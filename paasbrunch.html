@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paasbrunch</title>
+<style>
+:root{--bg:#1a1a1a;--card:#242424;--card2:#2e2e2e;--accent:#c8a96e;--accent2:#7fb069;--text:#f0e6d3;--muted:#666;--danger:#d96b6b;--border:#383838;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;}
+nav{background:var(--card);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;}
+.nav-tabs{display:flex;overflow-x:auto;scrollbar-width:none;}
+.nav-tabs::-webkit-scrollbar{display:none;}
+.nav-tab{padding:13px 15px;cursor:pointer;white-space:nowrap;font-size:13px;color:var(--muted);border-bottom:2px solid transparent;transition:all .2s;flex-shrink:0;display:flex;align-items:center;gap:6px;}
+.nav-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+.page{display:none;padding:16px;max-width:720px;margin:0 auto;}
+.page.active{display:block;}
+h1{font-size:21px;color:var(--accent);font-weight:700;letter-spacing:-.3px;}
+h2{font-size:15px;color:var(--accent);font-weight:600;}
+h3{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:8px;}
+.card{background:var(--card);border-radius:14px;padding:14px;margin-bottom:12px;border:1px solid var(--border);}
+.card.done{border-color:var(--accent2);opacity:.6;}
+hr{border:none;border-top:1px solid var(--border);margin:12px 0;}
+
+/* DISH CARDS */
+.dish-card{display:flex;justify-content:space-between;align-items:center;gap:10px;}
+.dish-left{display:flex;align-items:center;gap:11px;}
+.dish-icon{width:40px;height:40px;border-radius:10px;background:var(--card2);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.dish-name{font-size:15px;font-weight:600;margin-bottom:1px;}
+.dish-meta{font-size:12px;color:var(--muted);}
+.dish-right{display:flex;align-items:center;gap:7px;}
+.done-btn{padding:6px 13px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-size:12px;font-weight:600;transition:all .2s;display:flex;align-items:center;gap:5px;}
+.done-btn.done{background:var(--accent2);border-color:var(--accent2);color:#fff;}
+.icon-btn{width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;}
+.icon-btn:hover{border-color:var(--accent);color:var(--accent);}
+.icon-btn.active{border-color:var(--accent);color:var(--accent);background:rgba(200,169,110,.08);}
+
+/* COMPACT TIMER */
+.timer-row{display:flex;align-items:center;gap:8px;padding:8px 0;flex-wrap:wrap;}
+.timer-row:not(:last-child){border-bottom:1px solid var(--border);}
+.timer-name-in{background:var(--bg);border:1px solid var(--border);color:var(--text);border-radius:7px;padding:5px 8px;font-size:12px;width:90px;}
+.timer-num{background:var(--bg);border:1px solid var(--border);color:var(--text);border-radius:7px;padding:5px 6px;font-size:12px;width:42px;text-align:center;}
+.timer-sep{font-size:11px;color:var(--muted);}
+.timer-disp{font-size:18px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--accent);min-width:46px;text-align:right;}
+.timer-disp.running{color:var(--accent2);}
+.timer-disp.finished{color:var(--danger);animation:pulse 1s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+.tctl{width:28px;height:28px;border-radius:7px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0;}
+.tctl:active{transform:scale(.92);}
+.tctl-play{background:var(--accent);color:#1a1a1a;}
+.tctl-pause{background:var(--card2);color:var(--text);border:1px solid var(--border);}
+.tctl-reset{background:transparent;color:var(--muted);border:1px solid var(--border);}
+.tctl-remove{background:transparent;color:var(--muted);border:none;}
+.add-timer-btn{font-size:12px;color:var(--muted);background:transparent;border:1px dashed var(--border);border-radius:7px;padding:5px 10px;cursor:pointer;display:flex;align-items:center;gap:5px;margin-top:8px;transition:all .2s;}
+.add-timer-btn:hover{color:var(--accent);border-color:var(--accent);}
+
+/* RECEPT LAYOUT */
+.recept-tabs{display:flex;gap:7px;margin-bottom:14px;flex-wrap:wrap;}
+.recept-tab{padding:7px 15px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-size:13px;font-weight:600;transition:all .2s;display:flex;align-items:center;gap:6px;}
+.recept-tab.active{background:var(--accent);color:#1a1a1a;border-color:var(--accent);}
+.recept-page{display:none;}
+.recept-page.active{display:block;}
+.recept-grid{display:grid;grid-template-columns:1fr;gap:12px;}
+@media(min-width:580px){.recept-grid{grid-template-columns:200px 1fr;align-items:start;}}
+.ing-panel{background:var(--card);border-radius:14px;padding:14px;border:1px solid var(--border);}
+.ing-collapsible{}
+.ing-toggle{display:none;}
+@media(max-width:579px){
+  .ing-toggle{display:flex;align-items:center;justify-content:space-between;cursor:pointer;padding:2px 0;margin-bottom:0;}
+  .ing-toggle.open{margin-bottom:10px;}
+  .ing-list{display:none;}
+  .ing-list.open{display:block;}
+}
+@media(min-width:580px){.ing-list{display:block!important;}.ing-toggle{display:none!important;}}
+
+/* CHECKLIST */
+.check-item{display:flex;align-items:flex-start;gap:9px;padding:8px 0;border-bottom:1px solid var(--border);cursor:pointer;}
+.check-item:last-child{border-bottom:none;}
+.check-box{width:18px;height:18px;border-radius:5px;border:1.5px solid var(--border);background:var(--card2);flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.check-item.checked .check-box{background:var(--accent2);border-color:var(--accent2);}
+.check-item label{cursor:pointer;font-size:14px;line-height:1.4;flex:1;}
+.check-item.checked label{text-decoration:line-through;color:var(--muted);}
+
+/* STEPS */
+.step-item{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);cursor:pointer;align-items:flex-start;}
+.step-item:last-child{border-bottom:none;}
+.step-num{width:22px;height:22px;border-radius:50%;background:var(--accent);color:#1a1a1a;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;transition:background .15s;}
+.step-item.checked .step-num{background:var(--accent2);}
+.step-item label{cursor:pointer;font-size:14px;line-height:1.5;flex:1;}
+.step-item.checked label{color:var(--muted);text-decoration:line-through;}
+
+/* OVERVIEW TIMER PANEL */
+.ov-timer-panel{margin-top:10px;padding-top:10px;border-top:1px solid var(--border);}
+
+/* BOODSCHAPPEN */
+.add-item-row{display:flex;gap:8px;margin-top:10px;}
+.add-item-row input{flex:1;background:var(--bg);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:8px 10px;font-size:13px;}
+.add-item-row button{background:var(--accent);color:#1a1a1a;border:none;border-radius:8px;padding:8px 12px;font-weight:700;cursor:pointer;font-size:14px;}
+
+/* ACTIVE TIMERS OVERVIEW */
+.timers-overview-list .timer-ov-row{background:var(--card2);border-radius:10px;padding:10px 12px;margin-bottom:7px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.timer-ov-meta{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;}
+.timer-ov-name{font-size:13px;font-weight:600;margin-top:1px;}
+
+/* TIMELINE */
+.tl-day{font-size:11px;text-transform:uppercase;color:var(--accent);letter-spacing:1.2px;font-weight:700;margin:14px 0 8px;padding-bottom:4px;border-bottom:1px solid var(--border);}
+.tl-item{display:flex;gap:10px;margin-bottom:9px;align-items:flex-start;}
+.tl-time{font-size:12px;color:var(--muted);font-weight:600;min-width:56px;padding-top:2px;}
+.tl-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-top:5px;}
+.tl-text{font-size:14px;line-height:1.45;flex:1;}
+
+textarea{width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);border-radius:10px;padding:10px;font-size:14px;resize:vertical;min-height:70px;font-family:inherit;margin-top:4px;}
+.no-timers{color:var(--muted);font-size:13px;padding:4px 0;}
+</style>
+</head>
+<body>
+
+<svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="ic-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></symbol>
+  <symbol id="ic-book" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></symbol>
+  <symbol id="ic-cart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></symbol>
+  <symbol id="ic-bag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></symbol>
+  <symbol id="ic-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></symbol>
+  <symbol id="ic-bread" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11a4 4 0 014-4h10a4 4 0 110 8H7a4 4 0 01-4-4z"/><path d="M7 7v10"/><path d="M17 7v10"/></symbol>
+  <symbol id="ic-egg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22C6.5 22 4 17.5 4 13.5 4 8 7.5 2 12 2s8 6 8 11.5C20 17.5 17.5 22 12 22z"/></symbol>
+  <symbol id="ic-spoon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3a4 4 0 014 4c0 1.5-.7 2.8-1.8 3.6L14 21H10l-4.8-10.4A4 4 0 017 3z"/></symbol>
+  <symbol id="ic-leaf" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8C8 10 5.9 16.17 3.82 19.34A10 10 0 0021 12C21 9 20 6 17 8z"/><path d="M3.82 19.34L12 12"/></symbol>
+  <symbol id="ic-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></symbol>
+  <symbol id="ic-play" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></symbol>
+  <symbol id="ic-pause" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></symbol>
+  <symbol id="ic-reset" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></symbol>
+  <symbol id="ic-timer" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2"/><path d="M9 2h6"/><path d="M12 2v3"/></symbol>
+  <symbol id="ic-note" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></symbol>
+  <symbol id="ic-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></symbol>
+  <symbol id="ic-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></symbol>
+  <symbol id="ic-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></symbol>
+</svg>
+
+<nav>
+  <div class="nav-tabs">
+    <div class="nav-tab active" onclick="showPage('overzicht',this)"><svg class="icon" width="15" height="15"><use href="#ic-home"/></svg>Overzicht</div>
+    <div class="nav-tab" onclick="showPage('recepten',this)"><svg class="icon" width="15" height="15"><use href="#ic-book"/></svg>Recepten</div>
+    <div class="nav-tab" onclick="showPage('boodschappen',this)"><svg class="icon" width="15" height="15"><use href="#ic-cart"/></svg>Boodschappen</div>
+    <div class="nav-tab" onclick="showPage('paklijst',this)"><svg class="icon" width="15" height="15"><use href="#ic-bag"/></svg>Paklijst</div>
+    <div class="nav-tab" onclick="showPage('tijdlijn',this)"><svg class="icon" width="15" height="15"><use href="#ic-clock"/></svg>Tijdlijn</div>
+  </div>
+</nav>
+
+<!-- OVERZICHT -->
+<div class="page active" id="page-overzicht">
+  <h1 style="margin:16px 0 4px">Paasbrunch</h1>
+  <p style="color:var(--muted);font-size:13px;margin-bottom:16px">Zondag &nbsp;·&nbsp; 10 personen</p>
+
+  <div class="card" id="card-brioche">
+    <div class="dish-card">
+      <div class="dish-left">
+        <div class="dish-icon"><svg width="20" height="20" style="color:var(--accent)"><use href="#ic-bread"/></svg></div>
+        <div><div class="dish-name">Brioche</div><div class="dish-meta">1u45 + rijzen</div></div>
+      </div>
+      <div class="dish-right">
+        <button class="icon-btn" id="tbtn-brioche" onclick="toggleOvTimer('brioche')"><svg width="14" height="14"><use href="#ic-timer"/></svg></button>
+        <button class="done-btn" id="done-brioche" onclick="toggleDone('brioche')">Klaar</button>
+      </div>
+    </div>
+    <div id="ov-timer-brioche" style="display:none" class="ov-timer-panel"></div>
+  </div>
+
+  <div class="card" id="card-eljeh">
+    <div class="dish-card">
+      <div class="dish-left">
+        <div class="dish-icon"><svg width="20" height="20" style="color:var(--accent)"><use href="#ic-egg"/></svg></div>
+        <div><div class="dish-name">Eljeh</div><div class="dish-meta">15 min per batch</div></div>
+      </div>
+      <div class="dish-right">
+        <button class="icon-btn" id="tbtn-eljeh" onclick="toggleOvTimer('eljeh')"><svg width="14" height="14"><use href="#ic-timer"/></svg></button>
+        <button class="done-btn" id="done-eljeh" onclick="toggleDone('eljeh')">Klaar</button>
+      </div>
+    </div>
+    <div id="ov-timer-eljeh" style="display:none" class="ov-timer-panel"></div>
+  </div>
+
+  <div class="card" id="card-gribiche">
+    <div class="dish-card">
+      <div class="dish-left">
+        <div class="dish-icon"><svg width="20" height="20" style="color:var(--accent)"><use href="#ic-spoon"/></svg></div>
+        <div><div class="dish-name">Sauce Gribiche</div><div class="dish-meta">15 min · volledig voor te bereiden</div></div>
+      </div>
+      <div class="dish-right">
+        <button class="icon-btn" id="tbtn-gribiche" onclick="toggleOvTimer('gribiche')"><svg width="14" height="14"><use href="#ic-timer"/></svg></button>
+        <button class="done-btn" id="done-gribiche" onclick="toggleDone('gribiche')">Klaar</button>
+      </div>
+    </div>
+    <div id="ov-timer-gribiche" style="display:none" class="ov-timer-panel"></div>
+  </div>
+
+  <div class="card" id="card-crispy">
+    <div class="dish-card">
+      <div class="dish-left">
+        <div class="dish-icon"><svg width="20" height="20" style="color:var(--accent)"><use href="#ic-leaf"/></svg></div>
+        <div><div class="dish-name">Gefrituurde Peterselie</div><div class="dish-meta">5 min · garnering</div></div>
+      </div>
+      <button class="done-btn" id="done-crispy" onclick="toggleDone('crispy')">Klaar</button>
+    </div>
+  </div>
+
+  <div style="display:flex;align-items:center;gap:7px;margin:16px 0 10px">
+    <svg width="14" height="14" style="color:var(--muted)"><use href="#ic-timer"/></svg>
+    <h3 style="margin:0">Actieve timers</h3>
+  </div>
+  <div class="timers-overview-list" id="timers-overview-list"><p class="no-timers">Nog geen actieve timers.</p></div>
+</div>
+
+<!-- RECEPTEN -->
+<div class="page" id="page-recepten">
+  <div class="recept-tabs" style="margin-top:16px">
+    <button class="recept-tab active" onclick="showRecept('brioche',this)"><svg width="13" height="13"><use href="#ic-bread"/></svg>Brioche</button>
+    <button class="recept-tab" onclick="showRecept('eljeh',this)"><svg width="13" height="13"><use href="#ic-egg"/></svg>Eljeh</button>
+    <button class="recept-tab" onclick="showRecept('gribiche',this)"><svg width="13" height="13"><use href="#ic-spoon"/></svg>Gribiche</button>
+    <button class="recept-tab" onclick="showRecept('peterselie',this)"><svg width="13" height="13"><use href="#ic-leaf"/></svg>Peterselie</button>
+  </div>
+
+  <!-- BRIOCHE -->
+  <div class="recept-page active" id="recept-brioche">
+    <div style="margin-bottom:10px"><div style="font-size:17px;font-weight:700;color:var(--accent)">Brioche</div>
+    <div style="font-size:12px;color:var(--muted);margin-top:2px">2 broden · 10 pers · ±1u45 + rijzen</div></div>
+    <div class="recept-grid">
+      <div class="ing-panel">
+        <div class="ing-toggle" id="ing-toggle-brioche" onclick="toggleIng('brioche')">
+          <h3 style="margin:0">Ingrediënten</h3>
+          <svg width="16" height="16" id="ing-chev-brioche" style="color:var(--muted);transition:transform .2s"><use href="#ic-chevron"/></svg>
+        </div>
+        <div class="ing-list" id="ing-list-brioche">
+          <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>100 ml volle melk</label></div>
+          <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>1 kg patent bloem</label></div>
+          <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>50 g kristalsuiker</label></div>
+          <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>50 g gedroogde gist</label></div>
+          <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>20 g zout</label></div>
+          <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>14 eieren</label></div>
+          <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>500 g zachte boter</label></div>
+        </div>
+        <hr style="margin:10px 0">
+        <h3>Timers</h3>
+        <div id="timers-brioche"></div>
+      </div>
+      <div class="card" style="margin:0">
+        <h3>Werkwijze</h3>
+        <div class="step-item" onclick="toggleStep(this)"><div class="step-num">1</div><label>Meng 100 ml warme melk, 50 g bloem, 50 g suiker en 50 g gist. Dek af, 15 min wachten tot je bellen ziet.</label></div>
+        <div class="step-item" onclick="toggleStep(this)"><div class="step-num">2</div><label>Doe 900 g bloem, 20 g zout en 12 eieren in de kom. Voeg gistmengsel toe. Kneed 10 min op middelhoge snelheid.</label></div>
+        <div class="step-item" onclick="toggleStep(this)"><div class="step-num">3</div><label>Verdeel 500 g boter in 6 porties, voeg één voor één toe. Kneed totaal ±10 min tot het deeg glad en glanzend is.</label></div>
+        <div class="step-item" onclick="toggleStep(this)"><div class="step-num">4</div><label>Dek af, laat 45–60 min rijzen op kamertemperatuur tot 1½× omvang. Of 's nachts in de koelkast.</label></div>
+        <div class="step-item" onclick="toggleStep(this)"><div class="step-num">5</div><label>Sla plat, vouw zijkanten naar midden (N/O/Z/W) tot strakke bol. In beboterde bakvorm, opnieuw laten rijzen.</label></div>
+        <div class="step-item" onclick="toggleStep(this)"><div class="step-num">6</div><label>Bestrijk met losgeklopt ei. Bak op 180°C tot goudbruin. Afkoelen op rooster, bewaar in theedoek.</label></div>
+        <hr>
+        <h3>Notities</h3>
+        <textarea placeholder="Aantekeningen..." id="note-brioche"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- ELJEH -->
+  <div class="recept-page" id="recept-eljeh">
+    <div style="margin-bottom:10px"><div style="font-size:17px;font-weight:700;color:var(--accent)">Eljeh — Libanese Kruidenomelet</div>
+    <div style="font-size:12px;color:var(--muted);margin-top:2px">5× recept · 10 pers · beslag thuis, bakken ter plekke</div></div>
+    <div class="recept-grid">
+      <div class="ing-panel">
+        <div class="ing-toggle" id="ing-toggle-eljeh" onclick="toggleIng('eljeh')">
+          <h3 style="margin:0">Ingrediënten</h3>
+          <svg width="16" height="16" id="ing-chev-eljeh" style="color:var(--muted);transition:transform .2s"><use href="#ic-chevron"/></svg>
+        </div>
+        <div class="ing-list" id="ing-list-eljeh">
+          <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>15 eieren</label></div>
+          <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>250 ml room</label></div>
+          <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>5 el bloem</label></div>
+          <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>5 handen platte peterselie</label></div>
+          <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>5 lente-uitjes</label></div>
+          <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>5 handen dragon</label></div>
+          <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>5 handen munt</label></div>
+          <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>5 bosjes bieslook</label></div>
+          <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>250 g boter</label></div>
+          <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>5 flatbreads</label></div>
+          <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>Zout en peper</label></div>
+        </div>
+        <hr style="margin:10px 0">
+        <h3>Timers</h3>
+        <div id="timers-eljeh"></div>
+      </div>
+      <div class="card" style="margin:0">
+        <h3>Thuis — beslag</h3>
+        <div class="step-item" onclick="toggleStep(this)"><div class="step-num">1</div><label>Klop 15 eieren los met zout en peper.</label></div>
+        <div class="step-item" onclick="toggleStep(this)"><div class="step-num">2</div><label>Voeg 250 ml room en 5 el bloem toe, klop tot egaal mengsel.</label></div>
+        <div class="step-item" onclick="toggleStep(this)"><div class="step-num">3</div><label>Alle gehakte kruiden erdoor roeren. Afgedekt bewaren, mee in koelbox.</label></div>
+        <hr>
+        <h3>Bij je ouders — bakken</h3>
+        <div class="step-item" onclick="toggleStep(this)"><div class="step-num">4</div><label>Smelt 25 g boter in koekenpan op hoog vuur, giet ⅕ beslag erin.</label></div>
+        <div class="step-item" onclick="toggleStep(this)"><div class="step-num">5</div><label>Draai vuur lager, kantel pan zodat vloeibaar beslag gelijkmatig verdeelt.</label></div>
+        <div class="step-item" onclick="toggleStep(this)"><div class="step-num">6</div><label>Onderkant bruin → keer om, bak andere kant knapperig. Herhaal 5×.</label></div>
+        <div class="step-item" onclick="toggleStep(this)"><div class="step-num">7</div><label>Flatbreads met boter in oven op 180°C. Eljeh op warm flatbread, direct serveren.</label></div>
+        <hr>
+        <h3>Notities</h3>
+        <textarea placeholder="Aantekeningen..." id="note-eljeh"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- GRIBICHE -->
+  <div class="recept-page" id="recept-gribiche">
+    <div style="margin-bottom:10px"><div style="font-size:17px;font-weight:700;color:var(--accent)">Sauce Gribiche</div>
+    <div style="font-size:12px;color:var(--muted);margin-top:2px">4× recept · 10 pers · volledig voor te bereiden</div></div>
+    <div class="recept-grid">
+      <div class="ing-panel">
+        <div class="ing-toggle" id="ing-toggle-gribiche" onclick="toggleIng('gribiche')">
+          <h3 style="margin:0">Ingrediënten</h3>
+          <svg width="16" height="16" id="ing-chev-gribiche" style="color:var(--muted);transition:transform .2s"><use href="#ic-chevron"/></svg>
+        </div>
+        <div class="ing-list" id="ing-list-gribiche">
+          <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>12 eieren</label></div>
+          <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>40 cornichons, gehakt</label></div>
+          <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>4 handen peterselie, gehakt</label></div>
+          <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>4 handen bieslook, gehakt</label></div>
+          <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>4 tenen knoflook, geperst</label></div>
+          <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>4 tl kappertjes</label></div>
+          <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>4 tl dijonmosterd</label></div>
+          <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>4 el citroensap</label></div>
+          <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>20 el olijfolie</label></div>
+          <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>Zout en peper</label></div>
+        </div>
+        <hr style="margin:10px 0">
+        <h3>Timers</h3>
+        <div id="timers-gribiche"></div>
+      </div>
+      <div class="card" style="margin:0">
+        <h3>Werkwijze</h3>
+        <div class="step-item" onclick="toggleStep(this)"><div class="step-num">1</div><label>Kook 12 eieren 7 min. Koel af onder koud water, pel en halveer.</label></div>
+        <div class="step-item" onclick="toggleStep(this)"><div class="step-num">2</div><label>Dooiers en eiwitten scheiden. Eiwitten grof hakken.</label></div>
+        <div class="step-item" onclick="toggleStep(this)"><div class="step-num">3</div><label>Prak dooiers fijn. Voeg cornichons, kruiden, knoflook, kappertjes, mosterd, citroensap en olie toe. Roer goed.</label></div>
+        <div class="step-item" onclick="toggleStep(this)"><div class="step-num">4</div><label>Gehakte eiwitten erdoor. Op smaak met zout en peper. In afgesloten pot in koelkast.</label></div>
+        <hr>
+        <h3>Notities</h3>
+        <textarea placeholder="Aantekeningen..." id="note-gribiche"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- PETERSELIE -->
+  <div class="recept-page" id="recept-peterselie">
+    <div style="margin-bottom:10px"><div style="font-size:17px;font-weight:700;color:var(--accent)">Gefrituurde Peterselie + Krokante Kappertjes</div>
+    <div style="font-size:12px;color:var(--muted);margin-top:2px">Garnering · 5 min · thuis voorbereiden</div></div>
+    <div class="recept-grid">
+      <div class="ing-panel">
+        <div class="ing-toggle" id="ing-toggle-peterselie" onclick="toggleIng('peterselie')">
+          <h3 style="margin:0">Ingrediënten</h3>
+          <svg width="16" height="16" id="ing-chev-peterselie" style="color:var(--muted);transition:transform .2s"><use href="#ic-chevron"/></svg>
+        </div>
+        <div class="ing-list" id="ing-list-peterselie">
+          <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>1 hand verse peterselie</label></div>
+          <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>Extra kappertjes (voor krokant)</label></div>
+          <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>Olijfolie (om te frituren)</label></div>
+          <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>Keukenpapier</label></div>
+        </div>
+      </div>
+      <div class="card" style="margin:0">
+        <h3>Werkwijze</h3>
+        <div class="step-item" onclick="toggleStep(this)"><div class="step-num">1</div><label>Verhit royaal olijfolie in een kleine pan op hoog vuur.</label></div>
+        <div class="step-item" onclick="toggleStep(this)"><div class="step-num">2</div><label>Gooi de kappertjes in de hete olie, bak ±2 min tot ze openspringen en krokant zijn. Uithalen met schuimspaan, op keukenpapier.</label></div>
+        <div class="step-item" onclick="toggleStep(this)"><div class="step-num">3</div><label>Zelfde olie, peterselie erin — let op spatten! 30 sec tot knapperig en donkergroen. Direct op keukenpapier.</label></div>
+        <div class="step-item" onclick="toggleStep(this)"><div class="step-num">4</div><label>Bewaar in open bakje — niet afdekken, anders wordt het slap.</label></div>
+        <div class="step-item" onclick="toggleStep(this)"><div class="step-num">5</div><label>Bij serveren: strooi over de eljeh en gribiche vlak voor opdienen.</label></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BOODSCHAPPEN -->
+<div class="page" id="page-boodschappen">
+  <h1 style="margin:16px 0 4px">Boodschappen</h1>
+  <p style="color:var(--muted);font-size:13px;margin-bottom:16px">10 personen</p>
+
+  <div class="card" data-cat="Eieren & Zuivel">
+    <h3>Eieren & Zuivel</h3>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>41 eieren (14 brioche · 15 eljeh · 12 gribiche)</label></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>750 g boter (500 g brioche + 250 g eljeh)</label></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>100 ml volle melk</label></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>250 ml room</label></div>
+    <div class="add-item-row"><input type="text" placeholder="Item toevoegen..." onkeydown="if(event.key==='Enter')addItem(this)"><button onclick="addItem(this.previousElementSibling)"><svg width="14" height="14"><use href="#ic-plus"/></svg></button></div>
+  </div>
+
+  <div class="card" data-cat="Droog & Bakkerij">
+    <h3>Droog & Bakkerij</h3>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>1 kg patent bloem</label></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>50 g gedroogde gist</label></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>50 g fijne kristalsuiker</label></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>5 el bloem extra (eljeh)</label></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>5 flatbreads of wraps</label></div>
+    <div class="add-item-row"><input type="text" placeholder="Item toevoegen..." onkeydown="if(event.key==='Enter')addItem(this)"><button onclick="addItem(this.previousElementSibling)"><svg width="14" height="14"><use href="#ic-plus"/></svg></button></div>
+  </div>
+
+  <div class="card" data-cat="Verse Kruiden">
+    <h3>Verse Kruiden</h3>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>Grote bos platte peterselie (eljeh + gribiche + frituren)</label></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>Grote bos bieslook</label></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>Bos dragon</label></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>Bos munt</label></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>5 lente-uitjes</label></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>4 tenen knoflook</label></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>2 citroenen</label></div>
+    <div class="add-item-row"><input type="text" placeholder="Item toevoegen..." onkeydown="if(event.key==='Enter')addItem(this)"><button onclick="addItem(this.previousElementSibling)"><svg width="14" height="14"><use href="#ic-plus"/></svg></button></div>
+  </div>
+
+  <div class="card" data-cat="Pot & Fles">
+    <h3>Pot & Fles</h3>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>Cornichons (grote pot)</label></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>Kappertjes (ook extra voor krokant)</label></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>Dijonmosterd</label></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>Olijfolie</label></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>Zout en peper</label></div>
+    <div class="add-item-row"><input type="text" placeholder="Item toevoegen..." onkeydown="if(event.key==='Enter')addItem(this)"><button onclick="addItem(this.previousElementSibling)"><svg width="14" height="14"><use href="#ic-plus"/></svg></button></div>
+  </div>
+
+  <div id="done-items-card" style="display:none" class="card">
+    <h3 style="color:var(--accent2);display:flex;align-items:center;gap:6px;margin-bottom:8px"><svg width="12" height="12" style="color:var(--accent2)"><use href="#ic-check"/></svg>In huis</h3>
+    <div id="done-items-list"></div>
+  </div>
+</div>
+
+<!-- PAKLIJST -->
+<div class="page" id="page-paklijst">
+  <h1 style="margin:16px 0 4px">Paklijst</h1>
+  <p style="color:var(--muted);font-size:13px;margin-bottom:16px">Wat gaat mee vanuit huis</p>
+  <div class="card">
+    <h3>Klaar & Gebakken</h3>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>2 briochebroden in theedoek</label></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>Sauce Gribiche in afgesloten pot</label></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>Krokante kappertjes in bakje op keukenpapier</label></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>Gefrituurde peterselie in open bakje</label></div>
+  </div>
+  <div class="card">
+    <h3>In de Koelbox</h3>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>Eljehbeslag in afgesloten pot</label></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>5 flatbreads ingesmeerd met boter, in folie</label></div>
+  </div>
+  <div class="card">
+    <h3>Spullen</h3>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>Koelbox</label></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>Grote koekenpan (check bij ouders!)</label></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>Snijplank en mes</label></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>Serveerschalen</label></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>Keukenpapier</label></div>
+  </div>
+</div>
+
+<!-- TIJDLIJN -->
+<div class="page" id="page-tijdlijn">
+  <h1 style="margin:16px 0 4px">Tijdlijn</h1>
+  <p style="color:var(--muted);font-size:13px;margin-bottom:16px">Zaterdag & Zondag</p>
+  <div class="card">
+    <div class="tl-day">Zaterdag — Brioche</div>
+    <div class="tl-item"><div class="tl-time">14:00</div><div class="tl-dot"></div><div class="tl-text">Gist activeren — melk, bloem, suiker, gist</div></div>
+    <div class="tl-item"><div class="tl-time">14:15</div><div class="tl-dot"></div><div class="tl-text">Deeg kneden met overige ingrediënten, 10 min</div></div>
+    <div class="tl-item"><div class="tl-time">14:30</div><div class="tl-dot"></div><div class="tl-text">Boter in porties toevoegen, nogmaals kneden</div></div>
+    <div class="tl-item"><div class="tl-time">14:45</div><div class="tl-dot" style="background:var(--muted)"></div><div class="tl-text" style="color:var(--muted)">Eerste rijs — 60 min (of nacht in koelkast)</div></div>
+    <div class="tl-item"><div class="tl-time">15:45</div><div class="tl-dot"></div><div class="tl-text">Vormen, in bakvorm, tweede rijs ±45 min</div></div>
+    <div class="tl-item"><div class="tl-time">16:30</div><div class="tl-dot"></div><div class="tl-text">Bakken op 180°C</div></div>
+    <div class="tl-item"><div class="tl-time">17:15</div><div class="tl-dot" style="background:var(--accent2)"></div><div class="tl-text">Klaar — afkoelen in theedoek</div></div>
+    <div class="tl-day">Zondagochtend</div>
+    <div class="tl-item"><div class="tl-time">09:00</div><div class="tl-dot"></div><div class="tl-text">12 eieren koken (7 min), Sauce Gribiche samenstellen</div></div>
+    <div class="tl-item"><div class="tl-time">09:20</div><div class="tl-dot"></div><div class="tl-text">Kappertjes krokant bakken, peterselie frituren</div></div>
+    <div class="tl-item"><div class="tl-time">09:30</div><div class="tl-dot"></div><div class="tl-text">Eljehbeslag klaarmaken</div></div>
+    <div class="tl-item"><div class="tl-time">09:45</div><div class="tl-dot" style="background:var(--accent2)"></div><div class="tl-text">Alles inpakken — vertrek!</div></div>
+    <div class="tl-day">Bij je ouders</div>
+    <div class="tl-item"><div class="tl-time">Aankomst</div><div class="tl-dot"></div><div class="tl-text">Oven op 180°C, gribiche en garneringen neerzetten</div></div>
+    <div class="tl-item"><div class="tl-time">−30 min</div><div class="tl-dot"></div><div class="tl-text">Flatbreads in oven, eljeh bakken in 5 batches</div></div>
+    <div class="tl-item"><div class="tl-time">Serveer</div><div class="tl-dot" style="background:var(--accent2)"></div><div class="tl-text">Brioche · Eljeh op flatbread · Gribiche erover · Garneringen erop</div></div>
+  </div>
+</div>
+
+<script>
+// ── NAV ──
+function showPage(id, el) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  el.classList.add('active');
+  if(id==='overzicht') updateTimersOverview();
+}
+
+// ── RECEPT TABS ──
+function showRecept(id, el) {
+  document.querySelectorAll('.recept-page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.recept-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('recept-'+id).classList.add('active');
+  el.classList.add('active');
+}
+
+// ── INGREDIENT COLLAPSIBLE (mobile) ──
+function toggleIng(id) {
+  const list = document.getElementById('ing-list-'+id);
+  const toggle = document.getElementById('ing-toggle-'+id);
+  const chev = document.getElementById('ing-chev-'+id);
+  const open = list.classList.toggle('open');
+  toggle.classList.toggle('open', open);
+  chev.style.transform = open ? 'rotate(180deg)' : '';
+}
+
+// ── DONE ──
+function toggleDone(id) {
+  const card = document.getElementById('card-'+id);
+  const btn = document.getElementById('done-'+id);
+  const on = btn.classList.toggle('done');
+  card.classList.toggle('done', on);
+  btn.innerHTML = on ? `<svg width="12" height="12"><use href="#ic-check"/></svg> Klaar!` : 'Klaar';
+}
+
+// ── CHECKLIST ──
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  const icon = el.querySelector('.chk-icon');
+  if(icon) icon.style.display = el.classList.contains('checked') ? 'block' : 'none';
+  const page = el.closest('.page');
+  if(page && page.id==='page-boodschappen') updateDoneSection();
+}
+
+// ── BOODSCHAPPEN DONE SECTION ──
+function updateDoneSection() {
+  const page = document.getElementById('page-boodschappen');
+  const doneCard = document.getElementById('done-items-card');
+  const list = document.getElementById('done-items-list');
+  const checked = [...page.querySelectorAll('.card:not(#done-items-card) .check-item.checked')];
+
+  page.querySelectorAll('.card:not(#done-items-card) .check-item').forEach(el => {
+    el.style.display = el.classList.contains('checked') ? 'none' : 'flex';
+  });
+
+  if(!checked.length){ doneCard.style.display='none'; return; }
+  doneCard.style.display='block';
+  list.innerHTML = checked.map((el,i) =>
+    `<div onclick="uncheckBoodschap(this)" data-label="${el.querySelector('label').textContent.trim()}"
+      style="cursor:pointer;padding:8px 0;${i<checked.length-1?'border-bottom:1px solid var(--border);':''}font-size:14px;color:var(--muted);text-decoration:line-through;display:flex;align-items:center;gap:8px">
+      <svg width="12" height="12" style="color:var(--accent2);flex-shrink:0"><use href="#ic-check"/></svg>${el.querySelector('label').textContent.trim()}
+    </div>`
+  ).join('');
+}
+
+function uncheckBoodschap(row) {
+  const label = row.dataset.label;
+  document.querySelectorAll('#page-boodschappen .card:not(#done-items-card) .check-item').forEach(el => {
+    if(el.querySelector('label').textContent.trim()===label) {
+      el.classList.remove('checked');
+      const icon = el.querySelector('.chk-icon');
+      if(icon) icon.style.display='none';
+    }
+  });
+  updateDoneSection();
+}
+
+// ── ADD BOODSCHAP ──
+function addItem(input) {
+  const val = input.value.trim();
+  if(!val) return;
+  const card = input.closest('.card');
+  const addRow = input.closest('.add-item-row');
+  const item = document.createElement('div');
+  item.className = 'check-item';
+  item.setAttribute('onclick','toggleCheck(this)');
+  item.innerHTML = `<div class="check-box"><svg width="11" height="11" style="color:#fff;display:none" class="chk-icon"><use href="#ic-check"/></svg></div><label>${val}</label>`;
+  card.insertBefore(item, addRow);
+  input.value = '';
+}
+
+// ── STEPS ──
+function toggleStep(el){ el.classList.toggle('checked'); }
+
+// ── TIMERS ──
+let timerIdCounter = 0;
+const receptTimers = { brioche:[], eljeh:[], gribiche:[] };
+const receptNames  = { brioche:'Brioche', eljeh:'Eljeh', gribiche:'Gribiche' };
+
+function makeTimer(recept) {
+  return { id:'t'+(++timerIdCounter), recept, label:'', min:5, sec:0, remaining:300, running:false, interval:null };
+}
+
+function fmt(s) {
+  const m=Math.floor(Math.abs(s)/60), sc=Math.abs(s)%60;
+  return `${String(m).padStart(2,'0')}:${String(sc).padStart(2,'0')}`;
+}
+
+function beep() {
+  try {
+    const ctx=new(window.AudioContext||window.webkitAudioContext)();
+    [0,500,1000].forEach(d=>setTimeout(()=>{
+      const o=ctx.createOscillator(),g=ctx.createGain();
+      o.connect(g);g.connect(ctx.destination);
+      o.frequency.value=880;
+      g.gain.setValueAtTime(.3,ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+.5);
+      o.start();o.stop(ctx.currentTime+.5);
+    },d));
+  }catch(e){}
+}
+
+(async()=>{try{if('wakeLock' in navigator)await navigator.wakeLock.request('screen');}catch(e){}})();
+
+function timerRowHTML(t) {
+  return `<div class="timer-row" id="tr-${t.id}">
+    <input class="timer-name-in" type="text" placeholder="Naam…" value="${t.label}" oninput="tSetLabel('${t.id}',this.value)">
+    <input class="timer-num" type="number" value="${t.min}" min="0" max="180" id="tmin-${t.id}" onchange="tSetTime('${t.id}')">
+    <span class="timer-sep">:</span>
+    <input class="timer-num" type="number" value="${t.sec}" min="0" max="59" id="tsec-${t.id}" onchange="tSetTime('${t.id}')">
+    <div class="timer-disp" id="tdisp-${t.id}">${fmt(t.remaining)}</div>
+    <button class="tctl tctl-play" onclick="tStart('${t.id}')"><svg width="11" height="11"><use href="#ic-play"/></svg></button>
+    <button class="tctl tctl-pause" onclick="tPause('${t.id}')"><svg width="11" height="11"><use href="#ic-pause"/></svg></button>
+    <button class="tctl tctl-reset" onclick="tReset('${t.id}')"><svg width="11" height="11"><use href="#ic-reset"/></svg></button>
+    <button class="tctl tctl-remove" onclick="tRemove('${t.id}')" title="Verwijder"><svg width="11" height="11"><use href="#ic-x"/></svg></button>
+  </div>`;
+}
+
+function renderTimers(recept) {
+  const ts = receptTimers[recept];
+  const html = ts.map(timerRowHTML).join('') +
+    (ts.length < 2 ? `<button class="add-timer-btn" onclick="tAdd('${recept}')"><svg width="12" height="12"><use href="#ic-plus"/></svg> Timer toevoegen</button>` : '');
+  const el = document.getElementById('timers-'+recept);
+  if(el) el.innerHTML = html;
+  // also re-render overview timer panel if open
+  const ov = document.getElementById('ov-timer-'+recept);
+  if(ov && ov.style.display!=='none') renderOvTimers(recept);
+}
+
+function tAdd(recept) {
+  const t = makeTimer(recept);
+  receptTimers[recept].push(t);
+  renderTimers(recept);
+}
+
+function tRemove(id) {
+  const t = findT(id); if(!t) return;
+  clearInterval(t.interval);
+  receptTimers[t.recept] = receptTimers[t.recept].filter(x=>x.id!==id);
+  renderTimers(t.recept);
+  updateTimersOverview();
+}
+
+function tSetLabel(id, val) {
+  const t=findT(id); if(t){ t.label=val; updateTimersOverview(); }
+}
+
+function tSetTime(id) {
+  const t=findT(id); if(!t||t.running) return;
+  t.min=parseInt(document.getElementById('tmin-'+id).value)||0;
+  t.sec=parseInt(document.getElementById('tsec-'+id).value)||0;
+  t.remaining=t.min*60+t.sec;
+  updDisp(id);
+}
+
+function tStart(id) {
+  const t=findT(id); if(!t||t.running) return;
+  if(t.remaining<=0) t.remaining=t.min*60+t.sec;
+  t.running=true;
+  t.interval=setInterval(()=>{
+    t.remaining--;
+    updDisp(id);
+    updateTimersOverview();
+    if(t.remaining<=0){ clearInterval(t.interval); t.running=false; beep(); }
+  },1000);
+  updDisp(id);
+  updateTimersOverview();
+}
+
+function tPause(id) {
+  const t=findT(id); if(!t) return;
+  clearInterval(t.interval); t.running=false;
+  updDisp(id); updateTimersOverview();
+}
+
+function tReset(id) {
+  const t=findT(id); if(!t) return;
+  clearInterval(t.interval); t.running=false;
+  t.remaining=t.min*60+t.sec;
+  updDisp(id); updateTimersOverview();
+}
+
+function updDisp(id) {
+  const t=findT(id);
+  ['tdisp-','ovtdisp-'].forEach(pre=>{
+    const el=document.getElementById(pre+id);
+    if(el){ el.textContent=fmt(t.remaining); el.className='timer-disp'+(t.remaining<=0?' finished':t.running?' running':''); }
+  });
+}
+
+function findT(id) {
+  for(const r of Object.keys(receptTimers)){ const t=receptTimers[r].find(x=>x.id===id); if(t) return t; }
+}
+
+// Overview timer panel
+function toggleOvTimer(recept) {
+  const panel = document.getElementById('ov-timer-'+recept);
+  const btn   = document.getElementById('tbtn-'+recept);
+  const open  = panel.style.display==='none';
+  panel.style.display = open ? 'block' : 'none';
+  btn.classList.toggle('active', open);
+  if(open) renderOvTimers(recept);
+}
+
+function renderOvTimers(recept) {
+  const panel = document.getElementById('ov-timer-'+recept);
+  const ts = receptTimers[recept];
+  if(!ts.length) {
+    panel.innerHTML = `<button class="add-timer-btn" onclick="tAdd('${recept}');renderOvTimers('${recept}')"><svg width="12" height="12"><use href="#ic-plus"/></svg> Timer toevoegen</button>`;
+    return;
+  }
+  panel.innerHTML = ts.map(t=>`
+    <div class="timer-row" id="ovtr-${t.id}" style="flex-wrap:wrap">
+      <input class="timer-name-in" type="text" placeholder="Naam…" value="${t.label}" oninput="tSetLabel('${t.id}',this.value)" style="width:80px">
+      <input class="timer-num" type="number" value="${t.min}" min="0" max="180" id="ovtmin-${t.id}" onchange="tSetTimeOv('${t.id}')">
+      <span class="timer-sep">:</span>
+      <input class="timer-num" type="number" value="${t.sec}" min="0" max="59" id="ovtsec-${t.id}" onchange="tSetTimeOv('${t.id}')">
+      <div class="timer-disp${t.remaining<=0?' finished':t.running?' running':''}" id="ovtdisp-${t.id}">${fmt(t.remaining)}</div>
+      <button class="tctl tctl-play" onclick="tStart('${t.id}')"><svg width="11" height="11"><use href="#ic-play"/></svg></button>
+      <button class="tctl tctl-pause" onclick="tPause('${t.id}')"><svg width="11" height="11"><use href="#ic-pause"/></svg></button>
+      <button class="tctl tctl-reset" onclick="tReset('${t.id}')"><svg width="11" height="11"><use href="#ic-reset"/></svg></button>
+    </div>`).join('') +
+    (ts.length<2 ? `<button class="add-timer-btn" style="margin-top:6px" onclick="tAdd('${recept}');renderOvTimers('${recept}')"><svg width="12" height="12"><use href="#ic-plus"/></svg> Tweede timer</button>` : '');
+}
+
+function tSetTimeOv(id) {
+  const t=findT(id); if(!t||t.running) return;
+  t.min=parseInt(document.getElementById('ovtmin-'+id).value)||0;
+  t.sec=parseInt(document.getElementById('ovtsec-'+id).value)||0;
+  t.remaining=t.min*60+t.sec;
+  updDisp(id);
+  // sync recepten page inputs
+  const dm=document.getElementById('tmin-'+id); if(dm) dm.value=t.min;
+  const ds=document.getElementById('tsec-'+id); if(ds) ds.value=t.sec;
+}
+
+// Timers overview (bottom of overzicht)
+function updateTimersOverview() {
+  const c=document.getElementById('timers-overview-list');
+  let html='', any=false;
+  for(const r of ['brioche','eljeh','gribiche']){
+    receptTimers[r].forEach(t=>{
+      if(t.running||t.remaining!==(t.min*60+t.sec)){
+        any=true;
+        html+=`<div class="timer-ov-row">
+          <div>
+            <div class="timer-ov-meta">${receptNames[r]}</div>
+            <div class="timer-ov-name">${t.label||'Timer'}</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div class="timer-disp${t.remaining<=0?' finished':t.running?' running':''}" id="ovtdisp-${t.id}" style="font-size:22px">${fmt(t.remaining)}</div>
+            <button class="tctl tctl-pause" onclick="tPause('${t.id}')"><svg width="11" height="11"><use href="#ic-pause"/></svg></button>
+            <button class="tctl tctl-reset" onclick="tReset('${t.id}')"><svg width="11" height="11"><use href="#ic-reset"/></svg></button>
+          </div>
+        </div>`;
+      }
+    });
+  }
+  c.innerHTML = any ? html : '<p class="no-timers">Nog geen actieve timers.</p>';
+}
+
+// Init: one timer per recept on recepten page
+['brioche','eljeh','gribiche'].forEach(r=>{
+  receptTimers[r].push(makeTimer(r));
+  renderTimers(r);
+});
+</script>
+</body>
+</html>
