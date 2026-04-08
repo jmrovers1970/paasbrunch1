@@ -112,15 +112,15 @@ body {
   justify-content: center;
   gap: 6px;
   width: 100%;
-  padding: 11px;
+  padding: 9px;
   background: transparent;
   border: 1px dashed var(--bo);
   border-radius: var(--radius);
   color: var(--mu);
-  font-size: 13px;
+  font-size: 12px;
   cursor: pointer;
   transition: all .15s;
-  margin-top: 8px;
+  margin-top: 6px;
 }
 .btn-toevoegen:active { border-color: var(--ac); color: var(--ac); }
 
@@ -460,13 +460,31 @@ body {
 .stap-item.afgevinkt .stap-nr { background: var(--ac2); }
 .stap-tekst-detail { font-size: 13px; line-height: 1.5; flex: 1; }
 .stap-item.afgevinkt .stap-tekst-detail { color: var(--mu); text-decoration: line-through; }
-.stap-tv-badge {
-  display: inline-block;
-  font-size: 10px;
-  font-weight: 600;
-  margin-top: 3px;
-  opacity: .85;
+.stap-tv-ind {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 11px; font-weight: 600;
+  padding: 3px 8px; border-radius: 10px;
+  border: 1px solid currentColor;
+  cursor: pointer; background: transparent;
+  font-family: inherit; line-height: 1.4;
+  -webkit-tap-highlight-color: transparent;
 }
+.stap-tv-ind.geerfd { opacity: 0.7; }
+div.stap-tv-ind { cursor: default; pointer-events: none; }
+.stap-tv-wrapper { position: relative; display: inline-block; margin-top: 5px; }
+.stap-tv-menu {
+  position: absolute; z-index: 200; left: 0; top: calc(100% + 4px);
+  background: var(--card); border: 1px solid var(--bo);
+  border-radius: var(--radius-sm); min-width: 170px;
+  box-shadow: 0 4px 12px rgba(0,0,0,.3); display: none;
+}
+.stap-tv-menu.open { display: block; }
+.stap-tv-menu-item {
+  padding: 8px 12px; font-size: 12px; cursor: pointer; color: var(--tx);
+  border-bottom: 1px solid var(--bo);
+}
+.stap-tv-menu-item:last-child { border-bottom: none; }
+.stap-tv-menu-item.actief { color: var(--ac); font-weight: 600; }
 
 .recept-acties {
   display: flex;
@@ -479,7 +497,7 @@ body {
 /* ── Methode-selectie ── */
 .methode-knoppen {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 12px;
   padding: 24px 0 8px;
 }
@@ -501,6 +519,13 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 .methode-knop:active { border-color: var(--ac); color: var(--ac); }
+.methode-handmatig-link {
+  background: none; border: none; color: var(--mu);
+  font-size: 12px; font-family: inherit; cursor: pointer;
+  text-decoration: underline; padding: 4px 8px;
+  -webkit-tap-highlight-color: transparent;
+}
+.methode-handmatig-link:active { color: var(--tx); }
 
 /* ── Laden ── */
 .laden-staat {
@@ -540,9 +565,9 @@ body {
   inset: 0;
   background: var(--bg);
   z-index: 300;
-  overflow-y: auto;
+  flex-direction: column;
 }
-.modaal-fs.actief { display: block; }
+.modaal-fs.actief { display: flex; }
 .modaal-fs-header {
   display: flex;
   align-items: center;
@@ -550,24 +575,56 @@ body {
   padding: 12px var(--gap);
   background: var(--card);
   border-bottom: 1px solid var(--bo);
-  position: sticky;
-  top: 0;
-  z-index: 1;
+  flex-shrink: 0;
   gap: 10px;
 }
 .modaal-fs-titel { font-size: 14px; font-weight: 700; color: var(--ac); flex: 1; text-align: center; }
-.modaal-fs-body { padding: var(--gap); max-width: 740px; margin: 0 auto; }
-.form-sectie-kop { font-size: 13px; font-weight: 700; color: var(--tx); margin: 20px 0 10px; }
+.modaal-fs-body {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: var(--gap);
+  max-width: 740px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* ── Sticky footer recept-formulier ── */
+.recept-form-footer {
+  flex-shrink: 0;
+  display: flex;
+  gap: 10px;
+  padding: 12px var(--gap);
+  background: var(--bg);
+  border-top: 1px solid var(--bo);
+  max-width: 740px;
+  margin: 0 auto;
+  width: 100%;
+}
+.recept-form-footer .btn-primair { flex: 2; justify-content: center; }
+.form-sectie-kop {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--tx);
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  margin: 12px 0 6px;
+  padding: 6px 0 4px;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--bg);
+}
 
 /* ── Ingrediënt-formrij ── */
 .ing-form-rij {
   background: var(--card2);
   border-radius: var(--radius-sm);
-  padding: 10px;
-  margin-bottom: 8px;
+  padding: 7px 8px;
+  margin-bottom: 6px;
 }
-.ing-form-top { display: flex; gap: 6px; margin-bottom: 6px; align-items: center; flex-wrap: wrap; }
-.ing-form-bot { display: flex; gap: 6px; align-items: center; }
+.ing-form-top { display: flex; gap: 5px; margin-bottom: 5px; align-items: center; flex-wrap: wrap; }
+.ing-form-bot { display: flex; gap: 5px; align-items: center; }
 .inp-hoeveelheid { width: 68px; flex-shrink: 0; padding: 7px 6px; }
 .inp-eenheid { width: 120px; flex-shrink: 0; padding: 7px 4px; }
 .inp-naam { flex: 1; min-width: 130px; }
@@ -596,8 +653,8 @@ body {
 .stap-form-rij {
   background: var(--card2);
   border-radius: var(--radius-sm);
-  padding: 10px;
-  margin-bottom: 8px;
+  padding: 7px 8px;
+  margin-bottom: 6px;
   display: flex;
   gap: 8px;
   align-items: flex-start;
@@ -618,11 +675,11 @@ body {
   border: 1px solid var(--bo);
   color: var(--tx);
   border-radius: var(--radius-sm);
-  padding: 7px 8px;
+  padding: 6px 8px;
   font-size: 13px;
   font-family: inherit;
   resize: vertical;
-  min-height: 54px;
+  min-height: 44px;
 }
 .stap-form-textarea:focus { outline: none; border-color: var(--ac); }
 .stap-form-timer { display: flex; align-items: center; gap: 6px; margin-top: 6px; }
@@ -630,7 +687,6 @@ body {
 .stap-form-timer span { font-size: 11px; color: var(--mu); }
 .inp-timer { width: 56px; flex-shrink: 0; padding: 5px 7px; font-size: 12px; }
 .stap-form-tv { margin-top: 5px; }
-.stap-form-tv select { font-size: 12px; padding: 5px 7px; }
 
 /* ── Boodschappenlijst ── */
 .boodschappen-groep { margin-bottom: 20px; }
@@ -864,8 +920,15 @@ body {
   display: flex;
   gap: 6px;
   align-items: center;
-  margin-bottom: 10px;
+  margin: -12px -12px 10px;
+  padding: 10px 12px;
   flex-wrap: wrap;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--card);
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  border-bottom: 1px solid var(--bo);
 }
 .comp-blok-naam { flex: 1; min-width: 120px; }
 .comp-blok-tv { width: 130px; flex-shrink: 0; font-size: 12px; padding: 6px 6px; }
@@ -1088,7 +1151,7 @@ svg.sprite { display: none; }
   <div class="modaal-fs-header">
     <button type="button" class="btn-secundair" id="btn-annuleer-recept" style="padding:6px 14px;flex-shrink:0">Annuleren</button>
     <span class="modaal-fs-titel" id="recept-form-titel">Recept toevoegen</span>
-    <button type="submit" form="form-recept" class="btn-primair" id="btn-recept-submit" style="flex-shrink:0;visibility:hidden">Opslaan</button>
+    <div style="width:80px;flex-shrink:0"></div><!-- placeholder voor balans -->
   </div>
   <div class="modaal-fs-body">
 
@@ -1103,10 +1166,9 @@ svg.sprite { display: none; }
           <svg width="26" height="26"><use href="#ic-link"/></svg>
           Link
         </button>
-        <button type="button" class="methode-knop" id="btn-methode-handmatig">
-          <svg width="26" height="26"><use href="#ic-edit"/></svg>
-          Handmatig
-        </button>
+      </div>
+      <div style="text-align:center;padding:4px 0 8px">
+        <button type="button" class="methode-handmatig-link" id="btn-methode-handmatig">of voer handmatig in</button>
       </div>
       <input type="file" id="foto-input" accept="image/*" capture="environment" style="display:none">
     </div>
@@ -1213,9 +1275,15 @@ svg.sprite { display: none; }
         </button>
       </div>
 
-      <div style="height:24px"></div>
     </form>
     </div><!-- /recept-stap-form -->
+  </div><!-- /modaal-fs-body -->
+  <div id="recept-form-footer" class="recept-form-footer" style="display:none">
+    <button type="button" class="btn-secundair" id="btn-footer-annuleer" style="flex:1">Annuleren</button>
+    <button type="submit" form="form-recept" class="btn-primair">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      Opslaan
+    </button>
   </div>
 </div>
 
@@ -1279,6 +1347,8 @@ const TV_CSS_KLEUR = {
   a_la_minute:     'alaminute',
   laatste_uur:     'uur',
 };
+
+const KLOK_SVG = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>';
 
 // Volgorde is chronologisch (ver weg → dichtbij). laatste_uur is oud veld, alias voor uur_ervoor.
 const TIJDVENSTERS = {
@@ -1728,19 +1798,17 @@ function renderReceptDetail(receptId) {
           </div>`).join('')
       : `<p style="color:var(--mu);font-size:13px;padding:8px 0">Geen ingrediënten.</p>`;
   }
-  function maakStapItems(staps) {
+  function maakStapItems(staps, erfTv) {
     return staps.length
       ? staps.map(s => {
-          const stapTv = s.tijdvenster;
-          const stapTvBadge = stapTv
-            ? `<span class="stap-tv-badge" style="color:var(--tv-${TV_CSS_KLEUR[stapTv] || 'ochtend'})">${TIJDVENSTERS[stapTv] || stapTv}</span>`
-            : '';
+          const stapTv = s.tijdvenster || '';
+          const tvInd = maakStapTvIndicatorHtml(stapTv, erfTv || r.tijdvenster || 'ochtend_van', false, '');
           return `
           <div class="stap-item" data-id="${s.id}">
             <div class="stap-nr">${s.nummer}</div>
             <div style="flex:1">
               <span class="stap-tekst-detail">${escHtml(s.tekst)}</span>
-              ${stapTvBadge}
+              ${tvInd}
             </div>
           </div>`;
         }).join('')
@@ -1750,23 +1818,23 @@ function renderReceptDetail(receptId) {
   let detailSectiesHtml;
   if (r.componenten && r.componenten.length) {
     detailSectiesHtml = r.componenten.map(comp => {
-      const tvBadge = `<span class="stap-tv-badge" style="color:var(--tv-${TV_CSS_KLEUR[comp.tijdvenster] || 'ochtend'})">${TIJDVENSTERS[comp.tijdvenster] || comp.tijdvenster}</span>`;
+      const compTvInd = maakStapTvIndicatorHtml(comp.tijdvenster || '', r.tijdvenster || 'ochtend_van', false, '');
       return `
         <div class="comp-detail-kop">
           <span class="comp-detail-naam">${escHtml(comp.naam)}</span>
-          ${tvBadge}
+          ${compTvInd}
         </div>
         <div class="sectie-kop" style="margin-top:8px">Ingrediënten</div>
         ${maakIngItems(comp.ingredienten)}
         <div class="sectie-kop" style="margin-top:12px">Stappen</div>
-        ${maakStapItems(comp.stappen)}`;
+        ${maakStapItems(comp.stappen, comp.tijdvenster)}`;
     }).join('');
   } else {
     detailSectiesHtml = `
       <div class="sectie-kop">Ingrediënten</div>
       <div id="detail-ings">${maakIngItems(r.ingredienten)}</div>
       <div class="sectie-kop">Stappen</div>
-      <div id="detail-stappen">${maakStapItems(r.stappen)}</div>`;
+      <div id="detail-stappen">${maakStapItems(r.stappen, r.tijdvenster)}</div>`;
   }
 
   const tvSelectKleur = `var(--tv-${TV_CSS_KLEUR[r.tijdvenster] || 'ochtend'})`;
@@ -1953,10 +2021,12 @@ function renderCookMode() {
       ? comp.stappen.map(s => {
           const sleutel = stapAfgevinkSleutel(r.id, s.id, comp.id);
           const isAf = afgevinkt.has(sleutel);
+          const tvInd = maakStapTvIndicatorHtml(s.tijdvenster || '', comp.tijdvenster || r.tijdvenster || 'ochtend_van', false, '');
           return `<div class="cook-stap${isAf ? ' afgevinkt' : ''}" data-sleutel="${escHtml(sleutel)}">
             <div class="cook-stap-nr">${s.nummer}</div>
             <div class="cook-stap-body">
               <div class="cook-stap-tekst">${escHtml(s.tekst)}</div>
+              ${tvInd}
               ${maakTimerHtml(s)}
             </div>
           </div>`;
@@ -1983,10 +2053,12 @@ function renderCookMode() {
       ? r.stappen.map(s => {
           const sleutel = stapAfgevinkSleutel(r.id, s.id);
           const isAf = afgevinkt.has(sleutel);
+          const tvInd = maakStapTvIndicatorHtml(s.tijdvenster || '', r.tijdvenster || 'ochtend_van', false, '');
           return `<div class="cook-stap${isAf ? ' afgevinkt' : ''}" data-sleutel="${escHtml(sleutel)}">
             <div class="cook-stap-nr">${s.nummer}</div>
             <div class="cook-stap-body">
               <div class="cook-stap-tekst">${escHtml(s.tekst)}</div>
+              ${tvInd}
               ${maakTimerHtml(s)}
             </div>
           </div>`;
@@ -2533,11 +2605,9 @@ function initReceptFormModus() {
 }
 
 function renderComponenten() {
+  if (!_formComponentenModus) return;
   const c = document.getElementById('comp-container');
   if (!c) return;
-  const tvKiesOpts = Object.entries(TIJDVENSTERS)
-    .filter(([k]) => k !== 'laatste_uur')
-    .map(([k, v]) => `<option value="${k}">${v}</option>`).join('');
 
   c.innerHTML = _formComponenten.map(comp => {
     const tvOpts = Object.entries(TIJDVENSTERS)
@@ -2601,6 +2671,17 @@ function renderComponenten() {
       renderCompStapRijen(comp);
     });
   });
+
+  // Herregistreer "Component toevoegen"-knop zodat hij altijd up-to-date is
+  const btnVoegCompToe = document.getElementById('btn-voeg-comp-toe');
+  if (btnVoegCompToe) {
+    btnVoegCompToe.onclick = () => {
+      if (!_formComponentenModus) return;
+      saveComponentenState();
+      _formComponenten.push(leegComp());
+      renderComponenten();
+    };
+  }
 }
 
 function renderCompIngRijen(comp) {
@@ -2642,12 +2723,10 @@ function renderCompIngRijen(comp) {
 function renderCompStapRijen(comp) {
   const c = document.getElementById(`stap-comp-${comp.id}`);
   if (!c) return;
+  const erfTv = comp.tijdvenster || 'ochtend_van';
+  const erfLabel = comp.naam || 'component';
   c.innerHTML = comp.staps.map((stap, idx) => {
     const stapTv = stap.tijdvenster || '';
-    const tvOpts = `<option value=""${stapTv === '' ? ' selected' : ''}>(volgt component)</option>` +
-      Object.entries(TIJDVENSTERS)
-        .filter(([k]) => k !== 'laatste_uur')
-        .map(([k, v]) => `<option value="${k}"${k === stapTv ? ' selected' : ''}>${v}</option>`).join('');
     return `
     <div class="stap-form-rij" data-row-id="${stap.id}" data-comp-id="${comp.id}">
       <div class="stap-form-nr">${idx + 1}</div>
@@ -2660,7 +2739,7 @@ function renderCompStapRijen(comp) {
           <span>min (opt.)</span>
         </div>
         <div class="stap-form-tv">
-          <select class="form-inp stap-tijdvenster">${tvOpts}</select>
+          ${maakStapTvIndicatorHtml(stapTv, erfTv, true, erfLabel)}
         </div>
       </div>
       <button type="button" class="btn-rij-del" data-row-id="${stap.id}">×</button>
@@ -2722,7 +2801,7 @@ function leesComponenten() {
     naam: comp.naam || 'Component',
     tijdvenster: comp.tijdvenster || 'ochtend_van',
     ingredienten: comp.ings.filter(i => i.naam).map(ing => ({
-      id: maakId('ing'),
+      id: ing.id || maakId('ing'),
       hoeveelheid: ing.hoeveelheid ?? null,
       eenheid: ing.eenheid || '',
       naam: ing.naam,
@@ -2730,7 +2809,7 @@ function leesComponenten() {
       opmerking: ing.opmerking || undefined,
     })),
     stappen: comp.staps.filter(s => s.tekst).map((s, i) => ({
-      id: maakId('stap'),
+      id: s.id || maakId('stap'),
       nummer: i + 1,
       tekst: s.tekst,
       timerMinuten: s.timerMinuten,
@@ -2773,8 +2852,8 @@ function toonReceptStap(naam) {
     const el = document.getElementById(`recept-stap-${s}`);
     if (el) el.style.display = s === naam ? '' : 'none';
   });
-  const submitBtn = document.getElementById('btn-recept-submit');
-  if (submitBtn) submitBtn.style.visibility = naam === 'form' ? 'visible' : 'hidden';
+  const footer = document.getElementById('recept-form-footer');
+  if (footer) footer.style.display = naam === 'form' ? 'flex' : 'none';
 }
 
 function leegIng() {
@@ -2927,20 +3006,32 @@ function renderIngFormRijen() {
   });
 }
 
+function maakStapTvIndicatorHtml(stapTv, erfTv, isInteractief, erfLabel) {
+  const geldendTv = stapTv || erfTv || 'ochtend_van';
+  const isGeerfd = !stapTv;
+  const kleur = `var(--tv-${TV_CSS_KLEUR[geldendTv] || 'ochtend'})`;
+  const label = TIJDVENSTERS[geldendTv] || geldendTv;
+  if (isInteractief) {
+    const erfItem = `<div class="stap-tv-menu-item${!stapTv ? ' actief' : ''}" data-tv="">(volgt ${escHtml(erfLabel)})</div>`;
+    const tvItems = Object.entries(TIJDVENSTERS)
+      .filter(([k]) => k !== 'laatste_uur')
+      .map(([k, v]) => `<div class="stap-tv-menu-item${stapTv === k ? ' actief' : ''}" data-tv="${k}">${v}</div>`).join('');
+    return `<div class="stap-tv-wrapper" data-erf-tv="${escHtml(erfTv || '')}" data-erf-label="${escHtml(erfLabel)}">` +
+      `<input type="hidden" class="stap-tijdvenster" value="${escHtml(stapTv || '')}">` +
+      `<button type="button" class="stap-tv-ind${isGeerfd ? ' geerfd' : ''}" style="color:${kleur}">${KLOK_SVG} ${escHtml(label)}</button>` +
+      `<div class="stap-tv-menu">${erfItem}${tvItems}</div>` +
+      `</div>`;
+  } else {
+    return `<div class="stap-tv-ind${isGeerfd ? ' geerfd' : ''}" style="color:${kleur}">${KLOK_SVG} ${escHtml(label)}</div>`;
+  }
+}
+
 function renderStapFormRijen() {
   const c = document.getElementById('stap-form-container');
-  // Tijdvenster-opties voor stap: eerste optie = "(volgt recept)"
-  const tvKiesOpties = `<option value="">(volgt recept)</option>` +
-    Object.entries(TIJDVENSTERS)
-      .filter(([k]) => k !== 'laatste_uur')
-      .map(([k, v]) => `<option value="${k}">${v}</option>`).join('');
+  const erfTv = document.getElementById('rf-tijdvenster')?.value || 'ochtend_van';
 
   c.innerHTML = _formStaps.map((stap, idx) => {
     const stapTv = stap.tijdvenster || '';
-    const tvOpties = `<option value=""${stapTv === '' ? ' selected' : ''}>(volgt recept)</option>` +
-      Object.entries(TIJDVENSTERS)
-        .filter(([k]) => k !== 'laatste_uur')
-        .map(([k, v]) => `<option value="${k}"${k === stapTv ? ' selected' : ''}>${v}</option>`).join('');
     return `
     <div class="stap-form-rij" data-row-id="${stap.id}">
       <div class="stap-form-nr">${idx + 1}</div>
@@ -2953,7 +3044,7 @@ function renderStapFormRijen() {
           <span>min (optioneel)</span>
         </div>
         <div class="stap-form-tv">
-          <select class="form-inp stap-tijdvenster">${tvOpties}</select>
+          ${maakStapTvIndicatorHtml(stapTv, erfTv, true, 'recept')}
         </div>
       </div>
       <button type="button" class="btn-rij-del" data-row-id="${stap.id}" title="Verwijder">×</button>
@@ -2971,8 +3062,8 @@ function renderStapFormRijen() {
 }
 
 function leesIngredientRijen() {
-  return Array.from(document.querySelectorAll('.ing-form-rij')).map(rij => ({
-    id: maakId('ing'),
+  return Array.from(document.getElementById('ing-form-container').querySelectorAll('.ing-form-rij')).map(rij => ({
+    id: rij.dataset.rowId || maakId('ing'),
     hoeveelheid: parseFloat(rij.querySelector('.ing-hoeveelheid').value) || null,
     eenheid: rij.querySelector('.ing-eenheid').value.trim(),
     naam: rij.querySelector('.ing-naam').value.trim(),
@@ -2982,11 +3073,11 @@ function leesIngredientRijen() {
 }
 
 function leesStapRijen() {
-  return Array.from(document.querySelectorAll('.stap-form-rij')).map((rij, idx) => {
+  return Array.from(document.getElementById('stap-form-container').querySelectorAll('.stap-form-rij')).map((rij, idx) => {
     const tvEl = rij.querySelector('.stap-tijdvenster');
     const tv = tvEl && tvEl.value ? tvEl.value : undefined;
     return {
-      id: maakId('stap'),
+      id: rij.dataset.rowId || maakId('stap'),
       nummer: idx + 1,
       tekst: rij.querySelector('.stap-tekst').value.trim(),
       timerMinuten: parseInt(rij.querySelector('.stap-timer').value) || undefined,
@@ -3272,6 +3363,7 @@ async function init() {
 
   // Recept-form
   document.getElementById('btn-annuleer-recept').addEventListener('click', sluitReceptForm);
+  document.getElementById('btn-footer-annuleer').addEventListener('click', sluitReceptForm);
   document.getElementById('btn-voeg-ing-toe').addEventListener('click', () => {
     saveIngState();
     _formIngs.push(leegIng());
@@ -3291,10 +3383,49 @@ async function init() {
     if (_formComponentenModus) schakelNaarEnkelvoudigModus();
     else schakelNaarComponentModus();
   });
+  // Initiële registratie — wordt ook herregistreerd via .onclick in renderComponenten()
   document.getElementById('btn-voeg-comp-toe').addEventListener('click', () => {
+    if (!_formComponentenModus) return;
     saveComponentenState();
     _formComponenten.push(leegComp());
     renderComponenten();
+  });
+
+  // Stap tijdvenster indicator menus (event delegation)
+  document.addEventListener('click', (e) => {
+    const ind = e.target.closest('button.stap-tv-ind');
+    const item = e.target.closest('.stap-tv-menu-item');
+    if (ind) {
+      const menu = ind.nextElementSibling;
+      const isOpen = menu && menu.classList.contains('open');
+      document.querySelectorAll('.stap-tv-menu.open').forEach(m => m.classList.remove('open'));
+      if (menu && !isOpen) menu.classList.add('open');
+      e.stopPropagation();
+    } else if (item) {
+      const menu = item.closest('.stap-tv-menu');
+      const wrapper = menu?.parentElement;
+      if (!wrapper) return;
+      const hiddenInput = wrapper.querySelector('.stap-tijdvenster');
+      const btn = wrapper.querySelector('button.stap-tv-ind');
+      const newTv = item.dataset.tv;
+      if (hiddenInput) hiddenInput.value = newTv;
+      if (btn) {
+        const erfTv = wrapper.dataset.erfTv || 'ochtend_van';
+        const geldendTv = newTv || erfTv;
+        const kleur = `var(--tv-${TV_CSS_KLEUR[geldendTv] || 'ochtend'})`;
+        const label = TIJDVENSTERS[geldendTv] || geldendTv;
+        btn.style.color = kleur;
+        btn.className = `stap-tv-ind${!newTv ? ' geerfd' : ''}`;
+        btn.innerHTML = `${KLOK_SVG} ${escHtml(label)}`;
+      }
+      menu.querySelectorAll('.stap-tv-menu-item').forEach(mi => {
+        mi.classList.toggle('actief', mi.dataset.tv === newTv);
+      });
+      menu.classList.remove('open');
+      e.stopPropagation();
+    } else if (!e.target.closest('.stap-tv-menu')) {
+      document.querySelectorAll('.stap-tv-menu.open').forEach(m => m.classList.remove('open'));
+    }
   });
 
   // Cook Mode
