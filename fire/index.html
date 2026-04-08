@@ -9,18 +9,30 @@
 <title>Fire</title>
 <style>
 :root {
-  --bg: #1a1a1a;
-  --card: #242424;
-  --card2: #2e2e2e;
+  --bg: #1f1916;
+  --card: #2a2421;
+  --card2: #34302c;
   --ac: #c8a96e;
   --ac2: #7fb069;
   --tx: #f0e6d3;
   --mu: #888;
   --da: #d96b6b;
-  --bo: #383838;
+  --bo: #3d3733;
   --radius: 12px;
   --radius-sm: 7px;
   --gap: 14px;
+
+  /* Semantische tijdvenster-kleuren (koel → warm) */
+  --tv-week:      #6b8eaa;
+  --tv-paardagen: #7a9bb5;
+  --tv-dag:       #7fb069;
+  --tv-avond:     #9bb86e;
+  --tv-ochtend:   #c8a96e;
+  --tv-middag:    #d4a05e;
+  --tv-tweeuur:   #d4925e;
+  --tv-uur:       #d68554;
+  --tv-halfuur:   #d96e4f;
+  --tv-alaminute: #d96b6b;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -168,6 +180,7 @@ body {
   gap: 10px;
   transition: border-color .15s;
   -webkit-tap-highlight-color: transparent;
+  box-shadow: 0 1px 3px rgba(0,0,0,.2);
 }
 .geleg-kaart:active { border-color: var(--ac); }
 .geleg-info { flex: 1; min-width: 0; }
@@ -265,6 +278,7 @@ body {
   gap: 10px;
   transition: border-color .15s;
   -webkit-tap-highlight-color: transparent;
+  box-shadow: 0 1px 3px rgba(0,0,0,.2);
 }
 .ov-recept-kaart:active { border-color: var(--ac); }
 .ov-recept-naam { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
@@ -446,6 +460,13 @@ body {
 .stap-item.afgevinkt .stap-nr { background: var(--ac2); }
 .stap-tekst-detail { font-size: 13px; line-height: 1.5; flex: 1; }
 .stap-item.afgevinkt .stap-tekst-detail { color: var(--mu); text-decoration: line-through; }
+.stap-tv-badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 600;
+  margin-top: 3px;
+  opacity: .85;
+}
 
 .recept-acties {
   display: flex;
@@ -545,13 +566,13 @@ body {
   padding: 10px;
   margin-bottom: 8px;
 }
-.ing-form-top { display: flex; gap: 6px; margin-bottom: 6px; align-items: center; }
+.ing-form-top { display: flex; gap: 6px; margin-bottom: 6px; align-items: center; flex-wrap: wrap; }
 .ing-form-bot { display: flex; gap: 6px; align-items: center; }
-.inp-hoeveelheid { width: 60px; flex-shrink: 0; padding: 7px 6px; }
-.inp-eenheid { width: 56px; flex-shrink: 0; padding: 7px 6px; }
-.inp-naam { flex: 1; }
-.inp-opmerking { flex: 1; }
-.inp-productgroep { flex: 1; }
+.inp-hoeveelheid { width: 68px; flex-shrink: 0; padding: 7px 6px; }
+.inp-eenheid { width: 120px; flex-shrink: 0; padding: 7px 4px; }
+.inp-naam { flex: 1; min-width: 130px; }
+.inp-opmerking { flex: 1; min-width: 0; }
+.inp-productgroep { flex: 1; min-width: 0; }
 .form-inp { padding: 7px 8px; font-size: 13px; }
 .btn-rij-del {
   width: 26px;
@@ -608,6 +629,8 @@ body {
 .stap-form-timer label { font-size: 11px; color: var(--mu); }
 .stap-form-timer span { font-size: 11px; color: var(--mu); }
 .inp-timer { width: 56px; flex-shrink: 0; padding: 5px 7px; font-size: 12px; }
+.stap-form-tv { margin-top: 5px; }
+.stap-form-tv select { font-size: 12px; padding: 5px 7px; }
 
 /* ── Boodschappenlijst ── */
 .boodschappen-groep { margin-bottom: 20px; }
@@ -666,24 +689,22 @@ body {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: .06em;
-  color: var(--ac);
   padding: 0 0 8px;
   border-bottom: 1px solid var(--bo);
   margin-bottom: 6px;
 }
-.tijdlijn-recept {
+.tijdlijn-handeling {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px 0;
+  gap: 8px;
+  padding: 9px 0;
   border-bottom: 1px solid var(--bo);
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 }
-.tijdlijn-recept:last-child { border-bottom: none; }
-.tijdlijn-recept-naam { font-size: 13px; font-weight: 600; flex: 1; }
-.tijdlijn-recept-preview { font-size: 12px; color: var(--mu); margin-top: 2px; line-height: 1.4; }
-.tijdlijn-recept-body { flex: 1; }
+.tijdlijn-handeling:last-child { border-bottom: none; }
+.tl-stap-tekst { font-size: 13px; font-weight: 500; flex: 1; line-height: 1.4; }
+.tl-recept-naam { font-size: 12px; color: var(--mu); flex-shrink: 0; white-space: nowrap; max-width: 120px; overflow: hidden; text-overflow: ellipsis; }
 .tijdlijn-chevron { color: var(--mu); flex-shrink: 0; }
 
 /* ── Sheet modaal (gelegenheid) ── */
@@ -831,6 +852,104 @@ body {
 .cook-timer-display.op { color: var(--ac2); }
 .cook-timer-display.verlopen { color: var(--da); }
 
+/* ── Component-blocks in recept-form ── */
+.comp-blok {
+  border: 1px solid var(--bo);
+  border-radius: var(--radius);
+  padding: 12px;
+  margin-bottom: 12px;
+  background: var(--card);
+}
+.comp-blok-header {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+.comp-blok-naam { flex: 1; min-width: 120px; }
+.comp-blok-tv { width: 130px; flex-shrink: 0; font-size: 12px; padding: 6px 6px; }
+.comp-sectie-kop {
+  font-size: 10px;
+  color: var(--mu);
+  text-transform: uppercase;
+  letter-spacing: .8px;
+  font-weight: 700;
+  margin: 10px 0 6px;
+}
+
+/* ── Component-koppen in detail-weergave ── */
+.comp-detail-kop {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 16px 0 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--bo);
+}
+.comp-detail-naam {
+  font-size: 13px;
+  font-weight: 700;
+  flex: 1;
+}
+
+/* ── Cook Mode navigatie ── */
+.cook-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 0 4px;
+  border-top: 1px solid var(--bo);
+  margin-top: 8px;
+}
+.cook-comp-indicator {
+  flex: 1;
+  font-size: 11px;
+  color: var(--mu);
+  text-align: center;
+}
+.cook-nav-btn {
+  background: var(--card2);
+  border: 1px solid var(--bo);
+  color: var(--tx);
+  border-radius: var(--radius-sm);
+  padding: 8px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color .15s;
+  flex-shrink: 0;
+}
+.cook-nav-btn:disabled { opacity: .3; cursor: default; }
+.cook-nav-btn:not(:disabled):active { border-color: var(--ac); }
+
+/* ── Serveermoment-rijen ── */
+.serveerm-rij {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin-bottom: 6px;
+}
+.serveerm-rij .form-inp { font-size: 13px; }
+.inp-serveerm-naam { flex: 1; }
+.inp-serveerm-tijd { width: 88px; flex-shrink: 0; }
+.serveerm-del:disabled { opacity: .25; cursor: default; }
+
+/* ── Serveermoment-kop in Overzicht ── */
+.ov-serveerm-kop {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ac);
+  padding: 10px 0 6px;
+  border-bottom: 1px solid var(--bo);
+  margin-bottom: 6px;
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.ov-serveerm-kop:first-child { margin-top: 0; }
+
 /* SVG sprite */
 svg.sprite { display: none; }
 </style>
@@ -946,15 +1065,17 @@ svg.sprite { display: none; }
           <input type="date" id="f-datum">
         </div>
         <div class="form-veld">
-          <label for="f-tijd">Serveertijd</label>
-          <input type="time" id="f-tijd" value="12:00" required>
+          <label for="f-personen">Personen</label>
+          <input type="number" id="f-personen" value="4" min="1" max="50" required>
         </div>
       </div>
-      <div class="form-veld">
-        <label for="f-personen">Aantal personen</label>
-        <input type="number" id="f-personen" value="4" min="1" max="50" required>
-      </div>
-      <div class="form-knoppen">
+      <div class="form-sectie-kop" style="margin-top:16px;margin-bottom:8px">Serveer-momenten</div>
+      <div id="serveerm-container"></div>
+      <button type="button" class="btn-toevoegen" id="btn-voeg-serveerm-toe" style="margin-top:4px;margin-bottom:4px">
+        <svg width="13" height="13"><use href="#ic-plus"/></svg>
+        Serveer-moment toevoegen
+      </button>
+      <div class="form-knoppen" style="margin-top:14px">
         <button type="button" class="btn-secundair" id="btn-annuleer-geleg">Annuleren</button>
         <button type="submit" class="btn-primair" id="btn-submit-geleg">Aanmaken</button>
       </div>
@@ -1025,6 +1146,12 @@ svg.sprite { display: none; }
     <div id="recept-stap-form" style="display:none">
     <form id="form-recept" novalidate>
 
+      <!-- Serveermoment (verborgen als er maar 1 is) -->
+      <div class="form-veld" id="rf-serveermoment-rij" style="display:none">
+        <label for="rf-serveermoment">Serveer-moment</label>
+        <select id="rf-serveermoment" class="form-inp"></select>
+      </div>
+
       <div class="form-veld">
         <label for="rf-naam">Naam</label>
         <input type="text" id="rf-naam" class="form-inp" placeholder="Naam van het recept" required maxlength="80" autocomplete="off">
@@ -1038,9 +1165,14 @@ svg.sprite { display: none; }
           <label for="rf-tijdvenster">Tijdvenster</label>
           <select id="rf-tijdvenster" class="form-inp">
             <option value="week_vooruit">Week vooruit</option>
+            <option value="paar_dagen">Paar dagen ervoor</option>
             <option value="dag_ervoor">Dag ervoor</option>
+            <option value="avond_ervoor">Avond ervoor</option>
             <option value="ochtend_van" selected>Ochtend van</option>
-            <option value="laatste_uur">Laatste uur</option>
+            <option value="middag_van">Middag van</option>
+            <option value="twee_uur_ervoor">Twee uur ervoor</option>
+            <option value="uur_ervoor">Uur ervoor</option>
+            <option value="halfuur_ervoor">Halfuur ervoor</option>
             <option value="a_la_minute">À la minute</option>
           </select>
         </div>
@@ -1050,19 +1182,36 @@ svg.sprite { display: none; }
         <input type="number" id="rf-bereidingstijd" class="form-inp" placeholder="bijv. 45" min="1">
       </div>
 
-      <div class="form-sectie-kop">Ingrediënten</div>
-      <div id="ing-form-container"></div>
-      <button type="button" class="btn-toevoegen" id="btn-voeg-ing-toe">
-        <svg width="13" height="13"><use href="#ic-plus"/></svg>
-        Ingrediënt toevoegen
+      <!-- Toggle enkelvoudig ↔ componenten -->
+      <button type="button" id="btn-toggle-componenten" class="btn-secundair"
+              style="width:100%;justify-content:center;margin:12px 0 6px;font-size:12px">
+        Componenten gebruiken
       </button>
 
-      <div class="form-sectie-kop">Stappen</div>
-      <div id="stap-form-container"></div>
-      <button type="button" class="btn-toevoegen" id="btn-voeg-stap-toe">
-        <svg width="13" height="13"><use href="#ic-plus"/></svg>
-        Stap toevoegen
-      </button>
+      <!-- Enkelvoudig modus (standaard) -->
+      <div id="recept-enkelvoudig">
+        <div class="form-sectie-kop">Ingrediënten</div>
+        <div id="ing-form-container"></div>
+        <button type="button" class="btn-toevoegen" id="btn-voeg-ing-toe">
+          <svg width="13" height="13"><use href="#ic-plus"/></svg>
+          Ingrediënt toevoegen
+        </button>
+        <div class="form-sectie-kop">Stappen</div>
+        <div id="stap-form-container"></div>
+        <button type="button" class="btn-toevoegen" id="btn-voeg-stap-toe">
+          <svg width="13" height="13"><use href="#ic-plus"/></svg>
+          Stap toevoegen
+        </button>
+      </div>
+
+      <!-- Componenten modus (verborgen bij aanmaken) -->
+      <div id="recept-componenten" style="display:none">
+        <div id="comp-container"></div>
+        <button type="button" class="btn-toevoegen" id="btn-voeg-comp-toe">
+          <svg width="13" height="13"><use href="#ic-plus"/></svg>
+          Component toevoegen
+        </button>
+      </div>
 
       <div style="height:24px"></div>
     </form>
@@ -1109,17 +1258,41 @@ if (!window.storage) {
 }
 
 // ─── Sleutels ────────────────────────────────────────────────────────────────
-function stapAfgevinkSleutel(receptId, stapId) {
-  return `${receptId}|${stapId}`;
+// componentId is optioneel: null/undefined → enkelvoudig recept (2-delig formaat)
+// Met componentId → recept met componenten (3-delig formaat)
+function stapAfgevinkSleutel(receptId, stapId, componentId = null) {
+  return componentId ? `${receptId}|${componentId}|${stapId}` : `${receptId}|${stapId}`;
 }
 
 // ─── Constanten ───────────────────────────────────────────────────────────────
+// CSS-kleur-sleutels per tijdvenster (voor var(--tv-X) in de tijdlijn)
+const TV_CSS_KLEUR = {
+  week_vooruit:    'week',
+  paar_dagen:      'paardagen',
+  dag_ervoor:      'dag',
+  avond_ervoor:    'avond',
+  ochtend_van:     'ochtend',
+  middag_van:      'middag',
+  twee_uur_ervoor: 'tweeuur',
+  uur_ervoor:      'uur',
+  halfuur_ervoor:  'halfuur',
+  a_la_minute:     'alaminute',
+  laatste_uur:     'uur',
+};
+
+// Volgorde is chronologisch (ver weg → dichtbij). laatste_uur is oud veld, alias voor uur_ervoor.
 const TIJDVENSTERS = {
-  week_vooruit: 'Week vooruit',
-  dag_ervoor: 'Dag ervoor',
-  ochtend_van: 'Ochtend van',
-  laatste_uur: 'Laatste uur',
-  a_la_minute: 'À la minute',
+  week_vooruit:    'Week vooruit',
+  paar_dagen:      'Paar dagen ervoor',
+  dag_ervoor:      'Dag ervoor',
+  avond_ervoor:    'Avond ervoor',
+  ochtend_van:     'Ochtend van',
+  middag_van:      'Middag van',
+  twee_uur_ervoor: 'Twee uur ervoor',
+  uur_ervoor:      'Uur ervoor',
+  halfuur_ervoor:  'Halfuur ervoor',
+  a_la_minute:     'À la minute',
+  laatste_uur:     'Uur ervoor', // backward-compat alias (Sprint 1 data)
 };
 
 const PRODUCTGROEPEN = {
@@ -1133,6 +1306,45 @@ const PRODUCTGROEPEN = {
   diepvries: 'Diepvries',
   drank: 'Drank',
   overig: 'Overig',
+};
+
+const EENHEDEN = [
+  { waarde: 'g', label: 'g (gram)' },
+  { waarde: 'kg', label: 'kg (kilo)' },
+  { waarde: 'ml', label: 'ml' },
+  { waarde: 'l', label: 'l (liter)' },
+  { waarde: 'el', label: 'el (eetlepel)' },
+  { waarde: 'tl', label: 'tl (theelepel)' },
+  { waarde: 'snuf', label: 'snuf' },
+  { waarde: 'stuks', label: 'stuks' },
+  { waarde: 'stengels', label: 'stengels' },
+  { waarde: 'teentjes', label: 'teentjes' },
+  { waarde: 'bosjes', label: 'bosjes' },
+  { waarde: 'blikje', label: 'blikje' },
+  { waarde: 'pakje', label: 'pakje' },
+  { waarde: '', label: '(geen)' },
+];
+
+const EENHEID_NORMALISATIE = {
+  'kilo': 'kg', 'kilogram': 'kg', 'gram': 'g', 'grammen': 'g',
+  'milliliter': 'ml', 'liter': 'l', 'eetlepel': 'el', 'eetlepels': 'el',
+  'theelepel': 'tl', 'theelepels': 'tl', 'stuk': 'stuks',
+  'stengel': 'stengels', 'teentje': 'teentjes', 'bosje': 'bosjes',
+};
+
+// PrepActie-waarden en labels (voor ingrediënt-formulier en Prep-tab)
+const PREP_ACTIES = {
+  geen:          '(geen)',
+  snijden:       'Snijden',
+  hakken:        'Hakken',
+  raspen:        'Raspen',
+  persen:        'Persen',
+  afmeten:       'Afmeten',
+  marineren:     'Marineren',
+  weken:         'Weken',
+  ontdooien:     'Ontdooien',
+  op_temperatuur:'Op temperatuur',
+  blancheren:    'Blancheren',
 };
 
 // ─── Strings ─────────────────────────────────────────────────────────────────
@@ -1159,6 +1371,26 @@ function maakId(prefix) {
   return `${prefix}_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
 }
 
+// ─── Schema-migratie ──────────────────────────────────────────────────────────
+// v1 (Sprint 1/1.5) → v2 (Sprint 2A): voeg serveermomenten toe, koppel recepten
+function migreerNaarV2(g) {
+  const sm = {
+    id: maakId('serv'),
+    naam: 'Serveren',
+    tijdstip: g.serveerTijd || '12:00',
+    volgorde: 1,
+  };
+  g.serveermomenten = [sm];
+  for (const r of (g.recepten || [])) {
+    r.serveermomentId = sm.id;
+  }
+  if (!g.afgevinkteIngredientKeys) g.afgevinkteIngredientKeys = [];
+  if (!g.afgevinkteStapKeys) g.afgevinkteStapKeys = [];
+  if (!g.afgevinktePrepKeys) g.afgevinktePrepKeys = [];
+  g.schemaVersie = 2;
+  return g;
+}
+
 // ─── Storage-laag ─────────────────────────────────────────────────────────────
 async function loadAllGelegenheden() {
   const lijst = [];
@@ -1171,12 +1403,36 @@ async function loadAllGelegenheden() {
       } catch (e) { console.warn('[Fire] kon gelegenheid niet laden:', key, e); }
     }
   } catch (e) { console.warn('[Fire] storage.list mislukt:', e); }
+  // Normaliseer eenheden en tijdvensters voor backward compatibility
+  for (const g of lijst) {
+    for (const r of (g.recepten || [])) {
+      if (r.tijdvenster === 'laatste_uur') r.tijdvenster = 'uur_ervoor';
+      for (const ing of (r.ingredienten || [])) {
+        const lower = (ing.eenheid || '').toLowerCase().trim();
+        if (EENHEID_NORMALISATIE[lower] !== undefined) {
+          ing.eenheid = EENHEID_NORMALISATIE[lower];
+        }
+      }
+      for (const s of (r.stappen || [])) {
+        if (s.tijdvenster === 'laatste_uur') s.tijdvenster = 'uur_ervoor';
+      }
+    }
+  }
+  // Migreer naar schema versie 2 indien nodig, sla direct op
+  for (const g of lijst) {
+    if (!g.schemaVersie || g.schemaVersie < 2) {
+      migreerNaarV2(g);
+      try { await saveGelegenheid(g); }
+      catch (e) { console.warn('[Fire] migratie v2 opslaan mislukt:', g.id, e); }
+    }
+  }
   sorteerGelegenheden(lijst);
   return lijst;
 }
 
 async function saveGelegenheid(gelegenheid) {
   gelegenheid.gewijzigd = new Date().toISOString();
+  gelegenheid.schemaVersie = 2;
   try {
     await window.storage.set(`gelegenheden:${gelegenheid.id}`, JSON.stringify(gelegenheid));
   } catch (e) {
@@ -1264,7 +1520,7 @@ function renderStartscherm() {
       <div class="geleg-kaart" data-id="${g.id}" role="button" tabindex="0">
         <div class="geleg-info">
           <div class="geleg-naam">${escHtml(g.naam)}</div>
-          <div class="geleg-meta">${datumTekst}${g.serveerTijd} · ${g.aantalPersonen} personen · ${n === 1 ? '1 recept' : n + ' recepten'}</div>
+          <div class="geleg-meta">${datumTekst}${(() => { const sm = (g.serveermomenten || []).sort((a,b)=>a.tijdstip.localeCompare(b.tijdstip))[0]; return sm ? sm.tijdstip : (g.serveerTijd || ''); })()} · ${g.aantalPersonen} personen · ${n === 1 ? '1 recept' : n + ' recepten'}</div>
         </div>
         <div class="geleg-acties">
           <button class="btn-icon btn-verwijder-geleg" data-id="${g.id}" title="Verwijderen">
@@ -1299,9 +1555,11 @@ function renderGelegenheidHeader() {
   const g = actieveGelegenheid();
   if (!g) return;
   document.getElementById('geleg-header-titel').textContent = g.naam;
+  const eersteSm = (g.serveermomenten || []).sort((a, b) => a.tijdstip.localeCompare(b.tijdstip))[0];
+  const tijdTekst = eersteSm ? eersteSm.tijdstip : (g.serveerTijd || '');
   const delen = [];
   if (g.datum) delen.push(formateerDatum(g.datum));
-  delen.push(g.serveerTijd, `${g.aantalPersonen} personen`);
+  delen.push(tijdTekst, `${g.aantalPersonen} personen`);
   document.getElementById('geleg-header-meta').textContent = delen.join(' · ');
 }
 
@@ -1318,6 +1576,19 @@ function wisselTab(tabNaam) {
 }
 
 // ─── Overzicht-tab ────────────────────────────────────────────────────────────
+function maakReceptKaart(r) {
+  const tvKleur = `var(--tv-${TV_CSS_KLEUR[r.tijdvenster] || 'ochtend'})`;
+  const aantalIngs = r.ingredienten ? r.ingredienten.length : 0;
+  const aantalStappen = r.stappen ? r.stappen.length : 0;
+  return `<div class="ov-recept-kaart" data-recept-id="${r.id}">
+    <div style="flex:1;min-width:0">
+      <div class="ov-recept-naam">${escHtml(r.naam)}</div>
+      <div class="ov-recept-meta">${aantalIngs} ingrediënten · ${aantalStappen} stappen</div>
+    </div>
+    <span class="tijdvenster-badge" style="color:${tvKleur}">${TIJDVENSTERS[r.tijdvenster] || r.tijdvenster}</span>
+  </div>`;
+}
+
 function renderOverzichtTab(g) {
   if (!g) return;
   const container = document.getElementById('overzicht-inhoud');
@@ -1333,33 +1604,53 @@ function renderOverzichtTab(g) {
     return;
   }
 
-  const kaarten = g.recepten.map(r => `
-    <div class="ov-recept-kaart" data-recept-id="${r.id}">
-      <div style="flex:1;min-width:0">
-        <div class="ov-recept-naam">${escHtml(r.naam)}</div>
-        <div class="ov-recept-meta">${r.ingredienten.length} ingrediënten · ${r.stappen.length} stappen</div>
-      </div>
-      <span class="tijdvenster-badge">${TIJDVENSTERS[r.tijdvenster] || r.tijdvenster}</span>
-    </div>`).join('');
-
-  const totaalStappen = g.recepten.reduce((s, r) => s + r.stappen.length, 0);
+  // Stats
+  const totaalStappen = g.recepten.reduce((s, r) => s + (r.stappen ? r.stappen.length : 0), 0);
   const afgevinkteStapSet = new Set(g.afgevinkteStapKeys || []);
   const afgevinkteStapCount = g.recepten.reduce((s, r) =>
-    s + r.stappen.filter(st => afgevinkteStapSet.has(stapAfgevinkSleutel(r.id, st.id))).length, 0);
+    s + (r.stappen || []).filter(st => afgevinkteStapSet.has(stapAfgevinkSleutel(r.id, st.id))).length, 0);
 
-  container.innerHTML = `
-    <div class="ov-stats">
-      <div class="ov-stat">
-        <span class="ov-stat-getal">${n}</span>
-        <span class="ov-stat-label">Recepten</span>
-      </div>
-      ${totaalStappen > 0 ? `<div class="ov-stat">
-        <span class="ov-stat-getal">${afgevinkteStapCount}/${totaalStappen}</span>
-        <span class="ov-stat-label">Stappen gedaan</span>
-      </div>` : ''}
+  const sms = [...(g.serveermomenten || [])].sort((a, b) => a.tijdstip.localeCompare(b.tijdstip));
+  const multiMoment = sms.length > 1;
+
+  let statsHtml = `<div class="ov-stats">
+    <div class="ov-stat">
+      <span class="ov-stat-getal">${n}</span>
+      <span class="ov-stat-label">Recepten</span>
     </div>
-    ${kaarten}
-    <button class="btn-toevoegen" id="ov-btn-add">
+    ${multiMoment ? `<div class="ov-stat">
+      <span class="ov-stat-getal">${sms.length}</span>
+      <span class="ov-stat-label">Momenten</span>
+    </div>` : ''}
+    ${totaalStappen > 0 ? `<div class="ov-stat">
+      <span class="ov-stat-getal">${afgevinkteStapCount}/${totaalStappen}</span>
+      <span class="ov-stat-label">Stappen gedaan</span>
+    </div>` : ''}
+  </div>`;
+
+  // Recepten-kaarten: gegroepeerd per serveermoment als er meer dan 1 is
+  let receptenHtml = '';
+  if (multiMoment) {
+    const smIds = new Set(sms.map(sm => sm.id));
+    for (const sm of sms) {
+      const rijen = g.recepten.filter(r => r.serveermomentId === sm.id);
+      if (!rijen.length) continue;
+      receptenHtml += `<div class="ov-serveerm-kop">${sm.tijdstip} — ${escHtml(sm.naam)}</div>`;
+      receptenHtml += rijen.map(maakReceptKaart).join('');
+    }
+    // Recepten zonder geldig serveermomentId (edge case na incomplete migratie)
+    const wezen = g.recepten.filter(r => !smIds.has(r.serveermomentId));
+    if (wezen.length) {
+      receptenHtml += `<div class="ov-serveerm-kop">Overig</div>`;
+      receptenHtml += wezen.map(maakReceptKaart).join('');
+    }
+  } else {
+    // Enkelvoudig: platte lijst (zoals v1.0.0)
+    receptenHtml = g.recepten.map(maakReceptKaart).join('');
+  }
+
+  container.innerHTML = statsHtml + receptenHtml + `
+    <button class="btn-toevoegen" id="ov-btn-add" style="margin-top:8px">
       <svg width="13" height="13"><use href="#ic-plus"/></svg> Recept toevoegen
     </button>`;
 
@@ -1422,32 +1713,68 @@ function renderReceptDetail(receptId) {
   if (!r) return;
   const detail = document.getElementById('recept-detail-container');
 
-  const tvOpties = Object.entries(TIJDVENSTERS).map(([k, v]) =>
-    `<option value="${k}" ${r.tijdvenster === k ? 'selected' : ''}>${v}</option>`).join('');
+  const tvOpties = Object.entries(TIJDVENSTERS)
+    .filter(([k]) => k !== 'laatste_uur')
+    .map(([k, v]) => `<option value="${k}" ${r.tijdvenster === k ? 'selected' : ''}>${v}</option>`).join('');
 
   const bronLabel = r.bronType === 'foto' ? 'Foto' : r.bronType === 'link' ? 'Link' : 'Handmatig';
 
-  const ings = r.ingredienten.length
-    ? r.ingredienten.map(ing => `
-        <div class="ing-item" data-id="${ing.id}">
-          <div class="ing-cb"></div>
-          <span class="ing-tekst">${escHtml(formateerIngredient(ing, r.origineelAantalPersonen, r.geschaaldAantalPersonen))}</span>
-        </div>`).join('')
-    : `<p style="color:var(--mu);font-size:13px;padding:8px 0">Geen ingrediënten.</p>`;
+  function maakIngItems(ings) {
+    return ings.length
+      ? ings.map(ing => `
+          <div class="ing-item" data-id="${ing.id}">
+            <div class="ing-cb"></div>
+            <span class="ing-tekst">${escHtml(formateerIngredient(ing, r.origineelAantalPersonen, r.geschaaldAantalPersonen))}</span>
+          </div>`).join('')
+      : `<p style="color:var(--mu);font-size:13px;padding:8px 0">Geen ingrediënten.</p>`;
+  }
+  function maakStapItems(staps) {
+    return staps.length
+      ? staps.map(s => {
+          const stapTv = s.tijdvenster;
+          const stapTvBadge = stapTv
+            ? `<span class="stap-tv-badge" style="color:var(--tv-${TV_CSS_KLEUR[stapTv] || 'ochtend'})">${TIJDVENSTERS[stapTv] || stapTv}</span>`
+            : '';
+          return `
+          <div class="stap-item" data-id="${s.id}">
+            <div class="stap-nr">${s.nummer}</div>
+            <div style="flex:1">
+              <span class="stap-tekst-detail">${escHtml(s.tekst)}</span>
+              ${stapTvBadge}
+            </div>
+          </div>`;
+        }).join('')
+      : `<p style="color:var(--mu);font-size:13px;padding:8px 0">Geen stappen.</p>`;
+  }
 
-  const stappen = r.stappen.length
-    ? r.stappen.map(s => `
-        <div class="stap-item" data-id="${s.id}">
-          <div class="stap-nr">${s.nummer}</div>
-          <span class="stap-tekst-detail">${escHtml(s.tekst)}</span>
-        </div>`).join('')
-    : `<p style="color:var(--mu);font-size:13px;padding:8px 0">Geen stappen.</p>`;
+  let detailSectiesHtml;
+  if (r.componenten && r.componenten.length) {
+    detailSectiesHtml = r.componenten.map(comp => {
+      const tvBadge = `<span class="stap-tv-badge" style="color:var(--tv-${TV_CSS_KLEUR[comp.tijdvenster] || 'ochtend'})">${TIJDVENSTERS[comp.tijdvenster] || comp.tijdvenster}</span>`;
+      return `
+        <div class="comp-detail-kop">
+          <span class="comp-detail-naam">${escHtml(comp.naam)}</span>
+          ${tvBadge}
+        </div>
+        <div class="sectie-kop" style="margin-top:8px">Ingrediënten</div>
+        ${maakIngItems(comp.ingredienten)}
+        <div class="sectie-kop" style="margin-top:12px">Stappen</div>
+        ${maakStapItems(comp.stappen)}`;
+    }).join('');
+  } else {
+    detailSectiesHtml = `
+      <div class="sectie-kop">Ingrediënten</div>
+      <div id="detail-ings">${maakIngItems(r.ingredienten)}</div>
+      <div class="sectie-kop">Stappen</div>
+      <div id="detail-stappen">${maakStapItems(r.stappen)}</div>`;
+  }
 
+  const tvSelectKleur = `var(--tv-${TV_CSS_KLEUR[r.tijdvenster] || 'ochtend'})`;
   detail.innerHTML = `
     <input type="text" class="recept-detail-naam" value="${escHtml(r.naam)}" data-id="${r.id}" autocomplete="off">
     <div class="recept-meta-rij">
       <span class="recept-bron">${bronLabel}</span>
-      <select class="recept-tv-select" data-id="${r.id}">${tvOpties}</select>
+      <select class="recept-tv-select" data-id="${r.id}" style="color:${tvSelectKleur}">${tvOpties}</select>
     </div>
     <div class="schaler">
       <span class="schaler-label">Porties</span>
@@ -1455,10 +1782,7 @@ function renderReceptDetail(receptId) {
       <span class="schaler-getal" id="sch-getal">${r.geschaaldAantalPersonen}</span>
       <button class="schaler-btn" id="sch-plus">+</button>
     </div>
-    <div class="sectie-kop">Ingrediënten</div>
-    <div id="detail-ings">${ings}</div>
-    <div class="sectie-kop">Stappen</div>
-    <div id="detail-stappen">${stappen}</div>
+    ${detailSectiesHtml}
     <div class="recept-acties">
       <button class="btn-primair" style="flex:1;justify-content:center" id="btn-start-cook">Cook Mode</button>
       <button class="btn-icon" id="btn-bewerk-recept" title="Recept bewerken">
@@ -1482,6 +1806,7 @@ function renderReceptDetail(receptId) {
   // Tijdvenster
   detail.querySelector('.recept-tv-select').addEventListener('change', async (e) => {
     r.tijdvenster = e.target.value;
+    e.target.style.color = `var(--tv-${TV_CSS_KLEUR[r.tijdvenster] || 'ochtend'})`;
     try { await saveGelegenheid(g); } catch (err) { alert(STRINGS.opslagFout); }
   });
 
@@ -1489,11 +1814,9 @@ function renderReceptDetail(receptId) {
   detail.querySelector('#sch-min').addEventListener('click', () => schaalPorties(r.id, -1));
   detail.querySelector('#sch-plus').addEventListener('click', () => schaalPorties(r.id, +1));
 
-  // Ingredient checkboxes (visueel, niet gepersisteerd in Taak 5)
+  // Ingredient/stap checkboxes (visueel)
   detail.querySelectorAll('.ing-item').forEach(item =>
     item.addEventListener('click', () => item.classList.toggle('afgevinkt')));
-
-  // Stap checkboxes (visueel)
   detail.querySelectorAll('.stap-item').forEach(item =>
     item.addEventListener('click', () => item.classList.toggle('afgevinkt')));
 
@@ -1540,10 +1863,12 @@ async function bevestigVerwijderRecept(receptId) {
 // ─── Cook Mode ────────────────────────────────────────────────────────────────
 let _wakeLock = null;
 let _cookReceptId = null;
+let _cookComponentIdx = 0;
 const _timerStarts = {}; // stapId → Date.now() van start, of null
 
 async function openCookMode(receptId) {
   _cookReceptId = receptId;
+  _cookComponentIdx = 0;
   renderCookMode();
   document.getElementById('cook-mode').classList.add('actief');
   document.body.style.overflow = 'hidden';
@@ -1593,47 +1918,91 @@ function renderCookMode() {
   document.getElementById('cook-titel').textContent = r.naam;
 
   const body = document.getElementById('cook-body');
+  const heeftComps = r.componenten && r.componenten.length > 0;
 
-  // Ingrediënten
-  const ingHtml = r.ingredienten.length
-    ? r.ingredienten.map(ing =>
-        `<div class="cook-ing-item">${escHtml(formateerIngredient(ing, r.origineelAantalPersonen, r.geschaaldAantalPersonen))}</div>`
-      ).join('')
-    : `<p style="color:var(--mu);font-size:14px">Geen ingrediënten.</p>`;
+  function maakTimerHtml(s) {
+    return s.timerMinuten
+      ? `<div class="cook-timer">
+           <button class="cook-timer-btn" data-stap-id="${escHtml(s.id)}" data-minuten="${s.timerMinuten}">
+             Start timer (${s.timerMinuten} min)
+           </button>
+           <span class="cook-timer-display" id="timer-${escHtml(s.id)}"></span>
+         </div>`
+      : '';
+  }
 
-  // Stappen
-  const stappenHtml = r.stappen.length
-    ? r.stappen.map(s => {
-        const sleutel = stapAfgevinkSleutel(r.id, s.id);
-        const isAf = afgevinkt.has(sleutel);
-        const timerHtml = s.timerMinuten
-          ? `<div class="cook-timer">
-               <button class="cook-timer-btn" data-stap-id="${escHtml(s.id)}" data-minuten="${s.timerMinuten}">
-                 Start timer (${s.timerMinuten} min)
-               </button>
-               <span class="cook-timer-display" id="timer-${escHtml(s.id)}"></span>
-             </div>`
-          : '';
-        return `<div class="cook-stap${isAf ? ' afgevinkt' : ''}" data-sleutel="${escHtml(sleutel)}">
-          <div class="cook-stap-nr">${s.nummer}</div>
-          <div class="cook-stap-body">
-            <div class="cook-stap-tekst">${escHtml(s.tekst)}</div>
-            ${timerHtml}
-          </div>
-        </div>`;
-      }).join('')
-    : `<p style="color:var(--mu);font-size:14px">Geen stappen.</p>`;
+  if (heeftComps) {
+    if (_cookComponentIdx < 0) _cookComponentIdx = 0;
+    if (_cookComponentIdx >= r.componenten.length) _cookComponentIdx = r.componenten.length - 1;
+    const comp = r.componenten[_cookComponentIdx];
 
-  body.innerHTML = `
-    <div class="cook-sectie-kop">Ingrediënten</div>
-    <div id="cook-ings">${ingHtml}</div>
-    <div class="cook-sectie-kop">Stappen</div>
-    <div id="cook-stappen">${stappenHtml}</div>`;
+    const navHtml = `
+      <div class="cook-nav">
+        <button class="cook-nav-btn" id="cook-prev-comp" ${_cookComponentIdx === 0 ? 'disabled' : ''}>← Vorige</button>
+        <div class="cook-comp-indicator">${escHtml(comp.naam)} (${_cookComponentIdx + 1}/${r.componenten.length})</div>
+        <button class="cook-nav-btn" id="cook-next-comp" ${_cookComponentIdx >= r.componenten.length - 1 ? 'disabled' : ''}>Volgende →</button>
+      </div>`;
 
-  // Stap afvinken
+    const ingHtml = comp.ingredienten.length
+      ? comp.ingredienten.map(ing =>
+          `<div class="cook-ing-item">${escHtml(formateerIngredient(ing, r.origineelAantalPersonen, r.geschaaldAantalPersonen))}</div>`
+        ).join('')
+      : `<p style="color:var(--mu);font-size:14px">Geen ingrediënten.</p>`;
+
+    const stappenHtml = comp.stappen.length
+      ? comp.stappen.map(s => {
+          const sleutel = stapAfgevinkSleutel(r.id, s.id, comp.id);
+          const isAf = afgevinkt.has(sleutel);
+          return `<div class="cook-stap${isAf ? ' afgevinkt' : ''}" data-sleutel="${escHtml(sleutel)}">
+            <div class="cook-stap-nr">${s.nummer}</div>
+            <div class="cook-stap-body">
+              <div class="cook-stap-tekst">${escHtml(s.tekst)}</div>
+              ${maakTimerHtml(s)}
+            </div>
+          </div>`;
+        }).join('')
+      : `<p style="color:var(--mu);font-size:14px">Geen stappen.</p>`;
+
+    body.innerHTML = `${navHtml}
+      <div class="cook-sectie-kop">Ingrediënten</div>
+      <div id="cook-ings">${ingHtml}</div>
+      <div class="cook-sectie-kop">Stappen</div>
+      <div id="cook-stappen">${stappenHtml}</div>`;
+
+    body.querySelector('#cook-prev-comp')?.addEventListener('click', () => { _cookComponentIdx--; renderCookMode(); });
+    body.querySelector('#cook-next-comp')?.addEventListener('click', () => { _cookComponentIdx++; renderCookMode(); });
+
+  } else {
+    const ingHtml = r.ingredienten.length
+      ? r.ingredienten.map(ing =>
+          `<div class="cook-ing-item">${escHtml(formateerIngredient(ing, r.origineelAantalPersonen, r.geschaaldAantalPersonen))}</div>`
+        ).join('')
+      : `<p style="color:var(--mu);font-size:14px">Geen ingrediënten.</p>`;
+
+    const stappenHtml = r.stappen.length
+      ? r.stappen.map(s => {
+          const sleutel = stapAfgevinkSleutel(r.id, s.id);
+          const isAf = afgevinkt.has(sleutel);
+          return `<div class="cook-stap${isAf ? ' afgevinkt' : ''}" data-sleutel="${escHtml(sleutel)}">
+            <div class="cook-stap-nr">${s.nummer}</div>
+            <div class="cook-stap-body">
+              <div class="cook-stap-tekst">${escHtml(s.tekst)}</div>
+              ${maakTimerHtml(s)}
+            </div>
+          </div>`;
+        }).join('')
+      : `<p style="color:var(--mu);font-size:14px">Geen stappen.</p>`;
+
+    body.innerHTML = `
+      <div class="cook-sectie-kop">Ingrediënten</div>
+      <div id="cook-ings">${ingHtml}</div>
+      <div class="cook-sectie-kop">Stappen</div>
+      <div id="cook-stappen">${stappenHtml}</div>`;
+  }
+
+  // Stap afvinken (gemeenschappelijk)
   body.querySelectorAll('.cook-stap').forEach(el => {
     el.addEventListener('click', async (e) => {
-      // Niet afvinken als op timer-knop geklikt
       if (e.target.closest('.cook-timer-btn')) return;
       const sleutel = el.dataset.sleutel;
       const set = new Set(g.afgevinkteStapKeys || []);
@@ -1644,21 +2013,19 @@ function renderCookMode() {
     });
   });
 
-  // Timer-knoppen
+  // Timer-knoppen (gemeenschappelijk)
   body.querySelectorAll('.cook-timer-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
       const stapId = btn.dataset.stapId;
       const minuten = parseInt(btn.dataset.minuten, 10);
       if (_timerStarts[stapId]) {
-        // Reset
         delete _timerStarts[stapId];
         btn.textContent = `Start timer (${minuten} min)`;
         btn.classList.remove('actief');
         const display = document.getElementById(`timer-${stapId}`);
         if (display) { display.textContent = ''; display.className = 'cook-timer-display'; }
       } else {
-        // Start
         _timerStarts[stapId] = Date.now() + minuten * 60 * 1000;
         btn.textContent = 'Stop timer';
         btn.classList.add('actief');
@@ -1707,15 +2074,20 @@ const EXTRACTIE_PROMPT = `Je bent een assistent die recepten extraheert en omzet
 1. Vertaal naar Nederlands. Behoud cultureel herkenbare namen (Tiramisu, Ratatouille).
 2. Reken om naar metrisch: cups→ml/g, oz→g, fl oz→ml, lb→g, °F→°C, tbsp→el, tsp→tl.
 3. Herken het originele aantal porties.
-4. Per ingrediënt: hoeveelheid, eenheid, naam, productgroep (zie lijst).
-5. Per stap: korte Nederlandse instructie.
-6. Tijdvenster: week_vooruit, dag_ervoor, ochtend_van, laatste_uur, a_la_minute. Bij twijfel: ochtend_van.
-7. Geef ALLEEN valide JSON terug, geen extra tekst of code blocks.
+4. Per ingrediënt: hoeveelheid als getal, eenheid uit de vaste lijst, naam, productgroep (zie lijst).
+5. Per stap: korte Nederlandse instructie. Geef per stap een tijdvenster als de stap duidelijk op een ander moment hoort dan het recept-tijdvenster (bijv. marineren de ochtend, bakken het laatste uur).
+6. Tijdvenster (recept en stappen): week_vooruit, paar_dagen, dag_ervoor, avond_ervoor, ochtend_van, middag_van, twee_uur_ervoor, uur_ervoor, halfuur_ervoor, a_la_minute. Bij twijfel: ochtend_van.
+7. Eenheden: gebruik ALLEEN: g, kg, ml, l, el, tl, snuf, stuks, stengels, teentjes, bosjes, blikje, pakje, of "" (leeg, voor ingrediënten zonder eenheid).
+8. Als het recept duidelijk aparte onderdelen heeft (bijv. saus, bodem, garnituur, vulling), gebruik dan een "componenten" array in plaats van "ingredienten"/"stappen". Elke component heeft: naam, tijdvenster, ingredienten (zelfde structuur), stappen (zelfde structuur). Bij twijfel: gebruik geen componenten.
+9. Geef ALLEEN valide JSON terug, geen extra tekst of code blocks.
 
 Productgroepen: groente_fruit, zuivel_eieren, vlees_vis, brood_banket, droge_waren, kruiden_specerijen, olie_azijn_saus, diepvries, drank, overig.
 
-Output:
-{"naam":"...","origineelAantalPersonen":4,"bereidingstijdMinuten":60,"tijdvenster":"ochtend_van","ingredienten":[{"hoeveelheid":500,"eenheid":"g","naam":"bloem","productgroep":"droge_waren","opmerking":""}],"stappen":[{"nummer":1,"tekst":"..."}]}
+Output (enkelvoudig):
+{"naam":"...","origineelAantalPersonen":4,"bereidingstijdMinuten":60,"tijdvenster":"ochtend_van","ingredienten":[{"hoeveelheid":500,"eenheid":"g","naam":"bloem","productgroep":"droge_waren","opmerking":""}],"stappen":[{"nummer":1,"tekst":"...","tijdvenster":"ochtend_van"}]}
+
+Output (met componenten):
+{"naam":"...","origineelAantalPersonen":4,"bereidingstijdMinuten":60,"tijdvenster":"ochtend_van","componenten":[{"naam":"Bodem","tijdvenster":"dag_ervoor","ingredienten":[...],"stappen":[...]},{"naam":"Vulling","tijdvenster":"uur_ervoor","ingredienten":[...],"stappen":[...]}]}
 
 Geen recept gevonden: {"fout":"geen_recept_herkend","reden":"..."}`;
 
@@ -1837,26 +2209,59 @@ function verwerkImportResultaat(jsonTekst, bronType) {
   document.getElementById('rf-porties').value = data.origineelAantalPersonen || actieveGelegenheid()?.aantalPersonen || 4;
   document.getElementById('rf-tijdvenster').value = data.tijdvenster || 'ochtend_van';
   document.getElementById('rf-bereidingstijd').value = data.bereidingstijdMinuten || '';
-  _formIngs = (data.ingredienten || []).map(i => ({
-    id: maakId('fi'),
-    hoeveelheid: i.hoeveelheid ?? null,
-    eenheid: i.eenheid || '',
-    naam: i.naam || '',
-    productgroep: i.productgroep || 'overig',
-    opmerking: i.opmerking || '',
-  }));
-  _formStaps = (data.stappen || []).map(s => ({
-    id: maakId('fs'),
-    tekst: s.tekst || '',
-    timerMinuten: s.timerMinuten,
-  }));
-  if (!_formIngs.length) _formIngs = [leegIng()];
-  if (!_formStaps.length) _formStaps = [leegStap()];
-  // bronType wordt bewaard voor als we submiten
   _importBronType = bronType;
   _importBronUrl = bronType === 'link' ? document.getElementById('link-url').value.trim() : undefined;
-  renderIngFormRijen();
-  renderStapFormRijen();
+
+  if (data.componenten && data.componenten.length) {
+    _formComponentenModus = true;
+    _formComponenten = data.componenten.map(comp => ({
+      id: maakId('comp'),
+      naam: comp.naam || 'Component',
+      tijdvenster: comp.tijdvenster || data.tijdvenster || 'ochtend_van',
+      ings: (comp.ingredienten || []).map(i => ({
+        id: maakId('fi'),
+        hoeveelheid: i.hoeveelheid ?? null,
+        eenheid: i.eenheid || '',
+        naam: i.naam || '',
+        productgroep: i.productgroep || 'overig',
+        opmerking: i.opmerking || '',
+      })),
+      staps: (comp.stappen || []).map(s => ({
+        id: maakId('fs'),
+        tekst: s.tekst || '',
+        timerMinuten: s.timerMinuten,
+        tijdvenster: s.tijdvenster || undefined,
+      })),
+    }));
+    _formComponenten.forEach(c => {
+      if (!c.ings.length) c.ings = [leegIng()];
+      if (!c.staps.length) c.staps = [leegStap()];
+    });
+    _formIngs = [leegIng()];
+    _formStaps = [leegStap()];
+  } else {
+    _formComponentenModus = false;
+    _formComponenten = [];
+    _formIngs = (data.ingredienten || []).map(i => ({
+      id: maakId('fi'),
+      hoeveelheid: i.hoeveelheid ?? null,
+      eenheid: i.eenheid || '',
+      naam: i.naam || '',
+      productgroep: i.productgroep || 'overig',
+      opmerking: i.opmerking || '',
+    }));
+    _formStaps = (data.stappen || []).map(s => ({
+      id: maakId('fs'),
+      tekst: s.tekst || '',
+      timerMinuten: s.timerMinuten,
+      tijdvenster: s.tijdvenster || undefined,
+    }));
+    if (!_formIngs.length) _formIngs = [leegIng()];
+    if (!_formStaps.length) _formStaps = [leegStap()];
+    renderIngFormRijen();
+    renderStapFormRijen();
+  }
+  initReceptFormModus();
   toonReceptStap('form');
 }
 
@@ -1884,7 +2289,10 @@ function renderBoodschappenTab(g) {
   // Samenvoegen: sleutel = productgroep + naam + eenheid
   const groepen = {}; // { productgroep: { sleutel: { naam, eenheid, hoeveelheid, productgroep } } }
   for (const r of g.recepten) {
-    for (const ing of r.ingredienten) {
+    const alleIngs = r.componenten && r.componenten.length
+      ? r.componenten.flatMap(c => c.ingredienten)
+      : r.ingredienten;
+    for (const ing of alleIngs) {
       const pgKey = ing.productgroep || 'overig';
       if (!groepen[pgKey]) groepen[pgKey] = {};
       const sleutel = berekeningsBoodschappenSleutel(ing.naam, ing.eenheid);
@@ -1966,6 +2374,46 @@ function renderBoodschappenTab(g) {
   }
 }
 
+// ─── Tijdlijn: bouw handelingen op ───────────────────────────────────────────
+function buildTijdlijn(g) {
+  const handelingen = [];
+  for (const r of g.recepten) {
+    if (r.componenten && r.componenten.length) {
+      for (const comp of r.componenten) {
+        for (const s of comp.stappen) {
+          if (!s.tekst) continue;
+          handelingen.push({
+            tijdvenster: s.tijdvenster || comp.tijdvenster || r.tijdvenster || 'ochtend_van',
+            tekst: s.tekst,
+            receptNaam: `${r.naam} — ${comp.naam}`,
+            stapId: s.id,
+            receptId: r.id,
+          });
+        }
+      }
+    } else {
+      for (const s of r.stappen) {
+        if (!s.tekst) continue;
+        handelingen.push({
+          tijdvenster: s.tijdvenster || r.tijdvenster || 'ochtend_van',
+          tekst: s.tekst,
+          receptNaam: r.naam,
+          stapId: s.id,
+          receptId: r.id,
+        });
+      }
+    }
+  }
+  // Groepeer per tijdvenster in chronologische volgorde
+  const volgorde = Object.keys(TIJDVENSTERS).filter(k => k !== 'laatste_uur');
+  const gegroepeerd = {};
+  for (const tv of volgorde) {
+    const items = handelingen.filter(h => h.tijdvenster === tv);
+    if (items.length) gegroepeerd[tv] = items;
+  }
+  return { gegroepeerd, volgorde };
+}
+
 // ─── Tijdlijn-tab ─────────────────────────────────────────────────────────────
 function renderTijdlijnTab(g) {
   const container = document.getElementById('tab-tijdlijn');
@@ -1974,34 +2422,24 @@ function renderTijdlijnTab(g) {
     return;
   }
 
-  // Groepeer recepten per tijdvenster
-  const volgorde = ['week_vooruit', 'dag_ervoor', 'ochtend_van', 'laatste_uur', 'a_la_minute'];
-  const groepen = {};
-  for (const r of g.recepten) {
-    const tv = r.tijdvenster || 'ochtend_van';
-    if (!groepen[tv]) groepen[tv] = [];
-    groepen[tv].push(r);
-  }
+  const { gegroepeerd, volgorde } = buildTijdlijn(g);
+  const gevulde = volgorde.filter(tv => gegroepeerd[tv]);
 
-  const gevulde = volgorde.filter(tv => groepen[tv] && groepen[tv].length);
   if (!gevulde.length) {
-    container.innerHTML = '<div class="tab-leeg">De tijdlijn verschijnt zodra je recepten hebt toegevoegd.</div>';
+    container.innerHTML = '<div class="tab-leeg">Voeg stappen toe aan je recepten om de tijdlijn te vullen.</div>';
     return;
   }
 
   let html = '<div style="padding:var(--gap)">';
   for (const tv of gevulde) {
-    html += `<div class="tijdlijn-sectie">
-      <div class="tijdlijn-sectie-kop">${escHtml(TIJDVENSTERS[tv])}</div>`;
-    for (const r of groepen[tv]) {
-      const eersteStap = r.stappen.length ? r.stappen[0].tekst : '';
-      const preview = eersteStap ? eersteStap.substring(0, 80) + (eersteStap.length > 80 ? '…' : '') : '';
-      html += `<div class="tijdlijn-recept" data-recept-id="${escHtml(r.id)}">
-        <div class="tijdlijn-recept-body">
-          <div class="tijdlijn-recept-naam">${escHtml(r.naam)}</div>
-          ${preview ? `<div class="tijdlijn-recept-preview">${escHtml(preview)}</div>` : ''}
-        </div>
-        <div class="tijdlijn-chevron"><svg width="16" height="16"><use href="#ic-chevron-right"/></svg></div>
+    const tvKleur = `var(--tv-${TV_CSS_KLEUR[tv] || 'ochtend'})`;
+    html += `<div class="tijdlijn-sectie" style="border-left:3px solid ${tvKleur};padding-left:10px">
+      <div class="tijdlijn-sectie-kop" style="color:${tvKleur}">${escHtml(TIJDVENSTERS[tv])}</div>`;
+    for (const h of gegroepeerd[tv]) {
+      html += `<div class="tijdlijn-handeling" data-recept-id="${escHtml(h.receptId)}">
+        <span class="tl-stap-tekst">${escHtml(h.tekst)}</span>
+        <span class="tl-recept-naam">— ${escHtml(h.receptNaam)}</span>
+        <div class="tijdlijn-chevron"><svg width="14" height="14"><use href="#ic-chevron-right"/></svg></div>
       </div>`;
     }
     html += '</div>';
@@ -2009,13 +2447,61 @@ function renderTijdlijnTab(g) {
   html += '</div>';
   container.innerHTML = html;
 
-  // Navigeer naar recept bij klikken
-  container.querySelectorAll('.tijdlijn-recept').forEach(el => {
+  container.querySelectorAll('.tijdlijn-handeling').forEach(el => {
     el.addEventListener('click', () => {
       state.actieveReceptId = el.dataset.receptId;
       wisselTab('recepten');
     });
   });
+}
+
+// ─── Serveermoment-form state ─────────────────────────────────────────────────
+let _formServeermomenten = [];
+let _verwijderdeServeermomentIds = [];
+
+function saveServeermomentState() {
+  document.querySelectorAll('.serveerm-rij').forEach(rij => {
+    const sm = _formServeermomenten.find(s => s.id === rij.dataset.id);
+    if (!sm) return;
+    sm.naam = rij.querySelector('.serveerm-naam').value.trim() || 'Serveren';
+    sm.tijdstip = rij.querySelector('.serveerm-tijdstip').value || '12:00';
+  });
+}
+
+function renderServeermomentRijen() {
+  const c = document.getElementById('serveerm-container');
+  if (!c) return;
+  const enkelvoudig = _formServeermomenten.length <= 1;
+  c.innerHTML = _formServeermomenten.map(sm => `
+    <div class="serveerm-rij" data-id="${sm.id}">
+      <input type="text" class="form-inp inp-serveerm-naam serveerm-naam"
+             value="${escHtml(sm.naam)}" placeholder="Naam moment" maxlength="40">
+      <input type="time" class="form-inp inp-serveerm-tijd serveerm-tijdstip"
+             value="${sm.tijdstip}">
+      <button type="button" class="btn-rij-del serveerm-del" data-id="${sm.id}"
+              ${enkelvoudig ? 'disabled' : ''}>×</button>
+    </div>`).join('');
+  c.querySelectorAll('.serveerm-del:not([disabled])').forEach(btn => {
+    btn.addEventListener('click', () => verwijderServeermomentRij(btn.dataset.id));
+  });
+}
+
+function verwijderServeermomentRij(id) {
+  if (_formServeermomenten.length <= 1) return;
+  saveServeermomentState();
+  const g = actieveGelegenheid();
+  const eersteAnder = _formServeermomenten.find(sm => sm.id !== id);
+  if (g) {
+    const n = g.recepten.filter(r => r.serveermomentId === id).length;
+    if (n > 0) {
+      const naam = eersteAnder ? `"${eersteAnder.naam}"` : 'het eerste moment';
+      if (!confirm(`${n} recept${n > 1 ? 'en' : ''} worden verplaatst naar ${naam}. Doorgaan?`)) return;
+    }
+  }
+  _verwijderdeServeermomentIds.push(id);
+  _formServeermomenten = _formServeermomenten.filter(sm => sm.id !== id);
+  _formServeermomenten.forEach((sm, i) => { sm.volgorde = i + 1; });
+  renderServeermomentRijen();
 }
 
 // ─── Recept-form ──────────────────────────────────────────────────────────────
@@ -2024,6 +2510,262 @@ let _formStaps = [];
 let _bewerkenReceptId = null;
 let _importBronType = 'handmatig';
 let _importBronUrl = undefined;
+let _formComponentenModus = false;
+let _formComponenten = []; // [{ id, naam, tijdvenster, ings: [], staps: [] }]
+
+function leegComp() {
+  return {
+    id: maakId('comp'),
+    naam: '',
+    tijdvenster: document.getElementById('rf-tijdvenster')?.value || 'ochtend_van',
+    ings: [leegIng()],
+    staps: [leegStap()],
+  };
+}
+
+function initReceptFormModus() {
+  const isComp = _formComponentenModus;
+  document.getElementById('recept-enkelvoudig').style.display = isComp ? 'none' : '';
+  document.getElementById('recept-componenten').style.display = isComp ? '' : 'none';
+  const btn = document.getElementById('btn-toggle-componenten');
+  if (btn) btn.textContent = isComp ? 'Enkelvoudig' : 'Componenten gebruiken';
+  if (isComp) renderComponenten();
+}
+
+function renderComponenten() {
+  const c = document.getElementById('comp-container');
+  if (!c) return;
+  const tvKiesOpts = Object.entries(TIJDVENSTERS)
+    .filter(([k]) => k !== 'laatste_uur')
+    .map(([k, v]) => `<option value="${k}">${v}</option>`).join('');
+
+  c.innerHTML = _formComponenten.map(comp => {
+    const tvOpts = Object.entries(TIJDVENSTERS)
+      .filter(([k]) => k !== 'laatste_uur')
+      .map(([k, v]) => `<option value="${k}"${k === comp.tijdvenster ? ' selected' : ''}>${v}</option>`).join('');
+    return `
+    <div class="comp-blok" data-comp-id="${comp.id}">
+      <div class="comp-blok-header">
+        <input type="text" class="form-inp comp-blok-naam comp-naam"
+               value="${escHtml(comp.naam)}" placeholder="Naam component (bijv. Bodem)">
+        <select class="form-inp comp-blok-tv comp-tv">${tvOpts}</select>
+        ${_formComponenten.length > 1
+          ? `<button type="button" class="btn-rij-del comp-del" data-comp-id="${comp.id}">×</button>`
+          : `<div style="width:26px;flex-shrink:0"></div>`}
+      </div>
+      <div class="comp-sectie-kop">Ingrediënten</div>
+      <div id="ing-comp-${comp.id}"></div>
+      <button type="button" class="btn-toevoegen comp-voeg-ing" data-comp-id="${comp.id}" style="margin-bottom:4px">
+        <svg width="12" height="12"><use href="#ic-plus"/></svg> Ingrediënt toevoegen
+      </button>
+      <div class="comp-sectie-kop">Stappen</div>
+      <div id="stap-comp-${comp.id}"></div>
+      <button type="button" class="btn-toevoegen comp-voeg-stap" data-comp-id="${comp.id}">
+        <svg width="12" height="12"><use href="#ic-plus"/></svg> Stap toevoegen
+      </button>
+    </div>`;
+  }).join('');
+
+  // Render ings en staps per component
+  _formComponenten.forEach(comp => {
+    renderCompIngRijen(comp);
+    renderCompStapRijen(comp);
+  });
+
+  // Delete-knoppen component
+  c.querySelectorAll('.comp-del').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (_formComponenten.length <= 1) return;
+      saveComponentenState();
+      _formComponenten = _formComponenten.filter(co => co.id !== btn.dataset.compId);
+      renderComponenten();
+    });
+  });
+
+  // Toevoeg-knoppen ings/staps per component
+  c.querySelectorAll('.comp-voeg-ing').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const comp = _formComponenten.find(co => co.id === btn.dataset.compId);
+      if (!comp) return;
+      saveCompIngState(comp);
+      comp.ings.push(leegIng());
+      renderCompIngRijen(comp);
+    });
+  });
+  c.querySelectorAll('.comp-voeg-stap').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const comp = _formComponenten.find(co => co.id === btn.dataset.compId);
+      if (!comp) return;
+      saveCompStapState(comp);
+      comp.staps.push(leegStap());
+      renderCompStapRijen(comp);
+    });
+  });
+}
+
+function renderCompIngRijen(comp) {
+  const c = document.getElementById(`ing-comp-${comp.id}`);
+  if (!c) return;
+  c.innerHTML = comp.ings.map(ing => {
+    const pgOpties = Object.entries(PRODUCTGROEPEN).map(([k, v]) =>
+      `<option value="${k}"${k === (ing.productgroep || 'overig') ? ' selected' : ''}>${v}</option>`).join('');
+    const eeOpties = EENHEDEN.map(e =>
+      `<option value="${e.waarde}"${e.waarde === (ing.eenheid || '') ? ' selected' : ''}>${e.label}</option>`).join('');
+    return `
+    <div class="ing-form-rij" data-row-id="${ing.id}" data-comp-id="${comp.id}">
+      <div class="ing-form-top">
+        <input type="number" class="form-inp inp-hoeveelheid ing-hoeveelheid"
+               value="${ing.hoeveelheid != null ? ing.hoeveelheid : ''}" placeholder="Hoev." min="0" step="any">
+        <select class="form-inp inp-eenheid ing-eenheid">${eeOpties}</select>
+        <input type="text" class="form-inp inp-naam ing-naam"
+               value="${escHtml(ing.naam || '')}" placeholder="Naam ingrediënt">
+      </div>
+      <div class="ing-form-bot">
+        <select class="form-inp inp-productgroep ing-productgroep">${pgOpties}</select>
+        <input type="text" class="form-inp inp-opmerking ing-opmerking"
+               value="${escHtml(ing.opmerking || '')}" placeholder="Opmerking (opt.)">
+        <button type="button" class="btn-rij-del" data-row-id="${ing.id}" title="Verwijder">×</button>
+      </div>
+    </div>`;
+  }).join('');
+
+  c.querySelectorAll('.btn-rij-del').forEach(btn => {
+    btn.addEventListener('click', () => {
+      saveCompIngState(comp);
+      if (comp.ings.length <= 1) return;
+      comp.ings = comp.ings.filter(i => i.id !== btn.dataset.rowId);
+      renderCompIngRijen(comp);
+    });
+  });
+}
+
+function renderCompStapRijen(comp) {
+  const c = document.getElementById(`stap-comp-${comp.id}`);
+  if (!c) return;
+  c.innerHTML = comp.staps.map((stap, idx) => {
+    const stapTv = stap.tijdvenster || '';
+    const tvOpts = `<option value=""${stapTv === '' ? ' selected' : ''}>(volgt component)</option>` +
+      Object.entries(TIJDVENSTERS)
+        .filter(([k]) => k !== 'laatste_uur')
+        .map(([k, v]) => `<option value="${k}"${k === stapTv ? ' selected' : ''}>${v}</option>`).join('');
+    return `
+    <div class="stap-form-rij" data-row-id="${stap.id}" data-comp-id="${comp.id}">
+      <div class="stap-form-nr">${idx + 1}</div>
+      <div class="stap-form-body">
+        <textarea class="stap-form-textarea stap-tekst" rows="2">${escHtml(stap.tekst || '')}</textarea>
+        <div class="stap-form-timer">
+          <label>Timer:</label>
+          <input type="number" class="form-inp inp-timer stap-timer"
+                 value="${stap.timerMinuten || ''}" placeholder="min" min="1">
+          <span>min (opt.)</span>
+        </div>
+        <div class="stap-form-tv">
+          <select class="form-inp stap-tijdvenster">${tvOpts}</select>
+        </div>
+      </div>
+      <button type="button" class="btn-rij-del" data-row-id="${stap.id}">×</button>
+    </div>`;
+  }).join('');
+
+  c.querySelectorAll('.btn-rij-del').forEach(btn => {
+    btn.addEventListener('click', () => {
+      saveCompStapState(comp);
+      if (comp.staps.length <= 1) return;
+      comp.staps = comp.staps.filter(s => s.id !== btn.dataset.rowId);
+      renderCompStapRijen(comp);
+    });
+  });
+}
+
+function saveCompIngState(comp) {
+  const c = document.getElementById(`ing-comp-${comp.id}`);
+  if (!c) return;
+  c.querySelectorAll('.ing-form-rij').forEach(rij => {
+    const obj = comp.ings.find(i => i.id === rij.dataset.rowId);
+    if (!obj) return;
+    obj.hoeveelheid = parseFloat(rij.querySelector('.ing-hoeveelheid').value) || null;
+    obj.eenheid = rij.querySelector('.ing-eenheid').value;
+    obj.naam = rij.querySelector('.ing-naam').value.trim();
+    obj.productgroep = rij.querySelector('.ing-productgroep').value;
+    obj.opmerking = rij.querySelector('.ing-opmerking').value.trim();
+  });
+}
+
+function saveCompStapState(comp) {
+  const c = document.getElementById(`stap-comp-${comp.id}`);
+  if (!c) return;
+  c.querySelectorAll('.stap-form-rij').forEach(rij => {
+    const obj = comp.staps.find(s => s.id === rij.dataset.rowId);
+    if (!obj) return;
+    obj.tekst = rij.querySelector('.stap-tekst').value;
+    obj.timerMinuten = parseInt(rij.querySelector('.stap-timer').value) || undefined;
+    const tvEl = rij.querySelector('.stap-tijdvenster');
+    obj.tijdvenster = tvEl && tvEl.value ? tvEl.value : undefined;
+  });
+}
+
+function saveComponentenState() {
+  document.querySelectorAll('.comp-blok').forEach(blok => {
+    const comp = _formComponenten.find(co => co.id === blok.dataset.compId);
+    if (!comp) return;
+    comp.naam = blok.querySelector('.comp-naam').value.trim();
+    comp.tijdvenster = blok.querySelector('.comp-tv').value;
+    saveCompIngState(comp);
+    saveCompStapState(comp);
+  });
+}
+
+function leesComponenten() {
+  saveComponentenState();
+  return _formComponenten.map(comp => ({
+    id: comp.id,
+    naam: comp.naam || 'Component',
+    tijdvenster: comp.tijdvenster || 'ochtend_van',
+    ingredienten: comp.ings.filter(i => i.naam).map(ing => ({
+      id: maakId('ing'),
+      hoeveelheid: ing.hoeveelheid ?? null,
+      eenheid: ing.eenheid || '',
+      naam: ing.naam,
+      productgroep: ing.productgroep || 'overig',
+      opmerking: ing.opmerking || undefined,
+    })),
+    stappen: comp.staps.filter(s => s.tekst).map((s, i) => ({
+      id: maakId('stap'),
+      nummer: i + 1,
+      tekst: s.tekst,
+      timerMinuten: s.timerMinuten,
+      tijdvenster: s.tijdvenster || undefined,
+    })),
+  }));
+}
+
+function schakelNaarComponentModus() {
+  saveIngState(); saveStapState();
+  const tv = document.getElementById('rf-tijdvenster')?.value || 'ochtend_van';
+  _formComponenten = [{
+    id: maakId('comp'),
+    naam: 'Hoofdrecept',
+    tijdvenster: tv,
+    ings: _formIngs.length ? [..._formIngs] : [leegIng()],
+    staps: _formStaps.length ? [..._formStaps] : [leegStap()],
+  }];
+  _formComponentenModus = true;
+  initReceptFormModus();
+}
+
+function schakelNaarEnkelvoudigModus() {
+  if (!confirm('Componenten samenvoegen tot één recept? Tijdvensters per component gaan verloren.')) return;
+  saveComponentenState();
+  const alleIngs = _formComponenten.flatMap(c => c.ings);
+  const alleStaps = _formComponenten.flatMap(c => c.staps).map((s, i) => ({ ...s, nummer: i + 1 }));
+  _formIngs = alleIngs.length ? alleIngs : [leegIng()];
+  _formStaps = alleStaps.length ? alleStaps : [leegStap()];
+  _formComponenten = [];
+  _formComponentenModus = false;
+  initReceptFormModus();
+  renderIngFormRijen();
+  renderStapFormRijen();
+}
 
 const RECEPT_STAPPEN = ['methode', 'link', 'laden', 'fout', 'form'];
 function toonReceptStap(naam) {
@@ -2039,7 +2781,7 @@ function leegIng() {
   return { id: maakId('fi'), hoeveelheid: null, eenheid: '', naam: '', productgroep: 'overig', opmerking: '' };
 }
 function leegStap() {
-  return { id: maakId('fs'), tekst: '', timerMinuten: undefined };
+  return { id: maakId('fs'), tekst: '', timerMinuten: undefined, tijdvenster: undefined };
 }
 
 // Bewaar huidige DOM-waarden terug in de arrays (zodat waarden niet verloren gaan bij re-render)
@@ -2060,7 +2802,32 @@ function saveStapState() {
     if (!obj) return;
     obj.tekst = rij.querySelector('.stap-tekst').value;
     obj.timerMinuten = parseInt(rij.querySelector('.stap-timer').value) || undefined;
+    const tvEl = rij.querySelector('.stap-tijdvenster');
+    obj.tijdvenster = tvEl && tvEl.value ? tvEl.value : undefined;
   });
+}
+
+function vulServeermomentDropdown(huidigServeermomentId) {
+  const g = actieveGelegenheid();
+  const rij = document.getElementById('rf-serveermoment-rij');
+  const sel = document.getElementById('rf-serveermoment');
+  if (!g || !rij || !sel) return;
+  const sms = [...(g.serveermomenten || [])].sort((a, b) => a.tijdstip.localeCompare(b.tijdstip));
+  if (sms.length <= 1) {
+    rij.style.display = 'none';
+    return;
+  }
+  rij.style.display = '';
+  sel.innerHTML = sms.map(sm =>
+    `<option value="${sm.id}"${sm.id === huidigServeermomentId ? ' selected' : ''}>${sm.tijdstip} — ${escHtml(sm.naam)}</option>`
+  ).join('');
+}
+
+function defaultServeermomentId() {
+  const g = actieveGelegenheid();
+  if (!g) return null;
+  const sms = [...(g.serveermomenten || [])].sort((a, b) => a.tijdstip.localeCompare(b.tijdstip));
+  return sms[0]?.id || null;
 }
 
 function openReceptForm(receptId = null) {
@@ -2077,16 +2844,39 @@ function openReceptForm(receptId = null) {
     document.getElementById('rf-porties').value = r.origineelAantalPersonen;
     document.getElementById('rf-tijdvenster').value = r.tijdvenster;
     document.getElementById('rf-bereidingstijd').value = r.bereidingstijdMinuten || '';
-    _formIngs = r.ingredienten.length ? r.ingredienten.map(i => ({ ...i })) : [leegIng()];
-    _formStaps = r.stappen.length ? r.stappen.map(s => ({ ...s })) : [leegStap()];
+    if (r.componenten && r.componenten.length) {
+      _formComponentenModus = true;
+      _formComponenten = r.componenten.map(comp => ({
+        id: comp.id,
+        naam: comp.naam,
+        tijdvenster: comp.tijdvenster,
+        ings: comp.ingredienten.map(i => ({ ...i })),
+        staps: comp.stappen.map(s => ({ ...s })),
+      }));
+      _formIngs = [leegIng()];
+      _formStaps = [leegStap()];
+    } else {
+      _formComponentenModus = false;
+      _formComponenten = [];
+      _formIngs = r.ingredienten.length ? r.ingredienten.map(i => ({ ...i })) : [leegIng()];
+      _formStaps = r.stappen.length ? r.stappen.map(s => ({ ...s })) : [leegStap()];
+    }
     _importBronType = r.bronType;
     _importBronUrl = r.bronUrl;
+    vulServeermomentDropdown(r.serveermomentId);
     document.getElementById('recept-form-titel').textContent = 'Recept bewerken';
-    renderIngFormRijen();
-    renderStapFormRijen();
+    initReceptFormModus();
+    if (!_formComponentenModus) {
+      renderIngFormRijen();
+      renderStapFormRijen();
+    }
     toonReceptStap('form');
   } else {
     // Nieuw recept: toon methode-selectie
+    _formComponentenModus = false;
+    _formComponenten = [];
+    initReceptFormModus();
+    vulServeermomentDropdown(defaultServeermomentId());
     document.getElementById('recept-form-titel').textContent = 'Recept toevoegen';
     document.getElementById('link-url').value = '';
     toonReceptStap('methode');
@@ -2098,6 +2888,8 @@ function openReceptForm(receptId = null) {
 
 function sluitReceptForm() {
   document.getElementById('modaal-recept').classList.remove('actief');
+  _formComponentenModus = false;
+  _formComponenten = [];
 }
 
 function renderIngFormRijen() {
@@ -2105,21 +2897,22 @@ function renderIngFormRijen() {
   c.innerHTML = _formIngs.map((ing) => {
     const pgOpties = Object.entries(PRODUCTGROEPEN).map(([k, v]) =>
       `<option value="${k}"${k === (ing.productgroep || 'overig') ? ' selected' : ''}>${v}</option>`).join('');
+    const eeOpties = EENHEDEN.map(e =>
+      `<option value="${e.waarde}"${e.waarde === (ing.eenheid || '') ? ' selected' : ''}>${e.label}</option>`).join('');
     return `
     <div class="ing-form-rij" data-row-id="${ing.id}">
       <div class="ing-form-top">
         <input type="number" class="form-inp inp-hoeveelheid ing-hoeveelheid"
                value="${ing.hoeveelheid != null ? ing.hoeveelheid : ''}" placeholder="Hoev." min="0" step="any">
-        <input type="text" class="form-inp inp-eenheid ing-eenheid"
-               value="${escHtml(ing.eenheid || '')}" placeholder="Eenh.">
+        <select class="form-inp inp-eenheid ing-eenheid">${eeOpties}</select>
         <input type="text" class="form-inp inp-naam ing-naam"
                value="${escHtml(ing.naam || '')}" placeholder="Naam ingrediënt" required>
-        <button type="button" class="btn-rij-del" data-row-id="${ing.id}" title="Verwijder">×</button>
       </div>
       <div class="ing-form-bot">
         <select class="form-inp inp-productgroep ing-productgroep">${pgOpties}</select>
         <input type="text" class="form-inp inp-opmerking ing-opmerking"
                value="${escHtml(ing.opmerking || '')}" placeholder="Opmerking (opt.)">
+        <button type="button" class="btn-rij-del" data-row-id="${ing.id}" title="Verwijder">×</button>
       </div>
     </div>`;
   }).join('');
@@ -2136,7 +2929,19 @@ function renderIngFormRijen() {
 
 function renderStapFormRijen() {
   const c = document.getElementById('stap-form-container');
-  c.innerHTML = _formStaps.map((stap, idx) => `
+  // Tijdvenster-opties voor stap: eerste optie = "(volgt recept)"
+  const tvKiesOpties = `<option value="">(volgt recept)</option>` +
+    Object.entries(TIJDVENSTERS)
+      .filter(([k]) => k !== 'laatste_uur')
+      .map(([k, v]) => `<option value="${k}">${v}</option>`).join('');
+
+  c.innerHTML = _formStaps.map((stap, idx) => {
+    const stapTv = stap.tijdvenster || '';
+    const tvOpties = `<option value=""${stapTv === '' ? ' selected' : ''}>(volgt recept)</option>` +
+      Object.entries(TIJDVENSTERS)
+        .filter(([k]) => k !== 'laatste_uur')
+        .map(([k, v]) => `<option value="${k}"${k === stapTv ? ' selected' : ''}>${v}</option>`).join('');
+    return `
     <div class="stap-form-rij" data-row-id="${stap.id}">
       <div class="stap-form-nr">${idx + 1}</div>
       <div class="stap-form-body">
@@ -2147,9 +2952,13 @@ function renderStapFormRijen() {
                  value="${stap.timerMinuten || ''}" placeholder="min" min="1">
           <span>min (optioneel)</span>
         </div>
+        <div class="stap-form-tv">
+          <select class="form-inp stap-tijdvenster">${tvOpties}</select>
+        </div>
       </div>
       <button type="button" class="btn-rij-del" data-row-id="${stap.id}" title="Verwijder">×</button>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 
   c.querySelectorAll('.btn-rij-del').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -2173,12 +2982,17 @@ function leesIngredientRijen() {
 }
 
 function leesStapRijen() {
-  return Array.from(document.querySelectorAll('.stap-form-rij')).map((rij, idx) => ({
-    id: maakId('stap'),
-    nummer: idx + 1,
-    tekst: rij.querySelector('.stap-tekst').value.trim(),
-    timerMinuten: parseInt(rij.querySelector('.stap-timer').value) || undefined,
-  })).filter(s => s.tekst);
+  return Array.from(document.querySelectorAll('.stap-form-rij')).map((rij, idx) => {
+    const tvEl = rij.querySelector('.stap-tijdvenster');
+    const tv = tvEl && tvEl.value ? tvEl.value : undefined;
+    return {
+      id: maakId('stap'),
+      nummer: idx + 1,
+      tekst: rij.querySelector('.stap-tekst').value.trim(),
+      timerMinuten: parseInt(rij.querySelector('.stap-timer').value) || undefined,
+      tijdvenster: tv,
+    };
+  }).filter(s => s.tekst);
 }
 
 async function submitReceptHandmatig(e) {
@@ -2189,9 +3003,16 @@ async function submitReceptHandmatig(e) {
   const porties = parseInt(document.getElementById('rf-porties').value, 10) || 1;
   const tijdvenster = document.getElementById('rf-tijdvenster').value;
   const btRaw = document.getElementById('rf-bereidingstijd').value;
-  const ingredienten = leesIngredientRijen();
-  const stappen = leesStapRijen();
+  const gebruikComps = _formComponentenModus;
+  const ingredienten = gebruikComps ? [] : leesIngredientRijen();
+  const stappen = gebruikComps ? [] : leesStapRijen();
+  const componenten = gebruikComps ? leesComponenten() : undefined;
   const g = actieveGelegenheid();
+
+  const serveermomentSel = document.getElementById('rf-serveermoment');
+  const serveermomentId = (serveermomentSel && serveermomentSel.offsetParent !== null)
+    ? serveermomentSel.value
+    : defaultServeermomentId();
 
   if (_bewerkenReceptId) {
     // Bewerken: bestaand recept updaten
@@ -2201,9 +3022,12 @@ async function submitReceptHandmatig(e) {
     r.naam = naam;
     r.origineelAantalPersonen = porties;
     r.tijdvenster = tijdvenster;
+    r.serveermomentId = serveermomentId || r.serveermomentId;
     r.bereidingstijdMinuten = btRaw ? parseInt(btRaw, 10) : undefined;
     r.ingredienten = ingredienten;
     r.stappen = stappen;
+    if (componenten !== undefined) r.componenten = componenten;
+    else delete r.componenten;
     try {
       await saveGelegenheid(g);
       sluitReceptForm();
@@ -2225,8 +3049,10 @@ async function submitReceptHandmatig(e) {
       geschaaldAantalPersonen: porties,
       bereidingstijdMinuten: btRaw ? parseInt(btRaw, 10) : undefined,
       tijdvenster,
+      serveermomentId: serveermomentId || defaultServeermomentId(),
       ingredienten,
       stappen,
+      ...(componenten !== undefined && { componenten }),
       aangemaakt: new Date().toISOString(),
     };
     voegReceptToe(g, recept);
@@ -2245,12 +3071,14 @@ async function submitReceptHandmatig(e) {
 // ─── Gelegenheid aanmaken / bewerken ─────────────────────────────────────────
 function openModaalNieuweGeleg() {
   state.modaalModus = 'aanmaken';
+  _verwijderdeServeermomentIds = [];
+  _formServeermomenten = [{ id: maakId('serv'), naam: 'Serveren', tijdstip: '12:00', volgorde: 1 }];
   document.getElementById('modaal-geleg-titel').textContent = 'Nieuwe gelegenheid';
   document.getElementById('btn-submit-geleg').textContent = 'Aanmaken';
   document.getElementById('f-naam').value = '';
   document.getElementById('f-datum').value = '';
-  document.getElementById('f-tijd').value = '12:00';
   document.getElementById('f-personen').value = '4';
+  renderServeermomentRijen();
   document.getElementById('modaal-geleg').classList.add('actief');
   setTimeout(() => document.getElementById('f-naam').focus(), 50);
 }
@@ -2259,12 +3087,19 @@ function openModaalBewerkGeleg() {
   const g = actieveGelegenheid();
   if (!g) return;
   state.modaalModus = 'bewerken';
+  _verwijderdeServeermomentIds = [];
+  // Laad serveermomenten gesorteerd op tijdstip
+  const gesorteerd = [...(g.serveermomenten || [])].sort((a, b) => a.tijdstip.localeCompare(b.tijdstip));
+  _formServeermomenten = gesorteerd.map((sm, i) => ({ ...sm, volgorde: i + 1 }));
+  if (_formServeermomenten.length === 0) {
+    _formServeermomenten = [{ id: maakId('serv'), naam: 'Serveren', tijdstip: g.serveerTijd || '12:00', volgorde: 1 }];
+  }
   document.getElementById('modaal-geleg-titel').textContent = 'Gelegenheid bewerken';
   document.getElementById('btn-submit-geleg').textContent = 'Opslaan';
   document.getElementById('f-naam').value = g.naam;
   document.getElementById('f-datum').value = g.datum || '';
-  document.getElementById('f-tijd').value = g.serveerTijd;
   document.getElementById('f-personen').value = g.aantalPersonen;
+  renderServeermomentRijen();
   document.getElementById('modaal-geleg').classList.add('actief');
   setTimeout(() => document.getElementById('f-naam').focus(), 50);
 }
@@ -2277,13 +3112,29 @@ async function submitGelegForm(e) {
   e.preventDefault();
   const naam = document.getElementById('f-naam').value.trim();
   const datum = document.getElementById('f-datum').value;
-  const tijd = document.getElementById('f-tijd').value;
   const personen = parseInt(document.getElementById('f-personen').value, 10);
-  if (!naam || !tijd || !personen) return;
+  if (!naam || !personen) return;
+
+  // Lees serveermomenten uit het formulier
+  saveServeermomentState();
+  if (_formServeermomenten.length === 0) return;
+  const eersteServeertijd = _formServeermomenten[0].tijdstip || '12:00';
 
   if (state.modaalModus === 'aanmaken') {
     const nu = new Date().toISOString();
-    const g = { id: maakId('geleg'), naam, datum, serveerTijd: tijd, aantalPersonen: personen, recepten: [], aangemaakt: nu, gewijzigd: nu };
+    const g = {
+      id: maakId('geleg'),
+      naam, datum,
+      serveerTijd: eersteServeertijd, // behoud voor compat
+      serveermomenten: _formServeermomenten,
+      aantalPersonen: personen,
+      recepten: [],
+      afgevinkteIngredientKeys: [],
+      afgevinkteStapKeys: [],
+      afgevinktePrepKeys: [],
+      schemaVersie: 2,
+      aangemaakt: nu, gewijzigd: nu,
+    };
     try {
       await saveGelegenheid(g);
       state.gelegenheden.push(g);
@@ -2294,12 +3145,33 @@ async function submitGelegForm(e) {
   } else {
     const g = actieveGelegenheid();
     if (!g) return;
-    Object.assign(g, { naam, datum, serveerTijd: tijd, aantalPersonen: personen });
+
+    // Verplaats recepten van verwijderde momenten naar het eerste overgebleven moment
+    if (_verwijderdeServeermomentIds.length > 0) {
+      const eersteId = _formServeermomenten[0]?.id;
+      if (eersteId) {
+        for (const r of g.recepten) {
+          if (_verwijderdeServeermomentIds.includes(r.serveermomentId)) {
+            r.serveermomentId = eersteId;
+          }
+        }
+      }
+    }
+
+    // Update gelegenheid-velden
+    Object.assign(g, {
+      naam, datum,
+      serveerTijd: eersteServeertijd,
+      serveermomenten: _formServeermomenten,
+      aantalPersonen: personen,
+    });
     try {
       await saveGelegenheid(g);
       sorteerGelegenheden(state.gelegenheden);
       sluitModaalGeleg();
       renderGelegenheidHeader();
+      // Overzicht-tab bijwerken als die actief is
+      if (state.actieveTab === 'overzicht') renderOverzichtTab(g);
     } catch (err) { alert(STRINGS.opslagFout); }
   }
 }
@@ -2333,14 +3205,38 @@ async function init() {
   document.getElementById('btn-annuleer-geleg').addEventListener('click', sluitModaalGeleg);
   document.getElementById('modaal-geleg').addEventListener('click', (e) => { if (e.target === e.currentTarget) sluitModaalGeleg(); });
   document.getElementById('form-geleg').addEventListener('submit', submitGelegForm);
+  document.getElementById('btn-voeg-serveerm-toe').addEventListener('click', () => {
+    saveServeermomentState();
+    const volgend = _formServeermomenten.length > 0
+      ? _formServeermomenten[_formServeermomenten.length - 1].tijdstip
+      : '12:00';
+    // Zet tijdstip +1 uur
+    const [h, m] = volgend.split(':').map(Number);
+    const nieuwTijdstip = `${String((h + 1) % 24).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+    _formServeermomenten.push({
+      id: maakId('serv'),
+      naam: '',
+      tijdstip: nieuwTijdstip,
+      volgorde: _formServeermomenten.length + 1,
+    });
+    renderServeermomentRijen();
+    // Focus op het nieuwe naam-veld
+    setTimeout(() => {
+      const velden = document.querySelectorAll('.serveerm-naam');
+      if (velden.length) velden[velden.length - 1].focus();
+    }, 30);
+  });
 
   // Recept-form: methode-selectie
   document.getElementById('btn-methode-handmatig').addEventListener('click', () => {
+    _formComponentenModus = false;
+    _formComponenten = [];
     _formIngs = [leegIng()]; _formStaps = [leegStap()];
     document.getElementById('rf-naam').value = '';
     document.getElementById('rf-porties').value = actieveGelegenheid()?.aantalPersonen || 4;
     document.getElementById('rf-tijdvenster').value = 'ochtend_van';
     document.getElementById('rf-bereidingstijd').value = '';
+    initReceptFormModus();
     renderIngFormRijen(); renderStapFormRijen();
     toonReceptStap('form');
     setTimeout(() => document.getElementById('rf-naam').focus(), 50);
@@ -2366,7 +3262,10 @@ async function init() {
   });
 
   document.getElementById('btn-fout-handmatig').addEventListener('click', () => {
+    _formComponentenModus = false;
+    _formComponenten = [];
     _formIngs = [leegIng()]; _formStaps = [leegStap()];
+    initReceptFormModus();
     renderIngFormRijen(); renderStapFormRijen();
     toonReceptStap('form');
   });
@@ -2386,6 +3285,17 @@ async function init() {
     setTimeout(() => { const l = document.querySelectorAll('.stap-tekst'); if (l.length) l[l.length-1].focus(); }, 30);
   });
   document.getElementById('form-recept').addEventListener('submit', submitReceptHandmatig);
+
+  // Componenten toggle + nieuw component
+  document.getElementById('btn-toggle-componenten').addEventListener('click', () => {
+    if (_formComponentenModus) schakelNaarEnkelvoudigModus();
+    else schakelNaarComponentModus();
+  });
+  document.getElementById('btn-voeg-comp-toe').addEventListener('click', () => {
+    saveComponentenState();
+    _formComponenten.push(leegComp());
+    renderComponenten();
+  });
 
   // Cook Mode
   document.getElementById('btn-cook-sluiten').addEventListener('click', sluitCookMode);
