@@ -737,6 +737,17 @@ div.stap-tv-ind { cursor: default; pointer-events: none; }
   display: flex;
   justify-content: center;
 }
+.in-huis-sectie { margin-top: 24px; }
+.in-huis-kop {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--ac2);
+  padding: 0 0 8px;
+  border-bottom: 1px solid var(--bo);
+  margin-bottom: 6px;
+}
 
 /* ── Tijdlijn ── */
 .tijdlijn-sectie { margin-bottom: 22px; }
@@ -762,6 +773,32 @@ div.stap-tv-ind { cursor: default; pointer-events: none; }
 .tl-stap-tekst { font-size: 13px; font-weight: 500; flex: 1; line-height: 1.4; }
 .tl-recept-naam { font-size: 12px; color: var(--mu); flex-shrink: 0; white-space: nowrap; max-width: 120px; overflow: hidden; text-overflow: ellipsis; }
 .tijdlijn-chevron { color: var(--mu); flex-shrink: 0; }
+.tl-drag-grip { color: var(--bo); flex-shrink: 0; }
+.tl-dragging { opacity: .3; }
+.tl-drag-ghost {
+  position: fixed;
+  left: 0; right: 0;
+  background: var(--card2);
+  border: 1px solid var(--ac);
+  border-radius: var(--radius-sm);
+  padding: 9px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--tx);
+  pointer-events: none;
+  z-index: 9999;
+  box-shadow: 0 4px 16px rgba(0,0,0,.5);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tl-drop-indicator {
+  height: 2px;
+  background: var(--ac);
+  border-radius: 2px;
+  margin: 0 0;
+  pointer-events: none;
+}
 
 /* ── Sheet modaal (gelegenheid) ── */
 .modaal-overlay {
@@ -941,20 +978,57 @@ div.stap-tv-ind { cursor: default; pointer-events: none; }
   margin: 10px 0 6px;
 }
 
-/* ── Component-koppen in detail-weergave ── */
+/* ── Component-kaarten in detail-weergave (inklapbaar) ── */
+.comp-detail-card {
+  background: var(--card);
+  border: 1px solid var(--bo);
+  border-radius: var(--radius);
+  margin-bottom: 10px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,.2);
+}
 .comp-detail-kop {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin: 16px 0 8px;
-  padding-bottom: 6px;
-  border-bottom: 1px solid var(--bo);
+  padding: 11px 13px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
+.comp-detail-kop:active { opacity: .8; }
 .comp-detail-naam {
   font-size: 13px;
   font-weight: 700;
   flex: 1;
 }
+.comp-chevron {
+  color: var(--mu);
+  flex-shrink: 0;
+  transition: transform .2s;
+}
+.comp-detail-card.open .comp-chevron { transform: rotate(180deg); }
+.comp-detail-body {
+  display: none;
+  padding: 0 13px 13px;
+  border-top: 1px solid var(--bo);
+}
+.comp-detail-card.open .comp-detail-body { display: block; }
+.comp-alle-toggle-rij {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 8px;
+}
+.btn-comp-alle-toggle {
+  background: transparent;
+  border: none;
+  color: var(--ac);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px 0;
+  -webkit-tap-highlight-color: transparent;
+}
+.btn-comp-alle-toggle:active { opacity: .7; }
 
 /* ── Cook Mode navigatie ── */
 .cook-nav {
@@ -1226,16 +1300,13 @@ svg.sprite { display: none; }
         <div class="form-veld">
           <label for="rf-tijdvenster">Tijdvenster</label>
           <select id="rf-tijdvenster" class="form-inp">
-            <option value="week_vooruit">Week vooruit</option>
-            <option value="paar_dagen">Paar dagen ervoor</option>
-            <option value="dag_ervoor">Dag ervoor</option>
-            <option value="avond_ervoor">Avond ervoor</option>
+            <option value="week_vooruit">Week van tevoren</option>
+            <option value="paar_dagen">Paar dagen van tevoren</option>
+            <option value="dag_ervoor">Dag van tevoren</option>
             <option value="ochtend_van" selected>Ochtend van</option>
             <option value="middag_van">Middag van</option>
-            <option value="twee_uur_ervoor">Twee uur ervoor</option>
-            <option value="uur_ervoor">Uur ervoor</option>
-            <option value="halfuur_ervoor">Halfuur ervoor</option>
-            <option value="a_la_minute">À la minute</option>
+            <option value="uur_ervoor">Uur van tevoren</option>
+            <option value="a_la_minute">Vlak ervoor</option>
           </select>
         </div>
       </div>
@@ -1350,19 +1421,15 @@ const TV_CSS_KLEUR = {
 
 const KLOK_SVG = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>';
 
-// Volgorde is chronologisch (ver weg → dichtbij). laatste_uur is oud veld, alias voor uur_ervoor.
+// Volgorde is chronologisch (ver weg → dichtbij). Zeven vaste vensters (Fix 2, Sprint 1 fixes).
 const TIJDVENSTERS = {
-  week_vooruit:    'Week vooruit',
-  paar_dagen:      'Paar dagen ervoor',
-  dag_ervoor:      'Dag ervoor',
-  avond_ervoor:    'Avond ervoor',
-  ochtend_van:     'Ochtend van',
-  middag_van:      'Middag van',
-  twee_uur_ervoor: 'Twee uur ervoor',
-  uur_ervoor:      'Uur ervoor',
-  halfuur_ervoor:  'Halfuur ervoor',
-  a_la_minute:     'À la minute',
-  laatste_uur:     'Uur ervoor', // backward-compat alias (Sprint 1 data)
+  week_vooruit: 'Week van tevoren',
+  paar_dagen:   'Paar dagen van tevoren',
+  dag_ervoor:   'Dag van tevoren',
+  ochtend_van:  'Ochtend van',
+  middag_van:   'Middag van',
+  uur_ervoor:   'Uur van tevoren',
+  a_la_minute:  'Vlak ervoor',
 };
 
 const PRODUCTGROEPEN = {
@@ -1474,9 +1541,19 @@ async function loadAllGelegenheden() {
     }
   } catch (e) { console.warn('[Fire] storage.list mislukt:', e); }
   // Normaliseer eenheden en tijdvensters voor backward compatibility
+  // TV_MIGRATIE: oude sleutels (pre-Fix2) → dichtstbijzijnde nieuwe sleutel
+  const TV_MIGRATIE = {
+    laatste_uur:     'uur_ervoor',
+    avond_ervoor:    'dag_ervoor',
+    twee_uur_ervoor: 'uur_ervoor',
+    halfuur_ervoor:  'a_la_minute',
+  };
+  function normaliseerTv(tv) {
+    return TV_MIGRATIE[tv] || tv;
+  }
   for (const g of lijst) {
     for (const r of (g.recepten || [])) {
-      if (r.tijdvenster === 'laatste_uur') r.tijdvenster = 'uur_ervoor';
+      r.tijdvenster = normaliseerTv(r.tijdvenster);
       for (const ing of (r.ingredienten || [])) {
         const lower = (ing.eenheid || '').toLowerCase().trim();
         if (EENHEID_NORMALISATIE[lower] !== undefined) {
@@ -1484,7 +1561,13 @@ async function loadAllGelegenheden() {
         }
       }
       for (const s of (r.stappen || [])) {
-        if (s.tijdvenster === 'laatste_uur') s.tijdvenster = 'uur_ervoor';
+        if (s.tijdvenster) s.tijdvenster = normaliseerTv(s.tijdvenster);
+      }
+      for (const comp of (r.componenten || [])) {
+        comp.tijdvenster = normaliseerTv(comp.tijdvenster);
+        for (const s of (comp.stappen || [])) {
+          if (s.tijdvenster) s.tijdvenster = normaliseerTv(s.tijdvenster);
+        }
       }
     }
   }
@@ -1798,43 +1881,51 @@ function renderReceptDetail(receptId) {
           </div>`).join('')
       : `<p style="color:var(--mu);font-size:13px;padding:8px 0">Geen ingrediënten.</p>`;
   }
-  function maakStapItems(staps, erfTv) {
+  // Badge-weergave op stapniveau is bewust verwijderd (Fix 1): badge staat alleen op componentniveau.
+  function maakStapItems(staps) {
     return staps.length
-      ? staps.map(s => {
-          const stapTv = s.tijdvenster || '';
-          const tvInd = maakStapTvIndicatorHtml(stapTv, erfTv || r.tijdvenster || 'ochtend_van', false, '');
-          return `
+      ? staps.map(s => `
           <div class="stap-item" data-id="${s.id}">
             <div class="stap-nr">${s.nummer}</div>
             <div style="flex:1">
               <span class="stap-tekst-detail">${escHtml(s.tekst)}</span>
-              ${tvInd}
             </div>
-          </div>`;
-        }).join('')
+          </div>`).join('')
       : `<p style="color:var(--mu);font-size:13px;padding:8px 0">Geen stappen.</p>`;
   }
 
+  const CHEVRON_SVG = '<svg class="comp-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
+
   let detailSectiesHtml;
   if (r.componenten && r.componenten.length) {
-    detailSectiesHtml = r.componenten.map(comp => {
+    const kaarten = r.componenten.map(comp => {
       const compTvInd = maakStapTvIndicatorHtml(comp.tijdvenster || '', r.tijdvenster || 'ochtend_van', false, '');
       return `
-        <div class="comp-detail-kop">
-          <span class="comp-detail-naam">${escHtml(comp.naam)}</span>
-          ${compTvInd}
-        </div>
-        <div class="sectie-kop" style="margin-top:8px">Ingrediënten</div>
-        ${maakIngItems(comp.ingredienten)}
-        <div class="sectie-kop" style="margin-top:12px">Stappen</div>
-        ${maakStapItems(comp.stappen, comp.tijdvenster)}`;
+        <div class="comp-detail-card" data-comp-id="${escHtml(comp.id)}">
+          <div class="comp-detail-kop">
+            <span class="comp-detail-naam">${escHtml(comp.naam)}</span>
+            ${compTvInd}
+            ${CHEVRON_SVG}
+          </div>
+          <div class="comp-detail-body">
+            <div class="sectie-kop" style="margin-top:8px">Ingrediënten</div>
+            ${maakIngItems(comp.ingredienten)}
+            <div class="sectie-kop" style="margin-top:12px">Stappen</div>
+            ${maakStapItems(comp.stappen)}
+          </div>
+        </div>`;
     }).join('');
+    detailSectiesHtml = `
+      <div class="comp-alle-toggle-rij">
+        <button type="button" class="btn-comp-alle-toggle">Alles openen</button>
+      </div>
+      ${kaarten}`;
   } else {
     detailSectiesHtml = `
       <div class="sectie-kop">Ingrediënten</div>
       <div id="detail-ings">${maakIngItems(r.ingredienten)}</div>
       <div class="sectie-kop">Stappen</div>
-      <div id="detail-stappen">${maakStapItems(r.stappen, r.tijdvenster)}</div>`;
+      <div id="detail-stappen">${maakStapItems(r.stappen)}</div>`;
   }
 
   const tvSelectKleur = `var(--tv-${TV_CSS_KLEUR[r.tijdvenster] || 'ochtend'})`;
@@ -1887,6 +1978,28 @@ function renderReceptDetail(receptId) {
     item.addEventListener('click', () => item.classList.toggle('afgevinkt')));
   detail.querySelectorAll('.stap-item').forEach(item =>
     item.addEventListener('click', () => item.classList.toggle('afgevinkt')));
+
+  // Inklapbare component-kaarten
+  detail.querySelectorAll('.comp-detail-kop').forEach(kop => {
+    kop.addEventListener('click', () => {
+      kop.closest('.comp-detail-card').classList.toggle('open');
+      const btn = detail.querySelector('.btn-comp-alle-toggle');
+      if (btn) {
+        const kaarten = detail.querySelectorAll('.comp-detail-card');
+        const alleOpen = [...kaarten].every(k => k.classList.contains('open'));
+        btn.textContent = alleOpen ? 'Alles sluiten' : 'Alles openen';
+      }
+    });
+  });
+  const alleToggleBtn = detail.querySelector('.btn-comp-alle-toggle');
+  if (alleToggleBtn) {
+    alleToggleBtn.addEventListener('click', () => {
+      const kaarten = detail.querySelectorAll('.comp-detail-card');
+      const alleOpen = [...kaarten].every(k => k.classList.contains('open'));
+      kaarten.forEach(k => k.classList.toggle('open', !alleOpen));
+      alleToggleBtn.textContent = alleOpen ? 'Alles openen' : 'Alles sluiten';
+    });
+  }
 
   // Cook Mode
   detail.querySelector('#btn-start-cook').addEventListener('click', () => openCookMode(r.id));
@@ -2148,7 +2261,7 @@ const EXTRACTIE_PROMPT = `Je bent een assistent die recepten extraheert en omzet
 3. Herken het originele aantal porties.
 4. Per ingrediënt: hoeveelheid als getal, eenheid uit de vaste lijst, naam, productgroep (zie lijst).
 5. Per stap: korte Nederlandse instructie. Geef per stap een tijdvenster als de stap duidelijk op een ander moment hoort dan het recept-tijdvenster (bijv. marineren de ochtend, bakken het laatste uur).
-6. Tijdvenster (recept en stappen): week_vooruit, paar_dagen, dag_ervoor, avond_ervoor, ochtend_van, middag_van, twee_uur_ervoor, uur_ervoor, halfuur_ervoor, a_la_minute. Bij twijfel: ochtend_van.
+6. Tijdvenster (recept en stappen): week_vooruit, paar_dagen, dag_ervoor, ochtend_van, middag_van, uur_ervoor, a_la_minute. Bij twijfel: ochtend_van.
 7. Eenheden: gebruik ALLEEN: g, kg, ml, l, el, tl, snuf, stuks, stengels, teentjes, bosjes, blikje, pakje, of "" (leeg, voor ingrediënten zonder eenheid).
 8. Als het recept duidelijk aparte onderdelen heeft (bijv. saus, bodem, garnituur, vulling), gebruik dan een "componenten" array in plaats van "ingredienten"/"stappen". Elke component heeft: naam, tijdvenster, ingredienten (zelfde structuur), stappen (zelfde structuur). Bij twijfel: gebruik geen componenten.
 9. Geef ALLEEN valide JSON terug, geen extra tekst of code blocks.
@@ -2400,28 +2513,44 @@ function renderBoodschappenTab(g) {
     return;
   }
 
+  function maakBoodschapHtml(item, isAfgevinkt) {
+    const hoeveelheidTekst = item.hoeveelheid !== null
+      ? (item.eenheid ? `${item.hoeveelheid}\u202f${item.eenheid} ` : `${item.hoeveelheid} `)
+      : '';
+    return `<div class="boodschap-item${isAfgevinkt ? ' afgevinkt' : ''}" data-sleutel="${escHtml(item.sleutel)}">
+      <div class="boodschap-cb"></div>
+      <span class="boodschap-tekst">${escHtml(hoeveelheidTekst + item.naam)}</span>
+    </div>`;
+  }
+
+  // Verzamel alle items plat voor "In huis"-sectie
+  const alleItems = gesorteerdeGroepen.flatMap(pg => Object.values(groepen[pg]));
+  const inHuisItems = alleItems.filter(item => afgevinkt.has(item.sleutel));
+
   let html = '<div style="padding:var(--gap)">';
+
+  // Actieve items per productgroep (sla groepen over die volledig afgevinkt zijn)
   for (const pg of gesorteerdeGroepen) {
-    const items = Object.values(groepen[pg]);
+    const items = Object.values(groepen[pg]).filter(item => !afgevinkt.has(item.sleutel));
+    if (!items.length) continue;
     html += `<div class="boodschappen-groep">
       <div class="boodschappen-groep-kop">${escHtml(PRODUCTGROEPEN[pg])}</div>`;
-    for (const item of items) {
-      const isAfgevinkt = afgevinkt.has(item.sleutel);
-      const hoeveelheidTekst = item.hoeveelheid !== null
-        ? (item.eenheid ? `${item.hoeveelheid}\u202f${item.eenheid} ` : `${item.hoeveelheid} `)
-        : '';
-      html += `<div class="boodschap-item${isAfgevinkt ? ' afgevinkt' : ''}" data-sleutel="${escHtml(item.sleutel)}">
-        <div class="boodschap-cb"></div>
-        <span class="boodschap-tekst">${escHtml(hoeveelheidTekst + item.naam)}</span>
-      </div>`;
-    }
+    for (const item of items) html += maakBoodschapHtml(item, false);
     html += '</div>';
   }
+
+  // "In huis" sectie voor afgevinkte items
+  if (inHuisItems.length) {
+    html += '<div class="in-huis-sectie"><div class="in-huis-kop">In huis</div>';
+    for (const item of inHuisItems) html += maakBoodschapHtml(item, true);
+    html += '</div>';
+  }
+
   html += '<div class="boodschappen-reset"><button class="btn-secundair" id="btn-reset-boodschappen">Reset alle vinkjes</button></div>';
   html += '</div>';
   container.innerHTML = html;
 
-  // Events: afvinken
+  // Events: afvinken — her-render zodat item naar correcte sectie verplaatst
   container.querySelectorAll('.boodschap-item').forEach(item => {
     item.addEventListener('click', async () => {
       const sleutel = item.dataset.sleutel;
@@ -2429,9 +2558,7 @@ function renderBoodschappenTab(g) {
       if (set.has(sleutel)) set.delete(sleutel); else set.add(sleutel);
       g.afgevinkteIngredientKeys = [...set];
       try { await saveGelegenheid(g); } catch(e) {}
-      item.classList.toggle('afgevinkt');
-      const cb = item.querySelector('.boodschap-cb');
-      if (cb) cb.style.background = item.classList.contains('afgevinkt') ? '' : '';
+      renderBoodschappenTab(g);
     });
   });
 
@@ -2477,11 +2604,27 @@ function buildTijdlijn(g) {
     }
   }
   // Groepeer per tijdvenster in chronologische volgorde
-  const volgorde = Object.keys(TIJDVENSTERS).filter(k => k !== 'laatste_uur');
+  const volgorde = Object.keys(TIJDVENSTERS);
   const gegroepeerd = {};
   for (const tv of volgorde) {
     const items = handelingen.filter(h => h.tijdvenster === tv);
     if (items.length) gegroepeerd[tv] = items;
+  }
+  // Pas opgeslagen custom volgorde toe (Fix 4)
+  if (g.tijdlijnVolgorde) {
+    for (const tv of volgorde) {
+      if (!gegroepeerd[tv]) continue;
+      const customOrder = g.tijdlijnVolgorde[tv];
+      if (!customOrder || !customOrder.length) continue;
+      gegroepeerd[tv].sort((a, b) => {
+        const ia = customOrder.indexOf(a.stapId);
+        const ib = customOrder.indexOf(b.stapId);
+        if (ia === -1 && ib === -1) return 0;
+        if (ia === -1) return 1;
+        if (ib === -1) return -1;
+        return ia - ib;
+      });
+    }
   }
   return { gegroepeerd, volgorde };
 }
@@ -2502,13 +2645,16 @@ function renderTijdlijnTab(g) {
     return;
   }
 
+  const GRIP_SVG = '<svg class="tl-drag-grip" width="12" height="14" viewBox="0 0 12 14" fill="currentColor"><rect x="1" y="2" width="10" height="1.5" rx=".75"/><rect x="1" y="6" width="10" height="1.5" rx=".75"/><rect x="1" y="10" width="10" height="1.5" rx=".75"/></svg>';
+
   let html = '<div style="padding:var(--gap)">';
   for (const tv of gevulde) {
     const tvKleur = `var(--tv-${TV_CSS_KLEUR[tv] || 'ochtend'})`;
-    html += `<div class="tijdlijn-sectie" style="border-left:3px solid ${tvKleur};padding-left:10px">
-      <div class="tijdlijn-sectie-kop" style="color:${tvKleur}">${escHtml(TIJDVENSTERS[tv])}</div>`;
+    html += `<div class="tijdlijn-sectie" data-tv-sectie="${escHtml(tv)}" style="border-left:3px solid ${tvKleur};padding-left:10px">
+      <div class="tijdlijn-sectie-kop" style="color:${tvKleur}">${escHtml(TIJDVENSTERS[tv] || tv)}</div>`;
     for (const h of gegroepeerd[tv]) {
-      html += `<div class="tijdlijn-handeling" data-recept-id="${escHtml(h.receptId)}">
+      html += `<div class="tijdlijn-handeling" data-recept-id="${escHtml(h.receptId)}" data-stap-id="${escHtml(h.stapId)}" data-tv="${escHtml(tv)}">
+        ${GRIP_SVG}
         <span class="tl-stap-tekst">${escHtml(h.tekst)}</span>
         <span class="tl-recept-naam">— ${escHtml(h.receptNaam)}</span>
         <div class="tijdlijn-chevron"><svg width="14" height="14"><use href="#ic-chevron-right"/></svg></div>
@@ -2524,6 +2670,126 @@ function renderTijdlijnTab(g) {
       state.actieveReceptId = el.dataset.receptId;
       wisselTab('recepten');
     });
+  });
+
+  initieerTijdlijnDrag(container, g);
+}
+
+// ─── Tijdlijn: lang-indrukken-slepen (Fix 4) ─────────────────────────────────
+// Lang indrukken (~400ms) activeert sleep-modus. Kort aanraken + bewegen = scrollen.
+// Volgorde wordt opgeslagen in g.tijdlijnVolgorde per tijdvenster-groep.
+function initieerTijdlijnDrag(container, g) {
+  const LONG_PRESS_MS = 400;
+  let dragTimer = null;
+  let dragActief = false;
+  let dragItem = null;
+  let dragFromIdx = -1;
+  let dragTv = null;
+  let dragGhost = null;
+  let startX = 0, startY = 0;
+
+  function maakGhost(item, touchY) {
+    const rect = item.getBoundingClientRect();
+    const ghost = document.createElement('div');
+    ghost.className = 'tl-drag-ghost';
+    ghost.textContent = item.querySelector('.tl-stap-tekst')?.textContent || '';
+    ghost.style.top = (touchY - rect.height / 2) + 'px';
+    ghost.style.left = (rect.left + 10) + 'px';
+    ghost.style.right = (window.innerWidth - rect.right + 10) + 'px';
+    document.body.appendChild(ghost);
+    return ghost;
+  }
+
+  function itemsInGroep(tv) {
+    return [...container.querySelectorAll(`.tijdlijn-handeling[data-tv="${tv}"]`)];
+  }
+
+  function vindDropIndex(tv, touchY) {
+    const items = itemsInGroep(tv).filter(el => !el.classList.contains('tl-dragging'));
+    for (let i = 0; i < items.length; i++) {
+      const rect = items[i].getBoundingClientRect();
+      if (touchY < rect.top + rect.height / 2) return i;
+    }
+    return items.length;
+  }
+
+  function plaatsDropIndicator(tv, dropIdx) {
+    container.querySelectorAll('.tl-drop-indicator').forEach(el => el.remove());
+    const items = itemsInGroep(tv).filter(el => !el.classList.contains('tl-dragging'));
+    const indicator = document.createElement('div');
+    indicator.className = 'tl-drop-indicator';
+    if (dropIdx < items.length) {
+      items[dropIdx].before(indicator);
+    } else if (items.length > 0) {
+      items[items.length - 1].after(indicator);
+    }
+  }
+
+  container.addEventListener('touchstart', (e) => {
+    const item = e.target.closest('.tijdlijn-handeling');
+    if (!item) return;
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+    dragTimer = setTimeout(() => {
+      dragActief = true;
+      dragItem = item;
+      dragTv = item.dataset.tv;
+      dragFromIdx = itemsInGroep(dragTv).indexOf(item);
+      item.classList.add('tl-dragging');
+      dragGhost = maakGhost(item, startY);
+    }, LONG_PRESS_MS);
+  }, { passive: true });
+
+  container.addEventListener('touchmove', (e) => {
+    const touch = e.touches[0];
+    if (!dragActief) {
+      // Annuleer timer als de vinger meer dan 8px beweegt vóór activatie
+      if (Math.abs(touch.clientX - startX) > 8 || Math.abs(touch.clientY - startY) > 8) {
+        clearTimeout(dragTimer); dragTimer = null;
+      }
+      return;
+    }
+    e.preventDefault(); // Voorkom scrollen tijdens sleep
+    const y = touch.clientY;
+    dragGhost.style.top = (y - dragGhost.offsetHeight / 2) + 'px';
+    plaatsDropIndicator(dragTv, vindDropIndex(dragTv, y));
+  }, { passive: false });
+
+  container.addEventListener('touchend', async (e) => {
+    clearTimeout(dragTimer); dragTimer = null;
+    if (!dragActief) return;
+    dragActief = false;
+
+    const touch = e.changedTouches[0];
+    const dropIdx = vindDropIndex(dragTv, touch.clientY);
+
+    // Opruimen visuele staat
+    if (dragGhost) { dragGhost.remove(); dragGhost = null; }
+    container.querySelectorAll('.tl-drop-indicator').forEach(el => el.remove());
+    if (dragItem) { dragItem.classList.remove('tl-dragging'); }
+
+    // Bereken nieuwe volgorde en sla op
+    const { gegroepeerd } = buildTijdlijn(g);
+    const huidigeItems = gegroepeerd[dragTv] || [];
+    const huidigeIds = huidigeItems.map(h => h.stapId);
+    const nieuweIds = [...huidigeIds];
+    const [verplaatst] = nieuweIds.splice(dragFromIdx, 1);
+    nieuweIds.splice(dropIdx, 0, verplaatst);
+
+    if (!g.tijdlijnVolgorde) g.tijdlijnVolgorde = {};
+    g.tijdlijnVolgorde[dragTv] = nieuweIds;
+    try { await saveGelegenheid(g); } catch (err) { console.warn('[Fire] tijdlijn volgorde opslaan mislukt:', err); }
+
+    dragItem = null; dragTv = null; dragFromIdx = -1;
+    renderTijdlijnTab(g);
+  }, { passive: true });
+
+  container.addEventListener('touchcancel', () => {
+    clearTimeout(dragTimer); dragTimer = null;
+    if (dragGhost) { dragGhost.remove(); dragGhost = null; }
+    container.querySelectorAll('.tl-drop-indicator').forEach(el => el.remove());
+    if (dragItem) { dragItem.classList.remove('tl-dragging'); dragItem = null; }
+    dragActief = false; dragTv = null; dragFromIdx = -1;
   });
 }
 
@@ -2735,7 +3001,7 @@ function renderCompStapRijen(comp) {
         <div class="stap-form-timer">
           <label>Timer:</label>
           <input type="number" class="form-inp inp-timer stap-timer"
-                 value="${stap.timerMinuten || ''}" placeholder="min" min="1">
+                 value="${stap.timerMinuten || ''}" min="1">
           <span>min (opt.)</span>
         </div>
         <div class="stap-form-tv">
@@ -3040,7 +3306,7 @@ function renderStapFormRijen() {
         <div class="stap-form-timer">
           <label>Timer:</label>
           <input type="number" class="form-inp inp-timer stap-timer"
-                 value="${stap.timerMinuten || ''}" placeholder="min" min="1">
+                 value="${stap.timerMinuten || ''}" min="1">
           <span>min (optioneel)</span>
         </div>
         <div class="stap-form-tv">
