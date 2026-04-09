@@ -773,9 +773,9 @@ div.stap-tv-ind { cursor: default; pointer-events: none; }
   -webkit-tap-highlight-color: transparent;
 }
 .tijdlijn-handeling:last-child { border-bottom: none; }
-.tl-stap-tekst { font-size: 13px; font-weight: 500; flex: 1; line-height: 1.4; }
-.tl-recept-naam { font-size: 12px; color: var(--mu); flex-shrink: 0; white-space: nowrap; max-width: 120px; overflow: hidden; text-overflow: ellipsis; }
-.tijdlijn-chevron { color: var(--mu); flex-shrink: 0; }
+.tl-item-body { flex: 1; min-width: 0; }
+.tl-stap-tekst { font-size: 13px; font-weight: 500; line-height: 1.4; display: block; }
+.tl-recept-naam { font-size: 11px; color: var(--mu); display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 1px; }
 .tl-pijlen { display: flex; flex-direction: column; flex-shrink: 0; }
 .tl-pijl-btn {
   width: 44px;
@@ -1332,11 +1332,11 @@ svg.sprite { display: none; }
 
       <!-- Componenten modus (verborgen bij aanmaken) -->
       <div id="recept-componenten" style="display:none">
-        <div id="comp-container"></div>
-        <button type="button" class="btn-toevoegen" id="btn-voeg-comp-toe">
+        <button type="button" class="btn-toevoegen" id="btn-voeg-comp-toe" style="margin-bottom:10px;min-height:44px">
           <svg width="13" height="13"><use href="#ic-plus"/></svg>
           Component toevoegen
         </button>
+        <div id="comp-container"></div>
       </div>
 
     </form>
@@ -2587,51 +2587,52 @@ function renderBoodschappenTab(g) {
 }
 
 // ─── Tijdlijn: bouw handelingen op ───────────────────────────────────────────
+// Eén item per component (recept met componenten) of per recept (zonder componenten).
+// item.id = comp.id of r.id — gebruikt als sleutel in tijdlijnVolgorde.
 function buildTijdlijn(g) {
-  const handelingen = [];
+  const items = [];
   for (const r of g.recepten) {
     if (r.componenten && r.componenten.length) {
       for (const comp of r.componenten) {
-        for (const s of comp.stappen) {
-          if (!s.tekst) continue;
-          handelingen.push({
-            tijdvenster: s.tijdvenster || comp.tijdvenster || r.tijdvenster || 'ochtend_van',
-            tekst: s.tekst,
-            receptNaam: `${r.naam} — ${comp.naam}`,
-            stapId: s.id,
-            receptId: r.id,
-          });
-        }
-      }
-    } else {
-      for (const s of r.stappen) {
-        if (!s.tekst) continue;
-        handelingen.push({
-          tijdvenster: s.tijdvenster || r.tijdvenster || 'ochtend_van',
-          tekst: s.tekst,
-          receptNaam: r.naam,
-          stapId: s.id,
-          receptId: r.id,
+        items.push({
+          id:          comp.id,
+          tijdvenster: comp.tijdvenster || r.tijdvenster || 'ochtend_van',
+          naam:        comp.naam || 'Component',
+          receptNaam:  r.naam,
+          receptId:    r.id,
+          compId:      comp.id,
+          isComp:      true,
         });
       }
+    } else {
+      items.push({
+        id:          r.id,
+        tijdvenster: r.tijdvenster || 'ochtend_van',
+        naam:        r.naam,
+        receptNaam:  r.naam,
+        receptId:    r.id,
+        compId:      null,
+        isComp:      false,
+      });
     }
   }
-  // Groepeer per tijdvenster in chronologische volgorde (TV_VOLGORDE is canoniek)
-  const volgorde = TV_VOLGORDE;
+
+  // Groepeer per tijdvenster in TV_VOLGORDE-volgorde
   const gegroepeerd = {};
-  for (const tv of volgorde) {
-    const items = handelingen.filter(h => h.tijdvenster === tv);
-    if (items.length) gegroepeerd[tv] = items;
+  for (const tv of TV_VOLGORDE) {
+    const groep = items.filter(i => i.tijdvenster === tv);
+    if (groep.length) gegroepeerd[tv] = [...groep];
   }
-  // Pas opgeslagen custom volgorde toe (Fix 4)
+
+  // Pas opgeslagen volgorde per groep toe (item.id als sleutel)
   if (g.tijdlijnVolgorde) {
-    for (const tv of volgorde) {
+    for (const tv of TV_VOLGORDE) {
       if (!gegroepeerd[tv]) continue;
-      const customOrder = g.tijdlijnVolgorde[tv];
-      if (!customOrder || !customOrder.length) continue;
+      const custom = g.tijdlijnVolgorde[tv];
+      if (!custom || !custom.length) continue;
       gegroepeerd[tv].sort((a, b) => {
-        const ia = customOrder.indexOf(a.stapId);
-        const ib = customOrder.indexOf(b.stapId);
+        const ia = custom.indexOf(a.id);
+        const ib = custom.indexOf(b.id);
         if (ia === -1 && ib === -1) return 0;
         if (ia === -1) return 1;
         if (ib === -1) return -1;
@@ -2639,7 +2640,22 @@ function buildTijdlijn(g) {
       });
     }
   }
-  return { gegroepeerd, volgorde };
+
+  const gevulde   = TV_VOLGORDE.filter(tv => gegroepeerd[tv]);
+  const alleItems = gevulde.flatMap(tv => gegroepeerd[tv]);
+  return { gegroepeerd, gevulde, alleItems };
+}
+
+// Helper: update tijdvenster van een tijdlijn-item in de receptdata
+function updateItemTijdvenster(g, item, nieuwTv) {
+  const r = g.recepten.find(r => r.id === item.receptId);
+  if (!r) return;
+  if (item.isComp) {
+    const comp = (r.componenten || []).find(c => c.id === item.compId);
+    if (comp) comp.tijdvenster = nieuwTv;
+  } else {
+    r.tijdvenster = nieuwTv;
+  }
 }
 
 // ─── Tijdlijn-tab ─────────────────────────────────────────────────────────────
@@ -2650,35 +2666,39 @@ function renderTijdlijnTab(g) {
     return;
   }
 
-  const { gegroepeerd, volgorde } = buildTijdlijn(g);
-  const gevulde = volgorde.filter(tv => gegroepeerd[tv]);
+  const { gegroepeerd, gevulde, alleItems } = buildTijdlijn(g);
 
   if (!gevulde.length) {
-    container.innerHTML = '<div class="tab-leeg">Voeg stappen toe aan je recepten om de tijdlijn te vullen.</div>';
+    container.innerHTML = '<div class="tab-leeg">Voeg recepten toe om de tijdlijn te vullen.</div>';
     return;
   }
 
   const PIJL_OP   = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>';
   const PIJL_NEER = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
 
+  const totaal = alleItems.length;
+  let gIdx = 0;
   let html = '<div style="padding:var(--gap)">';
+
   for (const tv of gevulde) {
     const tvKleur = `var(--tv-${TV_CSS_KLEUR[tv] || 'ochtend'})`;
-    const groepItems = gegroepeerd[tv];
     html += `<div class="tijdlijn-sectie" style="border-left:3px solid ${tvKleur};padding-left:10px">
       <div class="tijdlijn-sectie-kop" style="color:${tvKleur}">${escHtml(TIJDVENSTERS[tv] || tv)}</div>`;
-    groepItems.forEach((h, idx) => {
-      const eersteInGroep = idx === 0;
-      const laatsteInGroep = idx === groepItems.length - 1;
-      html += `<div class="tijdlijn-handeling" data-recept-id="${escHtml(h.receptId)}" data-tv="${escHtml(tv)}" data-idx="${idx}">
-        <span class="tl-stap-tekst">${escHtml(h.tekst)}</span>
-        <span class="tl-recept-naam">— ${escHtml(h.receptNaam)}</span>
+    for (const h of gegroepeerd[tv]) {
+      const isEerste  = gIdx === 0;
+      const isLaatste = gIdx === totaal - 1;
+      html += `<div class="tijdlijn-handeling" data-recept-id="${escHtml(h.receptId)}" data-global-idx="${gIdx}">
+        <div class="tl-item-body">
+          <span class="tl-stap-tekst">${escHtml(h.naam)}</span>
+          ${h.isComp ? `<span class="tl-recept-naam">${escHtml(h.receptNaam)}</span>` : ''}
+        </div>
         <div class="tl-pijlen">
-          <button class="tl-pijl-btn" data-tv="${escHtml(tv)}" data-idx="${idx}" data-dir="op" ${eersteInGroep ? 'disabled' : ''} title="Omhoog">${PIJL_OP}</button>
-          <button class="tl-pijl-btn" data-tv="${escHtml(tv)}" data-idx="${idx}" data-dir="neer" ${laatsteInGroep ? 'disabled' : ''} title="Omlaag">${PIJL_NEER}</button>
+          <button class="tl-pijl-btn" data-global-idx="${gIdx}" data-dir="op"   ${isEerste  ? 'disabled' : ''} title="Omhoog">${PIJL_OP}</button>
+          <button class="tl-pijl-btn" data-global-idx="${gIdx}" data-dir="neer" ${isLaatste ? 'disabled' : ''} title="Omlaag">${PIJL_NEER}</button>
         </div>
       </div>`;
-    });
+      gIdx++;
+    }
     html += '</div>';
   }
   html += '</div>';
@@ -2692,29 +2712,52 @@ function renderTijdlijnTab(g) {
     });
   });
 
-  // Pijltjes ↑↓: wissel volgorde en sla op
+  // Pijltjes ↑↓: wissel volgorde, cross-group bijwerken tijdvenster
   container.querySelectorAll('.tl-pijl-btn').forEach(btn => {
     btn.addEventListener('click', async (e) => {
       e.stopPropagation();
       if (btn.disabled) return;
-      const tv    = btn.dataset.tv;
-      const idx   = parseInt(btn.dataset.idx, 10);
-      const dir   = btn.dataset.dir;
-      const naar  = dir === 'op' ? idx - 1 : idx + 1;
 
-      // Altijd actieveGelegenheid() ophalen voor een frisse referentie
+      const vanIdx  = parseInt(btn.dataset.globalIdx, 10);
+      const dir     = btn.dataset.dir;
+      const naarIdx = dir === 'op' ? vanIdx - 1 : vanIdx + 1;
+
       const gAct = actieveGelegenheid();
       if (!gAct) return;
 
-      const { gegroepeerd: grp } = buildTijdlijn(gAct);
-      const items = grp[tv] || [];
-      if (naar < 0 || naar >= items.length) return;
+      const { gegroepeerd: grp, alleItems: ai } = buildTijdlijn(gAct);
+      if (naarIdx < 0 || naarIdx >= ai.length) return;
 
-      const ids = items.map(h => h.stapId);
-      [ids[idx], ids[naar]] = [ids[naar], ids[idx]];
+      const itemA = ai[vanIdx];
+      const itemB = ai[naarIdx];
 
       if (!gAct.tijdlijnVolgorde) gAct.tijdlijnVolgorde = {};
-      gAct.tijdlijnVolgorde[tv] = ids;
+
+      if (itemA.tijdvenster === itemB.tijdvenster) {
+        // Binnen dezelfde groep: simpele wissel in volgorde-array
+        const tv  = itemA.tijdvenster;
+        const ids = grp[tv].map(i => i.id);
+        const ia  = ids.indexOf(itemA.id);
+        const ib  = ids.indexOf(itemB.id);
+        [ids[ia], ids[ib]] = [ids[ib], ids[ia]];
+        gAct.tijdlijnVolgorde[tv] = ids;
+      } else {
+        // Cross-groep: items wisselen van tijdvenster
+        const tvA = itemA.tijdvenster;
+        const tvB = itemB.tijdvenster;
+        const idsA = grp[tvA].map(i => i.id);
+        const idsB = grp[tvB].map(i => i.id);
+        const posA = idsA.indexOf(itemA.id);
+        const posB = idsB.indexOf(itemB.id);
+        // Vervang itemA in groep tvA door itemB, en andersom
+        idsA.splice(posA, 1, itemB.id);
+        idsB.splice(posB, 1, itemA.id);
+        gAct.tijdlijnVolgorde[tvA] = idsA;
+        gAct.tijdlijnVolgorde[tvB] = idsB;
+        // Update tijdvenster in receptdata (werkt door in component-badge en detailpagina)
+        updateItemTijdvenster(gAct, itemA, tvB);
+        updateItemTijdvenster(gAct, itemB, tvA);
+      }
 
       try {
         await saveGelegenheid(gAct);
