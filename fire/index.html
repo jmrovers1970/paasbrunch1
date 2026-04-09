@@ -752,6 +752,68 @@ div.stap-tv-ind { cursor: default; pointer-events: none; }
   margin-bottom: 6px;
 }
 
+/* ── Prep-tab ── */
+.prep-groep { margin-bottom: 20px; }
+.prep-groep-kop {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--ac);
+  padding: 0 0 8px;
+  border-bottom: 1px solid var(--bo);
+  margin-bottom: 6px;
+}
+.prep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--bo);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.prep-item:last-child { border-bottom: none; }
+.prep-cb {
+  width: 18px; height: 18px;
+  border-radius: 4px;
+  border: 1.5px solid var(--bo);
+  background: transparent;
+  flex-shrink: 0;
+  margin-top: 1px;
+  position: relative;
+  transition: all .15s;
+}
+.prep-item.afgevinkt .prep-cb { background: var(--ac2); border-color: var(--ac2); }
+.prep-item.afgevinkt .prep-cb::after {
+  content: '';
+  position: absolute;
+  left: 4px; top: 1px;
+  width: 5px; height: 9px;
+  border: 2px solid #fff;
+  border-top: none; border-left: none;
+  transform: rotate(45deg);
+}
+.prep-tekst { font-size: 13px; line-height: 1.4; flex: 1; }
+.prep-item.afgevinkt .prep-tekst { text-decoration: line-through; color: var(--mu); }
+.prep-recepten { font-size: 11px; color: var(--mu); margin-top: 2px; }
+.prep-klaar-sectie { margin-top: 24px; }
+.prep-klaar-kop {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--ac2);
+  padding: 0 0 8px;
+  border-bottom: 1px solid var(--bo);
+  margin-bottom: 6px;
+}
+.prep-reset {
+  margin-top: 8px;
+  display: flex;
+  justify-content: center;
+}
+
 /* ── Tijdlijn ── */
 .tijdlijn-sectie { margin-bottom: 22px; }
 .tijdlijn-sectie-kop {
@@ -776,9 +838,41 @@ div.stap-tv-ind { cursor: default; pointer-events: none; }
 .tl-item-body { flex: 1; min-width: 0; }
 .tl-stap-tekst { font-size: 13px; font-weight: 500; line-height: 1.4; display: block; }
 .tl-recept-naam { font-size: 11px; color: var(--mu); display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 1px; }
+.tl-cb-btn {
+  flex-shrink: 0;
+  width: 32px; height: 32px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+  margin-left: -6px;
+}
+.tl-cb {
+  width: 18px; height: 18px;
+  border-radius: 4px;
+  border: 1.5px solid var(--bo);
+  background: transparent;
+  position: relative;
+  transition: all .15s;
+}
+.tl-cb.afgevinkt { background: var(--ac2); border-color: var(--ac2); }
+.tl-cb.afgevinkt::after {
+  content: '';
+  position: absolute;
+  left: 4px; top: 1px;
+  width: 5px; height: 9px;
+  border: 2px solid #fff;
+  border-top: none; border-left: none;
+  transform: rotate(45deg);
+}
+.tijdlijn-handeling.tl-afgevinkt .tl-stap-tekst { text-decoration: line-through; color: var(--mu); }
+.tijdlijn-handeling.tl-afgevinkt .tl-recept-naam { color: var(--mu); opacity: .6; }
 .tl-pijlen { display: flex; flex-direction: column; flex-shrink: 0; }
 .tl-pijl-btn {
-  width: 44px;
+  width: 36px;
   height: 22px;
   background: transparent;
   border: none;
@@ -792,6 +886,20 @@ div.stap-tv-ind { cursor: default; pointer-events: none; }
 }
 .tl-pijl-btn:not([disabled]):active { color: var(--ac); }
 .tl-pijl-btn[disabled] { opacity: .2; cursor: default; }
+.tl-delete-btn {
+  width: 36px;
+  height: 44px;
+  background: transparent;
+  border: none;
+  color: var(--mu);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+  transition: color .1s;
+}
+.tl-delete-btn:active { color: var(--da); }
 
 /* ── Sheet modaal (gelegenheid) ── */
 .modaal-overlay {
@@ -994,6 +1102,22 @@ div.stap-tv-ind { cursor: default; pointer-events: none; }
   font-weight: 700;
   flex: 1;
 }
+.comp-kop-actie-btn {
+  flex-shrink: 0;
+  width: 32px; height: 32px;
+  background: transparent;
+  border: none;
+  color: var(--mu);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  -webkit-tap-highlight-color: transparent;
+  transition: color .1s;
+}
+.comp-kop-actie-btn:active { color: var(--ac); }
+.comp-kop-actie-delete:active { color: var(--da); }
 .comp-chevron {
   color: var(--mu);
   flex-shrink: 0;
@@ -1149,6 +1273,7 @@ svg.sprite { display: none; }
       <button class="tab actief" data-tab="overzicht" role="tab">Overzicht</button>
       <button class="tab" data-tab="recepten" role="tab">Recepten</button>
       <button class="tab" data-tab="boodschappen" role="tab">Boodschappen</button>
+      <button class="tab" data-tab="prep" role="tab">Prep</button>
       <button class="tab" data-tab="tijdlijn" role="tab">Tijdlijn</button>
     </nav>
 
@@ -1161,6 +1286,9 @@ svg.sprite { display: none; }
     </div>
     <div id="tab-boodschappen" class="tab-inhoud" role="tabpanel">
       <div class="tab-leeg">Nog geen ingrediënten. Voeg recepten toe om de lijst op te bouwen.</div>
+    </div>
+    <div id="tab-prep" class="tab-inhoud" role="tabpanel">
+      <div class="tab-leeg">Importeer recepten om prep-acties te zien.</div>
     </div>
     <div id="tab-tijdlijn" class="tab-inhoud" role="tabpanel">
       <div class="tab-leeg">De tijdlijn verschijnt zodra je recepten hebt toegevoegd.</div>
@@ -1490,9 +1618,12 @@ const PREP_ACTIES = {
   marineren:     'Marineren',
   weken:         'Weken',
   ontdooien:     'Ontdooien',
-  op_temperatuur:'Op temperatuur',
+  op_temperatuur:'Op kamertemperatuur brengen',
   blancheren:    'Blancheren',
 };
+
+// Volgorde van prep-actie groepen in de Prep-tab (meest "van tevoren" naar meest "vlak ervoor")
+const PREP_VOLGORDE = ['weken','ontdooien','marineren','op_temperatuur','afmeten','snijden','hakken','raspen','persen','blancheren'];
 
 // ─── Strings ─────────────────────────────────────────────────────────────────
 const STRINGS = {
@@ -1501,6 +1632,11 @@ const STRINGS = {
   leegStart: 'Nog geen gelegenheden. Maak je eerste gelegenheid aan om te beginnen.',
   verwijderGelegBevestiging: (naam) => `"${naam}" verwijderen? Dit kan niet ongedaan worden gemaakt.`,
   verwijderReceptBevestiging: (naam) => `Recept "${naam}" verwijderen?`,
+  verwijderCompBevestiging: (naam) => `Component "${naam}" verwijderen uit het recept?`,
+  verwijderTijdlijnCompBevestiging: 'Dit verwijdert de component uit het recept. Zeker weten?',
+  prepLeeg: 'Geen prep-acties. Importeer recepten via foto of link — Claude herkent dan automatisch welke ingrediënten snijwerk, weken of op temperatuur brengen nodig hebben.',
+  prepKlaar: 'Klaar',
+  prepReset: 'Reset alle vinkjes',
 };
 
 // ─── State ────────────────────────────────────────────────────────────────────
@@ -1534,6 +1670,7 @@ function migreerNaarV2(g) {
   if (!g.afgevinkteIngredientKeys) g.afgevinkteIngredientKeys = [];
   if (!g.afgevinkteStapKeys) g.afgevinkteStapKeys = [];
   if (!g.afgevinktePrepKeys) g.afgevinktePrepKeys = [];
+  if (!g.afgevinkteTijdlijnKeys) g.afgevinkteTijdlijnKeys = [];
   g.schemaVersie = 2;
   return g;
 }
@@ -1735,6 +1872,7 @@ function wisselTab(tabNaam) {
   if (tabNaam === 'overzicht') renderOverzichtTab(g);
   else if (tabNaam === 'recepten') renderReceptenTab(g);
   else if (tabNaam === 'boodschappen') renderBoodschappenTab(g);
+  else if (tabNaam === 'prep') renderPrepTab(g);
   else if (tabNaam === 'tijdlijn') renderTijdlijnTab(g);
 }
 
@@ -1904,6 +2042,8 @@ function renderReceptDetail(receptId) {
   }
 
   const CHEVRON_SVG = '<svg class="comp-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
+  const POTLOOD_SVG = '<svg width="14" height="14"><use href="#ic-edit"/></svg>';
+  const PRULLENBAK_SVG = '<svg width="14" height="14"><use href="#ic-trash"/></svg>';
 
   let detailSectiesHtml;
   if (r.componenten && r.componenten.length) {
@@ -1918,6 +2058,8 @@ function renderReceptDetail(receptId) {
           <div class="comp-detail-kop">
             <span class="comp-detail-naam">${escHtml(comp.naam)}</span>
             ${compTvInd}
+            <button class="comp-kop-actie-btn" data-comp-actie="bewerk" data-comp-id="${escHtml(comp.id)}" title="Component bewerken">${POTLOOD_SVG}</button>
+            <button class="comp-kop-actie-btn comp-kop-actie-delete" data-comp-actie="verwijder" data-comp-id="${escHtml(comp.id)}" title="Component verwijderen">${PRULLENBAK_SVG}</button>
             ${CHEVRON_SVG}
           </div>
           <div class="comp-detail-body">
@@ -2013,6 +2155,28 @@ function renderReceptDetail(receptId) {
       alleToggleBtn.textContent = alleOpen ? 'Alles openen' : 'Alles sluiten';
     });
   }
+
+  // Fix 1+2: bewerk/verwijder knoppen op component-kaart-header
+  detail.querySelectorAll('.comp-kop-actie-btn').forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+      e.stopPropagation(); // voorkom open/dicht klappen van de kaart
+      const compId = btn.dataset.compId;
+      const actie  = btn.dataset.compActie;
+      if (actie === 'bewerk') {
+        openReceptForm(r.id);
+      } else if (actie === 'verwijder') {
+        const comp = (r.componenten || []).find(c => c.id === compId);
+        if (!comp) return;
+        if (!confirm(STRINGS.verwijderCompBevestiging(comp.naam))) return;
+        r.componenten = r.componenten.filter(c => c.id !== compId);
+        try {
+          await saveGelegenheid(g);
+          renderReceptDetail(r.id);
+          renderOverzichtTab(g);
+        } catch (err) { alert(STRINGS.opslagFout); }
+      }
+    });
+  });
 
   // Cook Mode
   detail.querySelector('#btn-start-cook').addEventListener('click', () => openCookMode(r.id));
@@ -2272,8 +2436,9 @@ const EXTRACTIE_PROMPT = `Je bent een assistent die recepten extraheert en omzet
 1. Vertaal naar Nederlands. Behoud cultureel herkenbare namen (Tiramisu, Ratatouille).
 2. Reken om naar metrisch: cups→ml/g, oz→g, fl oz→ml, lb→g, °F→°C, tbsp→el, tsp→tl.
 3. Herken het originele aantal porties.
-4. Per ingrediënt: hoeveelheid als getal, eenheid uit de vaste lijst, naam, productgroep (zie lijst).
+4. Per ingrediënt: hoeveelheid als getal, eenheid uit de vaste lijst, naam, productgroep (zie lijst), en een prepActie (zie regel 5a).
 5. Per stap: korte Nederlandse instructie. Geef per stap een tijdvenster als de stap duidelijk op een ander moment hoort dan het recept-tijdvenster (bijv. marineren de ochtend, bakken het laatste uur).
+5a. prepActie per ingrediënt: kies één van: snijden, hakken, raspen, persen, afmeten, marineren, weken, ontdooien, op_temperatuur, blancheren, geen. Voorbeelden: "1 ui, fijngesneden" → snijden; "2 teentjes knoflook, geperst" → persen; "250g boter, op kamertemperatuur" → op_temperatuur; "500g bloem" → geen; "100g rozijnen, geweld in rum" → weken. Wees conservatief: bij twijfel kies geen.
 6. Tijdvenster (recept en stappen): week_vooruit, paar_dagen, dag_ervoor, ochtend_van, middag_van, uur_ervoor, a_la_minute. Bij twijfel: ochtend_van.
 7. Eenheden: gebruik ALLEEN: g, kg, ml, l, el, tl, snuf, stuks, stengels, teentjes, bosjes, blikje, pakje, of "" (leeg, voor ingrediënten zonder eenheid).
 8. Als het recept duidelijk aparte onderdelen heeft (bijv. saus, bodem, garnituur, vulling), gebruik dan een "componenten" array in plaats van "ingredienten"/"stappen". Elke component heeft: naam, tijdvenster, ingredienten (zelfde structuur), stappen (zelfde structuur). Bij twijfel: gebruik geen componenten.
@@ -2282,10 +2447,10 @@ const EXTRACTIE_PROMPT = `Je bent een assistent die recepten extraheert en omzet
 Productgroepen: groente_fruit, zuivel_eieren, vlees_vis, brood_banket, droge_waren, kruiden_specerijen, olie_azijn_saus, diepvries, drank, overig.
 
 Output (enkelvoudig):
-{"naam":"...","origineelAantalPersonen":4,"bereidingstijdMinuten":60,"tijdvenster":"ochtend_van","ingredienten":[{"hoeveelheid":500,"eenheid":"g","naam":"bloem","productgroep":"droge_waren","opmerking":""}],"stappen":[{"nummer":1,"tekst":"...","tijdvenster":"ochtend_van"}]}
+{"naam":"...","origineelAantalPersonen":4,"bereidingstijdMinuten":60,"tijdvenster":"ochtend_van","ingredienten":[{"hoeveelheid":500,"eenheid":"g","naam":"bloem","productgroep":"droge_waren","opmerking":"","prepActie":"geen"}],"stappen":[{"nummer":1,"tekst":"...","tijdvenster":"ochtend_van"}]}
 
 Output (met componenten):
-{"naam":"...","origineelAantalPersonen":4,"bereidingstijdMinuten":60,"tijdvenster":"ochtend_van","componenten":[{"naam":"Bodem","tijdvenster":"dag_ervoor","ingredienten":[...],"stappen":[...]},{"naam":"Vulling","tijdvenster":"uur_ervoor","ingredienten":[...],"stappen":[...]}]}
+{"naam":"...","origineelAantalPersonen":4,"bereidingstijdMinuten":60,"tijdvenster":"ochtend_van","componenten":[{"naam":"Bodem","tijdvenster":"dag_ervoor","ingredienten":[{"hoeveelheid":200,"eenheid":"g","naam":"bloem","productgroep":"droge_waren","opmerking":"","prepActie":"afmeten"}],"stappen":[...]},{"naam":"Vulling","tijdvenster":"uur_ervoor","ingredienten":[...],"stappen":[...]}]}
 
 Geen recept gevonden: {"fout":"geen_recept_herkend","reden":"..."}`;
 
@@ -2586,6 +2751,128 @@ function renderBoodschappenTab(g) {
   }
 }
 
+// ─── Prep-tab ─────────────────────────────────────────────────────────────────
+function renderPrepTab(g) {
+  const container = document.getElementById('tab-prep');
+  if (!g || !g.recepten.length) {
+    container.innerHTML = `<div class="tab-leeg">${STRINGS.prepLeeg}</div>`;
+    return;
+  }
+
+  if (!g.afgevinktePrepKeys) g.afgevinktePrepKeys = [];
+  const afgevinkt = new Set(g.afgevinktePrepKeys);
+
+  // Sleutelformaat: {prepActie}:{naam}:{eenheid} (lowercase, trimmed)
+  function maakPrepSleutel(prepActie, naam, eenheid) {
+    return `${prepActie}:${(naam || '').toLowerCase().trim()}:${(eenheid || '').toLowerCase().trim()}`;
+  }
+
+  // Verzamel alle ingrediënten met prepActie != 'geen' en != afwezig
+  // Aggregeer per prepActie + naam + eenheid (zelfde logica als boodschappenlijst)
+  // Bijhouden van receptnamen per sleutel
+  const prepGroepen = {}; // { prepActie: { sleutel: { naam, eenheid, hoeveelheid, recepten: Set } } }
+
+  for (const r of g.recepten) {
+    const alleIngs = r.componenten && r.componenten.length
+      ? r.componenten.flatMap(c => c.ingredienten)
+      : r.ingredienten;
+    for (const ing of alleIngs) {
+      const pa = ing.prepActie;
+      if (!pa || pa === 'geen') continue;
+      if (!PREP_ACTIES[pa]) continue; // onbekende waarde negeren
+      if (!prepGroepen[pa]) prepGroepen[pa] = {};
+      const sleutel = maakPrepSleutel(pa, ing.naam, ing.eenheid);
+      const geschaaldH = ing.hoeveelheid !== null
+        ? schaalHoeveelheid(ing.hoeveelheid, r.origineelAantalPersonen, r.geschaaldAantalPersonen, ing.eenheid)
+        : null;
+      if (prepGroepen[pa][sleutel]) {
+        const bestaand = prepGroepen[pa][sleutel];
+        if (geschaaldH !== null && bestaand.hoeveelheid !== null) {
+          bestaand.hoeveelheid += geschaaldH;
+        } else {
+          bestaand.hoeveelheid = null;
+        }
+        bestaand.recepten.add(r.naam);
+      } else {
+        prepGroepen[pa][sleutel] = {
+          sleutel,
+          naam: ing.naam,
+          eenheid: ing.eenheid,
+          hoeveelheid: geschaaldH,
+          recepten: new Set([r.naam]),
+        };
+      }
+    }
+  }
+
+  // Bepaal gevulde groepen in PREP_VOLGORDE
+  const gevuldeGroepen = PREP_VOLGORDE.filter(pa => prepGroepen[pa] && Object.keys(prepGroepen[pa]).length);
+
+  if (!gevuldeGroepen.length) {
+    container.innerHTML = `<div class="tab-leeg">${STRINGS.prepLeeg}</div>`;
+    return;
+  }
+
+  // Verzamel alle items voor "Klaar"-sectie
+  const alleItems = gevuldeGroepen.flatMap(pa => Object.values(prepGroepen[pa]));
+  const klaarItems = alleItems.filter(item => afgevinkt.has(item.sleutel));
+
+  function maakPrepItemHtml(item, isAfgevinkt) {
+    const hoeveelheidTekst = item.hoeveelheid !== null
+      ? (item.eenheid ? `${item.hoeveelheid}\u202f${item.eenheid} ` : `${item.hoeveelheid} `)
+      : '';
+    const receptenTekst = [...item.recepten].join(', ');
+    return `<div class="prep-item${isAfgevinkt ? ' afgevinkt' : ''}" data-sleutel="${escHtml(item.sleutel)}">
+      <div class="prep-cb"></div>
+      <div style="flex:1;min-width:0">
+        <span class="prep-tekst">${escHtml(hoeveelheidTekst + item.naam)}</span>
+        <div class="prep-recepten">${escHtml(receptenTekst)}</div>
+      </div>
+    </div>`;
+  }
+
+  let html = '<div style="padding:var(--gap)">';
+
+  for (const pa of gevuldeGroepen) {
+    const items = Object.values(prepGroepen[pa]).filter(item => !afgevinkt.has(item.sleutel));
+    if (!items.length) continue;
+    html += `<div class="prep-groep">
+      <div class="prep-groep-kop">${escHtml(PREP_ACTIES[pa])}</div>`;
+    for (const item of items) html += maakPrepItemHtml(item, false);
+    html += '</div>';
+  }
+
+  if (klaarItems.length) {
+    html += `<div class="prep-klaar-sectie"><div class="prep-klaar-kop">${STRINGS.prepKlaar}</div>`;
+    for (const item of klaarItems) html += maakPrepItemHtml(item, true);
+    html += '</div>';
+  }
+
+  html += `<div class="prep-reset"><button class="btn-secundair" id="btn-reset-prep">${STRINGS.prepReset}</button></div>`;
+  html += '</div>';
+  container.innerHTML = html;
+
+  container.querySelectorAll('.prep-item').forEach(item => {
+    item.addEventListener('click', async () => {
+      const sleutel = item.dataset.sleutel;
+      const set = new Set(g.afgevinktePrepKeys || []);
+      if (set.has(sleutel)) set.delete(sleutel); else set.add(sleutel);
+      g.afgevinktePrepKeys = [...set];
+      try { await saveGelegenheid(g); } catch(e) {}
+      renderPrepTab(g);
+    });
+  });
+
+  const resetBtn = document.getElementById('btn-reset-prep');
+  if (resetBtn) {
+    resetBtn.addEventListener('click', async () => {
+      g.afgevinktePrepKeys = [];
+      try { await saveGelegenheid(g); } catch(e) {}
+      renderPrepTab(g);
+    });
+  }
+}
+
 // ─── Tijdlijn: bouw handelingen op ───────────────────────────────────────────
 // Eén item per component (recept met componenten) of per recept (zonder componenten).
 // item.id = comp.id of r.id — gebruikt als sleutel in tijdlijnVolgorde.
@@ -2673,8 +2960,12 @@ function renderTijdlijnTab(g) {
     return;
   }
 
-  const PIJL_OP   = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>';
-  const PIJL_NEER = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
+  if (!g.afgevinkteTijdlijnKeys) g.afgevinkteTijdlijnKeys = [];
+  const afgevinkt = new Set(g.afgevinkteTijdlijnKeys);
+
+  const PIJL_OP    = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>';
+  const PIJL_NEER  = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
+  const PRULLENBAK = '<svg width="12" height="12"><use href="#ic-trash"/></svg>';
 
   const totaal = alleItems.length;
   let gIdx = 0;
@@ -2687,7 +2978,11 @@ function renderTijdlijnTab(g) {
     for (const h of gegroepeerd[tv]) {
       const isEerste  = gIdx === 0;
       const isLaatste = gIdx === totaal - 1;
-      html += `<div class="tijdlijn-handeling" data-recept-id="${escHtml(h.receptId)}" data-global-idx="${gIdx}">
+      const isAfgev   = afgevinkt.has(h.id);
+      html += `<div class="tijdlijn-handeling${isAfgev ? ' tl-afgevinkt' : ''}" data-item-id="${escHtml(h.id)}" data-recept-id="${escHtml(h.receptId)}" data-global-idx="${gIdx}">
+        <button class="tl-cb-btn" data-item-id="${escHtml(h.id)}" title="Afvinken">
+          <div class="tl-cb${isAfgev ? ' afgevinkt' : ''}"></div>
+        </button>
         <div class="tl-item-body">
           <span class="tl-stap-tekst">${escHtml(h.naam)}</span>
           ${h.isComp ? `<span class="tl-recept-naam">${escHtml(h.receptNaam)}</span>` : ''}
@@ -2695,6 +2990,7 @@ function renderTijdlijnTab(g) {
         <div class="tl-pijlen">
           <button class="tl-pijl-btn" data-global-idx="${gIdx}" data-dir="op"   ${isEerste  ? 'disabled' : ''} title="Omhoog">${PIJL_OP}</button>
           <button class="tl-pijl-btn" data-global-idx="${gIdx}" data-dir="neer" ${isLaatste ? 'disabled' : ''} title="Omlaag">${PIJL_NEER}</button>
+          <button class="tl-delete-btn" data-item-id="${escHtml(h.id)}" data-recept-id="${escHtml(h.receptId)}" data-is-comp="${h.isComp ? '1' : '0'}" data-comp-id="${escHtml(h.compId || '')}" title="Verwijderen">${PRULLENBAK}</button>
         </div>
       </div>`;
       gIdx++;
@@ -2704,11 +3000,66 @@ function renderTijdlijnTab(g) {
   html += '</div>';
   container.innerHTML = html;
 
-  // Klik op item → navigeer naar recept (pijltjes stoppen propagatie)
+  // Fix 3: checkbox — item blijft op positie (geen verplaatsing)
+  container.querySelectorAll('.tl-cb-btn').forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      const itemId = btn.dataset.itemId;
+      const gAct = actieveGelegenheid();
+      if (!gAct) return;
+      if (!gAct.afgevinkteTijdlijnKeys) gAct.afgevinkteTijdlijnKeys = [];
+      const set = new Set(gAct.afgevinkteTijdlijnKeys);
+      if (set.has(itemId)) set.delete(itemId); else set.add(itemId);
+      gAct.afgevinkteTijdlijnKeys = [...set];
+      try { await saveGelegenheid(gAct); } catch(e) {}
+      renderTijdlijnTab(gAct);
+    });
+  });
+
+  // Klik op item → navigeer naar recept (overige knoppen stoppen propagatie)
   container.querySelectorAll('.tijdlijn-handeling').forEach(el => {
     el.addEventListener('click', () => {
       state.actieveReceptId = el.dataset.receptId;
       wisselTab('recepten');
+    });
+  });
+
+  // Fix 4: verwijder-knop — verwijdert component of heel recept
+  container.querySelectorAll('.tl-delete-btn').forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      const isComp  = btn.dataset.isComp === '1';
+      const compId  = btn.dataset.compId;
+      const receptId = btn.dataset.receptId;
+      if (!confirm(STRINGS.verwijderTijdlijnCompBevestiging)) return;
+      const gAct = actieveGelegenheid();
+      if (!gAct) return;
+      const r = gAct.recepten.find(r => r.id === receptId);
+      if (!r) return;
+      if (isComp) {
+        r.componenten = (r.componenten || []).filter(c => c.id !== compId);
+      } else {
+        verwijderRecept(gAct, receptId);
+      }
+      // Verwijder ook uit tijdlijn-volgorde en afgevinkte keys
+      if (gAct.tijdlijnVolgorde) {
+        for (const tv of Object.keys(gAct.tijdlijnVolgorde)) {
+          gAct.tijdlijnVolgorde[tv] = gAct.tijdlijnVolgorde[tv].filter(id => id !== (isComp ? compId : receptId));
+        }
+      }
+      if (gAct.afgevinkteTijdlijnKeys) {
+        const keyToRemove = isComp ? compId : receptId;
+        gAct.afgevinkteTijdlijnKeys = gAct.afgevinkteTijdlijnKeys.filter(k => k !== keyToRemove);
+      }
+      try {
+        await saveGelegenheid(gAct);
+        renderTijdlijnTab(gAct);
+        renderOverzichtTab(gAct);
+        if (state.actieveReceptId === receptId && !isComp) {
+          state.actieveReceptId = null;
+          renderReceptenTab(gAct);
+        }
+      } catch (err) { alert(STRINGS.opslagFout); }
     });
   });
 
