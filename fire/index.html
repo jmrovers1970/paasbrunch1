@@ -37,6 +37,9 @@
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
+/* iOS Safari zoomt in op inputs met font-size < 16px — dit voorkomt dat */
+input, textarea, select { font-size: 16px; }
+
 body {
   background: var(--bg);
   color: var(--tx);
@@ -143,7 +146,7 @@ body {
   color: var(--tx);
   border-radius: var(--radius-sm);
   padding: 9px 10px;
-  font-size: 14px;
+  font-size: 16px;
   font-family: inherit;
   -webkit-appearance: none;
   appearance: none;
@@ -344,7 +347,7 @@ body {
   padding: 3px 8px;
 }
 .recept-tv-select {
-  font-size: 11px;
+  font-size: 16px;
   color: var(--ac);
   background: var(--card2);
   border: none;
@@ -630,7 +633,7 @@ div.stap-tv-ind { cursor: default; pointer-events: none; }
 .inp-naam { flex: 1; min-width: 130px; }
 .inp-opmerking { flex: 1; min-width: 0; }
 .inp-productgroep { flex: 1; min-width: 0; }
-.form-inp { padding: 7px 8px; font-size: 13px; }
+.form-inp { padding: 7px 8px; font-size: 16px; }
 .btn-rij-del {
   width: 26px;
   height: 26px;
@@ -685,7 +688,7 @@ div.stap-tv-ind { cursor: default; pointer-events: none; }
 .stap-form-timer { display: flex; align-items: center; gap: 6px; margin-top: 6px; }
 .stap-form-timer label { font-size: 11px; color: var(--mu); }
 .stap-form-timer span { font-size: 11px; color: var(--mu); }
-.inp-timer { width: 56px; flex-shrink: 0; padding: 5px 7px; font-size: 12px; }
+.inp-timer { width: 56px; flex-shrink: 0; padding: 5px 7px; font-size: 16px; }
 .stap-form-tv { margin-top: 5px; }
 
 /* ── Boodschappenlijst ── */
@@ -773,32 +776,22 @@ div.stap-tv-ind { cursor: default; pointer-events: none; }
 .tl-stap-tekst { font-size: 13px; font-weight: 500; flex: 1; line-height: 1.4; }
 .tl-recept-naam { font-size: 12px; color: var(--mu); flex-shrink: 0; white-space: nowrap; max-width: 120px; overflow: hidden; text-overflow: ellipsis; }
 .tijdlijn-chevron { color: var(--mu); flex-shrink: 0; }
-.tl-drag-grip { color: var(--bo); flex-shrink: 0; }
-.tl-dragging { opacity: .3; }
-.tl-drag-ghost {
-  position: fixed;
-  left: 0; right: 0;
-  background: var(--card2);
-  border: 1px solid var(--ac);
-  border-radius: var(--radius-sm);
-  padding: 9px 14px;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--tx);
-  pointer-events: none;
-  z-index: 9999;
-  box-shadow: 0 4px 16px rgba(0,0,0,.5);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.tl-pijlen { display: flex; flex-direction: column; flex-shrink: 0; }
+.tl-pijl-btn {
+  width: 44px;
+  height: 22px;
+  background: transparent;
+  border: none;
+  color: var(--mu);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+  transition: color .1s;
 }
-.tl-drop-indicator {
-  height: 2px;
-  background: var(--ac);
-  border-radius: 2px;
-  margin: 0 0;
-  pointer-events: none;
-}
+.tl-pijl-btn:not([disabled]):active { color: var(--ac); }
+.tl-pijl-btn[disabled] { opacity: .2; cursor: default; }
 
 /* ── Sheet modaal (gelegenheid) ── */
 .modaal-overlay {
@@ -968,7 +961,7 @@ div.stap-tv-ind { cursor: default; pointer-events: none; }
   border-bottom: 1px solid var(--bo);
 }
 .comp-blok-naam { flex: 1; min-width: 120px; }
-.comp-blok-tv { width: 130px; flex-shrink: 0; font-size: 12px; padding: 6px 6px; }
+.comp-blok-tv { width: 130px; flex-shrink: 0; font-size: 16px; padding: 6px 6px; }
 .comp-sectie-kop {
   font-size: 10px;
   color: var(--mu);
@@ -1421,7 +1414,19 @@ const TV_CSS_KLEUR = {
 
 const KLOK_SVG = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>';
 
-// Volgorde is chronologisch (ver weg → dichtbij). Zeven vaste vensters (Fix 2, Sprint 1 fixes).
+// TV_VOLGORDE is de enige canonieke bron voor tijdvenster-volgorde (Fix A, v0.1.8).
+// Chronologisch van ver weg → dichtbij. Alle sortering en rendering leidt hieruit af.
+const TV_VOLGORDE = [
+  'week_vooruit',
+  'paar_dagen',
+  'dag_ervoor',
+  'ochtend_van',
+  'middag_van',
+  'uur_ervoor',
+  'a_la_minute',
+];
+
+// TIJDVENSTERS afgeleid van TV_VOLGORDE zodat ze altijd in sync blijven.
 const TIJDVENSTERS = {
   week_vooruit: 'Week van tevoren',
   paar_dagen:   'Paar dagen van tevoren',
@@ -1431,6 +1436,11 @@ const TIJDVENSTERS = {
   uur_ervoor:   'Uur van tevoren',
   a_la_minute:  'Vlak ervoor',
 };
+
+function tvIndex(tv) {
+  const i = TV_VOLGORDE.indexOf(tv);
+  return i === -1 ? TV_VOLGORDE.length : i; // onbekende waarden gaan achteraan
+}
 
 const PRODUCTGROEPEN = {
   groente_fruit: 'Groente & fruit',
@@ -1866,9 +1876,8 @@ function renderReceptDetail(receptId) {
   if (!r) return;
   const detail = document.getElementById('recept-detail-container');
 
-  const tvOpties = Object.entries(TIJDVENSTERS)
-    .filter(([k]) => k !== 'laatste_uur')
-    .map(([k, v]) => `<option value="${k}" ${r.tijdvenster === k ? 'selected' : ''}>${v}</option>`).join('');
+  const tvOpties = TV_VOLGORDE
+    .map(k => `<option value="${k}" ${r.tijdvenster === k ? 'selected' : ''}>${TIJDVENSTERS[k]}</option>`).join('');
 
   const bronLabel = r.bronType === 'foto' ? 'Foto' : r.bronType === 'link' ? 'Link' : 'Handmatig';
 
@@ -1898,7 +1907,11 @@ function renderReceptDetail(receptId) {
 
   let detailSectiesHtml;
   if (r.componenten && r.componenten.length) {
-    const kaarten = r.componenten.map(comp => {
+    // Sorteren op tijdvenster (TV_VOLGORDE als index); stabiele sort behoudt invoervolgorde bij gelijk TV.
+    // Werkt op een kopie — opgeslagen data-volgorde blijft ongewijzigd.
+    const sorteerdeComponenten = [...r.componenten].sort((a, b) =>
+      tvIndex(a.tijdvenster) - tvIndex(b.tijdvenster));
+    const kaarten = sorteerdeComponenten.map(comp => {
       const compTvInd = maakStapTvIndicatorHtml(comp.tijdvenster || '', r.tijdvenster || 'ochtend_van', false, '');
       return `
         <div class="comp-detail-card" data-comp-id="${escHtml(comp.id)}">
@@ -2603,8 +2616,8 @@ function buildTijdlijn(g) {
       }
     }
   }
-  // Groepeer per tijdvenster in chronologische volgorde
-  const volgorde = Object.keys(TIJDVENSTERS);
+  // Groepeer per tijdvenster in chronologische volgorde (TV_VOLGORDE is canoniek)
+  const volgorde = TV_VOLGORDE;
   const gegroepeerd = {};
   for (const tv of volgorde) {
     const items = handelingen.filter(h => h.tijdvenster === tv);
@@ -2645,26 +2658,33 @@ function renderTijdlijnTab(g) {
     return;
   }
 
-  const GRIP_SVG = '<svg class="tl-drag-grip" width="12" height="14" viewBox="0 0 12 14" fill="currentColor"><rect x="1" y="2" width="10" height="1.5" rx=".75"/><rect x="1" y="6" width="10" height="1.5" rx=".75"/><rect x="1" y="10" width="10" height="1.5" rx=".75"/></svg>';
+  const PIJL_OP   = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>';
+  const PIJL_NEER = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
 
   let html = '<div style="padding:var(--gap)">';
   for (const tv of gevulde) {
     const tvKleur = `var(--tv-${TV_CSS_KLEUR[tv] || 'ochtend'})`;
-    html += `<div class="tijdlijn-sectie" data-tv-sectie="${escHtml(tv)}" style="border-left:3px solid ${tvKleur};padding-left:10px">
+    const groepItems = gegroepeerd[tv];
+    html += `<div class="tijdlijn-sectie" style="border-left:3px solid ${tvKleur};padding-left:10px">
       <div class="tijdlijn-sectie-kop" style="color:${tvKleur}">${escHtml(TIJDVENSTERS[tv] || tv)}</div>`;
-    for (const h of gegroepeerd[tv]) {
-      html += `<div class="tijdlijn-handeling" data-recept-id="${escHtml(h.receptId)}" data-stap-id="${escHtml(h.stapId)}" data-tv="${escHtml(tv)}">
-        ${GRIP_SVG}
+    groepItems.forEach((h, idx) => {
+      const eersteInGroep = idx === 0;
+      const laatsteInGroep = idx === groepItems.length - 1;
+      html += `<div class="tijdlijn-handeling" data-recept-id="${escHtml(h.receptId)}" data-tv="${escHtml(tv)}" data-idx="${idx}">
         <span class="tl-stap-tekst">${escHtml(h.tekst)}</span>
         <span class="tl-recept-naam">— ${escHtml(h.receptNaam)}</span>
-        <div class="tijdlijn-chevron"><svg width="14" height="14"><use href="#ic-chevron-right"/></svg></div>
+        <div class="tl-pijlen">
+          <button class="tl-pijl-btn" data-tv="${escHtml(tv)}" data-idx="${idx}" data-dir="op" ${eersteInGroep ? 'disabled' : ''} title="Omhoog">${PIJL_OP}</button>
+          <button class="tl-pijl-btn" data-tv="${escHtml(tv)}" data-idx="${idx}" data-dir="neer" ${laatsteInGroep ? 'disabled' : ''} title="Omlaag">${PIJL_NEER}</button>
+        </div>
       </div>`;
-    }
+    });
     html += '</div>';
   }
   html += '</div>';
   container.innerHTML = html;
 
+  // Klik op item → navigeer naar recept (pijltjes stoppen propagatie)
   container.querySelectorAll('.tijdlijn-handeling').forEach(el => {
     el.addEventListener('click', () => {
       state.actieveReceptId = el.dataset.receptId;
@@ -2672,124 +2692,37 @@ function renderTijdlijnTab(g) {
     });
   });
 
-  initieerTijdlijnDrag(container, g);
-}
+  // Pijltjes ↑↓: wissel volgorde en sla op
+  container.querySelectorAll('.tl-pijl-btn').forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      if (btn.disabled) return;
+      const tv    = btn.dataset.tv;
+      const idx   = parseInt(btn.dataset.idx, 10);
+      const dir   = btn.dataset.dir;
+      const naar  = dir === 'op' ? idx - 1 : idx + 1;
 
-// ─── Tijdlijn: lang-indrukken-slepen (Fix 4) ─────────────────────────────────
-// Lang indrukken (~400ms) activeert sleep-modus. Kort aanraken + bewegen = scrollen.
-// Volgorde wordt opgeslagen in g.tijdlijnVolgorde per tijdvenster-groep.
-function initieerTijdlijnDrag(container, g) {
-  const LONG_PRESS_MS = 400;
-  let dragTimer = null;
-  let dragActief = false;
-  let dragItem = null;
-  let dragFromIdx = -1;
-  let dragTv = null;
-  let dragGhost = null;
-  let startX = 0, startY = 0;
+      // Altijd actieveGelegenheid() ophalen voor een frisse referentie
+      const gAct = actieveGelegenheid();
+      if (!gAct) return;
 
-  function maakGhost(item, touchY) {
-    const rect = item.getBoundingClientRect();
-    const ghost = document.createElement('div');
-    ghost.className = 'tl-drag-ghost';
-    ghost.textContent = item.querySelector('.tl-stap-tekst')?.textContent || '';
-    ghost.style.top = (touchY - rect.height / 2) + 'px';
-    ghost.style.left = (rect.left + 10) + 'px';
-    ghost.style.right = (window.innerWidth - rect.right + 10) + 'px';
-    document.body.appendChild(ghost);
-    return ghost;
-  }
+      const { gegroepeerd: grp } = buildTijdlijn(gAct);
+      const items = grp[tv] || [];
+      if (naar < 0 || naar >= items.length) return;
 
-  function itemsInGroep(tv) {
-    return [...container.querySelectorAll(`.tijdlijn-handeling[data-tv="${tv}"]`)];
-  }
+      const ids = items.map(h => h.stapId);
+      [ids[idx], ids[naar]] = [ids[naar], ids[idx]];
 
-  function vindDropIndex(tv, touchY) {
-    const items = itemsInGroep(tv).filter(el => !el.classList.contains('tl-dragging'));
-    for (let i = 0; i < items.length; i++) {
-      const rect = items[i].getBoundingClientRect();
-      if (touchY < rect.top + rect.height / 2) return i;
-    }
-    return items.length;
-  }
+      if (!gAct.tijdlijnVolgorde) gAct.tijdlijnVolgorde = {};
+      gAct.tijdlijnVolgorde[tv] = ids;
 
-  function plaatsDropIndicator(tv, dropIdx) {
-    container.querySelectorAll('.tl-drop-indicator').forEach(el => el.remove());
-    const items = itemsInGroep(tv).filter(el => !el.classList.contains('tl-dragging'));
-    const indicator = document.createElement('div');
-    indicator.className = 'tl-drop-indicator';
-    if (dropIdx < items.length) {
-      items[dropIdx].before(indicator);
-    } else if (items.length > 0) {
-      items[items.length - 1].after(indicator);
-    }
-  }
-
-  container.addEventListener('touchstart', (e) => {
-    const item = e.target.closest('.tijdlijn-handeling');
-    if (!item) return;
-    startX = e.touches[0].clientX;
-    startY = e.touches[0].clientY;
-    dragTimer = setTimeout(() => {
-      dragActief = true;
-      dragItem = item;
-      dragTv = item.dataset.tv;
-      dragFromIdx = itemsInGroep(dragTv).indexOf(item);
-      item.classList.add('tl-dragging');
-      dragGhost = maakGhost(item, startY);
-    }, LONG_PRESS_MS);
-  }, { passive: true });
-
-  container.addEventListener('touchmove', (e) => {
-    const touch = e.touches[0];
-    if (!dragActief) {
-      // Annuleer timer als de vinger meer dan 8px beweegt vóór activatie
-      if (Math.abs(touch.clientX - startX) > 8 || Math.abs(touch.clientY - startY) > 8) {
-        clearTimeout(dragTimer); dragTimer = null;
+      try {
+        await saveGelegenheid(gAct);
+      } catch (err) {
+        console.warn('[Fire] tijdlijn volgorde opslaan mislukt:', err);
       }
-      return;
-    }
-    e.preventDefault(); // Voorkom scrollen tijdens sleep
-    const y = touch.clientY;
-    dragGhost.style.top = (y - dragGhost.offsetHeight / 2) + 'px';
-    plaatsDropIndicator(dragTv, vindDropIndex(dragTv, y));
-  }, { passive: false });
-
-  container.addEventListener('touchend', async (e) => {
-    clearTimeout(dragTimer); dragTimer = null;
-    if (!dragActief) return;
-    dragActief = false;
-
-    const touch = e.changedTouches[0];
-    const dropIdx = vindDropIndex(dragTv, touch.clientY);
-
-    // Opruimen visuele staat
-    if (dragGhost) { dragGhost.remove(); dragGhost = null; }
-    container.querySelectorAll('.tl-drop-indicator').forEach(el => el.remove());
-    if (dragItem) { dragItem.classList.remove('tl-dragging'); }
-
-    // Bereken nieuwe volgorde en sla op
-    const { gegroepeerd } = buildTijdlijn(g);
-    const huidigeItems = gegroepeerd[dragTv] || [];
-    const huidigeIds = huidigeItems.map(h => h.stapId);
-    const nieuweIds = [...huidigeIds];
-    const [verplaatst] = nieuweIds.splice(dragFromIdx, 1);
-    nieuweIds.splice(dropIdx, 0, verplaatst);
-
-    if (!g.tijdlijnVolgorde) g.tijdlijnVolgorde = {};
-    g.tijdlijnVolgorde[dragTv] = nieuweIds;
-    try { await saveGelegenheid(g); } catch (err) { console.warn('[Fire] tijdlijn volgorde opslaan mislukt:', err); }
-
-    dragItem = null; dragTv = null; dragFromIdx = -1;
-    renderTijdlijnTab(g);
-  }, { passive: true });
-
-  container.addEventListener('touchcancel', () => {
-    clearTimeout(dragTimer); dragTimer = null;
-    if (dragGhost) { dragGhost.remove(); dragGhost = null; }
-    container.querySelectorAll('.tl-drop-indicator').forEach(el => el.remove());
-    if (dragItem) { dragItem.classList.remove('tl-dragging'); dragItem = null; }
-    dragActief = false; dragTv = null; dragFromIdx = -1;
+      renderTijdlijnTab(gAct);
+    });
   });
 }
 
@@ -2876,8 +2809,7 @@ function renderComponenten() {
   if (!c) return;
 
   c.innerHTML = _formComponenten.map(comp => {
-    const tvOpts = Object.entries(TIJDVENSTERS)
-      .filter(([k]) => k !== 'laatste_uur')
+    const tvOpts = TV_VOLGORDE.map(k => [k, TIJDVENSTERS[k]])
       .map(([k, v]) => `<option value="${k}"${k === comp.tijdvenster ? ' selected' : ''}>${v}</option>`).join('');
     return `
     <div class="comp-blok" data-comp-id="${comp.id}">
@@ -3279,8 +3211,7 @@ function maakStapTvIndicatorHtml(stapTv, erfTv, isInteractief, erfLabel) {
   const label = TIJDVENSTERS[geldendTv] || geldendTv;
   if (isInteractief) {
     const erfItem = `<div class="stap-tv-menu-item${!stapTv ? ' actief' : ''}" data-tv="">(volgt ${escHtml(erfLabel)})</div>`;
-    const tvItems = Object.entries(TIJDVENSTERS)
-      .filter(([k]) => k !== 'laatste_uur')
+    const tvItems = TV_VOLGORDE.map(k => [k, TIJDVENSTERS[k]])
       .map(([k, v]) => `<div class="stap-tv-menu-item${stapTv === k ? ' actief' : ''}" data-tv="${k}">${v}</div>`).join('');
     return `<div class="stap-tv-wrapper" data-erf-tv="${escHtml(erfTv || '')}" data-erf-label="${escHtml(erfLabel)}">` +
       `<input type="hidden" class="stap-tijdvenster" value="${escHtml(stapTv || '')}">` +
