@@ -632,7 +632,6 @@ div.stap-tv-ind { cursor: default; pointer-events: none; }
 .inp-eenheid { width: 120px; flex-shrink: 0; padding: 7px 4px; }
 .inp-naam { flex: 1; min-width: 130px; }
 .inp-opmerking { flex: 1; min-width: 0; }
-.inp-productgroep { flex: 1; min-width: 0; }
 .form-inp { padding: 7px 8px; font-size: 16px; }
 .btn-rij-del {
   width: 26px;
@@ -1571,16 +1570,20 @@ function tvIndex(tv) {
 }
 
 const PRODUCTGROEPEN = {
-  groente_fruit: 'Groente & fruit',
-  zuivel_eieren: 'Zuivel & eieren',
-  vlees_vis: 'Vlees & vis',
-  brood_banket: 'Brood & banket',
+  groente:     'Groente',
+  fruit:       'Fruit',
+  vlees:       'Vlees',
+  vis:         'Vis & zeevruchten',
+  zuivel:      'Zuivel',
+  eieren:      'Eieren',
+  bakkerij:    'Brood & banket',
   droge_waren: 'Droge waren',
-  kruiden_specerijen: 'Kruiden & specerijen',
-  olie_azijn_saus: 'Olie, azijn & saus',
-  diepvries: 'Diepvries',
-  drank: 'Drank',
-  overig: 'Overig',
+  kruiden:     'Kruiden',
+  olie_azijn:  'Olie & azijn',
+  conserven:   'Conserven',
+  diepvries:   'Diepvries',
+  dranken:     'Dranken',
+  overig:      'Overig',
 };
 
 const EENHEDEN = [
@@ -2436,21 +2439,20 @@ const EXTRACTIE_PROMPT = `Je bent een assistent die recepten extraheert en omzet
 1. Vertaal naar Nederlands. Behoud cultureel herkenbare namen (Tiramisu, Ratatouille).
 2. Reken om naar metrisch: cups→ml/g, oz→g, fl oz→ml, lb→g, °F→°C, tbsp→el, tsp→tl.
 3. Herken het originele aantal porties.
-4. Per ingrediënt: hoeveelheid als getal, eenheid uit de vaste lijst, naam, productgroep (zie lijst), en een prepActie (zie regel 5a).
+4. Per ingrediënt: hoeveelheid als getal, eenheid uit de vaste lijst, naam, productgroep (zie regel 4a), en een prepActie (zie regel 4b).
+4a. productgroep per ingrediënt: kies exact één van: groente, fruit, vlees, vis, zuivel, eieren, bakkerij, droge_waren, kruiden, olie_azijn, conserven, diepvries, dranken, overig. Richtlijnen: groente=verse groente incl. knoflook/ui/aardappel; fruit=vers fruit incl. citroen/limoen; vlees=vers vlees/gevogelte/gehakt; vis=verse vis/zeevruchten; zuivel=melk/yoghurt/room/boter/kaas; eieren=eieren; bakkerij=brood/banket/cake/koekjes; droge_waren=bloem/suiker/rijst/pasta/noten/zaden; kruiden=verse&gedroogde kruiden/specerijen/zout/peper; olie_azijn=olie/azijn/sauzen; conserven=blik- en potvoeding/tomatenpuree; diepvries=expliciet ingevroren producten; dranken=wijn/bier/sap/bouillon. Voorbeelden: "1 ui" → groente; "250g mascarpone" → zuivel; "3 eieren" → eieren; "100g bloem" → droge_waren; "1 blik tomatenstukjes" → conserven; "handje verse basilicum" → kruiden. Wees conservatief: bij twijfel kies overig.
+4b. prepActie per ingrediënt: kies één van: snijden, hakken, raspen, persen, afmeten, marineren, weken, ontdooien, op_temperatuur, blancheren, geen. Voorbeelden: "1 ui, fijngesneden" → snijden; "2 teentjes knoflook, geperst" → persen; "250g boter, op kamertemperatuur" → op_temperatuur; "500g bloem" → geen; "100g rozijnen, geweld in rum" → weken. Wees conservatief: bij twijfel kies geen.
 5. Per stap: korte Nederlandse instructie. Geef per stap een tijdvenster als de stap duidelijk op een ander moment hoort dan het recept-tijdvenster (bijv. marineren de ochtend, bakken het laatste uur).
-5a. prepActie per ingrediënt: kies één van: snijden, hakken, raspen, persen, afmeten, marineren, weken, ontdooien, op_temperatuur, blancheren, geen. Voorbeelden: "1 ui, fijngesneden" → snijden; "2 teentjes knoflook, geperst" → persen; "250g boter, op kamertemperatuur" → op_temperatuur; "500g bloem" → geen; "100g rozijnen, geweld in rum" → weken. Wees conservatief: bij twijfel kies geen.
-6. Tijdvenster (recept en stappen): week_vooruit, paar_dagen, dag_ervoor, ochtend_van, middag_van, uur_ervoor, a_la_minute. Bij twijfel: ochtend_van.
+6. Tijdvenster voor recept (zonder componenten) of per component (met componenten): kies exact één van: week_van_tevoren, paar_dagen_van_tevoren, dag_van_tevoren, ochtend_van, middag_van, uur_van_tevoren, vlak_ervoor. Richtlijnen: dingen die moeten opstijven/rijzen/fermenteren/lang trekken → dag_van_tevoren of paar_dagen_van_tevoren; lang stoofwerk/bouillons/fond → dag_van_tevoren; tiramisu/mousses/panna cotta/lang-marinerende gerechten → dag_van_tevoren; brooddeeg dezelfde dag → ochtend_van; salades/dressings → uur_van_tevoren; slagroom kloppen/kaas schaven/garnering → vlak_ervoor; standaard bij twijfel → ochtend_van.
 7. Eenheden: gebruik ALLEEN: g, kg, ml, l, el, tl, snuf, stuks, stengels, teentjes, bosjes, blikje, pakje, of "" (leeg, voor ingrediënten zonder eenheid).
 8. Als het recept duidelijk aparte onderdelen heeft (bijv. saus, bodem, garnituur, vulling), gebruik dan een "componenten" array in plaats van "ingredienten"/"stappen". Elke component heeft: naam, tijdvenster, ingredienten (zelfde structuur), stappen (zelfde structuur). Bij twijfel: gebruik geen componenten.
 9. Geef ALLEEN valide JSON terug, geen extra tekst of code blocks.
-
-Productgroepen: groente_fruit, zuivel_eieren, vlees_vis, brood_banket, droge_waren, kruiden_specerijen, olie_azijn_saus, diepvries, drank, overig.
 
 Output (enkelvoudig):
 {"naam":"...","origineelAantalPersonen":4,"bereidingstijdMinuten":60,"tijdvenster":"ochtend_van","ingredienten":[{"hoeveelheid":500,"eenheid":"g","naam":"bloem","productgroep":"droge_waren","opmerking":"","prepActie":"geen"}],"stappen":[{"nummer":1,"tekst":"...","tijdvenster":"ochtend_van"}]}
 
 Output (met componenten):
-{"naam":"...","origineelAantalPersonen":4,"bereidingstijdMinuten":60,"tijdvenster":"ochtend_van","componenten":[{"naam":"Bodem","tijdvenster":"dag_ervoor","ingredienten":[{"hoeveelheid":200,"eenheid":"g","naam":"bloem","productgroep":"droge_waren","opmerking":"","prepActie":"afmeten"}],"stappen":[...]},{"naam":"Vulling","tijdvenster":"uur_ervoor","ingredienten":[...],"stappen":[...]}]}
+{"naam":"...","origineelAantalPersonen":4,"bereidingstijdMinuten":60,"tijdvenster":"dag_van_tevoren","componenten":[{"naam":"Bodem","tijdvenster":"dag_van_tevoren","ingredienten":[{"hoeveelheid":200,"eenheid":"g","naam":"bloem","productgroep":"droge_waren","opmerking":"","prepActie":"afmeten"}],"stappen":[...]},{"naam":"Opmaken","tijdvenster":"vlak_ervoor","ingredienten":[...],"stappen":[...]}]}
 
 Geen recept gevonden: {"fout":"geen_recept_herkend","reden":"..."}`;
 
@@ -2554,6 +2556,34 @@ async function importeerLink(url) {
   }
 }
 
+// Mapping van "vriendelijke" prompt-namen → interne TV_VOLGORDE keys
+// (Deel 2: tijdvenster-normalisatie voor import)
+const TV_IMPORT_NAMEN = {
+  week_van_tevoren:       'week_vooruit',
+  paar_dagen_van_tevoren: 'paar_dagen',
+  dag_van_tevoren:        'dag_ervoor',
+  ochtend_van:            'ochtend_van',
+  middag_van:             'middag_van',
+  uur_van_tevoren:        'uur_ervoor',
+  vlak_ervoor:            'a_la_minute',
+};
+function normaliseerTvImport(tv) {
+  if (!tv) return 'ochtend_van';
+  // Al een interne waarde?
+  if (TV_VOLGORDE.includes(tv)) return tv;
+  // Vriendelijke naam?
+  if (TV_IMPORT_NAMEN[tv]) return TV_IMPORT_NAMEN[tv];
+  console.warn('[Fire] onbekend tijdvenster in import, fallback ochtend_van:', tv);
+  return 'ochtend_van';
+}
+// Defensieve parsing productgroep
+function normaliseerPgImport(pg) {
+  if (!pg) return 'overig';
+  if (PRODUCTGROEPEN[pg]) return pg;
+  console.warn('[Fire] onbekende productgroep in import, fallback overig:', pg);
+  return 'overig';
+}
+
 function verwerkImportResultaat(jsonTekst, bronType) {
   // Strip eventuele code block markers
   const schoon = jsonTekst.replace(/^```[a-z]*\n?/i, '').replace(/\n?```$/,'').trim();
@@ -2570,30 +2600,35 @@ function verwerkImportResultaat(jsonTekst, bronType) {
   // Formulier vullen met geëxtraheerde data
   document.getElementById('rf-naam').value = data.naam || '';
   document.getElementById('rf-porties').value = data.origineelAantalPersonen || actieveGelegenheid()?.aantalPersonen || 4;
-  document.getElementById('rf-tijdvenster').value = data.tijdvenster || 'ochtend_van';
+  document.getElementById('rf-tijdvenster').value = normaliseerTvImport(data.tijdvenster);
   document.getElementById('rf-bereidingstijd').value = data.bereidingstijdMinuten || '';
   _importBronType = bronType;
   _importBronUrl = bronType === 'link' ? document.getElementById('link-url').value.trim() : undefined;
+
+  function mapIng(i) {
+    return {
+      id: maakId('fi'),
+      hoeveelheid: i.hoeveelheid ?? null,
+      eenheid: i.eenheid || '',
+      naam: i.naam || '',
+      productgroep: normaliseerPgImport(i.productgroep),
+      opmerking: i.opmerking || '',
+      prepActie: i.prepActie || 'geen',
+    };
+  }
 
   if (data.componenten && data.componenten.length) {
     _formComponentenModus = true;
     _formComponenten = data.componenten.map(comp => ({
       id: maakId('comp'),
       naam: comp.naam || 'Component',
-      tijdvenster: comp.tijdvenster || data.tijdvenster || 'ochtend_van',
-      ings: (comp.ingredienten || []).map(i => ({
-        id: maakId('fi'),
-        hoeveelheid: i.hoeveelheid ?? null,
-        eenheid: i.eenheid || '',
-        naam: i.naam || '',
-        productgroep: i.productgroep || 'overig',
-        opmerking: i.opmerking || '',
-      })),
+      tijdvenster: normaliseerTvImport(comp.tijdvenster || data.tijdvenster),
+      ings: (comp.ingredienten || []).map(mapIng),
       staps: (comp.stappen || []).map(s => ({
         id: maakId('fs'),
         tekst: s.tekst || '',
         timerMinuten: s.timerMinuten,
-        tijdvenster: s.tijdvenster || undefined,
+        tijdvenster: s.tijdvenster ? normaliseerTvImport(s.tijdvenster) : undefined,
       })),
     }));
     _formComponenten.forEach(c => {
@@ -2605,19 +2640,12 @@ function verwerkImportResultaat(jsonTekst, bronType) {
   } else {
     _formComponentenModus = false;
     _formComponenten = [];
-    _formIngs = (data.ingredienten || []).map(i => ({
-      id: maakId('fi'),
-      hoeveelheid: i.hoeveelheid ?? null,
-      eenheid: i.eenheid || '',
-      naam: i.naam || '',
-      productgroep: i.productgroep || 'overig',
-      opmerking: i.opmerking || '',
-    }));
+    _formIngs = (data.ingredienten || []).map(mapIng);
     _formStaps = (data.stappen || []).map(s => ({
       id: maakId('fs'),
       tekst: s.tekst || '',
       timerMinuten: s.timerMinuten,
-      tijdvenster: s.tijdvenster || undefined,
+      tijdvenster: s.tijdvenster ? normaliseerTvImport(s.tijdvenster) : undefined,
     }));
     if (!_formIngs.length) _formIngs = [leegIng()];
     if (!_formStaps.length) _formStaps = [leegStap()];
@@ -2656,7 +2684,7 @@ function renderBoodschappenTab(g) {
       ? r.componenten.flatMap(c => c.ingredienten)
       : r.ingredienten;
     for (const ing of alleIngs) {
-      const pgKey = ing.productgroep || 'overig';
+      const pgKey = (ing.productgroep && PRODUCTGROEPEN[ing.productgroep]) ? ing.productgroep : 'overig';
       if (!groepen[pgKey]) groepen[pgKey] = {};
       const sleutel = berekeningsBoodschappenSleutel(ing.naam, ing.eenheid);
       const geschaaldH = ing.hoeveelheid !== null
@@ -3280,8 +3308,6 @@ function renderCompIngRijen(comp) {
   const c = document.getElementById(`ing-comp-${comp.id}`);
   if (!c) return;
   c.innerHTML = comp.ings.map(ing => {
-    const pgOpties = Object.entries(PRODUCTGROEPEN).map(([k, v]) =>
-      `<option value="${k}"${k === (ing.productgroep || 'overig') ? ' selected' : ''}>${v}</option>`).join('');
     const eeOpties = EENHEDEN.map(e =>
       `<option value="${e.waarde}"${e.waarde === (ing.eenheid || '') ? ' selected' : ''}>${e.label}</option>`).join('');
     return `
@@ -3294,7 +3320,6 @@ function renderCompIngRijen(comp) {
                value="${escHtml(ing.naam || '')}" placeholder="Naam ingrediënt">
       </div>
       <div class="ing-form-bot">
-        <select class="form-inp inp-productgroep ing-productgroep">${pgOpties}</select>
         <input type="text" class="form-inp inp-opmerking ing-opmerking"
                value="${escHtml(ing.opmerking || '')}" placeholder="Opmerking (opt.)">
         <button type="button" class="btn-rij-del" data-row-id="${ing.id}" title="Verwijder">×</button>
@@ -3357,7 +3382,8 @@ function saveCompIngState(comp) {
     obj.hoeveelheid = parseFloat(rij.querySelector('.ing-hoeveelheid').value) || null;
     obj.eenheid = rij.querySelector('.ing-eenheid').value;
     obj.naam = rij.querySelector('.ing-naam').value.trim();
-    obj.productgroep = rij.querySelector('.ing-productgroep').value;
+    // productgroep wordt niet handmatig ingesteld: behoudt bestaande waarde of 'overig'
+    if (!obj.productgroep || !PRODUCTGROEPEN[obj.productgroep]) obj.productgroep = 'overig';
     obj.opmerking = rij.querySelector('.ing-opmerking').value.trim();
   });
 }
@@ -3397,8 +3423,9 @@ function leesComponenten() {
       hoeveelheid: ing.hoeveelheid ?? null,
       eenheid: ing.eenheid || '',
       naam: ing.naam,
-      productgroep: ing.productgroep || 'overig',
+      productgroep: (ing.productgroep && PRODUCTGROEPEN[ing.productgroep]) ? ing.productgroep : 'overig',
       opmerking: ing.opmerking || undefined,
+      prepActie: ing.prepActie || undefined,
     })),
     stappen: comp.staps.filter(s => s.tekst).map((s, i) => ({
       id: s.id || maakId('stap'),
@@ -3463,7 +3490,8 @@ function saveIngState() {
     obj.hoeveelheid = parseFloat(rij.querySelector('.ing-hoeveelheid').value) || null;
     obj.eenheid = rij.querySelector('.ing-eenheid').value.trim();
     obj.naam = rij.querySelector('.ing-naam').value.trim();
-    obj.productgroep = rij.querySelector('.ing-productgroep').value;
+    // productgroep wordt niet handmatig ingesteld: behoudt bestaande waarde of 'overig'
+    if (!obj.productgroep || !PRODUCTGROEPEN[obj.productgroep]) obj.productgroep = 'overig';
     obj.opmerking = rij.querySelector('.ing-opmerking').value.trim();
   });
 }
@@ -3566,8 +3594,6 @@ function sluitReceptForm() {
 function renderIngFormRijen() {
   const c = document.getElementById('ing-form-container');
   c.innerHTML = _formIngs.map((ing) => {
-    const pgOpties = Object.entries(PRODUCTGROEPEN).map(([k, v]) =>
-      `<option value="${k}"${k === (ing.productgroep || 'overig') ? ' selected' : ''}>${v}</option>`).join('');
     const eeOpties = EENHEDEN.map(e =>
       `<option value="${e.waarde}"${e.waarde === (ing.eenheid || '') ? ' selected' : ''}>${e.label}</option>`).join('');
     return `
@@ -3580,7 +3606,6 @@ function renderIngFormRijen() {
                value="${escHtml(ing.naam || '')}" placeholder="Naam ingrediënt" required>
       </div>
       <div class="ing-form-bot">
-        <select class="form-inp inp-productgroep ing-productgroep">${pgOpties}</select>
         <input type="text" class="form-inp inp-opmerking ing-opmerking"
                value="${escHtml(ing.opmerking || '')}" placeholder="Opmerking (opt.)">
         <button type="button" class="btn-rij-del" data-row-id="${ing.id}" title="Verwijder">×</button>
@@ -3658,8 +3683,9 @@ function leesIngredientRijen() {
     hoeveelheid: parseFloat(rij.querySelector('.ing-hoeveelheid').value) || null,
     eenheid: rij.querySelector('.ing-eenheid').value.trim(),
     naam: rij.querySelector('.ing-naam').value.trim(),
-    productgroep: rij.querySelector('.ing-productgroep').value,
+    productgroep: 'overig', // handmatig ingevoerd: geen dropdown, valt altijd onder overig
     opmerking: rij.querySelector('.ing-opmerking').value.trim() || undefined,
+    prepActie: (_formIngs.find(i => i.id === rij.dataset.rowId) || {}).prepActie || undefined,
   })).filter(i => i.naam);
 }
 
