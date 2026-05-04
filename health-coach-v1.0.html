@@ -641,6 +641,51 @@ label { display: block; font-size: 14px; font-weight: 600; color: var(--text-2);
 .stats-val { font-size: 14px; font-weight: 500; color: var(--text); }
 .stats-empty { color: var(--muted); font-size: 14px; text-align: center; padding: 16px 0; }
 
+/* ─── COACH FORMAT ─── */
+.chat-bubble p { margin: 5px 0; line-height: 1.6; }
+.chat-bubble p:first-child { margin-top: 0; }
+.chat-bubble p:last-child { margin-bottom: 0; }
+.coach-list { margin: 8px 0; padding-left: 20px; }
+.coach-list li { margin-bottom: 6px; line-height: 1.55; font-size: 14px; }
+.pin-btn {
+  background: none; border: none; cursor: pointer; padding: 4px 6px;
+  color: var(--muted); font-size: 15px; flex-shrink: 0; border-radius: 6px;
+  transition: color .15s; align-self: flex-start; margin-top: 2px;
+}
+.pin-btn:hover { color: var(--accent-move); }
+.pin-btn.pinned { color: var(--accent-move); }
+
+/* ─── SAVED TIPS ─── */
+.saved-tips-section { margin-top: 8px; }
+.saved-tips-toggle {
+  display: flex; align-items: center; justify-content: space-between;
+  width: 100%; background: none; border: none; cursor: pointer;
+  padding: 10px 0; font-size: 15px; font-weight: 600; color: var(--text);
+}
+.saved-tip-card {
+  background: var(--card2); border-radius: 10px; padding: 12px 14px;
+  margin-bottom: 10px; position: relative;
+}
+.saved-tip-date { font-size: 11px; color: var(--muted); margin-bottom: 6px; }
+.saved-tip-content { font-size: 14px; line-height: 1.55; color: var(--text); }
+.saved-tip-delete {
+  position: absolute; top: 8px; right: 10px;
+  background: none; border: none; cursor: pointer;
+  color: var(--muted); font-size: 16px; padding: 4px;
+}
+
+/* ─── WEEKOVERZICHT MODAL ─── */
+.weekov-day { margin-bottom: 18px; }
+.weekov-day-header {
+  font-size: 13px; font-weight: 700; color: var(--muted);
+  text-transform: uppercase; letter-spacing: .04em;
+  margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid var(--border);
+}
+.weekov-act { display: flex; align-items: center; gap: 8px; padding: 5px 0; font-size: 14px; }
+.weekov-act .done { text-decoration: line-through; color: var(--muted); }
+.weekov-meal { display: flex; gap: 8px; font-size: 13px; color: var(--text); padding: 3px 0; }
+.weekov-meal-label { color: var(--muted); min-width: 52px; }
+
 /* ─── SMART VOICE ─── */
 .smart-voice-btn {
   display: flex; align-items: center; justify-content: center; gap: 10px;
@@ -1062,16 +1107,24 @@ label { display: block; font-size: 14px; font-weight: 600; color: var(--text-2);
     </div>
   </div>
 
-  <!-- TAB 2: WEEK -->
+  <!-- TAB 2: BEWEGEN -->
   <div id="tab-week" class="tab-content">
     <div class="week-nav">
       <button onclick="navWeek(-1)">&#8249;</button>
       <span class="week-label" id="week-label"></span>
       <button onclick="navWeek(1)">&#8250;</button>
     </div>
+    <button class="smart-voice-btn" id="bewegen-voice-btn" onclick="beweegVoiceAdd()" style="margin-bottom:10px;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+      Spreek activiteit in voor vandaag
+    </button>
     <div class="progress-bar-wrap">
       <div class="progress-bar-fill" id="week-progress" style="width:0%"></div>
     </div>
+    <button class="btn btn-ghost btn-full" style="margin-bottom:12px;" onclick="showWeekoverzicht()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Weekoverzicht (maaltijden + sport)
+    </button>
     <div id="week-days"></div>
   </div>
 
@@ -1124,6 +1177,16 @@ label { display: block; font-size: 14px; font-weight: 600; color: var(--text-2);
       <div id="terugblik-result"></div>
     </div>
 
+    <div class="card" style="margin-bottom:14px;">
+      <div class="saved-tips-section">
+        <button class="saved-tips-toggle" onclick="toggleSavedTips(this)">
+          <span>📌 Opgeslagen tips</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div id="saved-tips-list" style="display:none;"></div>
+      </div>
+    </div>
+
     <div class="card">
       <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;">
         <h3>Coach</h3>
@@ -1151,8 +1214,8 @@ label { display: block; font-size: 14px; font-weight: 600; color: var(--text-2);
       Vandaag
     </button>
     <button class="tab-btn" onclick="switchTab('week', this)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-      Week
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      Bewegen
     </button>
     <button class="tab-btn" onclick="switchTab('recepten', this)">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v12"/><path d="M18 9a3 3 0 0 0-3-3H6"/><path d="M6 15a6 6 0 0 0 12 0"/></svg>
@@ -1373,7 +1436,8 @@ function defaultData() {
     streak: { huidig: 0, record: 0, laatsteDatum: '' },
     chatHistorie: [],
     recepten: [],
-    stats: { byMonth: {} }
+    stats: { byMonth: {} },
+    savedTips: []
   };
 }
 
@@ -1386,6 +1450,7 @@ function ensureRecepten() {
 function ensureStats() {
   if (!data.stats) data.stats = { byMonth: {} };
   if (!data.stats.byMonth) data.stats.byMonth = {};
+  if (!data.savedTips) data.savedTips = [];
 }
 
 function ensureWeek(weekKey) {
@@ -2114,19 +2179,6 @@ function renderWeek() {
       </button>`;
     }
 
-    const dinerMeal = dayData.maaltijden && dayData.maaltijden.diner;
-    const mealsHTML = `
-      <div style="margin-top:14px; padding-top:14px; border-top:1px solid var(--border);">
-        <div class="meal-row" onclick="quickEditWeekMeal('${dateStr}')" style="margin-bottom:0;">
-          <div class="meal-icon">🍽️</div>
-          <div class="meal-info">
-            <div class="meal-label">Diner</div>
-            <div class="meal-name">${dinerMeal ? dinerMeal.naam : '—'}</div>
-          </div>
-          <span class="meal-fibers">${dinerMeal ? dinerMeal.vezels : ''}</span>
-        </div>
-      </div>`;
-
     const isOpen = isToday;
 
     return `<div class="day-card ${isToday ? 'today' : ''}" id="daycard-${dateStr}">
@@ -2144,7 +2196,6 @@ function renderWeek() {
       </div>
       <div class="day-card-body" id="daybody-${dateStr}" style="display:${isOpen ? 'block' : 'none'};">
         ${actHTML}
-        ${mealsHTML}
       </div>
     </div>`;
   }).join('');
@@ -2728,6 +2779,97 @@ function copyToClipboard(text) {
   navigator.clipboard.writeText(text).then(() => showBanner('yellow', 'Gekopieerd naar klembord.'));
 }
 
+function beweegVoiceAdd() {
+  const todayStr = today();
+  const btn = document.getElementById('bewegen-voice-btn');
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) { showBanner('yellow', 'Spraakinvoer niet beschikbaar in deze browser.'); return; }
+
+  const recognition = new SR();
+  recognition.lang = 'nl-NL';
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+
+  if (btn) { btn.classList.add('listening'); btn.lastChild.textContent = ' Luisteren...'; }
+
+  recognition.onresult = async (e) => {
+    const text = e.results[0][0].transcript;
+    if (btn) { btn.classList.remove('listening'); btn.classList.add('processing'); btn.lastChild.textContent = ' Verwerken...'; }
+
+    try {
+      const result = await parseActivityVoice(text);
+      ensureDay(todayStr);
+      const weekKey = getISOWeek(new Date(todayStr + 'T12:00:00'));
+      const newType = result.type || 'other';
+      data.weken[weekKey][todayStr].activiteiten.push({
+        id: 'a' + Date.now(),
+        type: newType,
+        naam: result.naam || text,
+        detail: result.detail || '',
+        afgevinkt: false,
+        duur: result.duur || DEFAULT_DUUR[newType] || 30
+      });
+      data.weken[weekKey][todayStr].aangepast = true;
+      saveAndSync();
+      renderWeek();
+      renderTodayActivities(todayStr);
+      if (btn) { btn.classList.remove('processing'); btn.lastChild.textContent = ' Spreek activiteit in voor vandaag'; }
+      showBanner('green', `"${result.naam || text}" toegevoegd voor vandaag.`);
+    } catch (err) {
+      if (btn) { btn.classList.remove('processing'); btn.lastChild.textContent = ' Spreek activiteit in voor vandaag'; }
+      showBanner('yellow', 'Kon niet verwerken. Probeer opnieuw.');
+    }
+  };
+
+  recognition.onerror = () => {
+    if (btn) { btn.classList.remove('listening'); btn.lastChild.textContent = ' Spreek activiteit in voor vandaag'; }
+    showBanner('yellow', 'Luisteren mislukt. Probeer opnieuw.');
+  };
+  recognition.onend = () => { if (btn) btn.classList.remove('listening'); };
+  recognition.start();
+}
+
+function showWeekoverzicht() {
+  const weekKey = currentWeekKey();
+  ensureWeek(weekKey);
+  const days = getWeekDates(weekKey);
+  const dagNamen = ['Maandag','Dinsdag','Woensdag','Donderdag','Vrijdag','Zaterdag','Zondag'];
+  const mealLabels = { ontbijt: 'Ontbijt', lunch: 'Lunch', diner: 'Diner', snack: 'Snack' };
+
+  const html = days.map((dateStr, i) => {
+    const dayData = data.weken[weekKey][dateStr];
+    const isToday = dateStr === today();
+
+    const acts = (dayData.activiteiten || []).map(a => `
+      <div class="weekov-act">
+        ${iconSVG(a.type)}
+        <span class="${a.afgevinkt ? 'done' : ''}">${a.naam}${a.duur ? ` · ${fmtMin(a.duur)}` : ''}</span>
+      </div>`).join('') || '<div style="font-size:13px;color:var(--muted);padding:4px 0;">Rustdag</div>';
+
+    const meals = Object.entries(dayData.maaltijden || {}).map(([key, meal]) => `
+      <div class="weekov-meal">
+        <span class="weekov-meal-label">${mealLabels[key] || key}</span>
+        <span>${meal.naam || '—'}</span>
+      </div>`).join('');
+
+    return `<div class="weekov-day" ${isToday ? 'style="border-left:3px solid var(--accent-move);padding-left:10px;"' : ''}>
+      <div class="weekov-day-header">${dagNamen[i]} ${formatShortDate(dateStr)}${isToday ? ' · Vandaag' : ''}</div>
+      ${acts}
+      <div style="margin-top:8px;">${meals}</div>
+    </div>`;
+  }).join('');
+
+  showModal(`
+    <div class="modal-header">
+      <h2>Weekoverzicht</h2>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div style="overflow-y:auto;max-height:65vh;">
+      ${html}
+    </div>
+  `);
+}
+
 // ─── COACH TAB ───────────────────────────────────────────────────────────────
 
 // ─── STATS ───────────────────────────────────────────────────────────────────
@@ -2833,11 +2975,42 @@ function renderCoach() {
   updateStreakUI();
   renderChatHistory();
   renderStats();
+  renderSavedTips();
   const btn = document.getElementById('tts-toggle');
   if (btn) {
     btn.classList.toggle('active', _ttsEnabled);
     btn.title = _ttsEnabled ? 'Spraak uit' : 'Spraak aan';
   }
+}
+
+function formatCoachText(text) {
+  if (!text) return '';
+  const lines = text.split('\n');
+  let html = '';
+  let inUl = false, inOl = false;
+
+  const closeList = () => {
+    if (inUl) { html += '</ul>'; inUl = false; }
+    if (inOl) { html += '</ol>'; inOl = false; }
+  };
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].trim();
+    if (!line) { closeList(); continue; }
+
+    if (/^[-•*]\s+/.test(line)) {
+      if (!inUl) { closeList(); html += '<ul class="coach-list">'; inUl = true; }
+      html += `<li>${line.replace(/^[-•*]\s+/, '').replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')}</li>`;
+    } else if (/^\d+[.)]\s+/.test(line)) {
+      if (!inOl) { closeList(); html += '<ol class="coach-list">'; inOl = true; }
+      html += `<li>${line.replace(/^\d+[.)]\s+/, '').replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')}</li>`;
+    } else {
+      closeList();
+      html += `<p>${line.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')}</p>`;
+    }
+  }
+  closeList();
+  return html || `<p>${text}</p>`;
 }
 
 function renderChatHistory() {
@@ -2846,14 +3019,58 @@ function renderChatHistory() {
     container.innerHTML = `<div class="muted" style="font-size:14px; text-align:center; padding:16px;">Stel een vraag aan je coach.</div>`;
     return;
   }
-  container.innerHTML = data.chatHistorie.map(msg => `
+  container.innerHTML = data.chatHistorie.map((msg, i) => `
     <div class="chat-msg ${msg.role}">
       ${msg.role === 'assistant' ? '<div class="chat-avatar">🤖</div>' : ''}
-      <div class="chat-bubble">${msg.content}</div>
+      <div class="chat-bubble">${msg.role === 'assistant' ? formatCoachText(msg.content) : msg.content}</div>
+      ${msg.role === 'assistant' ? `<button class="pin-btn" onclick="pinTip(${i})" title="Tip opslaan">📌</button>` : ''}
       ${msg.role === 'user' ? '<div class="chat-avatar">👤</div>' : ''}
     </div>
   `).join('');
   container.scrollTop = container.scrollHeight;
+}
+
+function pinTip(idx) {
+  const msg = data.chatHistorie[idx];
+  if (!msg || msg.role !== 'assistant') return;
+  if (!data.savedTips) data.savedTips = [];
+  data.savedTips.unshift({ id: 't' + Date.now(), date: today(), content: msg.content });
+  saveAndSync();
+  renderSavedTips();
+  showBanner('green', 'Tip opgeslagen.');
+}
+
+function deleteSavedTip(id) {
+  data.savedTips = (data.savedTips || []).filter(t => t.id !== id);
+  saveAndSync();
+  renderSavedTips();
+}
+
+function toggleSavedTips(btn) {
+  const list = document.getElementById('saved-tips-list');
+  if (!list) return;
+  const open = list.style.display !== 'none';
+  list.style.display = open ? 'none' : 'block';
+  const svg = btn.querySelector('svg');
+  if (svg) svg.style.transform = open ? '' : 'rotate(180deg)';
+  if (!open) renderSavedTips();
+}
+
+function renderSavedTips() {
+  const el = document.getElementById('saved-tips-list');
+  if (!el || el.style.display === 'none') return;
+  const tips = data.savedTips || [];
+  if (tips.length === 0) {
+    el.innerHTML = '<p style="font-size:14px;color:var(--muted);padding:8px 0;">Nog geen opgeslagen tips. Tik 📌 onder een coach-antwoord om het op te slaan.</p>';
+    return;
+  }
+  el.innerHTML = tips.map(t => `
+    <div class="saved-tip-card">
+      <button class="saved-tip-delete" onclick="deleteSavedTip('${t.id}')">✕</button>
+      <div class="saved-tip-date">${t.date}</div>
+      <div class="saved-tip-content">${formatCoachText(t.content)}</div>
+    </div>
+  `).join('');
 }
 
 async function sendChat() {
@@ -3210,7 +3427,12 @@ function speakCoach(text) {
   utt.pitch = 1.0;
   const trySpeak = () => {
     const voices = window.speechSynthesis.getVoices();
-    const nlVoice = voices.find(v => v.lang === 'nl-NL') || voices.find(v => v.lang.startsWith('nl')) || null;
+    const nlVoice =
+      voices.find(v => v.name === 'Ellen') ||
+      voices.find(v => v.lang === 'nl-BE') ||
+      voices.find(v => v.lang.startsWith('nl') && /fem|vrouw/i.test(v.name)) ||
+      voices.find(v => v.lang.startsWith('nl')) ||
+      null;
     if (nlVoice) utt.voice = nlVoice;
     window.speechSynthesis.speak(utt);
   };
