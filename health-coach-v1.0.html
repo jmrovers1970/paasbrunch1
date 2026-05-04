@@ -641,6 +641,55 @@ label { display: block; font-size: 14px; font-weight: 600; color: var(--text-2);
 .stats-val { font-size: 14px; font-weight: 500; color: var(--text); }
 .stats-empty { color: var(--muted); font-size: 14px; text-align: center; padding: 16px 0; }
 
+/* ─── OEFENING KAART ─── */
+.muscle-badge {
+  display: inline-block; padding: 3px 10px; border-radius: 20px;
+  font-size: 12px; font-weight: 600; margin: 2px 3px 2px 0;
+}
+.oefen-muscles { margin-bottom: 16px; }
+.oefen-section { margin-bottom: 16px; }
+.oefen-label {
+  font-size: 11px; font-weight: 700; color: var(--muted);
+  letter-spacing: .06em; text-transform: uppercase; margin-bottom: 7px;
+}
+.oefen-text { font-size: 14px; line-height: 1.6; color: var(--text); margin: 0; }
+.oefen-steps { padding-left: 20px; margin: 0; }
+.oefen-steps li { font-size: 14px; line-height: 1.6; margin-bottom: 7px; color: var(--text); }
+.oefen-tip {
+  background: #fef9c3; border-left: 3px solid #ca8a04;
+  padding: 10px 13px; border-radius: 0 8px 8px 0;
+  font-size: 13px; line-height: 1.55; margin-bottom: 14px; color: #713f12;
+}
+.oefen-schema {
+  background: var(--accent-move-soft); color: var(--accent-move);
+  padding: 11px 14px; border-radius: 12px;
+  font-size: 14px; font-weight: 700; text-align: center;
+}
+.oefen-keuze-btn {
+  display: flex; align-items: center; gap: 12px;
+  width: 100%; padding: 14px 16px; border-radius: 12px;
+  border: 1.5px solid var(--border); background: var(--card2);
+  cursor: pointer; margin-bottom: 8px; text-align: left;
+  font-size: 15px; font-weight: 500; color: var(--text); transition: all .15s;
+}
+.oefen-keuze-btn:active { background: var(--accent-move-soft); border-color: var(--accent-move); }
+.activity-info-btn {
+  background: none; border: none; cursor: pointer; color: var(--muted);
+  padding: 7px; border-radius: 50%; display: flex; align-items: center;
+  justify-content: center; flex-shrink: 0; transition: color .15s;
+}
+.activity-info-btn:active { color: var(--accent-move); }
+
+/* ─── EXERCISE LINKS IN CHAT ─── */
+.exercise-link {
+  background: var(--accent-move-soft); border: 1px solid rgba(234,90,12,.25);
+  color: var(--accent-move); border-radius: 5px;
+  padding: 1px 7px; font-size: inherit; cursor: pointer;
+  font-weight: 600; display: inline; font-family: inherit;
+  transition: background .12s;
+}
+.exercise-link:active { background: var(--accent-move); color: #fff; }
+
 /* ─── COACH FORMAT ─── */
 .chat-bubble p { margin: 5px 0; line-height: 1.6; }
 .chat-bubble p:first-child { margin-top: 0; }
@@ -1239,11 +1288,115 @@ label { display: block; font-size: 14px; font-weight: 600; color: var(--text-2);
 const STORAGE_KEY = 'hc_data';
 const SETTINGS_KEY = 'hc_settings';
 const CHECKIN_KEY = 'hc_checkin_today';
-const SYSTEM_PROMPT = `Je bent een vriendelijke maar directe persoonlijke gezondheidscoach.
+function buildSystemPrompt() {
+  // --- live state ---
+  const today = new Date();
+  const dagNamen = ['zondag','maandag','dinsdag','woensdag','donderdag','vrijdag','zaterdag'];
+  const dagNaam = dagNamen[today.getDay()];
+  const dateStr = today.toISOString().slice(0, 10);
+
+  let checkInStatus = 'nog niet';
+  try {
+    const ci = JSON.parse(localStorage.getItem(CHECKIN_KEY) || '{}');
+    if (ci.datum === dateStr && ci.gevoel) checkInStatus = ci.gevoel;
+  } catch(_) {}
+
+  let activiteitVandaag = 'onbekend';
+  let weekVoortgang = '';
+  try {
+    if (data && data.weken) {
+      const weekKey = getISOWeek(today);
+      const weekData = data.weken[weekKey] || {};
+      const dayData = weekData[dateStr];
+      if (dayData && dayData.activiteiten && dayData.activiteiten.length > 0) {
+        const a = dayData.activiteiten[0];
+        activiteitVandaag = `${a.naam} — ${a.afgevinkt ? 'afgevinkt' : 'nog niet afgevinkt'}`;
+      }
+      // week progress
+      const days = Object.values(weekData);
+      let total = 0, done = 0;
+      days.forEach(d => {
+        if (!d.activiteiten) return;
+        d.activiteiten.forEach(a => { if (a.type !== 'rest') { total++; if (a.afgevinkt) done++; } });
+      });
+      weekVoortgang = `${done} van ${total}`;
+    }
+  } catch(_) {}
+
+  let vezelTotaal = 0;
+  try {
+    if (data && data.weken) {
+      const weekKey = getISOWeek(today);
+      const dayData = (data.weken[weekKey] || {})[dateStr];
+      if (dayData && dayData.maaltijden) {
+        Object.values(dayData.maaltijden).forEach(m => {
+          if (m && m.vezels) {
+            const n = parseFloat((m.vezels || '').replace(/[^\d.]/g, ''));
+            if (!isNaN(n)) vezelTotaal += n;
+          }
+        });
+      }
+    }
+  } catch(_) {}
+
+  const streakHuidig = (data && data.streak && data.streak.huidig) || 0;
+
+  // --- tone rule ---
+  let toon = 'neutraal';
+  if (streakHuidig >= 14) toon = 'enthousiast';
+  else if (streakHuidig >= 7) toon = 'positief kort';
+
+  return `Je bent een vriendelijke maar directe persoonlijke gezondheidscoach.
 Focus op hardlopen (hoofdsport), thuisgym (bankje + dumbbells) en fietsen.
 Voeding: vezelfocus, vast ontbijt is kwark/yoghurt met muesli en fruit.
 Houd antwoorden kort en praktisch. Spreek de gebruiker aan met 'je'.
-Reageer altijd in het Nederlands.`;
+Reageer altijd in het Nederlands.
+
+WEEKSCHEMA:
+Ma: Easy run 5-6km zone 2
+Di: Upper body (Dumbbell press, Dumbbell rows, Bicep curls, Shoulder press — 3×12)
+Wo: Intervaltraining 5×1km @ 5K-tempo, 4 min rust
+Do: Lower body (Goblet squat, Lunges, Hip thrust, Romanian deadlift — 3×12)
+Vr: Fietstocht 45-60 min herstel
+Za: Lange duurloop 10-12km zone 2
+Zo: Rustdag
+
+RECEPTEN: Linzensoep 14g / Kikkererwten curry 13g / Quinoa groenten 12g / Bonen taco's 11g / Spinazie pasta 10g
+VEZELDOELEN: ontbijt 6g / lunch 8g / diner 10-14g / snack 4g / dagdoel 30g
+
+HUIDIGE STAAT:
+- Datum: ${dateStr}
+- Dag: ${dagNaam}
+- Check-in: ${checkInStatus}
+- Activiteit vandaag: ${activiteitVandaag}
+- Vezeltotaal vandaag: ${vezelTotaal > 0 ? vezelTotaal + 'g van 30g' : 'onbekend'}
+- Streak: ${streakHuidig} dagen
+- Deze week: ${weekVoortgang || 'onbekend'} activiteiten afgevinkt
+
+VOEDING:
+Vezels zijn getallen per maaltijd. Dagdoel is 30g.
+Signaleer proactief als de gebruiker dit doel dreigt te missen.
+Groen ≥30g / oranje 20-29g / rood <20g.
+
+PATRONEN:
+Na 2+ weken data: analyseer welke dagen consistent gemist worden,
+en signaleer vezelverschil doordeweeks vs weekend. Benoem dit proactief.
+
+MOTIVATIETOON (huidige toon: ${toon}):
+- Streak 1-6: neutraal, zakelijk
+- Streak 7-13: positief, kort aanmoedigen
+- Streak 14+: enthousiast, energie uitstralen
+- Na gemiste dag: altijd vooruitkijken, nooit schuld geven
+- Mijlpalen (7/14/30/60/100 dagen): eenmalig benoemen, nooit herhalen
+
+Beschikbare oefeningen in het weekschema (gebruik exact deze namen):
+- Upper body: Dumbbell press, Rows, Curls
+- Lower body: Goblet squat, Lunges, Hip thrust
+- Lopen: Easy run, Intervaltraining, Lange duurloop
+- Overig: Fietstocht
+
+Als je oefeningen aanbeveelt of uitlegt, gebruik dan bij voorkeur deze namen zodat de gebruiker direct de uitlegkaart kan raadplegen. Geef bij oefeningen altijd: spiergroepen, uitvoering in stappen, en een praktische tip.`;
+}
 
 const WEEK_TEMPLATE = [
   { dag: 'ma', type: 'run',  naam: 'Easy run',         detail: '5–6 km · zone 2 · rustig' },
@@ -1263,6 +1416,87 @@ const DEFAULT_MEALS = {
 };
 
 const DEFAULT_DUUR = { run: 45, gym: 60, bike: 60, commute: 30, walk: 45, walkdog: 30, other: 30, rest: 0 };
+
+const OEFENINGEN = {
+  'dumbbell press': {
+    naam: 'Dumbbell Press', spieren: ['Borst','Schouders','Triceps'], kleuren: ['#ef4444','#7c3aed','#0891b2'],
+    startpositie: 'Lig op de bank met een dumbbell in elke hand op schouderhoogte. Voeten plat op de grond, rug licht gewelfd.',
+    stappen: ['Adem in, druk de dumbbells verticaal omhoog tot armen gestrekt zijn','Kantel polsen licht naar binnen bovenaan','Laat langzaam zakken in 2–3 seconden — ellebogen tot bankniveau, niet lager','Houd borst gespannen onderaan, laat niet volledig ontspannen','Adem uit terwijl je drukt'],
+    tip: 'Laat dumbbells niet te laag zakken — ellebogen stoppen op bankniveau. Verbind je schouderbladen zodat schouders niet naar voren rollen.',
+    schema: '3 sets × 12 herhalingen · 60–90 sec rust'
+  },
+  'bench press': 'dumbbell press',
+  'rows': {
+    naam: 'Dumbbell Row', spieren: ['Rug','Biceps','Core'], kleuren: ['#1d4ed8','#db2777','#6b7280'],
+    startpositie: 'Knie en hand van één zijde op de bank. Andere hand houdt de dumbbell, rug horizontaal en recht.',
+    stappen: ['Laat de dumbbell hangen met gestrekte arm, schouder licht omlaag','Trek elleboog omhoog langs je lichaam — richting heup, niet oor','Knijp rug samen bovenaan — houd 1 seconde','Laat gecontroleerd zakken in 2 seconden','Wissel zijde na alle reps'],
+    tip: 'Draai je schouder niet omhoog om te helpen — de beweging komt uit je rug, niet je arm.',
+    schema: '3 sets × 12 herhalingen per zijde · 60 sec rust'
+  },
+  'row': 'rows',
+  'curls': {
+    naam: 'Bicep Curl', spieren: ['Biceps','Onderarmen'], kleuren: ['#db2777','#b45309'],
+    startpositie: 'Sta recht met een dumbbell in elke hand, palm naar voren. Ellebogen langs je lichaam.',
+    stappen: ['Krul de dumbbells omhoog richting schouders — ellebogen blijven stil','Draai polsen licht naar buiten bovenaan','Knijp biceps samen bovenaan — houd 1 seconde','Laat langzaam zakken in 2 seconden — volledig strekken'],
+    tip: 'Schommel niet met je rug om het gewicht te helpen — als dat nodig is, is het te zwaar.',
+    schema: '3 sets × 12 herhalingen · 45 sec rust'
+  },
+  'curl': 'curls',
+  'bicep curl': 'curls',
+  'goblet squat': {
+    naam: 'Goblet Squat', spieren: ['Benen','Billen','Core'], kleuren: ['#f97316','#16a34a','#6b7280'],
+    startpositie: 'Sta met voeten iets breder dan heupbreedte. Houd een dumbbell verticaal tegen je borst, ellebogen omlaag.',
+    stappen: ['Adem in, buig door knieën en heupen tegelijk','Zak tot dijen parallel aan de vloer — of dieper als mobiliteit het toelaat','Knieën wijzen naar buiten, richting je tenen','Duw via je hielen omhoog terug naar beginpositie','Adem uit bovenaan'],
+    tip: 'Houd de dumbbell dicht tegen je borst — anders klapt de rug voorover. Knieën mogen niet naar binnen vallen.',
+    schema: '3 sets × 12 herhalingen · 60 sec rust'
+  },
+  'squat': 'goblet squat',
+  'lunges': {
+    naam: 'Lunges', spieren: ['Benen','Billen','Core'], kleuren: ['#f97316','#16a34a','#6b7280'],
+    startpositie: 'Sta recht met een dumbbell in elke hand langs je zij. Schouders naar achteren, torso recht.',
+    stappen: ['Stap één been groot naar voren','Zak loodrecht omlaag — achterste knie bijna de grond, niet erop','Voorste knie blijft boven de hiel — niet verder naar voren','Duw via de hiel van het voorste been omhoog terug','Wissel been per rep of doe alle reps op één been'],
+    tip: 'Houd torso recht — niet voorover leunen. Knie loopt in de richting van je teen.',
+    schema: '3 sets × 10 herhalingen per been · 60 sec rust'
+  },
+  'lunge': 'lunges',
+  'hip thrust': {
+    naam: 'Hip Thrust', spieren: ['Billen','Hamstrings','Core'], kleuren: ['#16a34a','#b45309','#6b7280'],
+    startpositie: 'Schouderbladen tegen de bank, voeten plat op de grond, knieën 90 graden. Optioneel: dumbbell op je heupen.',
+    stappen: ['Adem in, druk heupen explosief omhoog','Bovenaan: rug recht, knieën 90 graden, billen samengeknepen','Knijp billen krachtig samen — houd 1–2 seconden','Laat langzaam zakken — stop vóórdat heupen de grond raken'],
+    tip: 'Kin licht ingetrokken — niet naar achter gooien. De beweging start vanuit je billen, niet je rug.',
+    schema: '3 sets × 12 herhalingen · 60 sec rust'
+  },
+  'easy run': {
+    naam: 'Easy Run (Zone 2)', spieren: ['Conditie','Benen'], kleuren: ['#ea5a0c','#f97316'],
+    startpositie: 'Goed opgewarmd, loopschoenen aan. Licht voorwaartse houding, blik 10–15 m voor je.',
+    stappen: ['Tempo: rustig — je kunt een volledige zin uitspreken zonder buiten adem te raken','Hartslag: 60–70% van je max (zone 2) — voelt "makkelijk comfortabel"','Stapfrequentie: ±170–180 stappen per minuut — liever korte snelle stappen dan grote','Land onder je lichaamszwaartepunt, niet voor je voet uit','Armen ontspannen, 90 graden, langs je lichaam — geen kruisbeweging'],
+    tip: 'De meeste lopers lopen zone 2 te snel. Als je twijfelt: ga langzamer. Zone 2 bouwt je aerobe basis — de motor van alle andere trainingen.',
+    schema: '5–6 km · ±30–40 min'
+  },
+  'intervaltraining': {
+    naam: 'Intervaltraining', spieren: ['Conditie','Benen','Longcapaciteit'], kleuren: ['#ea5a0c','#f97316','#1d4ed8'],
+    startpositie: '10 minuten rustig inlopen. Benen warm, ademhaling rustiger dan normaal.',
+    stappen: ['Loop 1 km op 5K-tempo — zo hard als je 5 km kunt volhouden','Herstel: 4 minuten rustig lopen of stappen','Herhaal 5 keer — totaal 5 intervallen','10 minuten cooldown rustig lopen','Stretch na afloop: kuiten, hamstrings, heupflexors'],
+    tip: 'Begin de eerste interval niet te hard — je hebt er nog 4 te gaan. Consistentie over alle intervallen is beter dan 1 snelle en 4 langzame.',
+    schema: '5 × 1 km @ 5K-tempo · ±50 min totaal'
+  },
+  'interval': 'intervaltraining',
+  'lange duurloop': {
+    naam: 'Lange Duurloop', spieren: ['Conditie','Benen','Mentale weerbaarheid'], kleuren: ['#ea5a0c','#f97316','#7c3aed'],
+    startpositie: 'Goed ontbeten 2–3 uur van tevoren. Water bij de hand bij runs >60 min. Schoenen en sokken goed getest.',
+    stappen: ['Start langzamer dan je denkt nodig te hebben — echt','Zone 2 door: je kunt comfortabel praten, geen hijgen','Houd tempo consistent van begin tot eind — niet hard beginnen','Check na 6 km je gevoel: goed? Houd het vol. Moe? Vertraag','Laatste 1–2 km mag iets sneller als je nog energie hebt'],
+    tip: 'De lange duurloop is de pijler van je week. Traag = beter. Bouw maximaal 10% per week op in afstand.',
+    schema: '10–12 km · zone 2 · ±60–75 min'
+  },
+  'duurloop': 'lange duurloop',
+  'fietstocht': {
+    naam: 'Fietstocht (herstel)', spieren: ['Benen','Billen','Conditie'], kleuren: ['#1d4ed8','#16a34a','#ea5a0c'],
+    startpositie: 'Zadelshoogte: been bijna gestrekt bij onderste pedaalpositie. Handvatpositie comfortabel, rug ontspannen.',
+    stappen: ['Cadans: 80–90 omwentelingen per minuut — licht en snel trappen','Hartslag zone 2 — dit is een herstelrit, geen race','Vermijd zware versnellingen: liever licht tandwiel en hoge cadans','Rug ontspannen, knieën lopen recht — niet naar buiten','Drink elke 20 min een slok, ook als je niet dorstig bent'],
+    tip: 'Weersta de verleiding om hard te gaan. Actief herstel op lage intensiteit versnelt je herstel meer dan rust.',
+    schema: '45–60 min · lage intensiteit'
+  }
+};
 
 // These names indicate a meal has not been explicitly planned
 const DEFAULT_MEAL_NAMES = {
@@ -1926,7 +2160,10 @@ function renderTodayActivities(dateStr) {
     return;
   }
 
-  container.innerHTML = dayData.activiteiten.map(a => `
+  container.innerHTML = dayData.activiteiten.map(a => {
+    const safeName = a.naam.replace(/'/g,"\\'");
+    const safeDetail = (a.detail||'').replace(/'/g,"\\'");
+    return `
     <div class="activity-row">
       <button class="check-circle ${a.afgevinkt ? 'checked' : ''}" onclick="toggleActivity('${dateStr}','${a.id}',this)" aria-label="${a.afgevinkt ? 'Vink uit' : 'Vink af'}">
         <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
@@ -1936,8 +2173,10 @@ function renderTodayActivities(dateStr) {
         <div class="activity-name ${a.afgevinkt ? 'done' : ''}">${a.naam}</div>
         <div class="activity-detail">${a.detail}</div>
       </div>
-    </div>
-  `).join('');
+      <button class="activity-info-btn" onclick="showOefenuitleg('${safeName}','${safeDetail}','${a.type}')" title="Uitleg">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+      </button>
+    </div>`; }).join('');
 
   renderTodayProgress(dateStr);
 }
@@ -2159,7 +2398,10 @@ function renderWeek() {
     if (isRust || isSunday) {
       actHTML = `<div class="rust-card" style="margin-top:10px;">${iconSVG('rest')}<span>Rustdag — herstel is ook training</span></div>`;
     } else {
-      actHTML = (dayData.activiteiten || []).map(a => `
+      actHTML = (dayData.activiteiten || []).map(a => {
+        const safeName = a.naam.replace(/'/g,"\\'");
+        const safeDetail = (a.detail||'').replace(/'/g,"\\'");
+        return `
         <div class="activity-row">
           <button class="check-circle ${a.afgevinkt ? 'checked' : ''}" onclick="toggleWeekActivity('${dateStr}','${a.id}',this)">
             <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
@@ -2169,11 +2411,13 @@ function renderWeek() {
             <div class="activity-name ${a.afgevinkt ? 'done' : ''}">${a.naam}</div>
             <div class="activity-detail">${a.detail}</div>
           </div>
+          <button class="activity-info-btn" onclick="showOefenuitleg('${safeName}','${safeDetail}','${a.type}')" title="Uitleg">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          </button>
           <button class="activity-edit-btn" onclick="editActivity('${dateStr}','${a.id}')">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
           </button>
-        </div>
-      `).join('') + `<button class="add-activity-btn" onclick="addActivity('${dateStr}')">
+        </div>`;}).join('') + `<button class="add-activity-btn" onclick="addActivity('${dateStr}')">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         Activiteit toevoegen
       </button>`;
@@ -2983,6 +3227,26 @@ function renderCoach() {
   }
 }
 
+function linkExercises(line) {
+  const names = Object.entries(OEFENINGEN)
+    .filter(([, v]) => typeof v !== 'string')
+    .map(([k]) => k)
+    .sort((a, b) => b.length - a.length);
+  let result = line;
+  for (const name of names) {
+    const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const regex = new RegExp('(?<![\\w-])(' + escaped + ')(?![\\w-])', 'gi');
+    result = result.replace(regex, (match) =>
+      `<button class="exercise-link" onclick="showOefenKaart('${name}')">${match}</button>`
+    );
+  }
+  return result;
+}
+
+function applyInline(line) {
+  return linkExercises(line.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>'));
+}
+
 function formatCoachText(text) {
   if (!text) return '';
   const lines = text.split('\n');
@@ -3000,17 +3264,17 @@ function formatCoachText(text) {
 
     if (/^[-•*]\s+/.test(line)) {
       if (!inUl) { closeList(); html += '<ul class="coach-list">'; inUl = true; }
-      html += `<li>${line.replace(/^[-•*]\s+/, '').replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')}</li>`;
+      html += `<li>${applyInline(line.replace(/^[-•*]\s+/, ''))}</li>`;
     } else if (/^\d+[.)]\s+/.test(line)) {
       if (!inOl) { closeList(); html += '<ol class="coach-list">'; inOl = true; }
-      html += `<li>${line.replace(/^\d+[.)]\s+/, '').replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')}</li>`;
+      html += `<li>${applyInline(line.replace(/^\d+[.)]\s+/, ''))}</li>`;
     } else {
       closeList();
-      html += `<p>${line.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')}</p>`;
+      html += `<p>${applyInline(line)}</p>`;
     }
   }
   closeList();
-  return html || `<p>${text}</p>`;
+  return html || `<p>${applyInline(text)}</p>`;
 }
 
 function renderChatHistory() {
@@ -3166,7 +3430,7 @@ async function callAIMessages(messages, maxTokens) {
     body: JSON.stringify({
       model: 'claude-sonnet-4-20250514',
       max_tokens: maxTokens,
-      system: SYSTEM_PROMPT,
+      system: buildSystemPrompt(),
       messages
     })
   });
@@ -3479,6 +3743,118 @@ function micInput(id, placeholder, value = '') {
     <input id="${id}" type="text" placeholder="${placeholder}" value="${value.replace(/"/g,'&quot;')}" autocomplete="off">
     <button id="mic-${id}" class="mic-btn" type="button" onclick="startVoiceInput('${id}')" title="Spreek in">${mic}</button>
   </div>`;
+}
+
+// ─── OEFENING UITLEG ─────────────────────────────────────────────────────────
+
+function findOefening(naam) {
+  const key = naam.toLowerCase().trim();
+  let entry = OEFENINGEN[key];
+  if (!entry) {
+    for (const [k, v] of Object.entries(OEFENINGEN)) {
+      if (key.includes(k) || k.includes(key)) { entry = v; break; }
+    }
+  }
+  if (typeof entry === 'string') entry = OEFENINGEN[entry]; // alias
+  return entry || null;
+}
+
+function parseExercisesFromDetail(detail) {
+  return detail.split(/[·,\/&+]/)
+    .map(s => s.trim())
+    .filter(s => s.length > 2 && !/^\d/.test(s) && !/^(zone|min|sec|km|rust|@|x)/i.test(s));
+}
+
+function oefenMuscleHTML(spieren, kleuren) {
+  return spieren.map((s, i) => `<span class="muscle-badge" style="background:${kleuren[i]}20;color:${kleuren[i]};">${s}</span>`).join('');
+}
+
+function renderOefenKaart(o) {
+  return `
+    <div class="oefen-muscles">${oefenMuscleHTML(o.spieren, o.kleuren)}</div>
+    <div class="oefen-section">
+      <div class="oefen-label">Startpositie</div>
+      <p class="oefen-text">${o.startpositie}</p>
+    </div>
+    <div class="oefen-section">
+      <div class="oefen-label">Uitvoering</div>
+      <ol class="oefen-steps">${o.stappen.map(s => `<li>${s}</li>`).join('')}</ol>
+    </div>
+    <div class="oefen-tip">⚠️ <strong>Let op:</strong> ${o.tip}</div>
+    ${o.schema ? `<div class="oefen-schema">🗓 ${o.schema}</div>` : ''}`;
+}
+
+function showOefenKaart(naam) {
+  const o = findOefening(naam);
+  if (!o) { showOefenKaartAI(naam); return; }
+  showModal(`
+    <div class="modal-header">
+      <h2>${o.naam}</h2>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div style="overflow-y:auto;max-height:70vh;">
+      ${renderOefenKaart(o)}
+    </div>`);
+}
+
+async function showOefenKaartAI(naam) {
+  showModal(`
+    <div class="modal-header">
+      <h2>${naam}</h2>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div style="text-align:center;padding:28px 0;">
+      <div class="typing-dots"><span></span><span></span><span></span></div>
+      <p style="margin-top:12px;color:var(--muted);font-size:14px;">Uitleg ophalen...</p>
+    </div>`);
+  try {
+    const prompt = `Geef een gestructureerde uitleg voor de oefening "${naam}" voor thuisgym (dumbbells + bank). Antwoord ALLEEN in dit JSON-formaat:
+{"naam":"...","spieren":["...","..."],"kleuren":["#hex","#hex"],"startpositie":"...","stappen":["...","..."],"tip":"...","schema":"..."}
+Kleuren: rood=#ef4444, blauw=#1d4ed8, groen=#16a34a, paars=#7c3aed, oranje=#f97316, roze=#db2777, grijs=#6b7280. Geen uitleg, alleen JSON.`;
+    const raw = await callAI(prompt, 400);
+    const o = safeParseJSON(raw);
+    showModal(`
+      <div class="modal-header">
+        <h2>${o.naam || naam}</h2>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <div style="overflow-y:auto;max-height:70vh;">
+        ${renderOefenKaart(o)}
+      </div>`);
+  } catch(e) {
+    showModal(`
+      <div class="modal-header">
+        <h2>${naam}</h2>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <p style="padding:20px;color:var(--muted);font-size:14px;">Uitleg niet beschikbaar. Controleer je API-verbinding.</p>`);
+  }
+}
+
+function showOefenuitleg(naam, detail, type) {
+  const isCardio = ['run','bike','walk','walkdog','commute'].includes(type);
+  if (isCardio) {
+    const key = naam.toLowerCase();
+    showOefenKaart(key);
+    return;
+  }
+  const exercises = parseExercisesFromDetail(detail || '');
+  if (exercises.length <= 1) {
+    showOefenKaart(naam);
+    return;
+  }
+  const infoSvg = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>`;
+  showModal(`
+    <div class="modal-header">
+      <h2>Kies oefening</h2>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <p style="font-size:14px;color:var(--muted);margin-bottom:14px;">Tik op een oefening voor de uitleg.</p>
+    ${exercises.map(ex => `
+      <button class="oefen-keuze-btn" onclick="showOefenKaart('${ex.replace(/'/g,"\\'")}')">
+        ${infoSvg}
+        ${ex}
+      </button>`).join('')}`);
 }
 
 // ─── ICONS ───────────────────────────────────────────────────────────────────
