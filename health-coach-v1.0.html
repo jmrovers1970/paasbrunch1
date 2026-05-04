@@ -485,6 +485,17 @@ label { display: block; font-size: 14px; font-weight: 600; color: var(--text-2);
   background: var(--accent-food-tint); color: var(--accent-food);
   font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 999px;
 }
+.protein-badge {
+  background: #ede9fe; color: #6d28d9;
+  font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 999px;
+}
+.nutrition-calc-btn {
+  background: none; border: 1.5px solid var(--border); border-radius: 8px;
+  padding: 6px 12px; font-size: 13px; color: var(--muted); cursor: pointer;
+  display: flex; align-items: center; gap: 6px; margin-top: 10px; width: 100%;
+  justify-content: center; transition: border-color .2s, color .2s;
+}
+.nutrition-calc-btn:active { border-color: var(--accent-food); color: var(--accent-food); }
 .time-badge {
   background: var(--card2); color: var(--muted);
   font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 999px;
@@ -1240,29 +1251,23 @@ label { display: block; font-size: 14px; font-weight: 600; color: var(--text-2);
   <!-- TAB 3: FOOD -->
   <div id="tab-recepten" class="tab-content">
 
-    <!-- Weekoverzicht voeding -->
-    <div class="card" style="margin-bottom:12px;">
-      <h3 style="margin-bottom:12px;">Weekoverzicht vezels</h3>
-      <div id="food-week-overview"></div>
+    <!-- Recepten: genereren, inspreken, toevoegen -->
+    <div id="recipe-list"></div>
+
+    <!-- Weekmenu: wat staat er gepland -->
+    <div class="card" style="margin-top:4px; margin-bottom:12px;">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
+        <h3>Weekmenu</h3>
+        <button class="btn btn-ghost btn-sm" onclick="showShoppingList()">🛒 Boodschappen</button>
+      </div>
+      <div id="food-weekmenu"></div>
     </div>
 
-    <!-- Filter -->
-    <div style="display:flex; gap:8px; margin-bottom:12px; overflow-x:auto; padding-bottom:4px;">
-      <button class="food-filter-btn active" onclick="filterFood('alle',this)">Alle</button>
-      <button class="food-filter-btn" onclick="filterFood('ontbijt',this)">Ontbijt</button>
-      <button class="food-filter-btn" onclick="filterFood('lunch',this)">Lunch</button>
-      <button class="food-filter-btn" onclick="filterFood('diner',this)">Diner</button>
-      <button class="food-filter-btn" onclick="filterFood('snack',this)">Snack</button>
-    </div>
-
-    <!-- Receptenlijst -->
-    <div id="food-list"></div>
-
-    <!-- Toevoegen + boodschappenlijst -->
-    <div style="display:flex; gap:8px; margin-top:4px;">
-      <button class="btn btn-primary" style="flex:1;" onclick="showAddRecept()">+ Recept toevoegen</button>
-      <button class="btn btn-ghost" onclick="showBoodschappenlijst()">🛒</button>
-    </div>
+    <!-- Vezeloverzicht: inklapbaar, onderaan -->
+    <details style="margin-bottom:16px;">
+      <summary style="cursor:pointer; font-size:14px; font-weight:600; padding:12px 0; color:var(--muted);">📊 Vezeloverzicht deze week</summary>
+      <div id="food-week-overview" style="margin-top:8px;"></div>
+    </details>
 
   </div>
 
@@ -2878,7 +2883,8 @@ function renderRecepten() {
         <div class="recipe-header" onclick="toggleRecipe('${r.id}')">
           <span class="recipe-title">${r.naam}</span>
           <div class="recipe-badges">
-            <span class="fiber-badge">${r.vezels}</span>
+            <span class="fiber-badge">🌿 ${r.vezels || '?'}</span>
+            ${r.eiwitten ? `<span class="protein-badge">💪 ${r.eiwitten}</span>` : ''}
             <span class="time-badge">${r.tijd}</span>
           </div>
           <button class="rec-delete-btn" onclick="event.stopPropagation();deleteRecept('${r.id}')" aria-label="Verwijder recept">
@@ -2897,9 +2903,19 @@ function renderRecepten() {
           </div>
           <div class="plan-day-wrap">
             <select id="planday-${r.id}">${dagOpties}</select>
-            <button class="btn btn-secondary btn-sm" onclick="planRecipeForDay('${r.id}')">Plan voor dag →</button>
+            <select id="planslot-${r.id}" style="flex:0 0 auto;">
+              <option value="ontbijt">Ontbijt</option>
+              <option value="lunch">Lunch</option>
+              <option value="diner" selected>Diner</option>
+              <option value="snack">Snack</option>
+            </select>
+            <button class="btn btn-secondary btn-sm" onclick="planRecipeForDay('${r.id}')">Plan →</button>
           </div>
-          <button class="btn btn-ghost btn-full btn-sm" style="margin-top:10px;" onclick="editReceptModal('${r.id}')">
+          <button class="nutrition-calc-btn" id="calc-btn-${r.id}" onclick="calculateNutrition('${r.id}')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            Bereken vezels & eiwitten
+          </button>
+          <button class="btn btn-ghost btn-full btn-sm" style="margin-top:6px;" onclick="editReceptModal('${r.id}')">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
             Bewerken
           </button>
@@ -2920,17 +2936,25 @@ function toggleRecipe(id) {
 function planRecipeForDay(recipeId) {
   const weekKey = currentWeekKey();
   const dateStr = document.getElementById('planday-' + recipeId).value;
+  const slotEl = document.getElementById('planslot-' + recipeId);
+  const slot = slotEl ? slotEl.value : 'diner';
   const recept = (data.recepten || []).find(r => r.id === recipeId);
   if (!recept) return;
   ensureDay(dateStr);
-  data.weken[weekKey][dateStr].maaltijden.diner = {
+  const slotLabel = { ontbijt:'ontbijt', lunch:'lunch', diner:'diner', snack:'snack' };
+  data.weken[weekKey][dateStr].maaltijden[slot] = {
     naam: recept.naam,
     vezels: recept.vezels,
     receptId: recipeId,
     gepland: true
   };
   saveAndSync();
-  showBanner('yellow', `${recept.naam} ingepland als diner.`);
+  const dagNamen = ['Ma','Di','Wo','Do','Vr','Za','Zo'];
+  const dates = getWeekDates(weekKey);
+  const dagIdx = dates.indexOf(dateStr);
+  const dagLabel = dagIdx >= 0 ? dagNamen[dagIdx] : dateStr;
+  showBanner('yellow', `${recept.naam} ingepland als ${slot} op ${dagLabel}.`);
+  renderFoodWeekmenu();
 }
 
 function showShoppingList() {
@@ -3505,19 +3529,25 @@ async function sendChat() {
 
   if (!data.chatHistorie) data.chatHistorie = [];
 
-  // Voedingswaarde lookup voor merkproducten
+  // Voedingswaarde lookup voor merkproducten (Open Food Facts)
   let foodContext = '';
-  const foodMatch = msg.match(/(?:hoeveel vezels|vezels in|wat zit er in|voedingswaarde van?)\s+(.+?)[\?\.\!]?$/i)
-    || msg.match(/^(.{3,30})\s*(?:vezels|kcal|calorieën|voedingswaarde)/i);
+  const foodMatch = msg.match(/(?:hoeveel (?:vezels|eiwitten|proteïne|calorieën|kcal)|(?:vezels|eiwitten|voedingswaarde) (?:in|van))\s+(.+?)[\?\.\!]?$/i)
+    || msg.match(/(?:wat zit er in|voedingswaarde van?)\s+(.+?)[\?\.\!]?$/i)
+    || msg.match(/^(.{3,40})\s*(?:vezels|eiwitten|proteïne|calorieën|kcal|voedingswaarde)\??$/i);
   if (foodMatch) {
-    const product = lookupFoodFacts(foodMatch[1].trim());
-    const result = await product;
-    if (result && result.fiber_100g != null) {
-      foodContext = `\n[Voedingsdatabase]: ${result.name}${result.brand ? ' (' + result.brand + ')' : ''} bevat ${result.fiber_100g}g vezels per 100g (bron: Open Food Facts).`;
+    const result = await lookupFoodFacts(foodMatch[1].trim());
+    if (result) {
+      const parts = [`${result.name}${result.brand ? ' (' + result.brand + ')' : ''} (per 100g)`];
+      if (result.fiber_100g    != null) parts.push(`vezels: ${result.fiber_100g}g`);
+      if (result.proteins_100g != null) parts.push(`eiwitten: ${result.proteins_100g}g`);
+      if (result.kcal_100g     != null) parts.push(`energie: ${result.kcal_100g} kcal`);
+      if (parts.length > 1) {
+        foodContext = `\n[Open Food Facts database]: ${parts.join(' · ')}.`;
+      }
     }
   }
 
-  const userContent = msg + foodContext;
+  const userContent = foodContext ? msg + foodContext : msg;
 
   data.chatHistorie.push({ role: 'user', content: msg });
   if (data.chatHistorie.length > 20) data.chatHistorie.shift();
@@ -3584,6 +3614,51 @@ async function doTerugblik() {
   }
 }
 
+// ─── NUTRITION CALCULATOR ────────────────────────────────────────────────────
+
+async function calculateNutrition(receptId) {
+  const recept = (data.recepten || []).find(r => r.id === receptId);
+  if (!recept) return;
+
+  const btn = document.getElementById('calc-btn-' + receptId);
+  if (btn) { btn.textContent = 'Berekenen…'; btn.disabled = true; }
+
+  const ing = Array.isArray(recept.ingredienten)
+    ? recept.ingredienten.join('\n')
+    : recept.ingredienten || '';
+
+  const prompt = `Bereken voor dit recept (1 portie) de voedingswaarden op basis van de ingrediënten.
+Recept: ${recept.naam}
+Ingrediënten:
+${ing}
+
+Geef ALLEEN dit JSON-object terug, niets anders:
+{"vezels":"~Xg","eiwitten":"~Xg"}
+
+Gebruik realistische waarden per portie. Rond af op hele grammen.`;
+
+  try {
+    const raw = await callAI(prompt, 80);
+    const result = safeParseJSON(raw);
+    if (result && (result.vezels || result.eiwitten)) {
+      const idx = data.recepten.findIndex(r => r.id === receptId);
+      if (idx >= 0) {
+        if (result.vezels)   data.recepten[idx].vezels   = result.vezels;
+        if (result.eiwitten) data.recepten[idx].eiwitten = result.eiwitten;
+        saveAndSync();
+        renderRecepten();
+        showBanner('green', `${recept.naam}: ${result.vezels || '?'} vezels · ${result.eiwitten || '?'} eiwitten`);
+      }
+    } else {
+      if (btn) { btn.textContent = 'Bereken vezels & eiwitten'; btn.disabled = false; }
+      showBanner('red', 'Berekening mislukt. Probeer opnieuw.');
+    }
+  } catch(e) {
+    if (btn) { btn.textContent = 'Bereken vezels & eiwitten'; btn.disabled = false; }
+    showBanner('red', e.message || 'Berekening mislukt.');
+  }
+}
+
 // ─── FOOD FACTS API ──────────────────────────────────────────────────────────
 
 async function lookupFoodFacts(query) {
@@ -3591,13 +3666,20 @@ async function lookupFoodFacts(query) {
     const url = `https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(query)}&search_simple=1&action=process&json=1&page_size=1&fields=product_name,nutriments,brands`;
     const resp = await fetch(url);
     if (!resp.ok) return null;
-    const data = await resp.json();
-    const product = data.products && data.products[0];
+    const json = await resp.json();
+    const product = json.products && json.products[0];
     if (!product) return null;
-    const fiber = product.nutriments && product.nutriments['fiber_100g'];
-    const name = product.product_name || query;
-    const brand = product.brands || '';
-    return { name, brand, fiber_100g: fiber != null ? Math.round(fiber * 10) / 10 : null };
+    const n = product.nutriments || {};
+    const fiber    = n['fiber_100g']    != null ? Math.round(n['fiber_100g']    * 10) / 10 : null;
+    const proteins = n['proteins_100g'] != null ? Math.round(n['proteins_100g'] * 10) / 10 : null;
+    const kcal     = n['energy-kcal_100g'] != null ? Math.round(n['energy-kcal_100g']) : null;
+    return {
+      name: product.product_name || query,
+      brand: product.brands || '',
+      fiber_100g: fiber,
+      proteins_100g: proteins,
+      kcal_100g: kcal
+    };
   } catch(_) {
     return null;
   }
@@ -3648,8 +3730,43 @@ function filterFood(type, btn) {
 }
 
 function renderFoodTab() {
+  renderRecepten();
+  renderFoodWeekmenu();
   renderFoodWeekOverview();
-  renderFoodList();
+}
+
+function renderFoodWeekmenu() {
+  const container = document.getElementById('food-weekmenu');
+  if (!container) return;
+  const weekKey = getISOWeek(new Date());
+  const weekData = (data.weken && data.weken[weekKey]) || {};
+  const dates = getWeekDates(weekKey);
+  const dagKort = ['Ma','Di','Wo','Do','Vr','Za','Zo'];
+  const slots = ['ontbijt','lunch','diner','snack'];
+  const slotLabel = { ontbijt:'Ontbijt', lunch:'Lunch', diner:'Diner', snack:'Snack' };
+  const todayStr = new Date().toISOString().slice(0, 10);
+
+  container.innerHTML = dates.map((d, i) => {
+    const dayData = weekData[d] || {};
+    const meals = dayData.maaltijden || {};
+    const isToday = d === todayStr;
+    const gevuldeSlots = slots.filter(s => meals[s] && meals[s].naam);
+    if (gevuldeSlots.length === 0 && !isToday) return '';
+
+    const mealRows = slots.map(s => {
+      const m = meals[s];
+      if (!m || !m.naam) return '';
+      return `<div style="display:flex; gap:6px; align-items:baseline; font-size:13px; padding:2px 0;">
+        <span style="color:var(--muted); min-width:52px;">${slotLabel[s]}</span>
+        <span style="color:var(--text);">${m.naam}${m.vezels ? ' <span style="color:var(--accent-food); font-size:12px;">· ' + m.vezels + '</span>' : ''}</span>
+      </div>`;
+    }).filter(Boolean).join('');
+
+    return `<div style="padding:8px 0; border-bottom:1px solid var(--border); ${isToday ? 'font-weight:600;' : ''}">
+      <div style="font-size:13px; color:${isToday ? 'var(--accent-move)' : 'var(--muted)'}; margin-bottom:4px;">${dagKort[i]}${isToday ? ' — vandaag' : ''}</div>
+      ${mealRows || '<span style="font-size:12px; color:var(--muted);">—</span>'}
+    </div>`;
+  }).filter(Boolean).join('') || '<p style="color:var(--muted); font-size:14px; text-align:center; padding:12px 0;">Nog niets gepland deze week.</p>';
 }
 
 function renderFoodWeekOverview() {
