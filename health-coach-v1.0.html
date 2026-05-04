@@ -1014,6 +1014,8 @@ label { display: block; font-size: 14px; font-weight: 600; color: var(--text-2);
   opacity: 0.5; transition: opacity .15s;
 }
 .weekmenu-row:hover .weekmenu-del, .weekmenu-row:active .weekmenu-del { opacity: 1; }
+.weekmenu-row-empty { opacity: 0.5; }
+.weekmenu-row-empty:active { opacity: 1; background: var(--card2); }
 .food-fiber-bar { height: 6px; border-radius: 3px; margin-top: 3px; background: #e5e7eb; overflow: hidden; }
 .food-fiber-fill { height: 100%; border-radius: 3px; transition: width .3s; }
 
@@ -3097,32 +3099,83 @@ JSON-formaat (exact):
   }
 }
 
+function recipeCardHTML(r) {
+  return `<div class="gen-recipe-card" id="gencard-${r._tmpId}">
+    <label style="display:flex;align-items:flex-start;gap:12px;cursor:pointer;">
+      <input type="checkbox" id="chk-${r._tmpId}" checked style="margin-top:3px;width:20px;height:20px;accent-color:var(--accent-move);flex-shrink:0;">
+      <div style="flex:1;min-width:0;">
+        <div style="font-weight:700;font-size:16px;margin-bottom:4px;">${r.naam}</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">
+          <span class="fiber-badge">🌿 ${r.vezels || '?'}</span>
+          ${r.eiwitten ? `<span class="protein-badge">💪 ${r.eiwitten}</span>` : ''}
+          <span class="time-badge">${r.tijd}</span>
+        </div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.5;">
+          ${(r.ingredienten || []).slice(0, 4).join(', ')}${(r.ingredienten||[]).length > 4 ? ` + ${r.ingredienten.length - 4} meer` : ''}
+        </div>
+      </div>
+    </label>
+  </div>`;
+}
+
 function showGeneratedPreview(recepten) {
-  window._generatedRecepten = recepten.map((r, i) => ({ ...r, _tmpId: 'g' + i }));
+  const offset = (window._generatedRecepten || []).length;
+  const nieuw = recepten.map((r, i) => ({ ...r, _tmpId: 'g' + (offset + i) }));
+  window._generatedRecepten = [...(window._generatedRecepten || []), ...nieuw];
+
+  // Als modal al open is: append nieuwe kaarten boven de knoppen
+  const existing = document.getElementById('gen-preview-list');
+  if (existing) {
+    nieuw.forEach(r => {
+      existing.insertAdjacentHTML('beforeend', recipeCardHTML(r));
+    });
+    const meerBtn = document.getElementById('gen-meer-btn');
+    if (meerBtn) { meerBtn.disabled = false; meerBtn.textContent = 'Meer recepten genereren'; }
+    return;
+  }
+
   showModal(`
     <div class="modal-header">
-      <h2>${recepten.length} recept${recepten.length > 1 ? 'en' : ''} gegenereerd</h2>
-      <button class="modal-close" onclick="closeModal()">✕</button>
+      <h2>Recepten gegenereerd</h2>
+      <button class="modal-close" onclick="closeModal();window._generatedRecepten=[];">✕</button>
     </div>
     <p class="muted" style="font-size:14px;margin-bottom:14px;">Vink aan wat je wilt bewaren</p>
-    ${window._generatedRecepten.map(r => `
-      <div class="gen-recipe-card">
-        <label style="display:flex;align-items:flex-start;gap:12px;cursor:pointer;">
-          <input type="checkbox" id="chk-${r._tmpId}" checked style="margin-top:3px;width:20px;height:20px;accent-color:var(--accent-move);flex-shrink:0;">
-          <div style="flex:1;min-width:0;">
-            <div style="font-weight:700;font-size:16px;margin-bottom:4px;">${r.naam}</div>
-            <div style="display:flex;gap:6px;margin-bottom:8px;">
-              <span class="fiber-badge">${r.vezels}</span>
-              <span class="time-badge">${r.tijd}</span>
-            </div>
-            <div style="font-size:13px;color:var(--muted);line-height:1.5;">
-              ${(r.ingredienten || []).slice(0, 4).join(', ')}${(r.ingredienten||[]).length > 4 ? ` + ${r.ingredienten.length - 4} meer` : ''}
-            </div>
-          </div>
-        </label>
-      </div>`).join('')}
-    <button class="btn btn-primary btn-full" style="margin-top:6px;" onclick="saveSelectedRecepten()">Voeg geselecteerde toe</button>
+    <div id="gen-preview-list">${nieuw.map(recipeCardHTML).join('')}</div>
+    <button id="gen-meer-btn" class="btn btn-ghost btn-full" style="margin-top:10px;" onclick="generateMeer()">Meer recepten genereren</button>
+    <button class="btn btn-primary btn-full" style="margin-top:8px;" onclick="saveSelectedRecepten()">Voeg geselecteerde toe</button>
   `);
+}
+
+async function generateMeer() {
+  const btn = document.getElementById('gen-meer-btn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Bezig…'; }
+
+  const isVega = document.getElementById('gen-vega') && document.getElementById('gen-vega').checked;
+  const eetwijze = isVega ? 'volledig vegetarisch' : 'vegetarisch of met vis (geen vlees)';
+  const bestaandeNamen = [
+    ...(data.recepten || []).map(r => r.naam),
+    ...(window._generatedRecepten || []).map(r => r.naam)
+  ].join(', ');
+  const focusEl = document.getElementById('gen-focus');
+  const focus = focusEl ? focusEl.value.trim() : '';
+  const focusTxt = focus ? ` Focus op: ${focus}.` : '';
+
+  const prompt = `Genereer ${genCount} vezelrijke Nederlandse recepten. Reageer UITSLUITEND met een JSON-array.${focusTxt}
+Strikte regels: ${eetwijze}, minimaal 8g vezels, max 35 min, logische coherente gerechten, varieer eiwitbronnen.
+Vermijd recepten die lijken op: ${bestaandeNamen}.
+JSON: [{"naam":"...","vezels":"~Xg","eiwitten":"~Xg","tijd":"X min","ingredienten":["..."],"bereiding":["..."]}]`;
+
+  try {
+    const raw = await callAI(prompt, Math.min(genCount * 450, 2000));
+    const match = raw.match(/\[[\s\S]*\]/);
+    if (!match) throw new Error('Geen recepten ontvangen.');
+    const parsed = JSON.parse(match[0]);
+    if (!Array.isArray(parsed) || parsed.length === 0) throw new Error('Geen recepten ontvangen.');
+    showGeneratedPreview(parsed);
+  } catch(e) {
+    if (btn) { btn.disabled = false; btn.textContent = 'Meer recepten genereren'; }
+    showBanner('red', e.message || 'Genereren mislukt.');
+  }
 }
 
 function saveSelectedRecepten() {
@@ -3789,25 +3842,29 @@ function renderFoodWeekmenu() {
     const dayData = weekData[d] || {};
     const meals = dayData.maaltijden || {};
     const isToday = d === todayStr;
-    const gevuldeSlots = slots.filter(s => meals[s] && meals[s].naam);
-    if (gevuldeSlots.length === 0 && !isToday) return '';
 
     const mealRows = slots.map(s => {
       const m = meals[s];
-      if (!m || !m.naam) return '';
-      const fiber = m.vezels ? `<span style="color:var(--accent-food);font-size:12px;"> · ${m.vezels}</span>` : '';
-      return `<div class="weekmenu-row" data-date="${d}" data-slot="${s}" onclick="editWeekMenuMeal('${d}','${s}')">
-        <span class="weekmenu-slot-label">${slotLabel[s]}</span>
-        <span class="weekmenu-meal-name">${m.naam}${fiber}</span>
-        <span class="weekmenu-del" onclick="event.stopPropagation();clearWeekMenuMeal('${d}','${s}')">×</span>
-      </div>`;
-    }).filter(Boolean).join('');
+      if (m && m.naam) {
+        const fiber = m.vezels ? `<span style="color:var(--accent-food);font-size:11px;"> · ${m.vezels}</span>` : '';
+        return `<div class="weekmenu-row" onclick="editWeekMenuMeal('${d}','${s}')">
+          <span class="weekmenu-slot-label">${slotLabel[s]}</span>
+          <span class="weekmenu-meal-name">${m.naam}${fiber}</span>
+          <span class="weekmenu-del" onclick="event.stopPropagation();clearWeekMenuMeal('${d}','${s}')">×</span>
+        </div>`;
+      } else {
+        return `<div class="weekmenu-row weekmenu-row-empty" onclick="editWeekMenuMeal('${d}','${s}')">
+          <span class="weekmenu-slot-label">${slotLabel[s]}</span>
+          <span style="font-size:13px;color:var(--muted);">+ toevoegen</span>
+        </div>`;
+      }
+    }).join('');
 
     return `<div class="weekmenu-day ${isToday ? 'today' : ''}">
       <div class="weekmenu-day-label">${dagKort[i]}${isToday ? ' — vandaag' : ''}</div>
-      ${mealRows || '<span style="font-size:12px;color:var(--muted);padding-left:4px;">—</span>'}
+      ${mealRows}
     </div>`;
-  }).filter(Boolean).join('') || '<p style="color:var(--muted);font-size:14px;text-align:center;padding:12px 0;">Nog niets gepland deze week.</p>';
+  }).join('');
 }
 
 function clearWeekMenuMeal(dateStr, slot) {
@@ -3908,25 +3965,41 @@ function renderFoodWeekOverview() {
   const dagKort = ['Ma','Di','Wo','Do','Vr','Za','Zo'];
   const dates = getWeekDates(weekKey);
 
-  container.innerHTML = dates.map((d, i) => {
+  const todayStr = new Date().toISOString().slice(0,10);
+
+  // Header
+  container.innerHTML = `<div style="display:flex; font-size:11px; color:var(--muted); font-weight:600; margin-bottom:6px; padding:0 2px;">
+    <span style="width:28px;"></span>
+    <span style="flex:1; margin:0 10px;">🌿 Vezels (doel: 30g)</span>
+    <span style="width:70px; text-align:right;"></span>
+    <span style="flex:1; margin:0 10px;">💪 Eiwitten (doel: 80g)</span>
+    <span style="width:70px; text-align:right;"></span>
+  </div>` + dates.map((d, i) => {
     const dayData = weekData[d] || {};
     const meals = dayData.maaltijden || {};
-    let total = 0;
+    let vezels = 0, eiwitten = 0;
     Object.values(meals).forEach(m => {
-      if (m && m.vezels) {
-        const n = parseFloat((m.vezels||'').replace(/[^\d.]/g,''));
-        if (!isNaN(n)) total += n;
-      }
+      if (!m) return;
+      const v = parseFloat((m.vezels||'').replace(/[^\d.]/g,''));
+      const e = parseFloat((m.eiwitten||'').replace(/[^\d.]/g,''));
+      if (!isNaN(v)) vezels += v;
+      if (!isNaN(e)) eiwitten += e;
     });
-    const pct = Math.min(100, Math.round(total / 30 * 100));
-    const color = total >= 30 ? '#4ade80' : total >= 20 ? '#fb923c' : '#f87171';
-    const isToday = d === new Date().toISOString().slice(0,10);
+    const vPct = Math.min(100, Math.round(vezels / 30 * 100));
+    const vColor = vezels >= 30 ? '#4ade80' : vezels >= 20 ? '#fb923c' : '#f87171';
+    const ePct = Math.min(100, Math.round(eiwitten / 80 * 100));
+    const eColor = eiwitten >= 80 ? '#a78bfa' : eiwitten >= 50 ? '#c4b5fd' : '#e9d5ff';
+    const isToday = d === todayStr;
     return `<div class="food-week-row" style="${isToday ? 'font-weight:600;' : ''}">
-      <span style="width:28px;">${dagKort[i]}</span>
-      <div style="flex:1; margin: 0 10px;">
-        <div class="food-fiber-bar"><div class="food-fiber-fill" style="width:${pct}%; background:${color};"></div></div>
+      <span style="width:28px;font-size:13px;">${dagKort[i]}</span>
+      <div style="flex:1; margin:0 10px;">
+        <div class="food-fiber-bar"><div class="food-fiber-fill" style="width:${vPct}%;background:${vColor};"></div></div>
       </div>
-      <span style="color:${color}; font-size:13px; min-width:60px; text-align:right;">${total > 0 ? total + 'g / 30g' : '—'}</span>
+      <span style="color:${vColor};font-size:12px;min-width:70px;text-align:right;">${vezels > 0 ? vezels+'g' : '—'}</span>
+      <div style="flex:1; margin:0 10px;">
+        <div class="food-fiber-bar"><div class="food-fiber-fill" style="width:${ePct}%;background:${eColor};"></div></div>
+      </div>
+      <span style="color:${eColor};font-size:12px;min-width:70px;text-align:right;">${eiwitten > 0 ? eiwitten+'g' : '—'}</span>
     </div>`;
   }).join('');
 }
