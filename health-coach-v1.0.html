@@ -641,6 +641,36 @@ label { display: block; font-size: 14px; font-weight: 600; color: var(--text-2);
 .stats-val { font-size: 14px; font-weight: 500; color: var(--text); }
 .stats-empty { color: var(--muted); font-size: 14px; text-align: center; padding: 16px 0; }
 
+/* ─── SMART VOICE ─── */
+.smart-voice-btn {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  width: 100%; min-height: 54px; border-radius: var(--radius);
+  border: 2px solid var(--accent-move); background: var(--accent-move-soft);
+  color: var(--accent-move); font-size: 15px; font-weight: 600;
+  cursor: pointer; margin-bottom: 14px; transition: all .15s;
+}
+.smart-voice-btn.listening {
+  background: var(--accent-move); color: #fff;
+  animation: micPulse 1s ease infinite;
+}
+.smart-voice-btn.processing {
+  background: var(--card2); border-color: var(--border);
+  color: var(--muted); animation: none;
+}
+.smart-voice-status {
+  font-size: 13px; color: var(--muted); text-align: center;
+  margin: -8px 0 12px; min-height: 18px;
+}
+.smart-voice-status.ok { color: var(--accent-food); font-weight: 500; }
+.voice-recipe-btn {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  width: 100%; min-height: 50px; border-radius: var(--radius);
+  border: 2px solid var(--accent-food); background: var(--accent-food-soft);
+  color: var(--accent-food); font-size: 15px; font-weight: 600;
+  cursor: pointer; margin-bottom: 12px; transition: all .15s;
+}
+.voice-recipe-btn.listening { background: var(--accent-food); color: #fff; animation: micPulse 1s ease infinite; }
+
 /* ─── SETUP SCREEN ─── */
 #setup-overlay {
   position: fixed; inset: 0; background: var(--bg);
@@ -1539,9 +1569,9 @@ async function finishSetup() {
   const gistId = document.getElementById('setup-gist').value.trim();
   const errEl = document.getElementById('setup-error');
 
-  if (!naam || !anthropicKey || !githubToken || !gistId) {
+  if (!naam || !anthropicKey) {
     errEl.style.display = 'block';
-    errEl.textContent = 'Vul alle velden in om door te gaan.';
+    errEl.textContent = 'Vul je naam en Anthropic API-sleutel in om door te gaan.';
     return;
   }
   errEl.style.display = 'none';
@@ -2238,6 +2268,11 @@ function editActivity(dateStr, actId) {
       <h2>Activiteit bewerken</h2>
       <button class="modal-close" onclick="closeModal()">✕</button>
     </div>
+    <button id="smart-voice-act-btn" class="smart-voice-btn" onclick="smartVoiceActivity('edit')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+      Spreek activiteit in
+    </button>
+    <div id="smart-voice-status" class="smart-voice-status"></div>
     <div class="form-group">
       <label>Type</label>
       <select id="edit-type" onchange="document.getElementById('edit-duur').value=DEFAULT_DUUR[this.value]||30">
@@ -2256,11 +2291,11 @@ function editActivity(dateStr, actId) {
     </div>
     <div class="form-group">
       <label>Naam</label>
-      ${micInput('edit-naam', 'bijv. Easy run', act.naam)}
+      <input id="edit-naam" type="text" placeholder="bijv. Easy run" value="${act.naam.replace(/"/g,'&quot;')}" autocomplete="off">
     </div>
     <div class="form-group">
       <label>Details</label>
-      ${micInput('edit-detail', 'bijv. 8 km zone 2', act.detail)}
+      <input id="edit-detail" type="text" placeholder="bijv. 8 km zone 2" value="${(act.detail||'').replace(/"/g,'&quot;')}" autocomplete="off">
     </div>
     <button class="btn btn-primary btn-full" onclick="saveEditActivity('${dateStr}','${actId}')">Opslaan</button>
   `);
@@ -2287,6 +2322,11 @@ function addActivity(dateStr) {
       <h2>Activiteit toevoegen</h2>
       <button class="modal-close" onclick="closeModal()">✕</button>
     </div>
+    <button id="smart-voice-act-btn" class="smart-voice-btn" onclick="smartVoiceActivity('new')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+      Spreek activiteit in
+    </button>
+    <div id="smart-voice-status" class="smart-voice-status"></div>
     <div class="form-group">
       <label>Type</label>
       <select id="new-type" onchange="document.getElementById('new-duur').value=DEFAULT_DUUR[this.value]||30">
@@ -2305,11 +2345,11 @@ function addActivity(dateStr) {
     </div>
     <div class="form-group">
       <label>Naam</label>
-      ${micInput('new-naam', 'bijv. Yoga')}
+      <input id="new-naam" type="text" placeholder="bijv. Yoga" autocomplete="off">
     </div>
     <div class="form-group">
       <label>Details</label>
-      ${micInput('new-detail', 'bijv. 30 min')}
+      <input id="new-detail" type="text" placeholder="bijv. 30 min" autocomplete="off">
     </div>
     <button class="btn btn-primary btn-full" onclick="confirmAddActivity('${dateStr}')">Toevoegen</button>
   `);
@@ -2362,6 +2402,15 @@ function renderRecepten() {
         <input id="gen-focus" type="text" placeholder="bijv. met kikkererwten, snel, Aziatisch" style="min-height:44px;">
       </div>
       <button id="gen-btn" class="btn btn-primary btn-full" onclick="generateRecepten()" ${!hasKey?'disabled':''}>${!hasKey?'Geen API-sleutel ingesteld':'Genereer recepten'}</button>
+      ${hasKey ? `<div style="display:flex;align-items:center;gap:10px;margin-top:10px;">
+        <div style="flex:1;height:1px;background:var(--border);"></div>
+        <span style="font-size:12px;color:var(--muted);">of</span>
+        <div style="flex:1;height:1px;background:var(--border);"></div>
+      </div>
+      <button id="voice-recipe-btn" class="voice-recipe-btn" style="margin-top:10px;" onclick="smartVoiceRecipe()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+        Spreek gerecht in → direct recept
+      </button>` : ''}
     </div>
     <button class="btn btn-ghost btn-full" style="margin-bottom:16px;" onclick="addReceptModal()">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -2811,6 +2860,7 @@ async function sendChat() {
   const input = document.getElementById('chat-input');
   const msg = input.value.trim();
   if (!msg) return;
+  if (_ttsEnabled) unlockTTS();
   input.value = '';
 
   if (!data.chatHistorie) data.chatHistorie = [];
@@ -2926,6 +2976,183 @@ function closeModal() {
   document.getElementById('modal-container').innerHTML = '';
 }
 
+// ─── SMART VOICE INPUT ───────────────────────────────────────────────────────
+
+function safeParseJSON(raw) {
+  return JSON.parse(raw.trim().replace(/^```json?\n?/i, '').replace(/\n?```$/i, '').trim());
+}
+
+async function parseActivityVoice(text) {
+  const prompt = `Analyseer deze Nederlandse activiteitsbeschrijving en geef ALLEEN geldige JSON terug (geen uitleg):
+{"type":"run|gym|bike|commute|walk|walkdog|other","naam":"korte naam","duur":minuten_als_getal,"detail":"overige info"}
+
+Regels: type is exact één van de opties. duur is een getal (0 als niet vermeld). detail bevat afstand, zones, sets, etc.
+Beschrijving: "${text.replace(/"/g, "'")}"`;
+  const raw = await callAI(prompt, 120);
+  return safeParseJSON(raw);
+}
+
+function smartVoiceActivity(prefix) {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) { showBanner('yellow', 'Spraakinvoer niet beschikbaar in deze browser.'); return; }
+
+  const btn = document.getElementById('smart-voice-act-btn');
+  const statusEl = document.getElementById('smart-voice-status');
+
+  const setStatus = (msg, cls = '') => {
+    if (!statusEl) return;
+    statusEl.textContent = msg;
+    statusEl.className = 'smart-voice-status' + (cls ? ' ' + cls : '');
+  };
+
+  const recognition = new (SR)();
+  recognition.lang = 'nl-NL';
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+
+  btn.classList.add('listening');
+  btn.textContent = '';
+  btn.insertAdjacentHTML('afterbegin', `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>`);
+  btn.appendChild(document.createTextNode(' Luisteren...'));
+  setStatus('');
+
+  recognition.onresult = async (e) => {
+    const text = e.results[0][0].transcript;
+    btn.classList.remove('listening');
+    btn.classList.add('processing');
+    btn.lastChild.textContent = ' Verwerken...';
+    setStatus(`"${text}"`);
+
+    try {
+      const result = await parseActivityVoice(text);
+
+      const typeEl = document.getElementById(prefix + '-type');
+      const duurEl = document.getElementById(prefix + '-duur');
+      const naamEl = document.getElementById(prefix + '-naam');
+      const detailEl = document.getElementById(prefix + '-detail');
+
+      if (typeEl && result.type) typeEl.value = result.type;
+      if (duurEl && result.duur) duurEl.value = result.duur;
+      if (naamEl && result.naam) naamEl.value = result.naam;
+      if (detailEl != null) detailEl.value = result.detail || '';
+
+      btn.classList.remove('processing');
+      btn.lastChild.textContent = ' Ingevuld ✓';
+      setStatus('Controleer de velden en sla op.', 'ok');
+    } catch (err) {
+      btn.classList.remove('processing');
+      btn.lastChild.textContent = ' Probeer opnieuw';
+      setStatus('Kon niet verwerken — vul handmatig aan.');
+    }
+  };
+
+  recognition.onerror = () => {
+    btn.classList.remove('listening');
+    btn.lastChild.textContent = ' Spreek activiteit in';
+    setStatus('Luisteren mislukt. Probeer opnieuw.');
+  };
+  recognition.onend = () => { btn.classList.remove('listening'); };
+  recognition.start();
+}
+
+let _pendingVoiceRecipe = null;
+
+async function generateRecipeFromText(text) {
+  const prompt = `Je bent een gezondheidscoach gespecialiseerd in vezelrijke gerechten. Genereer een vezelrijk recept op basis van: "${text.replace(/"/g, "'")}".
+Geef ALLEEN geldige JSON terug (geen uitleg, geen markdown):
+{"naam":"recept naam","vezels":"~Xg","tijd":"X min","ingredienten":["hoeveelheid ingredient","..."],"bereiding":["Stap 1: ...","..."]}
+Regels: minimaal 8g vezels, vegetarisch of vis, max 35 min, concrete stappen in het Nederlands.`;
+  const raw = await callAI(prompt, 450);
+  return safeParseJSON(raw);
+}
+
+function smartVoiceRecipe() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) { showBanner('yellow', 'Spraakinvoer niet beschikbaar in deze browser.'); return; }
+
+  const btn = document.getElementById('voice-recipe-btn');
+
+  const recognition = new (SR)();
+  recognition.lang = 'nl-NL';
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+
+  if (btn) btn.classList.add('listening');
+
+  recognition.onresult = async (e) => {
+    const text = e.results[0][0].transcript;
+    if (btn) { btn.classList.remove('listening'); btn.lastChild.textContent = ' Recept genereren...'; }
+
+    showModal(`
+      <div class="modal-header">
+        <h2>Recept zoeken</h2>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <div style="text-align:center;padding:28px 0;">
+        <div class="typing-dots"><span></span><span></span><span></span></div>
+        <p style="margin-top:14px;color:var(--muted);font-size:14px;">Recept genereren voor:<br><strong style="color:var(--text)">"${text}"</strong></p>
+      </div>
+    `);
+
+    try {
+      const recipe = await generateRecipeFromText(text);
+      _pendingVoiceRecipe = recipe;
+      showModal(`
+        <div class="modal-header">
+          <h2>${recipe.naam}</h2>
+          <button class="modal-close" onclick="closeModal()">✕</button>
+        </div>
+        <div style="display:flex;gap:8px;margin-bottom:14px;">
+          <span class="badge" style="background:var(--accent-food-soft);color:var(--accent-food);">🌿 ${recipe.vezels} vezels</span>
+          <span class="badge" style="background:var(--card2);color:var(--muted);">⏱ ${recipe.tijd}</span>
+        </div>
+        <div class="form-group">
+          <strong style="font-size:13px;color:var(--muted);">INGREDIËNTEN</strong>
+          <ul style="margin:8px 0 0;padding-left:18px;font-size:14px;line-height:1.8;">
+            ${recipe.ingredienten.map(i => `<li>${i}</li>`).join('')}
+          </ul>
+        </div>
+        <div class="form-group">
+          <strong style="font-size:13px;color:var(--muted);">BEREIDING</strong>
+          <ol style="margin:8px 0 0;padding-left:18px;font-size:14px;line-height:1.8;">
+            ${recipe.bereiding.map(s => `<li>${s}</li>`).join('')}
+          </ol>
+        </div>
+        <button class="btn btn-primary btn-full" onclick="confirmVoiceRecipe()">Toevoegen aan recepten</button>
+        <button class="btn btn-ghost btn-full" style="margin-top:8px;" onclick="closeModal()">Annuleren</button>
+      `);
+    } catch (err) {
+      showModal(`
+        <div class="modal-header">
+          <h2>Genereren mislukt</h2>
+          <button class="modal-close" onclick="closeModal()">✕</button>
+        </div>
+        <p style="color:var(--muted);padding:16px;font-size:14px;">${err.message || 'Probeer het opnieuw.'}</p>
+      `);
+    }
+    if (btn) btn.lastChild.textContent = ' Spreek gerecht in → direct recept';
+  };
+
+  recognition.onerror = () => {
+    if (btn) { btn.classList.remove('listening'); btn.lastChild.textContent = ' Spreek gerecht in → direct recept'; }
+    showBanner('yellow', 'Luisteren mislukt. Probeer opnieuw.');
+  };
+  recognition.onend = () => { if (btn) btn.classList.remove('listening'); };
+  recognition.start();
+}
+
+function confirmVoiceRecipe() {
+  if (!_pendingVoiceRecipe) return;
+  const r = { ..._pendingVoiceRecipe, id: 'r' + Date.now() };
+  if (!data.recepten) data.recepten = [];
+  data.recepten.push(r);
+  _pendingVoiceRecipe = null;
+  saveAndSync();
+  closeModal();
+  renderRecepten();
+  showBanner('green', `"${r.naam}" toegevoegd aan je recepten.`);
+}
+
 // ─── VOICE INPUT ─────────────────────────────────────────────────────────────
 
 function startVoiceInput(inputId) {
@@ -2955,6 +3182,13 @@ function startVoiceInput(inputId) {
 
 let _ttsEnabled = localStorage.getItem('hc_tts') !== 'off';
 
+function unlockTTS() {
+  if (!window.speechSynthesis) return;
+  const utt = new SpeechSynthesisUtterance('');
+  utt.volume = 0;
+  window.speechSynthesis.speak(utt);
+}
+
 function toggleTTS() {
   _ttsEnabled = !_ttsEnabled;
   localStorage.setItem('hc_tts', _ttsEnabled ? 'on' : 'off');
@@ -2963,7 +3197,8 @@ function toggleTTS() {
     btn.classList.toggle('active', _ttsEnabled);
     btn.title = _ttsEnabled ? 'Spraak uit' : 'Spraak aan';
   }
-  if (!_ttsEnabled) window.speechSynthesis.cancel();
+  if (_ttsEnabled) unlockTTS();
+  else window.speechSynthesis.cancel();
 }
 
 function speakCoach(text) {
@@ -2971,24 +3206,30 @@ function speakCoach(text) {
   window.speechSynthesis.cancel();
   const utt = new SpeechSynthesisUtterance(text);
   utt.lang = 'nl-NL';
-  utt.rate = 1.0;
+  utt.rate = 0.95;
   utt.pitch = 1.0;
-  const doSpeak = () => {
+  const trySpeak = () => {
     const voices = window.speechSynthesis.getVoices();
-    const nlVoice = voices.find(v => v.lang.startsWith('nl')) || null;
+    const nlVoice = voices.find(v => v.lang === 'nl-NL') || voices.find(v => v.lang.startsWith('nl')) || null;
     if (nlVoice) utt.voice = nlVoice;
     window.speechSynthesis.speak(utt);
   };
-  if (window.speechSynthesis.getVoices().length > 0) {
-    doSpeak();
+  const voices = window.speechSynthesis.getVoices();
+  if (voices.length > 0) {
+    trySpeak();
   } else {
-    window.speechSynthesis.onvoiceschanged = () => { doSpeak(); window.speechSynthesis.onvoiceschanged = null; };
+    window.speechSynthesis.onvoiceschanged = () => {
+      window.speechSynthesis.onvoiceschanged = null;
+      trySpeak();
+    };
+    setTimeout(trySpeak, 300);
   }
 }
 
 function startVoiceChatInput() {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SR) { showBanner('yellow', 'Spraakinvoer niet beschikbaar in deze browser.'); return; }
+  if (_ttsEnabled) unlockTTS();
   const recognition = new SR();
   recognition.lang = 'nl-NL';
   recognition.interimResults = false;
@@ -3117,7 +3358,7 @@ window.addEventListener('DOMContentLoaded', () => {
     subEl.textContent = `Welkom terug, ${settings.naam} 👋`;
   }
 
-  _splashTimer = setTimeout(dismissSplash, 1800);
+  _splashTimer = setTimeout(dismissSplash, 3500);
 });
 </script>
 </body>
