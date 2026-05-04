@@ -468,6 +468,18 @@ label { display: block; font-size: 14px; font-weight: 600; color: var(--text-2);
   font-size: 18px; cursor: pointer; display: flex;
   align-items: center; justify-content: center;
 }
+.modal-label {
+  display: block; font-size: 13px; font-weight: 600;
+  color: var(--muted); margin-bottom: 6px;
+}
+.modal-input {
+  width: 100%; padding: 11px 14px; border-radius: 12px;
+  border: 1.5px solid var(--border); background: var(--card);
+  color: var(--text); font-size: 15px; outline: none;
+  font-family: inherit; margin-bottom: 4px;
+}
+.modal-input:focus { border-color: var(--accent-food); }
+select.modal-input { appearance: auto; }
 
 /* ─── RECIPES ─── */
 .recipe-card {
@@ -1020,22 +1032,132 @@ label { display: block; font-size: 14px; font-weight: 600; color: var(--text-2);
 .food-fiber-fill { height: 100%; border-radius: 3px; transition: width .3s; }
 
 /* ─── WATER TRACKER ─── */
-.water-tracker { margin: 0 0 16px 0; }
-.water-tracker-label { font-size: 13px; color: var(--muted); margin-bottom: 8px; display: flex; justify-content: space-between; }
-.water-glasses { display: flex; gap: 6px; flex-wrap: wrap; }
-.water-glass {
-  width: 36px; height: 44px;
-  border-radius: 4px 4px 8px 8px;
-  border: 2px solid #93c5fd;
-  background: transparent;
-  cursor: pointer;
-  transition: background .2s;
-  display: flex; align-items: flex-end;
-  overflow: hidden;
-  padding: 0;
+.water-tracker { margin: 0 0 4px 0; }
+.water-tracker-label { font-size: 13px; color: var(--muted); margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+.water-track {
+  display: flex; gap: 4px; height: 10px;
 }
-.water-glass.filled { background: #3b82f6; border-color: #2563eb; }
-.water-glass:active { transform: scale(.92); }
+.water-seg {
+  flex: 1; height: 10px; border-radius: 3px;
+  background: var(--border);
+  cursor: pointer; transition: background .15s, transform .1s;
+}
+.water-seg.filled { background: #3b82f6; }
+.water-seg:active { transform: scaleY(1.3); }
+.water-count-label { font-size: 13px; color: #3b82f6; font-weight: 700; }
+
+/* ─── DAILY COACH CARD ─── */
+.daily-coach-card {
+  border-left: 4px solid var(--accent-move);
+  background: linear-gradient(135deg, #fff8f3 0%, #ffffff 100%);
+  position: relative; overflow: hidden;
+}
+.daily-coach-card::before {
+  content: ''; position: absolute; top: -20px; right: -20px;
+  width: 80px; height: 80px; border-radius: 50%;
+  background: var(--accent-move-tint); pointer-events: none;
+}
+.coach-card-header {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
+}
+.coach-card-avatar {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--accent-move); display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.coach-card-avatar svg { color: #fff; }
+.coach-card-label { font-size: 11px; font-weight: 700; letter-spacing: .7px;
+  color: var(--accent-move); text-transform: uppercase; }
+.coach-card-q { font-size: 17px; font-weight: 600; color: var(--text); line-height: 1.4; margin-bottom: 16px; }
+.coach-card-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.coach-card-answer-btn {
+  flex: 1; min-width: 120px; padding: 11px 14px; border-radius: 12px;
+  border: none; background: var(--accent-move); color: #fff;
+  font-size: 15px; font-weight: 600; cursor: pointer; text-align: center;
+  transition: opacity .15s; min-height: 44px;
+}
+.coach-card-answer-btn:active { opacity: .75; }
+.coach-card-answer-btn.secondary {
+  background: var(--card2); color: var(--text-2); font-weight: 500;
+}
+.coach-card-skip {
+  display: flex; align-items: center; justify-content: flex-end; margin-top: 10px;
+}
+.coach-card-skip-btn {
+  background: none; border: none; color: var(--muted); font-size: 13px;
+  cursor: pointer; padding: 6px 2px; text-decoration: underline;
+}
+.coach-card-response {
+  margin-top: 12px; padding: 12px; background: var(--accent-move-tint);
+  border-radius: 10px; font-size: 15px; color: var(--text-2); line-height: 1.5;
+}
+
+/* ─── WEEK INTAKE BUTTON ─── */
+.week-intake-btn {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  width: 100%; padding: 15px 20px; margin-bottom: 12px;
+  border-radius: var(--radius); border: 2px solid var(--accent-move);
+  background: var(--accent-move-soft); color: var(--accent-move);
+  font-size: 16px; font-weight: 700; cursor: pointer;
+  transition: background .15s, transform .1s; min-height: 52px;
+}
+.week-intake-btn:active { background: var(--accent-move); color: #fff; transform: scale(.98); }
+.week-intake-btn.recording {
+  background: var(--accent-move); color: #fff; animation: pulse-rec 1s infinite;
+}
+@keyframes pulse-rec {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(234,90,12,.4); }
+  50% { box-shadow: 0 0 0 8px rgba(234,90,12,0); }
+}
+
+/* ─── VOEDING VOICE BTN ─── */
+.voeding-voice-btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 8px 14px; border-radius: 20px;
+  border: 1.5px solid var(--accent-food); background: var(--accent-food-soft);
+  color: var(--accent-food); font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: background .15s, color .15s; white-space: nowrap;
+  min-height: 36px;
+}
+.voeding-voice-btn:active { background: var(--accent-food); color: #fff; }
+.voeding-voice-btn.recording {
+  background: var(--accent-food); color: #fff;
+  animation: pulse-rec 1s infinite;
+}
+.voeding-voice-full {
+  display: flex; width: 100%; justify-content: center;
+  margin-bottom: 12px; border-radius: 12px; padding: 11px 14px;
+  font-size: 14px;
+}
+
+/* ─── VOEDING PREVIEW CARD ─── */
+.voeding-preview {
+  background: var(--accent-food-soft); border: 1.5px solid var(--accent-food);
+  border-radius: 14px; padding: 14px 16px; margin-top: 10px;
+}
+.voeding-preview-naam { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+.voeding-preview-meta { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+.voeding-preview-pill {
+  font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 20px;
+  background: #fff; color: var(--text-2);
+}
+.voeding-preview-slot { margin-bottom: 12px; }
+.voeding-preview-slot select { width: 100%; }
+
+/* ─── PARTNER ROWS ─── */
+.partner-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 11px 0; border-bottom: 1px solid var(--border); gap: 10px;
+}
+.partner-row:last-child { border-bottom: none; }
+.partner-info { display: flex; align-items: center; gap: 10px; flex: 1; }
+.partner-sport { font-size: 22px; flex-shrink: 0; }
+.partner-del-btn {
+  background: none; border: none; color: var(--muted); cursor: pointer;
+  padding: 8px; border-radius: 10px; min-height: 40px; min-width: 40px;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.partner-del-btn:active { background: var(--danger-soft); color: var(--danger); }
 
 /* ─── RECIPE DELETE BTN IN HEADER ─── */
 .rec-delete-btn {
@@ -1198,6 +1320,9 @@ label { display: block; font-size: 14px; font-weight: 600; color: var(--text-2);
       </div>
     </div>
 
+    <!-- Dagelijkse coach-kaart -->
+    <div id="daily-coach-card" class="card daily-coach-card" style="display:none;"></div>
+
     <!-- Vandaag-progress -->
     <div id="today-progress" class="today-progress" style="display:none;"></div>
 
@@ -1226,12 +1351,10 @@ label { display: block; font-size: 14px; font-weight: 600; color: var(--text-2);
     <div class="card">
       <div class="water-tracker">
         <div class="water-tracker-label">
-          <span>💧 Hydratatie</span>
-          <span id="water-count">0 / 8 glazen</span>
+          <span>💧 Water</span>
+          <span class="water-count-label" id="water-count">0 / 8</span>
         </div>
-        <div class="water-glasses" id="water-glasses">
-          <!-- gegenereerd door JS -->
-        </div>
+        <div class="water-track" id="water-glasses"></div>
       </div>
     </div>
 
@@ -1243,7 +1366,13 @@ label { display: block; font-size: 14px; font-weight: 600; color: var(--text-2);
 
     <!-- Maaltijden vandaag -->
     <div class="card">
-      <h3 style="margin-bottom:14px;">Maaltijden</h3>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+        <h3>Maaltijden</h3>
+        <button class="voeding-voice-btn" id="voeding-voice-btn-vandaag" onclick="startVoedingIntake(null, null, 'vandaag')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+          Ik heb gegeten…
+        </button>
+      </div>
       <div id="today-meals"></div>
     </div>
   </div>
@@ -1255,6 +1384,10 @@ label { display: block; font-size: 14px; font-weight: 600; color: var(--text-2);
       <span class="week-label" id="week-label"></span>
       <button onclick="navWeek(1)">&#8250;</button>
     </div>
+    <button class="week-intake-btn" onclick="startWeekIntake()">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+      Plan mijn week — spreek in
+    </button>
     <button class="smart-voice-btn" id="bewegen-voice-btn" onclick="beweegVoiceAdd()" style="margin-bottom:10px;">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
       Spreek activiteit in voor vandaag
@@ -1277,10 +1410,14 @@ label { display: block; font-size: 14px; font-weight: 600; color: var(--text-2);
 
     <!-- Weekmenu: wat staat er gepland -->
     <div class="card" style="margin-top:4px; margin-bottom:12px;">
-      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
         <h3>Weekmenu</h3>
         <button class="btn btn-ghost btn-sm" onclick="showShoppingList()">🛒 Boodschappen</button>
       </div>
+      <button class="voeding-voice-btn voeding-voice-full" id="voeding-voice-btn-food" onclick="startVoedingIntake(null, null, 'food')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+        Spreek maaltijd in — heb gegeten / ga eten
+      </button>
       <div id="food-weekmenu"></div>
     </div>
 
@@ -1337,6 +1474,14 @@ label { display: block; font-size: 14px; font-weight: 600; color: var(--text-2);
         </button>
         <div id="saved-tips-list" style="display:none;"></div>
       </div>
+    </div>
+
+    <div class="card" style="margin-bottom:14px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+        <h3>Trainingspartners</h3>
+        <button class="btn btn-ghost" style="font-size:13px;padding:6px 12px;" onclick="showAddPartnerModal()">+ Toevoegen</button>
+      </div>
+      <div id="partners-list"></div>
     </div>
 
     <div class="card">
@@ -1497,7 +1642,10 @@ Beschikbare oefeningen (gebruik exact deze namen):
 - Lower body: Goblet squat, Lunges, Hip thrust, Romanian deadlift, Calf raises, Bulgarian split squat
 - Core: Plank, Dead bug, Glute bridge
 
-Als je oefeningen aanbeveelt of uitlegt, gebruik dan bij voorkeur deze namen zodat de gebruiker direct de uitlegkaart kan raadplegen. Geef bij oefeningen altijd: spiergroepen, uitvoering in stappen, en een praktische tip.`;
+Als je oefeningen aanbeveelt of uitlegt, gebruik dan bij voorkeur deze namen zodat de gebruiker direct de uitlegkaart kan raadplegen. Geef bij oefeningen altijd: spiergroepen, uitvoering in stappen, en een praktische tip.
+${(data && data.partners && data.partners.length > 0)
+  ? '\nTRAININGSPARTNERS:\n' + data.partners.map(p => `- ${p.naam}${p.sport ? ' (' + p.sport + ')' : ''}${p.context ? ': ' + p.context : ''}`).join('\n') + '\nVerwijst de gebruiker naar een partner, benoem dan context en geef passend advies.'
+  : ''}`;
 }
 
 const WEEK_TEMPLATE = [
@@ -1854,7 +2002,8 @@ function defaultData() {
       { id: 'r11', type: 'snack', naam: 'Yoghurt met lijnzaad', vezels: '~3g', tijd: '2 min', ingredienten: '150g yoghurt, 1 el lijnzaad, optioneel: honing.', bereiding: 'Lijnzaad over yoghurt, eventueel honing.' }
     ],
     stats: { byMonth: {} },
-    savedTips: []
+    savedTips: [],
+    partners: []
   };
 }
 
@@ -1935,6 +2084,7 @@ function loadLocal() {
       data = JSON.parse(raw);
       ensureRecepten();
       ensureStats();
+      if (!data.partners) data.partners = [];
       return true;
     }
   } catch(e) {}
@@ -2234,6 +2384,7 @@ function renderVandaag() {
   document.getElementById('today-date-h1').textContent = `${d.getDate()} ${maanden[d.getMonth()]} ${d.getFullYear()}`;
 
   updateStreak();
+  renderDailyCoachCard();
   renderCheckIn(todayStr);
   renderWaterTracker();
   renderTodayActivities(todayStr);
@@ -2878,7 +3029,7 @@ function renderRecepten() {
           ${[1,2,3].map(n => `<button class="gen-count-btn${genCount===n?' active':''}" onclick="setGenCount(${n})" style="min-width:44px;min-height:44px;">${n}</button>`).join('')}
         </div>
         <label style="display:flex;align-items:center;gap:8px;font-size:14px;cursor:pointer;">
-          <input type="checkbox" id="gen-vega" style="width:20px;height:20px;accent-color:var(--accent-food);"> Vegetarisch
+          <input type="checkbox" id="gen-vega" style="width:20px;height:20px;accent-color:var(--accent-food);"> Geen vlees (vis mag)
         </label>
       </div>
       <div class="form-group">
@@ -3061,24 +3212,58 @@ async function generateRecepten() {
   }
   const focusEl = document.getElementById('gen-focus');
   const focus = focusEl ? focusEl.value.trim() : '';
+  const isVega = !!(document.getElementById('gen-vega') && document.getElementById('gen-vega').checked);
   const btn = document.getElementById('gen-btn');
   if (btn) { btn.disabled = true; btn.textContent = 'Bezig…'; }
 
-  const isVega = document.getElementById('gen-vega') && document.getElementById('gen-vega').checked;
+  // Valideer culinaire combinatie als de gebruiker meerdere ingrediënten heeft ingevoerd
+  if (focus && focus.split(/[,\s+&en]+/).filter(w => w.length > 2).length >= 3) {
+    if (btn) { btn.textContent = 'Combinatie checken…'; }
+    try {
+      const checkPrompt = `Beoordeel deze culinaire combinatie: "${focus}"
+Is dit een logische combinatie die culinair bij elkaar past? Antwoord ALLEEN met dit JSON-object:
+{"ok": true/false, "probleem": "welk ingrediënt past niet (of leeg als ok)", "suggestie": "kort alternatief (of leeg als ok)"}`;
+      const checkRaw = await callAI(checkPrompt, 120);
+      const check = safeParseJSON(checkRaw);
+      if (check && check.ok === false && check.probleem) {
+        if (btn) { btn.disabled = false; btn.textContent = 'Genereer recepten'; }
+        showModal(`
+          <div class="modal-header"><h2>Combinatie klopt niet helemaal</h2><button class="modal-close" onclick="closeModal()">✕</button></div>
+          <p style="font-size:15px;margin:12px 0;">⚠️ <strong>${check.probleem}</strong> past niet bij de rest.</p>
+          ${check.suggestie ? `<p style="font-size:14px;color:var(--muted);margin-bottom:16px;">${check.suggestie}</p>` : ''}
+          <div style="display:flex;gap:8px;">
+            <button class="btn btn-ghost" style="flex:1;" onclick="closeModal()">Aanpassen</button>
+            <button class="btn btn-primary" style="flex:1;" onclick="closeModal();_forceGenerate()">Toch genereren</button>
+          </div>
+        `);
+        window._forceGenerate = () => _doGenerateRecepten(focus, isVega);
+        return;
+      }
+    } catch(_) { /* validatie mislukt, gewoon doorgaan */ }
+  }
+  await _doGenerateRecepten(focus, isVega);
+}
+
+async function _doGenerateRecepten(focus, isVegaArg) {
+  const btn = document.getElementById('gen-btn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Bezig…'; }
+  const isVega = isVegaArg !== undefined ? isVegaArg : !!(document.getElementById('gen-vega') && document.getElementById('gen-vega').checked);
   const focusTxt = focus ? ` Focus op: ${focus}.` : '';
-  const eetwijze = isVega ? 'volledig vegetarisch' : 'vegetarisch of met vis (geen vlees)';
+  const vleesRegel = isVega
+    ? 'GEEN VLEES. Vis en zeevruchten zijn WEL toegestaan.'
+    : 'Vlees is toegestaan maar geef voorkeur aan vegetarische opties of vis.';
   const bestaandeNamen = (data.recepten || []).map(r => r.naam).join(', ');
   const vermijdDubbel = bestaandeNamen ? `\nVermijd recepten die lijken op: ${bestaandeNamen}.` : '';
 
-  const prompt = `Genereer ${genCount} vezelrijke Nederlandse recepten. Reageer UITSLUITEND met een JSON-array, geen tekst ervoor of erna.${focusTxt}
+  const prompt = `Genereer precies ${genCount} vezelrijke Nederlandse recepten. Reageer UITSLUITEND met een JSON-array van precies ${genCount} objecten, geen tekst ervoor of erna.${focusTxt}
 
 Strikte regels:
-- ${eetwijze}
+- ${vleesRegel}
 - Minimaal 8g vezels per portie
 - Max 35 minuten bereidingstijd
-- Logische, coherente gerechten — combineer ingrediënten zoals een kok zou doen
-- Varieer in eiwitbronnen: linzen, kikkererwten, tofu, eieren, kaas, vis, tempeh, quinoa, edamame
-- Gebruik niet altijd witte bonen — varieer
+- LOGISCHE COHERENTE GERECHTEN: ingrediënten moeten culinair bij elkaar passen zoals een kok zou combineren
+- Varieer in eiwitbronnen: linzen, kikkererwten, tofu, eieren, kaas, zalm, tempeh, quinoa, edamame, tonijn
+- Niet altijd bonen — varieer
 - Eenvoudige Nederlandse supermarktingrediënten
 - Concrete bereidingsstappen${vermijdDubbel}
 
@@ -3086,11 +3271,12 @@ JSON-formaat (exact):
 [{"naam":"...","vezels":"~Xg","eiwitten":"~Xg","tijd":"X min","ingredienten":["hoeveelheid ingredient","..."],"bereiding":["Stap 1...","Stap 2..."]}]`;
 
   try {
-    const raw = await callAI(prompt, Math.min(genCount * 450, 2000));
+    const raw = await callAI(prompt, Math.min(genCount * 850, 3500));
     const match = raw.match(/\[[\s\S]*\]/);
     if (!match) throw new Error('Kon geen recepten uit het antwoord halen. Probeer opnieuw.');
     const parsed = JSON.parse(match[0]);
     if (!Array.isArray(parsed) || parsed.length === 0) throw new Error('Geen recepten ontvangen.');
+    window._generatedRecepten = [];
     showGeneratedPreview(parsed);
   } catch(e) {
     showBanner('red', e.message || 'Genereren mislukt. Probeer opnieuw.');
@@ -3100,6 +3286,12 @@ JSON-formaat (exact):
 }
 
 function recipeCardHTML(r) {
+  const weekKey = currentWeekKey();
+  const dates = getWeekDates(weekKey);
+  const dagOpties = dates.map((d, i) => {
+    const labels = ['Ma','Di','Wo','Do','Vr','Za','Zo'];
+    return `<option value="${d}">${labels[i]}</option>`;
+  }).join('');
   return `<div class="gen-recipe-card" id="gencard-${r._tmpId}">
     <label style="display:flex;align-items:flex-start;gap:12px;cursor:pointer;">
       <input type="checkbox" id="chk-${r._tmpId}" checked style="margin-top:3px;width:20px;height:20px;accent-color:var(--accent-move);flex-shrink:0;">
@@ -3115,7 +3307,45 @@ function recipeCardHTML(r) {
         </div>
       </div>
     </label>
+    <div style="display:flex;gap:6px;margin-top:8px;padding-top:8px;border-top:1px solid var(--border);">
+      <select id="plan-dag-${r._tmpId}" style="flex:1;padding:7px;border-radius:8px;border:1.5px solid var(--border);background:var(--card);color:var(--text);font-size:13px;">${dagOpties}</select>
+      <select id="plan-slot-${r._tmpId}" style="flex:0 0 auto;padding:7px;border-radius:8px;border:1.5px solid var(--border);background:var(--card);color:var(--text);font-size:13px;">
+        <option value="ontbijt">Ontbijt</option>
+        <option value="lunch">Lunch</option>
+        <option value="diner" selected>Diner</option>
+        <option value="snack">Snack</option>
+      </select>
+      <button onclick="planGenRecipe('${r._tmpId}')" style="padding:7px 12px;border-radius:8px;background:var(--accent-food);color:#fff;border:none;font-size:13px;font-weight:600;cursor:pointer;">Plan</button>
+    </div>
   </div>`;
+}
+
+function planGenRecipe(tmpId) {
+  const recept = (window._generatedRecepten || []).find(r => r._tmpId === tmpId);
+  if (!recept) return;
+  const dateStr = document.getElementById('plan-dag-' + tmpId).value;
+  const slot = document.getElementById('plan-slot-' + tmpId).value;
+  const weekKey = getISOWeek(new Date(dateStr + 'T12:00:00'));
+  ensureDay(dateStr);
+  // Sla recept op als het nog niet bestaat
+  if (!data.recepten) data.recepten = [];
+  let saved = data.recepten.find(r => r.naam === recept.naam);
+  if (!saved) {
+    saved = { ...recept, id: 'r' + Date.now(), type: slot };
+    delete saved._tmpId;
+    data.recepten.push(saved);
+  }
+  data.weken[weekKey][dateStr].maaltijden[slot] = {
+    naam: saved.naam, vezels: saved.vezels || '', eiwitten: saved.eiwitten || '', receptId: saved.id
+  };
+  // Vink het recept aan in de preview
+  const chk = document.getElementById('chk-' + tmpId);
+  if (chk) chk.checked = true;
+  saveAndSync();
+  const dagNamen = ['Ma','Di','Wo','Do','Vr','Za','Zo'];
+  const dates = getWeekDates(weekKey);
+  const dagLabel = dagNamen[dates.indexOf(dateStr)] || dateStr;
+  showBanner('green', `${saved.naam} gepland op ${dagLabel} — ${slot}`);
 }
 
 function showGeneratedPreview(recepten) {
@@ -3150,8 +3380,8 @@ async function generateMeer() {
   const btn = document.getElementById('gen-meer-btn');
   if (btn) { btn.disabled = true; btn.textContent = 'Bezig…'; }
 
-  const isVega = document.getElementById('gen-vega') && document.getElementById('gen-vega').checked;
-  const eetwijze = isVega ? 'volledig vegetarisch' : 'vegetarisch of met vis (geen vlees)';
+  const isVega = !!(document.getElementById('gen-vega') && document.getElementById('gen-vega').checked);
+  const vleesRegel = isVega ? 'GEEN VLEES, vis mag wel.' : 'Vlees mag maar geef voorkeur aan vegetarisch of vis.';
   const bestaandeNamen = [
     ...(data.recepten || []).map(r => r.naam),
     ...(window._generatedRecepten || []).map(r => r.naam)
@@ -3160,13 +3390,13 @@ async function generateMeer() {
   const focus = focusEl ? focusEl.value.trim() : '';
   const focusTxt = focus ? ` Focus op: ${focus}.` : '';
 
-  const prompt = `Genereer ${genCount} vezelrijke Nederlandse recepten. Reageer UITSLUITEND met een JSON-array.${focusTxt}
-Strikte regels: ${eetwijze}, minimaal 8g vezels, max 35 min, logische coherente gerechten, varieer eiwitbronnen.
+  const prompt = `Genereer precies ${genCount} vezelrijke Nederlandse recepten. Reageer UITSLUITEND met een JSON-array van precies ${genCount} objecten.${focusTxt}
+Regels: ${vleesRegel} Minimaal 8g vezels, max 35 min, LOGISCH COHERENTE gerechten, varieer eiwitbronnen.
 Vermijd recepten die lijken op: ${bestaandeNamen}.
 JSON: [{"naam":"...","vezels":"~Xg","eiwitten":"~Xg","tijd":"X min","ingredienten":["..."],"bereiding":["..."]}]`;
 
   try {
-    const raw = await callAI(prompt, Math.min(genCount * 450, 2000));
+    const raw = await callAI(prompt, Math.min(genCount * 850, 3500));
     const match = raw.match(/\[[\s\S]*\]/);
     if (!match) throw new Error('Geen recepten ontvangen.');
     const parsed = JSON.parse(match[0]);
@@ -3495,6 +3725,7 @@ function renderCoach() {
   renderChatHistory();
   renderStats();
   renderSavedTips();
+  renderPartners();
   const btn = document.getElementById('tts-toggle');
   if (btn) {
     btn.classList.toggle('active', _ttsEnabled);
@@ -4144,9 +4375,9 @@ function renderWaterTracker() {
   if (!container) return;
 
   container.innerHTML = Array.from({length: 8}, (_, i) =>
-    `<button class="water-glass ${i < count ? 'filled' : ''}" onclick="setWater(${i + 1})" aria-label="Glas ${i+1}"></button>`
+    `<div class="water-seg ${i < count ? 'filled' : ''}" onclick="setWater(${i + 1})" role="button" aria-label="Glas ${i+1}"></div>`
   ).join('');
-  if (label) label.textContent = `${count} / 8 glazen`;
+  if (label) label.textContent = `${count} / 8`;
 }
 
 function setWater(n) {
@@ -4664,6 +4895,762 @@ function continueInit() {
   document.getElementById('app').style.display = 'flex';
   document.getElementById('app').style.flexDirection = 'column';
   initApp();
+}
+
+/* ══════════════════════════════════════════════════════════════
+   VOEDING VOICE INTAKE — heb gegeten / ga eten
+   ══════════════════════════════════════════════════════════════ */
+async function startVoedingIntake(dateStr, defaultSlot, source) {
+  const btnId = source === 'food' ? 'voeding-voice-btn-food' : 'voeding-voice-btn-vandaag';
+  const btn = document.getElementById(btnId);
+  const targetDate = dateStr || today();
+
+  if (!navigator.mediaDevices || !window.SpeechRecognition && !window.webkitSpeechRecognition) {
+    showBanner('red', 'Spraakopname niet ondersteund in deze browser.');
+    return;
+  }
+
+  if (window._voedingRecording) {
+    window._voedingRecording.stop();
+    return;
+  }
+
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new SpeechRec();
+    recognition.lang = 'nl-NL';
+    recognition.continuous = false;
+    recognition.interimResults = false;
+
+    if (btn) { btn.classList.add('recording'); btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="6" width="12" height="12" rx="2"/></svg> Luisteren… (tik om te stoppen)`; }
+    window._voedingRecording = recognition;
+
+    let transcript = '';
+
+    recognition.onresult = (e) => {
+      for (let i = e.resultIndex; i < e.results.length; i++) {
+        if (e.results[i].isFinal) transcript += e.results[i][0].transcript + ' ';
+      }
+    };
+
+    const resetBtn = () => {
+      stream.getTracks().forEach(t => t.stop());
+      window._voedingRecording = null;
+      if (btn) {
+        btn.classList.remove('recording');
+        btn.innerHTML = source === 'food'
+          ? `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg> Spreek maaltijd in — heb gegeten / ga eten`
+          : `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg> Ik heb gegeten…`;
+      }
+    };
+
+    recognition.onerror = () => {
+      resetBtn();
+      showBanner('red', 'Spraakopname mislukt.');
+    };
+
+    recognition.onend = async () => {
+      resetBtn();
+      const t = transcript.trim();
+      if (t.length < 3) { showBanner('red', 'Geen spraak herkend. Probeer opnieuw.'); return; }
+      await parseVoeding(t, targetDate, defaultSlot, source);
+    };
+
+    recognition.start();
+
+  } catch(e) {
+    showBanner('red', 'Microfoon toegang geweigerd.');
+  }
+}
+
+async function parseVoeding(transcript, dateStr, defaultSlot, source) {
+  showBanner('blue', 'Maaltijd verwerken…');
+
+  // Determine current time-of-day slot as hint
+  const uur = new Date().getHours();
+  const tijdSlot = uur < 10 ? 'ontbijt' : uur < 14 ? 'lunch' : uur < 17 ? 'snack' : 'diner';
+
+  const prompt = `De gebruiker heeft ingesproken wat hij/zij heeft gegeten of gaat eten.
+Transcript: "${transcript}"
+
+Huidig tijdslot (op basis van hoe laat het is): ${tijdSlot}
+Mogelijke slots: ontbijt, lunch, diner, snack
+
+Bepaal:
+1. Wat heeft de gebruiker gegeten/wil eten (naam van het gerecht of product)
+2. Het juiste slot: kijk naar timing-woorden zoals "vanavond/straks/diner" → diner, "vanmiddag/lunch" → lunch, "ontbijt/ochtend" → ontbijt, "tussendoor/snack" → snack. Als geen timing → gebruik huidig tijdslot.
+3. Wanneer: "al gegeten" of "ga nog eten"
+4. Schat de voedingswaarden (1 portie, normaal huishoudengrootte):
+
+Geef ALLEEN dit JSON terug:
+{"naam":"...", "slot":"ontbijt|lunch|diner|snack", "wanneer":"gegeten|gaat eten", "vezels":"~Xg", "eiwitten":"~Xg", "kcal":"~Xkcal"}
+
+Regels: naam in het Nederlands, vezels en eiwitten in gram met ~-prefix, kcal met ~-prefix en kcal-suffix.`;
+
+  try {
+    const raw = await callAI(prompt, 180);
+    const parsed = safeParseJSON(raw);
+    if (!parsed || !parsed.naam) { showBanner('red', 'Kon maaltijd niet herkennen. Probeer opnieuw.'); return; }
+    showVoedingPreview(parsed, dateStr, source);
+  } catch(e) {
+    showBanner('red', 'Fout bij verwerken maaltijd.');
+  }
+}
+
+function showVoedingPreview(parsed, dateStr, source) {
+  const slotLabel = { ontbijt: 'Ontbijt', lunch: 'Lunch', diner: 'Diner', snack: 'Snack' };
+  const wanneerLabel = parsed.wanneer === 'gegeten' ? 'Net gegeten' : 'Ga eten';
+  const wanneerKleur = parsed.wanneer === 'gegeten' ? 'var(--accent-food)' : '#7c3aed';
+
+  // Offer Open Food Facts lookup button
+  const offBtn = `<button class="btn btn-ghost" style="font-size:12px;padding:6px 12px;margin-top:4px;" onclick="lookupAndUpdateVoedingPreview('${parsed.naam.replace(/'/g,"\\'")}')">🔍 Exacte voedingswaarden zoeken</button>`;
+
+  showModal(`
+    <h3 style="margin-bottom:14px;">Maaltijd herkenning</h3>
+    <div class="voeding-preview">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+        <span style="font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:${wanneerKleur};">${wanneerLabel}</span>
+      </div>
+      <div class="voeding-preview-naam" id="vp-naam">${parsed.naam}</div>
+      <div class="voeding-preview-meta">
+        <span class="voeding-preview-pill" style="color:var(--accent-food);">🌿 ${parsed.vezels || '?'}</span>
+        <span class="voeding-preview-pill" style="color:#7c3aed;">💪 ${parsed.eiwitten || '?'}</span>
+        <span class="voeding-preview-pill" style="color:var(--muted);">🔥 ${parsed.kcal || '?'}</span>
+      </div>
+      ${offBtn}
+    </div>
+    <div class="voeding-preview-slot" style="margin-top:14px;">
+      <label class="modal-label">Maaltijdmoment</label>
+      <select id="vp-slot" class="modal-input">
+        ${['ontbijt','lunch','diner','snack'].map(s =>
+          `<option value="${s}"${s === parsed.slot ? ' selected' : ''}>${slotLabel[s]}</option>`
+        ).join('')}
+      </select>
+    </div>
+    <div style="margin-bottom:12px;">
+      <label class="modal-label">Datum</label>
+      <input type="date" id="vp-datum" class="modal-input" value="${dateStr}">
+    </div>
+    <div style="display:flex;gap:8px;margin-top:4px;">
+      <button class="btn btn-ghost" style="flex:1;" onclick="closeModal()">Annuleren</button>
+      <button class="btn btn-primary" style="flex:1;background:var(--accent-food);border-color:var(--accent-food);"
+        onclick="saveVoedingIntake(
+          document.getElementById('vp-datum').value,
+          document.getElementById('vp-slot').value,
+          '${parsed.naam.replace(/'/g,"\\'")}',
+          '${(parsed.vezels || '').replace(/'/g,"\\'")}',
+          '${(parsed.eiwitten || '').replace(/'/g,"\\'")}',
+          '${(parsed.kcal || '').replace(/'/g,"\\'")}',
+          '${source}'
+        )">Opslaan</button>
+    </div>
+  `);
+
+  // Store parsed data for lookup update
+  window._vpParsed = parsed;
+  window._vpDateStr = dateStr;
+  window._vpSource = source;
+}
+
+async function lookupAndUpdateVoedingPreview(naam) {
+  const el = document.querySelector('.voeding-preview');
+  if (!el) return;
+  const lookupBtn = el.querySelector('button');
+  if (lookupBtn) { lookupBtn.textContent = 'Zoeken…'; lookupBtn.disabled = true; }
+
+  try {
+    const result = await lookupFoodFacts(naam);
+    if (!result) { if (lookupBtn) { lookupBtn.textContent = 'Niet gevonden'; } return; }
+
+    // Update preview pills
+    const pills = el.querySelectorAll('.voeding-preview-pill');
+    if (result.fiber_100g !== null) {
+      const vezels = '~' + Math.round(result.fiber_100g * 2.5) + 'g'; // assume ~250g portion
+      if (pills[0]) pills[0].textContent = '🌿 ' + vezels;
+      if (window._vpParsed) window._vpParsed.vezels = vezels;
+    }
+    if (result.proteins_100g !== null) {
+      const eiwitten = '~' + Math.round(result.proteins_100g * 2.5) + 'g';
+      if (pills[1]) pills[1].textContent = '💪 ' + eiwitten;
+      if (window._vpParsed) window._vpParsed.eiwitten = eiwitten;
+    }
+    if (result.kcal_100g !== null) {
+      const kcal = '~' + Math.round(result.kcal_100g * 2.5) + 'kcal';
+      if (pills[2]) pills[2].textContent = '🔥 ' + kcal;
+      if (window._vpParsed) window._vpParsed.kcal = kcal;
+    }
+    if (lookupBtn) { lookupBtn.textContent = '✓ Gevonden: ' + (result.name || naam); lookupBtn.disabled = true; }
+  } catch(e) {
+    if (lookupBtn) { lookupBtn.textContent = 'Niet gevonden'; lookupBtn.disabled = false; }
+  }
+}
+
+function saveVoedingIntake(dateStr, slot, naam, vezels, eiwitten, kcal, source) {
+  // Use latest values from preview if lookup was done
+  if (window._vpParsed) {
+    vezels = window._vpParsed.vezels || vezels;
+    eiwitten = window._vpParsed.eiwitten || eiwitten;
+    kcal = window._vpParsed.kcal || kcal;
+  }
+
+  const weekKey = getISOWeek(new Date(dateStr + 'T12:00:00'));
+  ensureDay(dateStr);
+  if (!data.weken[weekKey][dateStr].maaltijden) data.weken[weekKey][dateStr].maaltijden = {};
+  data.weken[weekKey][dateStr].maaltijden[slot] = { naam, vezels, eiwitten, kcal };
+  saveAndSync();
+  closeModal();
+  window._vpParsed = null;
+
+  showBanner('green', `${naam} opgeslagen als ${slot}`);
+
+  // Refresh whichever tab is active
+  if (source === 'vandaag' || dateStr === today()) renderTodayMeals(today());
+  if (source === 'food' || document.getElementById('tab-recepten')?.classList.contains('active')) renderFoodTab();
+}
+
+/* ══════════════════════════════════════════════════════════════
+   DAGELIJKSE COACH-KAART
+   ══════════════════════════════════════════════════════════════ */
+function renderDailyCoachCard() {
+  const card = document.getElementById('daily-coach-card');
+  if (!card) return;
+
+  const todayStr = today();
+
+  // Don't show if already answered/skipped today
+  const skipped = localStorage.getItem('coachCardSkip');
+  const answered = localStorage.getItem('coachCardAnswered');
+  if (skipped === todayStr || answered === todayStr) { card.style.display = 'none'; return; }
+
+  const weekKey = getISOWeek(new Date(todayStr + 'T12:00:00'));
+  ensureWeek(weekKey);
+  const dayData = (data.weken[weekKey] || {})[todayStr] || {};
+
+  // Priority: check-in → sport done? → diner → water
+  let question = null;
+  if (!dayData.checkIn) {
+    question = {
+      type: 'checkin',
+      text: 'Hoe voel je je vandaag? Goed, matig of zwaar?',
+      answers: [
+        { label: 'Goed 😊', value: 'goed' },
+        { label: 'Matig 😐', value: 'matig' },
+        { label: 'Zwaar 😔', value: 'zwaar' }
+      ]
+    };
+  } else {
+    const acts = dayData.activiteiten || [];
+    const plannedAct = acts.find(a => !a.gedaan);
+    if (plannedAct) {
+      question = {
+        type: 'sport',
+        text: `Heb je je ${plannedAct.naam || 'training'} vandaag gedaan?`,
+        answers: [
+          { label: 'Ja, gedaan ✓', value: 'ja' },
+          { label: 'Nee, overgeslagen', value: 'nee' }
+        ],
+        actId: plannedAct.id
+      };
+    } else {
+      const maaltijden = dayData.maaltijden || {};
+      if (!maaltijden.diner) {
+        question = {
+          type: 'diner',
+          text: 'Wat eet je vanavond? Heb je al een diner gepland?',
+          answers: [
+            { label: 'Vertel wat', value: 'input' }
+          ]
+        };
+      } else {
+        const water = dayData.waterGlazen || 0;
+        if (water < 4) {
+          question = {
+            type: 'water',
+            text: `Je hebt vandaag ${water} van je 8 glazen water gedronken. Hoe gaat het?`,
+            answers: [
+              { label: 'Ik drink meer', value: 'meer' },
+              { label: 'Lastig vandaag', value: 'moeilijk' }
+            ]
+          };
+        }
+      }
+    }
+  }
+
+  if (!question) { card.style.display = 'none'; return; }
+  card.style.display = 'block';
+
+  const answersHTML = question.answers.map((a, i) =>
+    a.value === 'input'
+      ? `<div style="display:flex;gap:8px;width:100%;">
+           <input id="coach-input" type="text" class="modal-input" placeholder="Bijv. pasta met zalm…" style="flex:1;margin:0;">
+           <button class="coach-card-answer-btn" style="flex:0 0 auto;min-width:80px;"
+             onclick="answerDailyQuestion('${question.type}', document.getElementById('coach-input').value)">Stuur</button>
+         </div>`
+      : `<button class="coach-card-answer-btn${i > 0 ? ' secondary' : ''}"
+           onclick="answerDailyQuestion('${question.type}','${a.value}'${question.actId ? `,'${question.actId}'` : ''})">${a.label}</button>`
+  ).join('');
+
+  card.innerHTML = `
+    <div class="coach-card-header">
+      <div class="coach-card-avatar">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      </div>
+      <span class="coach-card-label">Coach — vraag van vandaag</span>
+    </div>
+    <div class="coach-card-q">${question.text}</div>
+    <div class="coach-card-actions">${answersHTML}</div>
+    <div class="coach-card-skip">
+      <button class="coach-card-skip-btn" onclick="skipDailyQuestion()">Sla over</button>
+    </div>
+    <div id="coach-card-response" class="coach-card-response" style="display:none;"></div>
+  `;
+}
+
+function skipDailyQuestion() {
+  localStorage.setItem('coachCardSkip', today());
+  const card = document.getElementById('daily-coach-card');
+  if (card) card.style.display = 'none';
+}
+
+async function answerDailyQuestion(type, value, actId) {
+  const todayStr = today();
+  const weekKey = getISOWeek(new Date(todayStr + 'T12:00:00'));
+  ensureDay(todayStr);
+
+  let prompt = '';
+
+  if (type === 'checkin') {
+    data.weken[weekKey][todayStr].checkIn = value;
+    saveAndSync();
+    const map = { goed: 'goed', matig: 'matig', zwaar: 'zwaar' };
+    const prompts = {
+      goed:  'Gebruiker voelt zich goed. Enthousiaste motiverende reactie (max 1 zin).',
+      matig: 'Gebruiker voelt zich matig. Begripvolle maar motiverende reactie (max 1 zin).',
+      zwaar: 'Gebruiker voelt zich zwaar. Begripvolle reactie met rustig voorstel (max 1 zin).'
+    };
+    prompt = prompts[value] || prompts.matig;
+    document.getElementById('checkin-card').style.display = 'none';
+  } else if (type === 'sport') {
+    if (actId && value === 'ja') {
+      const acts = data.weken[weekKey][todayStr].activiteiten || [];
+      const a = acts.find(x => x.id === actId);
+      if (a) { a.gedaan = true; saveAndSync(); renderTodayActivities(todayStr); }
+    }
+    prompt = value === 'ja'
+      ? 'Gebruiker heeft zijn training gedaan. Korte compliment (max 1 zin).'
+      : 'Gebruiker heeft training overgeslagen. Begripvol + motiveer voor morgen (max 1 zin).';
+  } else if (type === 'diner') {
+    if (value && value.length > 1) {
+      ensureDay(todayStr);
+      if (!data.weken[weekKey][todayStr].maaltijden) data.weken[weekKey][todayStr].maaltijden = {};
+      data.weken[weekKey][todayStr].maaltijden.diner = { naam: value };
+      saveAndSync(); renderTodayMeals(todayStr);
+      prompt = `Gebruiker eet vanavond: "${value}". Kort positief commentaar over de maaltijdkeuze (max 1 zin).`;
+    } else { skipDailyQuestion(); return; }
+  } else if (type === 'water') {
+    prompt = value === 'meer'
+      ? 'Gebruiker gaat meer water drinken. Kort aanmoedigend (max 1 zin).'
+      : 'Gebruiker vindt het lastig genoeg water te drinken. Praktische tip (max 1 zin).';
+  }
+
+  localStorage.setItem('coachCardAnswered', todayStr);
+
+  // Disable all buttons, show typing
+  const card = document.getElementById('daily-coach-card');
+  card.querySelectorAll('button').forEach(b => b.disabled = true);
+  const respEl = document.getElementById('coach-card-response');
+  respEl.style.display = 'block';
+  respEl.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
+
+  try {
+    const reply = await callAI(prompt, 120);
+    respEl.textContent = reply;
+    card.querySelector('.coach-card-skip').style.display = 'none';
+    // Auto-dismiss after 5s
+    setTimeout(() => { if (card) card.style.display = 'none'; }, 6000);
+  } catch(e) {
+    respEl.textContent = 'Bedankt voor je antwoord!';
+    setTimeout(() => { if (card) card.style.display = 'none'; }, 3000);
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   WEEK INTAKE — spreek je weekplan in één keer in
+   ══════════════════════════════════════════════════════════════ */
+async function startWeekIntake() {
+  const btn = document.querySelector('.week-intake-btn');
+  if (!btn) return;
+
+  // Already recording → stop
+  if (window._weekIntakeRecording) {
+    window._weekIntakeRecording.stop();
+    return;
+  }
+
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    showBanner('red', 'Spraakopname wordt niet ondersteund in deze browser.');
+    return;
+  }
+
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognition.lang = 'nl-NL';
+    recognition.continuous = true;
+    recognition.interimResults = false;
+
+    let transcript = '';
+    btn.classList.add('recording');
+    btn.innerHTML = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="6" width="12" height="12" rx="2"/></svg> Opname stoppen…`;
+
+    window._weekIntakeRecording = recognition;
+
+    recognition.onresult = (e) => {
+      for (let i = e.resultIndex; i < e.results.length; i++) {
+        if (e.results[i].isFinal) transcript += e.results[i][0].transcript + ' ';
+      }
+    };
+
+    recognition.onerror = () => {
+      stream.getTracks().forEach(t => t.stop());
+      window._weekIntakeRecording = null;
+      btn.classList.remove('recording');
+      btn.innerHTML = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg> Plan mijn week — spreek in`;
+      showBanner('red', 'Spraakopname mislukt. Probeer opnieuw.');
+    };
+
+    recognition.onend = async () => {
+      stream.getTracks().forEach(t => t.stop());
+      window._weekIntakeRecording = null;
+      btn.classList.remove('recording');
+      btn.innerHTML = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg> Plan mijn week — spreek in`;
+      const t = transcript.trim();
+      if (t.length < 5) { showBanner('red', 'Geen spraak herkend. Probeer opnieuw.'); return; }
+      await parseWeekPlan(t);
+    };
+
+    recognition.start();
+
+  } catch(e) {
+    showBanner('red', 'Microfoon toegang geweigerd.');
+  }
+}
+
+async function parseWeekPlan(transcript) {
+  showBanner('blue', 'Weekplan verwerken…');
+
+  const vandaag = new Date();
+  const maandag = new Date(vandaag);
+  const dag = vandaag.getDay();
+  const diffToMon = (dag === 0) ? -6 : 1 - dag;
+  maandag.setDate(vandaag.getDate() + diffToMon);
+
+  const dagDatums = [];
+  const dagNamen = ['maandag','dinsdag','woensdag','donderdag','vrijdag','zaterdag','zondag'];
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(maandag);
+    d.setDate(maandag.getDate() + i);
+    dagDatums.push({ dag: dagNamen[i], datum: d.toISOString().slice(0, 10) });
+  }
+
+  const datumLijst = dagDatums.map(d => `${d.dag}: ${d.datum}`).join(', ');
+
+  const prompt = `De gebruiker heeft zijn/haar weekplan voor sport ingesproken. Zet dit om naar een gestructureerde JSON-array.
+
+Week datums (gebruik deze exacte datums):
+${datumLijst}
+
+Transcript: "${transcript}"
+
+Activiteitstypen: run (hardlopen), gym, bike (fietsen), commute (fiets werk), rest (rust)
+
+Geef ALLEEN een geldige JSON-array terug, geen uitleg:
+[
+  {"datum":"YYYY-MM-DD","dag":"maandag","type":"gym","naam":"Gym","detail":"beschrijving of trainingspartner","duur":60},
+  ...
+]
+
+Regels:
+- Voeg alleen dagen toe waarover de gebruiker iets zegt
+- duur in minuten (schat als niet vermeld: gym=60, run=45, bike=60)
+- detail: evt partner of extra info, anders lege string ""
+- Dagen zonder activiteit NIET opnemen`;
+
+  try {
+    const raw = await callAI(prompt, 800);
+    const parsed = safeParseJSON(raw);
+    if (!Array.isArray(parsed) || parsed.length === 0) {
+      showBanner('red', 'Kon weekplan niet verwerken. Probeer duidelijker in te spreken.');
+      return;
+    }
+    showWeekIntakePreview(parsed, dagDatums);
+    extractPartners(transcript); // Blok 4: detect partner names in background
+  } catch(e) {
+    showBanner('red', 'Fout bij verwerken weekplan.');
+  }
+}
+
+function showWeekIntakePreview(parsed, dagDatums) {
+  const dagNamen = { maandag:'Ma', dinsdag:'Di', woensdag:'Wo', donderdag:'Do', vrijdag:'Vr', zaterdag:'Za', zondag:'Zo' };
+  const typeLabels = { run:'Hardlopen', gym:'Gym', bike:'Fietsen', commute:'Fiets werk', rest:'Rust' };
+
+  // Build a display per day
+  const rows = dagDatums.map(d => {
+    const acts = parsed.filter(a => a.datum === d.datum);
+    if (acts.length === 0) return `<div class="week-preview-row dimmed"><span>${dagNamen[d.dag] || d.dag} <small>${d.datum.slice(5)}</small></span><span style="color:var(--muted)">rust</span></div>`;
+    return acts.map(a => `
+      <div class="week-preview-row">
+        <span>${dagNamen[d.dag] || d.dag} <small>${d.datum.slice(5)}</small></span>
+        <span style="font-weight:600;">${typeLabels[a.type] || a.type}${a.detail ? ` <small style="color:var(--muted);font-weight:400;">— ${a.detail}</small>` : ''}</span>
+        <span style="color:var(--muted);font-size:13px;">${a.duur}min</span>
+      </div>`).join('');
+  }).join('');
+
+  showModal(`
+    <h3 style="margin-bottom:4px;">Weekplan — preview</h3>
+    <p style="color:var(--muted);font-size:13px;margin-bottom:16px;">Controleer je plan en bevestig.</p>
+    <style>
+      .week-preview-row { display:flex; align-items:center; gap:8px; padding:10px 0;
+        border-bottom:1px solid var(--border); font-size:15px; }
+      .week-preview-row.dimmed { opacity:.4; }
+      .week-preview-row small { font-size:12px; }
+      .week-preview-row:last-child { border-bottom:none; }
+    </style>
+    ${rows}
+    <div style="display:flex;gap:8px;margin-top:20px;">
+      <button class="btn btn-ghost" style="flex:1;" onclick="closeModal()">Aanpassen</button>
+      <button class="btn btn-primary" style="flex:1;" onclick="confirmWeekIntake(${JSON.stringify(parsed).replace(/"/g, '&quot;')})">Bevestigen</button>
+    </div>
+  `);
+}
+
+function confirmWeekIntake(plan) {
+  closeModal();
+  const typeLabels = { run:'Hardlopen', gym:'Gym', bike:'Fietsen', commute:'Fiets werk', rest:'Rust' };
+
+  plan.forEach(act => {
+    const dateStr = act.datum;
+    const weekKey = getISOWeek(new Date(dateStr + 'T12:00:00'));
+    ensureDay(dateStr);
+    if (!data.weken[weekKey][dateStr].activiteiten) data.weken[weekKey][dateStr].activiteiten = [];
+    data.weken[weekKey][dateStr].activiteiten.push({
+      id: Date.now() + Math.random(),
+      type: act.type || 'gym',
+      naam: typeLabels[act.type] || act.naam || 'Training',
+      detail: act.detail || '',
+      duur: act.duur || 60,
+      gedaan: false
+    });
+  });
+
+  saveAndSync();
+  renderWeek();
+  showBanner('green', `${plan.length} activiteiten ingepland!`);
+
+  // Blok 3: offer diner suggestions
+  setTimeout(() => showDinerDagPicker(plan), 600);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   BLOK 3 — DINER-SUGGESTIE FLOW
+   ══════════════════════════════════════════════════════════════ */
+function showDinerDagPicker(plan) {
+  const dagNamenLang = { maandag:'Maandag', dinsdag:'Dinsdag', woensdag:'Woensdag',
+    donderdag:'Donderdag', vrijdag:'Vrijdag', zaterdag:'Zaterdag', zondag:'Zondag' };
+
+  // Show only days that have a non-rest activity
+  const sportDagen = plan.filter(a => a.type !== 'rest');
+  if (sportDagen.length === 0) return;
+
+  const checks = sportDagen.map(a => `
+    <label class="diner-dag-check">
+      <input type="checkbox" name="dindag" value="${a.datum}" checked>
+      <span class="diner-dag-label">
+        <strong>${dagNamenLang[a.dag] || a.dag}</strong>
+        <small>${a.datum.slice(5)} · ${a.naam}</small>
+      </span>
+    </label>`).join('');
+
+  showModal(`
+    <h3 style="margin-bottom:6px;">Diners genereren?</h3>
+    <p style="color:var(--muted);font-size:13px;margin-bottom:16px;">
+      Voor welke spordagen wil je een diner laten genereren?
+    </p>
+    <style>
+      .diner-dag-check { display:flex; align-items:center; gap:10px; padding:10px 0;
+        border-bottom:1px solid var(--border); cursor:pointer; font-size:15px; }
+      .diner-dag-check:last-child { border-bottom:none; }
+      .diner-dag-check input { width:20px; height:20px; accent-color:var(--accent-food); flex-shrink:0; }
+      .diner-dag-label { display:flex; flex-direction:column; gap:1px; }
+      .diner-dag-label small { color:var(--muted); font-size:12px; }
+    </style>
+    ${checks}
+    <div style="display:flex;gap:8px;margin-top:20px;">
+      <button class="btn btn-ghost" style="flex:1;" onclick="closeModal()">Overslaan</button>
+      <button class="btn btn-primary" style="flex:1;background:var(--accent-food);border-color:var(--accent-food);"
+        onclick="genereerDiners()">Genereer diners</button>
+    </div>
+  `);
+}
+
+async function genereerDiners() {
+  const checkboxes = document.querySelectorAll('input[name="dindag"]:checked');
+  const geselecteerd = Array.from(checkboxes).map(c => c.value);
+  closeModal();
+
+  if (geselecteerd.length === 0) return;
+
+  showBanner('blue', `Diners genereren voor ${geselecteerd.length} dag${geselecteerd.length > 1 ? 'en' : ''}…`);
+
+  const dagNamen = ['zondag','maandag','dinsdag','woensdag','donderdag','vrijdag','zaterdag'];
+  const labels = geselecteerd.map(d => {
+    const dt = new Date(d + 'T12:00:00');
+    return dagNamen[dt.getDay()] + ' ' + d.slice(5);
+  }).join(', ');
+
+  const prompt = `Genereer voor deze ${geselecteerd.length} dag${geselecteerd.length > 1 ? 'en' : ''} een vezelrijk diner-idee (elk uniek, gevarieerd, makkelijk te koken):
+Dagen: ${labels}
+
+Geef ALLEEN dit JSON-array terug:
+[{"datum":"YYYY-MM-DD","naam":"Receptnaam","vezels":"~Xg","eiwitten":"~Xg"}]
+
+Regels: vezels ≥10g per portie, max 30 min bereidingstijd, gezond maar lekker.`;
+
+  try {
+    const raw = await callAI(prompt, Math.min(geselecteerd.length * 180, 900));
+    const dinners = safeParseJSON(raw);
+    if (!Array.isArray(dinners)) throw new Error('geen array');
+
+    dinners.forEach(din => {
+      const weekKey = getISOWeek(new Date(din.datum + 'T12:00:00'));
+      ensureDay(din.datum);
+      if (!data.weken[weekKey][din.datum].maaltijden) data.weken[weekKey][din.datum].maaltijden = {};
+      data.weken[weekKey][din.datum].maaltijden.diner = {
+        naam: din.naam,
+        vezels: din.vezels || '',
+        eiwitten: din.eiwitten || ''
+      };
+    });
+
+    saveAndSync();
+    showBanner('green', `${dinners.length} diners gepland in je weekmenu!`);
+    if (document.getElementById('tab-recepten') && document.getElementById('tab-recepten').classList.contains('active')) {
+      renderFoodTab();
+    }
+  } catch(e) {
+    showBanner('red', 'Kon diners niet genereren. Probeer opnieuw.');
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   BLOK 4 — PARTNER-GEHEUGEN
+   ══════════════════════════════════════════════════════════════ */
+async function extractPartners(transcript) {
+  if (!transcript || transcript.length < 10) return;
+  if (!data.partners) data.partners = [];
+
+  const prompt = `Analyseer dit weekplan-transcript en haal trainingspartners eruit.
+Transcript: "${transcript}"
+
+Zoek naar namen zoals "met Edwin", "samen met Sara", "loop ik met Pieter".
+Als je geen namen vindt, geef een lege array terug.
+
+Geef ALLEEN dit JSON terug (of [] als geen namen gevonden):
+[{"naam":"Naam","sport":"run/gym/bike","context":"korte omschrijving"}]`;
+
+  try {
+    const raw = await callAI(prompt, 200);
+    const gevonden = safeParseJSON(raw);
+    if (!Array.isArray(gevonden) || gevonden.length === 0) return;
+
+    gevonden.forEach(p => {
+      if (!p.naam) return;
+      const bestaand = data.partners.find(x => x.naam.toLowerCase() === p.naam.toLowerCase());
+      if (bestaand) {
+        // Update context
+        if (p.context) bestaand.context = p.context;
+        if (p.sport) bestaand.sport = p.sport;
+      } else {
+        data.partners.push({ naam: p.naam, sport: p.sport || '', context: p.context || '' });
+      }
+    });
+    saveAndSync();
+    renderPartners();
+  } catch(_) {}
+}
+
+function renderPartners() {
+  const el = document.getElementById('partners-list');
+  if (!el) return;
+
+  const partners = data.partners || [];
+  if (partners.length === 0) {
+    el.innerHTML = '<p style="color:var(--muted);font-size:14px;">Nog geen trainingspartners herkend. Spreek je weekplan in en vermeld namen.</p>';
+    return;
+  }
+
+  const sportIcoon = { run:'🏃', gym:'💪', bike:'🚴', commute:'🚴' };
+  el.innerHTML = partners.map((p, i) => `
+    <div class="partner-row">
+      <div class="partner-info">
+        <span class="partner-sport">${sportIcoon[p.sport] || '🏅'}</span>
+        <div>
+          <strong>${p.naam}</strong>
+          ${p.context ? `<div style="font-size:13px;color:var(--muted);">${p.context}</div>` : ''}
+        </div>
+      </div>
+      <button class="partner-del-btn" onclick="deletePartner(${i})" aria-label="Verwijder">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+      </button>
+    </div>`).join('');
+}
+
+function deletePartner(idx) {
+  if (!data.partners) return;
+  data.partners.splice(idx, 1);
+  saveAndSync();
+  renderPartners();
+}
+
+function showAddPartnerModal() {
+  showModal(`
+    <h3 style="margin-bottom:16px;">Partner toevoegen</h3>
+    <label class="modal-label">Naam</label>
+    <input id="p-naam" type="text" class="modal-input" placeholder="Bijv. Edwin">
+    <label class="modal-label" style="margin-top:12px;">Sport</label>
+    <select id="p-sport" class="modal-input">
+      <option value="run">Hardlopen</option>
+      <option value="bike">Fietsen</option>
+      <option value="gym">Gym</option>
+      <option value="">Anders</option>
+    </select>
+    <label class="modal-label" style="margin-top:12px;">Context (optioneel)</label>
+    <input id="p-context" type="text" class="modal-input" placeholder="Bijv. max 1x per week, weekend">
+    <div style="display:flex;gap:8px;margin-top:20px;">
+      <button class="btn btn-ghost" style="flex:1;" onclick="closeModal()">Annuleren</button>
+      <button class="btn btn-primary" style="flex:1;" onclick="saveNewPartner()">Opslaan</button>
+    </div>
+  `);
+}
+
+function saveNewPartner() {
+  const naam = (document.getElementById('p-naam')?.value || '').trim();
+  if (!naam) return;
+  const sport = document.getElementById('p-sport')?.value || '';
+  const context = (document.getElementById('p-context')?.value || '').trim();
+  if (!data.partners) data.partners = [];
+  const bestaand = data.partners.find(x => x.naam.toLowerCase() === naam.toLowerCase());
+  if (bestaand) {
+    if (sport) bestaand.sport = sport;
+    if (context) bestaand.context = context;
+  } else {
+    data.partners.push({ naam, sport, context });
+  }
+  saveAndSync();
+  closeModal();
+  renderPartners();
 }
 
 window.addEventListener('DOMContentLoaded', () => {
