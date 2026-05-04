@@ -549,6 +549,9 @@ label { display: block; font-size: 14px; font-weight: 600; color: var(--text-2);
   display: flex; flex-direction: column; gap: 12px;
   margin-bottom: 14px;
   min-height: 100px;
+  max-height: 340px;
+  overflow-y: auto;
+  scroll-behavior: smooth;
 }
 .chat-msg { display: flex; gap: 8px; }
 .chat-msg.user { flex-direction: row-reverse; }
@@ -958,6 +961,50 @@ label { display: block; font-size: 14px; font-weight: 600; color: var(--text-2);
 }
 @keyframes micPulse { 0%,100%{opacity:1} 50%{opacity:.35} }
 
+/* ─── FOOD TAB ─── */
+.food-filter-btn {
+  padding: 7px 14px; border-radius: 20px; border: 1.5px solid var(--border);
+  background: var(--card); color: var(--text); font-size: 14px; white-space: nowrap;
+  cursor: pointer;
+}
+.food-filter-btn.active { background: var(--accent-food); color: #fff; border-color: var(--accent-food); }
+.food-card { background: var(--card); border-radius: var(--radius); padding: 16px; margin-bottom: 10px; }
+.food-card-header { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.food-card-title { font-weight: 600; font-size: 15px; flex: 1; }
+.food-type-badge { font-size: 11px; padding: 3px 8px; border-radius: 12px; font-weight: 600; }
+.food-type-badge.ontbijt { background: #fef3c7; color: #92400e; }
+.food-type-badge.lunch { background: #d1fae5; color: #065f46; }
+.food-type-badge.diner { background: #e0e7ff; color: #3730a3; }
+.food-type-badge.snack { background: #ffe4e6; color: #9f1239; }
+.food-meta { display: flex; gap: 10px; margin: 6px 0; font-size: 13px; color: var(--muted); }
+.food-fiber { color: var(--accent-food); font-weight: 600; }
+.food-plan-row { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+.food-plan-btn { font-size: 12px; padding: 5px 10px; border-radius: 8px; border: 1.5px solid var(--border); background: var(--card2); cursor: pointer; }
+.food-plan-btn.planned { background: var(--accent-food); color: #fff; border-color: var(--accent-food); }
+.food-plan-btn:active { transform: scale(.93); }
+.food-week-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+.food-week-row:last-child { border-bottom: none; }
+.food-fiber-bar { height: 6px; border-radius: 3px; margin-top: 3px; background: #e5e7eb; overflow: hidden; }
+.food-fiber-fill { height: 100%; border-radius: 3px; transition: width .3s; }
+
+/* ─── WATER TRACKER ─── */
+.water-tracker { margin: 0 0 16px 0; }
+.water-tracker-label { font-size: 13px; color: var(--muted); margin-bottom: 8px; display: flex; justify-content: space-between; }
+.water-glasses { display: flex; gap: 6px; flex-wrap: wrap; }
+.water-glass {
+  width: 36px; height: 44px;
+  border-radius: 4px 4px 8px 8px;
+  border: 2px solid #93c5fd;
+  background: transparent;
+  cursor: pointer;
+  transition: background .2s;
+  display: flex; align-items: flex-end;
+  overflow: hidden;
+  padding: 0;
+}
+.water-glass.filled { background: #3b82f6; border-color: #2563eb; }
+.water-glass:active { transform: scale(.92); }
+
 /* ─── RECIPE DELETE BTN IN HEADER ─── */
 .rec-delete-btn {
   background: none; border: none; color: var(--muted);
@@ -1143,6 +1190,19 @@ label { display: block; font-size: 14px; font-weight: 600; color: var(--text-2);
       <div id="voorstel-container"></div>
     </div>
 
+    <!-- Hydratatie tracker -->
+    <div class="card">
+      <div class="water-tracker">
+        <div class="water-tracker-label">
+          <span>💧 Hydratatie</span>
+          <span id="water-count">0 / 8 glazen</span>
+        </div>
+        <div class="water-glasses" id="water-glasses">
+          <!-- gegenereerd door JS -->
+        </div>
+      </div>
+    </div>
+
     <!-- Activiteiten vandaag -->
     <div class="card">
       <h3 style="margin-bottom:14px;">Activiteiten</h3>
@@ -1177,16 +1237,33 @@ label { display: block; font-size: 14px; font-weight: 600; color: var(--text-2);
     <div id="week-days"></div>
   </div>
 
-  <!-- TAB 3: RECEPTEN -->
+  <!-- TAB 3: FOOD -->
   <div id="tab-recepten" class="tab-content">
-    <div class="page-header">
-      <h1>Recepten</h1>
+
+    <!-- Weekoverzicht voeding -->
+    <div class="card" style="margin-bottom:12px;">
+      <h3 style="margin-bottom:12px;">Weekoverzicht vezels</h3>
+      <div id="food-week-overview"></div>
     </div>
-    <button class="btn btn-secondary btn-full" style="margin-bottom:16px;" onclick="showShoppingList()">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-      Boodschappenlijst voor deze week
-    </button>
-    <div id="recipe-list"></div>
+
+    <!-- Filter -->
+    <div style="display:flex; gap:8px; margin-bottom:12px; overflow-x:auto; padding-bottom:4px;">
+      <button class="food-filter-btn active" onclick="filterFood('alle',this)">Alle</button>
+      <button class="food-filter-btn" onclick="filterFood('ontbijt',this)">Ontbijt</button>
+      <button class="food-filter-btn" onclick="filterFood('lunch',this)">Lunch</button>
+      <button class="food-filter-btn" onclick="filterFood('diner',this)">Diner</button>
+      <button class="food-filter-btn" onclick="filterFood('snack',this)">Snack</button>
+    </div>
+
+    <!-- Receptenlijst -->
+    <div id="food-list"></div>
+
+    <!-- Toevoegen + boodschappenlijst -->
+    <div style="display:flex; gap:8px; margin-top:4px;">
+      <button class="btn btn-primary" style="flex:1;" onclick="showAddRecept()">+ Recept toevoegen</button>
+      <button class="btn btn-ghost" onclick="showBoodschappenlijst()">🛒</button>
+    </div>
+
   </div>
 
   <!-- TAB 4: COACH -->
@@ -1268,7 +1345,7 @@ label { display: block; font-size: 14px; font-weight: 600; color: var(--text-2);
     </button>
     <button class="tab-btn" onclick="switchTab('recepten', this)">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v12"/><path d="M18 9a3 3 0 0 0-3-3H6"/><path d="M6 15a6 6 0 0 0 12 0"/></svg>
-      Recepten
+      Food
     </button>
     <button class="tab-btn" onclick="switchTab('coach', this)">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
@@ -1425,6 +1502,12 @@ const OEFENINGEN = {
     schema: '3 sets × 12 herhalingen · 60–90 sec rust'
   },
   'bench press': 'dumbbell press',
+  'tricep kickback': 'tricep kickbacks',
+  'rdl': 'romanian deadlift',
+  'deadlift': 'romanian deadlift',
+  'split squat': 'bulgarian split squat',
+  'bulgarian': 'bulgarian split squat',
+  'calf raise': 'calf raises',
   'rows': {
     naam: 'Dumbbell Row', spieren: ['Rug','Biceps','Core'], kleuren: ['#1d4ed8','#db2777','#6b7280'],
     startpositie: 'Knie en hand van één zijde op de bank. Andere hand houdt de dumbbell, rug horizontaal en recht.',
@@ -1494,6 +1577,69 @@ const OEFENINGEN = {
     stappen: ['Cadans: 80–90 omwentelingen per minuut — licht en snel trappen','Hartslag zone 2 — dit is een herstelrit, geen race','Vermijd zware versnellingen: liever licht tandwiel en hoge cadans','Rug ontspannen, knieën lopen recht — niet naar buiten','Drink elke 20 min een slok, ook als je niet dorstig bent'],
     tip: 'Weersta de verleiding om hard te gaan. Actief herstel op lage intensiteit versnelt je herstel meer dan rust.',
     schema: '45–60 min · lage intensiteit'
+  },
+  'shoulder press': {
+    naam: 'Shoulder Press', spieren: ['Schouders','Triceps','Core'], kleuren: ['#7c3aed','#0891b2','#6b7280'],
+    startpositie: 'Zit rechtop of sta met een dumbbell in elke hand op schouderhoogte. Ellebogen op 90°, handpalmen naar voren.',
+    stappen: ['Adem in en span core aan','Duw dumbbells verticaal omhoog tot armen bijna gestrekt zijn — niet volledig vergrendeld','Houd schouders neer, niet optrekken','Laat langzaam zakken in 2–3 sec terug naar startpositie','Adem uit bij het omhoogduwen'],
+    tip: 'Doe dit zittend als je lagere rugproblemen hebt. Vergrendel ellebogen nooit volledig bovenaan — houd spanning op spier.',
+    schema: '3 sets × 12 herhalingen · 60–90 sec rust'
+  },
+  'tricep kickbacks': {
+    naam: 'Tricep Kickbacks', spieren: ['Triceps','Core'], kleuren: ['#0891b2','#6b7280'],
+    startpositie: 'Leun licht voorover met een dumbbell in één hand. Bovenarm parallel aan de grond, elleboog gebogen op 90°.',
+    stappen: ['Houd bovenarm stil — dit is de sleutel','Strek elleboog volledig uit naar achteren','Houd 1 sec gestrekt — knijp tricep samen','Laat langzaam terug zakken naar 90°','Wissel per set of doe beurtelings'],
+    tip: 'Gebruik een licht gewicht. Beweging komt alleen uit de onderarm — bovenarm beweegt niet mee.',
+    schema: '3 sets × 12 herhalingen · 45–60 sec rust'
+  },
+  'chest fly': {
+    naam: 'Chest Fly', spieren: ['Borst','Schouders'], kleuren: ['#ef4444','#7c3aed'],
+    startpositie: 'Lig op de bank met een dumbbell in elke hand. Armen gestrekt boven borst, handpalmen naar elkaar toe. Lichte knik in ellebogen.',
+    stappen: ['Spreid armen breed zijwaarts — alsof je iemand omarmt in omgekeerde richting','Laat zakken tot ellebogen op bankniveau of iets lager','Voel rek in borst onderaan','Breng dumbbells terug samen boven borst via dezelfde boogbeweging','Adem in bij openen, uit bij sluiten'],
+    tip: 'Houd de knik in elleboog constant — dit is geen pers. Laat schouders niet oprollen.',
+    schema: '3 sets × 12 herhalingen · 60–90 sec rust'
+  },
+  'romanian deadlift': {
+    naam: 'Romanian Deadlift', spieren: ['Hamstrings','Billen','Rug'], kleuren: ['#b45309','#16a34a','#1d4ed8'],
+    startpositie: 'Sta rechtop met een dumbbell in elke hand voor de dijen. Voeten heupbreed, lichte knik in knieën.',
+    stappen: ['Houd rug recht — neutrale wervelkolom, geen ronde rug','Scharneer vanuit de heupen — stoot billen naar achteren','Laat dumbbells zakken langs de benen tot je hamstring-rek voelt (~scheenbeen hoogte)','Duw heupen terug naar voren om terug te komen','Knijp billen samen bovenaan'],
+    tip: 'Dit is een heupscharnierbeweging, geen squatbeweging. Knieën bewegen minimaal. Stop zodra je rug wil ronden.',
+    schema: '3 sets × 10–12 herhalingen · 90 sec rust'
+  },
+  'calf raises': {
+    naam: 'Calf Raises', spieren: ['Kuiten','Enkels'], kleuren: ['#f97316','#b45309'],
+    startpositie: 'Sta rechtop met voeten heupbreed. Optioneel: dumbbells in handen of steun bij wand. Voorvoet eventueel op een traprand voor groter bewegingsbereik.',
+    stappen: ['Druk op voorvoet omhoog — zo hoog als mogelijk','Houd 1–2 sec bovenaan','Laat langzaam zakken — controleer de neergaande beweging','Laat hiel zakken onder traprand voor volledige rek (indien van toepassing)'],
+    tip: 'Langzame neerwaartse fase is minstens zo belangrijk als omhoog. Doe ze eenbenig voor extra uitdaging.',
+    schema: '3 sets × 15–20 herhalingen · 45 sec rust'
+  },
+  'bulgarian split squat': {
+    naam: 'Bulgarian Split Squat', spieren: ['Benen','Billen','Core','Balans'], kleuren: ['#f97316','#16a34a','#6b7280','#7c3aed'],
+    startpositie: 'Sta voor een bank/stoel. Leg de wreef van achterste voet op de bank. Voorste voet ver genoeg naar voren — knie mag knie niet ver voorbij teen gaan.',
+    stappen: ['Laat het lichaam recht omlaag zakken — niet naar voren leunen','Voorste knie buigt tot ~90° — achterste knie zakt richting grond','Houd romp rechtop, core gespannen','Druk door voorste hiel omhoog','Wissel been na elke set'],
+    tip: 'Begin zonder gewicht om balans te leren. Dit is een zware oefening — neem de tijd. Pijn in knie? Zet voorste voet verder naar voren.',
+    schema: '3 sets × 8–10 herhalingen per been · 90 sec rust'
+  },
+  'plank': {
+    naam: 'Plank', spieren: ['Core','Schouders','Rug'], kleuren: ['#6b7280','#7c3aed','#1d4ed8'],
+    startpositie: 'Onderarm-plank: ellebogen onder schouders, onderarmen op de grond. Lichaam vormt een rechte lijn van hoofd tot hiel.',
+    stappen: ['Span buik aan — duw navel licht naar wervelkolom','Knijp billen samen','Houd nek in neutrale positie — kijk naar de grond','Adem normaal door — niet inhouden','Houd positie 20–60 sec'],
+    tip: 'Kwaliteit boven tijd. Zodra heupen zakken of opstaan is de set klaar. Bouw rustig op van 20 naar 60 sec.',
+    schema: '3 sets × 20–60 sec · 45–60 sec rust'
+  },
+  'dead bug': {
+    naam: 'Dead Bug', spieren: ['Core','Stabiliteit'], kleuren: ['#6b7280','#16a34a'],
+    startpositie: 'Lig op de rug. Armen recht omhoog (naar plafond). Heupen en knieën op 90° — benen in de lucht.',
+    stappen: ['Druk onderrug in de grond — houd dit de hele oefening','Laat tegelijkertijd één arm naar achteren zakken (naar grond achter hoofd) én strek het tegenovergestelde been uit','Arm en been raken de grond niet','Breng terug naar start','Wissel zijden — dit is één herhaling'],
+    tip: 'Moeilijker dan het lijkt. Zodra je onderrug van de grond wil lossen, is dat te ver. Beweging is langzaam en gecontroleerd.',
+    schema: '3 sets × 8–10 herhalingen per zijde · 45 sec rust'
+  },
+  'glute bridge': {
+    naam: 'Glute Bridge', spieren: ['Billen','Hamstrings','Core'], kleuren: ['#16a34a','#b45309','#6b7280'],
+    startpositie: 'Lig op de rug. Knieën gebogen, voeten plat op de grond heupbreed, dicht bij billen. Armen langs lichaam.',
+    stappen: ['Druk voeten in de grond','Til heupen op door billen samen te knijpen — maak een rechte lijn van schouders tot knieën','Houd 1–2 sec bovenaan — knijp billen actief samen','Laat gecontroleerd zakken — raak grond niet volledig','Herhaal'],
+    tip: 'Voor meer uitdaging: één been gestrekt houden (single-leg glute bridge) of een dumbbell op je heupen plaatsen.',
+    schema: '3 sets × 15 herhalingen · 45–60 sec rust'
   }
 };
 
@@ -1668,16 +1814,30 @@ function defaultData() {
     weken: {},
     streak: { huidig: 0, record: 0, laatsteDatum: '' },
     chatHistorie: [],
-    recepten: [],
+    recepten: [
+      { id: 'r1', type: 'diner', naam: 'Linzensoep met volkorenbrood', vezels: '~14g', tijd: '30 min', ingredienten: '200g rode linzen, 1 ui, 2 wortels, 2 stengels bleekselderij, 1 blik tomaten (400g), 1L groentebouillon, 2 tl komijn, zout/peper, 2 sneden volkorenbrood p.p.', bereiding: 'Fruit ui aan, voeg wortel en selderij toe, linzen erbij, bouillon en tomaten, 25 min koken, brood erbij.' },
+      { id: 'r2', type: 'diner', naam: 'Kikkererwten curry met zilvervliesrijst', vezels: '~13g', tijd: '25 min', ingredienten: '1 blik kikkererwten (400g), 1 blik kokosmelk (400ml), 1 blik tomaten (400g), 1 ui, 2 tl kerriepoeder, 1 tl kurkuma, 300g zilvervliesrijst, verse koriander.', bereiding: 'Ui fruiten, kruiden toevoegen, kikkererwten en tomaten erbij, kokosmelk toevoegen, 15 min sudderen, serveer met rijst.' },
+      { id: 'r3', type: 'diner', naam: 'Geroosterde groenten met quinoa en hummus', vezels: '~12g', tijd: '35 min', ingredienten: '1 courgette, 1 paprika, 1 rode ui, 200g quinoa, 150g hummus, olijfolie, tijm, zout/peper, handje rucola.', bereiding: 'Groenten in blokjes met olie en tijm, 25 min op 200°C, quinoa koken, serveer met hummus en rucola.' },
+      { id: 'r4', type: 'diner', naam: 'Zwarte bonen taco\'s met avocado', vezels: '~11g', tijd: '20 min', ingredienten: '1 blik zwarte bonen (400g), 2 avocado\'s, 1 limoen, 4 volkoren tortilla\'s, 1 tl komijn, 1 tl paprikapoeder, rode kool (geraspt), salsa, verse koriander.', bereiding: 'Bonen met kruiden opwarmen, avocado pureren met limoensap, tortilla\'s vullen en samenvouwen.' },
+      { id: 'r5', type: 'diner', naam: 'Pasta met spinazie, witte bonen en tomatensaus', vezels: '~10g', tijd: '20 min', ingredienten: '300g volkoren pasta, 1 blik witte bonen (400g), 200g spinazie, 1 blik tomaten (400g), 2 teentjes knoflook, olijfolie, italiaanse kruiden, parmezaan (optioneel).', bereiding: 'Pasta koken, knoflook fruiten, tomaten en bonen erbij, 10 min sudderen, spinazie erdoor, mengen met pasta.' },
+      { id: 'r6', type: 'ontbijt', naam: 'Kwark/yoghurt met muesli & fruit', vezels: '~6g', tijd: '5 min', ingredienten: '150g kwark of Griekse yoghurt, 40g muesli, 1 stuk fruit (banaan, appel of bessen).', bereiding: 'Kwark in kom, muesli en fruit erover.' },
+      { id: 'r7', type: 'ontbijt', naam: 'Havermout met noten en honing', vezels: '~5g', tijd: '10 min', ingredienten: '80g havermout, 300ml melk of plantaardige melk, handjevol noten, 1 tl honing, 1 stuk fruit.', bereiding: 'Havermout met melk opwarmen, noten en fruit erover, honing erdoor.' },
+      { id: 'r8', type: 'lunch', naam: 'Volkoren boterhammen met hummus & groente', vezels: '~8g', tijd: '5 min', ingredienten: '3 sneden volkorenbrood, 3 el hummus, komkommer, tomaat, sla.', bereiding: 'Brood beleggen met hummus en groente.' },
+      { id: 'r9', type: 'lunch', naam: 'Salade met kikkererwten en feta', vezels: '~7g', tijd: '10 min', ingredienten: '1 blik kikkererwten (200g), 50g feta, komkommer, tomaat, rode ui, olijfolie, citroensap.', bereiding: 'Alles mengen, dressing erover.' },
+      { id: 'r10', type: 'snack', naam: 'Appel of peer + handjevol noten', vezels: '~4g', tijd: '1 min', ingredienten: '1 appel of peer, 25g gemengde noten.', bereiding: 'Direct serveren.' },
+      { id: 'r11', type: 'snack', naam: 'Yoghurt met lijnzaad', vezels: '~3g', tijd: '2 min', ingredienten: '150g yoghurt, 1 el lijnzaad, optioneel: honing.', bereiding: 'Lijnzaad over yoghurt, eventueel honing.' }
+    ],
     stats: { byMonth: {} },
     savedTips: []
   };
 }
 
 function ensureRecepten() {
-  if (!data.recepten || data.recepten.length === 0) {
-    data.recepten = RECEPTEN.map(r => ({ ...r }));
+  if (!data.recepten) {
+    data.recepten = [];
   }
+  // If old-format recepten exist without type, add type: 'diner'
+  data.recepten.forEach(r => { if (!r.type) r.type = 'diner'; });
 }
 
 function ensureStats() {
@@ -1700,7 +1860,8 @@ function ensureWeek(weekKey) {
         activiteiten,
         maaltijden: JSON.parse(JSON.stringify(DEFAULT_MEALS)),
         checkIn: null,
-        aangepast: false
+        aangepast: false,
+        waterGlazen: 0
       };
     });
   }
@@ -1974,7 +2135,7 @@ function switchTab(name, btn) {
   if (name === 'vandaag') renderVandaag();
   if (name === 'week') renderWeek();
   if (name === 'coach') renderCoach();
-  if (name === 'recepten') renderRecepten();
+  if (name === 'recepten') renderFoodTab();
 }
 
 // ─── STREAK ──────────────────────────────────────────────────────────────────
@@ -2048,6 +2209,7 @@ function renderVandaag() {
 
   updateStreak();
   renderCheckIn(todayStr);
+  renderWaterTracker();
   renderTodayActivities(todayStr);
   renderTodayMeals(todayStr);
 }
@@ -2277,24 +2439,21 @@ function renderTodayMeals(dateStr) {
   const meals = data.weken[weekKey][dateStr].maaltijden;
 
   const rows = [
-    { key: 'ontbijt', label: 'Ontbijt', icon: '🥣', fixed: true },
-    { key: 'lunch',   label: 'Lunch',   icon: '🥪', fixed: false },
-    { key: 'diner',   label: 'Diner',   icon: '🍽️', fixed: false },
-    { key: 'snack',   label: 'Snack',   icon: '🍎', fixed: false }
+    { key: 'ontbijt', label: 'Ontbijt', icon: '🥣' },
+    { key: 'lunch',   label: 'Lunch',   icon: '🥪' },
+    { key: 'diner',   label: 'Diner',   icon: '🍽️' },
+    { key: 'snack',   label: 'Snack',   icon: '🍎' }
   ];
 
   container.innerHTML = rows.map(row => {
     const meal = meals[row.key] || { naam: '', vezels: '' };
     if (isMealSet(meal, row.key)) {
-      const onclick = row.fixed ? '' : `onclick="quickEditMeal('${dateStr}','${row.key}')"`;
-      const fixedTag = row.fixed ? '<span class="meal-fixed-tag">vast</span>' : '';
-      return `<div class="meal-row" ${onclick}>
+      return `<div class="meal-row" onclick="quickEditMeal('${dateStr}','${row.key}')">
         <div class="meal-icon">${row.icon}</div>
         <div class="meal-info">
           <div class="meal-label">${row.label}</div>
           <div class="meal-name">${meal.naam}</div>
         </div>
-        ${fixedTag}
         <span class="meal-fibers">${meal.vezels}</span>
       </div>`;
     } else {
@@ -2311,6 +2470,7 @@ function renderTodayMeals(dateStr) {
 }
 
 const MEAL_SUGGESTIONS = {
+  ontbijt: ['Kwark met muesli & fruit', 'Havermout met noten', 'Griekse yoghurt met bessen', 'Volkoren brood met pindakaas', 'Smoothie met havermout'],
   lunch: ['Volkoren wrap met hummus & groente', 'Salade met kikkererwten', 'Volkoren brood met avocado & ei', 'Linzensoep met brood', 'Restjes van diner'],
   diner: ['Pasta met groenten & bonen', 'Curry met zilvervliesrijst', 'Geroosterde groenten & quinoa', 'Salade met vis', 'Wokgroente met tofu'],
   snack: ['Appel + handje noten', 'Peer + amandelen', 'Banaan + pindakaas', 'Volkoren cracker met hummus', 'Wortel + dip']
@@ -2320,7 +2480,7 @@ function quickEditMeal(dateStr, mealKey) {
   const weekKey = getISOWeek(new Date(dateStr + 'T12:00:00'));
   const meal = data.weken[weekKey][dateStr].maaltijden[mealKey];
   const suggestions = MEAL_SUGGESTIONS[mealKey] || [];
-  const labels = { lunch: 'Lunch', diner: 'Diner', snack: 'Snack' };
+  const labels = { ontbijt: 'Ontbijt', lunch: 'Lunch', diner: 'Diner', snack: 'Snack' };
 
   showModal(`
     <div class="modal-header">
@@ -3345,6 +3505,20 @@ async function sendChat() {
 
   if (!data.chatHistorie) data.chatHistorie = [];
 
+  // Voedingswaarde lookup voor merkproducten
+  let foodContext = '';
+  const foodMatch = msg.match(/(?:hoeveel vezels|vezels in|wat zit er in|voedingswaarde van?)\s+(.+?)[\?\.\!]?$/i)
+    || msg.match(/^(.{3,30})\s*(?:vezels|kcal|calorieën|voedingswaarde)/i);
+  if (foodMatch) {
+    const product = lookupFoodFacts(foodMatch[1].trim());
+    const result = await product;
+    if (result && result.fiber_100g != null) {
+      foodContext = `\n[Voedingsdatabase]: ${result.name}${result.brand ? ' (' + result.brand + ')' : ''} bevat ${result.fiber_100g}g vezels per 100g (bron: Open Food Facts).`;
+    }
+  }
+
+  const userContent = msg + foodContext;
+
   data.chatHistorie.push({ role: 'user', content: msg });
   if (data.chatHistorie.length > 20) data.chatHistorie.shift();
 
@@ -3358,7 +3532,8 @@ async function sendChat() {
   container.scrollTop = container.scrollHeight;
 
   try {
-    const messages = data.chatHistorie.map(m => ({ role: m.role, content: m.content }));
+    const messages = data.chatHistorie.slice(0, -1).map(m => ({ role: m.role, content: m.content }));
+    messages.push({ role: 'user', content: userContent });
     const reply = await callAIMessages(messages, 600);
     typingEl.remove();
     data.chatHistorie.push({ role: 'assistant', content: reply });
@@ -3409,6 +3584,25 @@ async function doTerugblik() {
   }
 }
 
+// ─── FOOD FACTS API ──────────────────────────────────────────────────────────
+
+async function lookupFoodFacts(query) {
+  try {
+    const url = `https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(query)}&search_simple=1&action=process&json=1&page_size=1&fields=product_name,nutriments,brands`;
+    const resp = await fetch(url);
+    if (!resp.ok) return null;
+    const data = await resp.json();
+    const product = data.products && data.products[0];
+    if (!product) return null;
+    const fiber = product.nutriments && product.nutriments['fiber_100g'];
+    const name = product.product_name || query;
+    const brand = product.brands || '';
+    return { name, brand, fiber_100g: fiber != null ? Math.round(fiber * 10) / 10 : null };
+  } catch(_) {
+    return null;
+  }
+}
+
 // ─── AI CALLS ────────────────────────────────────────────────────────────────
 
 async function callAI(userMsg, maxTokens) {
@@ -3440,6 +3634,210 @@ async function callAIMessages(messages, maxTokens) {
 
   const json = await resp.json();
   return json.content[0].text;
+}
+
+// ─── FOOD TAB ────────────────────────────────────────────────────────────────
+
+let _foodFilter = 'alle';
+
+function filterFood(type, btn) {
+  _foodFilter = type;
+  document.querySelectorAll('.food-filter-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  renderFoodList();
+}
+
+function renderFoodTab() {
+  renderFoodWeekOverview();
+  renderFoodList();
+}
+
+function renderFoodWeekOverview() {
+  const container = document.getElementById('food-week-overview');
+  if (!container) return;
+  const weekKey = getISOWeek(new Date());
+  const weekData = (data.weken && data.weken[weekKey]) || {};
+  const dagKort = ['Ma','Di','Wo','Do','Vr','Za','Zo'];
+  const dates = getWeekDates(weekKey);
+
+  container.innerHTML = dates.map((d, i) => {
+    const dayData = weekData[d] || {};
+    const meals = dayData.maaltijden || {};
+    let total = 0;
+    Object.values(meals).forEach(m => {
+      if (m && m.vezels) {
+        const n = parseFloat((m.vezels||'').replace(/[^\d.]/g,''));
+        if (!isNaN(n)) total += n;
+      }
+    });
+    const pct = Math.min(100, Math.round(total / 30 * 100));
+    const color = total >= 30 ? '#4ade80' : total >= 20 ? '#fb923c' : '#f87171';
+    const isToday = d === new Date().toISOString().slice(0,10);
+    return `<div class="food-week-row" style="${isToday ? 'font-weight:600;' : ''}">
+      <span style="width:28px;">${dagKort[i]}</span>
+      <div style="flex:1; margin: 0 10px;">
+        <div class="food-fiber-bar"><div class="food-fiber-fill" style="width:${pct}%; background:${color};"></div></div>
+      </div>
+      <span style="color:${color}; font-size:13px; min-width:60px; text-align:right;">${total > 0 ? total + 'g / 30g' : '—'}</span>
+    </div>`;
+  }).join('');
+}
+
+function renderFoodList() {
+  const container = document.getElementById('food-list');
+  if (!container) return;
+  const recepten = data.recepten || [];
+  const filtered = _foodFilter === 'alle' ? recepten : recepten.filter(r => r.type === _foodFilter);
+
+  if (filtered.length === 0) {
+    container.innerHTML = '<p style="color:var(--muted); text-align:center; padding:20px 0;">Geen recepten</p>';
+    return;
+  }
+
+  const weekKey = getISOWeek(new Date());
+  const weekData = (data.weken && data.weken[weekKey]) || {};
+  const dates = getWeekDates(weekKey);
+  const dagKort = ['Ma','Di','Wo','Do','Vr','Za','Zo'];
+
+  container.innerHTML = filtered.map(r => {
+    const typeLabel = {ontbijt:'Ontbijt', lunch:'Lunch', diner:'Diner', snack:'Snack'}[r.type] || (r.type || 'Diner');
+
+    // Welke dagen heeft dit recept al gepland
+    const plannedDays = dates.map((d, i) => {
+      const meals = (weekData[d] && weekData[d].maaltijden) || {};
+      const slot = meals[r.type];
+      const isPlanned = slot && slot.receptId === r.id;
+      return { d, i, isPlanned };
+    });
+
+    const dagBtns = plannedDays.map(({ d, i, isPlanned }) =>
+      `<button class="food-plan-btn ${isPlanned ? 'planned' : ''}" onclick="planRecept('${r.id}','${d}','${r.type || 'diner'}')">${dagKort[i]}</button>`
+    ).join('');
+
+    const typeClass = r.type || 'diner';
+    const ingText = Array.isArray(r.ingredienten) ? r.ingredienten.join(', ') : (r.ingredienten || '');
+    const berText = Array.isArray(r.bereiding) ? r.bereiding.join(' ') : (r.bereiding || '');
+
+    return `<div class="food-card" id="food-card-${r.id}">
+      <div class="food-card-header">
+        <div class="food-card-title">${r.naam}</div>
+        <span class="food-type-badge ${typeClass}">${typeLabel}</span>
+        <button onclick="deleteRecept('${r.id}')" style="color:var(--muted); background:none; border:none; font-size:18px; cursor:pointer; padding:0 4px;" title="Verwijder">×</button>
+      </div>
+      <div class="food-meta">
+        <span class="food-fiber">🌿 ${r.vezels} vezels</span>
+        ${r.tijd ? `<span>⏱ ${r.tijd}</span>` : ''}
+      </div>
+      <details style="margin-top:8px;">
+        <summary style="cursor:pointer; font-size:13px; color:var(--muted);">Ingrediënten & bereiding</summary>
+        <p style="font-size:13px; margin-top:8px; color:var(--muted);">${ingText}</p>
+        <p style="font-size:13px; color:var(--muted);">${berText}</p>
+      </details>
+      <div class="food-plan-row">${dagBtns}</div>
+    </div>`;
+  }).join('');
+}
+
+function planRecept(receptId, dateStr, mealType) {
+  const weekKey = getISOWeek(new Date(dateStr + 'T12:00:00'));
+  if (!data.weken[weekKey]) ensureWeek(weekKey);
+  if (!data.weken[weekKey][dateStr]) return;
+  const meals = data.weken[weekKey][dateStr].maaltijden;
+  const recept = (data.recepten || []).find(r => r.id === receptId);
+  if (!recept) return;
+
+  // Toggle: klik op geplande dag = verwijder
+  if (meals[mealType] && meals[mealType].receptId === receptId) {
+    meals[mealType] = { naam: '', vezels: '', receptId: null };
+  } else {
+    meals[mealType] = { naam: recept.naam, vezels: recept.vezels, receptId: recept.id, gepland: true };
+  }
+  saveAndSync();
+  renderFoodTab();
+  if (document.getElementById('tab-vandaag').classList.contains('active')) renderVandaag();
+}
+
+function deleteRecept(receptId) {
+  if (!confirm('Recept verwijderen?')) return;
+  data.recepten = (data.recepten || []).filter(r => r.id !== receptId);
+  saveAndSync();
+  renderFoodList();
+}
+
+function showAddRecept() {
+  showModal(`
+    <h3 style="margin-bottom:16px;">Recept toevoegen</h3>
+    <div style="display:flex; flex-direction:column; gap:10px;">
+      <select id="nr-type" style="padding:10px; border-radius:8px; border:1.5px solid var(--border); background:var(--card); color:var(--text);">
+        <option value="ontbijt">Ontbijt</option>
+        <option value="lunch">Lunch</option>
+        <option value="diner" selected>Diner</option>
+        <option value="snack">Snack</option>
+      </select>
+      <input id="nr-naam" type="text" placeholder="Naam" style="padding:10px; border-radius:8px; border:1.5px solid var(--border); background:var(--card); color:var(--text);">
+      <input id="nr-vezels" type="text" placeholder="Vezels (bijv. ~10g)" style="padding:10px; border-radius:8px; border:1.5px solid var(--border); background:var(--card); color:var(--text);">
+      <input id="nr-tijd" type="text" placeholder="Bereidingstijd (bijv. 20 min)" style="padding:10px; border-radius:8px; border:1.5px solid var(--border); background:var(--card); color:var(--text);">
+      <textarea id="nr-ingredienten" placeholder="Ingrediënten" rows="3" style="padding:10px; border-radius:8px; border:1.5px solid var(--border); background:var(--card); color:var(--text); resize:none;"></textarea>
+      <textarea id="nr-bereiding" placeholder="Bereiding" rows="3" style="padding:10px; border-radius:8px; border:1.5px solid var(--border); background:var(--card); color:var(--text); resize:none;"></textarea>
+      <div style="display:flex; gap:8px; margin-top:4px;">
+        <button class="btn btn-ghost" style="flex:1;" onclick="closeModal()">Annuleer</button>
+        <button class="btn btn-primary" style="flex:1;" onclick="saveNewRecept()">Opslaan</button>
+      </div>
+    </div>
+  `);
+}
+
+function saveNewRecept() {
+  const naam = document.getElementById('nr-naam').value.trim();
+  if (!naam) return;
+  const recept = {
+    id: 'r' + Date.now(),
+    type: document.getElementById('nr-type').value,
+    naam,
+    vezels: document.getElementById('nr-vezels').value.trim() || '?',
+    tijd: document.getElementById('nr-tijd').value.trim(),
+    ingredienten: document.getElementById('nr-ingredienten').value.trim(),
+    bereiding: document.getElementById('nr-bereiding').value.trim()
+  };
+  if (!data.recepten) data.recepten = [];
+  data.recepten.push(recept);
+  saveAndSync();
+  closeModal();
+  renderFoodList();
+}
+
+function showBoodschappenlijst() {
+  showShoppingList();
+}
+
+// ─── WATER TRACKER ───────────────────────────────────────────────────────────
+
+function renderWaterTracker() {
+  const dateStr = new Date().toISOString().slice(0, 10);
+  const weekKey = getISOWeek(new Date());
+  const dayData = (data.weken[weekKey] || {})[dateStr] || {};
+  const count = dayData.waterGlazen || 0;
+
+  const container = document.getElementById('water-glasses');
+  const label = document.getElementById('water-count');
+  if (!container) return;
+
+  container.innerHTML = Array.from({length: 8}, (_, i) =>
+    `<button class="water-glass ${i < count ? 'filled' : ''}" onclick="setWater(${i + 1})" aria-label="Glas ${i+1}"></button>`
+  ).join('');
+  if (label) label.textContent = `${count} / 8 glazen`;
+}
+
+function setWater(n) {
+  const dateStr = new Date().toISOString().slice(0, 10);
+  const weekKey = getISOWeek(new Date());
+  if (!data.weken[weekKey]) ensureWeek(weekKey);
+  if (!data.weken[weekKey][dateStr]) return;
+  const current = data.weken[weekKey][dateStr].waterGlazen || 0;
+  // Toggle: klik op hetzelfde glas = één minder
+  data.weken[weekKey][dateStr].waterGlazen = (n === current) ? n - 1 : n;
+  saveAndSync();
+  renderWaterTracker();
 }
 
 // ─── MODAL ───────────────────────────────────────────────────────────────────
@@ -3877,7 +4275,7 @@ function iconSVG(type) {
 function renderAll() {
   renderVandaag();
   renderWeek();
-  renderRecepten();
+  renderFoodTab();
   renderCoach();
 }
 
