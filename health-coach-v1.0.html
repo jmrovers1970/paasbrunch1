@@ -995,6 +995,25 @@ label { display: block; font-size: 14px; font-weight: 600; color: var(--text-2);
 .food-plan-btn:active { transform: scale(.93); }
 .food-week-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
 .food-week-row:last-child { border-bottom: none; }
+.weekmenu-day { padding: 8px 0; border-bottom: 1px solid var(--border); }
+.weekmenu-day:last-child { border-bottom: none; }
+.weekmenu-day.today .weekmenu-day-label { color: var(--accent-move); font-weight: 700; }
+.weekmenu-day-label { font-size: 13px; color: var(--muted); margin-bottom: 4px; }
+.weekmenu-row {
+  display: flex; align-items: center; gap: 6px;
+  padding: 6px 8px; margin: 2px 0; border-radius: 8px;
+  cursor: pointer; transition: background .15s;
+  position: relative; overflow: hidden;
+}
+.weekmenu-row:active { background: var(--card2); }
+.weekmenu-slot-label { font-size: 12px; color: var(--muted); min-width: 52px; flex-shrink: 0; }
+.weekmenu-meal-name { flex: 1; font-size: 14px; color: var(--text); }
+.weekmenu-del {
+  font-size: 18px; color: var(--muted); padding: 0 4px;
+  line-height: 1; cursor: pointer; flex-shrink: 0;
+  opacity: 0.5; transition: opacity .15s;
+}
+.weekmenu-row:hover .weekmenu-del, .weekmenu-row:active .weekmenu-del { opacity: 1; }
 .food-fiber-bar { height: 6px; border-radius: 3px; margin-top: 3px; background: #e5e7eb; overflow: hidden; }
 .food-fiber-fill { height: 100%; border-radius: 3px; transition: width .3s; }
 
@@ -2852,13 +2871,17 @@ function renderRecepten() {
     <div class="card" style="margin-bottom:16px;">
       <h3 style="margin-bottom:6px;">Recepten genereren</h3>
       <p class="muted" style="font-size:14px;margin-bottom:14px;">Laat de coach vezelrijke recepten bedenken</p>
-      <label style="font-size:14px;font-weight:600;color:var(--text-2);margin-bottom:8px;display:block;">Aantal</label>
-      <div style="display:flex;gap:8px;margin-bottom:14px;">
-        ${[1,2,3,4,5].map(n => `<button class="gen-count-btn${genCount===n?' active':''}" onclick="setGenCount(${n})">${n}</button>`).join('')}
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+        <div style="display:flex;gap:8px;">
+          ${[1,2,3].map(n => `<button class="gen-count-btn${genCount===n?' active':''}" onclick="setGenCount(${n})" style="min-width:44px;min-height:44px;">${n}</button>`).join('')}
+        </div>
+        <label style="display:flex;align-items:center;gap:8px;font-size:14px;cursor:pointer;">
+          <input type="checkbox" id="gen-vega" style="width:20px;height:20px;accent-color:var(--accent-food);"> Vegetarisch
+        </label>
       </div>
       <div class="form-group">
         <label>Focus (optioneel)</label>
-        <input id="gen-focus" type="text" placeholder="bijv. met kikkererwten, snel, Aziatisch" style="min-height:44px;">
+        <input id="gen-focus" type="text" placeholder="bijv. Aziatisch, pasta, snel klaar" style="min-height:44px;">
       </div>
       <button id="gen-btn" class="btn btn-primary btn-full" onclick="generateRecepten()" ${!hasKey?'disabled':''}>${!hasKey?'Geen API-sleutel ingesteld':'Genereer recepten'}</button>
       ${hasKey ? `<div style="display:flex;align-items:center;gap:10px;margin-top:10px;">
@@ -3039,10 +3062,26 @@ async function generateRecepten() {
   const btn = document.getElementById('gen-btn');
   if (btn) { btn.disabled = true; btn.textContent = 'Bezig…'; }
 
-  const focusTxt = focus ? ` met focus op: ${focus}` : '';
-  const prompt = `Genereer ${genCount} unieke vezelrijke (minimaal 8g vezels) Nederlandse recepten${focusTxt}. Reageer UITSLUITEND met een JSON-array, geen tekst ervoor of erna:
-[{"naam":"...","vezels":"~Xg","tijd":"X min","ingredienten":["...","..."],"bereiding":["...","..."]}]
-Regels: vegetarisch of vis, max 35 min, eenvoudige ingrediënten, concrete stappen.`;
+  const isVega = document.getElementById('gen-vega') && document.getElementById('gen-vega').checked;
+  const focusTxt = focus ? ` Focus op: ${focus}.` : '';
+  const eetwijze = isVega ? 'volledig vegetarisch' : 'vegetarisch of met vis (geen vlees)';
+  const bestaandeNamen = (data.recepten || []).map(r => r.naam).join(', ');
+  const vermijdDubbel = bestaandeNamen ? `\nVermijd recepten die lijken op: ${bestaandeNamen}.` : '';
+
+  const prompt = `Genereer ${genCount} vezelrijke Nederlandse recepten. Reageer UITSLUITEND met een JSON-array, geen tekst ervoor of erna.${focusTxt}
+
+Strikte regels:
+- ${eetwijze}
+- Minimaal 8g vezels per portie
+- Max 35 minuten bereidingstijd
+- Logische, coherente gerechten — combineer ingrediënten zoals een kok zou doen
+- Varieer in eiwitbronnen: linzen, kikkererwten, tofu, eieren, kaas, vis, tempeh, quinoa, edamame
+- Gebruik niet altijd witte bonen — varieer
+- Eenvoudige Nederlandse supermarktingrediënten
+- Concrete bereidingsstappen${vermijdDubbel}
+
+JSON-formaat (exact):
+[{"naam":"...","vezels":"~Xg","eiwitten":"~Xg","tijd":"X min","ingredienten":["hoeveelheid ingredient","..."],"bereiding":["Stap 1...","Stap 2..."]}]`;
 
   try {
     const raw = await callAI(prompt, Math.min(genCount * 450, 2000));
@@ -3756,17 +3795,109 @@ function renderFoodWeekmenu() {
     const mealRows = slots.map(s => {
       const m = meals[s];
       if (!m || !m.naam) return '';
-      return `<div style="display:flex; gap:6px; align-items:baseline; font-size:13px; padding:2px 0;">
-        <span style="color:var(--muted); min-width:52px;">${slotLabel[s]}</span>
-        <span style="color:var(--text);">${m.naam}${m.vezels ? ' <span style="color:var(--accent-food); font-size:12px;">· ' + m.vezels + '</span>' : ''}</span>
+      const fiber = m.vezels ? `<span style="color:var(--accent-food);font-size:12px;"> · ${m.vezels}</span>` : '';
+      return `<div class="weekmenu-row" data-date="${d}" data-slot="${s}" onclick="editWeekMenuMeal('${d}','${s}')">
+        <span class="weekmenu-slot-label">${slotLabel[s]}</span>
+        <span class="weekmenu-meal-name">${m.naam}${fiber}</span>
+        <span class="weekmenu-del" onclick="event.stopPropagation();clearWeekMenuMeal('${d}','${s}')">×</span>
       </div>`;
     }).filter(Boolean).join('');
 
-    return `<div style="padding:8px 0; border-bottom:1px solid var(--border); ${isToday ? 'font-weight:600;' : ''}">
-      <div style="font-size:13px; color:${isToday ? 'var(--accent-move)' : 'var(--muted)'}; margin-bottom:4px;">${dagKort[i]}${isToday ? ' — vandaag' : ''}</div>
-      ${mealRows || '<span style="font-size:12px; color:var(--muted);">—</span>'}
+    return `<div class="weekmenu-day ${isToday ? 'today' : ''}">
+      <div class="weekmenu-day-label">${dagKort[i]}${isToday ? ' — vandaag' : ''}</div>
+      ${mealRows || '<span style="font-size:12px;color:var(--muted);padding-left:4px;">—</span>'}
     </div>`;
-  }).filter(Boolean).join('') || '<p style="color:var(--muted); font-size:14px; text-align:center; padding:12px 0;">Nog niets gepland deze week.</p>';
+  }).filter(Boolean).join('') || '<p style="color:var(--muted);font-size:14px;text-align:center;padding:12px 0;">Nog niets gepland deze week.</p>';
+}
+
+function clearWeekMenuMeal(dateStr, slot) {
+  const weekKey = getISOWeek(new Date(dateStr + 'T12:00:00'));
+  if (!data.weken[weekKey] || !data.weken[weekKey][dateStr]) return;
+  data.weken[weekKey][dateStr].maaltijden[slot] = { naam: '', vezels: '', receptId: null };
+  saveAndSync();
+  renderFoodWeekmenu();
+  renderFoodWeekOverview();
+}
+
+function editWeekMenuMeal(dateStr, slot) {
+  const weekKey = getISOWeek(new Date(dateStr + 'T12:00:00'));
+  const dayData = (data.weken[weekKey] || {})[dateStr] || {};
+  const meals = dayData.maaltijden || {};
+  const m = meals[slot] || {};
+  const slotLabel = { ontbijt:'Ontbijt', lunch:'Lunch', diner:'Diner', snack:'Snack' }[slot] || slot;
+  const dagNamen = ['Ma','Di','Wo','Do','Vr','Za','Zo'];
+  const dates = getWeekDates(weekKey);
+  const dagIdx = dates.indexOf(dateStr);
+  const dagLabel = dagIdx >= 0 ? dagNamen[dagIdx] : dateStr;
+
+  showModal(`
+    <div class="modal-header">
+      <h2>${dagLabel} — ${slotLabel}</h2>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px;">
+      <input id="wm-naam" type="text" value="${(m.naam||'').replace(/"/g,'&quot;')}" placeholder="Naam gerecht" style="padding:10px;border-radius:8px;border:1.5px solid var(--border);background:var(--card);color:var(--text);font-size:15px;">
+      <input id="wm-vezels" type="text" value="${m.vezels||''}" placeholder="Vezels (bijv. ~8g)" style="padding:10px;border-radius:8px;border:1.5px solid var(--border);background:var(--card);color:var(--text);">
+      <button class="btn btn-ghost btn-full" onclick="pickRecipeForSlot('${dateStr}','${slot}')">
+        📋 Kies uit mijn recepten
+      </button>
+      <div style="display:flex;gap:8px;margin-top:4px;">
+        <button class="btn btn-ghost" style="flex:1;color:#ef4444;border-color:#ef4444;" onclick="clearWeekMenuMeal('${dateStr}','${slot}');closeModal()">Verwijder</button>
+        <button class="btn btn-primary" style="flex:1;" onclick="saveWeekMenuMeal('${dateStr}','${slot}')">Opslaan</button>
+      </div>
+    </div>
+  `);
+}
+
+function saveWeekMenuMeal(dateStr, slot) {
+  const naam = (document.getElementById('wm-naam').value || '').trim();
+  const vezels = (document.getElementById('wm-vezels').value || '').trim();
+  const weekKey = getISOWeek(new Date(dateStr + 'T12:00:00'));
+  if (!data.weken[weekKey]) ensureWeek(weekKey);
+  if (!data.weken[weekKey][dateStr]) return;
+  data.weken[weekKey][dateStr].maaltijden[slot] = { naam, vezels, receptId: null };
+  saveAndSync();
+  closeModal();
+  renderFoodWeekmenu();
+  renderFoodWeekOverview();
+}
+
+function pickRecipeForSlot(dateStr, slot) {
+  const recepten = (data.recepten || []).filter(r => !r.type || r.type === slot || r.type === 'diner');
+  const slotLabel = { ontbijt:'Ontbijt', lunch:'Lunch', diner:'Diner', snack:'Snack' }[slot] || slot;
+  showModal(`
+    <div class="modal-header">
+      <h2>Kies recept — ${slotLabel}</h2>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div style="margin-top:8px;display:flex;flex-direction:column;gap:8px;">
+      ${recepten.length === 0
+        ? '<p style="color:var(--muted);text-align:center;padding:20px 0;">Geen recepten beschikbaar.</p>'
+        : recepten.map(r => `
+          <button onclick="applyRecipeToSlot('${r.id}','${dateStr}','${slot}')"
+            style="text-align:left;padding:12px;border-radius:10px;border:1.5px solid var(--border);background:var(--card);cursor:pointer;width:100%;">
+            <div style="font-weight:600;font-size:15px;">${r.naam}</div>
+            <div style="font-size:12px;color:var(--muted);margin-top:3px;">
+              ${r.vezels ? '🌿 ' + r.vezels : ''}${r.eiwitten ? ' · 💪 ' + r.eiwitten : ''}${r.tijd ? ' · ⏱ ' + r.tijd : ''}
+            </div>
+          </button>`).join('')}
+    </div>
+  `);
+}
+
+function applyRecipeToSlot(receptId, dateStr, slot) {
+  const recept = (data.recepten || []).find(r => r.id === receptId);
+  if (!recept) return;
+  const weekKey = getISOWeek(new Date(dateStr + 'T12:00:00'));
+  if (!data.weken[weekKey]) ensureWeek(weekKey);
+  if (!data.weken[weekKey][dateStr]) return;
+  data.weken[weekKey][dateStr].maaltijden[slot] = {
+    naam: recept.naam, vezels: recept.vezels || '', eiwitten: recept.eiwitten || '', receptId: recept.id
+  };
+  saveAndSync();
+  closeModal();
+  renderFoodWeekmenu();
+  renderFoodWeekOverview();
 }
 
 function renderFoodWeekOverview() {
