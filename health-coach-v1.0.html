@@ -277,6 +277,8 @@ label { display: block; font-size: 14px; font-weight: 600; color: var(--text-2);
 .type-icon.gym     { background: rgba(109,40,217,.10); }
 .type-icon.bike    { background: rgba(29,78,216,.10); }
 .type-icon.commute { background: rgba(13,148,136,.10); }
+.type-icon.walk    { background: rgba(22,163,74,.12); }
+.type-icon.walkdog { background: rgba(180,83,9,.12); }
 .type-icon.other   { background: var(--accent-food-tint); }
 
 @keyframes pop {
@@ -392,12 +394,14 @@ label { display: block; font-size: 14px; font-weight: 600; color: var(--text-2);
 .day-date-small { font-size: 13px; color: var(--muted); }
 .day-title-block { flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 .day-type-label { font-size: 22px; font-weight: 800; color: var(--text); line-height: 1.1; letter-spacing: -0.02em; }
-.day-type-label.t-run { color: var(--accent-move); }
-.day-type-label.t-gym { color: var(--accent-gym); }
-.day-type-label.t-bike { color: var(--accent-bike); }
+.day-type-label.t-run     { color: var(--accent-move); }
+.day-type-label.t-gym     { color: var(--accent-gym); }
+.day-type-label.t-bike    { color: var(--accent-bike); }
 .day-type-label.t-commute { color: #0f766e; }
-.day-type-label.t-rest { color: var(--muted); }
-.day-type-label.t-other { color: var(--accent-food); }
+.day-type-label.t-walk    { color: #16a34a; }
+.day-type-label.t-walkdog { color: #b45309; }
+.day-type-label.t-rest    { color: var(--muted); }
+.day-type-label.t-other   { color: var(--accent-food); }
 .day-meta-row { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); }
 .type-badge {
   font-size: 12px; font-weight: 700; padding: 4px 10px;
@@ -407,6 +411,8 @@ label { display: block; font-size: 14px; font-weight: 600; color: var(--text-2);
 .badge-gym  { background: rgba(109,40,217,.10); color: var(--accent-gym); }
 .badge-bike { background: rgba(29,78,216,.10); color: var(--accent-bike); }
 .badge-commute { background: rgba(13,148,136,.10); color: #0f766e; }
+.badge-walk    { background: rgba(22,163,74,.12); color: #16a34a; }
+.badge-walkdog { background: rgba(180,83,9,.12); color: #b45309; }
 .badge-rest { background: var(--card2); color: var(--muted); }
 .badge-other{ background: var(--accent-food-tint); color: var(--accent-food); }
 .day-done-icon { color: var(--accent-food); display: flex; }
@@ -585,6 +591,25 @@ label { display: block; font-size: 14px; font-weight: 600; color: var(--text-2);
   box-shadow: 0 2px 6px rgba(234,90,12,.30);
 }
 .chat-input-row button:active { transform: scale(.94); }
+.chat-mic-btn {
+  position: static !important; transform: none !important;
+  background: var(--card2) !important; color: var(--muted) !important;
+  box-shadow: none !important; border: 1.5px solid var(--border) !important;
+  border-radius: 50% !important; width: 48px !important; height: 48px !important;
+  flex-shrink: 0 !important;
+}
+.chat-mic-btn.listening {
+  background: rgba(234,90,12,.15) !important; color: var(--accent-move) !important;
+  border-color: var(--accent-move) !important;
+  animation: micPulse 1s ease infinite !important;
+}
+.tts-toggle-btn {
+  background: var(--card2); border: 1.5px solid var(--border);
+  border-radius: 50%; width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; color: var(--muted); transition: all .15s; flex-shrink: 0;
+}
+.tts-toggle-btn.active { background: rgba(234,90,12,.12); color: var(--accent-move); border-color: var(--accent-move); }
 
 /* ─── TERUGBLIK ─── */
 .terugblik-card {
@@ -594,6 +619,27 @@ label { display: block; font-size: 14px; font-weight: 600; color: var(--text-2);
   border-left: 3px solid var(--accent-food);
   color: var(--text);
 }
+
+/* ─── STATS ─── */
+.stats-period-tabs { display: flex; gap: 6px; margin-bottom: 14px; }
+.stats-tab {
+  flex: 1; padding: 8px 4px;
+  border: 1.5px solid var(--border); background: transparent;
+  border-radius: 8px; font-size: 13px; font-weight: 500;
+  color: var(--muted); cursor: pointer; transition: all .15s;
+}
+.stats-tab.active { background: var(--accent-move); color: #fff; border-color: var(--accent-move); }
+.stats-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 0; border-bottom: 1px solid var(--border);
+}
+.stats-row:last-child { border-bottom: none; }
+.stats-total-row { margin-top: 4px; padding-top: 10px; border-top: 1.5px solid var(--border); border-bottom: none; }
+.stats-total-row .stats-label,
+.stats-total-row .stats-val { font-weight: 700; color: var(--accent-move); font-size: 15px; }
+.stats-label { flex: 1; font-size: 14px; color: var(--text); }
+.stats-val { font-size: 14px; font-weight: 500; color: var(--text); }
+.stats-empty { color: var(--muted); font-size: 14px; text-align: center; padding: 16px 0; }
 
 /* ─── SETUP SCREEN ─── */
 #setup-overlay {
@@ -735,9 +781,83 @@ label { display: block; font-size: 14px; font-weight: 600; color: var(--text-2);
   color: var(--muted); font-size: 15px;
 }
 .empty-state svg { opacity: .35; margin-bottom: 10px; }
+
+/* ─── SPLASH ─── */
+#splash-overlay {
+  position: fixed; inset: 0; z-index: 600;
+  background: linear-gradient(160deg, #f97316 0%, var(--accent-move) 60%, #c2410c 100%);
+  display: flex; align-items: center; justify-content: center;
+  padding: 32px;
+  transition: opacity .5s ease;
+}
+#splash-overlay.fade-out { opacity: 0; pointer-events: none; }
+.splash-inner {
+  text-align: center;
+  animation: splashIn .65s cubic-bezier(.2,1.2,.4,1) both;
+}
+@keyframes splashIn {
+  from { transform: translateY(28px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+.splash-icon-wrap {
+  width: 112px; height: 112px; border-radius: 32px;
+  background: #fff;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 28px;
+  box-shadow: 0 16px 48px rgba(0,0,0,.18);
+  animation: splashIconPop .7s .1s cubic-bezier(.2,1.4,.4,1) both;
+}
+@keyframes splashIconPop {
+  from { transform: scale(.6); opacity: 0; }
+  to   { transform: scale(1);  opacity: 1; }
+}
+.splash-title {
+  color: #fff; font-size: 40px; font-weight: 800;
+  letter-spacing: -.025em; line-height: 1; margin-bottom: 12px;
+}
+.splash-sub { color: rgba(255,255,255,.82); font-size: 17px; font-weight: 500; }
+
+/* ─── VOICE INPUT ─── */
+.input-mic-wrap { position: relative; }
+.input-mic-wrap input { padding-right: 52px; }
+.mic-btn {
+  position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+  background: var(--card2); border: 1.5px solid var(--border-strong);
+  border-radius: 10px; width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; flex-shrink: 0; color: var(--muted);
+  transition: background .15s, border-color .15s, color .15s;
+}
+.mic-btn.listening {
+  background: var(--accent-move-soft); border-color: var(--accent-move);
+  color: var(--accent-move); animation: micPulse 1s ease infinite;
+}
+@keyframes micPulse { 0%,100%{opacity:1} 50%{opacity:.35} }
+
+/* ─── RECIPE DELETE BTN IN HEADER ─── */
+.rec-delete-btn {
+  background: none; border: none; color: var(--muted);
+  cursor: pointer; padding: 8px; min-height: 40px; min-width: 40px;
+  border-radius: 10px; display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: background .15s, color .15s;
+}
+.rec-delete-btn:active { background: var(--danger-soft); color: var(--danger); }
 </style>
 </head>
 <body>
+
+<!-- SPLASH -->
+<div id="splash-overlay" onclick="skipSplash()">
+  <div class="splash-inner">
+    <div class="splash-icon-wrap">
+      <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#ea5a0c" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+      </svg>
+    </div>
+    <h1 class="splash-title">Health Coach</h1>
+    <p class="splash-sub" id="splash-sub">Jouw persoonlijke gezondheidscoach</p>
+  </div>
+</div>
 
 <!-- BANNERS -->
 <div id="banners"></div>
@@ -955,6 +1075,17 @@ label { display: block; font-size: 14px; font-weight: 600; color: var(--text-2);
     </div>
 
     <div class="card" style="margin-bottom:14px;">
+      <h3 style="margin-bottom:12px;">Bewegingsstatistieken</h3>
+      <div class="stats-period-tabs">
+        <button class="stats-tab active" onclick="setStatsPeriod('week',this)">Week</button>
+        <button class="stats-tab" onclick="setStatsPeriod('month',this)">Maand</button>
+        <button class="stats-tab" onclick="setStatsPeriod('year',this)">Jaar</button>
+        <button class="stats-tab" onclick="setStatsPeriod('all',this)">Totaal</button>
+      </div>
+      <div id="stats-content"></div>
+    </div>
+
+    <div class="card" style="margin-bottom:14px;">
       <h3 style="margin-bottom:12px;">Wekelijkse terugblik</h3>
       <button class="btn btn-secondary btn-full" onclick="doTerugblik()">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.9"/></svg>
@@ -964,10 +1095,18 @@ label { display: block; font-size: 14px; font-weight: 600; color: var(--text-2);
     </div>
 
     <div class="card">
-      <h3 style="margin-bottom:14px;">Coach</h3>
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;">
+        <h3>Coach</h3>
+        <button id="tts-toggle" class="tts-toggle-btn active" onclick="toggleTTS()" title="Spraak uit">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+        </button>
+      </div>
       <div id="chat-history" class="chat-history"></div>
       <div class="chat-input-row">
-        <input id="chat-input" type="text" placeholder="Stel een vraag..." onkeydown="if(event.key==='Enter')sendChat()">
+        <input id="chat-input" type="text" placeholder="Spreek of typ een vraag..." onkeydown="if(event.key==='Enter')sendChat()">
+        <button id="mic-chat-input" class="mic-btn chat-mic-btn" onclick="startVoiceChatInput()" aria-label="Spreek in">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+        </button>
         <button onclick="sendChat()" aria-label="Verstuur">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
         </button>
@@ -1029,6 +1168,23 @@ const DEFAULT_MEALS = {
   diner:   { naam: 'Wisselend', vezels: '~10g' },
   snack:   { naam: 'Appel of peer + handjevol noten', vezels: '~4g' }
 };
+
+const DEFAULT_DUUR = { run: 45, gym: 60, bike: 60, commute: 30, walk: 45, walkdog: 30, other: 30, rest: 0 };
+
+// These names indicate a meal has not been explicitly planned
+const DEFAULT_MEAL_NAMES = {
+  lunch: 'Volkoren boterhammen met hummus & groente',
+  diner: 'Wisselend',
+  snack: 'Appel of peer + handjevol noten'
+};
+
+function isMealSet(meal, key) {
+  if (key === 'ontbijt') return true;
+  if (meal.gepland === true) return true;
+  if (meal.gepland === false) return false;
+  // Migration for existing data: treat non-default naam as set
+  return !!(meal.naam && meal.naam !== DEFAULT_MEAL_NAMES[key]);
+}
 
 const RECEPTEN = [
   {
@@ -1186,7 +1342,8 @@ function defaultData() {
     weken: {},
     streak: { huidig: 0, record: 0, laatsteDatum: '' },
     chatHistorie: [],
-    recepten: []
+    recepten: [],
+    stats: { byMonth: {} }
   };
 }
 
@@ -1194,6 +1351,11 @@ function ensureRecepten() {
   if (!data.recepten || data.recepten.length === 0) {
     data.recepten = RECEPTEN.map(r => ({ ...r }));
   }
+}
+
+function ensureStats() {
+  if (!data.stats) data.stats = { byMonth: {} };
+  if (!data.stats.byMonth) data.stats.byMonth = {};
 }
 
 function ensureWeek(weekKey) {
@@ -1204,7 +1366,7 @@ function ensureWeek(weekKey) {
     days.forEach((dateStr, i) => {
       const tmpl = WEEK_TEMPLATE[i];
       const activiteiten = tmpl.type === 'rest' ? [] : [
-        { id: 'a' + Date.now() + i, type: tmpl.type, naam: tmpl.naam, detail: tmpl.detail, afgevinkt: false }
+        { id: 'a' + Date.now() + i, type: tmpl.type, naam: tmpl.naam, detail: tmpl.detail, afgevinkt: false, duur: DEFAULT_DUUR[tmpl.type] || 30 }
       ];
       data.weken[weekKey][dateStr] = {
         activiteiten,
@@ -1225,9 +1387,19 @@ function ensureDay(dateStr) {
 
 function pruneOldWeeks() {
   if (!data.weken) return;
+  ensureStats();
   const allWeeks = Object.keys(data.weken).sort();
   while (allWeeks.length > 4) {
     const oldest = allWeeks.shift();
+    const weekData = data.weken[oldest];
+    Object.entries(weekData).forEach(([dateStr, dayData]) => {
+      if (!dayData.activiteiten) return;
+      const monthKey = dateStr.slice(0, 7);
+      if (!data.stats.byMonth[monthKey]) data.stats.byMonth[monthKey] = {};
+      dayData.activiteiten.filter(a => a.afgevinkt && (a.duur || 0) > 0).forEach(a => {
+        data.stats.byMonth[monthKey][a.type] = (data.stats.byMonth[monthKey][a.type] || 0) + (a.duur || 0);
+      });
+    });
     delete data.weken[oldest];
   }
 }
@@ -1247,11 +1419,13 @@ function loadLocal() {
     if (raw) {
       data = JSON.parse(raw);
       ensureRecepten();
+      ensureStats();
       return true;
     }
   } catch(e) {}
   data = defaultData();
   ensureRecepten();
+  ensureStats();
   return false;
 }
 
@@ -1778,17 +1952,28 @@ function renderTodayMeals(dateStr) {
 
   container.innerHTML = rows.map(row => {
     const meal = meals[row.key] || { naam: '', vezels: '' };
-    const onclick = row.fixed ? '' : `onclick="quickEditMeal('${dateStr}','${row.key}')"`;
-    const fixedTag = row.fixed ? '<span class="meal-fixed-tag">vast</span>' : '';
-    return `<div class="meal-row" ${onclick}>
-      <div class="meal-icon">${row.icon}</div>
-      <div class="meal-info">
-        <div class="meal-label">${row.label}</div>
-        <div class="meal-name">${meal.naam}</div>
-      </div>
-      ${fixedTag}
-      <span class="meal-fibers">${meal.vezels}</span>
-    </div>`;
+    if (isMealSet(meal, row.key)) {
+      const onclick = row.fixed ? '' : `onclick="quickEditMeal('${dateStr}','${row.key}')"`;
+      const fixedTag = row.fixed ? '<span class="meal-fixed-tag">vast</span>' : '';
+      return `<div class="meal-row" ${onclick}>
+        <div class="meal-icon">${row.icon}</div>
+        <div class="meal-info">
+          <div class="meal-label">${row.label}</div>
+          <div class="meal-name">${meal.naam}</div>
+        </div>
+        ${fixedTag}
+        <span class="meal-fibers">${meal.vezels}</span>
+      </div>`;
+    } else {
+      return `<div class="meal-row" onclick="quickEditMeal('${dateStr}','${row.key}')" style="opacity:.7;">
+        <div class="meal-icon">${row.icon}</div>
+        <div class="meal-info">
+          <div class="meal-label">${row.label}</div>
+          <div class="meal-name" style="color:var(--muted);font-size:14px;">Nog niet gepland</div>
+        </div>
+        <span style="font-size:13px;font-weight:700;color:var(--accent-move);">+ Plannen</span>
+      </div>`;
+    }
   }).join('');
 }
 
@@ -1811,7 +1996,7 @@ function quickEditMeal(dateStr, mealKey) {
     </div>
     <div class="form-group">
       <label>Wat eet je?</label>
-      <input id="quick-meal-input" type="text" value="${meal.naam.replace(/"/g,'&quot;')}" autocomplete="off">
+      ${micInput('quick-meal-input', 'Spreek of typ je maaltijd', meal.naam)}
     </div>
     <label>Snelkeuzes</label>
     <div class="meal-quick-chips">
@@ -1826,7 +2011,9 @@ function saveQuickMeal(dateStr, mealKey) {
   const weekKey = getISOWeek(new Date(dateStr + 'T12:00:00'));
   const val = document.getElementById('quick-meal-input').value.trim();
   if (val) {
-    data.weken[weekKey][dateStr].maaltijden[mealKey].naam = val;
+    const meal = data.weken[weekKey][dateStr].maaltijden[mealKey];
+    meal.naam = val;
+    meal.gepland = true;
     saveAndSync();
   }
   closeModal();
@@ -1871,7 +2058,7 @@ function renderWeek() {
     const isSunday = isZondag(dateStr);
 
     const badgeClass = `badge-${tmpl.type}`;
-    const badgeLabel = { run:'Lopen', gym:'Gym', bike:'Fietsen', commute:'Fiets werk', rest:'Rust' }[tmpl.type] || 'Overig';
+    const badgeLabel = { run:'Lopen', gym:'Gym', bike:'Fietsen', commute:'Fiets werk', walk:'Wandelen', walkdog:'Wandelen met Otis', rest:'Rust' }[tmpl.type] || 'Overig';
 
     let actHTML = '';
     if (isRust || isSunday) {
@@ -1985,7 +2172,7 @@ function quickEditWeekMeal(dateStr) {
     </div>
     <div class="form-group">
       <label>Wat eet je?</label>
-      <input id="quick-meal-input" type="text" value="${(meal.naam||'').replace(/"/g,'&quot;')}" autocomplete="off">
+      ${micInput('quick-meal-input', 'Spreek of typ je maaltijd', meal.naam || '')}
     </div>
     <label>Snelkeuzes</label>
     <div class="meal-quick-chips">
@@ -2000,7 +2187,9 @@ function saveQuickWeekMeal(dateStr) {
   const weekKey = getISOWeek(new Date(dateStr + 'T12:00:00'));
   const val = document.getElementById('quick-meal-input').value.trim();
   if (val) {
-    data.weken[weekKey][dateStr].maaltijden.diner.naam = val;
+    const meal = data.weken[weekKey][dateStr].maaltijden.diner;
+    meal.naam = val;
+    meal.gepland = true;
     saveAndSync();
   }
   closeModal();
@@ -2051,21 +2240,27 @@ function editActivity(dateStr, actId) {
     </div>
     <div class="form-group">
       <label>Type</label>
-      <select id="edit-type">
+      <select id="edit-type" onchange="document.getElementById('edit-duur').value=DEFAULT_DUUR[this.value]||30">
         <option value="run" ${act.type==='run'?'selected':''}>Lopen</option>
         <option value="bike" ${act.type==='bike'?'selected':''}>Fietsen</option>
         <option value="commute" ${act.type==='commute'?'selected':''}>Fiets werk</option>
         <option value="gym" ${act.type==='gym'?'selected':''}>Gym</option>
+        <option value="walk" ${act.type==='walk'?'selected':''}>Wandelen</option>
+        <option value="walkdog" ${act.type==='walkdog'?'selected':''}>Wandelen met Otis</option>
         <option value="other" ${act.type==='other'?'selected':''}>Overig</option>
       </select>
     </div>
     <div class="form-group">
+      <label>Duur (minuten)</label>
+      <input id="edit-duur" type="number" min="0" max="600" step="5" value="${act.duur || DEFAULT_DUUR[act.type] || 30}">
+    </div>
+    <div class="form-group">
       <label>Naam</label>
-      <input id="edit-naam" type="text" value="${act.naam}">
+      ${micInput('edit-naam', 'bijv. Easy run', act.naam)}
     </div>
     <div class="form-group">
       <label>Details</label>
-      <input id="edit-detail" type="text" value="${act.detail}">
+      ${micInput('edit-detail', 'bijv. 8 km zone 2', act.detail)}
     </div>
     <button class="btn btn-primary btn-full" onclick="saveEditActivity('${dateStr}','${actId}')">Opslaan</button>
   `);
@@ -2076,6 +2271,7 @@ function saveEditActivity(dateStr, actId) {
   const act = data.weken[weekKey][dateStr].activiteiten.find(a => a.id === actId);
   if (!act) return;
   act.type = document.getElementById('edit-type').value;
+  act.duur = parseInt(document.getElementById('edit-duur').value, 10) || 0;
   act.naam = document.getElementById('edit-naam').value.trim() || act.naam;
   act.detail = document.getElementById('edit-detail').value.trim();
   data.weken[weekKey][dateStr].aangepast = true;
@@ -2093,21 +2289,27 @@ function addActivity(dateStr) {
     </div>
     <div class="form-group">
       <label>Type</label>
-      <select id="new-type">
+      <select id="new-type" onchange="document.getElementById('new-duur').value=DEFAULT_DUUR[this.value]||30">
         <option value="run">Lopen</option>
         <option value="bike">Fietsen</option>
         <option value="commute">Fiets werk</option>
         <option value="gym">Gym</option>
+        <option value="walk">Wandelen</option>
+        <option value="walkdog">Wandelen met Otis</option>
         <option value="other">Overig</option>
       </select>
     </div>
     <div class="form-group">
+      <label>Duur (minuten)</label>
+      <input id="new-duur" type="number" min="0" max="600" step="5" value="45">
+    </div>
+    <div class="form-group">
       <label>Naam</label>
-      <input id="new-naam" type="text" placeholder="bijv. Yoga">
+      ${micInput('new-naam', 'bijv. Yoga')}
     </div>
     <div class="form-group">
       <label>Details</label>
-      <input id="new-detail" type="text" placeholder="bijv. 30 min">
+      ${micInput('new-detail', 'bijv. 30 min')}
     </div>
     <button class="btn btn-primary btn-full" onclick="confirmAddActivity('${dateStr}')">Toevoegen</button>
   `);
@@ -2118,12 +2320,14 @@ function confirmAddActivity(dateStr) {
   if (!naam) return;
   const weekKey = getISOWeek(new Date(dateStr + 'T12:00:00'));
   ensureDay(dateStr);
+  const newType = document.getElementById('new-type').value;
   data.weken[weekKey][dateStr].activiteiten.push({
     id: 'a' + Date.now(),
-    type: document.getElementById('new-type').value,
+    type: newType,
     naam,
     detail: document.getElementById('new-detail').value.trim(),
-    afgevinkt: false
+    afgevinkt: false,
+    duur: parseInt(document.getElementById('new-duur').value, 10) || DEFAULT_DUUR[newType] || 30
   });
   data.weken[weekKey][dateStr].aangepast = true;
   saveAndSync();
@@ -2174,6 +2378,9 @@ function renderRecepten() {
             <span class="fiber-badge">${r.vezels}</span>
             <span class="time-badge">${r.tijd}</span>
           </div>
+          <button class="rec-delete-btn" onclick="event.stopPropagation();deleteRecept('${r.id}')" aria-label="Verwijder recept">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+          </button>
           <svg class="chevron" id="rec-chev-${r.id}" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
         <div class="recipe-body" id="recbody-${r.id}" style="display:none;">
@@ -2189,16 +2396,10 @@ function renderRecepten() {
             <select id="planday-${r.id}">${dagOpties}</select>
             <button class="btn btn-secondary btn-sm" onclick="planRecipeForDay('${r.id}')">Plan voor dag →</button>
           </div>
-          <div style="display:flex;gap:8px;margin-top:10px;">
-            <button class="btn btn-ghost btn-sm" style="flex:1;" onclick="editReceptModal('${r.id}')">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-              Bewerken
-            </button>
-            <button class="btn btn-sm" style="flex:1;background:var(--danger-soft);color:var(--danger);border:1px solid #fecaca;" onclick="deleteRecept('${r.id}')">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
-              Verwijderen
-            </button>
-          </div>
+          <button class="btn btn-ghost btn-full btn-sm" style="margin-top:10px;" onclick="editReceptModal('${r.id}')">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            Bewerken
+          </button>
         </div>
       </div>`).join('');
 
@@ -2222,7 +2423,8 @@ function planRecipeForDay(recipeId) {
   data.weken[weekKey][dateStr].maaltijden.diner = {
     naam: recept.naam,
     vezels: recept.vezels,
-    receptId: recipeId
+    receptId: recipeId,
+    gepland: true
   };
   saveAndSync();
   showBanner('yellow', `${recept.naam} ingepland als diner.`);
@@ -2387,7 +2589,7 @@ function addReceptModal() {
       <button class="modal-close" onclick="closeModal()">✕</button>
     </div>
     <div class="form-group"><label>Naam</label>
-      <input id="rec-naam" type="text" placeholder="bijv. Groente wok met tofu">
+      ${micInput('rec-naam', 'bijv. Groente wok met tofu')}
     </div>
     <div style="display:flex;gap:8px;">
       <div class="form-group" style="flex:1;"><label>Vezels</label>
@@ -2433,7 +2635,7 @@ function editReceptModal(id) {
       <button class="modal-close" onclick="closeModal()">✕</button>
     </div>
     <div class="form-group"><label>Naam</label>
-      <input id="rec-naam" type="text" value="${r.naam.replace(/"/g,'&quot;')}">
+      ${micInput('rec-naam', 'Naam van het recept', r.naam)}
     </div>
     <div style="display:flex;gap:8px;">
       <div class="form-group" style="flex:1;"><label>Vezels</label>
@@ -2479,9 +2681,114 @@ function copyToClipboard(text) {
 
 // ─── COACH TAB ───────────────────────────────────────────────────────────────
 
+// ─── STATS ───────────────────────────────────────────────────────────────────
+
+const TYPE_LABELS = { run:'Lopen', gym:'Gym', bike:'Fietsen', commute:'Fiets werk', walk:'Wandelen', walkdog:'Wandelen met Otis', other:'Overig' };
+
+function fmtMin(m) {
+  if (!m || m <= 0) return '0 min';
+  const h = Math.floor(m / 60);
+  const rem = m % 60;
+  if (h === 0) return `${rem} min`;
+  if (rem === 0) return `${h}u`;
+  return `${h}u ${rem}m`;
+}
+
+function computeStats(period) {
+  ensureStats();
+  const now = new Date();
+  const curYear = now.getFullYear();
+  const curMonthKey = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
+  const curWeekKey = getISOWeek(now);
+  const curWeekDates = new Set(getWeekDates(curWeekKey));
+
+  const result = {};
+
+  const addMin = (type, min) => {
+    if (!min || min <= 0) return;
+    result[type] = (result[type] || 0) + min;
+  };
+
+  if (data.weken) {
+    Object.entries(data.weken).forEach(([weekKey, weekData]) => {
+      Object.entries(weekData).forEach(([dateStr, dayData]) => {
+        if (!dayData.activiteiten) return;
+        const monthKey = dateStr.slice(0, 7);
+        const yearNum = parseInt(dateStr.slice(0, 4), 10);
+        dayData.activiteiten.filter(a => a.afgevinkt && (a.duur || 0) > 0).forEach(a => {
+          if (period === 'week' && curWeekDates.has(dateStr)) addMin(a.type, a.duur);
+          else if (period === 'month' && monthKey === curMonthKey) addMin(a.type, a.duur);
+          else if (period === 'year' && yearNum === curYear) addMin(a.type, a.duur);
+          else if (period === 'all') addMin(a.type, a.duur);
+        });
+      });
+    });
+  }
+
+  if (period !== 'week') {
+    Object.entries(data.stats.byMonth).forEach(([monthKey, types]) => {
+      const yearNum = parseInt(monthKey.slice(0, 4), 10);
+      let include = false;
+      if (period === 'all') include = true;
+      else if (period === 'year' && yearNum === curYear) include = true;
+      else if (period === 'month' && monthKey === curMonthKey) include = true;
+      if (include) {
+        Object.entries(types).forEach(([t, m]) => addMin(t, m));
+      }
+    });
+  }
+
+  const total = Object.values(result).reduce((s, v) => s + v, 0);
+  return { byType: result, total };
+}
+
+let _statsPeriod = 'week';
+
+function setStatsPeriod(period, btn) {
+  _statsPeriod = period;
+  document.querySelectorAll('.stats-tab').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  renderStatsContent();
+}
+
+function renderStatsContent() {
+  const el = document.getElementById('stats-content');
+  if (!el) return;
+  const { byType, total } = computeStats(_statsPeriod);
+  if (total === 0) {
+    el.innerHTML = `<div class="stats-empty">Nog geen afgevinkte activiteiten in deze periode.</div>`;
+    return;
+  }
+  const rows = Object.entries(byType)
+    .filter(([, m]) => m > 0)
+    .sort((a, b) => b[1] - a[1])
+    .map(([t, m]) => `
+      <div class="stats-row">
+        <span class="stats-label">${TYPE_LABELS[t] || t}</span>
+        <span class="stats-val">${fmtMin(m)}</span>
+      </div>`)
+    .join('');
+  el.innerHTML = `
+    ${rows}
+    <div class="stats-row stats-total-row">
+      <span class="stats-label">Totaal</span>
+      <span class="stats-val">${fmtMin(total)}</span>
+    </div>`;
+}
+
+function renderStats() {
+  renderStatsContent();
+}
+
 function renderCoach() {
   updateStreakUI();
   renderChatHistory();
+  renderStats();
+  const btn = document.getElementById('tts-toggle');
+  if (btn) {
+    btn.classList.toggle('active', _ttsEnabled);
+    btn.title = _ttsEnabled ? 'Spraak uit' : 'Spraak aan';
+  }
 }
 
 function renderChatHistory() {
@@ -2528,6 +2835,7 @@ async function sendChat() {
     if (data.chatHistorie.length > 20) data.chatHistorie.shift();
     saveAndSync();
     renderChatHistory();
+    speakCoach(reply);
   } catch(e) {
     typingEl.remove();
     const errEl = document.createElement('div');
@@ -2618,6 +2926,98 @@ function closeModal() {
   document.getElementById('modal-container').innerHTML = '';
 }
 
+// ─── VOICE INPUT ─────────────────────────────────────────────────────────────
+
+function startVoiceInput(inputId) {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) { showBanner('yellow', 'Spraakinvoer niet beschikbaar in deze browser.'); return; }
+  const recognition = new SR();
+  recognition.lang = 'nl-NL';
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+  const input = document.getElementById(inputId);
+  const btn = document.getElementById('mic-' + inputId);
+  if (btn) btn.classList.add('listening');
+  recognition.onresult = e => {
+    const t = e.results[0][0].transcript;
+    if (input) { input.value = t; input.focus(); }
+    if (btn) btn.classList.remove('listening');
+  };
+  recognition.onerror = () => {
+    if (btn) btn.classList.remove('listening');
+    showBanner('yellow', 'Spraakinvoer mislukt. Probeer opnieuw.');
+  };
+  recognition.onend = () => { if (btn) btn.classList.remove('listening'); };
+  recognition.start();
+}
+
+// ─── TEKST-NAAR-SPRAAK ───────────────────────────────────────────────────────
+
+let _ttsEnabled = localStorage.getItem('hc_tts') !== 'off';
+
+function toggleTTS() {
+  _ttsEnabled = !_ttsEnabled;
+  localStorage.setItem('hc_tts', _ttsEnabled ? 'on' : 'off');
+  const btn = document.getElementById('tts-toggle');
+  if (btn) {
+    btn.classList.toggle('active', _ttsEnabled);
+    btn.title = _ttsEnabled ? 'Spraak uit' : 'Spraak aan';
+  }
+  if (!_ttsEnabled) window.speechSynthesis.cancel();
+}
+
+function speakCoach(text) {
+  if (!_ttsEnabled || !window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const utt = new SpeechSynthesisUtterance(text);
+  utt.lang = 'nl-NL';
+  utt.rate = 1.0;
+  utt.pitch = 1.0;
+  const doSpeak = () => {
+    const voices = window.speechSynthesis.getVoices();
+    const nlVoice = voices.find(v => v.lang.startsWith('nl')) || null;
+    if (nlVoice) utt.voice = nlVoice;
+    window.speechSynthesis.speak(utt);
+  };
+  if (window.speechSynthesis.getVoices().length > 0) {
+    doSpeak();
+  } else {
+    window.speechSynthesis.onvoiceschanged = () => { doSpeak(); window.speechSynthesis.onvoiceschanged = null; };
+  }
+}
+
+function startVoiceChatInput() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) { showBanner('yellow', 'Spraakinvoer niet beschikbaar in deze browser.'); return; }
+  const recognition = new SR();
+  recognition.lang = 'nl-NL';
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+  const input = document.getElementById('chat-input');
+  const btn = document.getElementById('mic-chat-input');
+  if (btn) btn.classList.add('listening');
+  recognition.onresult = e => {
+    const t = e.results[0][0].transcript;
+    if (input) input.value = t;
+    if (btn) btn.classList.remove('listening');
+    sendChat();
+  };
+  recognition.onerror = () => {
+    if (btn) btn.classList.remove('listening');
+    showBanner('yellow', 'Spraakinvoer mislukt. Probeer opnieuw.');
+  };
+  recognition.onend = () => { if (btn) btn.classList.remove('listening'); };
+  recognition.start();
+}
+
+function micInput(id, placeholder, value = '') {
+  const mic = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>`;
+  return `<div class="input-mic-wrap">
+    <input id="${id}" type="text" placeholder="${placeholder}" value="${value.replace(/"/g,'&quot;')}" autocomplete="off">
+    <button id="mic-${id}" class="mic-btn" type="button" onclick="startVoiceInput('${id}')" title="Spreek in">${mic}</button>
+  </div>`;
+}
+
 // ─── ICONS ───────────────────────────────────────────────────────────────────
 
 function iconSVG(type) {
@@ -2626,6 +3026,8 @@ function iconSVG(type) {
     gym: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6d28d9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4v16M18 4v16M9 4h6M9 20h6M3 8h3M18 8h3M3 16h3M18 16h3"/></svg>`,
     bike: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1d4ed8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="16" r="3"/><circle cx="18" cy="16" r="3"/><path d="M6 16l5-8h3l2 4"/><path d="M9 8h5l3 5"/></svg>`,
     commute: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0f766e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="16" r="3"/><circle cx="18" cy="16" r="3"/><path d="M6 16l5-8h3l2 4"/><path d="M9 8h5l3 5"/><path d="M12 2v3"/><path d="M10 2h4"/></svg>`,
+    walk: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="1.5"/><path d="M9 9l3 2 3-2"/><path d="M12 11v5"/><path d="M9 22l1.5-4"/><path d="M15 22l-1.5-4"/><path d="M8 12l-2 3"/><path d="M16 12l2 3"/></svg>`,
+    walkdog: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#b45309" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="14" r="3"/><ellipse cx="6.5" cy="10.5" rx="1.5" ry="2"/><ellipse cx="15.5" cy="10.5" rx="1.5" ry="2"/><ellipse cx="8.5" cy="7" rx="1" ry="1.5"/><ellipse cx="14" cy="7" rx="1" ry="1.5"/><path d="M14 14c1 1 3 1 4 0"/></svg>`,
     rest: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6b6b6b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`,
     other: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>`
   };
@@ -2682,19 +3084,40 @@ function setupSwipeGestures() {
   });
 }
 
-window.addEventListener('DOMContentLoaded', () => {
-  if (!loadSettings() || !settings.setupDone) {
+let _splashTimer = null;
+
+function skipSplash() {
+  clearTimeout(_splashTimer);
+  dismissSplash();
+}
+
+function dismissSplash() {
+  const splash = document.getElementById('splash-overlay');
+  splash.classList.add('fade-out');
+  setTimeout(() => { splash.style.display = 'none'; continueInit(); }, 480);
+}
+
+function continueInit() {
+  if (!settings.setupDone) {
     document.getElementById('setup-overlay').classList.add('visible');
     return;
   }
-
   loadLocal();
-
   document.getElementById('setup-overlay').classList.remove('visible');
   document.getElementById('app').style.display = 'flex';
   document.getElementById('app').style.flexDirection = 'column';
-
   initApp();
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  loadSettings();
+
+  const subEl = document.getElementById('splash-sub');
+  if (subEl && settings.naam && settings.setupDone) {
+    subEl.textContent = `Welkom terug, ${settings.naam} 👋`;
+  }
+
+  _splashTimer = setTimeout(dismissSplash, 1800);
 });
 </script>
 </body>
