@@ -449,6 +449,12 @@ label { display: block; font-size: 14px; font-weight: 600; color: var(--text-2);
   border-radius: 8px;
 }
 .activity-edit-btn:active { background: var(--card2); }
+.activity-delete-btn {
+  background: none; border: none; color: var(--muted);
+  cursor: pointer; padding: 8px; min-height: 40px; min-width: 40px;
+  border-radius: 8px;
+}
+.activity-delete-btn:active { background: var(--danger-soft); color: var(--danger); }
 
 /* ─── MODALS ─── */
 .modal-overlay {
@@ -719,30 +725,32 @@ select.modal-input { appearance: auto; }
 .intro-card {
   max-width: 380px; width: 100%;
   display: flex; flex-direction: column; align-items: center;
-  gap: 0; text-align: center;
+  text-align: center;
 }
-.intro-logo { margin-bottom: 12px; }
-.intro-title { font-size: 28px; font-weight: 800; letter-spacing: -.5px; margin-bottom: 6px; }
-.intro-sub { font-size: 15px; color: var(--muted); margin-bottom: 28px; line-height: 1.4; }
-.intro-pillars { display: flex; gap: 10px; width: 100%; margin-bottom: 28px; }
-.intro-pillar {
-  flex: 1; background: var(--card); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 14px 8px;
-  display: flex; flex-direction: column; align-items: center; gap: 6px;
+.intro-logo { margin-bottom: 14px; }
+.intro-title { font-size: 30px; font-weight: 800; letter-spacing: -.5px; margin-bottom: 8px; }
+.intro-sub { font-size: 15px; color: var(--muted); margin-bottom: 24px; line-height: 1.45; }
+.intro-feature-list {
+  width: 100%; display: flex; flex-direction: column; gap: 12px;
+  margin-bottom: 20px; text-align: left;
 }
-.intro-pillar-icon {
-  width: 42px; height: 42px; border-radius: 12px;
-  display: flex; align-items: center; justify-content: center;
+.intro-feature {
+  display: flex; align-items: flex-start; gap: 12px;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 12px; padding: 12px 14px;
+  font-size: 14px; line-height: 1.4; color: var(--text-2);
 }
-.intro-pillar-label { font-size: 13px; font-weight: 700; color: var(--text); }
-.intro-pillar-desc { font-size: 11px; color: var(--muted); line-height: 1.35; }
+.intro-feature-icon { flex-shrink: 0; display: flex; align-items: center; justify-content: center; width: 28px; }
+.intro-disclaimer {
+  font-size: 12px; color: var(--muted-2); margin-bottom: 20px;
+  line-height: 1.4; font-style: italic;
+}
 .intro-btn {
   width: 100%; padding: 16px; border-radius: var(--radius);
   background: var(--accent-move); color: #fff;
   border: none; font-size: 17px; font-weight: 700;
-  cursor: pointer; font-family: inherit; margin-bottom: 14px;
+  cursor: pointer; font-family: inherit;
 }
-.intro-tip { font-size: 13px; color: var(--muted-2); }
 
 /* ─── STATS ─── */
 .stats-period-tabs { display: flex; gap: 6px; margin-bottom: 14px; }
@@ -809,6 +817,12 @@ select.modal-input { appearance: auto; }
   justify-content: center; flex-shrink: 0; transition: color .15s;
 }
 .activity-edit-btn:active { color: var(--accent-move); }
+.activity-delete-btn {
+  background: none; border: none; cursor: pointer; color: var(--muted);
+  padding: 7px; border-radius: 50%; display: flex; align-items: center;
+  justify-content: center; flex-shrink: 0; transition: color .15s;
+}
+.activity-delete-btn:active { color: var(--danger); }
 
 /* ─── EXERCISE LINKS IN CHAT ─── */
 .exercise-link {
@@ -1478,7 +1492,7 @@ select.modal-input { appearance: auto; }
   color: #fff; border-radius: 12px; padding: 10px 8px;
   font-size: 13px; font-weight: 600; cursor: pointer; text-align: left;
   min-height: 44px; transition: background .15s; font-family: inherit;
-  line-height: 1.35;
+  line-height: 1.35; display: flex; flex-direction: column; align-items: flex-start; gap: 5px;
 }
 .quick-q-btn:active { background: rgba(255,255,255,.3); }
 
@@ -1878,10 +1892,22 @@ select.modal-input { appearance: auto; }
       </div>
       <!-- Snelvragen -->
       <div class="quick-q-row">
-        <button class="quick-q-btn" onclick="askQuickQ('Hoe gaat het met mijn voortgang en streak?')">📊 Mijn voortgang</button>
-        <button class="quick-q-btn" onclick="askQuickQ('Wat raad je me aan voor vandaag qua training en eten?')">💡 Advies vandaag</button>
-        <button class="quick-q-btn" onclick="askQuickQ('Wat kan ik het beste eten na het sporten vandaag?')">🍽️ Na het sporten</button>
-        <button class="quick-q-btn" onclick="askQuickQ('Hoe ging mijn week qua sport en voeding?')">📅 Mijn week</button>
+        <button class="quick-q-btn" onclick="askQuickQ('Hoe gaat het met mijn voortgang en streak?')">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          Mijn voortgang
+        </button>
+        <button class="quick-q-btn" onclick="askQuickQ('Wat raad je me aan voor vandaag qua training en eten?')">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Advies vandaag
+        </button>
+        <button class="quick-q-btn" onclick="askQuickQ('Wat kan ik het beste eten na het sporten vandaag?')">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v12"/><path d="M18 9a3 3 0 0 0-3-3H6"/><path d="M6 15a6 6 0 0 0 12 0"/></svg>
+          Na het sporten
+        </button>
+        <button class="quick-q-btn" onclick="askQuickQ('Hoe ging mijn week qua sport en voeding?')">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Mijn week
+        </button>
       </div>
     </div>
 
@@ -1993,35 +2019,40 @@ select.modal-input { appearance: auto; }
 <div id="intro-overlay" style="display:none;">
   <div class="intro-card">
     <div class="intro-logo">
-      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--accent-move)"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--accent-move)"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
     </div>
     <h1 class="intro-title">Health Coach</h1>
-    <p class="intro-sub">Jouw persoonlijke begeleider voor sport en voeding</p>
-    <div class="intro-pillars">
-      <div class="intro-pillar">
-        <div class="intro-pillar-icon" style="background:var(--accent-move-soft);color:var(--accent-move);">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="1.5"/><path d="M8 17l2-5 3 3 2-6"/><path d="M5 12l3-1 2 2"/><path d="M15 14l2 1 2 3"/></svg>
-        </div>
-        <div class="intro-pillar-label">Bewegen</div>
-        <div class="intro-pillar-desc">Log sport, plan je week, volg je streak</div>
+    <p class="intro-sub">Je persoonlijke coach voor sport én eten — makkelijker dan je denkt</p>
+
+    <div class="intro-feature-list">
+      <div class="intro-feature">
+        <span class="intro-feature-icon" style="color:var(--accent-move);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+        </span>
+        <span><strong>Spreek of typ</strong> — log sport, eten en water in één zin</span>
       </div>
-      <div class="intro-pillar">
-        <div class="intro-pillar-icon" style="background:var(--accent-food-soft);color:var(--accent-food);">
+      <div class="intro-feature">
+        <span class="intro-feature-icon" style="color:var(--accent-move);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </span>
+        <span><strong>Plan zonder gedoe</strong> — weekschema klaar in seconden</span>
+      </div>
+      <div class="intro-feature">
+        <span class="intro-feature-icon" style="color:var(--accent-food);">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v12"/><path d="M18 9a3 3 0 0 0-3-3H6"/><path d="M6 15a6 6 0 0 0 12 0"/></svg>
-        </div>
-        <div class="intro-pillar-label">Eten</div>
-        <div class="intro-pillar-desc">Recepten, vezels, eiwitten en weekmenu</div>
+        </span>
+        <span><strong>Chef aan huis</strong> — AI genereert recepten op maat</span>
       </div>
-      <div class="intro-pillar">
-        <div class="intro-pillar-icon" style="background:rgba(109,40,217,.08);color:#6d28d9;">
+      <div class="intro-feature">
+        <span class="intro-feature-icon" style="color:#6d28d9;">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-        </div>
-        <div class="intro-pillar-label">Coach</div>
-        <div class="intro-pillar-desc">Praat, vraag advies, sla tips op</div>
+        </span>
+        <span><strong>Coach altijd bij je</strong> — vraag advies, krijg een compliment</span>
       </div>
     </div>
+
+    <p class="intro-disclaimer">Geen vervanging voor je sport-app — wél je companion, trainer en cheerleader.</p>
     <button class="intro-btn" onclick="dismissIntro()">Aan de slag →</button>
-    <p class="intro-tip">Spreek in of typ — de app begrijpt je</p>
   </div>
 </div>
 
@@ -2468,6 +2499,7 @@ let settings = {};
 let data = {};
 let currentWeekOffset = 0;
 let genCount = 3;
+let genFocus = 'combi';
 
 // ─── DATE HELPERS ─────────────────────────────────────────────────────────────
 
@@ -3140,6 +3172,9 @@ function renderTodayActivities(dateStr) {
       <button class="activity-edit-btn" onclick="editActivity('${dateStr}','${a.id}')" title="Bewerken">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
       </button>
+      <button class="activity-delete-btn" onclick="deleteActivity('${dateStr}','${a.id}')" title="Verwijderen">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+      </button>
     </div>`; }).join('');
 
   renderTodayProgress(dateStr);
@@ -3426,6 +3461,9 @@ function renderWeek() {
           <button class="activity-edit-btn" onclick="editActivity('${dateStr}','${a.id}')">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
           </button>
+          <button class="activity-delete-btn" onclick="deleteActivity('${dateStr}','${a.id}')" title="Verwijderen">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+          </button>
         </div>`;}).join('') + `<button class="add-activity-btn" onclick="addActivity('${dateStr}')">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         Activiteit toevoegen
@@ -3605,6 +3643,17 @@ function editActivity(dateStr, actId) {
   `);
 }
 
+function deleteActivity(dateStr, actId) {
+  if (!confirm('Activiteit verwijderen?')) return;
+  const weekKey = getISOWeek(new Date(dateStr + 'T12:00:00'));
+  const dayData = data.weken[weekKey][dateStr];
+  dayData.activiteiten = dayData.activiteiten.filter(a => a.id !== actId);
+  dayData.aangepast = true;
+  saveAndSync();
+  renderWeek();
+  if (dateStr === today()) renderTodayActivities(dateStr);
+}
+
 function saveEditActivity(dateStr, actId) {
   const weekKey = getISOWeek(new Date(dateStr + 'T12:00:00'));
   const act = data.weken[weekKey][dateStr].activiteiten.find(a => a.id === actId);
@@ -3696,7 +3745,7 @@ function renderRecepten() {
   const genSection = `
     <div class="recipe-gen-card">
       <div class="recipe-gen-title">Jouw recepten</div>
-      <div class="recipe-gen-sub">AI bedenkt vezelrijke gerechten op maat</div>
+      <div class="recipe-gen-sub">AI bedenkt gezonde gerechten op maat</div>
       <div class="recipe-gen-row">
         <span class="recipe-gen-label">Aantal</span>
         ${[1,2,3].map(n => `<button class="gen-pill${genCount===n?' active':''}" onclick="setGenCount(${n})">${n}</button>`).join('')}
@@ -3705,7 +3754,22 @@ function renderRecepten() {
           <span class="vega-toggle-label">🌱 Vega</span>
         </label>
       </div>
-      <input id="gen-focus" type="text" class="recipe-gen-focus" placeholder="Focus: bijv. Aziatisch, pasta, snel klaar…">
+      <div class="recipe-gen-row" style="margin-top:6px;">
+        <span class="recipe-gen-label">Focus</span>
+        <button class="gen-pill gen-focus-pill${genFocus==='vezels'?' active':''}" onclick="setGenFocus('vezels',this)">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 0 1 10 10c0 5.52-4.48 10-10 10"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10"/><path d="M12 2v20"/><path d="M2 12h20"/></svg>
+          Vezels
+        </button>
+        <button class="gen-pill gen-focus-pill${genFocus==='eiwitten'?' active':''}" onclick="setGenFocus('eiwitten',this)">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4v16"/><path d="M18 4v16"/><path d="M6 8h12"/><path d="M6 16h12"/></svg>
+          Eiwitten
+        </button>
+        <button class="gen-pill gen-focus-pill${genFocus==='combi'?' active':''}" onclick="setGenFocus('combi',this)">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          Combi
+        </button>
+      </div>
+      <input id="gen-focus-input" type="text" class="recipe-gen-focus" placeholder="Extra focus: bijv. Aziatisch, pasta, snel klaar…">
       ${hasKey ? `<div class="recipe-gen-btns">
         <button id="gen-btn" class="recipe-gen-main-btn" onclick="generateRecepten()">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
@@ -4016,9 +4080,21 @@ function _categorizeIngredients(items) {
 
 function setGenCount(n) {
   genCount = n;
-  document.querySelectorAll('.gen-pill').forEach((b, i) => {
+  document.querySelectorAll('.gen-pill:not(.gen-focus-pill)').forEach((b, i) => {
     b.classList.toggle('active', i + 1 === n);
   });
+}
+
+function setGenFocus(f, btn) {
+  genFocus = f;
+  document.querySelectorAll('.gen-focus-pill').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+}
+
+function getActiveGenCount() {
+  const active = document.querySelector('.gen-pill.active');
+  if (active) { const n = parseInt(active.textContent); if (n > 0) return n; }
+  return genCount;
 }
 
 async function generateRecepten() {
@@ -4026,7 +4102,7 @@ async function generateRecepten() {
     showBanner('red', 'Geen API-sleutel — voeg je Anthropic sleutel in via Instellingen.');
     return;
   }
-  const focusEl = document.getElementById('gen-focus');
+  const focusEl = document.getElementById('gen-focus-input');
   const focus = focusEl ? focusEl.value.trim() : '';
   const isVega = !!(document.getElementById('gen-vega') && document.getElementById('gen-vega').checked);
   const btn = document.getElementById('gen-btn');
@@ -4061,6 +4137,7 @@ Is dit een logische combinatie die culinair bij elkaar past? Antwoord ALLEEN met
 }
 
 async function _doGenerateRecepten(focus, isVegaArg) {
+  const n = getActiveGenCount();
   const btn = document.getElementById('gen-btn');
   if (btn) { btn.disabled = true; btn.textContent = 'Bezig…'; }
   const isVega = isVegaArg !== undefined ? isVegaArg : !!(document.getElementById('gen-vega') && document.getElementById('gen-vega').checked);
@@ -4070,12 +4147,19 @@ async function _doGenerateRecepten(focus, isVegaArg) {
     : 'Vlees is toegestaan maar geef voorkeur aan vegetarische opties of vis.';
   const bestaandeNamen = (data.recepten || []).map(r => r.naam).join(', ');
   const vermijdDubbel = bestaandeNamen ? `\nVermijd recepten die lijken op: ${bestaandeNamen}.` : '';
+  const receptWord = n === 1 ? 'recept' : 'recepten';
+  const activeFocus = genFocus || 'combi';
+  const nutriRegel = activeFocus === 'vezels'
+    ? 'Minimaal 10g vezels per portie. Eiwitten zijn minder belangrijk.'
+    : activeFocus === 'eiwitten'
+    ? 'Minimaal 25g eiwitten per portie. Vezels zijn minder belangrijk.'
+    : 'Minimaal 8g vezels én minimaal 20g eiwitten per portie.';
 
-  const prompt = `Genereer precies ${genCount} vezelrijke Nederlandse recepten. Reageer UITSLUITEND met een JSON-array van precies ${genCount} objecten, geen tekst ervoor of erna.${focusTxt}
+  const prompt = `Genereer precies ${n} gezond Nederlands ${receptWord} met focus op ${activeFocus === 'vezels' ? 'veel vezels' : activeFocus === 'eiwitten' ? 'veel eiwitten' : 'vezels én eiwitten'}. Reageer UITSLUITEND met een JSON-array van precies ${n} object${n === 1 ? '' : 'en'}, geen tekst ervoor of erna.${focusTxt}
 
 Strikte regels:
 - ${vleesRegel}
-- Minimaal 8g vezels per portie
+- ${nutriRegel}
 - Max 35 minuten bereidingstijd
 - LOGISCHE COHERENTE GERECHTEN: ingrediënten moeten culinair bij elkaar passen zoals een kok zou combineren
 - Varieer in eiwitbronnen: linzen, kikkererwten, tofu, eieren, kaas, zalm, tempeh, quinoa, edamame, tonijn
@@ -4087,7 +4171,7 @@ JSON-formaat (exact):
 [{"naam":"...","vezels":"~Xg","eiwitten":"~Xg","tijd":"X min","ingredienten":["hoeveelheid ingredient","..."],"bereiding":["Stap 1...","Stap 2..."]}]`;
 
   try {
-    const raw = await callAI(prompt, Math.min(genCount * 850, 3500));
+    const raw = await callAI(prompt, Math.min(n * 850, 3500));
     const match = raw.match(/\[[\s\S]*\]/);
     if (!match) throw new Error('Kon geen recepten uit het antwoord halen. Probeer opnieuw.');
     const parsed = JSON.parse(match[0]);
@@ -4226,17 +4310,20 @@ async function generateMeer() {
     ...(data.recepten || []).map(r => r.naam),
     ...(window._generatedRecepten || []).map(r => r.naam)
   ].join(', ');
-  const focusEl = document.getElementById('gen-focus');
+  const focusEl = document.getElementById('gen-focus-input');
   const focus = focusEl ? focusEl.value.trim() : '';
   const focusTxt = focus ? ` Focus op: ${focus}.` : '';
 
-  const prompt = `Genereer precies ${genCount} vezelrijke Nederlandse recepten. Reageer UITSLUITEND met een JSON-array van precies ${genCount} objecten.${focusTxt}
-Regels: ${vleesRegel} Minimaal 8g vezels, max 35 min, LOGISCH COHERENTE gerechten, varieer eiwitbronnen.
+  const n = getActiveGenCount();
+  const af = genFocus || 'combi';
+  const nutriRegelM = af === 'vezels' ? 'Minimaal 10g vezels per portie.' : af === 'eiwitten' ? 'Minimaal 25g eiwitten per portie.' : 'Minimaal 8g vezels én 20g eiwitten per portie.';
+  const prompt = `Genereer precies ${n} gezond Nederlands ${n===1?'recept':'recepten'} (focus: ${af==='vezels'?'veel vezels':af==='eiwitten'?'veel eiwitten':'vezels én eiwitten'}). Reageer UITSLUITEND met een JSON-array van precies ${n} object${n===1?'':'en'}.${focusTxt}
+Regels: ${vleesRegel} ${nutriRegelM} Max 35 min, LOGISCH COHERENTE gerechten, varieer eiwitbronnen.
 Vermijd recepten die lijken op: ${bestaandeNamen}.
 JSON: [{"naam":"...","vezels":"~Xg","eiwitten":"~Xg","tijd":"X min","ingredienten":["..."],"bereiding":["..."]}]`;
 
   try {
-    const raw = await callAI(prompt, Math.min(genCount * 850, 3500));
+    const raw = await callAI(prompt, Math.min(n * 850, 3500));
     const match = raw.match(/\[[\s\S]*\]/);
     if (!match) throw new Error('Geen recepten ontvangen.');
     const parsed = JSON.parse(match[0]);
@@ -5394,56 +5481,13 @@ function smartVoiceRecipe() {
 
   recognition.onresult = async (e) => {
     const text = e.results[0][0].transcript;
-    if (btn) { btn.classList.remove('listening'); btn.lastChild.textContent = ' Recept genereren...'; }
+    if (btn) { btn.classList.remove('listening'); }
 
-    showModal(`
-      <div class="modal-header">
-        <h2>Recept zoeken</h2>
-        <button class="modal-close" onclick="closeModal()">✕</button>
-      </div>
-      <div style="text-align:center;padding:28px 0;">
-        <div class="typing-dots"><span></span><span></span><span></span></div>
-        <p style="margin-top:14px;color:var(--muted);font-size:14px;">Recept genereren voor:<br><strong style="color:var(--text)">"${text}"</strong></p>
-      </div>
-    `);
-
-    try {
-      const recipe = await generateRecipeFromText(text);
-      _pendingVoiceRecipe = recipe;
-      showModal(`
-        <div class="modal-header">
-          <h2>${recipe.naam}</h2>
-          <button class="modal-close" onclick="closeModal()">✕</button>
-        </div>
-        <div style="display:flex;gap:8px;margin-bottom:14px;">
-          <span class="badge" style="background:var(--accent-food-soft);color:var(--accent-food);">🌿 ${recipe.vezels} vezels</span>
-          <span class="badge" style="background:var(--card2);color:var(--muted);">⏱ ${recipe.tijd}</span>
-        </div>
-        <div class="form-group">
-          <strong style="font-size:13px;color:var(--muted);">INGREDIËNTEN</strong>
-          <ul style="margin:8px 0 0;padding-left:18px;font-size:14px;line-height:1.8;">
-            ${recipe.ingredienten.map(i => `<li>${i}</li>`).join('')}
-          </ul>
-        </div>
-        <div class="form-group">
-          <strong style="font-size:13px;color:var(--muted);">BEREIDING</strong>
-          <ol style="margin:8px 0 0;padding-left:18px;font-size:14px;line-height:1.8;">
-            ${recipe.bereiding.map(s => `<li>${s}</li>`).join('')}
-          </ol>
-        </div>
-        <button class="btn btn-primary btn-full" onclick="confirmVoiceRecipe()">Toevoegen aan recepten</button>
-        <button class="btn btn-ghost btn-full" style="margin-top:8px;" onclick="closeModal()">Annuleren</button>
-      `);
-    } catch (err) {
-      showModal(`
-        <div class="modal-header">
-          <h2>Genereren mislukt</h2>
-          <button class="modal-close" onclick="closeModal()">✕</button>
-        </div>
-        <p style="color:var(--muted);padding:16px;font-size:14px;">${err.message || 'Probeer het opnieuw.'}</p>
-      `);
-    }
-    if (btn) btn.lastChild.textContent = ' Spreek gerecht in → direct recept';
+    // Route via _doGenerateRecepten zodat het aantal uit de picker wordt gerespecteerd
+    const focusEl = document.getElementById('gen-focus-input');
+    if (focusEl) focusEl.value = text;
+    const isVega = !!(document.getElementById('gen-vega') && document.getElementById('gen-vega').checked);
+    await _doGenerateRecepten(text, isVega);
   };
 
   recognition.onerror = () => {
@@ -6076,8 +6120,8 @@ async function parseSmartInput(transcript) {
 
 Analyseer dit en extraheer alle informatie. Antwoord ALLEEN in dit JSON-formaat (geen uitleg, geen markdown):
 {
-  "activiteit": {"naam":"...", "type":"run|gym|bike|walk|commute|other|geen", "detail":"...", "km":0, "duur":0},
-  "maaltijd": {"naam":"...", "slot":"${tijdSlot}", "vezels":"~Xg", "eiwitten":"~Xg", "kcal":"~Xkcal"},
+  "activiteit": null,
+  "maaltijd": null,
   "water": 0,
   "verwijder_maaltijd": null,
   "verwijder_activiteit": null,
@@ -6086,14 +6130,14 @@ Analyseer dit en extraheer alle informatie. Antwoord ALLEEN in dit JSON-formaat 
 }
 
 Regels:
-- activiteit: vul in als gebruiker sport/beweging toevoegt, anders type="geen"
-- maaltijd: vul in als gebruiker eten toevoegt. Schat ALTIJD vezels EN eiwitten — nooit 0 of weglaten. Kip ~30g eiwit, friet ~4g, pasta ~12g, vis ~25g, ei ~12g per 2 stuks.
-- water: aantal glazen (0 als niet vermeld)
-- verwijder_maaltijd: "ontbijt", "lunch", "diner" of "snack" als gebruiker een maaltijd wil verwijderen/wissen/schrappen
-- verwijder_activiteit: naam of type van de activiteit als gebruiker een activiteit wil verwijderen (bijv. "hardlopen", "gym", "fietsen")
-- boodschap_toevoegen: array van strings als gebruiker items aan de boodschappenlijst wil toevoegen, bijv. ["melk","brood","appels"]. Null als niet van toepassing.
-- coaching_vraag: letterlijke vraag als gebruiker advies wil, anders null
-Geen uitleg, alleen JSON.`;
+- activiteit: als gebruiker sport/beweging toevoegt, vul in als object: {"naam":"Easy Run","type":"run","detail":"5km","km":5,"duur":30}. Types: run, gym, bike, walk, commute, walkdog, other. Anders null laten.
+- maaltijd: als gebruiker eten toevoegt, vul in als object: {"naam":"Kip met rijst","slot":"${tijdSlot}","vezels":"~5g","eiwitten":"~30g","kcal":"~500kcal"}. Schat ALTIJD vezels EN eiwitten. Anders null.
+- water: aantal glazen als vermeld, anders 0
+- verwijder_maaltijd: "ontbijt", "lunch", "diner" of "snack" als gebruiker vraagt iets te verwijderen/wissen/schrappen uit het menu. Anders null.
+- verwijder_activiteit: naam of type (bijv. "hardlopen", "gym") als gebruiker een activiteit wil verwijderen. Anders null.
+- boodschap_toevoegen: array van strings als gebruiker items aan boodschappenlijst wil toevoegen. Anders null.
+- coaching_vraag: alleen invullen als gebruiker een vraag stelt of advies wil. Anders null.
+Laat velden null als ze niet van toepassing zijn. Geen uitleg, alleen JSON.`;
 
   try {
     const raw = await callAI(prompt, 300);
@@ -6127,7 +6171,7 @@ Geen uitleg, alleen JSON.`;
     }
 
     // Activiteit toevoegen
-    if (parsed.activiteit && parsed.activiteit.type !== 'geen' && parsed.activiteit.naam) {
+    if (parsed.activiteit && parsed.activiteit.naam && parsed.activiteit.type) {
       const type = parsed.activiteit.type || 'other';
       const detail = [parsed.activiteit.detail, parsed.activiteit.km ? parsed.activiteit.km + 'km' : ''].filter(Boolean).join(' · ');
       dayData.activiteiten.push({
@@ -6176,7 +6220,7 @@ Geen uitleg, alleen JSON.`;
     }
 
     // Coaching-reactie
-    const heeftActiviteit = parsed.activiteit && parsed.activiteit.type !== 'geen' && parsed.activiteit.naam;
+    const heeftActiviteit = parsed.activiteit && parsed.activiteit.naam && parsed.activiteit.type;
     const heeftVerwijdering = parsed.verwijder_maaltijd || parsed.verwijder_activiteit;
     const vraag = parsed.coaching_vraag ||
       (acties.length > 0
