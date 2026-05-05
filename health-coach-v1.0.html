@@ -651,6 +651,23 @@ select.modal-input { appearance: auto; }
 .tts-toggle-btn.active { background: rgba(234,90,12,.12); color: var(--accent-move); border-color: var(--accent-move); }
 
 /* ─── TERUGBLIK ─── */
+.terugblik-periode-row { display: flex; align-items: center; gap: 8px; }
+.tblik-label { font-size: 14px; color: var(--text-2); font-weight: 500; white-space: nowrap; }
+.tblik-step {
+  width: 34px; height: 34px; border-radius: 50%;
+  border: 1.5px solid var(--border); background: var(--card2);
+  font-size: 18px; line-height: 1; color: var(--text-2);
+  cursor: pointer; font-family: inherit; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.tblik-input {
+  width: 56px; text-align: center; font-size: 18px; font-weight: 700;
+  border: 1.5px solid var(--border); border-radius: 10px;
+  padding: 6px 4px; background: var(--card); color: var(--text);
+  font-family: inherit;
+}
+.tblik-input::-webkit-inner-spin-button,
+.tblik-input::-webkit-outer-spin-button { -webkit-appearance: none; }
 .terugblik-card {
   background: var(--accent-food-soft); border-radius: var(--radius);
   padding: 16px; margin-top: 12px;
@@ -658,6 +675,74 @@ select.modal-input { appearance: auto; }
   border-left: 3px solid var(--accent-food);
   color: var(--text);
 }
+
+/* ─── INSTRUCTIEKAARTEN ─── */
+.instructie-details { margin-bottom: 12px; }
+.instructie-summary {
+  display: flex; align-items: center; gap: 8px;
+  padding: 12px 14px; background: var(--card);
+  border-radius: var(--radius); border: 1px solid var(--border);
+  font-size: 14px; font-weight: 600; color: var(--text-2);
+  cursor: pointer; list-style: none; user-select: none;
+}
+.instructie-summary::-webkit-details-marker { display: none; }
+.instructie-summary::after {
+  content: '›'; margin-left: auto; font-size: 18px; color: var(--muted);
+  transition: transform .2s; display: inline-block;
+}
+.instructie-details[open] .instructie-summary::after { transform: rotate(90deg); }
+.instructie-body { padding: 10px 0 4px; display: flex; flex-direction: column; gap: 12px; }
+.instructie-group { }
+.instructie-group-label {
+  font-size: 11px; font-weight: 700; color: var(--muted);
+  text-transform: uppercase; letter-spacing: .5px;
+  margin-bottom: 6px; padding: 0 2px;
+}
+.instructie-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.instructie-chip {
+  padding: 7px 12px; border-radius: 20px;
+  border: 1.5px solid var(--border); background: var(--card);
+  font-size: 13px; font-weight: 500; color: var(--text-2);
+  cursor: pointer; transition: all .15s; font-family: inherit;
+}
+.instructie-chip:active { background: var(--accent-move-soft); border-color: var(--accent-move); color: var(--accent-move); }
+
+/* ─── INTRO OVERLAY ─── */
+#intro-overlay {
+  position: fixed; inset: 0; z-index: 500;
+  background: var(--bg);
+  display: flex; align-items: center; justify-content: center;
+  padding: 24px;
+  padding-top: calc(24px + env(safe-area-inset-top, 0px));
+  padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+}
+.intro-card {
+  max-width: 380px; width: 100%;
+  display: flex; flex-direction: column; align-items: center;
+  gap: 0; text-align: center;
+}
+.intro-logo { margin-bottom: 12px; }
+.intro-title { font-size: 28px; font-weight: 800; letter-spacing: -.5px; margin-bottom: 6px; }
+.intro-sub { font-size: 15px; color: var(--muted); margin-bottom: 28px; line-height: 1.4; }
+.intro-pillars { display: flex; gap: 10px; width: 100%; margin-bottom: 28px; }
+.intro-pillar {
+  flex: 1; background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 14px 8px;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+}
+.intro-pillar-icon {
+  width: 42px; height: 42px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+}
+.intro-pillar-label { font-size: 13px; font-weight: 700; color: var(--text); }
+.intro-pillar-desc { font-size: 11px; color: var(--muted); line-height: 1.35; }
+.intro-btn {
+  width: 100%; padding: 16px; border-radius: var(--radius);
+  background: var(--accent-move); color: #fff;
+  border: none; font-size: 17px; font-weight: 700;
+  cursor: pointer; font-family: inherit; margin-bottom: 14px;
+}
+.intro-tip { font-size: 13px; color: var(--muted-2); }
 
 /* ─── STATS ─── */
 .stats-period-tabs { display: flex; gap: 6px; margin-bottom: 14px; }
@@ -801,14 +886,85 @@ select.modal-input { appearance: auto; }
   margin: -8px 0 12px; min-height: 18px;
 }
 .smart-voice-status.ok { color: var(--accent-food); font-weight: 500; }
-.voice-recipe-btn {
-  display: flex; align-items: center; justify-content: center; gap: 10px;
-  width: 100%; min-height: 50px; border-radius: var(--radius);
-  border: 2px solid var(--accent-food); background: var(--accent-food-soft);
-  color: var(--accent-food); font-size: 15px; font-weight: 600;
-  cursor: pointer; margin-bottom: 12px; transition: all .15s;
-}
 .voice-recipe-btn.listening { background: var(--accent-food); color: #fff; animation: micPulse 1s ease infinite; }
+
+/* ─── RECIPE GEN CARD ─── */
+.recipe-gen-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 18px 16px 12px;
+  margin-bottom: 14px; box-shadow: var(--shadow-sm);
+}
+.recipe-gen-title { font-size: 17px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+.recipe-gen-sub { font-size: 13px; color: var(--muted); margin-bottom: 14px; }
+.recipe-gen-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+.recipe-gen-label { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .4px; }
+.gen-pill {
+  background: var(--card2); border: 1.5px solid var(--border);
+  border-radius: 999px; width: 36px; height: 36px;
+  font-size: 15px; font-weight: 700; cursor: pointer; color: var(--text);
+  display: flex; align-items: center; justify-content: center; transition: all .15s;
+}
+.gen-pill.active { background: var(--accent-move); border-color: var(--accent-move); color: #fff; }
+.vega-toggle-wrap { margin-left: auto; display: flex; align-items: center; }
+.vega-toggle-input { display: none; }
+.vega-toggle-label {
+  background: var(--card2); border: 1.5px solid var(--border);
+  border-radius: 999px; padding: 6px 14px; font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: all .15s; color: var(--text); white-space: nowrap;
+  display: flex; align-items: center; gap: 5px;
+}
+.vega-toggle-input:checked + .vega-toggle-label {
+  background: #d1fae5; border-color: #059669; color: #065f46;
+}
+.recipe-gen-focus {
+  width: 100%; min-height: 42px; border-radius: 10px;
+  border: 1.5px solid var(--border); background: var(--card2);
+  color: var(--text); padding: 0 12px; font-size: 14px; font-family: inherit;
+  margin-bottom: 10px; box-sizing: border-box;
+}
+.recipe-gen-focus:focus { outline: none; border-color: var(--accent-food); }
+.recipe-gen-btns { display: flex; gap: 8px; margin-bottom: 10px; }
+.recipe-gen-main-btn {
+  flex: 1; min-height: 44px; border-radius: 10px;
+  background: var(--accent-food); border: none; color: #fff;
+  font-size: 15px; font-weight: 700; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  transition: opacity .15s; font-family: inherit;
+}
+.recipe-gen-main-btn:active { opacity: .85; }
+.recipe-gen-main-btn:disabled { background: var(--border); color: var(--muted); cursor: default; }
+.recipe-gen-voice-btn {
+  width: 44px; height: 44px; border-radius: 10px; flex-shrink: 0;
+  background: var(--card2); border: 1.5px solid var(--border); color: var(--text);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: all .15s;
+}
+.recipe-gen-voice-btn:active { background: var(--accent-food-tint); color: var(--accent-food); }
+.recipe-gen-voice-btn.listening { background: var(--accent-food); color: #fff; animation: micPulse 1s ease infinite; }
+.recipe-add-own-btn {
+  width: 100%; background: none; border: none; color: var(--muted);
+  font-size: 13px; font-weight: 600; cursor: pointer; padding: 6px 0;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  font-family: inherit; transition: color .15s;
+}
+.recipe-add-own-btn:active { color: var(--text); }
+/* ─── RECIPE HEADER REDESIGN ─── */
+.recipe-header { display: flex; align-items: center; gap: 8px; padding: 14px 12px; cursor: pointer; }
+.recipe-header-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 5px; }
+.recipe-title { font-weight: 700; font-size: 15px; color: var(--text); line-height: 1.3; }
+.recipe-badges { display: flex; gap: 5px; flex-wrap: wrap; }
+.recipe-header-actions { display: flex; align-items: center; gap: 2px; flex-shrink: 0; }
+/* ─── GLOBAL SETTINGS BTN ─── */
+.global-settings-btn {
+  position: fixed; top: calc(8px + env(safe-area-inset-top,0px));
+  right: 12px; z-index: 150;
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--card); border: 1px solid var(--border);
+  color: var(--muted); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: var(--shadow-sm); transition: color .15s;
+}
+.global-settings-btn:active { color: var(--accent-move); }
 
 /* ─── SETUP SCREEN ─── */
 #setup-overlay {
@@ -865,8 +1021,30 @@ select.modal-input { appearance: auto; }
 .voorstel-actions { display: flex; gap: 8px; margin-top: 14px; }
 
 /* ─── SHOPPING LIST ─── */
-.shop-list { font-size: 15px; line-height: 2; }
-.shop-cat { font-weight: 700; color: var(--accent-food); margin-top: 12px; font-size: 13px; text-transform: uppercase; letter-spacing: .3px; }
+.shop-list { font-size: 15px; }
+.shop-cat { font-weight: 700; color: var(--accent-food); margin-top: 14px; margin-bottom: 4px; font-size: 12px; text-transform: uppercase; letter-spacing: .4px; }
+.shop-picker { max-height: 48vh; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; }
+.shop-pick-row {
+  display: flex; align-items: center; gap: 12px; padding: 10px 12px;
+  border-radius: 10px; background: var(--card2); cursor: pointer; transition: background .15s;
+}
+.shop-pick-row.selected { background: var(--accent-food-tint); border: 1px solid var(--accent-food); }
+.shop-pick-row input[type=checkbox] { width: 20px; height: 20px; accent-color: var(--accent-food); flex-shrink: 0; }
+.shop-pick-info { flex: 1; min-width: 0; }
+.shop-pick-label { font-size: 11px; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: .3px; }
+.shop-pick-naam { font-size: 14px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.shop-pick-badge { font-size: 11px; color: var(--accent-food); flex-shrink: 0; font-weight: 600; }
+.shop-pick-badge.muted { color: var(--muted); }
+.shop-scroll { max-height: 44vh; overflow-y: auto; }
+.shop-item-row {
+  display: flex; align-items: center; gap: 10px; padding: 8px 2px;
+  font-size: 15px; cursor: pointer; border-bottom: 1px solid var(--border);
+  transition: opacity .2s;
+}
+.shop-item-row:last-child { border-bottom: none; }
+.shop-item-row input[type=checkbox] { width: 20px; height: 20px; accent-color: var(--accent-food); flex-shrink: 0; }
+.shop-item-row.in-huis { opacity: .35; }
+.shop-item-row.in-huis span { text-decoration: line-through; }
 
 /* ─── RECIPE GENERATOR ─── */
 .gen-count-btn {
@@ -1585,14 +1763,70 @@ select.modal-input { appearance: auto; }
     <div class="progress-bar-wrap">
       <div class="progress-bar-fill" id="week-progress" style="width:0%"></div>
     </div>
-    <button class="btn btn-ghost btn-full" style="margin-bottom:12px;" onclick="showWeekoverzicht()">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-      Weekoverzicht (maaltijden + sport)
-    </button>
+
+    <!-- Instructiekaarten -->
+    <details class="instructie-details" id="instructie-panel">
+      <summary class="instructie-summary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        Instructiekaarten
+      </summary>
+      <div class="instructie-body">
+        <div class="instructie-group">
+          <div class="instructie-group-label">Upper body</div>
+          <div class="instructie-chips">
+            <button class="instructie-chip" onclick="showOefenKaart('dumbbell press')">Dumbbell Press</button>
+            <button class="instructie-chip" onclick="showOefenKaart('rows')">Rows</button>
+            <button class="instructie-chip" onclick="showOefenKaart('curls')">Curls</button>
+            <button class="instructie-chip" onclick="showOefenKaart('shoulder press')">Shoulder Press</button>
+            <button class="instructie-chip" onclick="showOefenKaart('tricep kickbacks')">Tricep Kickbacks</button>
+            <button class="instructie-chip" onclick="showOefenKaart('chest fly')">Chest Fly</button>
+          </div>
+        </div>
+        <div class="instructie-group">
+          <div class="instructie-group-label">Lower body</div>
+          <div class="instructie-chips">
+            <button class="instructie-chip" onclick="showOefenKaart('goblet squat')">Goblet Squat</button>
+            <button class="instructie-chip" onclick="showOefenKaart('lunges')">Lunges</button>
+            <button class="instructie-chip" onclick="showOefenKaart('hip thrust')">Hip Thrust</button>
+            <button class="instructie-chip" onclick="showOefenKaart('romanian deadlift')">Romanian Deadlift</button>
+            <button class="instructie-chip" onclick="showOefenKaart('calf raises')">Calf Raises</button>
+            <button class="instructie-chip" onclick="showOefenKaart('bulgarian split squat')">Bulgarian Split Squat</button>
+          </div>
+        </div>
+        <div class="instructie-group">
+          <div class="instructie-group-label">Core</div>
+          <div class="instructie-chips">
+            <button class="instructie-chip" onclick="showOefenKaart('plank')">Plank</button>
+            <button class="instructie-chip" onclick="showOefenKaart('dead bug')">Dead Bug</button>
+            <button class="instructie-chip" onclick="showOefenKaart('glute bridge')">Glute Bridge</button>
+          </div>
+        </div>
+        <div class="instructie-group">
+          <div class="instructie-group-label">Cardio</div>
+          <div class="instructie-chips">
+            <button class="instructie-chip" onclick="showOefenKaart('easy run')">Easy Run</button>
+            <button class="instructie-chip" onclick="showOefenKaart('intervaltraining')">Intervaltraining</button>
+            <button class="instructie-chip" onclick="showOefenKaart('lange duurloop')">Lange Duurloop</button>
+            <button class="instructie-chip" onclick="showOefenKaart('fietstocht')">Fietstocht</button>
+          </div>
+        </div>
+      </div>
+    </details>
+
     <div id="week-days"></div>
   </div>
 
-  <!-- TAB 3: FOOD -->
+  <!-- TAB 3: WEEKOVERZICHT -->
+  <div id="tab-weekov" class="tab-content">
+    <div class="week-nav">
+      <button onclick="navWeek(-1)">&#8249;</button>
+      <span class="week-label" id="weekov-label"></span>
+      <button onclick="navWeek(1)">&#8250;</button>
+    </div>
+    <div id="weekov-days"></div>
+  </div>
+
+  <!-- TAB 4: FOOD -->
   <div id="tab-recepten" class="tab-content">
 
     <!-- Recepten: genereren, inspreken, toevoegen -->
@@ -1678,10 +1912,17 @@ select.modal-input { appearance: auto; }
     </div>
 
     <div class="card" style="margin-bottom:14px;">
-      <h3 style="margin-bottom:12px;">Wekelijkse terugblik</h3>
-      <button class="btn btn-secondary btn-full" onclick="doTerugblik()">
+      <h3 style="margin-bottom:10px;">Terugblik</h3>
+      <div class="terugblik-periode-row">
+        <span class="tblik-label">Afgelopen</span>
+        <button class="tblik-step" onclick="stepTerugblik(-1)">−</button>
+        <input id="terugblik-dagen-input" class="tblik-input" type="number" min="1" max="365" value="3">
+        <button class="tblik-step" onclick="stepTerugblik(1)">+</button>
+        <span class="tblik-label">dagen</span>
+      </div>
+      <button class="btn btn-secondary btn-full" style="margin-top:10px;" onclick="doTerugblik()">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.9"/></svg>
-        Hoe ging mijn week?
+        Analyseer periode
       </button>
       <div id="terugblik-result"></div>
     </div>
@@ -1706,16 +1947,20 @@ select.modal-input { appearance: auto; }
 
     <div class="card">
       <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:4px;">
-        <span style="font-size:13px;color:var(--muted);font-weight:500;">Volledige gesprekshistorie</span>
-        <button id="tts-toggle" class="tts-toggle-btn active" onclick="toggleTTS()" title="Spraak uit">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
-        </button>
+        <span style="font-size:13px;color:var(--muted);font-weight:500;">Gesprekshistorie</span>
+        <div style="display:flex;gap:6px;align-items:center;">
+          <button onclick="clearChat()" style="background:none;border:none;font-size:12px;color:var(--muted);cursor:pointer;padding:4px 8px;border-radius:6px;font-family:inherit;" title="Gesprek wissen">🗑 Wis chat</button>
+          <button id="tts-toggle" class="tts-toggle-btn active" onclick="toggleTTS()" title="Spraak uit">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+          </button>
+        </div>
       </div>
       <div id="chat-history" class="chat-history"></div>
     </div>
 
-    <div style="text-align:center;padding:8px 0 4px;">
+    <div style="text-align:center;padding:8px 0 4px;display:flex;justify-content:center;gap:16px;">
       <button onclick="resetApp()" style="background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;text-decoration:underline;padding:8px 12px;">App volledig resetten</button>
+      <button onclick="showIntro()" style="background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;text-decoration:underline;padding:8px 12px;">Intro bekijken</button>
     </div>
   </div>
 
@@ -1733,12 +1978,57 @@ select.modal-input { appearance: auto; }
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
       Bewegen
     </button>
+    <button class="tab-btn" onclick="switchTab('weekov', this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Week
+    </button>
     <button class="tab-btn" onclick="switchTab('recepten', this)">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v12"/><path d="M18 9a3 3 0 0 0-3-3H6"/><path d="M6 15a6 6 0 0 0 12 0"/></svg>
       Food
     </button>
   </div>
 </div>
+
+<!-- INTRO OVERLAY -->
+<div id="intro-overlay" style="display:none;">
+  <div class="intro-card">
+    <div class="intro-logo">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--accent-move)"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+    </div>
+    <h1 class="intro-title">Health Coach</h1>
+    <p class="intro-sub">Jouw persoonlijke begeleider voor sport en voeding</p>
+    <div class="intro-pillars">
+      <div class="intro-pillar">
+        <div class="intro-pillar-icon" style="background:var(--accent-move-soft);color:var(--accent-move);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="1.5"/><path d="M8 17l2-5 3 3 2-6"/><path d="M5 12l3-1 2 2"/><path d="M15 14l2 1 2 3"/></svg>
+        </div>
+        <div class="intro-pillar-label">Bewegen</div>
+        <div class="intro-pillar-desc">Log sport, plan je week, volg je streak</div>
+      </div>
+      <div class="intro-pillar">
+        <div class="intro-pillar-icon" style="background:var(--accent-food-soft);color:var(--accent-food);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v12"/><path d="M18 9a3 3 0 0 0-3-3H6"/><path d="M6 15a6 6 0 0 0 12 0"/></svg>
+        </div>
+        <div class="intro-pillar-label">Eten</div>
+        <div class="intro-pillar-desc">Recepten, vezels, eiwitten en weekmenu</div>
+      </div>
+      <div class="intro-pillar">
+        <div class="intro-pillar-icon" style="background:rgba(109,40,217,.08);color:#6d28d9;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <div class="intro-pillar-label">Coach</div>
+        <div class="intro-pillar-desc">Praat, vraag advies, sla tips op</div>
+      </div>
+    </div>
+    <button class="intro-btn" onclick="dismissIntro()">Aan de slag →</button>
+    <p class="intro-tip">Spreek in of typ — de app begrijpt je</p>
+  </div>
+</div>
+
+<!-- GLOBAL SETTINGS BUTTON -->
+<button class="global-settings-btn" onclick="openSettings()" aria-label="Instellingen">
+  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+</button>
 
 <!-- FLOATING COACH BUTTON (alle tabs) -->
 <button id="fab-coach" class="fab-coach" onclick="fabCoachTap()" aria-label="Praat met de coach">
@@ -2248,7 +2538,8 @@ function defaultData() {
     ],
     stats: { byMonth: {} },
     savedTips: [],
-    partners: []
+    partners: [],
+    boodschappenExtra: []
   };
 }
 
@@ -2543,11 +2834,33 @@ function importData(input) {
   importFromFile(file).then(() => { renderAll(); showBanner('yellow', 'Data geïmporteerd.'); });
 }
 
+function clearChat() {
+  if (!confirm('Gesprek wissen? Je opgeslagen tips blijven bewaard.')) return;
+  data.chatHistorie = [];
+  saveAndSync();
+  renderChatHistory();
+  const win = document.getElementById('coach-front-chat');
+  if (win) win.innerHTML = '';
+  showBanner('green', 'Chat gewist.');
+}
+
 function resetApp() {
-  if (!confirm('Weet je het zeker? Dit verwijdert alle data en instellingen permanent.')) return;
+  if (!confirm('App resetten? Recepten, looppartners en gesprekken blijven bewaard. Alleen je dagelijkse data en instellingen worden gewist.')) return;
+  const bewaard = {
+    recepten: data.recepten || [],
+    partners: data.partners || [],
+    chatHistorie: data.chatHistorie || [],
+    savedTips: data.savedTips || [],
+  };
   localStorage.removeItem(STORAGE_KEY);
-  localStorage.removeItem(SETTINGS_KEY);
   localStorage.removeItem(CHECKIN_KEY);
+  // Zet bewaarde data terug voor volgende sessie
+  const nieuweData = defaultData();
+  nieuweData.recepten = bewaard.recepten;
+  nieuweData.partners = bewaard.partners;
+  nieuweData.chatHistorie = bewaard.chatHistorie;
+  nieuweData.savedTips = bewaard.savedTips;
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(nieuweData));
   location.reload();
 }
 
@@ -2562,8 +2875,69 @@ function switchTab(name, btn) {
   if (fab) fab.style.display = name === 'coach' ? 'none' : 'flex';
   if (name === 'vandaag') renderVandaag();
   if (name === 'week') renderWeek();
+  if (name === 'weekov') renderWeekOvTab();
   if (name === 'coach') renderCoach();
   if (name === 'recepten') renderFoodTab();
+}
+
+function renderWeekOvTab() {
+  const weekKey = currentWeekKey();
+  const days = getWeekDates(weekKey);
+  ensureWeek(weekKey);
+
+  const start = days[0], end = days[6];
+  const labelEl = document.getElementById('weekov-label');
+  if (labelEl) labelEl.textContent = `Ma ${formatShortDate(start)} – Zo ${formatShortDate(end)}`;
+
+  const container = document.getElementById('weekov-days');
+  if (!container) return;
+
+  const dagNamen = ['Maandag','Dinsdag','Woensdag','Donderdag','Vrijdag','Zaterdag','Zondag'];
+  const mealLabels = { ontbijt: 'Ontbijt', lunch: 'Lunch', diner: 'Diner', snack: 'Snack' };
+  const todayStr = today();
+
+  container.innerHTML = days.map((dateStr, i) => {
+    const dayData = data.weken[weekKey][dateStr];
+    const isToday = dateStr === todayStr;
+
+    const acts = (dayData.activiteiten || []).map(a => `
+      <div class="weekov-act">
+        ${iconSVG(a.type)}
+        <span class="${a.afgevinkt ? 'done' : ''}">${a.naam}${a.duur ? ` · ${fmtMin(a.duur)}` : ''}</span>
+      </div>`).join('') || '<div style="font-size:13px;color:var(--muted);padding:2px 0;">Rustdag</div>';
+
+    const meals = Object.entries(dayData.maaltijden || {}).map(([key, meal]) => `
+      <div class="weekov-meal">
+        <span class="weekov-meal-label">${mealLabels[key] || key}</span>
+        <span>${meal.naam || '—'}</span>
+      </div>`).join('');
+
+    return `<div class="weekov-day card" style="margin-bottom:10px;${isToday ? 'border-left:3px solid var(--accent-move);' : ''}">
+      <div class="weekov-day-header">${dagNamen[i]} <span style="color:var(--muted);font-weight:500;">${formatShortDate(dateStr)}</span>${isToday ? ' <span style="color:var(--accent-move);font-size:12px;font-weight:700;">· Vandaag</span>' : ''}</div>
+      ${acts}
+      ${meals ? `<div style="margin-top:6px;border-top:1px solid var(--border);padding-top:6px;">${meals}</div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+const INTRO_KEY = 'hc_intro_seen';
+function checkIntro() {
+  if (!localStorage.getItem(INTRO_KEY)) {
+    document.getElementById('intro-overlay').style.display = 'flex';
+  }
+}
+function dismissIntro() {
+  localStorage.setItem(INTRO_KEY, '1');
+  const el = document.getElementById('intro-overlay');
+  el.style.opacity = '0';
+  el.style.transition = 'opacity .3s';
+  setTimeout(() => { el.style.display = 'none'; }, 300);
+}
+function showIntro() {
+  const el = document.getElementById('intro-overlay');
+  el.style.opacity = '1';
+  el.style.transition = '';
+  el.style.display = 'flex';
 }
 
 // ─── STREAK ──────────────────────────────────────────────────────────────────
@@ -2957,6 +3331,7 @@ function quickEditMeal(dateStr, mealKey) {
       ${suggestions.map(s => `<button class="meal-quick-chip" onclick="document.getElementById('quick-meal-input').value=this.textContent">${s}</button>`).join('')}
     </div>
     <button class="btn btn-primary btn-full" onclick="saveQuickMeal('${dateStr}','${mealKey}')">Opslaan</button>
+    ${meal.naam ? `<button class="btn btn-ghost btn-full" style="margin-top:8px;color:var(--danger);" onclick="deleteTodayMeal('${dateStr}','${mealKey}')">Maaltijd verwijderen</button>` : ''}
   `);
   setTimeout(() => document.getElementById('quick-meal-input').focus(), 50);
 }
@@ -2974,6 +3349,17 @@ function saveQuickMeal(dateStr, mealKey) {
   renderTodayMeals(dateStr);
 }
 
+function deleteTodayMeal(dateStr, mealKey) {
+  const weekKey = getISOWeek(new Date(dateStr + 'T12:00:00'));
+  const def = JSON.parse(JSON.stringify(DEFAULT_MEALS[mealKey] || { naam: '', vezels: '', eiwitten: '', kcal: '' }));
+  def.naam = '';
+  data.weken[weekKey][dateStr].maaltijden[mealKey] = def;
+  saveAndSync();
+  closeModal();
+  renderTodayMeals(dateStr);
+  renderNutriBar(dateStr);
+}
+
 // keep editMeal as alias for backward compatibility
 function editMeal(dateStr, mealKey) { quickEditMeal(dateStr, mealKey); }
 
@@ -2982,6 +3368,9 @@ function editMeal(dateStr, mealKey) { quickEditMeal(dateStr, mealKey); }
 function navWeek(dir) {
   currentWeekOffset += dir;
   renderWeek();
+  const weekovTab = document.getElementById('tab-weekov');
+  if (weekovTab && weekovTab.classList.contains('active')) renderWeekOvTab();
+  else renderWeekOvTab(); // keep weekov-label in sync
 }
 
 function renderWeek() {
@@ -3305,52 +3694,52 @@ function renderRecepten() {
   const hasKey = !!settings.anthropicKey;
 
   const genSection = `
-    <div class="card" style="margin-bottom:16px;">
-      <h3 style="margin-bottom:6px;">Recepten genereren</h3>
-      <p class="muted" style="font-size:14px;margin-bottom:14px;">Laat de coach vezelrijke recepten bedenken</p>
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
-        <div style="display:flex;gap:8px;">
-          ${[1,2,3].map(n => `<button class="gen-count-btn${genCount===n?' active':''}" onclick="setGenCount(${n})" style="min-width:44px;min-height:44px;">${n}</button>`).join('')}
-        </div>
-        <label style="display:flex;align-items:center;gap:8px;font-size:14px;cursor:pointer;">
-          <input type="checkbox" id="gen-vega" style="width:20px;height:20px;accent-color:var(--accent-food);"> Geen vlees (vis mag)
+    <div class="recipe-gen-card">
+      <div class="recipe-gen-title">Jouw recepten</div>
+      <div class="recipe-gen-sub">AI bedenkt vezelrijke gerechten op maat</div>
+      <div class="recipe-gen-row">
+        <span class="recipe-gen-label">Aantal</span>
+        ${[1,2,3].map(n => `<button class="gen-pill${genCount===n?' active':''}" onclick="setGenCount(${n})">${n}</button>`).join('')}
+        <label class="vega-toggle-wrap">
+          <input type="checkbox" id="gen-vega" class="vega-toggle-input">
+          <span class="vega-toggle-label">🌱 Vega</span>
         </label>
       </div>
-      <div class="form-group">
-        <label>Focus (optioneel)</label>
-        <input id="gen-focus" type="text" placeholder="bijv. Aziatisch, pasta, snel klaar" style="min-height:44px;">
-      </div>
-      <button id="gen-btn" class="btn btn-primary btn-full" onclick="generateRecepten()" ${!hasKey?'disabled':''}>${!hasKey?'Geen API-sleutel ingesteld':'Genereer recepten'}</button>
-      ${hasKey ? `<div style="display:flex;align-items:center;gap:10px;margin-top:10px;">
-        <div style="flex:1;height:1px;background:var(--border);"></div>
-        <span style="font-size:12px;color:var(--muted);">of</span>
-        <div style="flex:1;height:1px;background:var(--border);"></div>
-      </div>
-      <button id="voice-recipe-btn" class="voice-recipe-btn" style="margin-top:10px;" onclick="smartVoiceRecipe()">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
-        Spreek gerecht in → direct recept
-      </button>` : ''}
-    </div>
-    <button class="btn btn-ghost btn-full" style="margin-bottom:16px;" onclick="addReceptModal()">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-      Recept zelf toevoegen
-    </button>`;
+      <input id="gen-focus" type="text" class="recipe-gen-focus" placeholder="Focus: bijv. Aziatisch, pasta, snel klaar…">
+      ${hasKey ? `<div class="recipe-gen-btns">
+        <button id="gen-btn" class="recipe-gen-main-btn" onclick="generateRecepten()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          Genereer
+        </button>
+        <button id="voice-recipe-btn" class="recipe-gen-voice-btn" onclick="smartVoiceRecipe()" title="Spreek gerecht in — krijg direct een recept">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+        </button>
+      </div>` : `<p style="font-size:13px;color:var(--muted);text-align:center;padding:4px 0 8px;">Stel eerst een API-sleutel in via ⚙️</p>`}
+      <button class="recipe-add-own-btn" onclick="addReceptModal()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Recept zelf toevoegen
+      </button>
+    </div>`;
 
   const recList = data.recepten.length === 0
     ? '<p class="muted" style="text-align:center;padding:24px;">Nog geen recepten. Genereer er een paar!</p>'
     : data.recepten.map(r => `
       <div class="recipe-card" id="rec-${r.id}">
         <div class="recipe-header" onclick="toggleRecipe('${r.id}')">
-          <span class="recipe-title">${r.naam}</span>
-          <div class="recipe-badges">
-            <span class="fiber-badge">🌿 ${r.vezels || '?'}</span>
-            ${r.eiwitten ? `<span class="protein-badge">💪 ${r.eiwitten}</span>` : ''}
-            <span class="time-badge">${r.tijd}</span>
+          <div class="recipe-header-main">
+            <span class="recipe-title">${r.naam}</span>
+            <div class="recipe-badges">
+              <span class="fiber-badge">🌿 ${r.vezels || '?'}</span>
+              ${r.eiwitten ? `<span class="protein-badge">💪 ${r.eiwitten}</span>` : ''}
+              <span class="time-badge">${r.tijd}</span>
+            </div>
           </div>
-          <button class="rec-delete-btn" onclick="event.stopPropagation();deleteRecept('${r.id}')" aria-label="Verwijder recept">
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
-          </button>
-          <svg class="chevron" id="rec-chev-${r.id}" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          <div class="recipe-header-actions">
+            <button class="rec-delete-btn" onclick="event.stopPropagation();deleteRecept('${r.id}')" aria-label="Verwijder recept">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+            </button>
+            <svg class="chevron" id="rec-chev-${r.id}" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
         </div>
         <div class="recipe-body" id="recbody-${r.id}" style="display:none;">
           <div class="recipe-section">
@@ -3425,70 +3814,209 @@ function showShoppingList() {
   const weekKey = currentWeekKey();
   ensureWeek(weekKey);
   const weekDays = data.weken[weekKey];
+  const slots = ['ontbijt','lunch','diner','snack'];
+  const dayLabels = ['Ma','Di','Wo','Do','Vr','Za','Zo'];
+  const days = getWeekDates(weekKey);
 
-  const geplande = {};
-  Object.values(weekDays).forEach(day => {
-    const diner = day.maaltijden && day.maaltijden.diner;
-    if (diner && diner.receptId) {
-      geplande[diner.receptId] = true;
-    }
+  const allMeals = [];
+  days.forEach((d, di) => {
+    const dayData = weekDays[d];
+    if (!dayData) return;
+    slots.forEach(slot => {
+      const m = dayData.maaltijden && dayData.maaltijden[slot];
+      if (!m || !m.naam || m.naam.trim() === '') return;
+      const defaultNaam = DEFAULT_MEALS[slot] && DEFAULT_MEALS[slot].naam;
+      if (m.naam === defaultNaam) return;
+      let ingredienten = [];
+      if (m.receptId) {
+        const rec = (data.recepten || []).find(r => r.id === m.receptId);
+        if (rec && Array.isArray(rec.ingredienten)) ingredienten = rec.ingredienten;
+      }
+      allMeals.push({
+        id: d + '-' + slot,
+        label: dayLabels[di] + ' · ' + slot.charAt(0).toUpperCase() + slot.slice(1),
+        naam: m.naam,
+        ingredienten,
+        hasRecept: ingredienten.length > 0,
+      });
+    });
   });
 
-  const receptenGepland = (data.recepten || []).filter(r => geplande[r.id]);
-
-  if (receptenGepland.length === 0) {
+  if (allMeals.length === 0 && !(data.boodschappenExtra && data.boodschappenExtra.length)) {
     showModal(`
-      <div class="modal-header"><h2>Boodschappenlijst</h2><button class="modal-close" onclick="closeModal()">✕</button></div>
-      <p style="color:var(--muted); font-size:14px;">Geen recepten gepland voor deze week. Plan recepten als diner in het Recepten-tabblad.</p>
+      <div class="modal-header"><h2>🛒 Boodschappenlijst</h2><button class="modal-close" onclick="closeModal()">✕</button></div>
+      <p style="color:var(--muted);font-size:14px;text-align:center;padding:20px 0;">Geen maaltijden gepland deze week. Vul eerst je weekmenu in of laat de coach items toevoegen.</p>
     `);
     return;
   }
 
-  const cats = { 'Groenten': [], 'Blikken & potten': [], 'Granen & peulvruchten': [], 'Overig': [] };
-  const groenten_kw = ['courgette','paprika','ui','wortel','selderij','spinazie','kool','avocado','koriander','rucola','knoflook'];
-  const blikken_kw = ['blik','kokosmelk','bouillon','groentebouillon','tomaten','bonen','kikkererwten','linzen'];
-  const granen_kw = ['pasta','rijst','quinoa','brood','tortilla'];
+  const coachExtra = [...(data.boodschappenExtra || [])];
+  window._shopState = { allMeals, selected: new Set(allMeals.filter(m => m.hasRecept).map(m => m.id)), inHuis: new Set(), extraItems: coachExtra };
+  if (window._shopState.selected.size === 0) window._shopState.selected = new Set(allMeals.map(m => m.id));
+  _renderShopPicker();
+}
 
-  // Use word-boundary matching for groenten to avoid short keywords ('ui') matching inside compound words ('quinoa','bouillon')
-  const groentMatch = (key) => groenten_kw.some(k => new RegExp('(?:^|[^a-z])' + k + '(?:s)?(?:[^a-z]|$)').test(key));
+function _renderShopPicker() {
+  const { allMeals, selected } = window._shopState;
+  const rows = allMeals.map(m => `
+    <label class="shop-pick-row ${selected.has(m.id) ? 'selected' : ''}" onclick="event.stopPropagation()">
+      <input type="checkbox" ${selected.has(m.id) ? 'checked' : ''} onchange="_toggleShopMeal('${m.id}',this.checked,this.closest('.shop-pick-row'))">
+      <div class="shop-pick-info">
+        <div class="shop-pick-label">${m.label}</div>
+        <div class="shop-pick-naam">${m.naam}</div>
+      </div>
+      <span class="shop-pick-badge ${m.hasRecept ? '' : 'muted'}">${m.hasRecept ? '📋 recept' : 'geen recept'}</span>
+    </label>`).join('');
 
-  const seen = new Set();
-  receptenGepland.forEach(r => {
-    r.ingredienten.forEach(ing => {
-      const key = ing.toLowerCase().replace(/[^a-z ]/g, '').trim();
-      if (seen.has(key)) return;
-      seen.add(key);
-      if (groentMatch(key)) cats['Groenten'].push(ing);
-      else if (blikken_kw.some(k => key.includes(k))) cats['Blikken & potten'].push(ing);
-      else if (granen_kw.some(k => key.includes(k))) cats['Granen & peulvruchten'].push(ing);
-      else cats['Overig'].push(ing);
-    });
+  showModal(`
+    <div class="modal-header"><h2>🛒 Boodschappenlijst</h2><button class="modal-close" onclick="closeModal()">✕</button></div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:10px;">Welke gerechten wil je meenemen?</p>
+    <div class="shop-picker">${rows}</div>
+    <button class="btn btn-primary btn-full" style="margin-top:14px;" onclick="_buildAndShowShopList()">Maak lijst →</button>
+  `);
+}
+
+function _toggleShopMeal(id, checked, rowEl) {
+  if (checked) window._shopState.selected.add(id);
+  else window._shopState.selected.delete(id);
+  if (rowEl) rowEl.classList.toggle('selected', checked);
+}
+
+function _buildAndShowShopList() {
+  const { allMeals, selected, inHuis, extraItems } = window._shopState;
+  const allIng = [];
+  const geenRecept = [];
+
+  allMeals.forEach(m => {
+    if (!selected.has(m.id)) return;
+    if (m.hasRecept) allIng.push(...m.ingredienten);
+    else geenRecept.push(m.naam);
   });
+  extraItems.forEach(i => allIng.push(i));
 
-  let listText = `Boodschappenlijst week ${weekKey}\n\n`;
+  const merged = _mergeIngredients(allIng);
+  const cats = _categorizeIngredients(merged);
+
+  let listText = 'Boodschappenlijst\n\n';
   let listHTML = '';
   Object.entries(cats).forEach(([cat, items]) => {
-    if (items.length === 0) return;
-    listText += `${cat}:\n${items.map(i => `- ${i}`).join('\n')}\n\n`;
-    listHTML += `<div class="shop-cat">${cat}</div>${items.map(i => `<div>• ${i}</div>`).join('')}`;
+    if (!items.length) return;
+    listText += cat + ':\n' + items.map(i => '- ' + i.display).join('\n') + '\n\n';
+    listHTML += `<div class="shop-cat">${cat}</div>`;
+    listHTML += items.map(item => {
+      const esc = item.display.replace(/'/g, "\\'");
+      const checked = inHuis.has(item.display);
+      return `<label class="shop-item-row ${checked ? 'in-huis' : ''}" onclick="event.preventDefault();_toggleInHuis('${esc}',this)">
+        <input type="checkbox" ${checked ? 'checked' : ''} style="pointer-events:none;">
+        <span>${item.display}</span>
+      </label>`;
+    }).join('');
   });
 
-  window._pendingShopList = listText;
+  if (geenRecept.length) {
+    listHTML += `<div class="shop-cat" style="margin-top:16px;">Maaltijden (zelf regelen)</div>`;
+    listHTML += geenRecept.map(n => `<div style="font-size:14px;color:var(--muted);padding:4px 0;">• ${n}</div>`).join('');
+    listText += 'Maaltijden (zelf regelen):\n' + geenRecept.map(n => '- ' + n).join('\n') + '\n';
+  }
+
+  window._shopListText = listText;
+
   showModal(`
-    <div class="modal-header"><h2>Boodschappenlijst</h2><button class="modal-close" onclick="closeModal()">✕</button></div>
-    <p style="font-size:13px; color:var(--muted); margin-bottom:12px;">Op basis van geplande recepten: ${receptenGepland.map(r=>r.naam).join(', ')}</p>
-    <div class="shop-list">${listHTML}</div>
-    <button class="btn btn-secondary btn-full" style="margin-top:16px;" onclick="copyToClipboard(window._pendingShopList)">
-      Kopieer lijst
-    </button>
+    <div class="modal-header"><h2>🛒 Boodschappenlijst</h2><button class="modal-close" onclick="closeModal()">✕</button></div>
+    <button onclick="_renderShopPicker()" style="background:none;border:none;color:var(--muted);font-size:13px;cursor:pointer;padding:0 0 10px;display:flex;align-items:center;gap:4px;font-family:inherit;">← Terug</button>
+    <div class="shop-scroll"><div class="shop-list">${listHTML}</div></div>
+    <div style="display:flex;gap:8px;margin-top:14px;">
+      <input id="shop-extra-input" type="text" placeholder="Extra item toevoegen…" style="flex:1;min-height:40px;border-radius:8px;border:1.5px solid var(--border);background:var(--card2);color:var(--text);padding:0 10px;font-size:14px;font-family:inherit;" onkeydown="if(event.key==='Enter')_addShopExtra()">
+      <button onclick="_addShopExtra()" class="btn btn-secondary" style="min-height:40px;padding:0 14px;">+</button>
+    </div>
+    <button class="btn btn-ghost btn-full" style="margin-top:10px;" onclick="copyToClipboard(window._shopListText)">📋 Kopieer lijst</button>
+    ${data.boodschappenExtra && data.boodschappenExtra.length ? `<button onclick="clearBoodschappenExtra()" style="background:none;border:none;font-size:12px;color:var(--muted);cursor:pointer;margin-top:6px;font-family:inherit;text-decoration:underline;">🗑 Coach-items wissen (${data.boodschappenExtra.length})</button>` : ''}
   `);
+}
+
+function _toggleInHuis(display, labelEl) {
+  const checked = !labelEl.classList.contains('in-huis');
+  if (checked) window._shopState.inHuis.add(display);
+  else window._shopState.inHuis.delete(display);
+  labelEl.classList.toggle('in-huis', checked);
+  const cb = labelEl.querySelector('input[type=checkbox]');
+  if (cb) cb.checked = checked;
+}
+
+function _addShopExtra() {
+  const input = document.getElementById('shop-extra-input');
+  const val = input && input.value.trim();
+  if (!val) return;
+  window._shopState.extraItems.push(val);
+  if (!data.boodschappenExtra) data.boodschappenExtra = [];
+  data.boodschappenExtra.push(val);
+  saveAndSync();
+  _buildAndShowShopList();
+}
+
+function clearBoodschappenExtra() {
+  data.boodschappenExtra = [];
+  saveAndSync();
+  if (window._shopState) window._shopState.extraItems = [];
+  showBanner('green', 'Extra items gewist.');
+  _buildAndShowShopList();
+}
+
+function _mergeIngredients(ingredients) {
+  const map = {};
+  const order = [];
+  ingredients.forEach(ing => {
+    if (!ing || typeof ing !== 'string' || !ing.trim()) return;
+    ing = ing.trim();
+    const m = ing.match(/^([\d½¼¾,.]+)\s*(g|kg|ml|l|el|tl|stuks?|blikjes?|blik|bosjes?|bos|takjes?|teentjes?|teen|x)?\s+(.+)$/i);
+    let qty = null, unit = '', name = '';
+    if (m) {
+      qty = parseFloat(m[1].replace(',', '.'));
+      unit = (m[2] || '').toLowerCase().replace(/s$/, '');
+      name = m[3].toLowerCase().trim();
+    } else { name = ing.toLowerCase().trim(); }
+    if (unit === 'eetlepel') unit = 'el';
+    if (unit === 'theelepel') unit = 'tl';
+    const key = name + '§' + unit;
+    if (map[key]) {
+      if (qty !== null && map[key].qty !== null) {
+        map[key].qty += qty;
+        const q = map[key].qty % 1 === 0 ? map[key].qty : +map[key].qty.toFixed(1);
+        map[key].display = unit ? q + unit + ' ' + name : q + ' ' + name;
+      }
+    } else {
+      map[key] = { qty, unit, name, display: ing };
+      order.push(key);
+    }
+  });
+  return order.map(k => map[k]);
+}
+
+function _categorizeIngredients(items) {
+  const cats = { 'Groenten & fruit': [], 'Vlees, vis & eieren': [], 'Zuivel': [], 'Blikken & potten': [], 'Droog & granen': [], 'Overig': [] };
+  const kw = {
+    'Groenten & fruit': ['courgette','paprika','ui','wortel','selderij','spinazie','kool','avocado','koriander','rucola','knoflook','tomaat','prei','broccoli','bloemkool','sla','komkommer','citroen','limoen','appel','peer','banaan','mango','druif','aardbei','gember','biet','asperge','mais','champignon','paddenstoel'],
+    'Vlees, vis & eieren': ['kip','vlees','gehakt','spek','ham','vis','zalm','tonijn','garnalen','ei','eieren','tofu','tempeh','seitan'],
+    'Zuivel': ['melk','yoghurt','kwark','kaas','roomkaas','crème fraîche','slagroom','boter','margarine','room'],
+    'Blikken & potten': ['blik','kokosmelk','bouillon','bonen','kikkererwten','linzen','passata','tomatenpuree','pesto','mosterd','soja','sojasaus','ketjap'],
+    'Droog & granen': ['pasta','rijst','quinoa','brood','tortilla','meel','bloem','suiker','olie','olijfolie','azijn','noten','amandelen','cashew','walnoot','pijnboompit','rozijn','haver','havermout','muesli','crackers'],
+  };
+  items.forEach(item => {
+    const k = item.name;
+    let cat = 'Overig';
+    for (const [c, words] of Object.entries(kw)) {
+      if (words.some(w => k.includes(w))) { cat = c; break; }
+    }
+    cats[cat].push(item);
+  });
+  return cats;
 }
 
 // ─── RECIPE GENERATOR & MANAGEMENT ───────────────────────────────────────────
 
 function setGenCount(n) {
   genCount = n;
-  document.querySelectorAll('.gen-count-btn').forEach((b, i) => {
+  document.querySelectorAll('.gen-pill').forEach((b, i) => {
     b.classList.toggle('active', i + 1 === n);
   });
 }
@@ -4229,31 +4757,65 @@ async function sendChat() {
   }
 }
 
+function stepTerugblik(delta) {
+  const inp = document.getElementById('terugblik-dagen-input');
+  if (!inp) return;
+  const v = Math.max(1, Math.min(365, (parseInt(inp.value) || 3) + delta));
+  inp.value = v;
+}
+
 async function doTerugblik() {
   const resultEl = document.getElementById('terugblik-result');
   resultEl.innerHTML = '<div class="typing-dots" style="justify-content:center; padding:16px;"><span></span><span></span><span></span></div>';
 
-  const prevWeekDate = new Date();
-  prevWeekDate.setDate(prevWeekDate.getDate() - 7);
-  const prevWeekKey = getISOWeek(prevWeekDate);
-  const weekData = data.weken && data.weken[prevWeekKey];
+  const inp = document.getElementById('terugblik-dagen-input');
+  const dagen = Math.max(1, Math.min(365, parseInt(inp && inp.value) || 3));
+  const periodeLabel = dagen === 1 ? 'gisteren' : `de afgelopen ${dagen} dagen`;
 
-  let context = `Terugblik op week ${prevWeekKey}. `;
-  if (weekData) {
-    let gepland = 0, afgevinkt = 0;
-    Object.values(weekData).forEach(day => {
-      if (day.activiteiten) {
-        gepland += day.activiteiten.length;
-        afgevinkt += day.activiteiten.filter(a => a.afgevinkt).length;
+  // Collect day data for the period
+  const now = new Date();
+  let gepland = 0, afgevinkt = 0, sportDagen = 0, rustDagen = 0;
+  const sportTypes = {};
+  let maaltijdLines = [];
+
+  for (let i = 1; i <= dagen; i++) {
+    const d = new Date(now);
+    d.setDate(d.getDate() - i);
+    const dateStr = d.toISOString().slice(0,10);
+    const wk = getISOWeek(d);
+    const dayData = data.weken && data.weken[wk] && data.weken[wk][dateStr];
+    if (!dayData) continue;
+
+    if (dayData.activiteiten && dayData.activiteiten.length > 0) {
+      const acts = dayData.activiteiten;
+      gepland += acts.length;
+      const done = acts.filter(a => a.afgevinkt);
+      afgevinkt += done.length;
+      if (done.length > 0) {
+        sportDagen++;
+        done.forEach(a => { sportTypes[a.type || a.naam] = (sportTypes[a.type || a.naam] || 0) + 1; });
+      } else {
+        rustDagen++;
       }
-    });
-    const pct = gepland === 0 ? 0 : Math.round(afgevinkt / gepland * 100);
-    context += `${afgevinkt} van ${gepland} activiteiten afgevinkt (${pct}%).`;
-  } else {
-    context += 'Geen data beschikbaar voor de afgelopen week.';
+    }
+    if (dayData.maaltijden) {
+      Object.values(dayData.maaltijden).forEach(m => {
+        if (m && m.naam && m.gegeten) maaltijdLines.push(m.naam);
+      });
+    }
   }
 
-  const prompt = `${context} Geef een korte wekelijkse terugblik: wat ging goed, en 1 concrete tip voor deze week. Maximaal 4 zinnen.`;
+  const pct = gepland === 0 ? 0 : Math.round(afgevinkt / gepland * 100);
+  const sportSummary = Object.entries(sportTypes).map(([t,n]) => `${t} (${n}×)`).join(', ') || 'geen';
+  let context = `Terugblik voor de gebruiker over ${periodeLabel}. `;
+  context += gepland > 0
+    ? `${afgevinkt} van ${gepland} activiteiten afgevinkt (${pct}%). Sport: ${sportSummary}. Sportdagen: ${sportDagen}, rustdagen: ${rustDagen}. `
+    : 'Geen activiteiten gelogd in deze periode. ';
+  if (maaltijdLines.length > 0) {
+    context += `Gegeten: ${maaltijdLines.slice(0,6).join(', ')}${maaltijdLines.length > 6 ? ' (…)' : ''}. `;
+  }
+
+  const prompt = `${context}Geef een persoonlijke terugblik: benoem wat goed ging, en geef 1 concrete tip voor de komende dagen. Spreek de gebruiker direct aan. Maximaal 4 zinnen. Wees warm maar zakelijk.`;
 
   try {
     const reply = await callAI(prompt, 400);
@@ -5439,6 +6001,20 @@ async function coachFrontSend(msgOverride) {
     }
   }
 
+  // Boodschappenlijst intent
+  if (/boodschap|winkellijst|op de lijst|zet.{0,20}lijst|voeg.{0,20}toe.{0,15}lijst|moet.{0,15}kopen/i.test(msg)) {
+    try {
+      const shopRaw = await callAI(`De gebruiker zegt: "${msg}". Welke items wil hij/zij aan de boodschappenlijst toevoegen? Antwoord ALLEEN met een JSON-array van strings. Bijv. ["melk","brood"]. Lege array als onduidelijk. Geen uitleg.`, 120);
+      const items = safeParseJSON(shopRaw);
+      if (Array.isArray(items) && items.length > 0) {
+        if (!data.boodschappenExtra) data.boodschappenExtra = [];
+        items.forEach(i => { if (i && i.trim()) data.boodschappenExtra.push(i.trim()); });
+        saveAndSync();
+        showBanner('green', `🛒 ${items.join(', ')} toegevoegd`);
+      }
+    } catch(e) { /* silent */ }
+  }
+
   const userContent = foodContext ? msg + foodContext : msg;
   data.chatHistorie.push({ role: 'user', content: msg });
   if (data.chatHistorie.length > 20) data.chatHistorie.shift();
@@ -5505,6 +6081,7 @@ Analyseer dit en extraheer alle informatie. Antwoord ALLEEN in dit JSON-formaat 
   "water": 0,
   "verwijder_maaltijd": null,
   "verwijder_activiteit": null,
+  "boodschap_toevoegen": null,
   "coaching_vraag": null
 }
 
@@ -5514,6 +6091,7 @@ Regels:
 - water: aantal glazen (0 als niet vermeld)
 - verwijder_maaltijd: "ontbijt", "lunch", "diner" of "snack" als gebruiker een maaltijd wil verwijderen/wissen/schrappen
 - verwijder_activiteit: naam of type van de activiteit als gebruiker een activiteit wil verwijderen (bijv. "hardlopen", "gym", "fietsen")
+- boodschap_toevoegen: array van strings als gebruiker items aan de boodschappenlijst wil toevoegen, bijv. ["melk","brood","appels"]. Null als niet van toepassing.
 - coaching_vraag: letterlijke vraag als gebruiker advies wil, anders null
 Geen uitleg, alleen JSON.`;
 
@@ -5584,6 +6162,13 @@ Geen uitleg, alleen JSON.`;
       acties.push(`✓ ${parsed.water} glas${parsed.water > 1 ? 'zen' : ''} water`);
     }
 
+    // Boodschappen toevoegen
+    if (Array.isArray(parsed.boodschap_toevoegen) && parsed.boodschap_toevoegen.length > 0) {
+      if (!data.boodschappenExtra) data.boodschappenExtra = [];
+      parsed.boodschap_toevoegen.forEach(item => { if (item && item.trim()) data.boodschappenExtra.push(item.trim()); });
+      acties.push(`🛒 ${parsed.boodschap_toevoegen.join(', ')} op boodschappenlijst`);
+    }
+
     if (acties.length > 0) {
       saveAndSync();
       renderVandaag();
@@ -5615,6 +6200,7 @@ Geen uitleg, alleen JSON.`;
 function renderAll() {
   renderVandaag();
   renderWeek();
+  renderWeekOvTab();
   renderFoodTab();
   renderCoach();
 }
@@ -5626,6 +6212,7 @@ function initApp() {
   updateStreak();
   loadGist();
   setupSwipeGestures();
+  checkIntro();
   // Coach-tab is actief bij start — FAB verbergen
   const tabs = document.querySelectorAll('.tab-btn');
   tabs.forEach(t => t.classList.remove('active'));
