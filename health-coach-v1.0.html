@@ -5306,9 +5306,12 @@ function bigPraatStart() {
 }
 
 async function askQuickQ(question) {
-  // Scroll to chat, stuur bericht
   const input = document.getElementById('chat-input');
-  if (input) { input.value = question; sendChat(); }
+  if (!input) return;
+  input.value = question;
+  const chatCard = document.getElementById('chat-history')?.closest('.card');
+  if (chatCard) chatCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  sendChat();
 }
 
 async function parseSmartInput(transcript) {
