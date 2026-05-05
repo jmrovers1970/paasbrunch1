@@ -312,13 +312,21 @@ label { display: block; font-size: 14px; font-weight: 600; color: var(--text-2);
 
 /* ─── MEALS ─── */
 .meal-row {
-  display: flex; align-items: center; gap: 14px;
-  padding: 14px 16px; margin-bottom: 8px;
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 14px; margin-bottom: 8px;
   background: var(--card2); border-radius: 12px;
-  cursor: pointer; transition: background .15s;
-  min-height: 60px;
+  transition: background .15s; min-height: 60px;
 }
-.meal-row:active { background: #ebe6dc; }
+.meal-row:last-child { margin-bottom: 0; }
+.meal-check-circle {
+  width: 28px; height: 28px; min-width: 28px; border-radius: 50%;
+  border: 2px solid var(--border-strong); background: var(--card);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: background .15s, border-color .15s; flex-shrink: 0;
+}
+.meal-check-circle svg { opacity: 0; transition: opacity .15s; }
+.meal-check-circle.checked { background: var(--accent-food); border-color: var(--accent-food); }
+.meal-check-circle.checked svg { opacity: 1; }
 .meal-row:last-child { margin-bottom: 0; }
 .meal-icon {
   width: 36px; height: 36px; min-width: 36px;
@@ -710,6 +718,12 @@ select.modal-input { appearance: auto; }
   justify-content: center; flex-shrink: 0; transition: color .15s;
 }
 .activity-info-btn:active { color: var(--accent-move); }
+.activity-edit-btn {
+  background: none; border: none; cursor: pointer; color: var(--muted);
+  padding: 7px; border-radius: 50%; display: flex; align-items: center;
+  justify-content: center; flex-shrink: 0; transition: color .15s;
+}
+.activity-edit-btn:active { color: var(--accent-move); }
 
 /* ─── EXERCISE LINKS IN CHAT ─── */
 .exercise-link {
@@ -2749,8 +2763,8 @@ function renderTodayActivities(dateStr) {
         <div class="activity-name ${a.afgevinkt ? 'done' : ''}">${a.naam}</div>
         <div class="activity-detail">${a.detail}</div>
       </div>
-      <button class="activity-info-btn" onclick="showOefenuitleg('${safeName}','${safeDetail}','${a.type}')" title="Uitleg">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+      <button class="activity-edit-btn" onclick="editActivity('${dateStr}','${a.id}')" title="Bewerken">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
       </button>
     </div>`; }).join('');
 
@@ -2847,6 +2861,26 @@ function toggleActivity(dateStr, actId, circleEl) {
   if (!wasComplete && nowComplete) showCelebration();
 }
 
+function toggleMealGegeten(dateStr, slot, circleEl) {
+  const weekKey = getISOWeek(new Date(dateStr + 'T12:00:00'));
+  ensureDay(dateStr);
+  const meal = data.weken[weekKey][dateStr].maaltijden[slot];
+  if (!meal) return;
+  meal.gegeten = !meal.gegeten;
+  circleEl.classList.toggle('checked', meal.gegeten);
+  circleEl.classList.add('pop-anim');
+  setTimeout(() => circleEl.classList.remove('pop-anim'), 300);
+  if (meal.gegeten && navigator.vibrate) navigator.vibrate(15);
+  const row = circleEl.closest('.meal-row');
+  if (row) {
+    const nameEl = row.querySelector('.meal-name');
+    if (nameEl) nameEl.classList.toggle('done', meal.gegeten);
+    row.querySelectorAll('.meal-fibers, .meal-protein').forEach(el => el.style.opacity = meal.gegeten ? '1' : '.5');
+  }
+  saveAndSync();
+  renderNutriBar(dateStr);
+}
+
 function renderTodayMeals(dateStr) {
   const container = document.getElementById('today-meals');
   const weekKey = getISOWeek(new Date(dateStr + 'T12:00:00'));
@@ -2863,21 +2897,25 @@ function renderTodayMeals(dateStr) {
   container.innerHTML = rows.map(row => {
     const meal = meals[row.key] || { naam: '', vezels: '' };
     if (isMealSet(meal, row.key)) {
+      const gegeten = !!meal.gegeten;
       const protBadge = meal.eiwitten
-        ? `<span class="meal-protein">${meal.eiwitten}</span>` : '';
-      return `<div class="meal-row" onclick="quickEditMeal('${dateStr}','${row.key}')">
-        <div class="meal-icon">${row.icon}</div>
-        <div class="meal-info">
+        ? `<span class="meal-protein" style="${gegeten?'':'opacity:.5'}">${meal.eiwitten}</span>` : '';
+      return `<div class="meal-row" style="${gegeten?'opacity:1':''}">
+        <button class="meal-check-circle ${gegeten?'checked':''}" onclick="toggleMealGegeten('${dateStr}','${row.key}',this)" aria-label="${gegeten?'Vink uit':'Markeer als gegeten'}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </button>
+        <div class="meal-icon" onclick="quickEditMeal('${dateStr}','${row.key}')">${row.icon}</div>
+        <div class="meal-info" onclick="quickEditMeal('${dateStr}','${row.key}')">
           <div class="meal-label">${row.label}</div>
-          <div class="meal-name">${meal.naam}</div>
+          <div class="meal-name ${gegeten?'done':''}">${meal.naam}</div>
         </div>
-        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0;">
-          <span class="meal-fibers">${meal.vezels}</span>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0;" onclick="quickEditMeal('${dateStr}','${row.key}')">
+          <span class="meal-fibers" style="${gegeten?'':'opacity:.5'}">${meal.vezels}</span>
           ${protBadge}
         </div>
       </div>`;
     } else {
-      return `<div class="meal-row" onclick="quickEditMeal('${dateStr}','${row.key}')" style="opacity:.7;">
+      return `<div class="meal-row" onclick="quickEditMeal('${dateStr}','${row.key}')" style="opacity:.6;">
         <div class="meal-icon">${row.icon}</div>
         <div class="meal-info">
           <div class="meal-label">${row.label}</div>
@@ -5120,9 +5158,12 @@ function renderNutriBar(dateStr) {
   const dayData = data.weken && data.weken[weekKey] && data.weken[weekKey][dateStr];
   if (!dayData || !dayData.maaltijden) { el.innerHTML = ''; return; }
 
+  const allMeals = Object.values(dayData.maaltijden).filter(m => m && m.naam);
+  const anyGegeten = allMeals.some(m => m.gegeten);
+  const telMeals = anyGegeten ? allMeals.filter(m => m.gegeten) : allMeals;
+
   let vezels = 0, eiwitten = 0;
-  Object.values(dayData.maaltijden).forEach(m => {
-    if (!m) return;
+  telMeals.forEach(m => {
     vezels += parseGrams(m.vezels);
     eiwitten += parseGrams(m.eiwitten);
   });
@@ -5132,7 +5173,9 @@ function renderNutriBar(dateStr) {
   const eiwitPct = Math.min(100, Math.round(eiwitten / eiwitGoal * 100));
   const vezelClass = vezels >= 30 ? 'fiber' : vezels >= 20 ? 'fiber warn' : 'fiber low';
 
+  const label = anyGegeten ? 'gegeten' : 'gepland';
   el.innerHTML = `<div class="nutri-bars">
+    <div style="font-size:11px;color:var(--muted);margin-bottom:4px;font-weight:600;text-transform:uppercase;letter-spacing:.4px;">${label}</div>
     <div class="nutri-bar-row">
       <span class="nutri-bar-label">🌿 Vezels</span>
       <div class="nutri-bar-track"><div class="nutri-bar-fill ${vezelClass}" style="width:${vezelPct}%"></div></div>
@@ -5457,18 +5500,21 @@ async function parseSmartInput(transcript) {
 
 Analyseer dit en extraheer alle informatie. Antwoord ALLEEN in dit JSON-formaat (geen uitleg, geen markdown):
 {
-  "activiteit": {"naam":"...", "type":"run|gym|bike|walk|other|geen", "detail":"...", "km":0, "duur":0},
+  "activiteit": {"naam":"...", "type":"run|gym|bike|walk|commute|other|geen", "detail":"...", "km":0, "duur":0},
   "maaltijd": {"naam":"...", "slot":"${tijdSlot}", "vezels":"~Xg", "eiwitten":"~Xg", "kcal":"~Xkcal"},
   "water": 0,
-  "coaching_vraag": "..."
+  "verwijder_maaltijd": null,
+  "verwijder_activiteit": null,
+  "coaching_vraag": null
 }
 
 Regels:
-- activiteit: vul in als gebruiker sport noemt, anders {"naam":"","type":"geen","detail":"","km":0,"duur":0}
-- maaltijd: vul in als gebruiker eten noemt. Schat ALTIJD vezels EN eiwitten op basis van het gerecht — nooit weglaten of 0 laten. Kip bevat ~25-35g eiwit per portie, friet ~4g, pasta ~12g, vis ~25g, ei ~12g per 2 eieren, etc.
+- activiteit: vul in als gebruiker sport/beweging toevoegt, anders type="geen"
+- maaltijd: vul in als gebruiker eten toevoegt. Schat ALTIJD vezels EN eiwitten — nooit 0 of weglaten. Kip ~30g eiwit, friet ~4g, pasta ~12g, vis ~25g, ei ~12g per 2 stuks.
 - water: aantal glazen (0 als niet vermeld)
+- verwijder_maaltijd: "ontbijt", "lunch", "diner" of "snack" als gebruiker een maaltijd wil verwijderen/wissen/schrappen
+- verwijder_activiteit: naam of type van de activiteit als gebruiker een activiteit wil verwijderen (bijv. "hardlopen", "gym", "fietsen")
 - coaching_vraag: letterlijke vraag als gebruiker advies wil, anders null
-- Gebruik null alleen voor coaching_vraag als er geen vraag is. Velden nooit weglaten.
 Geen uitleg, alleen JSON.`;
 
   try {
@@ -5477,31 +5523,51 @@ Geen uitleg, alleen JSON.`;
     if (!parsed) { showBanner('red', 'Kon invoer niet verwerken.'); return; }
 
     const acties = [];
+    const weekKey = getISOWeek(new Date(todayStr + 'T12:00:00'));
+    ensureDay(todayStr);
+    const dayData = data.weken[weekKey][todayStr];
 
-    // Activiteit verwerken
-    if (parsed.activiteit && parsed.activiteit.type !== 'geen') {
-      const weekKey = getISOWeek(new Date(todayStr + 'T12:00:00'));
-      ensureDay(todayStr);
+    // Maaltijd verwijderen
+    if (parsed.verwijder_maaltijd) {
+      const slot = parsed.verwijder_maaltijd.toLowerCase();
+      if (dayData.maaltijden[slot]) {
+        const naam = dayData.maaltijden[slot].naam || slot;
+        dayData.maaltijden[slot] = { naam: '', vezels: '', eiwitten: '', kcal: '' };
+        acties.push(`🗑 ${naam} verwijderd`);
+      }
+    }
+
+    // Activiteit verwijderen
+    if (parsed.verwijder_activiteit) {
+      const zoek = parsed.verwijder_activiteit.toLowerCase();
+      const voor = dayData.activiteiten.length;
+      dayData.activiteiten = dayData.activiteiten.filter(a =>
+        !a.naam.toLowerCase().includes(zoek) && !a.type.toLowerCase().includes(zoek)
+      );
+      const na = dayData.activiteiten.length;
+      if (voor > na) acties.push(`🗑 Activiteit verwijderd`);
+    }
+
+    // Activiteit toevoegen
+    if (parsed.activiteit && parsed.activiteit.type !== 'geen' && parsed.activiteit.naam) {
       const type = parsed.activiteit.type || 'other';
       const detail = [parsed.activiteit.detail, parsed.activiteit.km ? parsed.activiteit.km + 'km' : ''].filter(Boolean).join(' · ');
-      data.weken[weekKey][todayStr].activiteiten.push({
+      dayData.activiteiten.push({
         id: 'a' + Date.now(),
         type,
-        naam: parsed.activiteit.naam || 'Activiteit',
+        naam: parsed.activiteit.naam,
         detail,
         afgevinkt: true,
         duur: parsed.activiteit.duur || (parsed.activiteit.km ? Math.round(parsed.activiteit.km * 6) : (DEFAULT_DUUR[type] || 30))
       });
-      data.weken[weekKey][todayStr].aangepast = true;
+      dayData.aangepast = true;
       acties.push(`✓ ${parsed.activiteit.naam} toegevoegd`);
     }
 
-    // Maaltijd verwerken
+    // Maaltijd toevoegen
     if (parsed.maaltijd && parsed.maaltijd.naam) {
-      const weekKey = getISOWeek(new Date(todayStr + 'T12:00:00'));
-      ensureDay(todayStr);
       const slot = parsed.maaltijd.slot || tijdSlot;
-      data.weken[weekKey][todayStr].maaltijden[slot] = {
+      dayData.maaltijden[slot] = {
         naam: parsed.maaltijd.naam,
         vezels: parsed.maaltijd.vezels || '',
         eiwitten: parsed.maaltijd.eiwitten || '',
@@ -5511,12 +5577,10 @@ Geen uitleg, alleen JSON.`;
       acties.push(`✓ ${parsed.maaltijd.naam} als ${slot}`);
     }
 
-    // Water verwerken
+    // Water
     if (parsed.water && parsed.water > 0) {
-      const weekKey = getISOWeek(new Date(todayStr + 'T12:00:00'));
-      ensureDay(todayStr);
-      const huidig = data.weken[weekKey][todayStr].waterGlazen || 0;
-      data.weken[weekKey][todayStr].waterGlazen = Math.min(8, huidig + parsed.water);
+      const huidig = dayData.waterGlazen || 0;
+      dayData.waterGlazen = Math.min(8, huidig + parsed.water);
       acties.push(`✓ ${parsed.water} glas${parsed.water > 1 ? 'zen' : ''} water`);
     }
 
@@ -5526,13 +5590,16 @@ Geen uitleg, alleen JSON.`;
       renderWeek();
     }
 
-    // Coaching-vraag of samenvatting als chatbericht sturen
-    const heeftActiviteit = parsed.activiteit && parsed.activiteit.type !== 'geen';
+    // Coaching-reactie
+    const heeftActiviteit = parsed.activiteit && parsed.activiteit.type !== 'geen' && parsed.activiteit.naam;
+    const heeftVerwijdering = parsed.verwijder_maaltijd || parsed.verwijder_activiteit;
     const vraag = parsed.coaching_vraag ||
       (acties.length > 0
         ? heeftActiviteit
           ? `Ik heb zojuist doorgegeven: ${acties.join(', ')}. Geef me een enthousiast compliment voor het sporten, en eventueel een korte tip. Maximaal 2 zinnen.`
-          : `Ik heb zojuist doorgegeven: ${acties.join(', ')}. Kun je een korte reactie geven?`
+          : heeftVerwijdering
+            ? `Ik heb ${acties.join(', ')}. Bevestig dit kort en vriendelijk.`
+            : `Ik heb zojuist doorgegeven: ${acties.join(', ')}. Kun je een korte reactie geven?`
         : transcript);
     coachFrontSend(vraag);
 
