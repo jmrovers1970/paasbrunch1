@@ -1236,7 +1236,7 @@ select.modal-input { appearance: auto; }
 .coach-chat-window {
   background: rgba(0,0,0,.20); border-radius: 14px;
   margin: 14px 0 0; padding: 12px;
-  max-height: 220px; overflow-y: auto;
+  max-height: 45vh; min-height: 120px; overflow-y: auto;
   display: flex; flex-direction: column; gap: 8px;
   scroll-behavior: smooth;
 }
@@ -5253,22 +5253,22 @@ function fabCoachTap() {
       if (e.results[i].isFinal) transcript += e.results[i][0].transcript + ' ';
     }
   };
-  recognition.onerror = () => {
+  recognition.onerror = e => {
     window._fabRec = null;
     if (fab) fab.classList.remove('listening');
-    showBanner('red', 'Spraakopname mislukt.');
+    if (e.error === 'not-allowed') showBanner('red', 'Microfoon geblokkeerd — sta toegang toe in je browserinstellingen.');
+    else if (e.error !== 'aborted') showBanner('red', 'Spraakopname mislukt (' + (e.error || '?') + ').');
   };
   recognition.onend = async () => {
     window._fabRec = null;
     if (fab) fab.classList.remove('listening');
     const t = transcript.trim();
-    if (t.length < 3) { showBanner('red', 'Geen spraak herkend.'); return; }
-    // Switch naar coach-tab en verwerk
+    if (t.length < 3) return;
     const coachBtn = document.querySelector('.tab-btn');
     if (coachBtn) switchTab('coach', coachBtn);
     await parseSmartInput(t);
   };
-  recognition.start();
+  try { recognition.start(); } catch(e) { window._fabRec = null; if (fab) fab.classList.remove('listening'); }
 }
 
 function bigPraatStart() {
@@ -5282,7 +5282,10 @@ function bigPraatStart() {
   }
 
   if (window._bigPraatRec) {
-    window._bigPraatRec.stop();
+    try { window._bigPraatRec.abort(); } catch(e) {}
+    window._bigPraatRec = null;
+    const btn2 = document.getElementById('big-praat-btn');
+    if (btn2) { btn2.classList.remove('listening','processing'); btn2.innerHTML = `<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg> Praat met de coach`; }
     return;
   }
 
@@ -5291,6 +5294,7 @@ function bigPraatStart() {
   recognition.continuous = false;
   recognition.interimResults = false;
   window._bigPraatRec = recognition;
+  let _aborted = false;
 
   btn.classList.add('listening');
   btn.innerHTML = `<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="6" width="12" height="12" rx="2"/></svg> Luisteren… tik om te stoppen`;
@@ -5309,18 +5313,24 @@ function bigPraatStart() {
     btn.innerHTML = `<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg> Praat met de coach`;
   };
 
-  recognition.onerror = () => { resetBtn(); showBanner('red', 'Spraakopname mislukt.'); };
+  recognition.onerror = e => {
+    if (e.error === 'aborted') { _aborted = true; return; }
+    resetBtn();
+    if (e.error === 'not-allowed') showBanner('red', 'Microfoon geblokkeerd — sta toegang toe in je browserinstellingen.');
+    else if (e.error === 'network') showBanner('red', 'Netwerk nodig voor spraakherkenning.');
+    else showBanner('red', 'Spraakopname mislukt (' + (e.error || '?') + ').');
+  };
   recognition.onend = async () => {
     const t = transcript.trim();
     resetBtn();
-    if (t.length < 3) { showBanner('red', 'Geen spraak herkend.'); return; }
+    if (_aborted || t.length < 3) return;
     status.textContent = 'Verwerken…';
     btn.classList.add('processing');
     await parseSmartInput(t);
     btn.classList.remove('processing');
     status.textContent = '';
   };
-  recognition.start();
+  try { recognition.start(); } catch(e) { resetBtn(); showBanner('red', 'Kon opname niet starten. Probeer opnieuw.'); }
 }
 
 async function askQuickQ(question) {
@@ -5332,11 +5342,31 @@ function addFrontBubble(role, text) {
   if (!win) return;
   const div = document.createElement('div');
   div.className = role === 'user' ? 'coach-bubble-user' : 'coach-bubble-ai';
-  div.innerHTML = role === 'user'
-    ? text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-    : formatCoachText(text);
+  if (role === 'user') {
+    div.innerHTML = text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  } else {
+    const tipId = 'ft' + Date.now();
+    div.innerHTML = formatCoachText(text) +
+      `<button onclick="pinFrontTip('${tipId}',this)" style="display:block;margin-top:6px;background:none;border:none;font-size:12px;color:rgba(0,0,0,.4);cursor:pointer;padding:0;font-family:inherit;">📌 Opslaan</button>`;
+    div.dataset.tipText = text;
+    div.dataset.tipId = tipId;
+  }
   win.appendChild(div);
   win.scrollTop = win.scrollHeight;
+}
+
+function pinFrontTip(id, btn) {
+  const bubble = btn.closest('.coach-bubble-ai');
+  const text = bubble ? bubble.dataset.tipText : '';
+  if (!text) return;
+  if (!data.savedTips) data.savedTips = [];
+  if (data.savedTips.find(t => t.id === id)) { showBanner('green', 'Al opgeslagen.'); return; }
+  data.savedTips.unshift({ id, date: today(), content: text });
+  saveAndSync();
+  btn.textContent = '✓ Opgeslagen';
+  btn.style.color = 'rgba(0,0,0,.25)';
+  btn.onclick = null;
+  showBanner('green', 'Tip opgeslagen onder Coach → Opgeslagen tips.');
 }
 
 async function coachFrontSend(msgOverride) {
@@ -5405,14 +5435,17 @@ function startVoiceFrontCoach() {
   recognition.interimResults = false;
   let t = '';
   recognition.onresult = e => { for (let i = e.resultIndex; i < e.results.length; i++) { if (e.results[i].isFinal) t += e.results[i][0].transcript; } };
-  recognition.onend = () => { if (t.trim()) coachFrontSend(t.trim()); };
-  recognition.onerror = () => showBanner('red', 'Spraakopname mislukt.');
-  if (inputEl) inputEl.placeholder = 'Luisteren…';
-  recognition.start();
+  recognition.onerror = e => {
+    if (inputEl) inputEl.placeholder = 'Of typ hier een vraag…';
+    if (e.error === 'not-allowed') showBanner('red', 'Microfoon geblokkeerd — sta toegang toe in je browserinstellingen.');
+    else if (e.error !== 'aborted') showBanner('red', 'Spraakopname mislukt.');
+  };
   recognition.onend = () => {
     if (inputEl) inputEl.placeholder = 'Of typ hier een vraag…';
     if (t.trim()) coachFrontSend(t.trim());
   };
+  if (inputEl) inputEl.placeholder = 'Luisteren…';
+  try { recognition.start(); } catch(e) { if (inputEl) inputEl.placeholder = 'Of typ hier een vraag…'; }
 }
 
 async function parseSmartInput(transcript) {
@@ -5494,8 +5527,13 @@ Geen uitleg, alleen JSON.`;
     }
 
     // Coaching-vraag of samenvatting als chatbericht sturen
+    const heeftActiviteit = parsed.activiteit && parsed.activiteit.type !== 'geen';
     const vraag = parsed.coaching_vraag ||
-      (acties.length > 0 ? `Ik heb zojuist doorgegeven: ${acties.join(', ')}. Kun je een korte reactie geven?` : transcript);
+      (acties.length > 0
+        ? heeftActiviteit
+          ? `Ik heb zojuist doorgegeven: ${acties.join(', ')}. Geef me een enthousiast compliment voor het sporten, en eventueel een korte tip. Maximaal 2 zinnen.`
+          : `Ik heb zojuist doorgegeven: ${acties.join(', ')}. Kun je een korte reactie geven?`
+        : transcript);
     coachFrontSend(vraag);
 
     if (acties.length > 0) showBanner('green', acties.join(' · '));
