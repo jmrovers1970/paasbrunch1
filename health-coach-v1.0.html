@@ -1233,6 +1233,50 @@ select.modal-input { appearance: auto; }
   color: rgba(255,255,255,.9); font-size: 13px; font-weight: 500;
   min-height: 20px; margin-top: 10px; text-align: center;
 }
+.coach-chat-window {
+  background: rgba(0,0,0,.20); border-radius: 14px;
+  margin: 14px 0 0; padding: 12px;
+  max-height: 220px; overflow-y: auto;
+  display: flex; flex-direction: column; gap: 8px;
+  scroll-behavior: smooth;
+}
+.coach-chat-window:empty::before {
+  content: 'Stel een vraag of praat met de coach…';
+  color: rgba(255,255,255,.45); font-size: 13px;
+  display: block; text-align: center; padding: 16px 0;
+}
+.coach-bubble-user {
+  align-self: flex-end;
+  background: rgba(255,255,255,.22); color: #fff;
+  border-radius: 12px 12px 4px 12px;
+  padding: 8px 12px; font-size: 13px; max-width: 85%; text-align: left; line-height: 1.4;
+}
+.coach-bubble-ai {
+  align-self: flex-start;
+  background: rgba(255,255,255,.95); color: #1a1a1a;
+  border-radius: 12px 12px 12px 4px;
+  padding: 8px 12px; font-size: 13px; max-width: 92%; text-align: left; line-height: 1.5;
+}
+.coach-bubble-ai.thinking {
+  color: rgba(0,0,0,.4); font-style: italic;
+}
+.coach-input-row {
+  display: flex; gap: 8px; margin-top: 12px; align-items: center;
+}
+.coach-input-row input {
+  flex: 1; border: none; border-radius: 999px;
+  background: rgba(255,255,255,.22); color: #fff;
+  padding: 10px 16px; font-size: 14px; font-family: inherit;
+  outline: none;
+}
+.coach-input-row input::placeholder { color: rgba(255,255,255,.55); }
+.coach-input-row button {
+  background: rgba(255,255,255,.22); border: none; border-radius: 50%;
+  width: 40px; height: 40px; cursor: pointer; color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: background .15s;
+}
+.coach-input-row button:active { background: rgba(255,255,255,.35); }
 .quick-q-row {
   display: grid; grid-template-columns: 1fr 1fr;
   gap: 8px; margin-top: 14px;
@@ -1524,14 +1568,6 @@ select.modal-input { appearance: auto; }
       <span class="week-label" id="week-label"></span>
       <button onclick="navWeek(1)">&#8250;</button>
     </div>
-    <button class="week-intake-btn" onclick="startWeekIntake()">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
-      Plan mijn week — spreek in
-    </button>
-    <button class="smart-voice-btn" id="bewegen-voice-btn" onclick="beweegVoiceAdd()" style="margin-bottom:10px;">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
-      Spreek activiteit in voor vandaag
-    </button>
     <div class="progress-bar-wrap">
       <div class="progress-bar-fill" id="week-progress" style="width:0%"></div>
     </div>
@@ -1580,6 +1616,18 @@ select.modal-input { appearance: auto; }
         Praat met de coach
       </button>
       <div id="big-praat-status" class="big-praat-status"></div>
+      <!-- Inline chat venster -->
+      <div id="coach-front-chat" class="coach-chat-window"></div>
+      <!-- Chat input -->
+      <div class="coach-input-row">
+        <input id="coach-front-input" type="text" placeholder="Of typ hier een vraag…" onkeydown="if(event.key==='Enter')coachFrontSend()">
+        <button onclick="startVoiceFrontCoach()" aria-label="Spreek in">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+        </button>
+        <button onclick="coachFrontSend()" aria-label="Verstuur">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+        </button>
+      </div>
       <!-- Snelvragen -->
       <div class="quick-q-row">
         <button class="quick-q-btn" onclick="askQuickQ('Hoe gaat het met mijn voortgang en streak?')">📊 Mijn voortgang</button>
@@ -1643,22 +1691,13 @@ select.modal-input { appearance: auto; }
     </div>
 
     <div class="card">
-      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;">
-        <h3>Coach</h3>
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:4px;">
+        <span style="font-size:13px;color:var(--muted);font-weight:500;">Volledige gesprekshistorie</span>
         <button id="tts-toggle" class="tts-toggle-btn active" onclick="toggleTTS()" title="Spraak uit">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
         </button>
       </div>
       <div id="chat-history" class="chat-history"></div>
-      <div class="chat-input-row">
-        <input id="chat-input" type="text" placeholder="Spreek of typ een vraag..." onkeydown="if(event.key==='Enter')sendChat()">
-        <button id="mic-chat-input" class="mic-btn chat-mic-btn" onclick="startVoiceChatInput()" aria-label="Spreek in">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
-        </button>
-        <button onclick="sendChat()" aria-label="Verstuur">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
-        </button>
-      </div>
     </div>
 
     <div style="text-align:center;padding:8px 0 4px;">
@@ -5115,21 +5154,7 @@ function resetToday() {
       <h2>Vandaag wissen</h2>
       <button class="modal-close" onclick="closeModal()">✕</button>
     </div>
-    <p style="font-size:15px;color:var(--text-2);margin-bottom:8px;">Kies wat je wilt wissen voor vandaag:</p>
-    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px;">
-      <label style="display:flex;align-items:center;gap:10px;font-size:15px;cursor:pointer;">
-        <input type="checkbox" id="rst-meals" checked style="width:18px;height:18px;"> Maaltijden & voeding
-      </label>
-      <label style="display:flex;align-items:center;gap:10px;font-size:15px;cursor:pointer;">
-        <input type="checkbox" id="rst-water" checked style="width:18px;height:18px;"> Water
-      </label>
-      <label style="display:flex;align-items:center;gap:10px;font-size:15px;cursor:pointer;">
-        <input type="checkbox" id="rst-acts" style="width:18px;height:18px;"> Activiteiten (vinkjes)
-      </label>
-      <label style="display:flex;align-items:center;gap:10px;font-size:15px;cursor:pointer;">
-        <input type="checkbox" id="rst-checkin" checked style="width:18px;height:18px;"> Check-in
-      </label>
-    </div>
+    <p style="font-size:15px;color:var(--text-2);margin-bottom:24px;">Maaltijden, water en check-in van vandaag worden gewist. Activiteiten blijven staan.</p>
     <div style="display:flex;gap:8px;">
       <button class="btn btn-ghost" style="flex:1;" onclick="closeModal()">Annuleren</button>
       <button class="btn btn-danger" style="flex:1;" onclick="confirmResetToday()">Wissen</button>
@@ -5142,16 +5167,9 @@ function confirmResetToday() {
   const weekKey = getISOWeek(new Date(todayStr + 'T12:00:00'));
   ensureDay(todayStr);
   const dayData = data.weken[weekKey][todayStr];
-  const resetMeals = document.getElementById('rst-meals').checked;
-  const resetWater = document.getElementById('rst-water').checked;
-  const resetActs  = document.getElementById('rst-acts').checked;
-  const resetCI    = document.getElementById('rst-checkin').checked;
-
-  if (resetMeals) dayData.maaltijden = JSON.parse(JSON.stringify(DEFAULT_MEALS));
-  if (resetWater) dayData.waterGlazen = 0;
-  if (resetActs)  dayData.activiteiten.forEach(a => { a.afgevinkt = false; });
-  if (resetCI)    dayData.checkIn = null;
-
+  dayData.maaltijden = JSON.parse(JSON.stringify(DEFAULT_MEALS));
+  dayData.waterGlazen = 0;
+  dayData.checkIn = null;
   saveAndSync();
   closeModal();
   renderVandaag();
@@ -5306,12 +5324,95 @@ function bigPraatStart() {
 }
 
 async function askQuickQ(question) {
-  const input = document.getElementById('chat-input');
-  if (!input) return;
-  input.value = question;
-  const chatCard = document.getElementById('chat-history')?.closest('.card');
-  if (chatCard) chatCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  sendChat();
+  coachFrontSend(question);
+}
+
+function addFrontBubble(role, text) {
+  const win = document.getElementById('coach-front-chat');
+  if (!win) return;
+  const div = document.createElement('div');
+  div.className = role === 'user' ? 'coach-bubble-user' : 'coach-bubble-ai';
+  div.innerHTML = role === 'user'
+    ? text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    : formatCoachText(text);
+  win.appendChild(div);
+  win.scrollTop = win.scrollHeight;
+}
+
+async function coachFrontSend(msgOverride) {
+  const inputEl = document.getElementById('coach-front-input');
+  const msg = msgOverride || (inputEl ? inputEl.value.trim() : '');
+  if (!msg) return;
+  if (inputEl && !msgOverride) inputEl.value = '';
+  if (_ttsEnabled) unlockTTS();
+
+  if (!data.chatHistorie) data.chatHistorie = [];
+
+  addFrontBubble('user', msg);
+
+  // Voedingswaarde lookup
+  let foodContext = '';
+  const foodMatch = msg.match(/(?:hoeveel (?:vezels|eiwitten|proteïne|calorieën|kcal)|(?:vezels|eiwitten|voedingswaarde) (?:in|van))\s+(.+?)[\?\.\!]?$/i)
+    || msg.match(/(?:wat zit er in|voedingswaarde van?)\s+(.+?)[\?\.\!]?$/i)
+    || msg.match(/^(.{3,40})\s*(?:vezels|eiwitten|proteïne|calorieën|kcal|voedingswaarde)\??$/i);
+  if (foodMatch) {
+    const result = await lookupFoodFacts(foodMatch[1].trim());
+    if (result) {
+      const parts = [`${result.name}${result.brand ? ' (' + result.brand + ')' : ''} (per 100g)`];
+      if (result.fiber_100g    != null) parts.push(`vezels: ${result.fiber_100g}g`);
+      if (result.proteins_100g != null) parts.push(`eiwitten: ${result.proteins_100g}g`);
+      if (result.kcal_100g     != null) parts.push(`energie: ${result.kcal_100g} kcal`);
+      if (parts.length > 1) foodContext = `\n[Open Food Facts database]: ${parts.join(' · ')}.`;
+    }
+  }
+
+  const userContent = foodContext ? msg + foodContext : msg;
+  data.chatHistorie.push({ role: 'user', content: msg });
+  if (data.chatHistorie.length > 20) data.chatHistorie.shift();
+  renderChatHistory();
+
+  // Thinking-bubble
+  const win = document.getElementById('coach-front-chat');
+  const thinking = document.createElement('div');
+  thinking.className = 'coach-bubble-ai thinking';
+  thinking.textContent = '…';
+  if (win) { win.appendChild(thinking); win.scrollTop = win.scrollHeight; }
+
+  try {
+    const messages = data.chatHistorie.slice(0, -1).map(m => ({ role: m.role, content: m.content }));
+    messages.push({ role: 'user', content: userContent });
+    const reply = await callAIMessages(messages, 600);
+    thinking.remove();
+    data.chatHistorie.push({ role: 'assistant', content: reply });
+    if (data.chatHistorie.length > 20) data.chatHistorie.shift();
+    saveAndSync();
+    addFrontBubble('ai', reply);
+    renderChatHistory();
+    speakCoach(reply);
+  } catch(e) {
+    thinking.remove();
+    addFrontBubble('ai', e.message || 'Coach is even niet bereikbaar. Probeer het later.');
+  }
+}
+
+function startVoiceFrontCoach() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) { showBanner('red', 'Spraakinvoer niet beschikbaar in deze browser.'); return; }
+  const inputEl = document.getElementById('coach-front-input');
+  const recognition = new SR();
+  recognition.lang = 'nl-NL';
+  recognition.continuous = false;
+  recognition.interimResults = false;
+  let t = '';
+  recognition.onresult = e => { for (let i = e.resultIndex; i < e.results.length; i++) { if (e.results[i].isFinal) t += e.results[i][0].transcript; } };
+  recognition.onend = () => { if (t.trim()) coachFrontSend(t.trim()); };
+  recognition.onerror = () => showBanner('red', 'Spraakopname mislukt.');
+  if (inputEl) inputEl.placeholder = 'Luisteren…';
+  recognition.start();
+  recognition.onend = () => {
+    if (inputEl) inputEl.placeholder = 'Of typ hier een vraag…';
+    if (t.trim()) coachFrontSend(t.trim());
+  };
 }
 
 async function parseSmartInput(transcript) {
@@ -5321,20 +5422,20 @@ async function parseSmartInput(transcript) {
 
   const prompt = `De gebruiker heeft ingesproken: "${transcript}"
 
-Analyseer dit en extraheer alle informatie. Antwoord ALLEEN in dit JSON-formaat:
+Analyseer dit en extraheer alle informatie. Antwoord ALLEEN in dit JSON-formaat (geen uitleg, geen markdown):
 {
-  "activiteit": {"naam":"...", "type":"run|gym|bike|walk|other|geen", "detail":"...", "km":0, "duur":0} of null,
-  "maaltijd": {"naam":"...", "slot":"${tijdSlot}", "vezels":"~Xg", "eiwitten":"~Xg", "kcal":"~Xkcal"} of null,
+  "activiteit": {"naam":"...", "type":"run|gym|bike|walk|other|geen", "detail":"...", "km":0, "duur":0},
+  "maaltijd": {"naam":"...", "slot":"${tijdSlot}", "vezels":"~Xg", "eiwitten":"~Xg", "kcal":"~Xkcal"},
   "water": 0,
-  "coaching_vraag": "..." of null
+  "coaching_vraag": "..."
 }
 
 Regels:
-- activiteit: als de gebruiker sport/beweging noemt. type=run voor hardlopen, gym voor kracht, bike voor fietsen, walk voor wandelen.
-- maaltijd: als de gebruiker eten/drinken noemt (niet water). Schat vezels en eiwitten.
-- water: aantal glazen water (alleen water, niet andere dranken).
-- coaching_vraag: als de gebruiker een vraag stelt of advies wil. De vraag letterlijk overnemen.
-- Gebruik null als iets niet van toepassing is. water=0 als niet vermeld.
+- activiteit: vul in als gebruiker sport noemt, anders {"naam":"","type":"geen","detail":"","km":0,"duur":0}
+- maaltijd: vul in als gebruiker eten noemt. Schat ALTIJD vezels EN eiwitten op basis van het gerecht — nooit weglaten of 0 laten. Kip bevat ~25-35g eiwit per portie, friet ~4g, pasta ~12g, vis ~25g, ei ~12g per 2 eieren, etc.
+- water: aantal glazen (0 als niet vermeld)
+- coaching_vraag: letterlijke vraag als gebruiker advies wil, anders null
+- Gebruik null alleen voor coaching_vraag als er geen vraag is. Velden nooit weglaten.
 Geen uitleg, alleen JSON.`;
 
   try {
@@ -5395,8 +5496,7 @@ Geen uitleg, alleen JSON.`;
     // Coaching-vraag of samenvatting als chatbericht sturen
     const vraag = parsed.coaching_vraag ||
       (acties.length > 0 ? `Ik heb zojuist doorgegeven: ${acties.join(', ')}. Kun je een korte reactie geven?` : transcript);
-    const input = document.getElementById('chat-input');
-    if (input) { input.value = vraag; sendChat(); }
+    coachFrontSend(vraag);
 
     if (acties.length > 0) showBanner('green', acties.join(' · '));
 
