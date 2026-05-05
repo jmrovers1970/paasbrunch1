@@ -1179,6 +1179,27 @@ select.modal-input { appearance: auto; }
 }
 .partner-del-btn:active { background: var(--danger-soft); color: var(--danger); }
 
+/* ─── FLOATING COACH BUTTON ─── */
+.fab-coach {
+  position: fixed;
+  right: 18px;
+  bottom: calc(var(--tab-h) + env(safe-area-inset-bottom, 0px) + 14px);
+  z-index: 99;
+  width: 54px; height: 54px; border-radius: 50%;
+  background: var(--accent-move);
+  border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(234,90,12,.45), 0 1px 4px rgba(0,0,0,.15);
+  transition: transform .15s, opacity .15s, background .15s;
+}
+.fab-coach:active { transform: scale(.92); opacity: .9; }
+.fab-coach.listening {
+  background: #c2410c;
+  animation: micPulse 1s ease infinite;
+  box-shadow: 0 0 0 8px rgba(234,90,12,.2), 0 4px 16px rgba(234,90,12,.45);
+}
+
 /* ─── COACH FRONTPAGE ─── */
 .coach-front-card {
   background: linear-gradient(135deg, var(--accent-move) 0%, #c2410c 100%);
@@ -1441,9 +1462,6 @@ select.modal-input { appearance: auto; }
       </div>
     </div>
 
-    <!-- Dagelijkse coach-kaart -->
-    <div id="daily-coach-card" class="card daily-coach-card" style="display:none;"></div>
-
     <!-- Vandaag-progress -->
     <div id="today-progress" class="today-progress" style="display:none;"></div>
 
@@ -1668,6 +1686,11 @@ select.modal-input { appearance: auto; }
     </button>
   </div>
 </div>
+
+<!-- FLOATING COACH BUTTON (alle tabs) -->
+<button id="fab-coach" class="fab-coach" onclick="fabCoachTap()" aria-label="Praat met de coach">
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+</button>
 
 <!-- MODAL CONTAINER -->
 <div id="modal-container"></div>
@@ -2180,8 +2203,13 @@ function ensureRecepten() {
   if (!data.recepten) {
     data.recepten = [];
   }
-  // If old-format recepten exist without type, add type: 'diner'
-  data.recepten.forEach(r => { if (!r.type) r.type = 'diner'; });
+  data.recepten.forEach(r => {
+    if (!r.type) r.type = 'diner';
+    if (typeof r.ingredienten === 'string') r.ingredienten = r.ingredienten.split(',').map(s => s.trim()).filter(Boolean);
+    if (!Array.isArray(r.ingredienten)) r.ingredienten = [];
+    if (typeof r.bereiding === 'string') r.bereiding = r.bereiding.split('.').map(s => s.trim()).filter(Boolean);
+    if (!Array.isArray(r.bereiding)) r.bereiding = [];
+  });
 }
 
 function ensureStats() {
@@ -2477,6 +2505,8 @@ function switchTab(name, btn) {
   document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
   document.getElementById('tab-' + name).classList.add('active');
   btn.classList.add('active');
+  const fab = document.getElementById('fab-coach');
+  if (fab) fab.style.display = name === 'coach' ? 'none' : 'flex';
   if (name === 'vandaag') renderVandaag();
   if (name === 'week') renderWeek();
   if (name === 'coach') renderCoach();
@@ -5178,6 +5208,51 @@ function exitKookmodus() {
 
 // ─── GROTE PRAAT-KNOP (coach frontpage) ──────────────────────────────────────
 
+function fabCoachTap() {
+  const fab = document.getElementById('fab-coach');
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  if (!SR) {
+    // Geen spraak: spring naar coach-tab
+    const coachBtn = document.querySelector('.tab-btn');
+    if (coachBtn) { switchTab('coach', coachBtn); }
+    return;
+  }
+
+  if (window._fabRec) { window._fabRec.stop(); return; }
+
+  const recognition = new SR();
+  recognition.lang = 'nl-NL';
+  recognition.continuous = false;
+  recognition.interimResults = false;
+  window._fabRec = recognition;
+
+  if (fab) fab.classList.add('listening');
+
+  let transcript = '';
+  recognition.onresult = e => {
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      if (e.results[i].isFinal) transcript += e.results[i][0].transcript + ' ';
+    }
+  };
+  recognition.onerror = () => {
+    window._fabRec = null;
+    if (fab) fab.classList.remove('listening');
+    showBanner('red', 'Spraakopname mislukt.');
+  };
+  recognition.onend = async () => {
+    window._fabRec = null;
+    if (fab) fab.classList.remove('listening');
+    const t = transcript.trim();
+    if (t.length < 3) { showBanner('red', 'Geen spraak herkend.'); return; }
+    // Switch naar coach-tab en verwerk
+    const coachBtn = document.querySelector('.tab-btn');
+    if (coachBtn) switchTab('coach', coachBtn);
+    await parseSmartInput(t);
+  };
+  recognition.start();
+}
+
 function bigPraatStart() {
   const btn = document.getElementById('big-praat-btn');
   const status = document.getElementById('big-praat-status');
@@ -5343,10 +5418,12 @@ function initApp() {
   updateStreak();
   loadGist();
   setupSwipeGestures();
-  // Zorg dat coach-tab knop active is bij start
+  // Coach-tab is actief bij start — FAB verbergen
   const tabs = document.querySelectorAll('.tab-btn');
   tabs.forEach(t => t.classList.remove('active'));
   if (tabs[0]) tabs[0].classList.add('active');
+  const fab = document.getElementById('fab-coach');
+  if (fab) fab.style.display = 'none';
 }
 
 // ─── SWIPE GESTURES (activity rows on week tab) ──────────────────────────────
@@ -5768,6 +5845,7 @@ async function answerDailyQuestion(type, value, actId) {
 
   // Disable all buttons, show typing
   const card = document.getElementById('daily-coach-card');
+  if (!card) return;
   card.querySelectorAll('button').forEach(b => b.disabled = true);
   const respEl = document.getElementById('coach-card-response');
   respEl.style.display = 'block';
