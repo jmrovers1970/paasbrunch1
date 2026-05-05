@@ -4726,6 +4726,7 @@ function formatCoachText(text) {
 
 function renderChatHistory() {
   const container = document.getElementById('chat-history');
+  if (!container) return;
   if (!data.chatHistorie || data.chatHistorie.length === 0) {
     container.innerHTML = `<div class="muted" style="font-size:14px; text-align:center; padding:16px;">Stel een vraag aan je coach.</div>`;
     return;
@@ -5012,6 +5013,30 @@ async function callAIMessages(messages, maxTokens) {
   if (resp.status === 429) throw new Error('Wacht even en probeer het opnieuw.');
   if (!resp.ok) throw new Error(`API fout: ${resp.status}`);
 
+  const json = await resp.json();
+  return json.content[0].text;
+}
+
+// JSON-only API call — no coach system prompt, for structured data extraction
+async function callAIPlain(userMsg, maxTokens) {
+  if (!settings.anthropicKey) throw new Error('No API key');
+  const resp = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': settings.anthropicKey,
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true'
+    },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: maxTokens,
+      messages: [{ role: 'user', content: userMsg }]
+    })
+  });
+  if (resp.status === 401) throw new Error('API-sleutel niet geldig — check instellingen.');
+  if (resp.status === 429) throw new Error('Wacht even en probeer het opnieuw.');
+  if (!resp.ok) throw new Error(`API fout: ${resp.status}`);
   const json = await resp.json();
   return json.content[0].text;
 }
@@ -5379,7 +5404,11 @@ function closeModal() {
 // ─── SMART VOICE INPUT ───────────────────────────────────────────────────────
 
 function safeParseJSON(raw) {
-  return JSON.parse(raw.trim().replace(/^```json?\n?/i, '').replace(/\n?```$/i, '').trim());
+  const s = raw.trim().replace(/^```json?\n?/i, '').replace(/\n?```$/i, '').trim();
+  try { return JSON.parse(s); } catch(_) {}
+  const obj = s.match(/\{[\s\S]*\}/); if (obj) { try { return JSON.parse(obj[0]); } catch(_) {} }
+  const arr = s.match(/\[[\s\S]*\]/);  if (arr) { try { return JSON.parse(arr[0]); } catch(_) {} }
+  throw new SyntaxError('safeParseJSON: no valid JSON found');
 }
 
 async function parseActivityVoice(text) {
@@ -5388,7 +5417,7 @@ async function parseActivityVoice(text) {
 
 Regels: type is exact één van de opties. duur is een getal (0 als niet vermeld). detail bevat afstand, zones, sets, etc.
 Beschrijving: "${text.replace(/"/g, "'")}"`;
-  const raw = await callAI(prompt, 120);
+  const raw = await callAIPlain(prompt, 120);
   return safeParseJSON(raw);
 }
 
@@ -6048,7 +6077,7 @@ async function coachFrontSend(msgOverride) {
   // Boodschappenlijst intent
   if (/boodschap|winkellijst|op de lijst|zet.{0,20}lijst|voeg.{0,20}toe.{0,15}lijst|moet.{0,15}kopen/i.test(msg)) {
     try {
-      const shopRaw = await callAI(`De gebruiker zegt: "${msg}". Welke items wil hij/zij aan de boodschappenlijst toevoegen? Antwoord ALLEEN met een JSON-array van strings. Bijv. ["melk","brood"]. Lege array als onduidelijk. Geen uitleg.`, 120);
+      const shopRaw = await callAIPlain(`De gebruiker zegt: "${msg}". Welke items wil hij/zij aan de boodschappenlijst toevoegen? Antwoord ALLEEN met een JSON-array van strings. Bijv. ["melk","brood"]. Lege array als onduidelijk. Geen uitleg.`, 120);
       const items = safeParseJSON(shopRaw);
       if (Array.isArray(items) && items.length > 0) {
         if (!data.boodschappenExtra) data.boodschappenExtra = [];
@@ -6062,7 +6091,7 @@ async function coachFrontSend(msgOverride) {
   const userContent = foodContext ? msg + foodContext : msg;
   data.chatHistorie.push({ role: 'user', content: msg });
   if (data.chatHistorie.length > 20) data.chatHistorie.shift();
-  renderChatHistory();
+  try { renderChatHistory(); } catch(_) {}
 
   // Thinking-bubble
   const win = document.getElementById('coach-front-chat');
@@ -6072,7 +6101,8 @@ async function coachFrontSend(msgOverride) {
   if (win) { win.appendChild(thinking); win.scrollTop = win.scrollHeight; }
 
   try {
-    const messages = data.chatHistorie.slice(0, -1).map(m => ({ role: m.role, content: m.content }));
+    const history = (data.chatHistorie || []).filter(m => m.role && m.content);
+    const messages = history.slice(0, -1).map(m => ({ role: m.role, content: m.content }));
     messages.push({ role: 'user', content: userContent });
     const reply = await callAIMessages(messages, 600);
     thinking.remove();
@@ -6080,7 +6110,7 @@ async function coachFrontSend(msgOverride) {
     if (data.chatHistorie.length > 20) data.chatHistorie.shift();
     saveAndSync();
     addFrontBubble('ai', reply);
-    renderChatHistory();
+    try { renderChatHistory(); } catch(_) {}
     speakCoach(reply);
   } catch(e) {
     thinking.remove();
@@ -6140,7 +6170,7 @@ Regels:
 Laat velden null als ze niet van toepassing zijn. Geen uitleg, alleen JSON.`;
 
   try {
-    const raw = await callAI(prompt, 300);
+    const raw = await callAIPlain(prompt, 300);
     const parsed = safeParseJSON(raw);
     if (!parsed) { showBanner('red', 'Kon invoer niet verwerken.'); return; }
 
@@ -6171,9 +6201,10 @@ Laat velden null als ze niet van toepassing zijn. Geen uitleg, alleen JSON.`;
     }
 
     // Activiteit toevoegen
-    if (parsed.activiteit && parsed.activiteit.naam && parsed.activiteit.type) {
+    if (parsed.activiteit && parsed.activiteit.naam && parsed.activiteit.type && parsed.activiteit.type !== 'geen') {
       const type = parsed.activiteit.type || 'other';
       const detail = [parsed.activiteit.detail, parsed.activiteit.km ? parsed.activiteit.km + 'km' : ''].filter(Boolean).join(' · ');
+      if (!dayData.activiteiten) dayData.activiteiten = [];
       dayData.activiteiten.push({
         id: 'a' + Date.now(),
         type,
