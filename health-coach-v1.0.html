@@ -548,37 +548,37 @@ select.modal-input { appearance: auto; }
 
 /* ─── COACH TAB ─── */
 .streak-display {
-  text-align: center; padding: 24px 16px 16px;
+  display: flex; align-items: center; gap: 12px; padding: 4px 0;
 }
 .streak-flame {
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 132px; height: 132px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0;
   background: radial-gradient(circle at 50% 35%, #fff1e6 0%, var(--accent-move-soft) 60%, transparent 100%);
-  position: relative; margin-bottom: 4px;
+  position: relative;
 }
 .streak-flame svg.flame-bg {
-  position: absolute; width: 80px; height: 80px;
+  position: absolute; width: 28px; height: 28px;
   top: 50%; left: 50%; transform: translate(-50%, -50%);
-  opacity: .15;
+  opacity: .18;
 }
 .streak-number-wrap {
   position: relative; z-index: 1; display: flex;
-  flex-direction: column; align-items: center;
+  flex-direction: row; align-items: baseline; gap: 3px;
 }
 .streak-number {
-  font-size: 56px; font-weight: 800; color: var(--accent-move);
+  font-size: 22px; font-weight: 800; color: var(--accent-move);
   line-height: 1; letter-spacing: -.03em;
 }
 .streak-unit {
-  font-size: 13px; font-weight: 700; color: var(--accent-move);
-  letter-spacing: .3px; text-transform: uppercase; margin-top: 2px;
+  font-size: 11px; font-weight: 700; color: var(--accent-move);
+  letter-spacing: .3px; text-transform: uppercase;
 }
-.streak-label { font-size: 16px; color: var(--text-2); margin-top: 12px; font-weight: 600; }
+.streak-label { font-size: 13px; color: var(--text-2); font-weight: 500; flex: 1; }
 .streak-record {
-  display: inline-block; margin-top: 10px;
+  display: inline-block;
   background: var(--accent-move-soft); border: 1px solid rgba(234,90,12,.2);
-  border-radius: 999px; padding: 5px 14px;
-  font-size: 14px; font-weight: 600; color: var(--accent-move);
+  border-radius: 999px; padding: 2px 10px;
+  font-size: 12px; font-weight: 600; color: var(--accent-move); white-space: nowrap;
 }
 .milestone-card {
   background: linear-gradient(135deg, var(--accent-move-soft), #fff8f1);
@@ -2010,40 +2010,6 @@ select.modal-input { appearance: auto; }
       </div>
     </div>
 
-    <div class="card" style="margin-bottom:14px;" id="coach-nutri-card">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
-        <h3 style="font-size:15px;">Voeding vandaag</h3>
-        <span style="font-size:12px;color:var(--muted);" id="coach-nutri-date"></span>
-      </div>
-      <div id="coach-nutri-bars"></div>
-    </div>
-
-    <div class="card" style="margin-bottom:14px;">
-      <div class="streak-display">
-        <div class="streak-flame">
-          <svg class="flame-bg" viewBox="0 0 24 24" fill="currentColor" style="color:var(--accent-move);"><path d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67zM11.71 19c-1.78 0-3.22-1.4-3.22-3.14 0-1.62 1.05-2.76 2.81-3.12 1.77-.36 3.6-1.21 4.62-2.58.39 1.29.59 2.65.59 4.04 0 2.65-2.15 4.8-4.8 4.8z"/></svg>
-          <div class="streak-number-wrap">
-            <div class="streak-number" id="coach-streak">0</div>
-            <div class="streak-unit">dagen</div>
-          </div>
-        </div>
-        <div class="streak-label">op rij volgehouden</div>
-        <div class="streak-record" id="coach-record">Record: 0 dagen</div>
-      </div>
-      <div id="milestone-msg"></div>
-    </div>
-
-    <div class="card" style="margin-bottom:14px;">
-      <h3 style="margin-bottom:12px;">Bewegingsstatistieken</h3>
-      <div class="stats-period-tabs">
-        <button class="stats-tab active" onclick="setStatsPeriod('week',this)">Week</button>
-        <button class="stats-tab" onclick="setStatsPeriod('month',this)">Maand</button>
-        <button class="stats-tab" onclick="setStatsPeriod('year',this)">Jaar</button>
-        <button class="stats-tab" onclick="setStatsPeriod('all',this)">Totaal</button>
-      </div>
-      <div id="stats-content"></div>
-    </div>
-
     <div class="card" style="margin-bottom:14px;">
       <h3 style="margin-bottom:10px;">Terugblik</h3>
       <div class="terugblik-periode-row">
@@ -2058,6 +2024,48 @@ select.modal-input { appearance: auto; }
         Analyseer periode
       </button>
       <div id="terugblik-result"></div>
+    </div>
+
+    <div class="card" style="margin-bottom:14px;" id="coach-nutri-card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+        <h3 style="font-size:15px;">Voeding vandaag</h3>
+        <span style="font-size:12px;color:var(--muted);" id="coach-nutri-date"></span>
+      </div>
+      <div id="coach-nutri-bars"></div>
+    </div>
+
+    <div class="card" style="margin-bottom:14px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <div class="streak-display">
+          <div class="streak-flame">
+            <svg class="flame-bg" viewBox="0 0 24 24" fill="currentColor" style="color:var(--accent-move);"><path d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67zM11.71 19c-1.78 0-3.22-1.4-3.22-3.14 0-1.62 1.05-2.76 2.81-3.12 1.77-.36 3.6-1.21 4.62-2.58.39 1.29.59 2.65.59 4.04 0 2.65-2.15 4.8-4.8 4.8z"/></svg>
+            <div class="streak-number-wrap">
+              <div class="streak-number" id="coach-streak">0</div>
+              <div class="streak-unit">d</div>
+            </div>
+          </div>
+          <div class="streak-label">op rij volgehouden</div>
+          <div class="streak-record" id="coach-record">Record: 0</div>
+        </div>
+        <button onclick="toggleStreakCard()" id="streak-toggle-btn" title="Streak verbergen"
+          style="background:none;border:none;cursor:pointer;color:var(--muted);padding:4px;font-size:13px;flex-shrink:0;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="streak-toggle-icon"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+        </button>
+      </div>
+      <div id="streak-body">
+        <div id="milestone-msg" style="margin-top:8px;"></div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:14px;">
+      <h3 style="margin-bottom:12px;">Bewegingsstatistieken</h3>
+      <div class="stats-period-tabs">
+        <button class="stats-tab active" onclick="setStatsPeriod('week',this)">Week</button>
+        <button class="stats-tab" onclick="setStatsPeriod('month',this)">Maand</button>
+        <button class="stats-tab" onclick="setStatsPeriod('year',this)">Jaar</button>
+        <button class="stats-tab" onclick="setStatsPeriod('all',this)">Totaal</button>
+      </div>
+      <div id="stats-content"></div>
     </div>
 
     <div class="card" style="margin-bottom:14px;">
@@ -3134,6 +3142,24 @@ function updateStreak() {
   updateStreakUI();
 }
 
+function toggleStreakCard() {
+  data.streakVerborgen = !data.streakVerborgen;
+  saveAndSync();
+  _applyStreakToggle();
+}
+
+function _applyStreakToggle() {
+  const body = document.getElementById('streak-body');
+  const icon = document.getElementById('streak-toggle-icon');
+  const btn = document.getElementById('streak-toggle-btn');
+  const hidden = data.streakVerborgen;
+  if (body) body.style.display = hidden ? 'none' : '';
+  if (btn) btn.title = hidden ? 'Streak tonen' : 'Streak verbergen';
+  if (icon) icon.innerHTML = hidden
+    ? '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>'
+    : '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/>';
+}
+
 function updateStreakUI() {
   const s = data.streak || { huidig: 0, record: 0 };
   const el1 = document.getElementById('header-streak');
@@ -3141,7 +3167,8 @@ function updateStreakUI() {
   const el3 = document.getElementById('coach-record');
   if (el1) el1.textContent = s.huidig;
   if (el2) el2.textContent = s.huidig;
-  if (el3) el3.textContent = `Record: ${s.record} dagen`;
+  if (el3) el3.textContent = `Record: ${s.record}`;
+  _applyStreakToggle();
 
   const msEl = document.getElementById('milestone-msg');
   if (msEl && MILESTONE_MSGS[s.huidig]) {
@@ -6548,6 +6575,7 @@ function addFrontBubble(role, text) {
       `<button onclick="pinFrontTip('${tipId}',this)" style="display:block;margin-top:6px;background:none;border:none;font-size:12px;color:rgba(0,0,0,.4);cursor:pointer;padding:0;font-family:inherit;">📌 Opslaan</button>`;
     div.dataset.tipText = text;
     div.dataset.tipId = tipId;
+    window._lastCoachReply = { text, id: tipId };
   }
   win.appendChild(div);
   win.scrollTop = win.scrollHeight;
@@ -6752,6 +6780,7 @@ Analyseer dit en extraheer ALLES. Één zin kan meerdere acties bevatten. Antwoo
   "verwijder_maaltijd": null,
   "verwijder_activiteit": null,
   "afvinken_activiteit": null,
+  "notitie_opslaan": false,
   "boodschap_toevoegen": null,
   "recept_genereren": null,
   "coaching_vraag": null
@@ -6764,6 +6793,7 @@ Regels:
 - water_totaal: totaal aantal glazen INSTELLEN (bij "in totaal X glazen" of "ik heb X glazen gehad vandaag"). 0 als niet van toepassing.
 - verwijder_maaltijd: object {"slot":"lunch","datum":"vandaag"} als gebruiker een maaltijdslot wil verwijderen/wissen. datum optioneel, standaard vandaag. null als niet van toepassing.
 - verwijder_activiteit: object {"naam":"hardlopen","datum":"vandaag"} als gebruiker een activiteit wil verwijderen. datum optioneel. null als niet van toepassing.
+- notitie_opslaan: true als gebruiker het laatste coach-antwoord wil bewaren/opslaan (bijv. "zet dit in notities", "sla dit op", "bewaar dit advies", "notitie maken"). false als niet van toepassing.
 - afvinken_activiteit: object {"naam":"hardlopen","datum":"vandaag"} als gebruiker meldt dat hij een activiteit HEEFT gedaan/voltooid (bijv. "ik heb hardgelopen", "zojuist een rondje gefietst", "gym gedaan"). datum optioneel, standaard vandaag. null als niet van toepassing. Gebruik dit NIET als gebruiker iets wil plannen.
 - boodschap_toevoegen: array van strings voor boodschappenlijst. null als niet van toepassing.
 - recept_genereren: {"ingredienten":"pasta, paprika","type":"diner"} als gebruiker een recept wil. null als niet van toepassing.
@@ -6913,7 +6943,22 @@ Lege arrays [] voor activiteiten/maaltijden als geen van toepassing. Geen uitleg
       acties.push(`✓ ${parsed.water_totaal} glazen water (totaal)`);
     }
 
-    // Boodschappen toevoegen
+    // Notitie opslaan (laatste coach-antwoord)
+    if (parsed.notitie_opslaan) {
+      const last = window._lastCoachReply;
+      if (last && last.text) {
+        if (!data.savedTips) data.savedTips = [];
+        if (!data.savedTips.find(t => t.id === last.id)) {
+          data.savedTips.unshift({ id: last.id, date: today(), content: last.text });
+          acties.push('📌 Advies opgeslagen in notities');
+        } else {
+          acties.push('Al opgeslagen');
+        }
+      } else {
+        showBanner('yellow', 'Geen coach-antwoord om op te slaan. Stel eerst een vraag.');
+      }
+    }
+
     const boodschappen = _toArray(parsed.boodschap_toevoegen).filter(i => i && typeof i === 'string' && i.trim());
     if (boodschappen.length > 0) {
       if (!data.boodschappenExtra) data.boodschappenExtra = [];
@@ -6958,7 +7003,7 @@ Lege arrays [] voor activiteiten/maaltijden als geen van toepassing. Geen uitleg
       const bannerTxt = acties.join(' · ');
       showBanner('green', bannerTxt);
       if (_ttsEnabled) {
-        const spokenTxt = acties.map(a => a.replace(/^✓\s*/, '').replace(/^🛒\s*/, '').replace(/·/g, ','))
+        const spokenTxt = acties.map(a => a.replace(/^[✓🛒📌]\s*/, '').replace(/·/g, ','))
           .join('. ');
         speakCoach(spokenTxt);
       }
