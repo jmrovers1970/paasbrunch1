@@ -1204,6 +1204,7 @@ select.modal-input { appearance: auto; }
   color: var(--accent-move); animation: micPulse 1s ease infinite;
 }
 @keyframes micPulse { 0%,100%{opacity:1} 50%{opacity:.35} }
+@keyframes spin { to { transform: rotate(360deg); } }
 
 /* ─── FOOD TAB ─── */
 .food-filter-btn {
@@ -1945,6 +1946,9 @@ select.modal-input { appearance: auto; }
         <input id="coach-front-input" type="text" placeholder="Of typ hier een vraag…" onkeydown="if(event.key==='Enter')coachFrontSend()">
         <button onclick="startVoiceFrontCoach()" aria-label="Spreek in">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+        </button>
+        <button id="tts-toggle-front" onclick="toggleTTS()" aria-label="Spraak aan/uit" title="Spraak aan/uit" style="opacity:0.75;">
+          <svg id="tts-front-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
         </button>
         <button onclick="coachFrontSend()" aria-label="Verstuur">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
@@ -4107,8 +4111,8 @@ function _renderShopPicker() {
         <div class="shop-pick-naam">${m.naam}</div>
       </div>
       ${m.hasRecept
-        ? `<span class="shop-pick-badge">📋 recept</span>`
-        : `<button class="shop-ai-ing-btn" onclick="event.preventDefault();event.stopPropagation();generateIngredientsForMeal('${m.id}')" title="AI genereert ingrediënten">🤖 ingrediënten</button>`}
+        ? `<span class="shop-pick-badge"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> recept</span>`
+        : `<button class="shop-ai-ing-btn" onclick="event.preventDefault();event.stopPropagation();generateIngredientsForMeal('${m.id}')" title="AI genereert ingrediënten"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c-1 2.5-4 4-4 8h8c0-4-3-5.5-4-8z"/><path d="M9 17h6"/><path d="M9 21h6"/></svg> ingrediënten</button>`}
     </label>`).join('');
 
   showModal(`
@@ -4135,12 +4139,32 @@ async function generateIngredientsForMeal(mealId) {
   if (btn) { btn.textContent = '⏳'; btn.disabled = true; }
   try {
     const prompt = `Geef de ingrediënten voor het gerecht "${meal.naam}" (2 personen). Geef ALLEEN een JSON-array van strings met hoeveelheid en ingredient, bijv. ["200g kipfilet","1 ui","2 el olijfolie"]. Geen uitleg.`;
-    const raw = await callAIPlain(prompt, 200);
+    const raw = await callAIPlain(prompt, 250);
     const ingredienten = safeParseJSON(raw);
     if (!Array.isArray(ingredienten) || ingredienten.length === 0) throw new Error();
+
+    // Sla op als echt recept zodat het zichtbaar en persistent is
+    ensureRecepten();
+    const newRec = {
+      id: 'ai-' + Date.now(),
+      naam: meal.naam,
+      ingredienten,
+      bereiding: [],
+      vezels: 0,
+      eiwitten: 0,
+      tijd: 30,
+      type: 'diner',
+      favoriet: false,
+      geschiktVoor: [],
+    };
+    data.recepten.push(newRec);
+    saveAndSync();
+
     meal.ingredienten = ingredienten;
     meal.hasRecept = true;
+    meal.receptId = newRec.id;
     window._shopState.selected.add(mealId);
+    showBanner('green', `"${meal.naam}" opgeslagen als recept`);
     _renderShopPicker();
   } catch(e) {
     if (btn) { btn.textContent = '🤖 ingrediënten'; btn.disabled = false; }
@@ -4154,7 +4178,7 @@ function _toggleShopMeal(id, checked, rowEl) {
   if (rowEl) rowEl.classList.toggle('selected', checked);
 }
 
-function _buildAndShowShopList() {
+async function _buildAndShowShopList() {
   const { allMeals, selected, inHuis, extraItems, persons } = window._shopState;
   const allIng = [];
   const geenRecept = [];
@@ -4167,13 +4191,30 @@ function _buildAndShowShopList() {
   });
   extraItems.forEach(i => allIng.push({ text: i, recept: null }));
 
-  const merged = _mergeIngredients(allIng, scaleFactor);
-  const cats = _categorizeIngredients(merged);
+  // Toon laadscherm terwijl AI samenvoegt
+  showModal(`
+    <div class="modal-header"><h2>Boodschappenlijst</h2><button class="modal-close" onclick="closeModal()">✕</button></div>
+    <div style="text-align:center;padding:48px 20px;">
+      <svg style="display:block;margin:0 auto 16px;color:var(--accent-food);animation:spin 1.2s linear infinite;" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
+      <p style="color:var(--text-2);font-size:15px;font-weight:500;">Ingrediënten samenvoegen…</p>
+    </div>
+  `);
+
+  let cats;
+  try {
+    cats = await _aiMergeIngredients(allIng, scaleFactor, persons || 2);
+  } catch(_) {
+    // Stille fallback naar regelgebaseerd samenvoegen
+    const merged = _mergeIngredients(allIng, scaleFactor);
+    cats = _categorizeIngredients(merged);
+  }
 
   let listText = `Boodschappenlijst (${persons || 2} personen)\n\n`;
   let listHTML = '';
-  Object.entries(cats).forEach(([cat, items]) => {
-    if (!items.length) return;
+  const catOrder = ['Groenten & fruit', 'Vlees, vis & eieren', 'Zuivel', 'Blikken & potten', 'Droog & granen', 'Overig'];
+  catOrder.forEach(cat => {
+    const items = cats[cat];
+    if (!items || !items.length) return;
     listText += cat + ':\n' + items.map(i => '- ' + i.display).join('\n') + '\n\n';
     listHTML += `<div class="shop-cat">${cat}</div>`;
     listHTML += items.map(item => {
@@ -4207,6 +4248,53 @@ function _buildAndShowShopList() {
     <button class="btn btn-ghost btn-full" style="margin-top:10px;" onclick="copyToClipboard(window._shopListText)">📋 Kopieer lijst</button>
     ${data.boodschappenExtra && data.boodschappenExtra.length ? `<button onclick="clearBoodschappenExtra()" style="background:none;border:none;font-size:12px;color:var(--muted);cursor:pointer;margin-top:6px;font-family:inherit;text-decoration:underline;">🗑 Coach-items wissen (${data.boodschappenExtra.length})</button>` : ''}
   `);
+}
+
+async function _aiMergeIngredients(ingObjs, scaleFactor, persons) {
+  const lines = ingObjs.map(o => {
+    const text = (typeof o === 'string' ? o : (o && o.text)) || '';
+    const src = o && o.recept ? ` [${o.recept}]` : '';
+    return text.trim() + src;
+  }).filter(Boolean);
+
+  if (!lines.length) {
+    return { 'Groenten & fruit': [], 'Vlees, vis & eieren': [], 'Zuivel': [], 'Blikken & potten': [], 'Droog & granen': [], 'Overig': [] };
+  }
+
+  const prompt = `Je bent een boodschappenlijst-assistent. Hieronder staan ingrediënten voor ${persons} personen (alle recepten zijn voor 2 personen — schaal de hoeveelheden dus maal ${persons}/2). Items hebben optioneel [receptnaam] erachter.
+
+${lines.join('\n')}
+
+Instructies:
+- Voeg dubbelen samen (bijv. "2 uien" + "1 ui" → "3 uien")
+- Normaliseer eenheden (gram, kilogram, ml, liter, el, tl)
+- Schaal ALLE hoeveelheden voor ${persons} personen
+- Verdeel over categorieën
+- Houd bij voor welk recept elk item is (voor-veld)
+
+Geef ALLEEN dit JSON-object terug (geen uitleg, geen markdown):
+{
+  "Groenten & fruit": [{"tekst":"300g broccoli","voor":["Recept A"]},{"tekst":"2 uien","voor":["Recept A","Recept B"]}],
+  "Vlees, vis & eieren": [],
+  "Zuivel": [],
+  "Blikken & potten": [],
+  "Droog & granen": [],
+  "Overig": []
+}`;
+
+  const raw = await callAIPlain(prompt, 700);
+  const result = safeParseJSON(raw);
+  if (!result || typeof result !== 'object') throw new Error('Invalid AI response');
+
+  const catOrder = ['Groenten & fruit', 'Vlees, vis & eieren', 'Zuivel', 'Blikken & potten', 'Droog & granen', 'Overig'];
+  const cats = {};
+  catOrder.forEach(c => {
+    cats[c] = (result[c] || []).map(item => {
+      if (typeof item === 'string') return { display: item, recepten: [] };
+      return { display: item.tekst || item.display || item, recepten: Array.isArray(item.voor) ? item.voor : [] };
+    });
+  });
+  return cats;
 }
 
 function _toggleInHuis(display, labelEl) {
@@ -4947,11 +5035,7 @@ function renderCoach() {
   renderStats();
   renderSavedTips();
   renderPartners();
-  const btn = document.getElementById('tts-toggle');
-  if (btn) {
-    btn.classList.toggle('active', _ttsEnabled);
-    btn.title = _ttsEnabled ? 'Spraak uit' : 'Spraak aan';
-  }
+  _syncTTSButtons();
 }
 
 function linkExercises(line) {
@@ -5877,13 +5961,30 @@ function unlockTTS() {
 function toggleTTS() {
   _ttsEnabled = !_ttsEnabled;
   localStorage.setItem('hc_tts', _ttsEnabled ? 'on' : 'off');
+  _syncTTSButtons();
+  if (_ttsEnabled) unlockTTS();
+  else window.speechSynthesis.cancel();
+}
+
+function _syncTTSButtons() {
+  // Luidspreker-icoon: aan = full speaker, uit = doorgestreept
+  const iconOn = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>`;
+  const iconOff = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>`;
+  const label = _ttsEnabled ? 'Spraak uit' : 'Spraak aan';
+  const icon = _ttsEnabled ? iconOn : iconOff;
+
   const btn = document.getElementById('tts-toggle');
   if (btn) {
     btn.classList.toggle('active', _ttsEnabled);
-    btn.title = _ttsEnabled ? 'Spraak uit' : 'Spraak aan';
+    btn.title = label;
+    btn.innerHTML = icon;
   }
-  if (_ttsEnabled) unlockTTS();
-  else window.speechSynthesis.cancel();
+  const btnFront = document.getElementById('tts-toggle-front');
+  if (btnFront) {
+    btnFront.title = label;
+    btnFront.style.opacity = _ttsEnabled ? '1' : '0.4';
+    btnFront.innerHTML = icon;
+  }
 }
 
 function _pickNlVoice(voices) {
