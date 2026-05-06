@@ -874,8 +874,12 @@ select.modal-input { appearance: auto; }
   text-transform: uppercase; letter-spacing: .04em;
   margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid var(--border);
 }
-.weekov-act { display: flex; align-items: center; gap: 8px; padding: 5px 0; font-size: 14px; }
+.weekov-act { display: flex; align-items: center; gap: 8px; padding: 5px 0; font-size: 14px; cursor: pointer; border-radius: 8px; transition: background .12s; }
+.weekov-act:active { background: var(--card2); }
 .weekov-act .done { text-decoration: line-through; color: var(--muted); }
+.weekov-act-check { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--border-strong); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all .15s; }
+.weekov-act-check.checked { background: var(--accent-move); border-color: var(--accent-move); }
+.weekov-act-check.checked::after { content: '✓'; color: #fff; font-size: 12px; font-weight: 700; }
 .weekov-meal { display: flex; gap: 8px; font-size: 13px; color: var(--text); padding: 3px 0; }
 .weekov-meal-label { color: var(--muted); min-width: 52px; }
 
@@ -919,6 +923,7 @@ select.modal-input { appearance: auto; }
   display: flex; align-items: center; justify-content: center; transition: all .15s;
 }
 .gen-pill.active { background: var(--accent-move); border-color: var(--accent-move); color: #fff; }
+.gen-focus-pill { width: auto; padding: 0 14px; gap: 5px; }
 .vega-toggle-wrap { margin-left: auto; display: flex; align-items: center; }
 .vega-toggle-input { display: none; }
 .vega-toggle-label {
@@ -1049,6 +1054,7 @@ select.modal-input { appearance: auto; }
 .shop-pick-naam { font-size: 14px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .shop-pick-badge { font-size: 11px; color: var(--accent-food); flex-shrink: 0; font-weight: 600; }
 .shop-pick-badge.muted { color: var(--muted); }
+.shop-ai-ing-btn { font-size: 11px; color: var(--accent-move); flex-shrink: 0; font-weight: 600; background: var(--accent-move-soft); border: 1px solid var(--accent-move-tint); border-radius: 6px; padding: 3px 7px; cursor: pointer; }
 .shop-scroll { max-height: 44vh; overflow-y: auto; }
 .shop-item-row {
   display: flex; align-items: center; gap: 10px; padding: 8px 2px;
@@ -1556,6 +1562,32 @@ select.modal-input { appearance: auto; }
   flex-shrink: 0; transition: background .15s, color .15s;
 }
 .rec-delete-btn:active { background: var(--danger-soft); color: var(--danger); }
+
+/* ─── RECEPTEN CATEGORIEËN ─── */
+.rec-section { margin-bottom: 4px; }
+.rec-section-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 4px 6px; cursor: pointer; user-select: none;
+}
+.rec-section-title { font-size: 14px; font-weight: 700; color: var(--text-2); display: flex; align-items: center; gap: 6px; }
+.rec-section-count { font-size: 12px; color: var(--muted); font-weight: 500; }
+.rec-section-chev { transition: transform .2s; color: var(--muted); }
+.rec-section-chev.open { transform: rotate(180deg); }
+.rec-section-body { }
+.rec-fav-btn {
+  background: none; border: none; cursor: pointer; padding: 8px; min-height: 40px; min-width: 40px;
+  border-radius: 10px; display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; font-size: 18px; transition: transform .15s; color: var(--muted);
+}
+.rec-fav-btn.active { color: #f59e0b; }
+.rec-fav-btn:active { transform: scale(1.2); }
+.rec-geschikt-wrap { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+.rec-geschikt-chip {
+  display: flex; align-items: center; gap: 5px; font-size: 13px;
+  padding: 4px 10px; border-radius: 20px; border: 1.5px solid var(--border);
+  background: var(--card2); cursor: pointer; user-select: none; transition: all .15s;
+}
+.rec-geschikt-chip.active { background: var(--accent-food-soft); border-color: var(--accent-food); color: var(--accent-food); font-weight: 600; }
 </style>
 </head>
 <body>
@@ -2581,6 +2613,8 @@ function ensureRecepten() {
   }
   data.recepten.forEach(r => {
     if (!r.type) r.type = 'diner';
+    if (typeof r.favoriet === 'undefined') r.favoriet = false;
+    if (!Array.isArray(r.geschiktVoor)) r.geschiktVoor = [];
     if (typeof r.ingredienten === 'string') r.ingredienten = r.ingredienten.split(',').map(s => s.trim()).filter(Boolean);
     if (!Array.isArray(r.ingredienten)) r.ingredienten = [];
     if (typeof r.bereiding === 'string') r.bereiding = r.bereiding.split('.').map(s => s.trim()).filter(Boolean);
@@ -2933,7 +2967,8 @@ function renderWeekOvTab() {
     const isToday = dateStr === todayStr;
 
     const acts = (dayData.activiteiten || []).map(a => `
-      <div class="weekov-act">
+      <div class="weekov-act" onclick="toggleWeekOvActivity('${dateStr}','${a.id}')">
+        <div class="weekov-act-check ${a.afgevinkt ? 'checked' : ''}"></div>
         ${iconSVG(a.type)}
         <span class="${a.afgevinkt ? 'done' : ''}">${a.naam}${a.duur ? ` · ${fmtMin(a.duur)}` : ''}</span>
       </div>`).join('') || '<div style="font-size:13px;color:var(--muted);padding:2px 0;">Rustdag</div>';
@@ -2950,6 +2985,19 @@ function renderWeekOvTab() {
       ${meals ? `<div style="margin-top:6px;border-top:1px solid var(--border);padding-top:6px;">${meals}</div>` : ''}
     </div>`;
   }).join('');
+}
+
+function toggleWeekOvActivity(dateStr, actId) {
+  const weekKey = getISOWeek(new Date(dateStr + 'T12:00:00'));
+  ensureDay(dateStr);
+  const acts = data.weken[weekKey][dateStr].activiteiten || [];
+  const act = acts.find(a => a.id === actId);
+  if (!act) return;
+  act.afgevinkt = !act.afgevinkt;
+  saveAndSync();
+  renderWeekOvTab();
+  if (dateStr === today()) renderVandaag();
+  updateStreak();
 }
 
 const INTRO_KEY = 'hc_intro_seen';
@@ -3785,9 +3833,23 @@ function renderRecepten() {
       </button>
     </div>`;
 
-  const recList = data.recepten.length === 0
-    ? '<p class="muted" style="text-align:center;padding:24px;">Nog geen recepten. Genereer er een paar!</p>'
-    : data.recepten.map(r => `
+  // Bouw gecategoriseerde lijst
+  const slotDef = [
+    { key: 'diner',   label: '🍽 Diner' },
+    { key: 'lunch',   label: '🥗 Lunch' },
+    { key: 'ontbijt', label: '☀️ Ontbijt' },
+    { key: 'snack',   label: '🍎 Snack' },
+  ];
+  const otherSlots = slotDef.map(s => s.key);
+
+  function recipeCardHTML_list(r, dagOpties) {
+    const otherChips = otherSlots.filter(s => s !== r.type).map(s => {
+      const slotLabel = { diner:'Diner', lunch:'Lunch', ontbijt:'Ontbijt', snack:'Snack' };
+      const active = (r.geschiktVoor || []).includes(s);
+      return `<span class="rec-geschikt-chip ${active ? 'active' : ''}" onclick="event.stopPropagation();toggleGeschiktVoor('${r.id}','${s}',this)">${slotLabel[s]}</span>`;
+    }).join('');
+    const defaultSlot = r.type || 'diner';
+    return `
       <div class="recipe-card" id="rec-${r.id}">
         <div class="recipe-header" onclick="toggleRecipe('${r.id}')">
           <div class="recipe-header-main">
@@ -3799,6 +3861,7 @@ function renderRecepten() {
             </div>
           </div>
           <div class="recipe-header-actions">
+            <button class="rec-fav-btn ${r.favoriet ? 'active' : ''}" onclick="event.stopPropagation();toggleFavoriet('${r.id}')" aria-label="Favoriet">⭐</button>
             <button class="rec-delete-btn" onclick="event.stopPropagation();deleteRecept('${r.id}')" aria-label="Verwijder recept">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
             </button>
@@ -3814,13 +3877,17 @@ function renderRecepten() {
             <h4>Bereiding</h4>
             <ol>${r.bereiding.map(s => `<li>${s}</li>`).join('')}</ol>
           </div>
+          <div class="recipe-section">
+            <h4>Ook geschikt voor</h4>
+            <div class="rec-geschikt-wrap">${otherChips}</div>
+          </div>
           <div class="plan-day-wrap">
             <select id="planday-${r.id}">${dagOpties}</select>
             <select id="planslot-${r.id}" style="flex:0 0 auto;">
-              <option value="ontbijt">Ontbijt</option>
-              <option value="lunch">Lunch</option>
-              <option value="diner" selected>Diner</option>
-              <option value="snack">Snack</option>
+              <option value="ontbijt"${defaultSlot==='ontbijt'?' selected':''}>Ontbijt</option>
+              <option value="lunch"${defaultSlot==='lunch'?' selected':''}>Lunch</option>
+              <option value="diner"${defaultSlot==='diner'?' selected':''}>Diner</option>
+              <option value="snack"${defaultSlot==='snack'?' selected':''}>Snack</option>
             </select>
             <button class="btn btn-secondary btn-sm" onclick="planRecipeForDay('${r.id}')">Plan →</button>
           </div>
@@ -3837,9 +3904,57 @@ function renderRecepten() {
             Bewerken
           </button>
         </div>
-      </div>`).join('');
+      </div>`;
+  }
+
+  let recList = '';
+  if (data.recepten.length === 0) {
+    recList = '<p class="muted" style="text-align:center;padding:24px;">Nog geen recepten. Genereer er een paar!</p>';
+  } else {
+    // Favorieten
+    const favs = data.recepten.filter(r => r.favoriet);
+    if (favs.length > 0) {
+      const isOpen = !_recSectionClosed.has('favoriet');
+      recList += `<div class="rec-section">
+        <div class="rec-section-header" onclick="toggleRecSection('favoriet')">
+          <span class="rec-section-title">⭐ Favorieten <span class="rec-section-count">${favs.length}</span></span>
+          <svg class="rec-section-chev ${isOpen ? 'open' : ''}" id="recchev-favoriet" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="rec-section-body" id="recsec-favoriet" style="${isOpen ? '' : 'display:none;'}">
+          ${favs.map(r => recipeCardHTML_list(r, dagOpties)).join('')}
+        </div>
+      </div>`;
+    }
+    // Per categorie
+    slotDef.forEach(({ key, label }) => {
+      const inCat = data.recepten.filter(r => r.type === key || (r.geschiktVoor || []).includes(key));
+      if (inCat.length === 0) return;
+      const isOpen = !_recSectionClosed.has(key);
+      recList += `<div class="rec-section">
+        <div class="rec-section-header" onclick="toggleRecSection('${key}')">
+          <span class="rec-section-title">${label} <span class="rec-section-count">${inCat.length}</span></span>
+          <svg class="rec-section-chev ${isOpen ? 'open' : ''}" id="recchev-${key}" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="rec-section-body" id="recsec-${key}" style="${isOpen ? '' : 'display:none;'}">
+          ${inCat.map(r => recipeCardHTML_list(r, dagOpties)).join('')}
+        </div>
+      </div>`;
+    });
+  }
 
   document.getElementById('recipe-list').innerHTML = genSection + recList;
+}
+
+const _recSectionClosed = new Set(); // secties die dichtgeklapt zijn
+
+function toggleRecSection(key) {
+  const body = document.getElementById('recsec-' + key);
+  const chev = document.getElementById('recchev-' + key);
+  if (!body) return;
+  const isOpen = body.style.display !== 'none';
+  body.style.display = isOpen ? 'none' : '';
+  if (isOpen) _recSectionClosed.add(key); else _recSectionClosed.delete(key);
+  if (chev) chev.classList.toggle('open', !isOpen);
 }
 
 function toggleRecipe(id) {
@@ -3848,6 +3963,26 @@ function toggleRecipe(id) {
   const isOpen = body.style.display !== 'none';
   body.style.display = isOpen ? 'none' : 'block';
   if (chev) chev.classList.toggle('open', !isOpen);
+}
+
+function toggleFavoriet(id) {
+  const r = (data.recepten || []).find(r => r.id === id);
+  if (!r) return;
+  r.favoriet = !r.favoriet;
+  saveAndSync();
+  renderRecepten();
+  showBanner('green', r.favoriet ? `⭐ ${r.naam} als favoriet opgeslagen` : `${r.naam} uit favorieten verwijderd`);
+}
+
+function toggleGeschiktVoor(id, slot, chipEl) {
+  const r = (data.recepten || []).find(r => r.id === id);
+  if (!r) return;
+  if (!Array.isArray(r.geschiktVoor)) r.geschiktVoor = [];
+  const idx = r.geschiktVoor.indexOf(slot);
+  if (idx >= 0) r.geschiktVoor.splice(idx, 1);
+  else r.geschiktVoor.push(slot);
+  chipEl.classList.toggle('active', idx < 0);
+  saveAndSync();
 }
 
 function planRecipeForDay(recipeId) {
@@ -3915,13 +4050,13 @@ function showShoppingList() {
   }
 
   const coachExtra = [...(data.boodschappenExtra || [])];
-  window._shopState = { allMeals, selected: new Set(allMeals.filter(m => m.hasRecept).map(m => m.id)), inHuis: new Set(), extraItems: coachExtra };
+  window._shopState = { allMeals, selected: new Set(allMeals.filter(m => m.hasRecept).map(m => m.id)), inHuis: new Set(), extraItems: coachExtra, persons: 2 };
   if (window._shopState.selected.size === 0) window._shopState.selected = new Set(allMeals.map(m => m.id));
   _renderShopPicker();
 }
 
 function _renderShopPicker() {
-  const { allMeals, selected } = window._shopState;
+  const { allMeals, selected, persons } = window._shopState;
   const rows = allMeals.map(m => `
     <label class="shop-pick-row ${selected.has(m.id) ? 'selected' : ''}" onclick="event.stopPropagation()">
       <input type="checkbox" ${selected.has(m.id) ? 'checked' : ''} onchange="_toggleShopMeal('${m.id}',this.checked,this.closest('.shop-pick-row'))">
@@ -3929,15 +4064,46 @@ function _renderShopPicker() {
         <div class="shop-pick-label">${m.label}</div>
         <div class="shop-pick-naam">${m.naam}</div>
       </div>
-      <span class="shop-pick-badge ${m.hasRecept ? '' : 'muted'}">${m.hasRecept ? '📋 recept' : 'geen recept'}</span>
+      ${m.hasRecept
+        ? `<span class="shop-pick-badge">📋 recept</span>`
+        : `<button class="shop-ai-ing-btn" onclick="event.preventDefault();event.stopPropagation();generateIngredientsForMeal('${m.id}')" title="AI genereert ingrediënten">🤖 ingrediënten</button>`}
     </label>`).join('');
 
   showModal(`
     <div class="modal-header"><h2>🛒 Boodschappenlijst</h2><button class="modal-close" onclick="closeModal()">✕</button></div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;padding:10px 0;border-bottom:1px solid var(--border);">
+      <span style="font-size:13px;font-weight:600;color:var(--muted);">Aantal personen:</span>
+      ${[1,2,3,4,5,6].map(n => `<button class="gen-pill${persons===n?' active':''}" onclick="_setShopPersons(${n})" style="min-width:32px;">${n}</button>`).join('')}
+    </div>
     <p style="font-size:13px;color:var(--muted);margin-bottom:10px;">Welke gerechten wil je meenemen?</p>
     <div class="shop-picker">${rows}</div>
     <button class="btn btn-primary btn-full" style="margin-top:14px;" onclick="_buildAndShowShopList()">Maak lijst →</button>
   `);
+}
+
+function _setShopPersons(n) {
+  window._shopState.persons = n;
+  _renderShopPicker();
+}
+
+async function generateIngredientsForMeal(mealId) {
+  const meal = (window._shopState.allMeals || []).find(m => m.id === mealId);
+  if (!meal) return;
+  const btn = document.querySelector(`[onclick*="generateIngredientsForMeal('${mealId}')"]`);
+  if (btn) { btn.textContent = '⏳'; btn.disabled = true; }
+  try {
+    const prompt = `Geef de ingrediënten voor het gerecht "${meal.naam}" (2 personen). Geef ALLEEN een JSON-array van strings met hoeveelheid en ingredient, bijv. ["200g kipfilet","1 ui","2 el olijfolie"]. Geen uitleg.`;
+    const raw = await callAIPlain(prompt, 200);
+    const ingredienten = safeParseJSON(raw);
+    if (!Array.isArray(ingredienten) || ingredienten.length === 0) throw new Error();
+    meal.ingredienten = ingredienten;
+    meal.hasRecept = true;
+    window._shopState.selected.add(mealId);
+    _renderShopPicker();
+  } catch(e) {
+    if (btn) { btn.textContent = '🤖 ingrediënten'; btn.disabled = false; }
+    showBanner('red', 'Kon ingrediënten niet genereren. Probeer opnieuw.');
+  }
 }
 
 function _toggleShopMeal(id, checked, rowEl) {
@@ -3947,21 +4113,22 @@ function _toggleShopMeal(id, checked, rowEl) {
 }
 
 function _buildAndShowShopList() {
-  const { allMeals, selected, inHuis, extraItems } = window._shopState;
+  const { allMeals, selected, inHuis, extraItems, persons } = window._shopState;
   const allIng = [];
   const geenRecept = [];
+  const scaleFactor = (persons || 2) / 2;
 
   allMeals.forEach(m => {
     if (!selected.has(m.id)) return;
-    if (m.hasRecept) allIng.push(...m.ingredienten);
+    if (m.hasRecept) m.ingredienten.forEach(ing => allIng.push({ text: ing, recept: m.naam }));
     else geenRecept.push(m.naam);
   });
-  extraItems.forEach(i => allIng.push(i));
+  extraItems.forEach(i => allIng.push({ text: i, recept: null }));
 
-  const merged = _mergeIngredients(allIng);
+  const merged = _mergeIngredients(allIng, scaleFactor);
   const cats = _categorizeIngredients(merged);
 
-  let listText = 'Boodschappenlijst\n\n';
+  let listText = `Boodschappenlijst (${persons || 2} personen)\n\n`;
   let listHTML = '';
   Object.entries(cats).forEach(([cat, items]) => {
     if (!items.length) return;
@@ -3970,9 +4137,11 @@ function _buildAndShowShopList() {
     listHTML += items.map(item => {
       const esc = item.display.replace(/'/g, "\\'");
       const checked = inHuis.has(item.display);
+      const receptLabel = item.recepten && item.recepten.length
+        ? `<div style="font-size:11px;color:var(--muted);margin-top:1px;">📋 ${item.recepten.join(' · ')}</div>` : '';
       return `<label class="shop-item-row ${checked ? 'in-huis' : ''}" onclick="event.preventDefault();_toggleInHuis('${esc}',this)">
         <input type="checkbox" ${checked ? 'checked' : ''} style="pointer-events:none;">
-        <span>${item.display}</span>
+        <div><span>${item.display}</span>${receptLabel}</div>
       </label>`;
     }).join('');
   });
@@ -4026,16 +4195,19 @@ function clearBoodschappenExtra() {
   _buildAndShowShopList();
 }
 
-function _mergeIngredients(ingredients) {
+function _mergeIngredients(ingObjs, scaleFactor) {
+  const scale = scaleFactor || 1;
   const map = {};
   const order = [];
-  ingredients.forEach(ing => {
-    if (!ing || typeof ing !== 'string' || !ing.trim()) return;
-    ing = ing.trim();
+  ingObjs.forEach(obj => {
+    const ingRaw = typeof obj === 'string' ? obj : (obj && obj.text);
+    const receptNaam = (obj && obj.recept) || null;
+    if (!ingRaw || typeof ingRaw !== 'string' || !ingRaw.trim()) return;
+    const ing = ingRaw.trim();
     const m = ing.match(/^([\d½¼¾,.]+)\s*(g|kg|ml|l|el|tl|stuks?|blikjes?|blik|bosjes?|bos|takjes?|teentjes?|teen|x)?\s+(.+)$/i);
     let qty = null, unit = '', name = '';
     if (m) {
-      qty = parseFloat(m[1].replace(',', '.'));
+      qty = parseFloat(m[1].replace(',', '.')) * scale;
       unit = (m[2] || '').toLowerCase().replace(/s$/, '');
       name = m[3].toLowerCase().trim();
     } else { name = ing.toLowerCase().trim(); }
@@ -4048,8 +4220,14 @@ function _mergeIngredients(ingredients) {
         const q = map[key].qty % 1 === 0 ? map[key].qty : +map[key].qty.toFixed(1);
         map[key].display = unit ? q + unit + ' ' + name : q + ' ' + name;
       }
+      if (receptNaam && !map[key].recepten.includes(receptNaam)) map[key].recepten.push(receptNaam);
     } else {
-      map[key] = { qty, unit, name, display: ing };
+      let display = ing;
+      if (qty !== null && scale !== 1) {
+        const q = qty % 1 === 0 ? qty : +qty.toFixed(1);
+        display = unit ? q + unit + ' ' + name : q + ' ' + name;
+      }
+      map[key] = { qty, unit, name, display, recepten: receptNaam ? [receptNaam] : [] };
       order.push(key);
     }
   });
@@ -5587,33 +5765,52 @@ function toggleTTS() {
   else window.speechSynthesis.cancel();
 }
 
+function _pickNlVoice(voices) {
+  // iOS heeft goede stemmen: Lotte (nl-NL enhanced), Xander (nl-NL standard)
+  // macOS: Ellen (nl-BE). Volgorde: beste kwaliteit eerst.
+  return (
+    voices.find(v => v.name === 'Lotte') ||
+    voices.find(v => v.name === 'Xander') ||
+    voices.find(v => v.lang === 'nl-NL' && v.localService) ||
+    voices.find(v => v.lang === 'nl-NL') ||
+    voices.find(v => v.name === 'Ellen') ||
+    voices.find(v => v.lang === 'nl-BE') ||
+    voices.find(v => v.lang.startsWith('nl')) ||
+    null
+  );
+}
+
 function speakCoach(text) {
   if (!_ttsEnabled || !window.speechSynthesis) return;
   window.speechSynthesis.cancel();
   const utt = new SpeechSynthesisUtterance(text);
   utt.lang = 'nl-NL';
-  utt.rate = 0.95;
+  utt.rate = 0.92;
   utt.pitch = 1.0;
-  const trySpeak = () => {
-    const voices = window.speechSynthesis.getVoices();
-    const nlVoice =
-      voices.find(v => v.name === 'Ellen') ||
-      voices.find(v => v.lang === 'nl-BE') ||
-      voices.find(v => v.lang.startsWith('nl') && /fem|vrouw/i.test(v.name)) ||
-      voices.find(v => v.lang.startsWith('nl')) ||
-      null;
-    if (nlVoice) utt.voice = nlVoice;
+
+  const doSpeak = (voices) => {
+    const voice = _pickNlVoice(voices);
+    if (voice) utt.voice = voice;
     window.speechSynthesis.speak(utt);
+    // iOS workaround: synthesis stopt soms halverwege
+    const resumeInterval = setInterval(() => {
+      if (!window.speechSynthesis.speaking) { clearInterval(resumeInterval); return; }
+      window.speechSynthesis.pause();
+      window.speechSynthesis.resume();
+    }, 10000);
+    utt.onend = () => clearInterval(resumeInterval);
+    utt.onerror = () => clearInterval(resumeInterval);
   };
+
   const voices = window.speechSynthesis.getVoices();
   if (voices.length > 0) {
-    trySpeak();
+    doSpeak(voices);
   } else {
     window.speechSynthesis.onvoiceschanged = () => {
       window.speechSynthesis.onvoiceschanged = null;
-      trySpeak();
+      doSpeak(window.speechSynthesis.getVoices());
     };
-    setTimeout(trySpeak, 300);
+    setTimeout(() => doSpeak(window.speechSynthesis.getVoices()), 500);
   }
 }
 
@@ -6250,19 +6447,14 @@ Laat velden null als ze niet van toepassing zijn. Geen uitleg, alleen JSON.`;
       renderWeek();
     }
 
-    // Coaching-reactie
-    const heeftActiviteit = parsed.activiteit && parsed.activiteit.naam && parsed.activiteit.type;
-    const heeftVerwijdering = parsed.verwijder_maaltijd || parsed.verwijder_activiteit;
-    const vraag = parsed.coaching_vraag ||
-      (acties.length > 0
-        ? heeftActiviteit
-          ? `Ik heb zojuist doorgegeven: ${acties.join(', ')}. Geef me een enthousiast compliment voor het sporten, en eventueel een korte tip. Maximaal 2 zinnen.`
-          : heeftVerwijdering
-            ? `Ik heb ${acties.join(', ')}. Bevestig dit kort en vriendelijk.`
-            : `Ik heb zojuist doorgegeven: ${acties.join(', ')}. Kun je een korte reactie geven?`
-        : transcript);
-    coachFrontSend(vraag);
-
+    // Alleen naar coach sturen als gebruiker écht een vraag stelt
+    if (parsed.coaching_vraag) {
+      coachFrontSend(parsed.coaching_vraag);
+    } else if (acties.length === 0) {
+      // Niets herkend — stuur transcript als gewone coachvraag
+      coachFrontSend(transcript);
+    }
+    // Bij simpele acties (toevoegen/verwijderen): alleen banner tonen
     if (acties.length > 0) showBanner('green', acties.join(' · '));
 
   } catch(e) {
