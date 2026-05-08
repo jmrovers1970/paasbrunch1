@@ -898,27 +898,17 @@ select.modal-input { appearance: auto; }
   color: var(--muted); font-size: 16px; padding: 4px;
 }
 
-/* ─── WEEKOVERZICHT MODAL ─── */
-.weekov-day { margin-bottom: 10px; background: var(--card); border-radius: 16px; border: 1.5px solid var(--border); overflow: hidden; }
-.weekov-day.is-today { border-color: var(--accent-move); border-width: 2px; }
-.weekov-day.all-done { border-color: rgba(13,148,136,.35); }
-.weekov-day-hdr { display:flex; align-items:center; padding:12px 14px 10px; }
-.weekov-day-status { width:20px; flex-shrink:0; display:flex; align-items:center; }
-.weekov-day-center { flex:1; text-align:center; }
-.weekov-day-name { font-size:19px; font-weight:800; line-height:1.1; letter-spacing:-.3px; }
-.weekov-day-date { font-size:11px; color:var(--muted); font-weight:400; margin-top:1px; }
-.weekov-day-dur { width:44px; text-align:right; font-size:12px; font-weight:700; color:var(--accent-move); flex-shrink:0; }
-.weekov-divider { height:1px; background:var(--border); margin:0 14px; }
-.weekov-day-body { padding:8px 14px 12px; display:flex; flex-direction:column; gap:2px; }
-.weekov-day-header {
-  margin-bottom: 8px; padding-bottom: 7px; border-bottom: 1px solid var(--border);
+/* ─── WEEKOVERZICHT DASHBOARD ─── */
+.weekov-row {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 11px 14px; background: var(--card);
+  border-radius: 14px; border: 1.5px solid var(--border);
+  margin-bottom: 8px;
 }
-.weekov-act { display: flex; align-items: center; gap: 8px; padding: 5px 0; cursor: pointer; border-radius: 8px; transition: background .12s; }
-.weekov-act:active { background: var(--card2); }
-.weekov-act .done { text-decoration: line-through; color: var(--muted); }
-.weekov-act-check { width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--border-strong); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all .15s; }
-.weekov-act-check.checked { background: var(--accent-move); border-color: var(--accent-move); }
-.weekov-act-check.checked::after { content: '✓'; color: #fff; font-size: 10px; font-weight: 700; }
+.weekov-row.is-today { border-color: var(--accent-move); }
+.weekov-row-left { display: flex; align-items: flex-start; gap: 8px; flex-shrink: 0; width: 44px; }
+.weekov-row-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.weekov-row-line { display: flex; align-items: flex-start; gap: 5px; font-size: 13px; line-height: 1.4; }
 .weekov-meal { display: flex; gap: 8px; font-size: 13px; color: var(--text); padding: 3px 0; }
 .weekov-meal-label { color: var(--muted); min-width: 52px; }
 
@@ -2369,45 +2359,160 @@ function buildSystemPrompt() {
     if (ci.datum === dateStr && ci.gevoel) checkInStatus = ci.gevoel;
   } catch(_) {}
 
-  let activiteitVandaag = 'onbekend';
+  let activiteitenVandaag = 'geen';
+  let maaltijdenVandaag = 'geen';
+  let vezelTotaal = 0;
+  let eiwitTotaal = 0;
+  let waterVandaag = 0;
   let weekVoortgang = '';
+  let activeDaysDezeWeek = 0;
   try {
     if (data && data.weken) {
       const weekKey = getISOWeek(today);
       const weekData = data.weken[weekKey] || {};
       const dayData = weekData[dateStr];
+
+      // Activiteiten vandaag
       if (dayData && dayData.activiteiten && dayData.activiteiten.length > 0) {
-        const a = dayData.activiteiten[0];
-        activiteitVandaag = `${a.naam} — ${a.afgevinkt ? 'afgevinkt' : 'nog niet afgevinkt'}`;
+        activiteitenVandaag = dayData.activiteiten.map(a =>
+          `${a.naam}${a.duur ? ' ' + a.duur + 'min' : ''}${a.afgevinkt ? ' ✓' : ' (gepland)'}`
+        ).join(', ');
       }
-      // week progress
+
+      // Maaltijden vandaag
+      if (dayData && dayData.maaltijden) {
+        const slotNamen = { ontbijt: 'Ontbijt', lunch: 'Lunch', diner: 'Diner', snack: 'Snack' };
+        const regels = [];
+        Object.entries(slotNamen).forEach(([slot, label]) => {
+          const items = Array.isArray(dayData.maaltijden[slot]) ? dayData.maaltijden[slot] : [];
+          if (items.length === 0) return;
+          items.forEach(m => {
+            const v = parseFloat((m.vezels || '').replace(/[^\d.]/g, ''));
+            const e = parseFloat((m.eiwitten || '').replace(/[^\d.]/g, ''));
+            if (!isNaN(v)) vezelTotaal += v;
+            if (!isNaN(e)) eiwitTotaal += e;
+            regels.push(`${label}: ${m.naam}${m.vezels ? ' (' + m.vezels + ' vezels' : ''}${m.eiwitten ? ', ' + m.eiwitten + ' eiwit)' : m.vezels ? ')' : ''}`);
+          });
+        });
+        maaltijdenVandaag = regels.length > 0 ? regels.join(' | ') : 'geen';
+        waterVandaag = dayData.waterGlazen || 0;
+      }
+
+      // Week voortgang
       const days = Object.values(weekData);
       let total = 0, done = 0;
       days.forEach(d => {
         if (!d.activiteiten) return;
         d.activiteiten.forEach(a => { if (a.type !== 'rest') { total++; if (a.afgevinkt) done++; } });
+        if ((d.activiteiten || []).some(a => a.afgevinkt)) activeDaysDezeWeek++;
       });
       weekVoortgang = `${done} van ${total}`;
     }
   } catch(_) {}
 
-  let vezelTotaal = 0;
+  const streakHuidig = (data && data.streak && data.streak.huidig) || 0;
+
+  // Historische context: afgelopen 4 weken
+  let historischeTekst = '';
   try {
-    if (data && data.weken) {
-      const weekKey = getISOWeek(today);
-      const dayData = (data.weken[weekKey] || {})[dateStr];
-      if (dayData && dayData.maaltijden) {
-        Object.values(dayData.maaltijden).flatMap(v => Array.isArray(v) ? v : (v && v.naam ? [v] : [])).forEach(m => {
-          if (m && m.vezels) {
-            const n = parseFloat((m.vezels || '').replace(/[^\d.]/g, ''));
-            if (!isNaN(n)) vezelTotaal += n;
-          }
+    const nu = new Date();
+    const weekStats = [];
+    for (let w = 1; w <= 4; w++) {
+      const ref = new Date(nu);
+      ref.setDate(ref.getDate() - w * 7);
+      const wk = getISOWeek(ref);
+      const weekData = (data.weken || {})[wk];
+      if (!weekData) continue;
+      let actDagen = 0, minTotaal = 0, vezels = 0, vezelDagen = 0;
+      Object.values(weekData).forEach(dd => {
+        const done = (dd.activiteiten || []).filter(a => a.afgevinkt);
+        if (done.length > 0) { actDagen++; done.forEach(a => minTotaal += a.duur || 0); }
+        let dv = 0;
+        Object.values(dd.maaltijden || {}).forEach(slot => {
+          (Array.isArray(slot) ? slot : []).forEach(m => {
+            const v = parseFloat((m.vezels || '').replace(/[^\d.]/g, ''));
+            if (!isNaN(v)) dv += v;
+          });
         });
-      }
+        if (dv > 0) { vezels += dv; vezelDagen++; }
+      });
+      const uur = Math.floor(minTotaal / 60), min = minTotaal % 60;
+      const duurStr = minTotaal > 0 ? (uur > 0 ? `${uur}u${min > 0 ? min + 'm' : ''}` : `${minTotaal}m`) : '0';
+      const gemVez = vezelDagen > 0 ? Math.round(vezels / vezelDagen) + 'g/dag' : '—';
+      weekStats.push(`W-${w}: ${actDagen} actieve dagen, ${duurStr} beweging, gem. vezels ${gemVez}`);
+    }
+    if (weekStats.length > 0) historischeTekst = '\n\nAFGELOPEN 4 WEKEN (van recent naar oud):\n' + weekStats.map(s => `- ${s}`).join('\n');
+  } catch(_) {}
+
+  // Doelen + voortgang berekenen
+  let doelenTekst = '';
+  try {
+    const doelen = (data && data.doelen) || [];
+    if (doelen.length > 0) {
+      const nu = new Date();
+      const maandStart = new Date(nu.getFullYear(), nu.getMonth(), 1);
+      const doelenRegels = doelen.map(d => {
+        let voortgang = '';
+        if (d.type === 'km_maand') {
+          let kmTotal = 0;
+          Object.values(data.weken || {}).forEach(week => {
+            Object.entries(week).forEach(([ds, day]) => {
+              if (ds >= _lds(maandStart)) {
+                (day.activiteiten || []).filter(a => a.afgevinkt).forEach(a => {
+                  const km = parseFloat((a.detail || '').match(/[\d.]+km/)?.[0] || 0);
+                  if (!isNaN(km)) kmTotal += km;
+                });
+              }
+            });
+          });
+          voortgang = ` → ${kmTotal.toFixed(1)}km van ${d.waarde || '?'}km deze maand`;
+        } else if (d.type === 'vezels_dag') {
+          voortgang = ` → vandaag ${vezelTotaal}g van ${d.waarde || 30}g`;
+        } else if (d.type === 'sessies_week') {
+          voortgang = ` → ${activeDaysDezeWeek} actieve dagen deze week`;
+        }
+        return `- ${d.omschrijving}${voortgang}`;
+      });
+      doelenTekst = '\n\nDOELEN EN VOORTGANG:\n' + doelenRegels.join('\n');
     }
   } catch(_) {}
 
-  const streakHuidig = (data && data.streak && data.streak.huidig) || 0;
+  // Check-in patroon: afgelopen 7 dagen
+  let checkInPatroon = '';
+  try {
+    const ciTeller = {};
+    for (let i = 1; i <= 7; i++) {
+      const d = new Date(today);
+      d.setDate(d.getDate() - i);
+      const ds = d.toISOString().slice(0, 10);
+      const wk = getISOWeek(d);
+      const ci = (data.weken && data.weken[wk] && data.weken[wk][ds] && data.weken[wk][ds].checkIn) || null;
+      if (ci) ciTeller[ci] = (ciTeller[ci] || 0) + 1;
+    }
+    const ciDelen = Object.entries(ciTeller).sort((a,b) => b[1]-a[1]).map(([k,v]) => `${k} (${v}×)`);
+    if (ciDelen.length > 0) checkInPatroon = ciDelen.join(', ');
+  } catch(_) {}
+
+  // Tijdscontext: huidig tijdstip + openstaande maaltijdslots + resterende vezels
+  let tijdsContext = '';
+  try {
+    const uur = today.getHours();
+    const dayDataNu = (data.weken && data.weken[getISOWeek(today)] && data.weken[getISOWeek(today)][dateStr]) || null;
+    const gelogdSlots = dayDataNu
+      ? Object.entries(dayDataNu.maaltijden || {}).filter(([,v]) => Array.isArray(v) && v.length > 0).map(([k]) => k)
+      : [];
+    const slotGrenzen = { ontbijt: 7, lunch: 12, diner: 18 };
+    const nietsGelogd = Object.entries(slotGrenzen)
+      .filter(([slot, grens]) => uur >= grens && !gelogdSlots.includes(slot))
+      .map(([slot]) => slot);
+    const restVezels = Math.max(0, 30 - vezelTotaal);
+    const tijdsDelen = [`${uur}:00`];
+    if (nietsGelogd.length > 0) tijdsDelen.push(`niet gelogd: ${nietsGelogd.join(', ')}`);
+    if (restVezels > 0 && vezelTotaal > 0) tijdsDelen.push(`nog ${restVezels}g vezels nodig`);
+    else if (vezelTotaal === 0 && uur >= 12) tijdsDelen.push('nog geen voeding gelogd');
+    if (vezelTotaal >= 30) tijdsDelen.push('vezeldoel gehaald ✓');
+    tijdsContext = tijdsDelen.join(' · ');
+  } catch(_) {}
 
   // --- tone rule ---
   let toon = 'neutraal';
@@ -2433,13 +2538,22 @@ RECEPTEN: Linzensoep 14g / Kikkererwten curry 13g / Quinoa groenten 12g / Bonen 
 VEZELDOELEN: ontbijt 6g / lunch 8g / diner 10-14g / snack 4g / dagdoel 30g
 
 HUIDIGE STAAT:
-- Datum: ${dateStr}
-- Dag: ${dagNaam}
-- Check-in: ${checkInStatus}
-- Activiteit vandaag: ${activiteitVandaag}
-- Vezeltotaal vandaag: ${vezelTotaal > 0 ? vezelTotaal + 'g van 30g' : 'onbekend'}
+- Datum: ${dateStr} (${dagNaam})
+- Check-in gevoel: ${checkInStatus}
 - Streak: ${streakHuidig} dagen
-- Deze week: ${weekVoortgang || 'onbekend'} activiteiten afgevinkt
+- Week: ${weekVoortgang || 'onbekend'} activiteiten afgevinkt
+
+VANDAAG GELOGD:
+- Activiteiten: ${activiteitenVandaag}
+- Maaltijden: ${maaltijdenVandaag}
+- Vezels: ${vezelTotaal > 0 ? vezelTotaal + 'g van 30g' : 'nog niets'}
+- Eiwitten: ${eiwitTotaal > 0 ? eiwitTotaal + 'g' : 'nog niets'}
+- Water: ${waterVandaag > 0 ? waterVandaag + ' glazen' : 'nog niets'}
+
+TIJDSCONTEXT: ${tijdsContext}
+${checkInPatroon ? 'CHECK-IN PATROON (7 dagen): ' + checkInPatroon : ''}
+
+${historischeTekst}${doelenTekst}
 
 WEEKMENU (geplande maaltijden deze week):
 ${buildWeekMenuContext()}
@@ -2469,9 +2583,17 @@ Beschikbare oefeningen (gebruik exact deze namen):
 Als je oefeningen aanbeveelt of uitlegt, gebruik dan bij voorkeur deze namen zodat de gebruiker direct de uitlegkaart kan raadplegen. Geef bij oefeningen altijd: spiergroepen, uitvoering in stappen, en een praktische tip.
 ${(data && data.partners && data.partners.length > 0)
   ? '\nTRAININGSPARTNERS:\n' + data.partners.map(p => `- ${p.naam}${p.sport ? ' (' + p.sport + ')' : ''}${p.context ? ': ' + p.context : ''}`).join('\n') + '\nVerwijst de gebruiker naar een partner, benoem dan context en geef passend advies.'
-  : ''}${(data && data.coachMemory && data.coachMemory.length > 0)
-  ? '\n\nPERSOONLIJK GEHEUGEN (feiten over deze gebruiker uit eerdere gesprekken):\n' + data.coachMemory.slice(0,10).map(m => `- ${m}`).join('\n')
-  : ''}`;
+  : ''}${(() => {
+  const v2 = data && data.coachMemoryV2;
+  const catLabels = { voorkeuren: 'Voorkeuren & intoleranties', medisch: 'Medisch & blessures', doelen: 'Doelen', schema: 'Schema & routine', overig: 'Overig' };
+  if (!v2) return '';
+  const regels = [];
+  Object.entries(catLabels).forEach(([cat, label]) => {
+    const items = (v2[cat] || []).slice(0, 10);
+    if (items.length > 0) regels.push(`${label}:\n` + items.map(m => `  - ${m}`).join('\n'));
+  });
+  return regels.length > 0 ? '\n\nPERSOONLIJK GEHEUGEN:\n' + regels.join('\n') : '';
+})()}`;
 }
 
 const WEEK_TEMPLATE = [
@@ -2845,7 +2967,10 @@ function defaultData() {
     stats: { byMonth: {} },
     savedTips: [],
     partners: [],
-    boodschappenExtra: []
+    boodschappenExtra: [],
+    coachMemory: [],
+    coachMemoryV2: { voorkeuren: [], medisch: [], doelen: [], schema: [], overig: [] },
+    doelen: []
   };
 }
 
@@ -2869,6 +2994,9 @@ function ensureStats() {
   if (!data.stats) data.stats = { byMonth: {} };
   if (!data.stats.byMonth) data.stats.byMonth = {};
   if (!data.savedTips) data.savedTips = [];
+  if (!data.coachMemory) data.coachMemory = [];
+  if (!data.coachMemoryV2) data.coachMemoryV2 = { voorkeuren: [], medisch: [], doelen: [], schema: [], overig: [] };
+  if (!data.doelen) data.doelen = [];
 }
 
 function ensureWeek(weekKey) {
@@ -3022,7 +3150,7 @@ async function loadGist() {
 
 // ─── BANNERS ─────────────────────────────────────────────────────────────────
 
-function showBanner(type, msg, hasRetry = false, id = null, retryFn = null) {
+function showBanner(type, msg, hasRetry = false, id = null, retryFn = null, undoFn = null) {
   const container = document.getElementById('banners');
   if (id && document.getElementById('banner-' + id)) return;
   const div = document.createElement('div');
@@ -3035,7 +3163,14 @@ function showBanner(type, msg, hasRetry = false, id = null, retryFn = null) {
     btn.onclick = () => { removeBanner(id); retryFn(); };
     div.appendChild(btn);
   } else if (!hasRetry) {
-    setTimeout(() => div.remove(), 5000);
+    setTimeout(() => div.remove(), 6000);
+  }
+  if (undoFn) {
+    const undoBtn = document.createElement('button');
+    undoBtn.textContent = '↩ Ongedaan';
+    undoBtn.style.cssText = 'margin-left:4px;font-weight:700;text-decoration:underline;background:none;border:none;color:inherit;cursor:pointer;font-family:inherit;font-size:inherit;padding:0;';
+    undoBtn.onclick = () => { div.remove(); undoFn(); };
+    div.appendChild(undoBtn);
   }
   const closeBtn = document.createElement('button');
   closeBtn.textContent = '✕';
@@ -3223,87 +3358,94 @@ function renderWeekOvTab() {
   const dagKort = ['Ma','Di','Wo','Do','Vr','Za','Zo'];
   const todayStr = today();
 
-  // Week-samenvatting berekenen
-  let totalMin = 0, activeDays = 0, totalActs = 0, doneActs = 0;
+  // Totalen berekenen
+  let totalMin = 0, activeDays = 0, totalVezels = 0, vezelDagen = 0;
   days.forEach(d => {
-    const acts = (data.weken[weekKey][d] || {}).activiteiten || [];
-    const done = acts.filter(a => a.afgevinkt);
-    totalActs += acts.length;
-    doneActs += done.length;
-    if (done.length > 0) activeDays++;
-    done.forEach(a => { totalMin += (a.duur || 0); });
+    const dd = data.weken[weekKey][d] || {};
+    const done = (dd.activiteiten || []).filter(a => a.afgevinkt);
+    if (done.length > 0) { activeDays++; done.forEach(a => totalMin += a.duur || 0); }
+    let dagVezels = 0;
+    Object.values(dd.maaltijden || {}).forEach(slot => {
+      (Array.isArray(slot) ? slot : []).forEach(m => {
+        const v = parseFloat((m.vezels || '').replace(/[^\d.]/g, ''));
+        if (!isNaN(v)) dagVezels += v;
+      });
+    });
+    if (dagVezels > 0) { totalVezels += dagVezels; vezelDagen++; }
   });
-  const uren = Math.floor(totalMin / 60);
-  const minRest = totalMin % 60;
-  const duurLabel = totalMin === 0 ? '0 min' : uren > 0 ? `${uren}u${minRest > 0 ? ' ' + minRest + 'm' : ''}` : `${totalMin} min`;
+  const uren = Math.floor(totalMin / 60), minRest = totalMin % 60;
+  const duurLabel = totalMin === 0 ? '—' : uren > 0 ? `${uren}u${minRest > 0 ? minRest + 'm' : ''}` : `${totalMin}m`;
+  const gemVezels = vezelDagen > 0 ? Math.round(totalVezels / vezelDagen) : 0;
 
   const summaryHTML = `
     <div style="display:flex;gap:0;margin-bottom:16px;background:var(--card);border-radius:14px;border:1.5px solid var(--border);overflow:hidden;">
-      <div style="flex:1;text-align:center;padding:14px 8px;">
-        <div style="font-size:24px;font-weight:800;color:var(--accent-move);line-height:1;">${activeDays}</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:3px;font-weight:500;">actieve<br>dagen</div>
+      <div style="flex:1;text-align:center;padding:14px 6px;">
+        <div style="font-size:22px;font-weight:800;color:var(--accent-move);line-height:1;">${activeDays}<span style="font-size:12px;font-weight:500;color:var(--muted);">/7</span></div>
+        <div style="font-size:11px;color:var(--muted);margin-top:3px;">actieve dagen</div>
       </div>
       <div style="width:1px;background:var(--border);"></div>
-      <div style="flex:1;text-align:center;padding:14px 8px;">
-        <div style="font-size:24px;font-weight:800;color:var(--accent-move);line-height:1;">${duurLabel}</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:3px;font-weight:500;">beweging<br>totaal</div>
+      <div style="flex:1;text-align:center;padding:14px 6px;">
+        <div style="font-size:22px;font-weight:800;color:var(--accent-move);line-height:1;">${duurLabel}</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:3px;">beweging</div>
       </div>
       <div style="width:1px;background:var(--border);"></div>
-      <div style="flex:1;text-align:center;padding:14px 8px;">
-        <div style="font-size:24px;font-weight:800;color:var(--accent-move);line-height:1;">${totalActs > 0 ? Math.round(doneActs / totalActs * 100) : 0}%</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:3px;font-weight:500;">afgevinkt<br>(${doneActs}/${totalActs})</div>
+      <div style="flex:1;text-align:center;padding:14px 6px;">
+        <div style="font-size:22px;font-weight:800;color:var(--accent-food);line-height:1;">${gemVezels > 0 ? gemVezels + 'g' : '—'}</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:3px;">gem. vezels</div>
       </div>
     </div>`;
 
   const daysHTML = days.map((dateStr, i) => {
     const dayData = data.weken[weekKey][dateStr];
     const isToday = dateStr === todayStr;
-    const isPast = dateStr < todayStr;
     const isFuture = dateStr > todayStr;
     const acts = dayData.activiteiten || [];
     const doneActs = acts.filter(a => a.afgevinkt);
     const allDone = acts.length > 0 && doneActs.length === acts.length;
     const someDone = doneActs.length > 0;
-
     const dayDuurMin = doneActs.reduce((s, a) => s + (a.duur || 0), 0);
-    const dayDuurLabel = dayDuurMin > 0 ? fmtMin(dayDuurMin) : '';
 
-    const nameColor = isToday
-      ? 'var(--accent-move)'
-      : allDone ? 'var(--accent-food)'
-      : someDone ? 'var(--accent-move)'
-      : isFuture ? 'var(--muted)' : 'var(--text)';
+    // Beweging samenvatting (één regel)
+    const beweegTxt = doneActs.length > 0
+      ? doneActs.map(a => a.naam + (a.duur ? ' ' + fmtMin(a.duur) : '')).join(', ')
+      : acts.length > 0
+        ? `<span style="color:var(--muted)">${acts.map(a => a.naam).join(', ')} (gepland)</span>`
+        : `<span style="color:var(--muted)">—</span>`;
 
-    const statusDot = allDone
-      ? `<span style="width:8px;height:8px;border-radius:50%;background:var(--accent-food);display:inline-block;"></span>`
-      : someDone
-        ? `<span style="width:8px;height:8px;border-radius:50%;background:#f97316;display:inline-block;"></span>`
-        : isToday
-          ? `<span style="width:8px;height:8px;border-radius:50%;border:2px solid var(--accent-move);display:inline-block;"></span>`
-          : `<span style="width:8px;height:8px;display:inline-block;"></span>`;
+    // Eten samenvatting (één regel per slot)
+    const m = dayData.maaltijden || {};
+    const etenParts = [];
+    ['ontbijt','lunch','diner','snack'].forEach(slot => {
+      const items = Array.isArray(m[slot]) ? m[slot] : [];
+      if (items.length > 0) etenParts.push(items.map(x => x.naam).join(' + '));
+    });
+    const etenTxt = etenParts.length > 0
+      ? etenParts.join(' · ')
+      : `<span style="color:var(--muted)">Niets gelogd</span>`;
 
-    const actsHTML = acts.length > 0
-      ? acts.map(a => `
-          <div class="weekov-act" onclick="toggleWeekOvActivity('${dateStr}','${a.id}')">
-            <div class="weekov-act-check ${a.afgevinkt ? 'checked' : ''}"></div>
-            <div style="flex-shrink:0;display:flex;align-items:center;color:${a.afgevinkt ? nameColor : 'var(--muted)'};">${iconSVG(a.type, 16)}</div>
-            <span class="${a.afgevinkt ? 'done' : ''}" style="font-size:13px;flex:1;min-width:0;">${a.naam}${a.duur ? `<span style="color:var(--muted);font-weight:400;"> · ${fmtMin(a.duur)}</span>` : ''}</span>
-          </div>`).join('')
-      : `<div style="font-size:13px;color:var(--muted);padding:2px 0;">Rustdag</div>`;
+    const dotBg = allDone ? 'var(--accent-food)' : someDone ? 'var(--accent-move)' : 'transparent';
+    const dotBorder = allDone ? 'var(--accent-food)' : someDone ? 'var(--accent-move)' : isToday ? 'var(--accent-move)' : 'var(--border-strong)';
+    const dayColor = isToday ? 'var(--accent-move)' : allDone ? 'var(--accent-food)' : isFuture ? 'var(--muted)' : 'var(--text)';
 
-    const cls = `weekov-day${isToday ? ' is-today' : ''}${allDone ? ' all-done' : ''}`;
-
-    return `<div class="${cls}" style="${isFuture ? 'opacity:.5;' : ''}">
-      <div class="weekov-day-hdr">
-        <div class="weekov-day-status">${statusDot}</div>
-        <div class="weekov-day-center">
-          <div class="weekov-day-name" style="color:${nameColor};">${dagKort[i]}</div>
-          <div class="weekov-day-date">${formatShortDate(dateStr)}</div>
+    return `<div class="weekov-row${isToday ? ' is-today' : ''}" style="${isFuture ? 'opacity:.45;' : ''}">
+      <div class="weekov-row-left">
+        <span style="width:9px;height:9px;border-radius:50%;border:2px solid ${dotBorder};background:${dotBg};display:inline-block;flex-shrink:0;margin-top:2px;"></span>
+        <div>
+          <div style="font-size:15px;font-weight:800;color:${dayColor};line-height:1.1;">${dagKort[i]}</div>
+          <div style="font-size:11px;color:var(--muted);">${formatShortDate(dateStr)}</div>
         </div>
-        <div class="weekov-day-dur">${dayDuurLabel}</div>
       </div>
-      <div class="weekov-divider"></div>
-      <div class="weekov-day-body">${actsHTML}</div>
+      <div class="weekov-row-body">
+        <div class="weekov-row-line">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-move)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px;"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>
+          <span>${beweegTxt}</span>
+          ${dayDuurMin > 0 ? `<span style="color:var(--accent-move);font-weight:700;font-size:12px;margin-left:auto;flex-shrink:0;">${fmtMin(dayDuurMin)}</span>` : ''}
+        </div>
+        <div class="weekov-row-line">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-food)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px;"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>
+          <span style="color:var(--muted);font-size:12px;">${etenTxt}</span>
+        </div>
+      </div>
     </div>`;
   }).join('');
 
@@ -4950,8 +5092,12 @@ function recipeCardHTML(r) {
           <option value="diner" selected>Diner</option>
           <option value="snack">Snack</option>
         </select>
+        <button onclick="logGenRecipeNow('${r._tmpId}')"
+          style="flex:0 0 auto;padding:9px 14px;border-radius:10px;background:var(--accent-move);color:#fff;border:none;font-size:14px;font-weight:700;cursor:pointer;min-height:42px;">
+          Log vandaag
+        </button>
         <button onclick="planGenRecipe('${r._tmpId}')"
-          style="flex:0 0 auto;padding:9px 18px;border-radius:10px;background:var(--accent-food);color:#fff;border:none;font-size:15px;font-weight:700;cursor:pointer;min-height:42px;">
+          style="flex:0 0 auto;padding:9px 14px;border-radius:10px;background:var(--accent-food);color:#fff;border:none;font-size:14px;font-weight:700;cursor:pointer;min-height:42px;">
           Plan
         </button>
       </div>
@@ -4999,6 +5145,31 @@ function planGenRecipe(tmpId) {
   const dates = getWeekDates(weekKey);
   const dagLabel = dagNamen[dates.indexOf(dateStr)] || dateStr;
   showBanner('green', `${saved.naam} gepland op ${dagLabel} — ${slot}`);
+}
+
+function logGenRecipeNow(tmpId) {
+  const recept = (window._generatedRecepten || []).find(r => r._tmpId === tmpId);
+  if (!recept) return;
+  const uur = new Date().getHours();
+  const slot = uur < 10 ? 'ontbijt' : uur < 14 ? 'lunch' : uur < 17 ? 'snack' : 'diner';
+  const dateStr = today();
+  const weekKey = getISOWeek(new Date(dateStr + 'T12:00:00'));
+  ensureDay(dateStr);
+  if (!data.recepten) data.recepten = [];
+  let saved = data.recepten.find(r => r.naam === recept.naam);
+  if (!saved) {
+    saved = { ...recept, id: 'r' + Date.now(), type: slot };
+    delete saved._tmpId;
+    data.recepten.push(saved);
+  }
+  const slotArr = data.weken[weekKey][dateStr].maaltijden;
+  if (!Array.isArray(slotArr[slot])) slotArr[slot] = [];
+  const dubbel = slotArr[slot].findIndex(x => x.naam === saved.naam);
+  const item = { id:'m'+Date.now()+Math.random().toString(36).slice(2,5), naam:saved.naam, vezels:saved.vezels||'', eiwitten:saved.eiwitten||'', kcal:'', gepland:true, gegeten:false, receptId:saved.id };
+  if (dubbel >= 0) slotArr[slot][dubbel] = item; else slotArr[slot].push(item);
+  saveAndSync();
+  renderVandaag();
+  showBanner('green', `✓ ${saved.naam} gelogd als ${slot} vandaag`);
 }
 
 function showGeneratedPreview(recepten) {
@@ -7359,19 +7530,29 @@ async function startWeekplanGesprek() {
 async function _updateCoachMemory(userMsg, coachReply) {
   if (!settings.anthropicKey) return;
   try {
-    const prompt = `Gebruikersbericht: "${userMsg}"\nCoachreactie: "${coachReply}"\n\nExtracteer maximaal 1 relevante persoonlijke feit over de gebruiker (geen advies, alleen feiten zoals voorkeuren, blessures, gewoonten, doelen). Geef ALLEEN een JSON-array van max 1 string. Bijv. ["Heeft kniepijn rechts"] of []. Geen uitleg.`;
-    const raw = await callAIPlain(prompt, 80);
+    const prompt = `Gebruikersbericht: "${userMsg}"\nCoachreactie: "${coachReply}"\n\nExtracteer maximaal 2 relevante persoonlijke feiten over de gebruiker. Categoriseer elk feit. Antwoord ALLEEN als JSON-array van objecten: [{"categorie":"voorkeuren","feit":"Eet geen erwten"},{"categorie":"medisch","feit":"Kniepijn rechts"}]. Categorieën: "voorkeuren" (eetvoorkeuren, intoleranties, smaken), "medisch" (blessures, aandoeningen, pijn), "doelen" (sport/voeding doelen), "schema" (trainingstijden, werk, routine), "overig". Geen adviezen, alleen feiten. Lege array [] als niets relevant. Geen uitleg.`;
+    const raw = await callAIPlain(prompt, 120);
     const facts = safeParseJSON(raw);
     if (!Array.isArray(facts) || facts.length === 0) return;
     if (!data.coachMemory) data.coachMemory = [];
+    if (!data.coachMemoryV2) data.coachMemoryV2 = { voorkeuren: [], medisch: [], doelen: [], schema: [], overig: [] };
     facts.forEach(f => {
-      if (typeof f !== 'string' || !f.trim()) return;
-      // Avoid duplicates (rough check)
-      if (!data.coachMemory.some(m => m.toLowerCase().includes(f.toLowerCase().slice(0,20)))) {
-        data.coachMemory.unshift(f.trim());
-      }
+      if (!f || typeof f !== 'object') return;
+      const feit = (f.feit || f).toString().trim();
+      const cat = (f.categorie || 'overig').toLowerCase();
+      if (!feit) return;
+      // Update platte lijst (achterwaartse compatibiliteit)
+      const keyword = feit.toLowerCase().slice(0, 30);
+      data.coachMemory = data.coachMemory.filter(m => !m.toLowerCase().includes(keyword));
+      data.coachMemory.unshift(feit);
+      // Update gestructureerde lijst
+      const validCat = ['voorkeuren','medisch','doelen','schema','overig'].includes(cat) ? cat : 'overig';
+      if (!data.coachMemoryV2[validCat]) data.coachMemoryV2[validCat] = [];
+      data.coachMemoryV2[validCat] = data.coachMemoryV2[validCat].filter(m => !m.toLowerCase().includes(keyword));
+      data.coachMemoryV2[validCat].unshift(feit);
+      if (data.coachMemoryV2[validCat].length > 15) data.coachMemoryV2[validCat] = data.coachMemoryV2[validCat].slice(0, 15);
     });
-    if (data.coachMemory.length > 20) data.coachMemory = data.coachMemory.slice(0, 20);
+    if (data.coachMemory.length > 40) data.coachMemory = data.coachMemory.slice(0, 40);
     saveAndSync();
   } catch(_) {}
 }
@@ -7403,10 +7584,37 @@ function _resolveDate(datum) {
   const t = today();
   if (!datum || datum === 'vandaag') return t;
   const d = new Date(t + 'T12:00:00');
-  if (datum === 'gisteren')   { d.setDate(d.getDate() - 1); return d.toISOString().slice(0,10); }
-  if (datum === 'morgen')     { d.setDate(d.getDate() + 1); return d.toISOString().slice(0,10); }
-  if (datum === 'overmorgen') { d.setDate(d.getDate() + 2); return d.toISOString().slice(0,10); }
+  if (datum === 'gisteren')   { d.setDate(d.getDate() - 1); return _lds(d); }
+  if (datum === 'morgen')     { d.setDate(d.getDate() + 1); return _lds(d); }
+  if (datum === 'overmorgen') { d.setDate(d.getDate() + 2); return _lds(d); }
+
+  // ISO-datum direct doorsturen: "2026-05-16"
+  if (/^\d{4}-\d{2}-\d{2}$/.test(datum)) return datum;
+
+  // "16 mei" of "16 mei 2026"
+  const maanden = { januari:1, februari:2, maart:3, april:4, mei:5, juni:6, juli:7, augustus:8, september:9, oktober:10, november:11, december:12 };
+  const dmMatch = (datum || '').toLowerCase().match(/^(\d{1,2})\s+(\w+)(?:\s+(\d{4}))?$/);
+  if (dmMatch) {
+    const dag = parseInt(dmMatch[1]);
+    const maand = maanden[dmMatch[2]];
+    const jaar = dmMatch[3] ? parseInt(dmMatch[3]) : new Date().getFullYear();
+    if (maand) return _lds(new Date(jaar, maand - 1, dag, 12, 0, 0));
+  }
+
   const dagIdx = { zondag:0, maandag:1, dinsdag:2, woensdag:3, donderdag:4, vrijdag:5, zaterdag:6 };
+
+  // "afgelopen_maandag" → meest recente verleden maandag
+  const afgelopenMatch = (datum || '').toLowerCase().match(/^afgelopen_(\w+)$/);
+  if (afgelopenMatch) {
+    const afTarget = dagIdx[afgelopenMatch[1]];
+    if (afTarget !== undefined) {
+      const cur = d.getDay();
+      let diff = afTarget - cur;
+      if (diff >= 0) diff -= 7; // altijd naar het verleden
+      d.setDate(d.getDate() + diff);
+      return _lds(d);
+    }
+  }
 
   // "volgende_week_dinsdag" → altijd volgende ISO-week
   const vwMatch = (datum || '').toLowerCase().match(/^volgende_week_(\w+)$/);
@@ -7416,9 +7624,9 @@ function _resolveDate(datum) {
       const cur = d.getDay();
       let diff = vwTarget - cur;
       if (diff <= 0) diff += 7;
-      diff += 7; // altijd een volle week extra
+      diff += 7;
       d.setDate(d.getDate() + diff);
-      return d.toISOString().slice(0,10);
+      return _lds(d);
     }
   }
 
@@ -7429,9 +7637,9 @@ function _resolveDate(datum) {
     if (komTarget !== undefined) {
       const cur = d.getDay();
       let diff = komTarget - cur;
-      if (diff <= 0) diff += 7; // vandaag of al geweest → volgende week
+      if (diff <= 0) diff += 7;
       d.setDate(d.getDate() + diff);
-      return d.toISOString().slice(0,10);
+      return _lds(d);
     }
   }
 
@@ -7441,9 +7649,17 @@ function _resolveDate(datum) {
     let diff = target - cur;
     if (diff < 0) diff += 7;
     d.setDate(d.getDate() + diff);
-    return d.toISOString().slice(0,10);
+    return _lds(d);
   }
   return t;
+}
+
+// Splitst "woensdag en vrijdag" of "woensdag, vrijdag" in meerdere datums
+function _resolveDatesMulti(datum) {
+  if (!datum) return [today()];
+  const parts = String(datum).split(/\s+en\s+|,\s*/i).map(s => s.trim()).filter(Boolean);
+  if (parts.length <= 1) return [_resolveDate(datum)];
+  return parts.map(p => _resolveDate(p));
 }
 
 // Vindt een weekdag binnen de LOPENDE week (voor herhaal_dagen — niet "volgende week")
@@ -7487,9 +7703,11 @@ Analyseer dit en extraheer ALLES. Één zin kan meerdere acties bevatten. Antwoo
   "maaltijden": [],
   "water": 0,
   "water_totaal": 0,
+  "wijzig_maaltijd": null,
   "verwijder_maaltijd": null,
   "verwijder_activiteit": null,
   "afvinken_activiteit": null,
+  "doel_opslaan": null,
   "notitie_opslaan": false,
   "boodschap_toevoegen": null,
   "recept_genereren": null,
@@ -7497,14 +7715,16 @@ Analyseer dit en extraheer ALLES. Één zin kan meerdere acties bevatten. Antwoo
 }
 
 Regels:
-- activiteiten: ARRAY van sport/beweging-objecten. Meerdere activiteiten in één zin → meerdere objecten. Elk object: {"naam":"5km Hardlopen","type":"run","detail":"rustig tempo","km":5,"duur":30,"datum":"vandaag","herhaal":null,"herhaal_dagen":[]}. BELANGRIJK: km = afstand als GETAL (bijv. 5 voor "5 kilometer"), altijd invullen als afstand wordt genoemd. naam = beschrijvende naam inclusief afstand (bijv. "5km Hardlopen"). duur = minuten (schat op basis van km: 1km ≈ 6 min lopen, 1km ≈ 3 min fietsen). datum = "gisteren"|"vandaag"|"morgen"|"overmorgen"|dag van de week|"komende_[dag]"|"volgende_week_[dag]". herhaal = null | "week" | "werkdagen". herhaal_dagen = specifieke weekdagen. Types: run, gym, bike, walk, commute, walkdog, other. ALLEEN bij PLANNEN/TOEVOEGEN, niet bij "ik heb... gedaan".
-- maaltijden: ARRAY van maaltijd-objecten. Meerdere maaltijden in één zin → meerdere objecten. Elk object: {"naam":"Yoghurt met muesli","slot":"ontbijt","vezels":"~5g","eiwitten":"~12g","kcal":"~350kcal","datum":"vandaag","herhaal":null}. datum = "gisteren"|"vandaag"|"morgen"|"overmorgen"|dag|"komende_[dag]"|"volgende_week_[dag]". herhaal = null | "week" | "werkdagen". Schat ALTIJD vezels én eiwitten.
-- water: glazen toe te VOEGEN (bij "nog X glazen" of "X glazen gedronken"). 0 als niet van toepassing.
+- activiteiten: ARRAY van sport/beweging-objecten. Meerdere activiteiten of dagen → meerdere APARTE objecten (nooit twee dagen in één datum-veld). Elk object: {"naam":"5km Hardlopen","type":"run","detail":"rustig tempo","km":5,"duur":30,"datum":"vandaag","herhaal":null,"herhaal_dagen":[]}. km = afstand als GETAL. duur = minuten (schat: 1km lopen ≈ 6 min, 1km fietsen ≈ 3 min). datum: specifieke datum → "YYYY-MM-DD" (bijv. "16 mei" → "2026-05-16"). Weekdag in VERLEDEN tijd (bijv. "maandag hardgelopen") → "afgelopen_maandag". Weekdag in TOEKOMST → dag zelf (bijv. "woensdag"). herhaal = null|"week"|"werkdagen". Types: run, gym, bike, walk, commute, walkdog, other. ALLEEN bij PLANNEN/TOEVOEGEN, niet bij "ik heb gedaan".
+- maaltijden: ARRAY van maaltijd-objecten. Meerdere maaltijden of dagen → meerdere APARTE objecten (nooit twee dagen in één datum-veld). Hoeveelheden in de naam verwerken als één object (naam: "Twee bananen"). Elk object: {"naam":"Yoghurt","slot":"ontbijt","vezels":"~5g","eiwitten":"~12g","kcal":"~350kcal","datum":"vandaag","herhaal":null}. slot: bepaal op basis van tijdswoorden: "vanochtend"/"vanmorgen"/"'s ochtends" → "ontbijt", "vanmiddag"/"'s middags" → "lunch", "vanavond"/"'s avonds" → "diner", "tussendoor"/"als snack" → "snack". Geen tijdswoord → gebruik meest logische slot op basis van het gerecht. datum: specifieke datum → "YYYY-MM-DD". Weekdag in VERLEDEN → "afgelopen_[dag]". herhaal = null|"week"|"werkdagen". Schat ALTIJD vezels én eiwitten.
+- water: glazen toe te VOEGEN (bij "nog X glazen" of "X glazen gedronken"). Liters omrekenen: 1 liter = 4 glazen, 1,5 liter = 6 glazen. 0 als niet van toepassing.
 - water_totaal: totaal aantal glazen INSTELLEN (bij "in totaal X glazen" of "ik heb X glazen gehad vandaag"). 0 als niet van toepassing.
+- wijzig_maaltijd: object {"slot":"ontbijt","nieuw_naam":"Havermout","datum":"vandaag","vezels":"~6g","eiwitten":"~8g","kcal":"~350kcal"} als gebruiker een maaltijd wil WIJZIGEN/AANPASSEN (bijv. "verander mijn ontbijt naar havermout", "maak van mijn lunch een wrap"). Wis het bestaande slot en voeg het nieuwe item toe. null als niet van toepassing.
 - verwijder_maaltijd: object {"slot":"lunch","datum":"vandaag"} als gebruiker een maaltijdslot wil verwijderen/wissen. datum optioneel, standaard vandaag. null als niet van toepassing.
 - verwijder_activiteit: object {"naam":"hardlopen","datum":"vandaag"} als gebruiker een activiteit wil verwijderen. datum optioneel. null als niet van toepassing.
+- doel_opslaan: object {"omschrijving":"50km per maand lopen","type":"km_maand","waarde":50} als gebruiker een persoonlijk doel uitspreekt (bijv. "mijn doel is 50km per maand", "ik wil dagelijks 30g vezels halen", "ik wil 3x per week sporten"). type: "km_maand"|"vezels_dag"|"sessies_week"|"overig". null als niet van toepassing.
 - notitie_opslaan: true als gebruiker het laatste coach-antwoord wil bewaren/opslaan (bijv. "zet dit in notities", "sla dit op", "bewaar dit advies", "notitie maken"). false als niet van toepassing.
-- afvinken_activiteit: object {"naam":"hardlopen","datum":"vandaag"} als gebruiker meldt dat hij een activiteit HEEFT gedaan/voltooid (bijv. "ik heb hardgelopen", "zojuist een rondje gefietst", "gym gedaan"). datum optioneel, standaard vandaag. null als niet van toepassing. Gebruik dit NIET als gebruiker iets wil plannen.
+- afvinken_activiteit: object {"naam":"8km Hardlopen","type":"run","datum":"vandaag","km":8,"duur":48,"detail":""} als gebruiker meldt dat hij een activiteit HEEFT gedaan/voltooid (bijv. "ik heb hardgelopen", "zojuist een rondje gefietst", "gym gedaan"). Vul km en duur ALTIJD in als de gebruiker afstand of tijd noemt. datum: weekdag in verleden → "afgelopen_[dag]", specifieke datum → "YYYY-MM-DD". null als niet van toepassing. Gebruik dit NIET als gebruiker iets wil plannen.
 - boodschap_toevoegen: array van strings voor boodschappenlijst. null als niet van toepassing.
 - recept_genereren: {"ingredienten":"pasta, paprika","type":"diner"} als gebruiker een recept wil. null als niet van toepassing.
 - coaching_vraag: alleen als gebruiker een vraag stelt of advies wil. null als niet van toepassing.
@@ -7515,10 +7735,28 @@ Lege arrays [] voor activiteiten/maaltijden als geen van toepassing. Geen uitleg
     const parsed = safeParseJSON(raw);
     if (!parsed) { showBanner('red', 'Kon invoer niet verwerken.'); return; }
 
+    const _snapshot = JSON.parse(JSON.stringify(data));
     const acties = [];
     const weekKey = getISOWeek(new Date(todayStr + 'T12:00:00'));
     ensureDay(todayStr);
     const dayData = data.weken[weekKey][todayStr];
+
+    // Maaltijd wijzigen (wis slot + voeg nieuw item toe)
+    if (parsed.wijzig_maaltijd) {
+      const wm = parsed.wijzig_maaltijd;
+      const slot = (wm.slot || tijdSlot).toLowerCase();
+      const wmDate = _resolveDate(wm.datum);
+      const wmWk = getISOWeek(new Date(wmDate + 'T12:00:00'));
+      ensureDay(wmDate);
+      const wmDay = data.weken[wmWk][wmDate];
+      wmDay.maaltijden[slot] = [{
+        id: 'm' + Date.now() + Math.random().toString(36).slice(2,5),
+        naam: wm.nieuw_naam || wm.naam || '?',
+        vezels: wm.vezels || '', eiwitten: wm.eiwitten || '', kcal: wm.kcal || '',
+        gepland: true, gegeten: false
+      }];
+      acties.push(`✓ ${slot} gewijzigd naar ${wm.nieuw_naam || wm.naam}`);
+    }
 
     // Maaltijd verwijderen (nu met datum)
     if (parsed.verwijder_maaltijd) {
@@ -7570,16 +7808,19 @@ Lege arrays [] voor activiteiten/maaltijden als geen van toepassing. Geen uitleg
       );
       if (match) {
         match.afgevinkt = true;
+        if (af.duur) match.duur = af.duur;
+        if (af.km) match.detail = [match.detail, af.km + 'km'].filter(Boolean).join(' · ');
         acties.push(`✓ ${match.naam} afgevinkt`);
       } else {
         // Staat nog niet gepland — voeg toe én vink meteen af
-        const typeMap = { hardlopen:'run', fietsen:'bike', lopen:'walk', gym:'gym', wandelen:'walk' };
-        const type = Object.entries(typeMap).find(([k]) => zoek.includes(k))?.[1] || 'other';
+        const typeMap = { hardlopen:'run', fietsen:'bike', lopen:'walk', gym:'gym', wandelen:'walk', zwemmen:'swim', yoga:'other', tennis:'other' };
+        const type = af.type || Object.entries(typeMap).find(([k]) => zoek.includes(k))?.[1] || 'other';
+        const detail = [af.detail, af.km ? af.km + 'km' : ''].filter(Boolean).join(' · ');
+        const duur = af.duur || (af.km ? Math.round(af.km * 6) : DEFAULT_DUUR[type] || 30);
         afDay.activiteiten = afDay.activiteiten || [];
         afDay.activiteiten.push({
           id: 'a' + Date.now() + Math.random().toString(36).slice(2, 5),
-          type, naam: af.naam, detail: '', afgevinkt: true,
-          duur: DEFAULT_DUUR[type] || 30
+          type, naam: af.naam, detail, afgevinkt: true, duur
         });
         afDay.aangepast = true;
         acties.push(`✓ ${af.naam} gedaan`);
@@ -7593,7 +7834,7 @@ Lege arrays [] voor activiteiten/maaltijden als geen van toepassing. Geen uitleg
       const detail = [act.detail, act.km ? act.km + 'km' : ''].filter(Boolean).join(' · ');
       const duur = act.duur || (act.km ? Math.round(act.km * 6) : (DEFAULT_DUUR[type] || 30));
 
-      // Prioriteit: herhaal_dagen (specifieke dagen) → herhaal (week/werkdagen) → enkele datum
+      // Prioriteit: herhaal_dagen (specifieke dagen) → herhaal (week/werkdagen) → enkele/meerdere datum(s)
       let targetDates;
       let herhaaltxt = '';
       if (Array.isArray(act.herhaal_dagen) && act.herhaal_dagen.length > 0) {
@@ -7603,9 +7844,8 @@ Lege arrays [] voor activiteiten/maaltijden als geen van toepassing. Geen uitleg
         targetDates = _resolveHerhaalDates(act.herhaal);
         herhaaltxt = act.herhaal === 'week' ? ' · hele week' : ' · ma–vr';
       } else {
-        const d = _resolveDate(act.datum);
-        targetDates = [d];
-        herhaaltxt = d !== todayStr ? ` · ${act.datum || ''}` : '';
+        targetDates = _resolveDatesMulti(act.datum);
+        herhaaltxt = targetDates.length > 1 ? ` · ${act.datum || ''}` : (targetDates[0] !== todayStr ? ` · ${act.datum || ''}` : '');
       }
 
       targetDates.forEach(actDate => {
@@ -7631,12 +7871,21 @@ Lege arrays [] voor activiteiten/maaltijden als geen van toepassing. Geen uitleg
         const slot = m.slot || tijdSlot;
         const mItem = { id: 'm'+Date.now()+Math.random().toString(36).slice(2,5), naam: m.naam, vezels: m.vezels || '', eiwitten: m.eiwitten || '', kcal: m.kcal || '', gepland: true, gegeten: false };
         const herhaalDates = _resolveHerhaalDates(m.herhaal);
-        const targetDates = herhaalDates || [_resolveDate(m.datum)];
+        const targetDates = herhaalDates || _resolveDatesMulti(m.datum);
         targetDates.forEach(dateStr => {
           const wk = getISOWeek(new Date(dateStr + 'T12:00:00'));
           ensureDay(dateStr);
-          if (!Array.isArray(data.weken[wk][dateStr].maaltijden[slot])) data.weken[wk][dateStr].maaltijden[slot] = [];
-          data.weken[wk][dateStr].maaltijden[slot].push({ ...mItem });
+          const slotArr = data.weken[wk][dateStr].maaltijden[slot];
+          if (!Array.isArray(slotArr)) data.weken[wk][dateStr].maaltijden[slot] = [];
+          const naamLower = m.naam.toLowerCase();
+          const dubbel = data.weken[wk][dateStr].maaltijden[slot].findIndex(
+            x => x.naam.toLowerCase() === naamLower
+          );
+          if (dubbel >= 0) {
+            data.weken[wk][dateStr].maaltijden[slot][dubbel] = { ...mItem };
+          } else {
+            data.weken[wk][dateStr].maaltijden[slot].push({ ...mItem });
+          }
         });
         const herhaaltxt = m.herhaal === 'week' ? ' · hele week' : m.herhaal === 'werkdagen' ? ' · ma–vr' : (m.datum && m.datum !== 'vandaag') ? ` · ${m.datum}` : '';
         acties.push(`✓ ${m.naam} als ${slot}${herhaaltxt}`);
@@ -7652,6 +7901,21 @@ Lege arrays [] voor activiteiten/maaltijden als geen van toepassing. Geen uitleg
     if (parsed.water_totaal && parsed.water_totaal > 0) {
       dayData.waterGlazen = Math.min(8, parsed.water_totaal);
       acties.push(`✓ ${parsed.water_totaal} glazen water (totaal)`);
+    }
+
+    // Doel opslaan
+    if (parsed.doel_opslaan && parsed.doel_opslaan.omschrijving) {
+      if (!data.doelen) data.doelen = [];
+      const doel = { id: 'd' + Date.now(), omschrijving: parsed.doel_opslaan.omschrijving, type: parsed.doel_opslaan.type || 'overig', waarde: parsed.doel_opslaan.waarde || null, aangemaakt: today() };
+      // Vervang bestaand doel van hetzelfde type
+      data.doelen = data.doelen.filter(d => d.type !== doel.type || doel.type === 'overig');
+      data.doelen.unshift(doel);
+      acties.push(`🎯 Doel opgeslagen: ${doel.omschrijving}`);
+      // Ook in coachMemoryV2 doelen
+      if (!data.coachMemoryV2) data.coachMemoryV2 = { voorkeuren: [], medisch: [], doelen: [], schema: [], overig: [] };
+      if (!data.coachMemoryV2.doelen) data.coachMemoryV2.doelen = [];
+      data.coachMemoryV2.doelen = data.coachMemoryV2.doelen.filter(m => !m.toLowerCase().includes(doel.type));
+      data.coachMemoryV2.doelen.unshift(doel.omschrijving);
     }
 
     // Notitie opslaan (laatste coach-antwoord)
@@ -7712,7 +7976,12 @@ Lege arrays [] voor activiteiten/maaltijden als geen van toepassing. Geen uitleg
     // Bij simpele acties (toevoegen/verwijderen): banner + TTS bevestiging
     if (acties.length > 0) {
       const bannerTxt = acties.join(' · ');
-      showBanner('green', bannerTxt);
+      showBanner('green', bannerTxt, false, null, null, () => {
+        data = _snapshot;
+        saveLocal();
+        renderAll();
+        showBanner('yellow', 'Ongedaan gemaakt.');
+      });
       if (_ttsEnabled) {
         const spokenTxt = acties.map(a => a.replace(/^[✓🛒📌]\s*/, '').replace(/·/g, ','))
           .join('. ');
