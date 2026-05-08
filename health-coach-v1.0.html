@@ -1028,9 +1028,9 @@ select.modal-input { appearance: auto; }
 }
 .setup-logo-icon {
   width: 56px; height: 56px; border-radius: 16px;
-  background: #18181b;
+  background: #ffffff;
   display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 4px 16px rgba(0,0,0,.22);
+  box-shadow: 0 4px 16px rgba(0,0,0,.15);
   flex-shrink: 0;
 }
 .setup-logo h1 { font-size: 28px; }
@@ -1768,7 +1768,7 @@ select.modal-input { appearance: auto; }
 <div id="setup-overlay">
   <div class="setup-logo">
     <div class="setup-logo-icon">
-      <span style="font-size:15px;font-weight:900;color:#fff;letter-spacing:-.04em;line-height:1;">C<span style="font-size:11px;font-weight:500;opacity:.6;">&amp;</span>C</span>
+      <span style="font-size:15px;font-weight:900;color:#18181b;letter-spacing:-.04em;line-height:1;">C<span style="font-size:11px;font-weight:500;opacity:.5;">&amp;</span>C</span>
     </div>
     <div>
       <h1>Coach &amp; Chef</h1>
@@ -2170,11 +2170,11 @@ select.modal-input { appearance: auto; }
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
           Mijn voortgang
         </button>
-        <button class="quick-q-btn" onclick="askQuickQ('Wat raad je me aan voor vandaag qua training en eten?')">
+        <button class="quick-q-btn" onclick="askAdviesVandaag()">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
           Advies vandaag
         </button>
-        <button class="quick-q-btn" onclick="askQuickQ('Wat kan ik het beste eten na het sporten vandaag?')">
+        <button class="quick-q-btn" onclick="askNaHetSporten()">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v12"/><path d="M18 9a3 3 0 0 0-3-3H6"/><path d="M6 15a6 6 0 0 0 12 0"/></svg>
           Na het sporten
         </button>
@@ -3164,6 +3164,8 @@ function pruneOldWeeks() {
 
 function saveLocal() {
   pruneOldWeeks();
+  if (!data.meta) data.meta = {};
+  data.meta.lastModified = Date.now();
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
   } catch(e) {
@@ -3258,9 +3260,13 @@ async function loadGist() {
     const file = json.files && json.files['data.json'];
     if (file && file.content) {
       const gistData = JSON.parse(file.content);
-      data = gistData;
-      saveLocal();
-      renderAll();
+      const localTs = (data.meta && data.meta.lastModified) || 0;
+      const gistTs  = (gistData.meta && gistData.meta.lastModified) || 0;
+      if (gistTs > localTs) {
+        data = gistData;
+        saveLocal();
+        renderAll();
+      }
     }
     removeBanner('gist-warn');
   } catch(e) {
@@ -3606,9 +3612,8 @@ function renderBrainOverview() {
 function resetBrainCategory(cat) {
   if (!confirm(`"${_brainCatLabels[cat]}" volledig wissen?`)) return;
   if (data.coachMemoryV2) data.coachMemoryV2[cat] = [];
-  // Sync platte lijst: verwijder items die nu niet meer in v2 staan
   _syncFlatMemory();
-  saveLocal();
+  saveAndSync();
   renderBrainOverview();
   showBanner('yellow', `${_brainCatLabels[cat]} gewist.`);
 }
@@ -3617,14 +3622,14 @@ function resetBrainItem(cat, idx) {
   if (!data.coachMemoryV2 || !data.coachMemoryV2[cat]) return;
   data.coachMemoryV2[cat].splice(idx, 1);
   _syncFlatMemory();
-  saveLocal();
+  saveAndSync();
   renderBrainOverview();
 }
 
 function resetDoel(idx) {
   if (!data.doelen) return;
   data.doelen.splice(idx, 1);
-  saveLocal();
+  saveAndSync();
   renderBrainOverview();
 }
 
@@ -3633,7 +3638,7 @@ function resetAllDoelen() {
   data.doelen = [];
   if (data.coachMemoryV2) data.coachMemoryV2.doelen = [];
   _syncFlatMemory();
-  saveLocal();
+  saveAndSync();
   renderBrainOverview();
   showBanner('yellow', 'Persoonlijke doelen gewist.');
 }
@@ -3643,7 +3648,7 @@ function resetBrainAll() {
   data.coachMemory = [];
   data.coachMemoryV2 = { voorkeuren: [], medisch: [], doelen: [], schema: [], overig: [] };
   data.doelen = [];
-  saveLocal();
+  saveAndSync();
   renderBrainOverview();
   showBanner('yellow', 'Coachgeheugen volledig gewist.');
 }
@@ -7786,6 +7791,35 @@ async function askQuickQ(question) {
   coachFrontSend(question);
 }
 
+async function askNaHetSporten() {
+  const dagStr = today();
+  const wk = getISOWeek(new Date());
+  const dayData = data.weken && data.weken[wk] && data.weken[wk][dagStr];
+  const gesport = (dayData ? (dayData.activiteiten || []) : []).filter(a => a.afgevinkt).map(a => a.naam);
+  const sportCtx = gesport.length ? ` Ik heb zojuist ${gesport.join(' en ')} gedaan.` : '';
+  const prompt = `Ik ben net klaar met sporten.${sportCtx} Geef me:
+1. 2-3 kleine, makkelijke herstelsnacks (niet een volledig maaltijd — denk: banaan, kwark, noten, eiwitshake)
+2. Wat is het beste om nu te drinken?
+3. Één concrete tip om spierpijn te voorkomen of te beperken
+4. Kort: een algemene richting voor het diner vanavond (voor recepten kan ik naar Chef)
+Houd het praktisch en kort. Geen opsommingen met lange uitleg.`;
+  coachFrontSend(prompt, '🏃 Na het sporten — herstel & eten');
+}
+
+async function askAdviesVandaag() {
+  const uur = new Date().getHours();
+  const morgenNaam = ['zondag','maandag','dinsdag','woensdag','donderdag','vrijdag','zaterdag'][new Date(Date.now() + 86400000).getDay()];
+  let prompt, label;
+  if (uur >= 17) {
+    prompt = `Geef me advies voor de rest van vandaag én een kort vooruitblik op morgen (${morgenNaam}). Wat moet ik vandaag nog afsluiten qua training of eten, en wat is mijn focus voor morgen?`;
+    label = '💡 Advies vandaag & morgen';
+  } else {
+    prompt = `Wat raad je me aan voor vandaag qua training en eten? Concreet en kort.`;
+    label = '💡 Advies vandaag';
+  }
+  coachFrontSend(prompt, label);
+}
+
 async function askOppepper() {
   const dagStr = today();
   const wk = getISOWeek(new Date());
@@ -7834,6 +7868,24 @@ function pinFrontTip(id, btn) {
   btn.style.color = 'rgba(0,0,0,.25)';
   btn.onclick = null;
   showBanner('green', 'Tip opgeslagen onder Coach → Opgeslagen tips.');
+}
+
+function _maybeAppendChefLink(userMsg, aiReply) {
+  const foodWords = /recept|maaltijd|ontbijt|lunch|diner|snack|ingredi|koken|bereid|voeding|vezels|eiwit|calorie|groente|fruit|pasta|rijst|soep|salade|eten na|herstel.*eet|eet.*herstel/i;
+  if (!foodWords.test(aiReply) && !foodWords.test(userMsg)) return;
+  const win = document.getElementById('coach-front-chat');
+  if (!win) return;
+  const bubbles = win.querySelectorAll('.coach-bubble-ai');
+  const last = bubbles[bubbles.length - 1];
+  if (!last) return;
+  const btn = document.createElement('button');
+  btn.style.cssText = 'display:inline-flex;align-items:center;gap:5px;margin-top:8px;background:var(--card2);border:1.5px solid var(--border);border-radius:8px;padding:5px 10px;font-size:12px;font-weight:600;color:var(--accent-food);cursor:pointer;font-family:inherit;';
+  btn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v12"/><path d="M18 9a3 3 0 0 0-3-3H6"/><path d="M6 15a6 6 0 0 0 12 0"/></svg> Naar Food & Chef';
+  btn.onclick = () => {
+    const foodBtn = document.querySelector('.tab-btn[onclick*="recepten"]');
+    if (foodBtn) { switchTab('recepten', foodBtn); try { switchFoodTab('chef'); } catch(_) {} }
+  };
+  last.appendChild(btn);
 }
 
 async function coachFrontSend(msgOverride, displayMsg) {
@@ -7899,6 +7951,7 @@ async function coachFrontSend(msgOverride, displayMsg) {
     if (data.chatHistorie.length > 20) data.chatHistorie.shift();
     saveAndSync();
     addFrontBubble('ai', reply);
+    _maybeAppendChefLink(msg, reply);
     try { renderChatHistory(); } catch(_) {}
     speakCoach(reply);
     _updateCoachMemory(msg, reply).catch(() => {});
@@ -8446,14 +8499,56 @@ function initApp() {
 
 function _showWelcomeGreeting() {
   const win = document.getElementById('coach-front-chat');
-  if (!win || win.children.length > 0) return; // only when chat is empty
+  if (!win || win.children.length > 0) return;
   const naam = (settings && settings.naam) || null;
+  const n = naam ? `, ${naam}` : '';
   const uur = new Date().getHours();
-  const dagdeel = uur < 12 ? 'Goedemorgen' : uur < 18 ? 'Goedemiddag' : 'Goedenavond';
+  const dag = ['zondag','maandag','dinsdag','woensdag','donderdag','vrijdag','zaterdag'][new Date().getDay()];
   const streak = (data.streak && data.streak.huidig) || 0;
-  const streakZin = streak >= 2 ? ` Je streak staat op ${streak} dagen — goed bezig.` : '';
-  const naamZin = naam ? `, ${naam}` : '';
-  const groet = `${dagdeel}${naamZin}! 👋 Ik ben je Coach & Chef — klaar om je dag beter te maken.${streakZin} Wat kan ik voor je doen?`;
+
+  const begroeting = [
+    `Fijn dat je er bent${n}! Wat kan ik voor je doen vandaag?`,
+    `Goed dat je incheckt${n}. Hoe is het?`,
+    `Hé${n} — lekker dat je er even bij bent. Wat staat er op het programma?`,
+    `Welkom terug${n}! Klaar voor een goede dag?`,
+    `${n ? naam : 'Hey'}, goed dat je er bent. Wat gaan we vandaag aanpakken?`,
+  ];
+
+  const motivatie = [
+    `Vandaag is weer een kans${n}. Laat hem niet onbenut.`,
+    `Elke dag dat je incheck is een dag dat je serieus bezig bent${n}. Doorgaan.`,
+    `Kleine stappen, elke dag${n} — dat is het geheim.`,
+    `${uur < 10 ? 'Vroeg begonnen is goed begonnen' : uur < 17 ? 'Je dag loopt — maak er iets moois van' : 'De avond is nog jong'}${n}.`,
+    `Je bent hier. Dat is al de helft${n}.`,
+  ];
+
+  const trots = streak >= 3 ? [
+    `${streak} dagen op rij${n} — dat is geen geluk meer, dat is discipline.`,
+    `Weet je wat ik zie${n}? ${streak} dagen consequent. Dat valt op.`,
+    `${streak} dagen streak${n}! Niet iedereen houdt dat vol — jij dus wel.`,
+    `Al ${streak} dagen bezig${n}. Je hebt een gewoonte aan het bouwen.`,
+  ] : null;
+
+  const vraag = [
+    `Hoe voel je je vandaag${n}? Goed, of heeft je lijf wat extra aandacht nodig?`,
+    `Wat is je intentie voor vandaag${n}? Sport, eten, of allebei?`,
+    `${dag.charAt(0).toUpperCase() + dag.slice(1)} al${n}! Wat gaan we doen?`,
+    `Hoe gaat het met je${n}? Wat wil je vandaag aanpakken?`,
+    `${naam ? naam + ', w' : 'W'}at heb je vandaag al gedaan — of staat er nog iets op de planning?`,
+  ];
+
+  const tip = [
+    `Tip${n}: drink meteen twee glazen water als je opstaat. Simpel, maar het werkt.`,
+    `Reminder${n}: herstel is ook training. Plan vandaag bewust een rustmoment als je dat nodig hebt.`,
+    `Consistentie wint altijd van perfectie${n}. Een kortere training telt net zo hard.`,
+    `${dag === 'maandag' ? 'Nieuwe week, nieuwe kansen' : dag === 'vrijdag' ? 'Vrijdag al — hoe staat je week er voor?' : dag === 'zondag' ? 'Rustdag of actief? Luister naar je lijf' : 'Elke dag is een kans om iets goed te doen'}${n}.`,
+    `${naam ? naam + ', w' : 'W'}eet je wat goed werkt? Vandaag al bewust iets eten met veel vezels.`,
+  ];
+
+  const pools = [begroeting, motivatie, vraag, tip];
+  if (trots) pools.push(trots, trots); // iets hogere kans als er een streak is
+  const pool = pools[Math.floor(Math.random() * pools.length)];
+  const groet = pool[Math.floor(Math.random() * pool.length)];
   addFrontBubble('ai', groet);
 }
 
