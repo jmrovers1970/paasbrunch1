@@ -1181,7 +1181,7 @@ select.modal-input { appearance: auto; }
 /* ─── SPLASH ─── */
 #splash-overlay {
   position: fixed; inset: 0; z-index: 600;
-  background: linear-gradient(160deg, #f97316 0%, var(--accent-move) 60%, #c2410c 100%);
+  background: #18181b;
   display: flex; align-items: center; justify-content: center;
   padding: 32px;
   transition: opacity .5s ease;
@@ -1197,21 +1197,27 @@ select.modal-input { appearance: auto; }
 }
 .splash-icon-wrap {
   width: 112px; height: 112px; border-radius: 32px;
-  background: #fff;
+  background: #ffffff;
   display: flex; align-items: center; justify-content: center;
   margin: 0 auto 28px;
-  box-shadow: 0 16px 48px rgba(0,0,0,.18);
+  box-shadow: 0 16px 48px rgba(0,0,0,.4);
   animation: splashIconPop .7s .1s cubic-bezier(.2,1.4,.4,1) both;
 }
+.splash-logo-text {
+  font-size: 34px; font-weight: 900;
+  color: #18181b; letter-spacing: -.04em; line-height: 1;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", system-ui, sans-serif;
+}
+.splash-logo-text .amp { font-size: 24px; font-weight: 500; opacity: .55; }
 @keyframes splashIconPop {
   from { transform: scale(.6); opacity: 0; }
   to   { transform: scale(1);  opacity: 1; }
 }
 .splash-title {
-  color: #fff; font-size: 40px; font-weight: 800;
+  color: #ffffff; font-size: 32px; font-weight: 800;
   letter-spacing: -.025em; line-height: 1; margin-bottom: 12px;
 }
-.splash-sub { color: rgba(255,255,255,.82); font-size: 17px; font-weight: 500; }
+.splash-sub { color: rgba(255,255,255,.55); font-size: 16px; font-weight: 500; }
 
 /* ─── VOICE INPUT ─── */
 .input-mic-wrap { position: relative; }
@@ -1628,6 +1634,17 @@ select.modal-input { appearance: auto; }
   line-height: 1.2; display: flex; flex-direction: row; align-items: center; gap: 7px;
 }
 .quick-q-btn:active { background: var(--accent-move-soft); border-color: var(--accent-move); color: var(--accent-move); }
+.oppepper-btn {
+  width: 100%; margin-top: 10px;
+  background: var(--text); color: #fff;
+  border: none; border-radius: 11px;
+  padding: 12px 16px; font-size: 14px; font-weight: 700;
+  cursor: pointer; font-family: inherit;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  letter-spacing: .01em;
+  transition: opacity .15s, transform .1s;
+}
+.oppepper-btn:active { opacity: .85; transform: scale(.98); }
 
 /* ─── PROTEIN TRACKING BAR ─── */
 .nutri-bars { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
@@ -1736,11 +1753,9 @@ select.modal-input { appearance: auto; }
 <div id="splash-overlay" onclick="skipSplash()">
   <div class="splash-inner">
     <div class="splash-icon-wrap">
-      <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#ea5a0c" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
-      </svg>
+      <div class="splash-logo-text">C<span class="amp">&amp;</span>C</div>
     </div>
-    <h1 class="splash-title">Coach & Chef</h1>
+    <h1 class="splash-title">Coach &amp; Chef</h1>
     <p class="splash-sub" id="splash-sub">Jouw persoonlijke gezondheidscoach</p>
   </div>
 </div>
@@ -1751,13 +1766,11 @@ select.modal-input { appearance: auto; }
 <!-- SETUP OVERLAY -->
 <div id="setup-overlay">
   <div class="setup-logo">
-    <div class="setup-logo-icon">
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
-      </svg>
+    <div class="setup-logo-icon" style="background:#18181b;display:flex;align-items:center;justify-content:center;">
+      <span style="font-size:15px;font-weight:900;color:#fff;letter-spacing:-.04em;line-height:1;">C&amp;C</span>
     </div>
     <div>
-      <h1>Coach & Chef</h1>
+      <h1>Coach &amp; Chef</h1>
       <p>Jouw persoonlijke gezondheidscoach</p>
     </div>
   </div>
@@ -1850,6 +1863,25 @@ select.modal-input { appearance: auto; }
         <input type="file" accept=".json" style="display:none;" onchange="importData(this)">
       </label>
     </div>
+  </div>
+
+  <div class="settings-section">
+    <h3>Logs wissen</h3>
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <button class="btn btn-secondary btn-full" onclick="openResetActiviteitenModal()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+        Activiteiten wissen
+      </button>
+      <button class="btn btn-secondary btn-full" onclick="openResetMaaltijdenModal()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+        Maaltijden wissen
+      </button>
+    </div>
+  </div>
+
+  <div class="settings-section">
+    <h3>Coach brein</h3>
+    <div id="brain-overview" style="font-size:14px;"></div>
   </div>
 
   <div class="settings-section">
@@ -2087,6 +2119,11 @@ select.modal-input { appearance: auto; }
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
         </button>
       </div>
+      <!-- Oppepper -->
+      <button class="oppepper-btn" onclick="askOppepper()">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        Geef me een oppepper
+      </button>
       <!-- Snelvragen -->
       <div class="quick-q-row">
         <button class="quick-q-btn" onclick="askQuickQ('Hoe gaat het met mijn voortgang en streak?')">
@@ -2125,10 +2162,16 @@ select.modal-input { appearance: auto; }
       <div id="patroon-grid"></div>
       <div id="dag-detail-bar" class="dag-detail-bar"></div>
 
-      <button class="btn btn-secondary btn-full" style="margin-top:16px;" onclick="analysePatronen()">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        Analyseer mijn patronen
-      </button>
+      <div style="display:flex;gap:8px;margin-top:16px;">
+        <button class="btn btn-secondary" style="flex:1;" onclick="analysePatronen()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          Analyseer patronen
+        </button>
+        <button class="btn btn-secondary" style="flex:1;" onclick="startWeekTerugblik()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.9"/></svg>
+          Weekterugblik
+        </button>
+      </div>
       <div id="patroon-inzichten"></div>
 
       <button class="periode-toggle-btn" onclick="togglePeriodeAnalyse()">
@@ -3027,16 +3070,30 @@ function pruneOldWeeks() {
   if (!data.weken) return;
   ensureStats();
   const allWeeks = Object.keys(data.weken).sort();
-  while (allWeeks.length > 4) {
+  while (allWeeks.length > 52) {
     const oldest = allWeeks.shift();
     const weekData = data.weken[oldest];
     Object.entries(weekData).forEach(([dateStr, dayData]) => {
-      if (!dayData.activiteiten) return;
       const monthKey = dateStr.slice(0, 7);
       if (!data.stats.byMonth[monthKey]) data.stats.byMonth[monthKey] = {};
-      dayData.activiteiten.filter(a => a.afgevinkt && (a.duur || 0) > 0).forEach(a => {
-        data.stats.byMonth[monthKey][a.type] = (data.stats.byMonth[monthKey][a.type] || 0) + (a.duur || 0);
+      const m = data.stats.byMonth[monthKey];
+      // Beweging per type
+      (dayData.activiteiten || []).filter(a => a.afgevinkt && (a.duur || 0) > 0).forEach(a => {
+        m[a.type] = (m[a.type] || 0) + (a.duur || 0);
       });
+      // Voeding: vezels, eiwitten, water
+      let dagV = 0, dagE = 0;
+      Object.values(dayData.maaltijden || {}).forEach(slot => {
+        (Array.isArray(slot) ? slot : []).forEach(item => {
+          const v = parseFloat((item.vezels || '').replace(/[^\d.]/g, ''));
+          const e = parseFloat((item.eiwitten || '').replace(/[^\d.]/g, ''));
+          if (!isNaN(v)) dagV += v;
+          if (!isNaN(e)) dagE += e;
+        });
+      });
+      if (dagV > 0) { m._vezelsDagen = (m._vezelsDagen || 0) + 1; m._vezelsSum = (m._vezelsSum || 0) + dagV; }
+      if (dagE > 0) { m._eiwitDagen = (m._eiwitDagen || 0) + 1; m._eiwitSum = (m._eiwitSum || 0) + dagE; }
+      if ((dayData.waterGlazen || 0) > 0) { m._waterDagen = (m._waterDagen || 0) + 1; m._waterSum = (m._waterSum || 0) + dayData.waterGlazen; }
     });
     delete data.weken[oldest];
   }
@@ -3248,6 +3305,7 @@ function openSettings() {
   document.getElementById('set-token').value = settings.githubToken || '';
   document.getElementById('set-gist').value = settings.gistId || '';
   document.getElementById('settings-overlay').classList.add('visible');
+  renderBrainOverview();
 }
 
 function closeSettings() {
@@ -3325,6 +3383,199 @@ function resetApp() {
   location.reload();
 }
 
+// ─── RESET LOGS ──────────────────────────────────────────────────────────────
+
+function _resetScopeModal(title, confirmFn) {
+  showModal(`
+    <div class="modal-header">
+      <h2>${title}</h2>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div style="padding:0 4px;">
+      <p style="color:var(--muted);font-size:14px;margin-bottom:18px;">Kies wat je wilt wissen. Dit kan <strong>niet</strong> ongedaan worden gemaakt.</p>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px;">
+        <label style="display:flex;align-items:center;gap:10px;font-size:15px;cursor:pointer;">
+          <input type="radio" name="reset-scope" value="week" checked style="width:18px;height:18px;accent-color:var(--accent-move);">
+          <span>Alleen huidige week</span>
+        </label>
+        <label style="display:flex;align-items:center;gap:10px;font-size:15px;cursor:pointer;">
+          <input type="radio" name="reset-scope" value="all" style="width:18px;height:18px;accent-color:var(--accent-move);">
+          <span>Alle weken (volledige geschiedenis)</span>
+        </label>
+      </div>
+      <div style="display:flex;gap:10px;">
+        <button class="btn btn-secondary" style="flex:1;" onclick="closeModal()">Annuleren</button>
+        <button class="btn btn-danger" style="flex:1;" onclick="${confirmFn}()">Wissen</button>
+      </div>
+    </div>
+  `);
+}
+
+function openResetActiviteitenModal() { _resetScopeModal('Activiteiten wissen', 'confirmResetActiviteiten'); }
+function openResetMaaltijdenModal()   { _resetScopeModal('Maaltijden wissen',   'confirmResetMaaltijden'); }
+
+function confirmResetActiviteiten() {
+  const scope = document.querySelector('input[name="reset-scope"]:checked')?.value || 'week';
+  closeModal();
+  if (scope === 'week') {
+    const weekKey = currentWeekKey();
+    if (data.weken && data.weken[weekKey]) {
+      getWeekDates(weekKey).forEach(dateStr => {
+        if (data.weken[weekKey][dateStr]) data.weken[weekKey][dateStr].activiteiten = [];
+      });
+    }
+  } else {
+    Object.values(data.weken || {}).forEach(wk => {
+      Object.values(wk).forEach(day => { if (day) day.activiteiten = []; });
+    });
+    data.streak = { huidig: 0, langste: 0, laatst: null };
+    data.stats = { byMonth: {} };
+  }
+  saveLocal(); renderAll();
+  showBanner('yellow', scope === 'week' ? 'Activiteiten deze week gewist.' : 'Alle activiteiten gewist.');
+}
+
+function confirmResetMaaltijden() {
+  const scope = document.querySelector('input[name="reset-scope"]:checked')?.value || 'week';
+  closeModal();
+  const leegMaaltijden = () => ({ ontbijt: [], lunch: [], diner: [], snack: [] });
+  if (scope === 'week') {
+    const weekKey = currentWeekKey();
+    if (data.weken && data.weken[weekKey]) {
+      getWeekDates(weekKey).forEach(dateStr => {
+        if (data.weken[weekKey][dateStr]) data.weken[weekKey][dateStr].maaltijden = leegMaaltijden();
+      });
+    }
+    localStorage.removeItem(CHECKIN_KEY);
+  } else {
+    Object.values(data.weken || {}).forEach(wk => {
+      Object.values(wk).forEach(day => { if (day) day.maaltijden = leegMaaltijden(); });
+    });
+    localStorage.removeItem(CHECKIN_KEY);
+  }
+  saveLocal(); renderAll();
+  showBanner('yellow', scope === 'week' ? 'Maaltijden deze week gewist.' : 'Alle maaltijden gewist.');
+}
+
+// ─── RESET BREIN ─────────────────────────────────────────────────────────────
+
+const _brainCatLabels = {
+  voorkeuren: 'Voorkeuren & intoleranties',
+  medisch: 'Medisch & blessures',
+  doelen: 'Doelen',
+  schema: 'Schema & routine',
+  overig: 'Overig'
+};
+
+function renderBrainOverview() {
+  const el = document.getElementById('brain-overview');
+  if (!el) return;
+  const v2 = data.coachMemoryV2 || {};
+  const doelen = data.doelen || [];
+  let html = '';
+  let heeftData = false;
+
+  Object.entries(_brainCatLabels).forEach(([cat, label]) => {
+    const items = (v2[cat] || []);
+    if (items.length === 0) return;
+    heeftData = true;
+    html += `<div style="margin-bottom:14px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+        <span style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;">${label}</span>
+        <button onclick="resetBrainCategory('${cat}')" style="font-size:11px;color:#ef4444;background:none;border:none;cursor:pointer;padding:2px 6px;border-radius:6px;">Wis alles</button>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:4px;">
+        ${items.map((item, idx) => `
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;background:var(--card2);border-radius:8px;padding:7px 10px;">
+            <span style="font-size:13px;line-height:1.4;">${item}</span>
+            <button onclick="resetBrainItem('${cat}',${idx})" style="flex-shrink:0;background:none;border:none;cursor:pointer;color:var(--muted);padding:0;line-height:1;" title="Verwijderen">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>`).join('')}
+      </div>
+    </div>`;
+  });
+
+  if (doelen.length > 0) {
+    heeftData = true;
+    html += `<div style="margin-bottom:14px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+        <span style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;">Persoonlijke doelen</span>
+        <button onclick="resetAllDoelen()" style="font-size:11px;color:#ef4444;background:none;border:none;cursor:pointer;padding:2px 6px;border-radius:6px;">Wis alles</button>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:4px;">
+        ${doelen.map((d, idx) => `
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;background:var(--card2);border-radius:8px;padding:7px 10px;">
+            <span style="font-size:13px;line-height:1.4;">🎯 ${d.omschrijving}</span>
+            <button onclick="resetDoel(${idx})" style="flex-shrink:0;background:none;border:none;cursor:pointer;color:var(--muted);padding:0;line-height:1;" title="Verwijderen">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>`).join('')}
+      </div>
+    </div>`;
+  }
+
+  if (!heeftData) {
+    html = `<p style="color:var(--muted);font-size:13px;font-style:italic;">Het brein is leeg — er zijn nog geen persoonlijke feiten opgeslagen.</p>`;
+  } else {
+    html += `<button class="btn btn-danger btn-full" style="margin-top:6px;" onclick="resetBrainAll()">Volledig brein wissen</button>`;
+  }
+
+  el.innerHTML = html;
+}
+
+function resetBrainCategory(cat) {
+  if (!confirm(`"${_brainCatLabels[cat]}" volledig wissen?`)) return;
+  if (data.coachMemoryV2) data.coachMemoryV2[cat] = [];
+  // Sync platte lijst: verwijder items die nu niet meer in v2 staan
+  _syncFlatMemory();
+  saveLocal();
+  renderBrainOverview();
+  showBanner('yellow', `${_brainCatLabels[cat]} gewist.`);
+}
+
+function resetBrainItem(cat, idx) {
+  if (!data.coachMemoryV2 || !data.coachMemoryV2[cat]) return;
+  data.coachMemoryV2[cat].splice(idx, 1);
+  _syncFlatMemory();
+  saveLocal();
+  renderBrainOverview();
+}
+
+function resetDoel(idx) {
+  if (!data.doelen) return;
+  data.doelen.splice(idx, 1);
+  saveLocal();
+  renderBrainOverview();
+}
+
+function resetAllDoelen() {
+  if (!confirm('Alle persoonlijke doelen wissen?')) return;
+  data.doelen = [];
+  if (data.coachMemoryV2) data.coachMemoryV2.doelen = [];
+  _syncFlatMemory();
+  saveLocal();
+  renderBrainOverview();
+  showBanner('yellow', 'Persoonlijke doelen gewist.');
+}
+
+function resetBrainAll() {
+  if (!confirm('Volledig coachgeheugen wissen? De coach vergeet alle persoonlijke feiten, voorkeuren en doelen.')) return;
+  data.coachMemory = [];
+  data.coachMemoryV2 = { voorkeuren: [], medisch: [], doelen: [], schema: [], overig: [] };
+  data.doelen = [];
+  saveLocal();
+  renderBrainOverview();
+  showBanner('yellow', 'Coachgeheugen volledig gewist.');
+}
+
+function _syncFlatMemory() {
+  // Herbouw de platte coachMemory vanuit coachMemoryV2
+  if (!data.coachMemoryV2) return;
+  const alle = Object.values(data.coachMemoryV2).flat();
+  data.coachMemory = alle.slice(0, 40);
+}
+
 // ─── TABS ─────────────────────────────────────────────────────────────────────
 
 function switchTab(name, btn) {
@@ -3359,39 +3610,47 @@ function renderWeekOvTab() {
   const todayStr = today();
 
   // Totalen berekenen
-  let totalMin = 0, activeDays = 0, totalVezels = 0, vezelDagen = 0;
+  let totalMin = 0, activeDays = 0, totalVezels = 0, totalEiwitten = 0, voedingDagen = 0;
   days.forEach(d => {
     const dd = data.weken[weekKey][d] || {};
     const done = (dd.activiteiten || []).filter(a => a.afgevinkt);
     if (done.length > 0) { activeDays++; done.forEach(a => totalMin += a.duur || 0); }
-    let dagVezels = 0;
+    let dagV = 0, dagE = 0;
     Object.values(dd.maaltijden || {}).forEach(slot => {
       (Array.isArray(slot) ? slot : []).forEach(m => {
         const v = parseFloat((m.vezels || '').replace(/[^\d.]/g, ''));
-        if (!isNaN(v)) dagVezels += v;
+        const e = parseFloat((m.eiwitten || '').replace(/[^\d.]/g, ''));
+        if (!isNaN(v)) dagV += v;
+        if (!isNaN(e)) dagE += e;
       });
     });
-    if (dagVezels > 0) { totalVezels += dagVezels; vezelDagen++; }
+    if (dagV > 0 || dagE > 0) { totalVezels += dagV; totalEiwitten += dagE; voedingDagen++; }
   });
   const uren = Math.floor(totalMin / 60), minRest = totalMin % 60;
   const duurLabel = totalMin === 0 ? '—' : uren > 0 ? `${uren}u${minRest > 0 ? minRest + 'm' : ''}` : `${totalMin}m`;
-  const gemVezels = vezelDagen > 0 ? Math.round(totalVezels / vezelDagen) : 0;
+  const gemVezels = voedingDagen > 0 ? Math.round(totalVezels / voedingDagen) : 0;
+  const gemEiwitten = voedingDagen > 0 ? Math.round(totalEiwitten / voedingDagen) : 0;
 
   const summaryHTML = `
     <div style="display:flex;gap:0;margin-bottom:16px;background:var(--card);border-radius:14px;border:1.5px solid var(--border);overflow:hidden;">
-      <div style="flex:1;text-align:center;padding:14px 6px;">
-        <div style="font-size:22px;font-weight:800;color:var(--accent-move);line-height:1;">${activeDays}<span style="font-size:12px;font-weight:500;color:var(--muted);">/7</span></div>
-        <div style="font-size:11px;color:var(--muted);margin-top:3px;">actieve dagen</div>
+      <div style="flex:1;text-align:center;padding:12px 4px;">
+        <div style="font-size:20px;font-weight:800;color:var(--accent-move);line-height:1;">${activeDays}<span style="font-size:11px;font-weight:500;color:var(--muted);">/7</span></div>
+        <div style="font-size:10px;color:var(--muted);margin-top:3px;">actief</div>
       </div>
       <div style="width:1px;background:var(--border);"></div>
-      <div style="flex:1;text-align:center;padding:14px 6px;">
-        <div style="font-size:22px;font-weight:800;color:var(--accent-move);line-height:1;">${duurLabel}</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:3px;">beweging</div>
+      <div style="flex:1;text-align:center;padding:12px 4px;">
+        <div style="font-size:20px;font-weight:800;color:var(--accent-move);line-height:1;">${duurLabel}</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:3px;">beweging</div>
       </div>
       <div style="width:1px;background:var(--border);"></div>
-      <div style="flex:1;text-align:center;padding:14px 6px;">
-        <div style="font-size:22px;font-weight:800;color:var(--accent-food);line-height:1;">${gemVezels > 0 ? gemVezels + 'g' : '—'}</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:3px;">gem. vezels</div>
+      <div style="flex:1;text-align:center;padding:12px 4px;">
+        <div style="font-size:20px;font-weight:800;color:var(--accent-food);line-height:1;">${gemVezels > 0 ? gemVezels + 'g' : '—'}</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:3px;">gem. vezels</div>
+      </div>
+      <div style="width:1px;background:var(--border);"></div>
+      <div style="flex:1;text-align:center;padding:12px 4px;">
+        <div style="font-size:20px;font-weight:800;color:var(--text);line-height:1;">${gemEiwitten > 0 ? gemEiwitten + 'g' : '—'}</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:3px;">gem. eiwit</div>
       </div>
     </div>`;
 
@@ -3412,16 +3671,30 @@ function renderWeekOvTab() {
         ? `<span style="color:var(--muted)">${acts.map(a => a.naam).join(', ')} (gepland)</span>`
         : `<span style="color:var(--muted)">—</span>`;
 
-    // Eten samenvatting (één regel per slot)
+    // Eten samenvatting + vezels/eiwitten per dag
     const m = dayData.maaltijden || {};
     const etenParts = [];
+    let dagVezels = 0, dagEiwitten = 0;
     ['ontbijt','lunch','diner','snack'].forEach(slot => {
       const items = Array.isArray(m[slot]) ? m[slot] : [];
       if (items.length > 0) etenParts.push(items.map(x => x.naam).join(' + '));
+      items.forEach(x => {
+        const v = parseFloat((x.vezels || '').replace(/[^\d.]/g, ''));
+        const e = parseFloat((x.eiwitten || '').replace(/[^\d.]/g, ''));
+        if (!isNaN(v)) dagVezels += v;
+        if (!isNaN(e)) dagEiwitten += e;
+      });
     });
     const etenTxt = etenParts.length > 0
       ? etenParts.join(' · ')
       : `<span style="color:var(--muted)">Niets gelogd</span>`;
+    const vezelKleur = dagVezels >= 30 ? 'var(--accent-food)' : dagVezels >= 20 ? 'var(--accent-move)' : dagVezels > 0 ? '#e57373' : 'var(--muted)';
+    const nutrBadge = (dagVezels > 0 || dagEiwitten > 0)
+      ? `<span style="margin-left:auto;flex-shrink:0;display:flex;gap:6px;font-size:11px;font-weight:700;">
+          ${dagVezels > 0 ? `<span style="color:${vezelKleur};">${Math.round(dagVezels)}g<span style="font-weight:400;color:var(--muted);"> vez</span></span>` : ''}
+          ${dagEiwitten > 0 ? `<span style="color:var(--text);">${Math.round(dagEiwitten)}g<span style="font-weight:400;color:var(--muted);"> eiw</span></span>` : ''}
+        </span>`
+      : '';
 
     const dotBg = allDone ? 'var(--accent-food)' : someDone ? 'var(--accent-move)' : 'transparent';
     const dotBorder = allDone ? 'var(--accent-food)' : someDone ? 'var(--accent-move)' : isToday ? 'var(--accent-move)' : 'var(--border-strong)';
@@ -3443,7 +3716,8 @@ function renderWeekOvTab() {
         </div>
         <div class="weekov-row-line">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-food)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px;"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>
-          <span style="color:var(--muted);font-size:12px;">${etenTxt}</span>
+          <span style="color:var(--muted);font-size:12px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${etenTxt}</span>
+          ${nutrBadge}
         </div>
       </div>
     </div>`;
@@ -3875,18 +4149,11 @@ function renderTodayMeals(dateStr) {
   renderNutriBar(dateStr);
 }
 
-const MEAL_SUGGESTIONS = {
-  ontbijt: ['Kwark met muesli & fruit', 'Havermout met noten', 'Griekse yoghurt met bessen', 'Volkoren brood met pindakaas', 'Smoothie met havermout'],
-  lunch: ['Volkoren wrap met hummus & groente', 'Salade met kikkererwten', 'Volkoren brood met avocado & ei', 'Linzensoep met brood', 'Restjes van diner'],
-  diner: ['Pasta met groenten & bonen', 'Curry met zilvervliesrijst', 'Geroosterde groenten & quinoa', 'Salade met vis', 'Wokgroente met tofu'],
-  snack: ['Appel + handje noten', 'Peer + amandelen', 'Banaan + pindakaas', 'Volkoren cracker met hummus', 'Wortel + dip']
-};
 
 function quickEditMeal(dateStr, slot) {
   const weekKey = getISOWeek(new Date(dateStr + 'T12:00:00'));
   ensureDay(dateStr);
   const items = data.weken[weekKey][dateStr].maaltijden[slot] || [];
-  const suggestions = MEAL_SUGGESTIONS[slot] || [];
   const labels = { ontbijt: 'Ontbijt', lunch: 'Lunch', diner: 'Diner', snack: 'Snack' };
 
   // Opgeslagen recepten voor dit slot
@@ -3935,10 +4202,6 @@ function quickEditMeal(dateStr, slot) {
       Bereken vezels &amp; eiwitten
     </button>
     <div id="nutri-preview" style="display:none;font-size:12px;color:var(--muted);margin-bottom:8px;padding:8px 10px;background:var(--bg);border-radius:8px;"></div>
-    <div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px;">Snelkeuzes</div>
-    <div class="meal-quick-chips" style="margin-bottom:12px;">
-      ${suggestions.map(s => `<button class="meal-quick-chip" onclick="document.getElementById('quick-meal-input').value=this.textContent">${s}</button>`).join('')}
-    </div>
     <button class="btn btn-primary btn-full" onclick="saveQuickMeal('${dateStr}','${slot}')">Toevoegen</button>
   `);
   setTimeout(() => document.getElementById('quick-meal-input').focus(), 50);
@@ -5997,6 +6260,67 @@ Geef ALLEEN de JSON array.`;
   }
 }
 
+async function startWeekTerugblik() {
+  if (!settings.anthropicKey) { showBanner('red', 'API-sleutel ontbreekt — stel in via Instellingen.'); return; }
+
+  // Verzamel afgelopen 7 dagen data
+  const vandaag = new Date(); vandaag.setHours(0,0,0,0);
+  const dagNamen = ['zondag','maandag','dinsdag','woensdag','donderdag','vrijdag','zaterdag'];
+  const regels = [];
+  let totaalMin = 0, totaalVezels = 0, vezelDagen = 0, checkIns = [];
+
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(vandaag); d.setDate(vandaag.getDate() - i);
+    const ds = _lds(d);
+    const wk = getISOWeek(d);
+    const dag = dagNamen[d.getDay()];
+    const dayData = data.weken && data.weken[wk] && data.weken[wk][ds];
+    if (!dayData) { regels.push(`${dag}: niets gelogd`); continue; }
+
+    const acts = (dayData.activiteiten || []).filter(a => a.afgevinkt);
+    const actTxt = acts.length ? acts.map(a => `${a.naam}${a.duur ? ' ' + a.duur + 'min' : ''}`).join(', ') : 'geen activiteit';
+    acts.forEach(a => totaalMin += a.duur || 0);
+
+    let dagV = 0;
+    Object.values(dayData.maaltijden || {}).forEach(slot => {
+      (Array.isArray(slot) ? slot : []).forEach(m => {
+        const v = parseFloat((m.vezels || '').replace(/[^\d.]/g, ''));
+        if (!isNaN(v)) dagV += v;
+      });
+    });
+    if (dagV > 0) { totaalVezels += dagV; vezelDagen++; }
+    if (dayData.checkIn) checkIns.push(dayData.checkIn);
+
+    const vezelTxt = dagV > 0 ? ` · ${Math.round(dagV)}g vezels` : '';
+    const feelTxt = dayData.checkIn ? ` · gevoel: ${dayData.checkIn}` : '';
+    regels.push(`${dag}: ${actTxt}${vezelTxt}${feelTxt}`);
+  }
+
+  const uren = Math.floor(totaalMin / 60), minR = totaalMin % 60;
+  const bewegingTotaal = totaalMin > 0 ? `${uren > 0 ? uren + 'u' : ''}${minR > 0 ? minR + 'm' : ''}` : '0';
+  const gemVezels = vezelDagen > 0 ? Math.round(totaalVezels / vezelDagen) : 0;
+  const feelSamenvatting = checkIns.length ? [...new Set(checkIns)].join(', ') : 'niet ingevuld';
+
+  const terugblikData = `Afgelopen 7 dagen:\n${regels.join('\n')}\n\nTotaal beweging: ${bewegingTotaal} · Gem. vezels: ${gemVezels > 0 ? gemVezels + 'g/dag' : 'onbekend'} · Check-ins: ${feelSamenvatting}`;
+
+  const terugblikPrompt = `${terugblikData}\n\nGeef een persoonlijke weekterugblik in 3 delen: (1) wat ging goed deze week, (2) wat kon beter of werd gemist, (3) één concreet aandachtspunt voor volgende week. Spreek de gebruiker direct aan. Houd het kort en eerlijk.`;
+
+  // Schakel over naar coach-tab en start gesprek
+  const coachBtn = document.querySelector('.tab-btn[onclick*="coach"]');
+  if (coachBtn) switchTab('coach', coachBtn);
+
+  const win = document.getElementById('coach-front-chat');
+  if (win) {
+    const intro = document.createElement('div');
+    intro.className = 'coach-bubble-ai';
+    intro.innerHTML = '<em style="color:var(--accent-food);font-size:13px;">🔄 Weekterugblik gestart</em>';
+    win.appendChild(intro);
+    win.scrollTop = win.scrollHeight;
+  }
+
+  await coachFrontSend(terugblikPrompt);
+}
+
 function togglePeriodeAnalyse() {
   const el = document.getElementById('periode-analyse-sectie');
   if (el) el.style.display = el.style.display === 'none' ? 'block' : 'none';
@@ -7381,6 +7705,23 @@ async function bigPraatStart() {
 
 async function askQuickQ(question) {
   coachFrontSend(question);
+}
+
+async function askOppepper() {
+  const dagStr = today();
+  const wk = getISOWeek(new Date());
+  const dayData = data.weken && data.weken[wk] && data.weken[wk][dagStr];
+  const gepland = (dayData ? (dayData.activiteiten || []) : []).filter(a => !a.afgevinkt).map(a => a.naam);
+  const streak = (data.streak && data.streak.huidig) || 0;
+  const gevoel = (() => { try { const ci = JSON.parse(localStorage.getItem(CHECKIN_KEY)||'{}'); return ci.gevoel || null; } catch(_){return null;} })();
+
+  let context = '';
+  if (gepland.length) context += ` Ik heb ${gepland.join(' en ')} gepland.`;
+  if (streak > 0) context += ` Mijn huidige streak is ${streak} dagen.`;
+  if (gevoel) context += ` Ik voel me ${gevoel}.`;
+
+  const prompt = `Geef me een korte, persoonlijke en energieke motivatieboost om nu te gaan sporten.${context} De gedachte erachter: al ga je wat korter of minder intensief, gaan is altijd beter dan niet gaan — je voelt je daarna altijd beter. Vertaal dit op je eigen manier, maar zeg het niet letterlijk. Wees afwisselend, verrassend en vurig. Maximaal 3 zinnen. Geen opsommingen.`;
+  coachFrontSend(prompt);
 }
 
 function addFrontBubble(role, text) {
