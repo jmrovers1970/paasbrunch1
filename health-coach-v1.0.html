@@ -2159,9 +2159,6 @@ select.modal-input { appearance: auto; }
           <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
           Praat met de coach
         </button>
-        <button id="mic-picker-btn" class="mic-picker-btn" onclick="openMicPicker()" aria-label="Microfoon kiezen" title="Microfoon kiezen">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
-        </button>
       </div>
       <div id="mic-status-label" class="mic-status-label"></div>
       <div id="big-praat-status" class="big-praat-status"></div>
@@ -2206,6 +2203,14 @@ select.modal-input { appearance: auto; }
       </div>
     </div>
 
+    <div class="card" style="margin-bottom:14px;" id="coach-nutri-card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+        <h3 style="font-size:15px;">Voeding vandaag</h3>
+        <span style="font-size:12px;color:var(--muted);" id="coach-nutri-date"></span>
+      </div>
+      <div id="coach-nutri-bars"></div>
+    </div>
+
     <div id="weekplan-card" class="weekplan-card" style="display:none;">
       <div class="weekplan-card-title">📅 Plan je week — zondag</div>
       <div class="weekplan-card-sub">Vertel de coach je plannen voor de komende week. Trainingen, boodschappen en maaltijden worden automatisch ingevuld.</div>
@@ -2217,7 +2222,7 @@ select.modal-input { appearance: auto; }
     </div>
 
     <div class="card" style="margin-bottom:14px;">
-      <h3 style="margin-bottom:16px;">Patronen</h3>
+      <h3 style="margin-bottom:16px;">Inzicht</h3>
 
       <div id="patroon-stats" class="patroon-stats"></div>
       <div id="patroon-grid"></div>
@@ -2253,14 +2258,6 @@ select.modal-input { appearance: auto; }
         </button>
         <div id="terugblik-result"></div>
       </div>
-    </div>
-
-    <div class="card" style="margin-bottom:14px;" id="coach-nutri-card">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
-        <h3 style="font-size:15px;">Voeding vandaag</h3>
-        <span style="font-size:12px;color:var(--muted);" id="coach-nutri-date"></span>
-      </div>
-      <div id="coach-nutri-bars"></div>
     </div>
 
     <div class="card" style="margin-bottom:14px;">
@@ -7331,7 +7328,7 @@ async function _speakOpenAI(text, apiKey, voice) {
   const resp = await fetch('https://api.openai.com/v1/audio/speech', {
     method: 'POST',
     headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ model: 'tts-1', input: text.slice(0, 4096), voice, speed: 1.0 })
+    body: JSON.stringify({ model: 'tts-1', input: text.slice(0, 4096), voice, speed: 0.88 })
   });
   if (!resp.ok) throw new Error(`OpenAI TTS ${resp.status}`);
   const blob = await resp.blob();
