@@ -1829,7 +1829,46 @@ select.modal-input { appearance: auto; }
     <h3>Profiel</h3>
     <div class="form-group">
       <label>Naam</label>
-      <input id="set-naam" type="text">
+      <input id="set-naam" type="text" placeholder="Hoe mag de coach je noemen?">
+    </div>
+    <div class="form-group">
+      <label>Leeftijd</label>
+      <input id="set-leeftijd" type="number" min="10" max="100" placeholder="bijv. 38">
+    </div>
+    <div class="form-group">
+      <label>Hoofddoel</label>
+      <input id="set-doel" type="text" placeholder="bijv. afvallen, fitter worden, meer energie">
+    </div>
+    <div class="form-group">
+      <label>Geslacht</label>
+      <select id="set-geslacht" style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--radius);font-size:15px;font-family:inherit;background:var(--surface);color:var(--text);">
+        <option value="">— niet opgegeven —</option>
+        <option value="man">Man</option>
+        <option value="vrouw">Vrouw</option>
+        <option value="anders">Anders / liever niet zeggen</option>
+      </select>
+    </div>
+    <div class="form-group" style="display:flex;gap:10px;">
+      <div style="flex:1;">
+        <label>Gewicht (kg)</label>
+        <input id="set-gewicht" type="number" min="30" max="300" placeholder="bijv. 82">
+      </div>
+      <div style="flex:1;">
+        <label>Streefgewicht (kg)</label>
+        <input id="set-streefgewicht" type="number" min="30" max="300" placeholder="bijv. 76">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Favoriete sporten</label>
+      <input id="set-sporten" type="text" placeholder="bijv. hardlopen, fietsen, gym">
+    </div>
+    <div class="form-group">
+      <label>Favoriet of veelgegeten eten</label>
+      <input id="set-eten" type="text" placeholder="bijv. pasta, kwark, smoothies">
+    </div>
+    <div class="form-group">
+      <label>Slaap &amp; routine</label>
+      <input id="set-slaap" type="text" placeholder="bijv. op om 6:30, vroeg naar bed, ochtendsporter">
     </div>
   </div>
 
@@ -2562,11 +2601,34 @@ function buildSystemPrompt() {
   if (streakHuidig >= 14) toon = 'enthousiast';
   else if (streakHuidig >= 7) toon = 'positief kort';
 
+  const _naam = (settings && settings.naam) ? settings.naam : null;
+  const _profielRegels = [];
+  if (_naam) _profielRegels.push(`Naam: ${_naam} — spreek de gebruiker bij voorkeur aan met '${_naam}'.`);
+  if (settings && settings.leeftijd) _profielRegels.push(`Leeftijd: ${settings.leeftijd} jaar`);
+  if (settings && settings.geslacht && settings.geslacht !== 'anders') _profielRegels.push(`Geslacht: ${settings.geslacht}`);
+  if (settings && settings.gewicht) _profielRegels.push(`Huidig gewicht: ${settings.gewicht} kg${settings.streefgewicht ? ' · streefgewicht: ' + settings.streefgewicht + ' kg' : ''}`);
+  if (settings && settings.doel) _profielRegels.push(`Hoofddoel: ${settings.doel}`);
+  if (settings && settings.sporten) _profielRegels.push(`Favoriete sporten: ${settings.sporten}`);
+  if (settings && settings.eten) _profielRegels.push(`Favoriet/veelgegeten eten: ${settings.eten}`);
+  if (settings && settings.slaap) _profielRegels.push(`Slaap & routine: ${settings.slaap}`);
+
+  const _ontbrekendeInfo = [];
+  if (!settings.gewicht) _ontbrekendeInfo.push('gewicht');
+  if (!settings.doel) _ontbrekendeInfo.push('hoofddoel');
+  if (!settings.geslacht) _ontbrekendeInfo.push('geslacht');
+  if (!settings.slaap) _ontbrekendeInfo.push('slaap- of dagritme');
+
+  const _profielBlok = _profielRegels.length > 0 ? `\nGEBRUIKERSPROFIEL:\n${_profielRegels.join('\n')}\n` : '';
+  const _vraagHint = _ontbrekendeInfo.length > 0
+    ? `\nPERSOONLIJKE INFO: Je mist nog wat context over deze gebruiker (${_ontbrekendeInfo.join(', ')}). Als het heel natuurlijk past mag je af en toe één korte vraag stellen — maar alleen als het écht relevant is voor je antwoord, nooit als verplichting, nooit meerdere tegelijk. De gebruiker hoeft niet te antwoorden.\n`
+    : `\nPROFIEL COMPLEET: je kent deze gebruiker goed. Gebruik die kennis actief.\n`;
+
   return `Je bent een vriendelijke maar directe persoonlijke gezondheidscoach.
 Focus op hardlopen (hoofdsport), thuisgym (bankje + dumbbells) en fietsen.
 Voeding: vezelfocus, vast ontbijt is kwark/yoghurt met muesli en fruit.
-Houd antwoorden kort en praktisch. Spreek de gebruiker aan met 'je'.
+Houd antwoorden kort en praktisch. Spreek de gebruiker aan met 'je'${_naam ? ` of bij naam (${_naam})` : ''}.
 Reageer altijd in het Nederlands.
+${_profielBlok}${_vraagHint}
 
 WEEKSCHEMA:
 Ma: Easy run 5-6km zone 2
@@ -3301,6 +3363,14 @@ function skipSetup() {
 
 function openSettings() {
   document.getElementById('set-naam').value = settings.naam || '';
+  document.getElementById('set-leeftijd').value = settings.leeftijd || '';
+  document.getElementById('set-geslacht').value = settings.geslacht || '';
+  document.getElementById('set-gewicht').value = settings.gewicht || '';
+  document.getElementById('set-streefgewicht').value = settings.streefgewicht || '';
+  document.getElementById('set-doel').value = settings.doel || '';
+  document.getElementById('set-sporten').value = settings.sporten || '';
+  document.getElementById('set-eten').value = settings.eten || '';
+  document.getElementById('set-slaap').value = settings.slaap || '';
   document.getElementById('set-anthropic').value = settings.anthropicKey || '';
   document.getElementById('set-token').value = settings.githubToken || '';
   document.getElementById('set-gist').value = settings.gistId || '';
@@ -3314,10 +3384,18 @@ function closeSettings() {
 
 function saveSettings() {
   const naam = document.getElementById('set-naam').value.trim();
+  const leeftijd = document.getElementById('set-leeftijd').value.trim();
+  const geslacht = document.getElementById('set-geslacht').value;
+  const gewicht = document.getElementById('set-gewicht').value.trim();
+  const streefgewicht = document.getElementById('set-streefgewicht').value.trim();
+  const doel = document.getElementById('set-doel').value.trim();
+  const sporten = document.getElementById('set-sporten').value.trim();
+  const eten = document.getElementById('set-eten').value.trim();
+  const slaap = document.getElementById('set-slaap').value.trim();
   const anthropicKey = document.getElementById('set-anthropic').value.trim();
   const githubToken = document.getElementById('set-token').value.trim();
   const gistId = document.getElementById('set-gist').value.trim();
-  saveSettingsData({ ...settings, naam, anthropicKey, githubToken, gistId });
+  saveSettingsData({ ...settings, naam, leeftijd, geslacht, gewicht, streefgewicht, doel, sporten, eten, slaap, anthropicKey, githubToken, gistId });
   showBanner('yellow', 'Instellingen opgeslagen.');
   closeSettings();
 }
@@ -7721,7 +7799,7 @@ async function askOppepper() {
   if (gevoel) context += ` Ik voel me ${gevoel}.`;
 
   const prompt = `Geef me een korte, persoonlijke en energieke motivatieboost om nu te gaan sporten.${context} De gedachte erachter: al ga je wat korter of minder intensief, gaan is altijd beter dan niet gaan — je voelt je daarna altijd beter. Vertaal dit op je eigen manier, maar zeg het niet letterlijk. Wees afwisselend, verrassend en vurig. Maximaal 3 zinnen. Geen opsommingen.`;
-  coachFrontSend(prompt);
+  coachFrontSend(prompt, '⚡ Geef me een oppepper!');
 }
 
 function addFrontBubble(role, text) {
@@ -7757,7 +7835,7 @@ function pinFrontTip(id, btn) {
   showBanner('green', 'Tip opgeslagen onder Coach → Opgeslagen tips.');
 }
 
-async function coachFrontSend(msgOverride) {
+async function coachFrontSend(msgOverride, displayMsg) {
   const inputEl = document.getElementById('coach-front-input');
   const msg = msgOverride || (inputEl ? inputEl.value.trim() : '');
   if (!msg) return;
@@ -7766,7 +7844,7 @@ async function coachFrontSend(msgOverride) {
 
   if (!data.chatHistorie) data.chatHistorie = [];
 
-  addFrontBubble('user', msg);
+  addFrontBubble('user', displayMsg || msg);
 
   // Voedingswaarde lookup
   let foodContext = '';
