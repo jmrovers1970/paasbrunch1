@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Health Coach</title>
+<title>Coach & Chef</title>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -15,9 +15,9 @@
   --accent-move:  #ea5a0c;          /* deeper orange — better contrast on light */
   --accent-move-soft: #fff1e6;
   --accent-move-tint: rgba(234,90,12,.10);
-  --accent-food:  #15803d;          /* deeper green for accessibility */
-  --accent-food-soft: #e8f5ec;
-  --accent-food-tint: rgba(21,128,61,.10);
+  --accent-food:  #0d9488;          /* teal — voeding/balans, complement aan oranje */
+  --accent-food-soft: #f0fdfa;
+  --accent-food-tint: rgba(13,148,136,.10);
   --accent-bike:  #1d4ed8;
   --accent-gym:   #6d28d9;
   --text:         #1a1a1a;
@@ -315,31 +315,31 @@ label { display: block; font-size: 14px; font-weight: 600; color: var(--text-2);
 /* ─── MEALS ─── */
 .meal-row {
   display: flex; align-items: center; gap: 10px;
-  padding: 12px 14px; margin-bottom: 8px;
-  background: var(--card2); border-radius: 12px;
-  transition: background .15s; min-height: 60px;
+  padding: 11px 12px; margin-bottom: 7px;
+  background: var(--card); border-radius: 12px;
+  border: 1.5px solid var(--border);
+  transition: background .15s; min-height: 58px;
 }
 .meal-row:last-child { margin-bottom: 0; }
 .meal-check-circle {
-  width: 28px; height: 28px; min-width: 28px; border-radius: 50%;
-  border: 2px solid var(--border-strong); background: var(--card);
+  width: 26px; height: 26px; min-width: 26px; border-radius: 50%;
+  border: 2px solid var(--border-strong); background: transparent;
   cursor: pointer; display: flex; align-items: center; justify-content: center;
   transition: background .15s, border-color .15s; flex-shrink: 0;
 }
 .meal-check-circle svg { opacity: 0; transition: opacity .15s; }
 .meal-check-circle.checked { background: var(--accent-food); border-color: var(--accent-food); }
 .meal-check-circle.checked svg { opacity: 1; }
-.meal-row:last-child { margin-bottom: 0; }
 .meal-icon {
-  width: 36px; height: 36px; min-width: 36px;
-  border-radius: 10px; background: var(--card);
+  width: 34px; height: 34px; min-width: 34px;
+  border-radius: 9px; background: var(--accent-food-soft);
   display: flex; align-items: center; justify-content: center;
-  font-size: 18px;
+  color: var(--accent-food);
 }
 .meal-info { flex: 1; min-width: 0; }
-.meal-label { font-size: 12px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .4px; }
+.meal-label { font-size: 11px; color: var(--accent-food); font-weight: 700; text-transform: uppercase; letter-spacing: .5px; }
 .meal-name {
-  font-size: 16px; font-weight: 500; color: var(--text);
+  font-size: 15px; font-weight: 500; color: var(--text);
   margin-top: 1px;
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
@@ -400,23 +400,21 @@ label { display: block; font-size: 14px; font-weight: 600; color: var(--text-2);
 }
 .day-card.today { border-color: var(--accent-move); border-width: 2px; }
 .day-card-header {
-  display: flex; align-items: center; gap: 12px;
-  padding: 14px 16px; cursor: pointer; min-height: 60px;
+  display: flex; align-items: center; gap: 0;
+  padding: 12px 14px 10px; cursor: pointer;
   user-select: none;
 }
 .day-card-header:active { background: var(--card2); }
+.dchr-status { width:20px; flex-shrink:0; display:flex; align-items:center; }
+.dch-dot { width:9px; height:9px; border-radius:50%; border:2px solid var(--border); display:inline-block; }
+.dchr-center { flex:1; text-align:center; }
+.dchr-dayname { font-size:19px; font-weight:800; line-height:1.1; letter-spacing:-.3px; }
+.dchr-date { font-size:11px; color:var(--muted); margin-top:1px; }
+.dchr-sport { font-size:12px; color:var(--muted); margin-top:3px; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:160px; margin-left:auto; margin-right:auto; }
+.dchr-right { display:flex; align-items:center; gap:5px; flex-shrink:0; width:44px; justify-content:flex-end; }
+.dchr-dur { font-size:12px; font-weight:700; color:var(--accent-move); }
 .day-name { font-weight: 700; font-size: 15px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; min-width: 32px; }
-.day-date-small { font-size: 13px; color: var(--muted); }
 .day-title-block { flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-.day-type-label { font-size: 22px; font-weight: 800; color: var(--text); line-height: 1.1; letter-spacing: -0.02em; }
-.day-type-label.t-run     { color: var(--accent-move); }
-.day-type-label.t-gym     { color: var(--accent-gym); }
-.day-type-label.t-bike    { color: var(--accent-bike); }
-.day-type-label.t-commute { color: #0f766e; }
-.day-type-label.t-walk    { color: #16a34a; }
-.day-type-label.t-walkdog { color: #b45309; }
-.day-type-label.t-rest    { color: var(--muted); }
-.day-type-label.t-other   { color: var(--accent-food); }
 .day-meta-row { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); }
 .type-badge {
   font-size: 12px; font-weight: 700; padding: 4px 10px;
@@ -660,7 +658,7 @@ select.modal-input { appearance: auto; }
 }
 .tts-toggle-btn.active { background: rgba(234,90,12,.12); color: var(--accent-move); border-color: var(--accent-move); }
 
-/* ─── TERUGBLIK ─── */
+/* ─── TERUGBLIK / PATRONEN ─── */
 .terugblik-periode-row { display: flex; align-items: center; gap: 8px; }
 .tblik-label { font-size: 14px; color: var(--text-2); font-weight: 500; white-space: nowrap; }
 .tblik-step {
@@ -685,6 +683,31 @@ select.modal-input { appearance: auto; }
   border-left: 3px solid var(--accent-food);
   color: var(--text);
 }
+.patroon-strip { margin-bottom:14px; }
+.patroon-strip-letters { display:flex; justify-content:space-between; margin-bottom:5px; }
+.patroon-strip-dots { display:flex; justify-content:space-between; }
+.patroon-dag-hdr { flex:1; text-align:center; font-size:11px; color:var(--muted); font-weight:700; }
+.dag-dot { flex:1; max-width:38px; aspect-ratio:1; border-radius:50%; border:2px solid var(--border); cursor:pointer; transition:transform .15s, box-shadow .15s; background:transparent; padding:0; margin:0 auto; display:block; }
+.dag-dot:hover { transform:scale(1.12); }
+.dag-dot.score-2 { background:#16a34a; border-color:#16a34a; }
+.dag-dot.score-1 { background:var(--accent-move); border-color:var(--accent-move); }
+.dag-dot.score-0 { background:var(--card2); border-color:var(--border); }
+.dag-dot.future { opacity:.22; pointer-events:none; }
+.dag-dot.today { box-shadow:0 0 0 3px rgba(234,90,12,.35); }
+.dag-detail-bar { font-size:12px; color:var(--muted); min-height:18px; margin:8px 0 0; text-align:center; }
+.patroon-stats { display:flex; gap:8px; margin:14px 0 16px; }
+.patroon-stat { flex:1; background:var(--card2); border-radius:14px; padding:12px 8px; text-align:center; }
+.patroon-stat-val { font-size:24px; font-weight:800; line-height:1; }
+.patroon-stat-lbl { font-size:11px; color:var(--muted); margin-top:4px; }
+.inzicht-card { border-radius:12px; padding:14px 16px; margin-top:10px; display:flex; gap:12px; align-items:flex-start; }
+.inzicht-card.patroon { background:rgba(124,58,237,.08); border-left:3px solid #7c3aed; }
+.inzicht-card.trend { background:var(--accent-food-soft); border-left:3px solid var(--accent-food); }
+.inzicht-card.tip { background:rgba(234,90,12,.07); border-left:3px solid var(--accent-move); }
+.inzicht-icon { font-size:18px; flex-shrink:0; margin-top:1px; }
+.inzicht-lbl { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; color:var(--muted); margin-bottom:4px; }
+.inzicht-tekst { font-size:14px; line-height:1.55; color:var(--text); }
+.periode-toggle-btn { width:100%; background:none; border:none; color:var(--muted); font-size:13px; font-family:inherit; cursor:pointer; padding:12px 0 4px; text-align:center; display:flex; align-items:center; justify-content:center; gap:6px; }
+.periode-toggle-btn:hover { color:var(--text); }
 
 /* ─── INSTRUCTIEKAARTEN ─── */
 .instructie-details { margin-bottom: 12px; }
@@ -735,16 +758,20 @@ select.modal-input { appearance: auto; }
 .intro-title { font-size: 30px; font-weight: 800; letter-spacing: -.5px; margin-bottom: 8px; }
 .intro-sub { font-size: 15px; color: var(--muted); margin-bottom: 24px; line-height: 1.45; }
 .intro-feature-list {
-  width: 100%; display: flex; flex-direction: column; gap: 12px;
-  margin-bottom: 20px; text-align: left;
+  width: 100%; display: flex; flex-direction: column; gap: 10px;
+  margin-bottom: 24px; text-align: left;
 }
 .intro-feature {
-  display: flex; align-items: flex-start; gap: 12px;
+  display: flex; align-items: center; gap: 14px;
   background: var(--card); border: 1px solid var(--border);
-  border-radius: 12px; padding: 12px 14px;
-  font-size: 14px; line-height: 1.4; color: var(--text-2);
+  border-radius: 14px; padding: 14px 16px;
 }
-.intro-feature-icon { flex-shrink: 0; display: flex; align-items: center; justify-content: center; width: 28px; }
+.intro-feature-icon {
+  width: 40px; height: 40px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.intro-feat-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+.intro-feat-sub { font-size: 12px; color: var(--muted); line-height: 1.4; }
 .intro-disclaimer {
   font-size: 12px; color: var(--muted-2); margin-bottom: 20px;
   line-height: 1.4; font-style: italic;
@@ -872,18 +899,26 @@ select.modal-input { appearance: auto; }
 }
 
 /* ─── WEEKOVERZICHT MODAL ─── */
-.weekov-day { margin-bottom: 18px; }
+.weekov-day { margin-bottom: 10px; background: var(--card); border-radius: 16px; border: 1.5px solid var(--border); overflow: hidden; }
+.weekov-day.is-today { border-color: var(--accent-move); border-width: 2px; }
+.weekov-day.all-done { border-color: rgba(13,148,136,.35); }
+.weekov-day-hdr { display:flex; align-items:center; padding:12px 14px 10px; }
+.weekov-day-status { width:20px; flex-shrink:0; display:flex; align-items:center; }
+.weekov-day-center { flex:1; text-align:center; }
+.weekov-day-name { font-size:19px; font-weight:800; line-height:1.1; letter-spacing:-.3px; }
+.weekov-day-date { font-size:11px; color:var(--muted); font-weight:400; margin-top:1px; }
+.weekov-day-dur { width:44px; text-align:right; font-size:12px; font-weight:700; color:var(--accent-move); flex-shrink:0; }
+.weekov-divider { height:1px; background:var(--border); margin:0 14px; }
+.weekov-day-body { padding:8px 14px 12px; display:flex; flex-direction:column; gap:2px; }
 .weekov-day-header {
-  font-size: 13px; font-weight: 700; color: var(--muted);
-  text-transform: uppercase; letter-spacing: .04em;
-  margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid var(--border);
+  margin-bottom: 8px; padding-bottom: 7px; border-bottom: 1px solid var(--border);
 }
-.weekov-act { display: flex; align-items: center; gap: 8px; padding: 5px 0; font-size: 14px; cursor: pointer; border-radius: 8px; transition: background .12s; }
+.weekov-act { display: flex; align-items: center; gap: 8px; padding: 5px 0; cursor: pointer; border-radius: 8px; transition: background .12s; }
 .weekov-act:active { background: var(--card2); }
 .weekov-act .done { text-decoration: line-through; color: var(--muted); }
-.weekov-act-check { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--border-strong); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all .15s; }
+.weekov-act-check { width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--border-strong); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all .15s; }
 .weekov-act-check.checked { background: var(--accent-move); border-color: var(--accent-move); }
-.weekov-act-check.checked::after { content: '✓'; color: #fff; font-size: 12px; font-weight: 700; }
+.weekov-act-check.checked::after { content: '✓'; color: #fff; font-size: 10px; font-weight: 700; }
 .weekov-meal { display: flex; gap: 8px; font-size: 13px; color: var(--text); padding: 3px 0; }
 .weekov-meal-label { color: var(--muted); min-width: 52px; }
 
@@ -1193,12 +1228,13 @@ select.modal-input { appearance: auto; }
 .input-mic-wrap input { padding-right: 52px; }
 .mic-btn {
   position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
-  background: var(--card2); border: 1.5px solid var(--border-strong);
+  background: rgba(234,90,12,.08); border: 1.5px solid rgba(234,90,12,.25);
   border-radius: 10px; width: 36px; height: 36px;
   display: flex; align-items: center; justify-content: center;
-  cursor: pointer; flex-shrink: 0; color: var(--muted);
+  cursor: pointer; flex-shrink: 0; color: var(--accent-move);
   transition: background .15s, border-color .15s, color .15s;
 }
+.mic-btn:hover { background: rgba(234,90,12,.15); border-color: var(--accent-move); }
 .mic-btn.listening {
   background: var(--accent-move-soft); border-color: var(--accent-move);
   color: var(--accent-move); animation: micPulse 1s ease infinite;
@@ -1221,15 +1257,27 @@ select.modal-input { appearance: auto; }
   color: var(--muted); cursor: pointer; transition: all .15s; font-family: inherit;
 }
 .food-inner-tab.active { background: var(--card); color: var(--accent-food); box-shadow: 0 1px 3px rgba(0,0,0,.08); }
-.food-chef-big-voice {
-  width: 100%; background: var(--accent-food-soft); border: 1.5px solid var(--accent-food);
-  color: var(--accent-food); border-radius: var(--radius); padding: 14px;
-  font-size: 15px; font-weight: 600; display: flex; align-items: center;
-  justify-content: center; gap: 10px; cursor: pointer; font-family: inherit;
-  margin-bottom: 14px; transition: all .15s;
+.food-chef-big-voice { display: none; }
+.chef-hero { text-align: center; padding: 8px 0 20px; }
+.chef-hero-title { font-size: 22px; font-weight: 800; color: var(--text); margin-bottom: 4px; }
+.chef-hero-sub { font-size: 13px; color: var(--muted); margin-bottom: 22px; }
+.chef-mic-big {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: var(--accent-move); border: none; color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; margin: 0 auto 10px; transition: transform .12s, box-shadow .12s;
+  box-shadow: 0 4px 20px rgba(234,90,12,.35);
 }
-.food-chef-big-voice:active { background: var(--accent-food); color: #fff; }
-.food-chef-big-voice.listening { background: var(--accent-food); color: #fff; animation: micPulse 1s ease infinite; }
+.chef-mic-big:active { transform: scale(.93); }
+.chef-mic-big.listening { animation: micPulse 1s ease infinite; box-shadow: 0 0 0 12px rgba(234,90,12,.15); }
+.chef-mic-label { font-size: 13px; font-weight: 600; color: var(--accent-move); }
+.chef-inspiration { display: flex; gap: 7px; flex-wrap: wrap; margin: 14px 0 12px; }
+.chef-chip {
+  background: var(--card2); border: 1.5px solid var(--border);
+  border-radius: 999px; padding: 6px 12px; font-size: 13px; font-weight: 500;
+  cursor: pointer; color: var(--text); transition: all .12s; white-space: nowrap; font-family: inherit;
+}
+.chef-chip:active, .chef-chip:hover { background: rgba(234,90,12,.1); border-color: var(--accent-move); color: var(--accent-move); }
 .food-filter-chips {
   display: flex; gap: 6px; flex-wrap: nowrap; overflow-x: auto;
   -webkit-overflow-scrolling: touch; padding-bottom: 8px; margin-bottom: 12px; scrollbar-width: none;
@@ -1306,49 +1354,59 @@ select.modal-input { appearance: auto; }
 
 /* ─── DAILY COACH CARD ─── */
 .daily-coach-card {
-  border-left: 4px solid var(--accent-move);
-  background: linear-gradient(135deg, #fff8f3 0%, #ffffff 100%);
+  border: 1.5px solid rgba(234,90,12,.2);
+  background: linear-gradient(135deg, #fff8f3 0%, #ffffff 60%);
   position: relative; overflow: hidden;
 }
 .daily-coach-card::before {
-  content: ''; position: absolute; top: -20px; right: -20px;
-  width: 80px; height: 80px; border-radius: 50%;
+  content: ''; position: absolute; top: -30px; right: -30px;
+  width: 100px; height: 100px; border-radius: 50%;
   background: var(--accent-move-tint); pointer-events: none;
 }
 .coach-card-header {
-  display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
+  display: flex; align-items: center; gap: 10px; margin-bottom: 10px;
 }
 .coach-card-avatar {
-  width: 36px; height: 36px; border-radius: 50%;
+  width: 32px; height: 32px; border-radius: 50%;
   background: var(--accent-move); display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
 }
 .coach-card-avatar svg { color: #fff; }
 .coach-card-label { font-size: 11px; font-weight: 700; letter-spacing: .7px;
   color: var(--accent-move); text-transform: uppercase; }
-.coach-card-q { font-size: 17px; font-weight: 600; color: var(--text); line-height: 1.4; margin-bottom: 16px; }
+.coach-card-q { font-size: 16px; font-weight: 600; color: var(--text); line-height: 1.4; margin-bottom: 14px; }
 .coach-card-actions { display: flex; gap: 8px; flex-wrap: wrap; }
 .coach-card-answer-btn {
-  flex: 1; min-width: 120px; padding: 11px 14px; border-radius: 12px;
+  flex: 1; min-width: 110px; padding: 10px 14px; border-radius: 10px;
   border: none; background: var(--accent-move); color: #fff;
-  font-size: 15px; font-weight: 600; cursor: pointer; text-align: center;
-  transition: opacity .15s; min-height: 44px;
+  font-size: 14px; font-weight: 600; cursor: pointer; text-align: center;
+  transition: opacity .15s; min-height: 42px;
 }
 .coach-card-answer-btn:active { opacity: .75; }
 .coach-card-answer-btn.secondary {
   background: var(--card2); color: var(--text-2); font-weight: 500;
+  border: 1.5px solid var(--border);
 }
 .coach-card-skip {
-  display: flex; align-items: center; justify-content: flex-end; margin-top: 10px;
+  display: flex; align-items: center; justify-content: flex-end; margin-top: 8px;
 }
 .coach-card-skip-btn {
   background: none; border: none; color: var(--muted); font-size: 13px;
-  cursor: pointer; padding: 6px 2px; text-decoration: underline;
+  cursor: pointer; padding: 4px 2px; text-decoration: underline;
 }
 .coach-card-response {
-  margin-top: 12px; padding: 12px; background: var(--accent-move-tint);
-  border-radius: 10px; font-size: 15px; color: var(--text-2); line-height: 1.5;
+  margin-top: 10px; padding: 11px 12px; background: var(--accent-move-tint);
+  border-radius: 10px; font-size: 14px; color: var(--text-2); line-height: 1.5;
 }
+.coach-snelvragen {
+  display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px;
+}
+.coach-snelvraag-btn {
+  background: var(--card2); border: 1.5px solid var(--border);
+  border-radius: 999px; padding: 6px 12px; font-size: 12px; font-weight: 500;
+  cursor: pointer; color: var(--text-2); transition: all .12s; font-family: inherit; white-space: nowrap;
+}
+.coach-snelvraag-btn:active { background: var(--accent-move-tint); border-color: var(--accent-move); color: var(--accent-move); }
 
 /* ─── WEEK INTAKE BUTTON ─── */
 .week-intake-btn {
@@ -1438,10 +1496,10 @@ select.modal-input { appearance: auto; }
   right: 18px;
   bottom: calc(var(--tab-h) + env(safe-area-inset-bottom, 0px) + 14px);
   z-index: 99;
-  width: 54px; height: 54px; border-radius: 50%;
+  width: 58px; height: 58px; border-radius: 50%;
   background: var(--accent-move);
   border: none; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
+  display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 2px;
   color: #fff;
   box-shadow: 0 4px 16px rgba(234,90,12,.45), 0 1px 4px rgba(0,0,0,.15);
   transition: transform .15s, opacity .15s, background .15s;
@@ -1453,95 +1511,140 @@ select.modal-input { appearance: auto; }
   box-shadow: 0 0 0 8px rgba(234,90,12,.2), 0 4px 16px rgba(234,90,12,.45);
 }
 
+/* ─── WEEKPLAN CARD ─── */
+.weekplan-card {
+  background: linear-gradient(135deg, var(--accent-food-soft) 0%, #ffffff 100%);
+  border: 1.5px solid var(--accent-food);
+  border-radius: var(--radius); padding: 18px 16px;
+  margin-bottom: 14px; position: relative; overflow: hidden;
+}
+.weekplan-card-title { font-size: 16px; font-weight: 700; color: var(--accent-food); margin-bottom: 4px; }
+.weekplan-card-sub { font-size: 13px; color: var(--muted); margin-bottom: 14px; line-height: 1.4; }
+.weekplan-card-btn {
+  width: 100%; padding: 12px; border-radius: 10px;
+  background: var(--accent-food); border: none; color: #fff;
+  font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+
 /* ─── COACH FRONTPAGE ─── */
 .coach-front-card {
-  background: linear-gradient(135deg, var(--accent-move) 0%, #c2410c 100%);
-  border-radius: var(--radius-lg); padding: 24px 20px 20px;
-  margin-bottom: 14px; text-align: center;
-  box-shadow: 0 4px 20px rgba(234,90,12,.30);
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 20px 16px 16px;
+  margin-bottom: 14px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.06);
 }
 .coach-front-label {
-  color: rgba(255,255,255,.85); font-size: 14px; font-weight: 500;
-  margin-bottom: 16px; letter-spacing: .2px;
+  color: var(--muted); font-size: 13px; font-weight: 500;
+  letter-spacing: .1px;
 }
 .big-praat-btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 12px;
-  background: #fff; color: var(--accent-move);
+  background: var(--accent-move); color: #fff;
   border: none; border-radius: 999px;
-  padding: 16px 28px; font-size: 18px; font-weight: 700;
-  cursor: pointer; min-height: 60px; width: 100%;
-  box-shadow: 0 4px 16px rgba(0,0,0,.15);
-  transition: transform .1s, opacity .15s;
+  padding: 16px 28px; font-size: 17px; font-weight: 700;
+  cursor: pointer; min-height: 58px; width: 100%;
+  box-shadow: 0 4px 16px rgba(234,90,12,.30);
+  transition: transform .1s, box-shadow .15s;
   font-family: inherit;
 }
-.big-praat-btn:active { transform: scale(.97); opacity: .9; }
+.big-praat-btn:active { transform: scale(.97); box-shadow: 0 2px 8px rgba(234,90,12,.20); }
 .big-praat-btn.listening {
-  background: var(--accent-move); color: #fff;
   animation: micPulse 1s ease infinite;
+  box-shadow: 0 0 0 6px rgba(234,90,12,.18);
 }
 .big-praat-btn.processing {
-  background: #fff3; color: #fff; pointer-events: none;
+  background: var(--muted); box-shadow: none; pointer-events: none;
 }
 .big-praat-status {
-  color: rgba(255,255,255,.9); font-size: 13px; font-weight: 500;
+  color: var(--muted); font-size: 13px; font-weight: 500;
   min-height: 20px; margin-top: 10px; text-align: center;
 }
+.praat-btn-row {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+}
+.mic-picker-btn {
+  flex-shrink: 0; width: 44px; height: 44px; border-radius: 50%;
+  border: 1.5px solid var(--border); background: var(--card2);
+  color: var(--muted); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color .15s, color .15s;
+}
+.mic-picker-btn.active {
+  border-color: var(--accent-food); color: var(--accent-food);
+}
+.mic-status-label {
+  text-align: center; font-size: 12px; color: var(--muted);
+  margin-top: 8px; min-height: 16px;
+  display: flex; align-items: center; justify-content: center; gap: 5px;
+}
+.mic-device-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 13px 0; border-bottom: 1px solid var(--border);
+  cursor: pointer; font-size: 15px; color: var(--text);
+  gap: 10px;
+}
+.mic-device-item:last-child { border-bottom: none; }
+.mic-device-item .mic-check { color: var(--accent-food); font-size: 18px; flex-shrink: 0; }
+.mic-device-item .mic-name { flex: 1; }
 .coach-chat-window {
-  background: rgba(0,0,0,.20); border-radius: 14px;
+  background: var(--card2); border: 1px solid var(--border); border-radius: 14px;
   margin: 14px 0 0; padding: 12px;
-  max-height: 45vh; min-height: 120px; overflow-y: auto;
+  max-height: 45vh; min-height: 100px; overflow-y: auto;
   display: flex; flex-direction: column; gap: 8px;
   scroll-behavior: smooth;
 }
 .coach-chat-window:empty::before {
   content: 'Stel een vraag of praat met de coach…';
-  color: rgba(255,255,255,.45); font-size: 13px;
+  color: var(--muted); font-size: 13px;
   display: block; text-align: center; padding: 16px 0;
 }
 .coach-bubble-user {
   align-self: flex-end;
-  background: rgba(255,255,255,.22); color: #fff;
-  border-radius: 12px 12px 4px 12px;
+  background: var(--accent-move); color: #fff;
+  border-radius: 14px 14px 4px 14px;
   padding: 8px 12px; font-size: 13px; max-width: 85%; text-align: left; line-height: 1.4;
 }
 .coach-bubble-ai {
   align-self: flex-start;
-  background: rgba(255,255,255,.95); color: #1a1a1a;
-  border-radius: 12px 12px 12px 4px;
+  background: var(--card); color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 14px 14px 14px 4px;
   padding: 8px 12px; font-size: 13px; max-width: 92%; text-align: left; line-height: 1.5;
 }
 .coach-bubble-ai.thinking {
-  color: rgba(0,0,0,.4); font-style: italic;
+  color: var(--muted); font-style: italic; border-style: dashed;
 }
 .coach-input-row {
   display: flex; gap: 8px; margin-top: 12px; align-items: center;
 }
 .coach-input-row input {
-  flex: 1; border: none; border-radius: 999px;
-  background: rgba(255,255,255,.22); color: #fff;
+  flex: 1; border: 1.5px solid var(--border); border-radius: 999px;
+  background: var(--card2); color: var(--text);
   padding: 10px 16px; font-size: 14px; font-family: inherit;
-  outline: none;
+  outline: none; transition: border-color .15s;
 }
-.coach-input-row input::placeholder { color: rgba(255,255,255,.55); }
+.coach-input-row input:focus { border-color: var(--accent-move); }
+.coach-input-row input::placeholder { color: var(--muted); }
 .coach-input-row button {
-  background: rgba(255,255,255,.22); border: none; border-radius: 50%;
-  width: 40px; height: 40px; cursor: pointer; color: #fff;
+  background: var(--card2); border: 1.5px solid var(--border); border-radius: 50%;
+  width: 40px; height: 40px; cursor: pointer; color: var(--text-2);
   display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0; transition: background .15s;
+  flex-shrink: 0; transition: background .15s, border-color .15s;
 }
-.coach-input-row button:active { background: rgba(255,255,255,.35); }
+.coach-input-row button:active { background: var(--accent-move-soft); border-color: var(--accent-move); color: var(--accent-move); }
 .quick-q-row {
   display: grid; grid-template-columns: 1fr 1fr;
-  gap: 8px; margin-top: 14px;
+  gap: 8px; margin-top: 12px;
 }
 .quick-q-btn {
-  background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.25);
-  color: #fff; border-radius: 12px; padding: 10px 8px;
+  background: var(--card2); border: 1.5px solid var(--border);
+  color: var(--text-2); border-radius: 12px; padding: 10px 10px;
   font-size: 13px; font-weight: 600; cursor: pointer; text-align: left;
-  min-height: 44px; transition: background .15s; font-family: inherit;
+  min-height: 44px; transition: background .15s, border-color .15s; font-family: inherit;
   line-height: 1.35; display: flex; flex-direction: column; align-items: flex-start; gap: 5px;
 }
-.quick-q-btn:active { background: rgba(255,255,255,.3); }
+.quick-q-btn:active { background: var(--accent-move-soft); border-color: var(--accent-move); color: var(--accent-move); }
 
 /* ─── PROTEIN TRACKING BAR ─── */
 .nutri-bars { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
@@ -1654,7 +1757,7 @@ select.modal-input { appearance: auto; }
         <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
       </svg>
     </div>
-    <h1 class="splash-title">Health Coach</h1>
+    <h1 class="splash-title">Coach & Chef</h1>
     <p class="splash-sub" id="splash-sub">Jouw persoonlijke gezondheidscoach</p>
   </div>
 </div>
@@ -1671,7 +1774,7 @@ select.modal-input { appearance: auto; }
       </svg>
     </div>
     <div>
-      <h1>Health Coach</h1>
+      <h1>Coach & Chef</h1>
       <p>Jouw persoonlijke gezondheidscoach</p>
     </div>
   </div>
@@ -1826,7 +1929,10 @@ select.modal-input { appearance: auto; }
     <div class="card">
       <div class="water-tracker">
         <div class="water-tracker-label">
-          <span>💧 Water</span>
+          <span style="display:flex;align-items:center;gap:6px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--accent-food)" stroke="none"><path d="M12 2C6 10 4 14 4 17a8 8 0 0 0 16 0c0-3-2-7-8-15z"/></svg>
+            Water
+          </span>
           <span class="water-count-label" id="water-count">0 / 8</span>
         </div>
         <div class="water-track" id="water-glasses"></div>
@@ -1968,11 +2074,20 @@ select.modal-input { appearance: auto; }
 
     <!-- Grote praat-knop -->
     <div class="coach-front-card">
-      <div class="coach-front-label">Vertel me alles — sport, eten, water</div>
-      <button id="big-praat-btn" class="big-praat-btn" onclick="bigPraatStart()">
-        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
-        Praat met de coach
-      </button>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+        <div class="coach-front-label" style="margin-bottom:0;text-align:left;">Zeg het maar — sport, eten, water, hoe je je voelt</div>
+        <button onclick="showIntro()" aria-label="Hoe werkt het?" title="Hoe werkt het?" style="flex-shrink:0;margin-left:10px;width:28px;height:28px;border-radius:50%;border:1.5px solid var(--border);background:var(--card2);color:var(--muted);font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:inherit;line-height:1;">?</button>
+      </div>
+      <div class="praat-btn-row">
+        <button id="big-praat-btn" class="big-praat-btn" onclick="bigPraatStart()">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+          Praat met de coach
+        </button>
+        <button id="mic-picker-btn" class="mic-picker-btn" onclick="openMicPicker()" aria-label="Microfoon kiezen" title="Microfoon kiezen">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
+        </button>
+      </div>
+      <div id="mic-status-label" class="mic-status-label"></div>
       <div id="big-praat-status" class="big-praat-status"></div>
       <!-- Inline chat venster -->
       <div id="coach-front-chat" class="coach-chat-window"></div>
@@ -2010,20 +2125,47 @@ select.modal-input { appearance: auto; }
       </div>
     </div>
 
-    <div class="card" style="margin-bottom:14px;">
-      <h3 style="margin-bottom:10px;">Terugblik</h3>
-      <div class="terugblik-periode-row">
-        <span class="tblik-label">Afgelopen</span>
-        <button class="tblik-step" onclick="stepTerugblik(-1)">−</button>
-        <input id="terugblik-dagen-input" class="tblik-input" type="number" min="1" max="365" value="3">
-        <button class="tblik-step" onclick="stepTerugblik(1)">+</button>
-        <span class="tblik-label">dagen</span>
-      </div>
-      <button class="btn btn-secondary btn-full" style="margin-top:10px;" onclick="doTerugblik()">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.9"/></svg>
-        Analyseer periode
+    <div id="weekplan-card" class="weekplan-card" style="display:none;">
+      <div class="weekplan-card-title">📅 Plan je week — zondag</div>
+      <div class="weekplan-card-sub">Vertel de coach je plannen voor de komende week. Trainingen, boodschappen en maaltijden worden automatisch ingevuld.</div>
+      <button class="weekplan-card-btn" onclick="startWeekplanGesprek()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+        Weekplan bespreken
       </button>
-      <div id="terugblik-result"></div>
+      <button onclick="dismissWeekplanCard()" style="display:block;margin-top:8px;background:none;border:none;color:var(--muted);font-size:13px;cursor:pointer;width:100%;text-align:center;">Overslaan</button>
+    </div>
+
+    <div class="card" style="margin-bottom:14px;">
+      <h3 style="margin-bottom:16px;">Patronen</h3>
+
+      <div id="patroon-stats" class="patroon-stats"></div>
+      <div id="patroon-grid"></div>
+      <div id="dag-detail-bar" class="dag-detail-bar"></div>
+
+      <button class="btn btn-secondary btn-full" style="margin-top:16px;" onclick="analysePatronen()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Analyseer mijn patronen
+      </button>
+      <div id="patroon-inzichten"></div>
+
+      <button class="periode-toggle-btn" onclick="togglePeriodeAnalyse()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.9"/></svg>
+        Periode analyse
+      </button>
+      <div id="periode-analyse-sectie" style="display:none;padding-top:10px;border-top:1px solid var(--border);margin-top:4px;">
+        <div class="terugblik-periode-row" style="margin-bottom:10px;">
+          <span class="tblik-label">Afgelopen</span>
+          <button class="tblik-step" onclick="stepTerugblik(-1)">−</button>
+          <input id="terugblik-dagen-input" class="tblik-input" type="number" min="1" max="365" value="7">
+          <button class="tblik-step" onclick="stepTerugblik(1)">+</button>
+          <span class="tblik-label">dagen</span>
+        </div>
+        <button class="btn btn-secondary btn-full" onclick="doTerugblik()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.9"/></svg>
+          Analyseer periode
+        </button>
+        <div id="terugblik-result"></div>
+      </div>
     </div>
 
     <div class="card" style="margin-bottom:14px;" id="coach-nutri-card">
@@ -2133,41 +2275,46 @@ select.modal-input { appearance: auto; }
 <!-- INTRO OVERLAY -->
 <div id="intro-overlay" style="display:none;">
   <div class="intro-card">
-    <div class="intro-logo">
-      <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--accent-move)"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+    <div class="intro-logo" style="margin-bottom:20px;">
+      <div style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--accent-move) 0%,var(--accent-food) 100%);display:flex;align-items:center;justify-content:center;margin:0 auto;box-shadow:0 6px 28px rgba(234,90,12,.28);">
+        <span style="color:#fff;font-size:22px;font-weight:900;letter-spacing:-1px;line-height:1;font-family:inherit;">C&amp;C</span>
+      </div>
     </div>
-    <h1 class="intro-title">Health Coach</h1>
-    <p class="intro-sub">Je persoonlijke coach voor sport én eten — makkelijker dan je denkt</p>
+    <h1 class="intro-title">Coach & Chef</h1>
+    <p class="intro-sub" style="font-size:16px;margin-bottom:28px;">Spreek of typ — over sport, eten, water, hoe je je voelt. Coach & Chef regelen de rest.</p>
 
     <div class="intro-feature-list">
       <div class="intro-feature">
-        <span class="intro-feature-icon" style="color:var(--accent-move);">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
-        </span>
-        <span><strong>Spreek of typ</strong> — log sport, eten en water in één zin</span>
+        <div class="intro-feature-icon" style="background:rgba(234,90,12,.1);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-move)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+        </div>
+        <div>
+          <div class="intro-feat-title">Log in één zin</div>
+          <div class="intro-feat-sub">"Ik heb 45 min hardgelopen en pasta gegeten"</div>
+        </div>
       </div>
       <div class="intro-feature">
-        <span class="intro-feature-icon" style="color:var(--accent-move);">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-        </span>
-        <span><strong>Plan zonder gedoe</strong> — weekschema klaar in seconden</span>
+        <div class="intro-feature-icon" style="background:rgba(13,148,136,.1);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-food)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        </div>
+        <div>
+          <div class="intro-feat-title">Eiwitten, vezels & activiteiten</div>
+          <div class="intro-feat-sub">Jij vertelt het — Coach & Chef registreren en berekenen alles</div>
+        </div>
       </div>
       <div class="intro-feature">
-        <span class="intro-feature-icon" style="color:var(--accent-food);">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v12"/><path d="M18 9a3 3 0 0 0-3-3H6"/><path d="M6 15a6 6 0 0 0 12 0"/></svg>
-        </span>
-        <span><strong>Chef aan huis</strong> — AI genereert recepten op maat</span>
-      </div>
-      <div class="intro-feature">
-        <span class="intro-feature-icon" style="color:#6d28d9;">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-        </span>
-        <span><strong>Coach altijd bij je</strong> — vraag advies, krijg een compliment</span>
+        <div class="intro-feature-icon" style="background:rgba(124,58,237,.1);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
+        <div>
+          <div class="intro-feat-title">Plan je week</div>
+          <div class="intro-feat-sub">Weekschema, boodschappenlijst en recepten op maat</div>
+        </div>
       </div>
     </div>
 
-    <p class="intro-disclaimer">Geen vervanging voor je sport-app — wél je companion, trainer en cheerleader.</p>
-    <button class="intro-btn" onclick="dismissIntro()">Aan de slag →</button>
+    <button class="intro-btn" onclick="dismissIntro()" style="font-size:17px;">Starten →</button>
+    <p style="font-size:12px;color:var(--muted-2);margin-top:14px;font-style:italic;">Geen data gedeeld — alles blijft op jouw apparaat</p>
   </div>
 </div>
 
@@ -2179,6 +2326,7 @@ select.modal-input { appearance: auto; }
 <!-- FLOATING COACH BUTTON (alle tabs) -->
 <button id="fab-coach" class="fab-coach" onclick="fabCoachTap()" aria-label="Praat met de coach">
   <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+  <span id="fab-label" style="display:none;font-size:10px;font-weight:700;letter-spacing:.3px;margin-top:2px;line-height:1;">LOG</span>
 </button>
 
 <!-- MODAL CONTAINER -->
@@ -2203,10 +2351,12 @@ function buildWeekMenuContext() {
       if (!dayData || !dayData.maaltijden) return null;
       const m = dayData.maaltijden;
       const parts = [];
-      if (m.ontbijt && m.ontbijt.naam) parts.push(`ontbijt: ${m.ontbijt.naam} (${m.ontbijt.vezels || '?'}v${m.ontbijt.eiwitten ? '/' + m.ontbijt.eiwitten + 'e' : ''})`);
-      if (m.lunch && m.lunch.naam && m.lunch.naam !== DEFAULT_MEAL_NAMES.lunch) parts.push(`lunch: ${m.lunch.naam}`);
-      if (m.diner && m.diner.naam && m.diner.naam !== DEFAULT_MEAL_NAMES.diner) parts.push(`diner: ${m.diner.naam} (${m.diner.vezels || '?'}v${m.diner.eiwitten ? '/' + m.diner.eiwitten + 'e' : ''})`);
-      if (m.snack && m.snack.naam) parts.push(`snack: ${m.snack.naam}`);
+      const _slotName = (slot) => (Array.isArray(m[slot]) ? m[slot] : []).map(i => i.naam).filter(Boolean).join(' + ');
+      const _slotFirst = (slot) => (Array.isArray(m[slot]) && m[slot].length > 0) ? m[slot][0] : null;
+      const ont = _slotFirst('ontbijt'); if (ont) parts.push(`ontbijt: ${_slotName('ontbijt')} (${ont.vezels||'?'}v${ont.eiwitten?'/'+ont.eiwitten+'e':''})`);
+      const lun = _slotFirst('lunch'); if (lun) parts.push(`lunch: ${_slotName('lunch')}`);
+      const din = _slotFirst('diner'); if (din) parts.push(`diner: ${_slotName('diner')} (${din.vezels||'?'}v${din.eiwitten?'/'+din.eiwitten+'e':''})`);
+      const sna = _slotFirst('snack'); if (sna) parts.push(`snack: ${_slotName('snack')}`);
       return parts.length > 0 ? `${dagKort[i]}: ${parts.join(', ')}` : null;
     }).filter(Boolean);
     return lines.length > 0 ? lines.join('\n') : 'Nog geen maaltijden gepland deze week.';
@@ -2254,7 +2404,7 @@ function buildSystemPrompt() {
       const weekKey = getISOWeek(today);
       const dayData = (data.weken[weekKey] || {})[dateStr];
       if (dayData && dayData.maaltijden) {
-        Object.values(dayData.maaltijden).forEach(m => {
+        Object.values(dayData.maaltijden).flatMap(v => Array.isArray(v) ? v : (v && v.naam ? [v] : [])).forEach(m => {
           if (m && m.vezels) {
             const n = parseFloat((m.vezels || '').replace(/[^\d.]/g, ''));
             if (!isNaN(n)) vezelTotaal += n;
@@ -2326,6 +2476,8 @@ Beschikbare oefeningen (gebruik exact deze namen):
 Als je oefeningen aanbeveelt of uitlegt, gebruik dan bij voorkeur deze namen zodat de gebruiker direct de uitlegkaart kan raadplegen. Geef bij oefeningen altijd: spiergroepen, uitvoering in stappen, en een praktische tip.
 ${(data && data.partners && data.partners.length > 0)
   ? '\nTRAININGSPARTNERS:\n' + data.partners.map(p => `- ${p.naam}${p.sport ? ' (' + p.sport + ')' : ''}${p.context ? ': ' + p.context : ''}`).join('\n') + '\nVerwijst de gebruiker naar een partner, benoem dan context en geef passend advies.'
+  : ''}${(data && data.coachMemory && data.coachMemory.length > 0)
+  ? '\n\nPERSOONLIJK GEHEUGEN (feiten over deze gebruiker uit eerdere gesprekken):\n' + data.coachMemory.slice(0,10).map(m => `- ${m}`).join('\n')
   : ''}`;
 }
 
@@ -2505,12 +2657,8 @@ const DEFAULT_MEAL_NAMES = {
   snack: 'Appel of peer + handjevol noten'
 };
 
-function isMealSet(meal, key) {
-  if (key === 'ontbijt') return true;
-  if (meal.gepland === true) return true;
-  if (meal.gepland === false) return false;
-  // Migration for existing data: treat non-default naam as set
-  return !!(meal.naam && meal.naam !== DEFAULT_MEAL_NAMES[key]);
+function isMealSet(items) {
+  return Array.isArray(items) && items.length > 0;
 }
 
 const RECEPTEN = [
@@ -2724,7 +2872,7 @@ function ensureWeek(weekKey) {
       ];
       data.weken[weekKey][dateStr] = {
         activiteiten,
-        maaltijden: JSON.parse(JSON.stringify(DEFAULT_MEALS)),
+        maaltijden: { ontbijt: [], lunch: [], diner: [], snack: [] },
         checkIn: null,
         aangepast: false,
         waterGlazen: 0
@@ -2768,14 +2916,35 @@ function saveLocal() {
   }
 }
 
+function _migrateMaaltijdenToArrays() {
+  const slots = ['ontbijt','lunch','diner','snack'];
+  Object.values(data.weken || {}).forEach(weekData => {
+    Object.values(weekData).forEach(dayData => {
+      if (!dayData || !dayData.maaltijden) return;
+      slots.forEach(slot => {
+        const m = dayData.maaltijden[slot];
+        if (!Array.isArray(m)) {
+          if (m && m.naam && m.naam.trim() !== '') {
+            dayData.maaltijden[slot] = [{ ...m, id: 'm' + Date.now() + Math.random().toString(36).slice(2,5) }];
+          } else {
+            dayData.maaltijden[slot] = [];
+          }
+        }
+      });
+    });
+  });
+}
+
 function loadLocal() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (raw) {
       data = JSON.parse(raw);
+      _migrateMaaltijdenToArrays();
       ensureRecepten();
       ensureStats();
       if (!data.partners) data.partners = [];
+      if (!data.coachMemory) data.coachMemory = [];
       return true;
     }
   } catch(e) {}
@@ -3023,10 +3192,12 @@ function switchTab(name, btn) {
   btn.classList.add('active');
   const fab = document.getElementById('fab-coach');
   if (fab) fab.style.display = name === 'coach' ? 'none' : 'flex';
+  const fabLabel = document.getElementById('fab-label');
+  if (fabLabel) fabLabel.style.display = name === 'coach' ? 'none' : 'block';
   if (name === 'vandaag') renderVandaag();
   if (name === 'week') renderWeek();
   if (name === 'weekov') renderWeekOvTab();
-  if (name === 'coach') renderCoach();
+  if (name === 'coach') { renderCoach(); checkWeekplanCard(); }
   if (name === 'recepten') renderFoodTab();
 }
 
@@ -3042,33 +3213,94 @@ function renderWeekOvTab() {
   const container = document.getElementById('weekov-days');
   if (!container) return;
 
-  const dagNamen = ['Maandag','Dinsdag','Woensdag','Donderdag','Vrijdag','Zaterdag','Zondag'];
-  const mealLabels = { ontbijt: 'Ontbijt', lunch: 'Lunch', diner: 'Diner', snack: 'Snack' };
+  const dagKort = ['Ma','Di','Wo','Do','Vr','Za','Zo'];
   const todayStr = today();
 
-  container.innerHTML = days.map((dateStr, i) => {
+  // Week-samenvatting berekenen
+  let totalMin = 0, activeDays = 0, totalActs = 0, doneActs = 0;
+  days.forEach(d => {
+    const acts = (data.weken[weekKey][d] || {}).activiteiten || [];
+    const done = acts.filter(a => a.afgevinkt);
+    totalActs += acts.length;
+    doneActs += done.length;
+    if (done.length > 0) activeDays++;
+    done.forEach(a => { totalMin += (a.duur || 0); });
+  });
+  const uren = Math.floor(totalMin / 60);
+  const minRest = totalMin % 60;
+  const duurLabel = totalMin === 0 ? '0 min' : uren > 0 ? `${uren}u${minRest > 0 ? ' ' + minRest + 'm' : ''}` : `${totalMin} min`;
+
+  const summaryHTML = `
+    <div style="display:flex;gap:0;margin-bottom:16px;background:var(--card);border-radius:14px;border:1.5px solid var(--border);overflow:hidden;">
+      <div style="flex:1;text-align:center;padding:14px 8px;">
+        <div style="font-size:24px;font-weight:800;color:var(--accent-move);line-height:1;">${activeDays}</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:3px;font-weight:500;">actieve<br>dagen</div>
+      </div>
+      <div style="width:1px;background:var(--border);"></div>
+      <div style="flex:1;text-align:center;padding:14px 8px;">
+        <div style="font-size:24px;font-weight:800;color:var(--accent-move);line-height:1;">${duurLabel}</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:3px;font-weight:500;">beweging<br>totaal</div>
+      </div>
+      <div style="width:1px;background:var(--border);"></div>
+      <div style="flex:1;text-align:center;padding:14px 8px;">
+        <div style="font-size:24px;font-weight:800;color:var(--accent-move);line-height:1;">${totalActs > 0 ? Math.round(doneActs / totalActs * 100) : 0}%</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:3px;font-weight:500;">afgevinkt<br>(${doneActs}/${totalActs})</div>
+      </div>
+    </div>`;
+
+  const daysHTML = days.map((dateStr, i) => {
     const dayData = data.weken[weekKey][dateStr];
     const isToday = dateStr === todayStr;
+    const isPast = dateStr < todayStr;
+    const isFuture = dateStr > todayStr;
+    const acts = dayData.activiteiten || [];
+    const doneActs = acts.filter(a => a.afgevinkt);
+    const allDone = acts.length > 0 && doneActs.length === acts.length;
+    const someDone = doneActs.length > 0;
 
-    const acts = (dayData.activiteiten || []).map(a => `
-      <div class="weekov-act" onclick="toggleWeekOvActivity('${dateStr}','${a.id}')">
-        <div class="weekov-act-check ${a.afgevinkt ? 'checked' : ''}"></div>
-        ${iconSVG(a.type)}
-        <span class="${a.afgevinkt ? 'done' : ''}">${a.naam}${a.duur ? ` · ${fmtMin(a.duur)}` : ''}</span>
-      </div>`).join('') || '<div style="font-size:13px;color:var(--muted);padding:2px 0;">Rustdag</div>';
+    const dayDuurMin = doneActs.reduce((s, a) => s + (a.duur || 0), 0);
+    const dayDuurLabel = dayDuurMin > 0 ? fmtMin(dayDuurMin) : '';
 
-    const meals = Object.entries(dayData.maaltijden || {}).map(([key, meal]) => `
-      <div class="weekov-meal">
-        <span class="weekov-meal-label">${mealLabels[key] || key}</span>
-        <span>${meal.naam || '—'}</span>
-      </div>`).join('');
+    const nameColor = isToday
+      ? 'var(--accent-move)'
+      : allDone ? 'var(--accent-food)'
+      : someDone ? 'var(--accent-move)'
+      : isFuture ? 'var(--muted)' : 'var(--text)';
 
-    return `<div class="weekov-day card" style="margin-bottom:10px;${isToday ? 'border-left:3px solid var(--accent-move);' : ''}">
-      <div class="weekov-day-header">${dagNamen[i]} <span style="color:var(--muted);font-weight:500;">${formatShortDate(dateStr)}</span>${isToday ? ' <span style="color:var(--accent-move);font-size:12px;font-weight:700;">· Vandaag</span>' : ''}</div>
-      ${acts}
-      ${meals ? `<div style="margin-top:6px;border-top:1px solid var(--border);padding-top:6px;">${meals}</div>` : ''}
+    const statusDot = allDone
+      ? `<span style="width:8px;height:8px;border-radius:50%;background:var(--accent-food);display:inline-block;"></span>`
+      : someDone
+        ? `<span style="width:8px;height:8px;border-radius:50%;background:#f97316;display:inline-block;"></span>`
+        : isToday
+          ? `<span style="width:8px;height:8px;border-radius:50%;border:2px solid var(--accent-move);display:inline-block;"></span>`
+          : `<span style="width:8px;height:8px;display:inline-block;"></span>`;
+
+    const actsHTML = acts.length > 0
+      ? acts.map(a => `
+          <div class="weekov-act" onclick="toggleWeekOvActivity('${dateStr}','${a.id}')">
+            <div class="weekov-act-check ${a.afgevinkt ? 'checked' : ''}"></div>
+            <div style="flex-shrink:0;display:flex;align-items:center;color:${a.afgevinkt ? nameColor : 'var(--muted)'};">${iconSVG(a.type, 16)}</div>
+            <span class="${a.afgevinkt ? 'done' : ''}" style="font-size:13px;flex:1;min-width:0;">${a.naam}${a.duur ? `<span style="color:var(--muted);font-weight:400;"> · ${fmtMin(a.duur)}</span>` : ''}</span>
+          </div>`).join('')
+      : `<div style="font-size:13px;color:var(--muted);padding:2px 0;">Rustdag</div>`;
+
+    const cls = `weekov-day${isToday ? ' is-today' : ''}${allDone ? ' all-done' : ''}`;
+
+    return `<div class="${cls}" style="${isFuture ? 'opacity:.5;' : ''}">
+      <div class="weekov-day-hdr">
+        <div class="weekov-day-status">${statusDot}</div>
+        <div class="weekov-day-center">
+          <div class="weekov-day-name" style="color:${nameColor};">${dagKort[i]}</div>
+          <div class="weekov-day-date">${formatShortDate(dateStr)}</div>
+        </div>
+        <div class="weekov-day-dur">${dayDuurLabel}</div>
+      </div>
+      <div class="weekov-divider"></div>
+      <div class="weekov-day-body">${actsHTML}</div>
     </div>`;
   }).join('');
+
+  container.innerHTML = summaryHTML + daysHTML;
 }
 
 function toggleWeekOvActivity(dateStr, actId) {
@@ -3421,21 +3653,23 @@ function toggleActivity(dateStr, actId, circleEl) {
   if (!wasComplete && nowComplete) showCelebration();
 }
 
-function toggleMealGegeten(dateStr, slot, circleEl) {
+function toggleMealGegeten(dateStr, slot, itemId, circleEl) {
   const weekKey = getISOWeek(new Date(dateStr + 'T12:00:00'));
   ensureDay(dateStr);
-  const meal = data.weken[weekKey][dateStr].maaltijden[slot];
-  if (!meal) return;
-  meal.gegeten = !meal.gegeten;
-  circleEl.classList.toggle('checked', meal.gegeten);
+  const arr = data.weken[weekKey][dateStr].maaltijden[slot];
+  if (!Array.isArray(arr)) return;
+  const item = arr.find(m => m.id === itemId);
+  if (!item) return;
+  item.gegeten = !item.gegeten;
+  circleEl.classList.toggle('checked', item.gegeten);
   circleEl.classList.add('pop-anim');
   setTimeout(() => circleEl.classList.remove('pop-anim'), 300);
-  if (meal.gegeten && navigator.vibrate) navigator.vibrate(15);
+  if (item.gegeten && navigator.vibrate) navigator.vibrate(15);
   const row = circleEl.closest('.meal-row');
   if (row) {
     const nameEl = row.querySelector('.meal-name');
-    if (nameEl) nameEl.classList.toggle('done', meal.gegeten);
-    row.querySelectorAll('.meal-fibers, .meal-protein').forEach(el => el.style.opacity = meal.gegeten ? '1' : '.5');
+    if (nameEl) nameEl.classList.toggle('done', item.gegeten);
+    row.querySelectorAll('.meal-fibers, .meal-protein').forEach(el => el.style.opacity = item.gegeten ? '1' : '.5');
   }
   saveAndSync();
   renderNutriBar(dateStr);
@@ -3447,33 +3681,36 @@ function renderTodayMeals(dateStr) {
   ensureDay(dateStr);
   const meals = data.weken[weekKey][dateStr].maaltijden;
 
-  const rows = [
-    { key: 'ontbijt', label: 'Ontbijt', icon: '🥣' },
-    { key: 'lunch',   label: 'Lunch',   icon: '🥪' },
-    { key: 'diner',   label: 'Diner',   icon: '🍽️' },
-    { key: 'snack',   label: 'Snack',   icon: '🍎' }
+  const slotDefs = [
+    { key: 'ontbijt', label: 'Ontbijt', icon: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>' },
+    { key: 'lunch',   label: 'Lunch',   icon: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>' },
+    { key: 'diner',   label: 'Diner',   icon: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3zm0 0v7"/></svg>' },
+    { key: 'snack',   label: 'Snack',   icon: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>' }
   ];
 
-  container.innerHTML = rows.map(row => {
-    const meal = meals[row.key] || { naam: '', vezels: '' };
-    if (isMealSet(meal, row.key)) {
-      const gegeten = !!meal.gegeten;
-      const protBadge = meal.eiwitten
-        ? `<span class="meal-protein" style="${gegeten?'':'opacity:.5'}">${meal.eiwitten}</span>` : '';
-      return `<div class="meal-row" style="${gegeten?'opacity:1':''}">
-        <button class="meal-check-circle ${gegeten?'checked':''}" onclick="toggleMealGegeten('${dateStr}','${row.key}',this)" aria-label="${gegeten?'Vink uit':'Markeer als gegeten'}">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-        </button>
-        <div class="meal-icon" onclick="quickEditMeal('${dateStr}','${row.key}')">${row.icon}</div>
-        <div class="meal-info" onclick="quickEditMeal('${dateStr}','${row.key}')">
-          <div class="meal-label">${row.label}</div>
-          <div class="meal-name ${gegeten?'done':''}">${meal.naam}</div>
-        </div>
-        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0;" onclick="quickEditMeal('${dateStr}','${row.key}')">
-          <span class="meal-fibers" style="${gegeten?'':'opacity:.5'}">${meal.vezels}</span>
-          ${protBadge}
-        </div>
-      </div>`;
+  container.innerHTML = slotDefs.map(row => {
+    const items = Array.isArray(meals[row.key]) ? meals[row.key] : [];
+    if (items.length > 0) {
+      const itemRows = items.map(item => {
+        const gegeten = !!item.gegeten;
+        const protBadge = item.eiwitten
+          ? `<span class="meal-protein" style="${gegeten?'':'opacity:.5'}">${item.eiwitten}</span>` : '';
+        return `<div class="meal-row" style="${gegeten?'opacity:1':''}">
+          <button class="meal-check-circle ${gegeten?'checked':''}" onclick="toggleMealGegeten('${dateStr}','${row.key}','${item.id}',this)" aria-label="${gegeten?'Vink uit':'Markeer als gegeten'}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </button>
+          <div class="meal-icon" onclick="quickEditMeal('${dateStr}','${row.key}')">${row.icon}</div>
+          <div class="meal-info" onclick="quickEditMeal('${dateStr}','${row.key}')">
+            <div class="meal-label" style="${items.indexOf(item)>0?'display:none':''};">${row.label}</div>
+            <div class="meal-name ${gegeten?'done':''}">${item.naam}</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0;" onclick="quickEditMeal('${dateStr}','${row.key}')">
+            <span class="meal-fibers" style="${gegeten?'':'opacity:.5'}">${item.vezels||''}</span>
+            ${protBadge}
+          </div>
+        </div>`;
+      }).join('');
+      return itemRows;
     } else {
       return `<div class="meal-row" onclick="quickEditMeal('${dateStr}','${row.key}')" style="opacity:.6;">
         <div class="meal-icon">${row.icon}</div>
@@ -3486,7 +3723,6 @@ function renderTodayMeals(dateStr) {
     }
   }).join('');
 
-  // Nutritiebalkjes (vezels + eiwitten)
   renderNutriBar(dateStr);
 }
 
@@ -3497,49 +3733,130 @@ const MEAL_SUGGESTIONS = {
   snack: ['Appel + handje noten', 'Peer + amandelen', 'Banaan + pindakaas', 'Volkoren cracker met hummus', 'Wortel + dip']
 };
 
-function quickEditMeal(dateStr, mealKey) {
+function quickEditMeal(dateStr, slot) {
   const weekKey = getISOWeek(new Date(dateStr + 'T12:00:00'));
-  const meal = data.weken[weekKey][dateStr].maaltijden[mealKey];
-  const suggestions = MEAL_SUGGESTIONS[mealKey] || [];
+  ensureDay(dateStr);
+  const items = data.weken[weekKey][dateStr].maaltijden[slot] || [];
+  const suggestions = MEAL_SUGGESTIONS[slot] || [];
   const labels = { ontbijt: 'Ontbijt', lunch: 'Lunch', diner: 'Diner', snack: 'Snack' };
+
+  // Opgeslagen recepten voor dit slot
+  const slotRecepten = (data.recepten || []).filter(r =>
+    r.type === slot || (r.geschiktVoor || []).includes(slot)
+  ).slice(0, 6);
+
+  const existingHTML = items.length > 0
+    ? `<div style="margin-bottom:12px;">
+        ${items.map(item => `
+          <div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);">
+            <div style="flex:1;font-size:14px;">${item.naam}${item.vezels ? ' <span style="color:var(--muted);font-size:12px;">🌿 '+item.vezels+'</span>' : ''}${item.eiwitten ? ' <span style="color:var(--muted);font-size:12px;"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="vertical-align:-1px;opacity:.9"><path d="M12 2C8.5 2 5 7 5 11.8 5 17.4 8.1 22 12 22s7-4.6 7-10.2C19 7 15.5 2 12 2z"/></svg> '+item.eiwitten+'</span>' : ''}</div>
+            <button onclick="deleteTodayMeal('${dateStr}','${slot}','${item.id}')" style="border:none;background:none;color:var(--danger);font-size:18px;cursor:pointer;line-height:1;padding:0 4px;">×</button>
+          </div>`).join('')}
+      </div>` : '';
+
+  const receptenHTML = slotRecepten.length > 0
+    ? `<div style="margin-bottom:12px;">
+        <div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px;">Mijn recepten</div>
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          ${slotRecepten.map(r => `
+            <button onclick="addReceptToMeal('${dateStr}','${slot}','${r.id}')"
+              style="text-align:left;padding:10px 12px;border-radius:8px;border:1.5px solid var(--border);background:var(--card);cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:space-between;">
+              <div>
+                <div style="font-size:14px;font-weight:500;">${r.naam}</div>
+                ${r.vezels || r.eiwitten ? `<div style="font-size:11px;color:var(--muted);margin-top:2px;">${r.vezels ? '🌿 '+r.vezels : ''}${r.vezels && r.eiwitten ? ' · ' : ''}${r.eiwitten ? '<svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="vertical-align:-1px;opacity:.9"><path d="M12 2C8.5 2 5 7 5 11.8 5 17.4 8.1 22 12 22s7-4.6 7-10.2C19 7 15.5 2 12 2z"/></svg> '+r.eiwitten : ''}</div>` : ''}
+              </div>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-food)" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </button>`).join('')}
+        </div>
+      </div>` : '';
 
   showModal(`
     <div class="modal-header">
-      <h2>${labels[mealKey] || 'Maaltijd'} aanpassen</h2>
+      <h2>${labels[slot] || 'Maaltijd'} toevoegen</h2>
       <button class="modal-close" onclick="closeModal()">✕</button>
     </div>
-    <div class="form-group">
-      <label>Wat eet je?</label>
-      ${micInput('quick-meal-input', 'Spreek of typ je maaltijd', meal.naam)}
+    ${existingHTML}
+    ${receptenHTML}
+    <div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px;">Handmatig invoeren</div>
+    <div class="form-group" style="margin-bottom:8px;">
+      ${micInput('quick-meal-input', 'Spreek of typ je maaltijd', '')}
     </div>
-    <label>Snelkeuzes</label>
-    <div class="meal-quick-chips">
+    <button class="btn btn-ghost btn-full" id="btn-bereken-nutri" onclick="berekenNutriVoorInput('${dateStr}','${slot}')" style="margin-bottom:8px;font-size:13px;">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+      Bereken vezels &amp; eiwitten
+    </button>
+    <div id="nutri-preview" style="display:none;font-size:12px;color:var(--muted);margin-bottom:8px;padding:8px 10px;background:var(--bg);border-radius:8px;"></div>
+    <div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px;">Snelkeuzes</div>
+    <div class="meal-quick-chips" style="margin-bottom:12px;">
       ${suggestions.map(s => `<button class="meal-quick-chip" onclick="document.getElementById('quick-meal-input').value=this.textContent">${s}</button>`).join('')}
     </div>
-    <button class="btn btn-primary btn-full" onclick="saveQuickMeal('${dateStr}','${mealKey}')">Opslaan</button>
-    ${meal.naam ? `<button class="btn btn-ghost btn-full" style="margin-top:8px;color:var(--danger);" onclick="deleteTodayMeal('${dateStr}','${mealKey}')">Maaltijd verwijderen</button>` : ''}
+    <button class="btn btn-primary btn-full" onclick="saveQuickMeal('${dateStr}','${slot}')">Toevoegen</button>
   `);
   setTimeout(() => document.getElementById('quick-meal-input').focus(), 50);
 }
 
-function saveQuickMeal(dateStr, mealKey) {
+function addReceptToMeal(dateStr, slot, receptId) {
+  const weekKey = getISOWeek(new Date(dateStr + 'T12:00:00'));
+  const recept = (data.recepten || []).find(r => r.id === receptId);
+  if (!recept) return;
+  ensureDay(dateStr);
+  const arr = data.weken[weekKey][dateStr].maaltijden;
+  if (!Array.isArray(arr[slot])) arr[slot] = [];
+  arr[slot].push({ id:'m'+Date.now()+Math.random().toString(36).slice(2,5), naam:recept.naam, vezels:recept.vezels||'', eiwitten:recept.eiwitten||'', kcal:'', gepland:true, gegeten:false, receptId:recept.id });
+  saveAndSync();
+  closeModal();
+  renderTodayMeals(dateStr);
+}
+
+async function berekenNutriVoorInput(dateStr, slot) {
+  const naam = (document.getElementById('quick-meal-input').value || '').trim();
+  if (!naam) { showBanner('yellow', 'Typ eerst een gerecht in.'); return; }
+  const btn = document.getElementById('btn-bereken-nutri');
+  const preview = document.getElementById('nutri-preview');
+  if (btn) { btn.disabled = true; btn.textContent = 'Bezig…'; }
+  try {
+    const prompt = `Schat voor het gerecht "${naam}" (1 portie): vezels in gram en eiwitten in gram. Geef ALLEEN JSON: {"vezels":"~Xg","eiwitten":"~Xg"}. Geen uitleg.`;
+    const raw = await callAIPlain(prompt, 60);
+    const result = safeParseJSON(raw);
+    if (result && (result.vezels || result.eiwitten)) {
+      window._berekenResult = result;
+      if (preview) {
+        preview.style.display = 'block';
+        preview.innerHTML = `🌿 Vezels: <strong>${result.vezels||'?'}</strong> &nbsp;·&nbsp; <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="vertical-align:-1px;opacity:.9"><path d="M12 2C8.5 2 5 7 5 11.8 5 17.4 8.1 22 12 22s7-4.6 7-10.2C19 7 15.5 2 12 2z"/></svg> Eiwitten: <strong>${result.eiwitten||'?'}</strong> &nbsp;<span style="color:var(--accent-food);">✓ wordt opgeslagen</span>`;
+      }
+    } else throw new Error();
+  } catch(_) {
+    if (preview) { preview.style.display = 'block'; preview.textContent = 'Kon niet berekenen — probeer opnieuw.'; }
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg> Bereken vezels &amp; eiwitten';
+    }
+  }
+}
+
+function saveQuickMeal(dateStr, slot) {
   const weekKey = getISOWeek(new Date(dateStr + 'T12:00:00'));
   const val = document.getElementById('quick-meal-input').value.trim();
   if (val) {
-    const meal = data.weken[weekKey][dateStr].maaltijden[mealKey];
-    meal.naam = val;
-    meal.gepland = true;
+    ensureDay(dateStr);
+    const arr = data.weken[weekKey][dateStr].maaltijden;
+    if (!Array.isArray(arr[slot])) arr[slot] = [];
+    const nutri = window._berekenResult || {};
+    window._berekenResult = null;
+    arr[slot].push({ id:'m'+Date.now()+Math.random().toString(36).slice(2,5), naam:val, vezels:nutri.vezels||'', eiwitten:nutri.eiwitten||'', kcal:'', gepland:true, gegeten:false });
     saveAndSync();
   }
   closeModal();
   renderTodayMeals(dateStr);
 }
 
-function deleteTodayMeal(dateStr, mealKey) {
+function deleteTodayMeal(dateStr, slot, itemId) {
   const weekKey = getISOWeek(new Date(dateStr + 'T12:00:00'));
-  const def = JSON.parse(JSON.stringify(DEFAULT_MEALS[mealKey] || { naam: '', vezels: '', eiwitten: '', kcal: '' }));
-  def.naam = '';
-  data.weken[weekKey][dateStr].maaltijden[mealKey] = def;
+  const arr = data.weken[weekKey][dateStr].maaltijden;
+  if (Array.isArray(arr[slot])) {
+    arr[slot] = arr[slot].filter(m => m.id !== itemId);
+  }
   saveAndSync();
   closeModal();
   renderTodayMeals(dateStr);
@@ -3582,12 +3899,28 @@ function renderWeek() {
     const tmpl = WEEK_TEMPLATE[i];
     const isRust = tmpl.type === 'rest';
 
-    const allDone = !isRust && dayData.activiteiten && dayData.activiteiten.length > 0 &&
-      dayData.activiteiten.every(a => a.afgevinkt);
     const isSunday = isZondag(dateStr);
+    const loggedActs = dayData.activiteiten || [];
+    const doneActs = loggedActs.filter(a => a.afgevinkt);
+    const allDone = !isRust && loggedActs.length > 0 && doneActs.length === loggedActs.length;
+    const someDone = doneActs.length > 0;
+    const dayDuurMin = doneActs.reduce((s,a) => s+(a.duur||0), 0);
+    const dayDuurLabel = dayDuurMin > 0 ? fmtMin(dayDuurMin) : '';
 
-    const badgeClass = `badge-${tmpl.type}`;
     const badgeLabel = { run:'Lopen', gym:'Gym', bike:'Fietsen', commute:'Fiets werk', walk:'Wandelen', walkdog:'Wandelen met Otis', rest:'Rust' }[tmpl.type] || 'Overig';
+
+    const nameColor = isToday ? 'var(--accent-move)' : allDone ? 'var(--accent-food)' : 'var(--text)';
+    const dotBg = allDone ? 'var(--accent-food)' : someDone ? 'var(--accent-move)' : 'transparent';
+    const dotBorder = allDone ? 'var(--accent-food)' : someDone ? 'var(--accent-move)' : isToday ? 'var(--accent-move)' : 'var(--border)';
+
+    // Sport label: actual logged activities, or template suggestion if nothing logged
+    let sportLabel = '';
+    if (loggedActs.length > 0) {
+      const names = [...new Set(loggedActs.map(a => a.naam))];
+      sportLabel = names.slice(0,2).join(' · ');
+    } else if (!isRust && !isSunday) {
+      sportLabel = badgeLabel;
+    }
 
     let actHTML = '';
     if (isRust || isSunday) {
@@ -3625,16 +3958,16 @@ function renderWeek() {
 
     return `<div class="day-card ${isToday ? 'today' : ''}" id="daycard-${dateStr}">
       <div class="day-card-header" onclick="toggleDayCard('${dateStr}')">
-        <span class="day-name">${dagNaam}</span>
-        <div class="day-title-block">
-          <span class="day-type-label t-${tmpl.type}">${badgeLabel}</span>
-          <div class="day-meta-row">
-            <span>${formatShortDate(dateStr)}</span>
-            ${dayData.aangepast ? '<span class="edited-icon" title="Aangepast">✎ aangepast</span>' : ''}
-          </div>
+        <div class="dchr-status"><span class="dch-dot" style="background:${dotBg};border-color:${dotBorder};"></span></div>
+        <div class="dchr-center">
+          <div class="dchr-dayname" style="color:${nameColor};">${dagNaam}</div>
+          <div class="dchr-date">${formatShortDate(dateStr)}${dayData.aangepast ? ' · <span style="color:var(--muted);font-size:10px;">aangepast</span>' : ''}</div>
+          ${sportLabel ? `<div class="dchr-sport">${sportLabel}</div>` : ''}
         </div>
-        ${allDone ? '<span class="day-done-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-food)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>' : ''}
-        <svg class="chevron ${isOpen ? 'open' : ''}" id="chevron-${dateStr}" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        <div class="dchr-right">
+          ${dayDuurLabel ? `<span class="dchr-dur">${dayDuurLabel}</span>` : ''}
+          <svg class="chevron ${isOpen ? 'open' : ''}" id="chevron-${dateStr}" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
       </div>
       <div class="day-card-body" id="daybody-${dateStr}" style="display:${isOpen ? 'block' : 'none'};">
         ${actHTML}
@@ -3684,40 +4017,12 @@ function updateWeekProgress() {
 function editWeekMeal(dateStr) { quickEditWeekMeal(dateStr); }
 
 function quickEditWeekMeal(dateStr) {
-  const weekKey = getISOWeek(new Date(dateStr + 'T12:00:00'));
-  ensureDay(dateStr);
-  const meal = data.weken[weekKey][dateStr].maaltijden.diner;
-  const suggestions = MEAL_SUGGESTIONS.diner || [];
-  showModal(`
-    <div class="modal-header">
-      <h2>Diner aanpassen</h2>
-      <button class="modal-close" onclick="closeModal()">✕</button>
-    </div>
-    <div class="form-group">
-      <label>Wat eet je?</label>
-      ${micInput('quick-meal-input', 'Spreek of typ je maaltijd', meal.naam || '')}
-    </div>
-    <label>Snelkeuzes</label>
-    <div class="meal-quick-chips">
-      ${suggestions.map(s => `<button class="meal-quick-chip" onclick="document.getElementById('quick-meal-input').value=this.textContent">${s}</button>`).join('')}
-    </div>
-    <button class="btn btn-primary btn-full" onclick="saveQuickWeekMeal('${dateStr}')">Opslaan</button>
-  `);
-  setTimeout(() => document.getElementById('quick-meal-input').focus(), 50);
+  quickEditMeal(dateStr, 'diner');
 }
 
 function saveQuickWeekMeal(dateStr) {
-  const weekKey = getISOWeek(new Date(dateStr + 'T12:00:00'));
-  const val = document.getElementById('quick-meal-input').value.trim();
-  if (val) {
-    const meal = data.weken[weekKey][dateStr].maaltijden.diner;
-    meal.naam = val;
-    meal.gepland = true;
-    saveAndSync();
-  }
-  closeModal();
+  saveQuickMeal(dateStr, 'diner');
   renderWeek();
-  if (dateStr === today()) renderTodayMeals(dateStr);
 }
 
 function _unusedEditWeekMeal(dateStr) {
@@ -3895,51 +4200,70 @@ function _renderFoodChef() {
   const container = document.getElementById('food-chef-content');
   if (!container) return;
   const hasKey = !!settings.anthropicKey;
-  const weekKey = currentWeekKey();
-  const days = getWeekDates(weekKey);
-  const dagOpties = days.map((d, i) => {
-    const labels = ['Maandag','Dinsdag','Woensdag','Donderdag','Vrijdag','Zaterdag','Zondag'];
-    return `<option value="${d}">${labels[i]}</option>`;
-  }).join('');
+
+  const micSVG = `<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>`;
+
+  const chips = [
+    { svg: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>', label: 'Hoge vezels' },
+    { svg: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4v6a6 6 0 0 0 12 0V4"/><line x1="6" y1="4" x2="18" y2="4"/></svg>', label: 'Veel eiwit' },
+    { svg: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a9 9 0 0 0 9-9c0-4.97-4.03-9-9-9S3 8.03 3 13a9 9 0 0 0 9 9z"/><path d="M12 8v5l3 3"/></svg>', label: 'Vegetarisch' },
+    { svg: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>', label: 'Snel & makkelijk' },
+    { svg: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg>', label: 'Goed ontbijt' },
+    { svg: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>', label: 'Comfort food' },
+    { svg: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>', label: 'Lichte lunch' },
+    { svg: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>', label: 'Internationaal' },
+  ];
 
   container.innerHTML = `
-    <div class="recipe-gen-card">
-      ${hasKey ? `
-      <button id="voice-recipe-btn" class="food-chef-big-voice" onclick="smartVoiceRecipe()">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
-        Spreek gerecht in — direct recept
-      </button>` : ''}
-      <input id="gen-focus-input" type="text" class="recipe-gen-focus" placeholder="Of typ: pasta, paprika, tomaat…">
-      <div class="recipe-gen-row" style="margin-top:10px;">
-        <span class="recipe-gen-label">Aantal</span>
+    <div class="chef-hero">
+      <div class="chef-hero-title">Wat wil je eten?</div>
+      <div class="chef-hero-sub">Zeg maar wat je wil — een gerecht, ingrediënt, wat je in huis hebt, of gewoon "iets snels met kip"</div>
+      <button id="voice-recipe-btn" class="chef-mic-big" onclick="smartVoiceRecipe()">${micSVG}</button>
+      <div class="chef-mic-label" id="chef-mic-label">Spreek je wens in</div>
+    </div>
+
+    <div class="chef-inspiration">
+      ${chips.map(c => `<button class="chef-chip" onclick="document.getElementById('gen-focus-input').value='${c.label}'">${c.svg} ${c.label}</button>`).join('')}
+    </div>
+
+    <div style="margin-bottom:12px;">
+      ${micInput('gen-focus-input', 'Of typ: pasta, paprika, tomaat…', '')}
+    </div>
+
+    <div class="recipe-gen-card" style="margin-bottom:12px;padding:14px 14px 10px;">
+      <div class="recipe-gen-row">
+        <span class="recipe-gen-label">Recepten</span>
         ${[1,2,3].map(n => `<button class="gen-pill${genCount===n?' active':''}" onclick="setGenCount(${n})">${n}</button>`).join('')}
         <label class="vega-toggle-wrap">
           <input type="checkbox" id="gen-vega" class="vega-toggle-input">
-          <span class="vega-toggle-label">Vega</span>
+          <span class="vega-toggle-label">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;"><path d="M2 22c1.25-1.25 2.45-2.45 4-3 2.5-1 5.5.5 8 0 2-.4 4-2 4-2s-2 4-5 5c-2 .7-4.5-.2-6 1H2z"/><path d="M2 22s3-6 6-8 9-2 9-2"/></svg>
+            Vega
+          </span>
         </label>
       </div>
-      <div class="recipe-gen-row" style="margin-top:8px;">
+      <div class="recipe-gen-row" style="margin-bottom:0;">
         <span class="recipe-gen-label">Focus</span>
         <button class="gen-pill gen-focus-pill${genFocus==='vezels'?' active':''}" onclick="setGenFocus('vezels',this)">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 0 1 10 10c0 5.52-4.48 10-10 10"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10"/><path d="M12 2v20"/><path d="M2 12h20"/></svg>
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="vertical-align:-1px;"><line x1="18" y1="20" x2="18" y2="12"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
           Vezels
         </button>
         <button class="gen-pill gen-focus-pill${genFocus==='eiwitten'?' active':''}" onclick="setGenFocus('eiwitten',this)">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4v16"/><path d="M18 4v16"/><path d="M6 8h12"/><path d="M6 16h12"/></svg>
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="vertical-align:-1px;"><path d="M6 4v6a6 6 0 0 0 12 0V4"/><line x1="6" y1="4" x2="18" y2="4"/></svg>
           Eiwitten
         </button>
         <button class="gen-pill gen-focus-pill${genFocus==='combi'?' active':''}" onclick="setGenFocus('combi',this)">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-          Combi
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="vertical-align:-1px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          Alles
         </button>
       </div>
-      ${hasKey
-        ? `<button id="gen-btn" class="recipe-gen-main-btn" style="width:100%;margin-top:14px;" onclick="generateRecepten()">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-            Genereer recepten
-           </button>`
-        : `<p style="font-size:13px;color:var(--muted);text-align:center;padding:8px 0;">Voeg een API-sleutel in via ⚙️</p>`}
     </div>
+
+    <button id="gen-btn" class="recipe-gen-main-btn" style="width:100%;margin-bottom:10px;" onclick="generateRecepten()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      Genereer recepten
+    </button>
+
     <button class="recipe-add-own-btn" onclick="addReceptModal()">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
       Recept zelf toevoegen
@@ -3983,7 +4307,7 @@ function _renderFoodReceptenList() {
             <span class="recipe-title">${r.naam}</span>
             <div class="recipe-badges">
               <span class="fiber-badge">🌿 ${r.vezels || '?'}</span>
-              ${r.eiwitten ? `<span class="protein-badge">💪 ${r.eiwitten}</span>` : ''}
+              ${r.eiwitten ? `<span class="protein-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="vertical-align:-1px;opacity:.9"><path d="M12 2C8.5 2 5 7 5 11.8 5 17.4 8.1 22 12 22s7-4.6 7-10.2C19 7 15.5 2 12 2z"/></svg> ${r.eiwitten}</span>` : ''}
               <span class="time-badge">${r.tijd}</span>
             </div>
           </div>
@@ -4140,12 +4464,9 @@ function planRecipeForDay(recipeId) {
   if (!recept) return;
   ensureDay(dateStr);
   const slotLabel = { ontbijt:'ontbijt', lunch:'lunch', diner:'diner', snack:'snack' };
-  data.weken[weekKey][dateStr].maaltijden[slot] = {
-    naam: recept.naam,
-    vezels: recept.vezels,
-    receptId: recipeId,
-    gepland: true
-  };
+  const _arr4159 = data.weken[weekKey][dateStr].maaltijden;
+  if (!Array.isArray(_arr4159[slot])) _arr4159[slot] = [];
+  _arr4159[slot].push({ id:'m'+Date.now()+Math.random().toString(36).slice(2,5), naam:recept.naam, vezels:recept.vezels||'', eiwitten:recept.eiwitten||'', kcal:'', gepland:true, gegeten:false, receptId:recipeId });
   saveAndSync();
   const dagNamen = ['Ma','Di','Wo','Do','Vr','Za','Zo'];
   const dates = getWeekDates(weekKey);
@@ -4168,21 +4489,23 @@ function showShoppingList() {
     const dayData = weekDays[d];
     if (!dayData) return;
     slots.forEach(slot => {
-      const m = dayData.maaltijden && dayData.maaltijden[slot];
-      if (!m || !m.naam || m.naam.trim() === '') return;
-      const defaultNaam = DEFAULT_MEALS[slot] && DEFAULT_MEALS[slot].naam;
-      if (m.naam === defaultNaam) return;
-      let ingredienten = [];
-      if (m.receptId) {
-        const rec = (data.recepten || []).find(r => r.id === m.receptId);
-        if (rec && Array.isArray(rec.ingredienten)) ingredienten = rec.ingredienten;
-      }
-      allMeals.push({
-        id: d + '-' + slot,
-        label: dayLabels[di] + ' · ' + slot.charAt(0).toUpperCase() + slot.slice(1),
-        naam: m.naam,
-        ingredienten,
-        hasRecept: ingredienten.length > 0,
+      const slotVal = dayData.maaltijden && dayData.maaltijden[slot];
+      const items = Array.isArray(slotVal) ? slotVal : (slotVal && slotVal.naam ? [slotVal] : []);
+      items.forEach((m, idx) => {
+        if (!m || !m.naam || m.naam.trim() === '') return;
+        let ingredienten = [];
+        if (m.receptId) {
+          const rec = (data.recepten || []).find(r => r.id === m.receptId);
+          if (rec && Array.isArray(rec.ingredienten)) ingredienten = rec.ingredienten;
+        }
+        allMeals.push({
+          id: d + '-' + slot + (idx > 0 ? '-' + idx : ''),
+          label: dayLabels[di] + ' · ' + slot.charAt(0).toUpperCase() + slot.slice(1),
+          naam: m.naam,
+          ingredienten,
+          hasRecept: ingredienten.length > 0,
+          _mealId: m.id, _mealSlot: slot, _mealDate: d,
+        });
       });
     });
   });
@@ -4259,6 +4582,16 @@ async function generateIngredientsForMeal(mealId) {
       geschiktVoor: [],
     };
     data.recepten.push(newRec);
+
+    // Sla receptId ook op in data.weken zodat volgende keer showShoppingList het vindt
+    if (meal._mealId && meal._mealDate && meal._mealSlot) {
+      const mealWk = getISOWeek(new Date(meal._mealDate + 'T12:00:00'));
+      const slotArr = data.weken[mealWk] && data.weken[mealWk][meal._mealDate] && data.weken[mealWk][meal._mealDate].maaltijden[meal._mealSlot];
+      if (Array.isArray(slotArr)) {
+        const mItem = slotArr.find(m2 => m2.id === meal._mealId);
+        if (mItem) mItem.receptId = newRec.id;
+      }
+    }
     saveAndSync();
 
     meal.ingredienten = ingredienten;
@@ -4322,7 +4655,7 @@ async function _buildAndShowShopList() {
       const esc = item.display.replace(/'/g, "\\'");
       const checked = inHuis.has(item.display);
       const receptLabel = item.recepten && item.recepten.length
-        ? `<div style="font-size:11px;color:var(--muted);margin-top:1px;">${item.recepten.map(r => `<span style="background:var(--surface2);border-radius:4px;padding:0 4px;margin-right:2px;">${r.length > 14 ? r.slice(0,13)+'…' : r}</span>`).join('')}</div>` : '';
+        ? `<div style="font-size:11px;color:var(--muted);margin-top:1px;" title="${item.recepten.join(', ')}"><span style="background:var(--surface2);border-radius:4px;padding:1px 6px;">${item.recepten.length === 1 ? item.recepten[0].length > 18 ? item.recepten[0].slice(0,17)+'…' : item.recepten[0] : `${item.recepten.length} recepten`}</span></div>` : '';
       return `<label class="shop-item-row ${checked ? 'in-huis' : ''}" onclick="event.preventDefault();_toggleInHuis('${esc}',this)">
         <input type="checkbox" ${checked ? 'checked' : ''} style="pointer-events:none;">
         <div><span>${item.display}</span>${receptLabel}</div>
@@ -4623,7 +4956,7 @@ function recipeCardHTML(r) {
         <div style="font-weight:700;font-size:16px;margin-bottom:4px;">${r.naam}</div>
         <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px;">
           <span class="fiber-badge">🌿 ${r.vezels || '?'}</span>
-          ${r.eiwitten ? `<span class="protein-badge">💪 ${r.eiwitten}</span>` : ''}
+          ${r.eiwitten ? `<span class="protein-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="vertical-align:-1px;opacity:.9"><path d="M12 2C8.5 2 5 7 5 11.8 5 17.4 8.1 22 12 22s7-4.6 7-10.2C19 7 15.5 2 12 2z"/></svg> ${r.eiwitten}</span>` : ''}
           <span class="time-badge">${r.tijd}</span>
         </div>
         <div style="font-size:13px;color:var(--muted);line-height:1.5;">
@@ -4679,9 +5012,9 @@ function planGenRecipe(tmpId) {
     delete saved._tmpId;
     data.recepten.push(saved);
   }
-  data.weken[weekKey][dateStr].maaltijden[slot] = {
-    naam: saved.naam, vezels: saved.vezels || '', eiwitten: saved.eiwitten || '', receptId: saved.id
-  };
+  const _arr4707 = data.weken[weekKey][dateStr].maaltijden;
+  if (!Array.isArray(_arr4707[slot])) _arr4707[slot] = [];
+  _arr4707[slot].push({ id:'m'+Date.now()+Math.random().toString(36).slice(2,5), naam:saved.naam, vezels:saved.vezels||'', eiwitten:saved.eiwitten||'', kcal:'', gepland:true, gegeten:false, receptId:saved.id });
   // Vink het recept aan in de preview
   const chk = document.getElementById('chk-' + tmpId);
   if (chk) chk.checked = true;
@@ -4994,11 +5327,14 @@ function showWeekoverzicht() {
         <span class="${a.afgevinkt ? 'done' : ''}">${a.naam}${a.duur ? ` · ${fmtMin(a.duur)}` : ''}</span>
       </div>`).join('') || '<div style="font-size:13px;color:var(--muted);padding:4px 0;">Rustdag</div>';
 
-    const meals = Object.entries(dayData.maaltijden || {}).map(([key, meal]) => `
-      <div class="weekov-meal">
-        <span class="weekov-meal-label">${mealLabels[key] || key}</span>
-        <span>${meal.naam || '—'}</span>
-      </div>`).join('');
+    const meals = Object.entries(dayData.maaltijden || {}).flatMap(([key, val]) => {
+      const items = Array.isArray(val) ? val : (val && val.naam ? [val] : []);
+      return items.map(meal => `
+        <div class="weekov-meal">
+          <span class="weekov-meal-label">${mealLabels[key] || key}</span>
+          <span>${meal.naam || '—'}</span>
+        </div>`);
+    }).join('');
 
     return `<div class="weekov-day" ${isToday ? 'style="border-left:3px solid var(--accent-move);padding-left:10px;"' : ''}>
       <div class="weekov-day-header">${dagNamen[i]} ${formatShortDate(dateStr)}${isToday ? ' · Vandaag' : ''}</div>
@@ -5045,7 +5381,8 @@ function computeStats(period) {
 
   const addMin = (type, min) => {
     if (!min || min <= 0) return;
-    result[type] = (result[type] || 0) + min;
+    const t = (type === 'commute') ? 'bike' : type;
+    result[t] = (result[t] || 0) + min;
   };
 
   if (data.weken) {
@@ -5127,7 +5464,7 @@ function renderCoachNutri() {
   if (dateEl) dateEl.textContent = new Date(todayStr + 'T12:00:00').toLocaleDateString('nl-NL', { weekday: 'long', day: 'numeric', month: 'long' });
   const weekKey = getISOWeek(new Date(todayStr + 'T12:00:00'));
   const dayData = data.weken && data.weken[weekKey] && data.weken[weekKey][todayStr];
-  const maaltijden = dayData ? Object.values(dayData.maaltijden || {}) : [];
+  const maaltijden = dayData ? Object.values(dayData.maaltijden || {}).flatMap(v => Array.isArray(v) ? v : (v && v.naam ? [v] : [])) : [];
 
   let vezels = 0, eiwitten = 0;
   maaltijden.forEach(m => {
@@ -5166,6 +5503,7 @@ function renderCoach() {
   renderSavedTips();
   renderPartners();
   _syncTTSButtons();
+  renderPatroonGrid();
 }
 
 function linkExercises(line) {
@@ -5346,6 +5684,177 @@ async function sendChat() {
   }
 }
 
+// ─── PATRONEN ────────────────────────────────────────────────────────────────
+
+function calcDagScore(dateStr) {
+  const d = new Date(dateStr + 'T00:00:00');
+  const wk = getISOWeek(d);
+  const dayData = data.weken && data.weken[wk] && data.weken[wk][dateStr];
+  if (!dayData) return 0;
+  let score = 0;
+  if (dayData.activiteiten && dayData.activiteiten.some(a => a.afgevinkt)) score++;
+  if (dayData.maaltijden) {
+    const filled = Object.values(dayData.maaltijden).filter(v => {
+      const arr = Array.isArray(v) ? v : (v && v.naam ? [v] : []);
+      return arr.some(m => m.gegeten);
+    });
+    if (filled.length >= 2) score++;
+  }
+  return score;
+}
+
+function _lds(d) {
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
+
+function renderPatroonGrid() {
+  const gridEl = document.getElementById('patroon-grid');
+  const statsEl = document.getElementById('patroon-stats');
+  if (!gridEl) return;
+
+  const today = new Date(); today.setHours(0,0,0,0);
+  const todayStr = _lds(today);
+  const dagLetters = ['Z','M','D','W','D','V','Z'];
+  const dagNamen = ['Ma','Di','Wo','Do','Vr','Za','Zo'];
+
+  // Last 7 days, oldest first
+  const days = [];
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(today); d.setDate(today.getDate() - i);
+    days.push(d);
+  }
+
+  const lettersHTML = days.map(d => `<span class="patroon-dag-hdr">${dagLetters[d.getDay()]}</span>`).join('');
+  const dotsHTML = days.map(d => {
+    const ds = _lds(d);
+    const isToday = ds === todayStr;
+    const score = calcDagScore(ds);
+    let cls = 'dag-dot';
+    if (score === 2) cls += ' score-2';
+    else if (score === 1) cls += ' score-1';
+    else cls += ' score-0';
+    if (isToday) cls += ' today';
+    return `<button class="${cls}" onclick="showDagDetail('${ds}')"></button>`;
+  }).join('');
+
+  gridEl.innerHTML = `<div class="patroon-strip">
+    <div class="patroon-strip-letters">${lettersHTML}</div>
+    <div class="patroon-strip-dots">${dotsHTML}</div>
+  </div>`;
+
+  // Stats from last 56 days
+  const dowScores = [[],[],[],[],[],[],[]];
+  let streakCount = 0, streakBroken = false;
+  for (let i = 1; i <= 56; i++) {
+    const d = new Date(today); d.setDate(today.getDate() - i);
+    const score = calcDagScore(_lds(d));
+    dowScores[(d.getDay() + 6) % 7].push(score);
+    if (!streakBroken) { if (score > 0) streakCount++; else streakBroken = true; }
+  }
+  if (!streakBroken && calcDagScore(todayStr) > 0) streakCount++;
+
+  const dowAvgs = dowScores.map(arr => arr.length ? arr.reduce((a,b)=>a+b,0)/arr.length : 0);
+  const maxAvg = Math.max(...dowAvgs);
+  const bestDow = maxAvg > 0 ? dowAvgs.indexOf(maxAvg) : -1;
+  const total = dowScores.flat().length;
+  const active = dowScores.flat().filter(s => s > 0).length;
+  const pct = total > 0 ? Math.round(active / total * 100) : 0;
+
+  statsEl.innerHTML = `
+    <div class="patroon-stat">
+      <div class="patroon-stat-val" style="color:#16a34a;">${streakCount}</div>
+      <div class="patroon-stat-lbl">dag${streakCount !== 1 ? 'en' : ''} streak</div>
+    </div>
+    <div class="patroon-stat">
+      <div class="patroon-stat-val" style="color:var(--accent-food);">${bestDow >= 0 ? dagNamen[bestDow] : '—'}</div>
+      <div class="patroon-stat-lbl">beste dag</div>
+    </div>
+    <div class="patroon-stat">
+      <div class="patroon-stat-val">${pct}%</div>
+      <div class="patroon-stat-lbl">actief</div>
+    </div>`;
+}
+
+function showDagDetail(dateStr) {
+  const bar = document.getElementById('dag-detail-bar');
+  if (!bar) return;
+  const d = new Date(dateStr + 'T00:00:00');
+  const wk = getISOWeek(d);
+  const dayData = data.weken && data.weken[wk] && data.weken[wk][dateStr];
+  const dNamen = ['zo','ma','di','wo','do','vr','za'];
+  const mNamen = ['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
+  const label = `${dNamen[d.getDay()]} ${d.getDate()} ${mNamen[d.getMonth()]}`;
+  if (!dayData) { bar.textContent = `${label} — niets gelogd`; return; }
+  const parts = [];
+  if (dayData.activiteiten) {
+    const done = dayData.activiteiten.filter(a => a.afgevinkt).map(a => a.naam || a.type);
+    if (done.length) parts.push(done.join(', '));
+  }
+  if (dayData.maaltijden) {
+    const meals = Object.values(dayData.maaltijden).flatMap(v => Array.isArray(v) ? v : (v && v.naam ? [v] : [])).filter(m => m.gegeten).map(m => m.naam);
+    if (meals.length) parts.push(meals.slice(0,3).join(', '));
+  }
+  bar.textContent = `${label} — ${parts.length ? parts.join(' · ') : 'niets gelogd'}`;
+}
+
+async function analysePatronen() {
+  const el = document.getElementById('patroon-inzichten');
+  el.innerHTML = '<div class="typing-dots" style="justify-content:center;padding:20px;"><span></span><span></span><span></span></div>';
+
+  const today = new Date(); today.setHours(0,0,0,0);
+  const dowScores = [[],[],[],[],[],[],[]];
+  const weekMap = {};
+  let streakCount = 0, streakBroken = false;
+
+  for (let i = 1; i <= 56; i++) {
+    const d = new Date(today); d.setDate(today.getDate() - i);
+    const ds = _lds(d);
+    const score = calcDagScore(ds);
+    const dow = (d.getDay() + 6) % 7;
+    const wk = `W${getISOWeek(d)}`;
+    dowScores[dow].push(score);
+    weekMap[wk] = (weekMap[wk] || 0) + score;
+    if (!streakBroken) { if (score > 0) streakCount++; else streakBroken = true; }
+  }
+
+  const dagNamen = ['maandag','dinsdag','woensdag','donderdag','vrijdag','zaterdag','zondag'];
+  const dowStr = dowScores.map((arr,i) => `${dagNamen[i]}:${arr.length ? (arr.reduce((a,b)=>a+b,0)/arr.length).toFixed(2) : '0'}`).join(', ');
+  const weekStr = Object.entries(weekMap).slice(-8).map(([w,s]) => `${w}:${s}`).join(', ') || 'te weinig data';
+  const totalDays = dowScores.flat().length;
+  const activeDays = dowScores.flat().filter(s => s > 0).length;
+
+  const prompt = `Analyseer gezondheidspatronen van de gebruiker.
+Dag-gemiddelden (0=niets, 1=half, 2=volledig): ${dowStr}.
+Weekscores (som): ${weekStr}.
+Huidige streak: ${streakCount} dagen. Actieve dagen: ${activeDays} van ${totalDays}.
+
+Geef PRECIES 3 inzichten als JSON array. Elk heeft "type" (kies: patroon, trend of tip) en "tekst" (1 zin, concreet, spreek gebruiker aan met "je"). Baseer je alleen op de data, geen vage algemeenheden.
+Geef ALLEEN de JSON array.`;
+
+  try {
+    const raw = await callAI(prompt, 350);
+    const match = raw.match(/\[[\s\S]*\]/);
+    const inzichten = JSON.parse(match ? match[0] : raw);
+    const iconMap = { patroon:'🔍', trend:'📈', tip:'💡' };
+    const lblMap = { patroon:'Patroon', trend:'Trend', tip:'Tip' };
+    el.innerHTML = inzichten.map(iz => `
+      <div class="inzicht-card ${iz.type||'tip'}">
+        <div class="inzicht-icon">${iconMap[iz.type]||'💡'}</div>
+        <div>
+          <div class="inzicht-lbl">${lblMap[iz.type]||'Inzicht'}</div>
+          <div class="inzicht-tekst">${iz.tekst}</div>
+        </div>
+      </div>`).join('');
+  } catch(e) {
+    el.innerHTML = `<p style="color:var(--muted);font-size:14px;margin-top:10px;">Analyse mislukt. Probeer opnieuw.</p>`;
+  }
+}
+
+function togglePeriodeAnalyse() {
+  const el = document.getElementById('periode-analyse-sectie');
+  if (el) el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+
 function stepTerugblik(delta) {
   const inp = document.getElementById('terugblik-dagen-input');
   if (!inp) return;
@@ -5388,7 +5897,7 @@ async function doTerugblik() {
       }
     }
     if (dayData.maaltijden) {
-      Object.values(dayData.maaltijden).forEach(m => {
+      Object.values(dayData.maaltijden).flatMap(v => Array.isArray(v) ? v : (v && v.naam ? [v] : [])).forEach(m => {
         if (m && m.naam && m.gegeten) maaltijdLines.push(m.naam);
       });
     }
@@ -5576,13 +6085,19 @@ function renderFoodWeekmenu() {
     const isToday = d === todayStr;
 
     const mealRows = slots.map(s => {
-      const m = meals[s];
-      if (m && m.naam) {
-        const fiber = m.vezels ? `<span style="color:var(--accent-food);font-size:11px;"> · ${m.vezels}</span>` : '';
-        return `<div class="weekmenu-row" onclick="editWeekMenuMeal('${d}','${s}')">
-          <span class="weekmenu-slot-label">${slotLabel[s]}</span>
-          <span class="weekmenu-meal-name">${m.naam}${fiber}</span>
-          <span class="weekmenu-del" onclick="event.stopPropagation();clearWeekMenuMeal('${d}','${s}')">×</span>
+      const items = Array.isArray(meals[s]) ? meals[s] : [];
+      if (items.length > 0) {
+        return items.map((m, idx) => {
+          const fiber = [m.vezels ? `🌿 ${m.vezels}` : '', m.eiwitten ? `<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="vertical-align:-1px;opacity:.9"><path d="M12 2C8.5 2 5 7 5 11.8 5 17.4 8.1 22 12 22s7-4.6 7-10.2C19 7 15.5 2 12 2z"/></svg> ${m.eiwitten}` : ''].filter(Boolean).join(' · ');
+          const fiberSpan = fiber ? `<span style="color:var(--muted);font-size:11px;"> · ${fiber}</span>` : '';
+          return `<div class="weekmenu-row" onclick="editWeekMenuMeal('${d}','${s}')">
+            <span class="weekmenu-slot-label">${idx === 0 ? slotLabel[s] : ''}</span>
+            <span class="weekmenu-meal-name">${m.naam}${fiberSpan}</span>
+            <span class="weekmenu-del" onclick="event.stopPropagation();deleteWeekMenuMealItem('${d}','${s}','${m.id}')">×</span>
+          </div>`;
+        }).join('') + `<div class="weekmenu-row weekmenu-row-empty" onclick="editWeekMenuMeal('${d}','${s}')">
+          <span class="weekmenu-slot-label"></span>
+          <span style="font-size:12px;color:var(--muted);">+ nog iets toevoegen</span>
         </div>`;
       } else {
         return `<div class="weekmenu-row weekmenu-row-empty" onclick="editWeekMenuMeal('${d}','${s}')">
@@ -5592,17 +6107,40 @@ function renderFoodWeekmenu() {
       }
     }).join('');
 
+    const hasAnyMeal = slots.some(s => Array.isArray(meals[s]) && meals[s].length > 0);
     return `<div class="weekmenu-day ${isToday ? 'today' : ''}">
-      <div class="weekmenu-day-label">${dagKort[i]}${isToday ? ' — vandaag' : ''}</div>
+      <div class="weekmenu-day-label" style="display:flex;align-items:center;justify-content:space-between;">
+        <span>${dagKort[i]}${isToday ? ' — vandaag' : ''}</span>
+        ${hasAnyMeal ? `<button onclick="clearWeekMenuDay('${d}')" style="border:none;background:none;color:var(--muted);font-size:11px;cursor:pointer;padding:0;line-height:1;" title="Dag leegmaken">wissen</button>` : ''}
+      </div>
       ${mealRows}
     </div>`;
   }).join('');
 }
 
+function clearWeekMenuDay(dateStr) {
+  const weekKey = getISOWeek(new Date(dateStr + 'T12:00:00'));
+  if (!data.weken[weekKey] || !data.weken[weekKey][dateStr]) return;
+  data.weken[weekKey][dateStr].maaltijden = { ontbijt:[], lunch:[], diner:[], snack:[] };
+  saveAndSync();
+  renderFoodWeekmenu();
+  renderFoodWeekOverview();
+}
+
 function clearWeekMenuMeal(dateStr, slot) {
   const weekKey = getISOWeek(new Date(dateStr + 'T12:00:00'));
   if (!data.weken[weekKey] || !data.weken[weekKey][dateStr]) return;
-  data.weken[weekKey][dateStr].maaltijden[slot] = { naam: '', vezels: '', receptId: null };
+  data.weken[weekKey][dateStr].maaltijden[slot] = [];
+  saveAndSync();
+  renderFoodWeekmenu();
+  renderFoodWeekOverview();
+}
+
+function deleteWeekMenuMealItem(dateStr, slot, itemId) {
+  const weekKey = getISOWeek(new Date(dateStr + 'T12:00:00'));
+  if (!data.weken[weekKey] || !data.weken[weekKey][dateStr]) return;
+  const arr = data.weken[weekKey][dateStr].maaltijden;
+  if (Array.isArray(arr[slot])) arr[slot] = arr[slot].filter(m => m.id !== itemId);
   saveAndSync();
   renderFoodWeekmenu();
   renderFoodWeekOverview();
@@ -5612,7 +6150,7 @@ function editWeekMenuMeal(dateStr, slot) {
   const weekKey = getISOWeek(new Date(dateStr + 'T12:00:00'));
   const dayData = (data.weken[weekKey] || {})[dateStr] || {};
   const meals = dayData.maaltijden || {};
-  const m = meals[slot] || {};
+  const m = (Array.isArray(meals[slot]) && meals[slot].length > 0) ? meals[slot][0] : {};
   const slotLabel = { ontbijt:'Ontbijt', lunch:'Lunch', diner:'Diner', snack:'Snack' }[slot] || slot;
   const dagNamen = ['Ma','Di','Wo','Do','Vr','Za','Zo'];
   const dates = getWeekDates(weekKey);
@@ -5625,8 +6163,14 @@ function editWeekMenuMeal(dateStr, slot) {
       <button class="modal-close" onclick="closeModal()">✕</button>
     </div>
     <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px;">
-      <input id="wm-naam" type="text" value="${(m.naam||'').replace(/"/g,'&quot;')}" placeholder="Naam gerecht" style="padding:10px;border-radius:8px;border:1.5px solid var(--border);background:var(--card);color:var(--text);font-size:15px;">
-      <input id="wm-vezels" type="text" value="${m.vezels||''}" placeholder="Vezels (bijv. ~8g)" style="padding:10px;border-radius:8px;border:1.5px solid var(--border);background:var(--card);color:var(--text);">
+      ${micInput('wm-naam', 'Naam gerecht', m.naam||'')}
+      <button class="btn btn-ghost btn-full" id="wm-bereken-btn" onclick="berekenNutriWeekmenu()" style="font-size:13px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+        Bereken vezels &amp; eiwitten
+      </button>
+      <div id="wm-nutri-preview" style="display:${m.vezels||m.eiwitten?'block':'none'};font-size:12px;color:var(--muted);padding:8px 10px;background:var(--bg);border-radius:8px;">
+        ${m.vezels ? '🌿 '+m.vezels : ''} ${m.eiwitten ? '· <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="vertical-align:-1px;opacity:.9"><path d="M12 2C8.5 2 5 7 5 11.8 5 17.4 8.1 22 12 22s7-4.6 7-10.2C19 7 15.5 2 12 2z"/></svg> '+m.eiwitten : ''}
+      </div>
       <button class="btn btn-ghost btn-full" onclick="pickRecipeForSlot('${dateStr}','${slot}')">
         📋 Kies uit mijn recepten
       </button>
@@ -5638,13 +6182,43 @@ function editWeekMenuMeal(dateStr, slot) {
   `);
 }
 
+async function berekenNutriWeekmenu() {
+  const naam = (document.getElementById('wm-naam') ? document.getElementById('wm-naam').value : '').trim();
+  if (!naam) { showBanner('yellow', 'Typ eerst een gerecht in.'); return; }
+  const btn = document.getElementById('wm-bereken-btn');
+  const preview = document.getElementById('wm-nutri-preview');
+  if (btn) { btn.disabled = true; btn.textContent = 'Bezig…'; }
+  try {
+    const prompt = `Schat voor het gerecht "${naam}" (1 portie): vezels in gram en eiwitten in gram. Geef ALLEEN JSON: {"vezels":"~Xg","eiwitten":"~Xg"}. Geen uitleg.`;
+    const raw = await callAIPlain(prompt, 60);
+    const result = safeParseJSON(raw);
+    if (result && (result.vezels || result.eiwitten)) {
+      window._wmNutri = result;
+      if (preview) {
+        preview.style.display = 'block';
+        preview.innerHTML = `🌿 Vezels: <strong>${result.vezels||'?'}</strong> &nbsp;·&nbsp; <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="vertical-align:-1px;opacity:.9"><path d="M12 2C8.5 2 5 7 5 11.8 5 17.4 8.1 22 12 22s7-4.6 7-10.2C19 7 15.5 2 12 2z"/></svg> Eiwitten: <strong>${result.eiwitten||'?'}</strong> &nbsp;<span style="color:var(--accent-food);">✓</span>`;
+      }
+    } else throw new Error();
+  } catch(_) {
+    if (preview) { preview.style.display = 'block'; preview.textContent = 'Kon niet berekenen.'; }
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg> Bereken vezels &amp; eiwitten';
+    }
+  }
+}
+
 function saveWeekMenuMeal(dateStr, slot) {
-  const naam = (document.getElementById('wm-naam').value || '').trim();
-  const vezels = (document.getElementById('wm-vezels').value || '').trim();
+  const naam = (document.getElementById('wm-naam') ? document.getElementById('wm-naam').value : '').trim();
   const weekKey = getISOWeek(new Date(dateStr + 'T12:00:00'));
   if (!data.weken[weekKey]) ensureWeek(weekKey);
   if (!data.weken[weekKey][dateStr]) return;
-  data.weken[weekKey][dateStr].maaltijden[slot] = { naam, vezels, receptId: null };
+  const arr = data.weken[weekKey][dateStr].maaltijden;
+  if (!Array.isArray(arr[slot])) arr[slot] = [];
+  const nutri = window._wmNutri || {};
+  window._wmNutri = null;
+  arr[slot].push({ id:'m'+Date.now()+Math.random().toString(36).slice(2,5), naam, vezels:nutri.vezels||'', eiwitten:nutri.eiwitten||'', kcal:'', gegeten:false, gepland:true, receptId:null });
   saveAndSync();
   closeModal();
   renderFoodWeekmenu();
@@ -5662,7 +6236,7 @@ function pickRecipeForSlot(dateStr, slot) {
       style="text-align:left;padding:12px;border-radius:10px;border:1.5px solid var(--border);background:var(--card);cursor:pointer;width:100%;font-family:inherit;">
       <div style="font-weight:600;font-size:15px;">${r.naam}</div>
       <div style="font-size:12px;color:var(--muted);margin-top:3px;">
-        ${r.vezels ? '🌿 ' + r.vezels : ''}${r.eiwitten ? ' · 💪 ' + r.eiwitten : ''}${r.tijd ? ' · ⏱ ' + r.tijd : ''}
+        ${r.vezels ? '🌿 ' + r.vezels : ''}${r.eiwitten ? ' · <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="vertical-align:-1px;opacity:.9"><path d="M12 2C8.5 2 5 7 5 11.8 5 17.4 8.1 22 12 22s7-4.6 7-10.2C19 7 15.5 2 12 2z"/></svg> ' + r.eiwitten : ''}${r.tijd ? ' · ⏱ ' + r.tijd : ''}
       </div>
     </button>`;
 
@@ -5692,9 +6266,9 @@ function applyRecipeToSlot(receptId, dateStr, slot) {
   const weekKey = getISOWeek(new Date(dateStr + 'T12:00:00'));
   if (!data.weken[weekKey]) ensureWeek(weekKey);
   if (!data.weken[weekKey][dateStr]) return;
-  data.weken[weekKey][dateStr].maaltijden[slot] = {
-    naam: recept.naam, vezels: recept.vezels || '', eiwitten: recept.eiwitten || '', receptId: recept.id
-  };
+  const _arr5724 = data.weken[weekKey][dateStr].maaltijden;
+  if (!Array.isArray(_arr5724[slot])) _arr5724[slot] = [];
+  _arr5724[slot].push({ id:'m'+Date.now()+Math.random().toString(36).slice(2,5), naam:recept.naam, vezels:recept.vezels||'', eiwitten:recept.eiwitten||'', kcal:'', gepland:true, gegeten:false, receptId:recept.id });
   saveAndSync();
   closeModal();
   renderFoodWeekmenu();
@@ -5716,18 +6290,18 @@ function renderFoodWeekOverview() {
     <span style="width:28px;"></span>
     <span style="flex:1; margin:0 10px;">🌿 Vezels (doel: 30g)</span>
     <span style="width:70px; text-align:right;"></span>
-    <span style="flex:1; margin:0 10px;">💪 Eiwitten (doel: 80g)</span>
+    <span style="flex:1; margin:0 10px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="vertical-align:-1px;opacity:.9"><path d="M12 2C8.5 2 5 7 5 11.8 5 17.4 8.1 22 12 22s7-4.6 7-10.2C19 7 15.5 2 12 2z"/></svg> Eiwitten (doel: 80g)</span>
     <span style="width:70px; text-align:right;"></span>
   </div>` + dates.map((d, i) => {
     const dayData = weekData[d] || {};
     const meals = dayData.maaltijden || {};
     let vezels = 0, eiwitten = 0;
-    Object.values(meals).forEach(m => {
+    Object.values(meals).flatMap(v => Array.isArray(v) ? v : (v && v.naam ? [v] : [])).forEach(m => {
       if (!m) return;
-      const v = parseFloat((m.vezels||'').replace(/[^\d.]/g,''));
-      const e = parseFloat((m.eiwitten||'').replace(/[^\d.]/g,''));
-      if (!isNaN(v)) vezels += v;
-      if (!isNaN(e)) eiwitten += e;
+      const v2 = parseFloat((m.vezels||'').replace(/[^\d.]/g,''));
+      const e2 = parseFloat((m.eiwitten||'').replace(/[^\d.]/g,''));
+      if (!isNaN(v2)) vezels += v2;
+      if (!isNaN(e2)) eiwitten += e2;
     });
     const vPct = Math.min(100, Math.round(vezels / 30 * 100));
     const vColor = vezels >= 30 ? '#4ade80' : vezels >= 20 ? '#fb923c' : '#f87171';
@@ -5770,8 +6344,8 @@ function renderFoodList() {
     // Welke dagen heeft dit recept al gepland
     const plannedDays = dates.map((d, i) => {
       const meals = (weekData[d] && weekData[d].maaltijden) || {};
-      const slot = meals[r.type];
-      const isPlanned = slot && slot.receptId === r.id;
+      const slotArr = Array.isArray(meals[r.type]) ? meals[r.type] : [];
+      const isPlanned = slotArr.some(m => m.receptId === r.id);
       return { d, i, isPlanned };
     });
 
@@ -5811,11 +6385,13 @@ function planRecept(receptId, dateStr, mealType) {
   const recept = (data.recepten || []).find(r => r.id === receptId);
   if (!recept) return;
 
+  if (!Array.isArray(meals[mealType])) meals[mealType] = [];
   // Toggle: klik op geplande dag = verwijder
-  if (meals[mealType] && meals[mealType].receptId === receptId) {
-    meals[mealType] = { naam: '', vezels: '', receptId: null };
+  const existingIdx = meals[mealType].findIndex(m => m.receptId === receptId);
+  if (existingIdx >= 0) {
+    meals[mealType].splice(existingIdx, 1);
   } else {
-    meals[mealType] = { naam: recept.naam, vezels: recept.vezels, receptId: recept.id, gepland: true };
+    meals[mealType].push({ id:'m'+Date.now()+Math.random().toString(36).slice(2,5), naam:recept.naam, vezels:recept.vezels||'', eiwitten:recept.eiwitten||'', kcal:'', gepland:true, gegeten:false, receptId:recept.id });
   }
   saveAndSync();
   renderFoodTab();
@@ -6020,10 +6596,13 @@ function smartVoiceRecipe() {
   recognition.maxAlternatives = 1;
 
   if (btn) btn.classList.add('listening');
+  const _chefLbl = document.getElementById('chef-mic-label');
+  if (_chefLbl) _chefLbl.textContent = 'Luisteren…';
 
   recognition.onresult = async (e) => {
     const text = e.results[0][0].transcript;
-    if (btn) { btn.classList.remove('listening'); }
+    if (btn) btn.classList.remove('listening');
+    if (_chefLbl) _chefLbl.textContent = 'Spreek je wens in';
 
     // Route via _doGenerateRecepten zodat het aantal uit de picker wordt gerespecteerd
     const focusEl = document.getElementById('gen-focus-input');
@@ -6033,10 +6612,16 @@ function smartVoiceRecipe() {
   };
 
   recognition.onerror = () => {
-    if (btn) { btn.classList.remove('listening'); btn.lastChild.textContent = ' Spreek gerecht in → direct recept'; }
+    if (btn) btn.classList.remove('listening');
+    const lbl = document.getElementById('chef-mic-label');
+    if (lbl) lbl.textContent = 'Spreek je wens in';
     showBanner('yellow', 'Luisteren mislukt. Probeer opnieuw.');
   };
-  recognition.onend = () => { if (btn) btn.classList.remove('listening'); };
+  recognition.onend = () => {
+    if (btn) btn.classList.remove('listening');
+    const lbl = document.getElementById('chef-mic-label');
+    if (lbl) lbl.textContent = 'Spreek je wens in';
+  };
   recognition.start();
 }
 
@@ -6313,16 +6898,17 @@ function showOefenuitleg(naam, detail, type) {
 
 // ─── ICONS ───────────────────────────────────────────────────────────────────
 
-function iconSVG(type) {
+function iconSVG(type, size = 22) {
+  const s = size;
   const icons = {
-    run: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ea5a0c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="1.5"/><path d="M8 17l2-5 3 3 2-6"/><path d="M5 12l3-1 2 2"/><path d="M15 14l2 1 2 3"/></svg>`,
-    gym: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6d28d9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4v16M18 4v16M9 4h6M9 20h6M3 8h3M18 8h3M3 16h3M18 16h3"/></svg>`,
-    bike: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1d4ed8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="16" r="3"/><circle cx="18" cy="16" r="3"/><path d="M6 16l5-8h3l2 4"/><path d="M9 8h5l3 5"/></svg>`,
-    commute: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0f766e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="16" r="3"/><circle cx="18" cy="16" r="3"/><path d="M6 16l5-8h3l2 4"/><path d="M9 8h5l3 5"/><path d="M12 2v3"/><path d="M10 2h4"/></svg>`,
-    walk: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="1.5"/><path d="M9 9l3 2 3-2"/><path d="M12 11v5"/><path d="M9 22l1.5-4"/><path d="M15 22l-1.5-4"/><path d="M8 12l-2 3"/><path d="M16 12l2 3"/></svg>`,
-    walkdog: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#b45309" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="14" r="3"/><ellipse cx="6.5" cy="10.5" rx="1.5" ry="2"/><ellipse cx="15.5" cy="10.5" rx="1.5" ry="2"/><ellipse cx="8.5" cy="7" rx="1" ry="1.5"/><ellipse cx="14" cy="7" rx="1" ry="1.5"/><path d="M14 14c1 1 3 1 4 0"/></svg>`,
-    rest: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6b6b6b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`,
-    other: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>`
+    run:     `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="#ea5a0c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="1.5"/><path d="M8 17l2-5 3 3 2-6"/><path d="M5 12l3-1 2 2"/><path d="M15 14l2 1 2 3"/></svg>`,
+    gym:     `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="#6d28d9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4v16M18 4v16M9 4h6M9 20h6M3 8h3M18 8h3M3 16h3M18 16h3"/></svg>`,
+    bike:    `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="#1d4ed8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="16" r="3"/><circle cx="18" cy="16" r="3"/><path d="M6 16l5-8h3l2 4"/><path d="M9 8h5l3 5"/></svg>`,
+    commute: `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="#0f766e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="16" r="3"/><circle cx="18" cy="16" r="3"/><path d="M6 16l5-8h3l2 4"/><path d="M9 8h5l3 5"/><path d="M12 2v3"/><path d="M10 2h4"/></svg>`,
+    walk:    `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="1.5"/><path d="M9 9l3 2 3-2"/><path d="M12 11v5"/><path d="M9 22l1.5-4"/><path d="M15 22l-1.5-4"/><path d="M8 12l-2 3"/><path d="M16 12l2 3"/></svg>`,
+    walkdog: `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="#b45309" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="14" r="3"/><ellipse cx="6.5" cy="10.5" rx="1.5" ry="2"/><ellipse cx="15.5" cy="10.5" rx="1.5" ry="2"/><ellipse cx="8.5" cy="7" rx="1" ry="1.5"/><ellipse cx="14" cy="7" rx="1" ry="1.5"/><path d="M14 14c1 1 3 1 4 0"/></svg>`,
+    rest:    `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="#6b6b6b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`,
+    other:   `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>`
   };
   return icons[type] || icons.other;
 }
@@ -6342,7 +6928,7 @@ function renderNutriBar(dateStr) {
   const dayData = data.weken && data.weken[weekKey] && data.weken[weekKey][dateStr];
   if (!dayData || !dayData.maaltijden) { el.innerHTML = ''; return; }
 
-  const allMeals = Object.values(dayData.maaltijden).filter(m => m && m.naam);
+  const allMeals = Object.values(dayData.maaltijden).flatMap(v => Array.isArray(v) ? v : (v && v.naam ? [v] : [])).filter(m => m.naam);
   const anyGegeten = allMeals.some(m => m.gegeten);
   const telMeals = anyGegeten ? allMeals.filter(m => m.gegeten) : allMeals;
 
@@ -6366,7 +6952,7 @@ function renderNutriBar(dateStr) {
       <span class="nutri-bar-val fiber">${Math.round(vezels)}/30g</span>
     </div>
     <div class="nutri-bar-row">
-      <span class="nutri-bar-label">💪 Eiwit</span>
+      <span class="nutri-bar-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="vertical-align:-1px;opacity:.9"><path d="M12 2C8.5 2 5 7 5 11.8 5 17.4 8.1 22 12 22s7-4.6 7-10.2C19 7 15.5 2 12 2z"/></svg> Eiwit</span>
       <div class="nutri-bar-track"><div class="nutri-bar-fill protein" style="width:${eiwitPct}%"></div></div>
       <span class="nutri-bar-val protein">${Math.round(eiwitten)}/80g</span>
     </div>
@@ -6394,7 +6980,7 @@ function confirmResetToday() {
   const weekKey = getISOWeek(new Date(todayStr + 'T12:00:00'));
   ensureDay(todayStr);
   const dayData = data.weken[weekKey][todayStr];
-  dayData.maaltijden = JSON.parse(JSON.stringify(DEFAULT_MEALS));
+  dayData.maaltijden = { ontbijt: [], lunch: [], diner: [], snack: [] };
   dayData.waterGlazen = 0;
   dayData.checkIn = null;
   saveAndSync();
@@ -6496,7 +7082,89 @@ function fabCoachTap() {
   try { recognition.start(); } catch(e) { window._fabRec = null; if (fab) fab.classList.remove('listening'); }
 }
 
-function bigPraatStart() {
+// ─── MIC PICKER (oortjes / Bluetooth) ────────────────────────────────────────
+
+function updateMicStatusLabel() {
+  const el = document.getElementById('mic-status-label');
+  const btn = document.getElementById('mic-picker-btn');
+  if (!el) return;
+  const label = settings.preferredMicLabel;
+  if (label) {
+    el.innerHTML = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg> ${label}`;
+    if (btn) btn.classList.add('active');
+  } else {
+    el.innerHTML = '';
+    if (btn) btn.classList.remove('active');
+  }
+}
+
+async function openMicPicker() {
+  if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
+    showBanner('yellow', 'Microfoon selecteren niet beschikbaar in deze browser.');
+    return;
+  }
+  // Need getUserMedia first to get labeled device names
+  try {
+    const tempStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    tempStream.getTracks().forEach(t => t.stop());
+  } catch(e) {
+    showBanner('red', 'Microfoon toegang geweigerd. Sta toegang toe in je browserinstellingen.');
+    return;
+  }
+  const devices = await navigator.mediaDevices.enumerateDevices();
+  const mics = devices.filter(d => d.kind === 'audioinput');
+  if (!mics.length) { showBanner('yellow', 'Geen microfoons gevonden.'); return; }
+
+  const currentId = settings.preferredMicId || '';
+  const itemsHTML = mics.map(d => {
+    const name = d.label || 'Microfoon ' + (mics.indexOf(d) + 1);
+    const isSelected = d.deviceId === currentId;
+    const checkmark = isSelected ? '<span class="mic-check">✓</span>' : '<span style="width:18px;"></span>';
+    return `<div class="mic-device-item" onclick="selectMic('${d.deviceId.replace(/'/g,"\\'")}','${name.replace(/'/g,"\\'")}')">
+      <span class="mic-name">${name}</span>${checkmark}</div>`;
+  }).join('');
+
+  const resetRow = currentId
+    ? `<div style="margin-top:14px;text-align:center;">
+        <button onclick="selectMic('','Systeem standaard')" style="background:none;border:none;color:var(--muted);font-size:13px;cursor:pointer;font-family:inherit;text-decoration:underline;">Reset naar systeem standaard</button>
+       </div>`
+    : '';
+
+  showModal(`
+    <div class="modal-header">
+      <div style="font-size:17px;font-weight:700;">Microfoon kiezen</div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <p style="font-size:13px;color:var(--muted);margin:0 0 4px;">De browser kiest altijd de <strong style="color:var(--text);">standaard microfoon van je telefoon</strong> — ongeacht wat je hier kiest. Wil je echt via je oortjes inspreken?</p>
+    <p style="font-size:13px;color:var(--text);margin:0 0 16px;padding:10px 12px;background:var(--card2);border-radius:10px;border-left:3px solid var(--accent-food);">Stel je oortjes in als standaard microfoon in de <strong>telefooninstellingen → Bluetooth → koppel oortjes</strong>. Daarna hoort de app ze automatisch — zonder extra stap hier.</p>
+    <p style="font-size:12px;color:var(--muted);margin:0 0 16px;">Hieronder zie je welk apparaat nu actief is op dit apparaat.</p>
+    <div>${itemsHTML}</div>
+    ${resetRow}
+  `);
+}
+
+function selectMic(deviceId, label) {
+  if (!deviceId) {
+    saveSettingsData({ ...settings, preferredMicId: '', preferredMicLabel: '' });
+    showBanner('yellow', 'Terug naar systeem standaard microfoon.');
+  } else {
+    saveSettingsData({ ...settings, preferredMicId: deviceId, preferredMicLabel: label });
+    showBanner('yellow', `Microfoon ingesteld: ${label}`);
+  }
+  closeModal();
+  updateMicStatusLabel();
+}
+
+async function _activatePreferredMic() {
+  const id = settings.preferredMicId;
+  if (!id || !navigator.mediaDevices) return null;
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: { deviceId: { exact: id } } });
+    return stream;
+  } catch(e) { return null; }
+}
+
+async function bigPraatStart() {
   const btn = document.getElementById('big-praat-btn');
   const status = document.getElementById('big-praat-status');
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -6512,6 +7180,12 @@ function bigPraatStart() {
     const btn2 = document.getElementById('big-praat-btn');
     if (btn2) { btn2.classList.remove('listening','processing'); btn2.innerHTML = `<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg> Praat met de coach`; }
     return;
+  }
+
+  // Wake up preferred mic device before SpeechRecognition (stop immediately — no simultaneous capture)
+  if (settings.preferredMicId) {
+    const s = await _activatePreferredMic();
+    if (s) s.getTracks().forEach(t => t.stop());
   }
 
   const recognition = new SR();
@@ -6660,10 +7334,70 @@ async function coachFrontSend(msgOverride) {
     addFrontBubble('ai', reply);
     try { renderChatHistory(); } catch(_) {}
     speakCoach(reply);
+    _updateCoachMemory(msg, reply).catch(() => {});
   } catch(e) {
     thinking.remove();
     addFrontBubble('ai', e.message || 'Coach is even niet bereikbaar. Probeer het later.');
   }
+}
+
+function checkWeekplanCard() {
+  const card = document.getElementById('weekplan-card');
+  if (!card) return;
+  const d = new Date();
+  const isSunday = d.getDay() === 0;
+  const skipped = localStorage.getItem('weekplanSkip');
+  const todayStr = d.toISOString().slice(0,10);
+  if (skipped === todayStr) { card.style.display = 'none'; return; }
+  card.style.display = isSunday ? 'block' : 'none';
+}
+
+function dismissWeekplanCard() {
+  const card = document.getElementById('weekplan-card');
+  if (card) card.style.display = 'none';
+  localStorage.setItem('weekplanSkip', new Date().toISOString().slice(0,10));
+}
+
+async function startWeekplanGesprek() {
+  dismissWeekplanCard();
+
+  const weekKey = getISOWeek(new Date());
+  const days = getWeekDates(weekKey);
+  const dagNamen = ['Maandag','Dinsdag','Woensdag','Donderdag','Vrijdag','Zaterdag','Zondag'];
+  const dagSummary = days.map((d, i) => dagNamen[i]).join(', ');
+
+  const planPrompt = `De gebruiker wil zijn week plannen (${dagSummary}). Stel 3-4 gerichte vragen in één bericht om zijn week in te plannen: (1) welke trainingen hij plant, (2) of er bijzonderheden zijn (reizen, afspraken), (3) wat hij de komende week wil eten. Geef dan aan dat je alles invult. Kort en direct.`;
+
+  const win = document.getElementById('coach-front-chat');
+  if (win) {
+    const intro = document.createElement('div');
+    intro.className = 'coach-bubble-ai';
+    intro.innerHTML = '<em style="color:var(--accent-food);font-size:13px;">📅 Weekplanning gestart</em>';
+    win.appendChild(intro);
+    win.scrollTop = win.scrollHeight;
+  }
+
+  await coachFrontSend(planPrompt);
+}
+
+async function _updateCoachMemory(userMsg, coachReply) {
+  if (!settings.anthropicKey) return;
+  try {
+    const prompt = `Gebruikersbericht: "${userMsg}"\nCoachreactie: "${coachReply}"\n\nExtracteer maximaal 1 relevante persoonlijke feit over de gebruiker (geen advies, alleen feiten zoals voorkeuren, blessures, gewoonten, doelen). Geef ALLEEN een JSON-array van max 1 string. Bijv. ["Heeft kniepijn rechts"] of []. Geen uitleg.`;
+    const raw = await callAIPlain(prompt, 80);
+    const facts = safeParseJSON(raw);
+    if (!Array.isArray(facts) || facts.length === 0) return;
+    if (!data.coachMemory) data.coachMemory = [];
+    facts.forEach(f => {
+      if (typeof f !== 'string' || !f.trim()) return;
+      // Avoid duplicates (rough check)
+      if (!data.coachMemory.some(m => m.toLowerCase().includes(f.toLowerCase().slice(0,20)))) {
+        data.coachMemory.unshift(f.trim());
+      }
+    });
+    if (data.coachMemory.length > 20) data.coachMemory = data.coachMemory.slice(0, 20);
+    saveAndSync();
+  } catch(_) {}
 }
 
 function startVoiceFrontCoach() {
@@ -6787,7 +7521,7 @@ Analyseer dit en extraheer ALLES. Één zin kan meerdere acties bevatten. Antwoo
 }
 
 Regels:
-- activiteiten: ARRAY van sport/beweging-objecten. Meerdere activiteiten in één zin → meerdere objecten. Elk object: {"naam":"Easy Run","type":"run","detail":"5km","km":5,"duur":30,"datum":"vandaag","herhaal":null,"herhaal_dagen":[]}. datum = "gisteren"|"vandaag"|"morgen"|"overmorgen"|dag van de week|"komende_[dag]"|"volgende_week_[dag]". Gebruik "komende_[dag]" bij "komende dinsdag" (eerstvolgende, nooit vandaag). Gebruik "volgende_week_[dag]" bij "volgende week [dag]" (altijd +1 week). herhaal = null | "week" (elke dag) | "werkdagen" (ma t/m vr). herhaal_dagen = specifieke weekdagen (bijv. ["dinsdag","donderdag"] voor "elke di en do"). Leeg array = niet herhalend. Types: run, gym, bike, walk, commute, walkdog, other. ALLEEN gebruiken als gebruiker iets wil PLANNEN of TOEVOEGEN, niet als hij meldt dat hij iets al heeft gedaan.
+- activiteiten: ARRAY van sport/beweging-objecten. Meerdere activiteiten in één zin → meerdere objecten. Elk object: {"naam":"5km Hardlopen","type":"run","detail":"rustig tempo","km":5,"duur":30,"datum":"vandaag","herhaal":null,"herhaal_dagen":[]}. BELANGRIJK: km = afstand als GETAL (bijv. 5 voor "5 kilometer"), altijd invullen als afstand wordt genoemd. naam = beschrijvende naam inclusief afstand (bijv. "5km Hardlopen"). duur = minuten (schat op basis van km: 1km ≈ 6 min lopen, 1km ≈ 3 min fietsen). datum = "gisteren"|"vandaag"|"morgen"|"overmorgen"|dag van de week|"komende_[dag]"|"volgende_week_[dag]". herhaal = null | "week" | "werkdagen". herhaal_dagen = specifieke weekdagen. Types: run, gym, bike, walk, commute, walkdog, other. ALLEEN bij PLANNEN/TOEVOEGEN, niet bij "ik heb... gedaan".
 - maaltijden: ARRAY van maaltijd-objecten. Meerdere maaltijden in één zin → meerdere objecten. Elk object: {"naam":"Yoghurt met muesli","slot":"ontbijt","vezels":"~5g","eiwitten":"~12g","kcal":"~350kcal","datum":"vandaag","herhaal":null}. datum = "gisteren"|"vandaag"|"morgen"|"overmorgen"|dag|"komende_[dag]"|"volgende_week_[dag]". herhaal = null | "week" | "werkdagen". Schat ALTIJD vezels én eiwitten.
 - water: glazen toe te VOEGEN (bij "nog X glazen" of "X glazen gedronken"). 0 als niet van toepassing.
 - water_totaal: totaal aantal glazen INSTELLEN (bij "in totaal X glazen" of "ik heb X glazen gehad vandaag"). 0 als niet van toepassing.
@@ -6820,9 +7554,9 @@ Lege arrays [] voor activiteiten/maaltijden als geen van toepassing. Geen uitleg
       const vmWk = getISOWeek(new Date(vmDate + 'T12:00:00'));
       ensureDay(vmDate);
       const vmDay = data.weken[vmWk][vmDate];
-      if (vmDay.maaltijden && vmDay.maaltijden[slot]) {
-        const naam = vmDay.maaltijden[slot].naam || slot;
-        vmDay.maaltijden[slot] = { naam: '', vezels: '', eiwitten: '', kcal: '' };
+      if (vmDay.maaltijden && Array.isArray(vmDay.maaltijden[slot]) && vmDay.maaltijden[slot].length > 0) {
+        const naam = vmDay.maaltijden[slot].map(i => i.naam).join(', ') || slot;
+        vmDay.maaltijden[slot] = [];
         acties.push(`Verwijderd: ${naam}`);
       }
     }
@@ -6915,17 +7649,18 @@ Lege arrays [] voor activiteiten/maaltijden als geen van toepassing. Geen uitleg
       acties.push(`✓ ${act.naam}${herhaaltxt}`);
     });
 
-    // Maaltijden toevoegen (array, met datum + herhaling)
+    // Maaltijden toevoegen (array, met datum + herhaling — stapelt per slot)
     _toArray(parsed.maaltijden).forEach(m => {
         if (!m || !m.naam) return;
         const slot = m.slot || tijdSlot;
-        const mData = { naam: m.naam, vezels: m.vezels || '', eiwitten: m.eiwitten || '', kcal: m.kcal || '', gepland: true };
+        const mItem = { id: 'm'+Date.now()+Math.random().toString(36).slice(2,5), naam: m.naam, vezels: m.vezels || '', eiwitten: m.eiwitten || '', kcal: m.kcal || '', gepland: true, gegeten: false };
         const herhaalDates = _resolveHerhaalDates(m.herhaal);
         const targetDates = herhaalDates || [_resolveDate(m.datum)];
         targetDates.forEach(dateStr => {
           const wk = getISOWeek(new Date(dateStr + 'T12:00:00'));
           ensureDay(dateStr);
-          data.weken[wk][dateStr].maaltijden[slot] = { ...mData };
+          if (!Array.isArray(data.weken[wk][dateStr].maaltijden[slot])) data.weken[wk][dateStr].maaltijden[slot] = [];
+          data.weken[wk][dateStr].maaltijden[slot].push({ ...mItem });
         });
         const herhaaltxt = m.herhaal === 'week' ? ' · hele week' : m.herhaal === 'werkdagen' ? ' · ma–vr' : (m.datum && m.datum !== 'vandaag') ? ` · ${m.datum}` : '';
         acties.push(`✓ ${m.naam} als ${slot}${herhaaltxt}`);
@@ -7032,6 +7767,8 @@ function initApp() {
   loadGist();
   setupSwipeGestures();
   checkIntro();
+  checkWeekplanCard();
+  updateMicStatusLabel();
   // Coach-tab is actief bij start — FAB verbergen
   const tabs = document.querySelectorAll('.tab-btn');
   tabs.forEach(t => t.classList.remove('active'));
@@ -7225,7 +7962,7 @@ function showVoedingPreview(parsed, dateStr, source) {
       <div class="voeding-preview-naam" id="vp-naam">${parsed.naam}</div>
       <div class="voeding-preview-meta">
         <span class="voeding-preview-pill" style="color:var(--accent-food);">🌿 ${parsed.vezels || '?'}</span>
-        <span class="voeding-preview-pill" style="color:#7c3aed;">💪 ${parsed.eiwitten || '?'}</span>
+        <span class="voeding-preview-pill" style="color:#7c3aed;"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="vertical-align:-1px;opacity:.9"><path d="M12 2C8.5 2 5 7 5 11.8 5 17.4 8.1 22 12 22s7-4.6 7-10.2C19 7 15.5 2 12 2z"/></svg> ${parsed.eiwitten || '?'}</span>
         <span class="voeding-preview-pill" style="color:var(--muted);">🔥 ${parsed.kcal || '?'}</span>
       </div>
       ${offBtn}
@@ -7282,7 +8019,7 @@ async function lookupAndUpdateVoedingPreview(naam) {
     }
     if (result.proteins_100g !== null) {
       const eiwitten = '~' + Math.round(result.proteins_100g * 2.5) + 'g';
-      if (pills[1]) pills[1].textContent = '💪 ' + eiwitten;
+      if (pills[1]) pills[1].textContent = '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="vertical-align:-1px;opacity:.9"><path d="M12 2C8.5 2 5 7 5 11.8 5 17.4 8.1 22 12 22s7-4.6 7-10.2C19 7 15.5 2 12 2z"/></svg> ' + eiwitten;
       if (window._vpParsed) window._vpParsed.eiwitten = eiwitten;
     }
     if (result.kcal_100g !== null) {
@@ -7306,8 +8043,9 @@ function saveVoedingIntake(dateStr, slot, naam, vezels, eiwitten, kcal, source) 
 
   const weekKey = getISOWeek(new Date(dateStr + 'T12:00:00'));
   ensureDay(dateStr);
-  if (!data.weken[weekKey][dateStr].maaltijden) data.weken[weekKey][dateStr].maaltijden = {};
-  data.weken[weekKey][dateStr].maaltijden[slot] = { naam, vezels, eiwitten, kcal };
+  if (!data.weken[weekKey][dateStr].maaltijden) data.weken[weekKey][dateStr].maaltijden = { ontbijt:[], lunch:[], diner:[], snack:[] };
+  if (!Array.isArray(data.weken[weekKey][dateStr].maaltijden[slot])) data.weken[weekKey][dateStr].maaltijden[slot] = [];
+  data.weken[weekKey][dateStr].maaltijden[slot].push({ id:'m'+Date.now()+Math.random().toString(36).slice(2,5), naam, vezels, eiwitten, kcal, gegeten: false, gepland: true });
   saveAndSync();
   closeModal();
   window._vpParsed = null;
@@ -7364,7 +8102,7 @@ function renderDailyCoachCard() {
       };
     } else {
       const maaltijden = dayData.maaltijden || {};
-      if (!maaltijden.diner) {
+      if (!Array.isArray(maaltijden.diner) || maaltijden.diner.length === 0) {
         question = {
           type: 'diner',
           text: 'Wat eet je vanavond? Heb je al een diner gepland?',
@@ -7454,8 +8192,9 @@ async function answerDailyQuestion(type, value, actId) {
   } else if (type === 'diner') {
     if (value && value.length > 1) {
       ensureDay(todayStr);
-      if (!data.weken[weekKey][todayStr].maaltijden) data.weken[weekKey][todayStr].maaltijden = {};
-      data.weken[weekKey][todayStr].maaltijden.diner = { naam: value };
+      if (!data.weken[weekKey][todayStr].maaltijden) data.weken[weekKey][todayStr].maaltijden = { ontbijt:[], lunch:[], diner:[], snack:[] };
+      if (!Array.isArray(data.weken[weekKey][todayStr].maaltijden.diner)) data.weken[weekKey][todayStr].maaltijden.diner = [];
+      data.weken[weekKey][todayStr].maaltijden.diner.push({ id:'m'+Date.now()+Math.random().toString(36).slice(2,5), naam:value, vezels:'', eiwitten:'', kcal:'', gepland:true, gegeten:false });
       saveAndSync(); renderTodayMeals(todayStr);
       prompt = `Gebruiker eet vanavond: "${value}". Kort positief commentaar over de maaltijdkeuze (max 1 zin).`;
     } else { skipDailyQuestion(); return; }
@@ -7737,12 +8476,9 @@ Regels: vezels ≥10g per portie, max 30 min bereidingstijd, gezond maar lekker.
     dinners.forEach(din => {
       const weekKey = getISOWeek(new Date(din.datum + 'T12:00:00'));
       ensureDay(din.datum);
-      if (!data.weken[weekKey][din.datum].maaltijden) data.weken[weekKey][din.datum].maaltijden = {};
-      data.weken[weekKey][din.datum].maaltijden.diner = {
-        naam: din.naam,
-        vezels: din.vezels || '',
-        eiwitten: din.eiwitten || ''
-      };
+      if (!data.weken[weekKey][din.datum].maaltijden) data.weken[weekKey][din.datum].maaltijden = { ontbijt:[], lunch:[], diner:[], snack:[] };
+      if (!Array.isArray(data.weken[weekKey][din.datum].maaltijden.diner)) data.weken[weekKey][din.datum].maaltijden.diner = [];
+      data.weken[weekKey][din.datum].maaltijden.diner.push({ id:'m'+Date.now()+Math.random().toString(36).slice(2,5), naam:din.naam, vezels:din.vezels||'', eiwitten:din.eiwitten||'', kcal:'', gepland:true, gegeten:false });
     });
 
     saveAndSync();
@@ -7802,7 +8538,7 @@ function renderPartners() {
     return;
   }
 
-  const sportIcoon = { run:'🏃', gym:'💪', bike:'🚴', commute:'🚴' };
+  const sportIcoon = { run:'🏃', gym:'🏋️', bike:'🚴', commute:'🚴' };
   el.innerHTML = partners.map((p, i) => `
     <div class="partner-row">
       <div class="partner-info">
