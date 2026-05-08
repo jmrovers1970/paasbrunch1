@@ -1028,9 +1028,9 @@ select.modal-input { appearance: auto; }
 }
 .setup-logo-icon {
   width: 56px; height: 56px; border-radius: 16px;
-  background: #ffffff;
+  background: #ffffff !important;
   display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 4px 16px rgba(0,0,0,.15);
+  box-shadow: 0 4px 16px rgba(0,0,0,.15) !important;
   flex-shrink: 0;
 }
 .setup-logo h1 { font-size: 28px; }
@@ -1891,6 +1891,27 @@ select.modal-input { appearance: auto; }
   </div>
 
   <div class="settings-section">
+    <h3>Spraak (coach)</h3>
+    <div class="form-group">
+      <label>OpenAI API-sleutel <span style="font-weight:400;color:var(--muted);font-size:12px;">— voor natuurlijke stem (optioneel)</span></label>
+      <input id="set-openai" type="password" placeholder="sk-...">
+      <p class="setup-help">Zonder sleutel gebruikt de app de browser-stem. Met OpenAI-sleutel klinkt de coach veel natuurlijker.</p>
+    </div>
+    <div class="form-group">
+      <label>Stem</label>
+      <select id="set-tts-voice" style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--radius);font-size:15px;font-family:inherit;background:var(--surface);color:var(--text);">
+        <option value="nova">Nova — vrouwelijk, warm (aanbevolen)</option>
+        <option value="shimmer">Shimmer — vrouwelijk, helder</option>
+        <option value="echo">Echo — mannelijk, neutraal</option>
+        <option value="onyx">Onyx — mannelijk, diep</option>
+        <option value="alloy">Alloy — neutraal</option>
+        <option value="fable">Fable — expressief</option>
+      </select>
+    </div>
+    <button class="btn btn-secondary btn-full" onclick="saveSettings();testTTS()">Opslaan &amp; stem testen</button>
+  </div>
+
+  <div class="settings-section">
     <h3>Data</h3>
     <div style="display:flex; flex-direction:column; gap:8px;">
       <button class="btn btn-secondary btn-full" onclick="exportData()">
@@ -2627,7 +2648,8 @@ function buildSystemPrompt() {
   return `Je bent een vriendelijke maar directe persoonlijke gezondheidscoach.
 Focus op hardlopen (hoofdsport), thuisgym (bankje + dumbbells) en fietsen.
 Voeding: vezelfocus, vast ontbijt is kwark/yoghurt met muesli en fruit.
-Houd antwoorden kort en praktisch. Spreek de gebruiker aan met 'je'${_naam ? ` of bij naam (${_naam})` : ''}.
+Houd antwoorden standaard KORT en praktisch: max 3-4 punten, geen lange uitleg. Spreek de gebruiker aan met 'je'${_naam ? ` of bij naam (${_naam})` : ''}.
+Als de gebruiker meer detail wil, bied je aan om uit te breiden — maar doe dat niet spontaan.
 Reageer altijd in het Nederlands.
 ${_profielBlok}${_vraagHint}
 
@@ -3381,6 +3403,8 @@ function openSettings() {
   document.getElementById('set-anthropic').value = settings.anthropicKey || '';
   document.getElementById('set-token').value = settings.githubToken || '';
   document.getElementById('set-gist').value = settings.gistId || '';
+  document.getElementById('set-openai').value = settings.openaiKey || '';
+  document.getElementById('set-tts-voice').value = settings.ttsVoice || 'nova';
   document.getElementById('settings-overlay').classList.add('visible');
   renderBrainOverview();
 }
@@ -3402,7 +3426,9 @@ function saveSettings() {
   const anthropicKey = document.getElementById('set-anthropic').value.trim();
   const githubToken = document.getElementById('set-token').value.trim();
   const gistId = document.getElementById('set-gist').value.trim();
-  saveSettingsData({ ...settings, naam, leeftijd, geslacht, gewicht, streefgewicht, doel, sporten, eten, slaap, anthropicKey, githubToken, gistId });
+  const openaiKey  = document.getElementById('set-openai').value.trim();
+  const ttsVoice   = document.getElementById('set-tts-voice').value;
+  saveSettingsData({ ...settings, naam, leeftijd, geslacht, gewicht, streefgewicht, doel, sporten, eten, slaap, anthropicKey, githubToken, gistId, openaiKey, ttsVoice });
   showBanner('yellow', 'Instellingen opgeslagen.');
   closeSettings();
 }
@@ -7258,52 +7284,111 @@ function _syncTTSButtons() {
 }
 
 function _pickNlVoice(voices) {
-  // iOS heeft goede stemmen: Lotte (nl-NL enhanced), Xander (nl-NL standard)
-  // macOS: Ellen (nl-BE). Volgorde: beste kwaliteit eerst.
+  const nl = voices.filter(v => v.lang && v.lang.startsWith('nl'));
+  const enhanced = nl.find(v => /enhanced|neural|premium|natural/i.test(v.name));
+  if (enhanced) return enhanced;
   return (
-    voices.find(v => v.name === 'Lotte') ||
-    voices.find(v => v.name === 'Xander') ||
-    voices.find(v => v.lang === 'nl-NL' && v.localService) ||
-    voices.find(v => v.lang === 'nl-NL') ||
+    nl.find(v => v.name === 'Claire') ||
+    nl.find(v => /siri stem 2/i.test(v.name)) ||
+    nl.find(v => /siri/i.test(v.name)) ||
+    nl.find(v => v.name === 'Lotte') ||
+    nl.find(v => v.name === 'Xander') ||
+    nl.find(v => /Microsoft.*NL|Azure/i.test(v.name)) ||
+    nl.find(v => v.lang === 'nl-NL' && v.localService) ||
+    nl.find(v => v.lang === 'nl-NL') ||
     voices.find(v => v.name === 'Ellen') ||
-    voices.find(v => v.lang === 'nl-BE') ||
-    voices.find(v => v.lang.startsWith('nl')) ||
+    nl[0] ||
     null
   );
 }
 
-function speakCoach(text) {
-  if (!_ttsEnabled || !window.speechSynthesis) return;
-  window.speechSynthesis.cancel();
-  const utt = new SpeechSynthesisUtterance(text);
-  utt.lang = 'nl-NL';
-  utt.rate = 0.92;
-  utt.pitch = 1.0;
+let _currentAudio = null;
 
+function _stopCurrentAudio() {
+  if (_currentAudio) {
+    try { _currentAudio.pause(); _currentAudio.currentTime = 0; } catch(_) {}
+    _currentAudio = null;
+  }
+  if (window.speechSynthesis) window.speechSynthesis.cancel();
+  _updatePlayButtons(false);
+}
+
+async function speakCoach(text) {
+  if (!_ttsEnabled) return;
+  _stopCurrentAudio();
+  const clean = text
+    .replace(/\*\*(.+?)\*\*/g, '$1').replace(/\*(.+?)\*/g, '$1')
+    .replace(/#+\s/g, '').replace(/📌[^\n]*/g, '')
+    .replace(/[\u{1F300}-\u{1FAFF}]/gu, '').replace(/\n{2,}/g, '. ').trim();
+  if (settings.openaiKey) {
+    try { await _speakOpenAI(clean, settings.openaiKey, settings.ttsVoice || 'nova'); return; }
+    catch(e) { console.warn('OpenAI TTS fallback:', e.message); }
+  }
+  _speakBrowser(clean);
+}
+
+async function _speakOpenAI(text, apiKey, voice) {
+  const resp = await fetch('https://api.openai.com/v1/audio/speech', {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ model: 'tts-1', input: text.slice(0, 4096), voice, speed: 1.0 })
+  });
+  if (!resp.ok) throw new Error(`OpenAI TTS ${resp.status}`);
+  const blob = await resp.blob();
+  const url = URL.createObjectURL(blob);
+  const audio = new Audio(url);
+  _currentAudio = audio;
+  _updatePlayButtons(true);
+  audio.onended = () => { URL.revokeObjectURL(url); _currentAudio = null; _updatePlayButtons(false); };
+  audio.onerror = () => { URL.revokeObjectURL(url); _currentAudio = null; _updatePlayButtons(false); };
+  await audio.play();
+}
+
+function _speakBrowser(text) {
+  if (!window.speechSynthesis) return;
+  const utt = new SpeechSynthesisUtterance(text);
+  utt.lang = 'nl-NL'; utt.rate = 0.93; utt.pitch = 1.0;
   const doSpeak = (voices) => {
     const voice = _pickNlVoice(voices);
     if (voice) utt.voice = voice;
+    _updatePlayButtons(true);
     window.speechSynthesis.speak(utt);
-    // iOS workaround: synthesis stopt soms halverwege
-    const resumeInterval = setInterval(() => {
-      if (!window.speechSynthesis.speaking) { clearInterval(resumeInterval); return; }
-      window.speechSynthesis.pause();
-      window.speechSynthesis.resume();
+    const t = setInterval(() => {
+      if (!window.speechSynthesis.speaking) { clearInterval(t); _updatePlayButtons(false); return; }
+      window.speechSynthesis.pause(); window.speechSynthesis.resume();
     }, 10000);
-    utt.onend = () => clearInterval(resumeInterval);
-    utt.onerror = () => clearInterval(resumeInterval);
+    utt.onend = () => { clearInterval(t); _updatePlayButtons(false); };
+    utt.onerror = () => { clearInterval(t); _updatePlayButtons(false); };
   };
-
   const voices = window.speechSynthesis.getVoices();
-  if (voices.length > 0) {
-    doSpeak(voices);
-  } else {
-    window.speechSynthesis.onvoiceschanged = () => {
-      window.speechSynthesis.onvoiceschanged = null;
-      doSpeak(window.speechSynthesis.getVoices());
-    };
+  if (voices.length > 0) doSpeak(voices);
+  else {
+    window.speechSynthesis.onvoiceschanged = () => { window.speechSynthesis.onvoiceschanged = null; doSpeak(window.speechSynthesis.getVoices()); };
     setTimeout(() => doSpeak(window.speechSynthesis.getVoices()), 500);
   }
+}
+
+function _iconPlay() { return `<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>`; }
+function _iconStop() { return `<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>`; }
+
+function _updatePlayButtons(playing) {
+  document.querySelectorAll('.bubble-play-btn').forEach(btn => {
+    btn.innerHTML = playing ? _iconStop() : _iconPlay();
+    btn.title = playing ? 'Stop' : 'Afspelen';
+    btn.dataset.playing = playing ? 'true' : 'false';
+  });
+}
+
+function toggleBubblePlay(btn, text) {
+  if (btn.dataset.playing === 'true') { _stopCurrentAudio(); return; }
+  document.querySelectorAll('.bubble-play-btn').forEach(b => { b.innerHTML = _iconPlay(); b.dataset.playing = 'false'; });
+  speakCoach(text);
+  btn.innerHTML = _iconStop(); btn.dataset.playing = 'true'; btn.title = 'Stop';
+}
+
+function testTTS() {
+  const naam = (settings && settings.naam) ? settings.naam : 'daar';
+  speakCoach(`Hé ${naam}, zo klinkt je coach. Klinkt dit goed?`);
 }
 
 function startVoiceChatInput() {
@@ -7846,14 +7931,25 @@ function addFrontBubble(role, text) {
     div.innerHTML = text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   } else {
     const tipId = 'ft' + Date.now();
+    const safeText = text.replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/\n/g,' ');
     div.innerHTML = formatCoachText(text) +
-      `<button onclick="pinFrontTip('${tipId}',this)" style="display:block;margin-top:6px;background:none;border:none;font-size:12px;color:rgba(0,0,0,.4);cursor:pointer;padding:0;font-family:inherit;">📌 Opslaan</button>`;
+      `<div style="display:flex;align-items:center;gap:8px;margin-top:8px;flex-wrap:wrap;">
+        <button class="bubble-play-btn" data-playing="false" onclick="toggleBubblePlay(this,'${safeText}')" title="Afspelen"
+          style="display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:var(--card2);border:1.5px solid var(--border);cursor:pointer;color:var(--text-2);flex-shrink:0;">${_iconPlay()}</button>
+        <button onclick="askUitgebreider(this)" style="background:none;border:1px solid var(--border);border-radius:7px;font-size:12px;color:var(--muted);cursor:pointer;padding:3px 9px;font-family:inherit;">+ Meer detail</button>
+        <button onclick="pinFrontTip('${tipId}',this)" style="background:none;border:none;font-size:12px;color:rgba(0,0,0,.4);cursor:pointer;padding:0;font-family:inherit;margin-left:2px;">📌 Opslaan</button>
+      </div>`;
     div.dataset.tipText = text;
     div.dataset.tipId = tipId;
     window._lastCoachReply = { text, id: tipId };
   }
   win.appendChild(div);
   win.scrollTop = win.scrollHeight;
+}
+
+function askUitgebreider(btn) {
+  btn.style.display = 'none';
+  coachFrontSend('Kun je dat wat uitgebreider toelichten?', '+ Meer detail');
 }
 
 function pinFrontTip(id, btn) {
