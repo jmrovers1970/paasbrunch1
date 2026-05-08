@@ -3365,7 +3365,7 @@ async function finishSetup() {
   }
   errEl.style.display = 'none';
 
-  saveSettingsData({ naam, anthropicKey, githubToken, gistId, setupDone: true });
+  saveSettingsData({ ...settings, naam, anthropicKey, githubToken, gistId, setupDone: true });
 
   const importFile = document.getElementById('setup-import').files[0];
   if (importFile) {
@@ -7272,12 +7272,18 @@ function startVoiceInput(inputId) {
 // ─── TEKST-NAAR-SPRAAK ───────────────────────────────────────────────────────
 
 let _ttsEnabled = localStorage.getItem('hc_tts') !== 'off';
+let _audioUnlocked = false;
 
 function unlockTTS() {
   if (!window.speechSynthesis) return;
   const utt = new SpeechSynthesisUtterance('');
   utt.volume = 0;
   window.speechSynthesis.speak(utt);
+  if (!_audioUnlocked) {
+    const silent = new Audio('data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=');
+    silent.volume = 0;
+    silent.play().then(() => { _audioUnlocked = true; }).catch(() => {});
+  }
 }
 
 function toggleTTS() {
