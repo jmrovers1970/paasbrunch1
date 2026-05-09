@@ -659,23 +659,6 @@ select.modal-input { appearance: auto; }
 .tts-toggle-btn.active { background: rgba(234,90,12,.12); color: var(--accent-move); border-color: var(--accent-move); }
 
 /* ─── TERUGBLIK / PATRONEN ─── */
-.terugblik-periode-row { display: flex; align-items: center; gap: 8px; }
-.tblik-label { font-size: 14px; color: var(--text-2); font-weight: 500; white-space: nowrap; }
-.tblik-step {
-  width: 34px; height: 34px; border-radius: 50%;
-  border: 1.5px solid var(--border); background: var(--card2);
-  font-size: 18px; line-height: 1; color: var(--text-2);
-  cursor: pointer; font-family: inherit; flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center;
-}
-.tblik-input {
-  width: 56px; text-align: center; font-size: 18px; font-weight: 700;
-  border: 1.5px solid var(--border); border-radius: 10px;
-  padding: 6px 4px; background: var(--card); color: var(--text);
-  font-family: inherit;
-}
-.tblik-input::-webkit-inner-spin-button,
-.tblik-input::-webkit-outer-spin-button { -webkit-appearance: none; }
 .terugblik-card {
   background: var(--accent-food-soft); border-radius: var(--radius);
   padding: 16px; margin-top: 12px;
@@ -683,11 +666,11 @@ select.modal-input { appearance: auto; }
   border-left: 3px solid var(--accent-food);
   color: var(--text);
 }
-.patroon-strip { margin-bottom:14px; }
-.patroon-strip-letters { display:flex; justify-content:space-between; margin-bottom:5px; }
-.patroon-strip-dots { display:flex; justify-content:space-between; }
-.patroon-dag-hdr { flex:1; text-align:center; font-size:11px; color:var(--muted); font-weight:700; }
-.dag-dot { flex:1; max-width:38px; aspect-ratio:1; border-radius:50%; border:2px solid var(--border); cursor:pointer; transition:transform .15s, box-shadow .15s; background:transparent; padding:0; margin:0 auto; display:block; }
+.patroon-strip { margin-bottom:8px; }
+.patroon-strip-letters { display:grid; grid-template-columns:repeat(7,1fr); margin-bottom:5px; }
+.patroon-strip-dots { display:grid; grid-template-columns:repeat(7,1fr); gap:4px 0; justify-items:center; align-items:center; }
+.patroon-dag-hdr { text-align:center; font-size:11px; color:var(--muted); font-weight:700; }
+.dag-dot { width:20px; height:20px; border-radius:50%; border:2px solid var(--border); cursor:pointer; transition:transform .15s, box-shadow .15s; background:transparent; padding:0; margin:0; display:block; flex-shrink:0; }
 .dag-dot:hover { transform:scale(1.12); }
 .dag-dot.score-2 { background:#16a34a; border-color:#16a34a; }
 .dag-dot.score-1 { background:var(--accent-move); border-color:var(--accent-move); }
@@ -706,8 +689,6 @@ select.modal-input { appearance: auto; }
 .inzicht-icon { font-size:18px; flex-shrink:0; margin-top:1px; }
 .inzicht-lbl { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; color:var(--muted); margin-bottom:4px; }
 .inzicht-tekst { font-size:14px; line-height:1.55; color:var(--text); }
-.periode-toggle-btn { width:100%; background:none; border:none; color:var(--muted); font-size:13px; font-family:inherit; cursor:pointer; padding:12px 0 4px; text-align:center; display:flex; align-items:center; justify-content:center; gap:6px; }
-.periode-toggle-btn:hover { color:var(--text); }
 
 /* ─── INSTRUCTIEKAARTEN ─── */
 .instructie-details { margin-bottom: 12px; }
@@ -1548,7 +1529,7 @@ select.modal-input { appearance: auto; }
 }
 .big-praat-status {
   color: var(--muted); font-size: 13px; font-weight: 500;
-  min-height: 20px; margin-top: 10px; text-align: center;
+  min-height: 0; margin-top: 4px; text-align: center;
 }
 .praat-btn-row {
   display: flex; align-items: center; justify-content: center; gap: 10px;
@@ -1565,7 +1546,7 @@ select.modal-input { appearance: auto; }
 }
 .mic-status-label {
   text-align: center; font-size: 12px; color: var(--muted);
-  margin-top: 8px; min-height: 16px;
+  margin-top: 4px; min-height: 0;
   display: flex; align-items: center; justify-content: center; gap: 5px;
 }
 .mic-device-item {
@@ -1579,16 +1560,12 @@ select.modal-input { appearance: auto; }
 .mic-device-item .mic-name { flex: 1; }
 .coach-chat-window {
   background: var(--card2); border: 1px solid var(--border); border-radius: 14px;
-  margin: 14px 0 0; padding: 12px;
-  max-height: 45vh; min-height: 100px; overflow-y: auto;
+  margin: 10px 0 0; padding: 12px;
+  max-height: 45vh; min-height: 0; overflow-y: auto;
   display: flex; flex-direction: column; gap: 8px;
   scroll-behavior: smooth;
 }
-.coach-chat-window:empty::before {
-  content: 'Stel een vraag of praat met de coach…';
-  color: var(--muted); font-size: 13px;
-  display: block; text-align: center; padding: 16px 0;
-}
+.coach-chat-window:empty { display: none; }
 .coach-bubble-user {
   align-self: flex-end;
   background: var(--accent-move); color: #fff;
@@ -1635,17 +1612,12 @@ select.modal-input { appearance: auto; }
   line-height: 1.2; display: flex; flex-direction: row; align-items: center; gap: 7px;
 }
 .quick-q-btn:active { background: var(--accent-move-soft); border-color: var(--accent-move); color: var(--accent-move); }
-.oppepper-btn {
-  width: 100%; margin-top: 10px;
-  background: var(--text); color: #fff;
-  border: none; border-radius: 11px;
-  padding: 12px 16px; font-size: 14px; font-weight: 700;
-  cursor: pointer; font-family: inherit;
-  display: flex; align-items: center; justify-content: center; gap: 8px;
-  letter-spacing: .01em;
-  transition: opacity .15s, transform .1s;
+.quick-q-btn.quick-q-oppepper {
+  background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);
+  color: #fff; border-color: transparent;
+  font-weight: 700;
 }
-.oppepper-btn:active { opacity: .85; transform: scale(.98); }
+.quick-q-btn.quick-q-oppepper:active { background: linear-gradient(135deg, #d97706, #c2410c); }
 
 /* ─── PROTEIN TRACKING BAR ─── */
 .nutri-bars { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
@@ -1960,8 +1932,9 @@ select.modal-input { appearance: auto; }
   <div id="tab-vandaag" class="tab-content">
     <div class="page-header">
       <div style="min-width:0; flex:1;">
-        <div id="today-day" style="font-size:14px; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:.4px;"></div>
-        <h1 id="today-date-h1" style="margin-top:2px;"></h1>
+        <div id="today-day" style="font-size:12px; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:.5px;"></div>
+        <h1 id="today-date-h1" style="margin-top:1px; font-size:22px;"></h1>
+        <div id="today-coach-line" style="font-size:13px;color:var(--muted);margin-top:2px;line-height:1.4;min-height:18px;"></div>
       </div>
       <div style="display:flex; align-items:center; gap:10px; flex-shrink:0;">
         <div class="streak-badge">
@@ -2162,45 +2135,42 @@ select.modal-input { appearance: auto; }
       </div>
       <div id="mic-status-label" class="mic-status-label"></div>
       <div id="big-praat-status" class="big-praat-status"></div>
-      <!-- Inline chat venster -->
-      <div id="coach-front-chat" class="coach-chat-window"></div>
-      <!-- Chat input -->
-      <div class="coach-input-row">
-        <input id="coach-front-input" type="text" placeholder="Of typ hier een vraag…" onkeydown="if(event.key==='Enter')coachFrontSend()">
-        <button onclick="startVoiceFrontCoach()" aria-label="Spreek in">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
-        </button>
-        <button id="tts-toggle-front" onclick="toggleTTS()" aria-label="Spraak aan/uit" title="Spraak aan/uit" style="opacity:0.75;">
-          <svg id="tts-front-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
-        </button>
-        <button onclick="coachFrontSend()" aria-label="Verstuur">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
-        </button>
-      </div>
-      <!-- Oppepper -->
-      <button class="oppepper-btn" onclick="askOppepper()">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-        Geef me een oppepper
-      </button>
-      <!-- Snelvragen -->
-      <div class="quick-q-row">
-        <button class="quick-q-btn" onclick="askQuickQ('Hoe gaat het met mijn voortgang en streak?')">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-          Mijn voortgang
+      <!-- Snelvragen (incl. oppepper) direct onder de knop -->
+      <div class="quick-q-row" style="margin-top:10px;">
+        <button class="quick-q-btn quick-q-oppepper" onclick="askOppepper()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          Oppepper
         </button>
         <button class="quick-q-btn" onclick="askAdviesVandaag()">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
           Advies vandaag
         </button>
+        <button class="quick-q-btn" onclick="askAdviesMorgen()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Advies morgen
+        </button>
         <button class="quick-q-btn" onclick="askNaHetSporten()">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v12"/><path d="M18 9a3 3 0 0 0-3-3H6"/><path d="M6 15a6 6 0 0 0 12 0"/></svg>
           Na het sporten
+        </button>
+        <button class="quick-q-btn" onclick="askQuickQ('Hoe gaat het met mijn voortgang en streak?')">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          Voortgang
         </button>
         <button class="quick-q-btn" onclick="askQuickQ('Hoe ging mijn week qua sport en voeding?')">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
           Mijn week
         </button>
       </div>
+      <!-- Chat input -->
+      <div class="coach-input-row" style="margin-top:10px;">
+        <input id="coach-front-input" type="text" placeholder="Of typ hier een vraag…" onkeydown="if(event.key==='Enter')coachFrontSend()">
+        <button onclick="coachFrontSend()" aria-label="Verstuur">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+        </button>
+      </div>
+      <!-- Chatvenster onder de input -->
+      <div id="coach-front-chat" class="coach-chat-window"></div>
     </div>
 
     <div class="card" style="margin-bottom:14px;" id="coach-nutri-card">
@@ -2225,9 +2195,11 @@ select.modal-input { appearance: auto; }
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
         <h3 style="margin-bottom:0;">Inzicht</h3>
         <div style="display:flex;align-items:center;gap:5px;">
-          <button onclick="setInzichtPeriode(-7)" style="width:26px;height:26px;border-radius:50%;border:1.5px solid var(--border);background:var(--card2);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text-2);font-family:inherit;line-height:1;">−</button>
-          <span id="inzicht-periode-label" style="font-size:13px;font-weight:600;color:var(--muted);min-width:34px;text-align:center;">7d</span>
-          <button onclick="setInzichtPeriode(7)" style="width:26px;height:26px;border-radius:50%;border:1.5px solid var(--border);background:var(--card2);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text-2);font-family:inherit;line-height:1;">+</button>
+          <button onclick="setInzichtPeriode(-1)" style="width:26px;height:26px;border-radius:50%;border:1.5px solid var(--border);background:var(--card2);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text-2);font-family:inherit;line-height:1;">−</button>
+          <input id="inzicht-periode-input" type="number" min="1" max="365" value="7"
+            style="width:46px;height:26px;border:1.5px solid var(--border);border-radius:8px;background:var(--card2);font-size:13px;font-weight:600;color:var(--text-2);text-align:center;font-family:inherit;padding:0 4px;"
+            oninput="setInzichtPeriodeDirect(this.value)">
+          <button onclick="setInzichtPeriode(1)" style="width:26px;height:26px;border-radius:50%;border:1.5px solid var(--border);background:var(--card2);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text-2);font-family:inherit;line-height:1;">+</button>
         </div>
       </div>
 
@@ -2235,36 +2207,23 @@ select.modal-input { appearance: auto; }
       <div id="patroon-grid"></div>
       <div id="dag-detail-bar" class="dag-detail-bar"></div>
 
-      <div style="display:flex;gap:8px;margin-top:16px;">
-        <button class="btn btn-secondary" style="flex:1;" onclick="analysePatronen()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          Analyseer
+      <div style="display:flex;gap:8px;margin-top:8px;">
+        <button onclick="analysePatronen()" style="flex:1;background:var(--card2);border:1.5px solid var(--border);border-radius:11px;padding:10px 14px;cursor:pointer;font-family:inherit;display:flex;flex-direction:column;align-items:center;gap:3px;transition:opacity .15s;">
+          <div style="display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--text-2);">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            Analyseer
+          </div>
+          <div style="font-size:11px;color:var(--muted);font-weight:400;text-align:center;line-height:1.3;">Toont 3 inzicht-kaarten hier<br>op basis van jouw logdata</div>
         </button>
-        <button class="btn btn-secondary" style="flex:1;" onclick="startWeekTerugblik()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.9"/></svg>
-          Terugblik
+        <button onclick="startWeekTerugblik()" style="flex:1;background:var(--accent-food);color:#fff;border:none;border-radius:11px;padding:10px 14px;cursor:pointer;font-family:inherit;display:flex;flex-direction:column;align-items:center;gap:3px;transition:opacity .15s;">
+          <div style="display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.9"/></svg>
+            Terugblik
+          </div>
+          <div style="font-size:11px;opacity:.85;font-weight:400;text-align:center;line-height:1.3;">Persoonlijk gesprek<br>met je coach in de chat</div>
         </button>
       </div>
       <div id="patroon-inzichten"></div>
-
-      <button class="periode-toggle-btn" onclick="togglePeriodeAnalyse()">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.9"/></svg>
-        Periode analyse
-      </button>
-      <div id="periode-analyse-sectie" style="display:none;padding-top:10px;border-top:1px solid var(--border);margin-top:4px;">
-        <div class="terugblik-periode-row" style="margin-bottom:10px;">
-          <span class="tblik-label">Afgelopen</span>
-          <button class="tblik-step" onclick="stepTerugblik(-1)">−</button>
-          <input id="terugblik-dagen-input" class="tblik-input" type="number" min="1" max="365" value="7">
-          <button class="tblik-step" onclick="stepTerugblik(1)">+</button>
-          <span class="tblik-label">dagen</span>
-        </div>
-        <button class="btn btn-secondary btn-full" onclick="doTerugblik()">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.9"/></svg>
-          Analyseer periode
-        </button>
-        <div id="terugblik-result"></div>
-      </div>
     </div>
 
     <div class="card" style="margin-bottom:14px;">
@@ -2304,7 +2263,7 @@ select.modal-input { appearance: auto; }
     <div class="card" style="margin-bottom:14px;">
       <div class="saved-tips-section">
         <button class="saved-tips-toggle" onclick="toggleSavedTips(this)">
-          <span>📌 Opgeslagen tips</span>
+          <span style="display:flex;align-items:center;gap:6px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>Opgeslagen tips</span>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
         </button>
         <div id="saved-tips-list" style="display:none;"></div>
@@ -2404,7 +2363,7 @@ select.modal-input { appearance: auto; }
       </div>
     </div>
 
-    <button class="intro-btn" onclick="dismissIntro()" style="font-size:17px;">Starten →</button>
+    <button class="intro-btn" onclick="dismissIntro()" style="font-size:17px;display:inline-flex;align-items:center;gap:8px;">Starten <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
     <p style="font-size:12px;color:var(--muted-2);margin-top:14px;font-style:italic;">Geen data gedeeld — alles blijft op jouw apparaat</p>
   </div>
 </div>
@@ -2431,6 +2390,100 @@ select.modal-input { appearance: auto; }
 const STORAGE_KEY = 'hc_data';
 const SETTINGS_KEY = 'hc_settings';
 const CHECKIN_KEY = 'hc_checkin_today';
+function buildPatternContext() {
+  try {
+    if (!data.weken) return '';
+    const dagNamen = ['zo','ma','di','wo','do','vr','za'];
+    const dagNamenNL = ['zondag','maandag','dinsdag','woensdag','donderdag','vrijdag','zaterdag'];
+    const nu = new Date();
+    const dagTotaal = {}; // per weekdag: {gepland, gedaan}
+    const maalTeller = {};
+    let weekenActief = 0, weekenTotaal = 0;
+    let doordeweekActief = 0, doordeweekTotaal = 0;
+    let totaleSessies = 0, aantalWeken = 0;
+    const sportTeller = {};
+
+    const cutoff = new Date(nu);
+    cutoff.setDate(cutoff.getDate() - 56); // 8 weken terug
+    const cutoffStr = cutoff.toISOString().slice(0,10);
+
+    Object.values(data.weken).forEach(weekData => {
+      let weekSessies = 0;
+      Object.entries(weekData).forEach(([ds, day]) => {
+        if (ds < cutoffStr || !day) return;
+        const dagIdx = new Date(ds + 'T12:00:00').getDay(); // 0=zo
+        const isWeekend = dagIdx === 0 || dagIdx === 6;
+        const acts = day.activiteiten || [];
+        if (acts.length === 0) return;
+        if (!dagTotaal[dagIdx]) dagTotaal[dagIdx] = { gepland: 0, gedaan: 0 };
+        dagTotaal[dagIdx].gepland += acts.length;
+        const done = acts.filter(a => a.afgevinkt);
+        dagTotaal[dagIdx].gedaan += done.length;
+        done.forEach(a => {
+          sportTeller[a.type || 'overig'] = (sportTeller[a.type || 'overig'] || 0) + 1;
+          weekSessies++;
+        });
+        if (isWeekend) { weekenTotaal++; if (done.length > 0) weekenActief++; }
+        else { doordeweekTotaal++; if (done.length > 0) doordeweekActief++; }
+        Object.values(day.maaltijden || {}).forEach(slot => {
+          (Array.isArray(slot) ? slot : []).forEach(m => {
+            if (m.naam) maalTeller[m.naam] = (maalTeller[m.naam] || 0) + 1;
+          });
+        });
+      });
+      if (weekSessies > 0) { totaleSessies += weekSessies; aantalWeken++; }
+    });
+
+    const regels = [];
+
+    // Meest gemiste dag
+    let meesteGemist = null, laagsteRatio = 1;
+    Object.entries(dagTotaal).forEach(([idx, d]) => {
+      if (d.gepland < 3) return; // te weinig data
+      const ratio = d.gedaan / d.gepland;
+      if (ratio < laagsteRatio) { laagsteRatio = ratio; meesteGemist = parseInt(idx); }
+    });
+    if (meesteGemist !== null && laagsteRatio < 0.6) {
+      regels.push(`Meest gemiste dag: ${dagNamenNL[meesteGemist]} (${Math.round(laagsteRatio*100)}% afgerond)`);
+    }
+
+    // Sterkste dag
+    let bestedag = null, hoogsteRatio = 0;
+    Object.entries(dagTotaal).forEach(([idx, d]) => {
+      if (d.gepland < 3) return;
+      const ratio = d.gedaan / d.gepland;
+      if (ratio > hoogsteRatio) { hoogsteRatio = ratio; bestedag = parseInt(idx); }
+    });
+    if (bestedag !== null && hoogsteRatio > 0.8) {
+      regels.push(`Sterkste dag: ${dagNamenNL[bestedag]} (${Math.round(hoogsteRatio*100)}% afgerond)`);
+    }
+
+    // Weekend vs doordeweeks
+    if (weekenTotaal >= 4 && doordeweekTotaal >= 8) {
+      const wpct = Math.round(weekenActief / weekenTotaal * 100);
+      const dpct = Math.round(doordeweekActief / doordeweekTotaal * 100);
+      if (Math.abs(wpct - dpct) >= 20) {
+        regels.push(`Weekend ${wpct > dpct ? 'actiever' : 'minder actief'} dan doordeweeks (${wpct}% vs ${dpct}%)`);
+      }
+    }
+
+    // Gem sessies per week
+    if (aantalWeken >= 2) {
+      regels.push(`Gem. ${(totaleSessies/aantalWeken).toFixed(1)} sporttssies/week (afgelopen ${aantalWeken} weken)`);
+    }
+
+    // Favoriete sport
+    const topSport = Object.entries(sportTeller).sort((a,b)=>b[1]-a[1])[0];
+    if (topSport) regels.push(`Meest gedane sport: ${topSport[0]} (${topSport[1]}× afgelopen 8 weken)`);
+
+    // Favoriete maaltijden (top 3)
+    const topMaals = Object.entries(maalTeller).sort((a,b)=>b[1]-a[1]).slice(0,3).filter(([,v])=>v>1);
+    if (topMaals.length > 0) regels.push(`Vaakst gegeten: ${topMaals.map(([n,v])=>`${n} (${v}×)`).join(', ')}`);
+
+    return regels.length > 0 ? '\n\nGEDRAGSPATRONEN (automatisch herkend, afgelopen 8 weken):\n' + regels.map(r=>`- ${r}`).join('\n') + '\nGebruik deze patronen actief: benoem ze als het relevant is, stel bij terugkerende patronen een gerichte vraag.' : '';
+  } catch(_) { return ''; }
+}
+
 function buildWeekMenuContext() {
   try {
     const weekKey = getISOWeek(new Date());
@@ -2483,7 +2536,7 @@ function buildSystemPrompt() {
       // Activiteiten vandaag
       if (dayData && dayData.activiteiten && dayData.activiteiten.length > 0) {
         activiteitenVandaag = dayData.activiteiten.map(a =>
-          `${a.naam}${a.duur ? ' ' + a.duur + 'min' : ''}${a.afgevinkt ? ' ✓' : ' (gepland)'}`
+          `${a.naam}${a.duur ? ' ' + a.duur + 'min' : ''}${a.afgevinkt ? ' ✓' + (a.gevoel ? ' (' + a.gevoel + ')' : '') : ' (gepland)'}`
         ).join(', ');
       }
 
@@ -2688,7 +2741,7 @@ ${checkInPatroon ? 'CHECK-IN PATROON (7 dagen): ' + checkInPatroon : ''}
 ${historischeTekst}${doelenTekst}
 
 WEEKMENU (geplande maaltijden deze week):
-${buildWeekMenuContext()}
+${buildWeekMenuContext()}${buildPatternContext()}
 
 VOEDING:
 Vezels dagdoel: 30g (ontbijt ~6g / lunch ~8g / diner ~10-14g / snack ~4g).
@@ -3084,17 +3137,17 @@ function defaultData() {
     streak: { huidig: 0, record: 0, laatsteDatum: '' },
     chatHistorie: [],
     recepten: [
-      { id: 'r1', type: 'diner', naam: 'Linzensoep met volkorenbrood', vezels: '~14g', tijd: '30 min', ingredienten: '200g rode linzen, 1 ui, 2 wortels, 2 stengels bleekselderij, 1 blik tomaten (400g), 1L groentebouillon, 2 tl komijn, zout/peper, 2 sneden volkorenbrood p.p.', bereiding: 'Fruit ui aan, voeg wortel en selderij toe, linzen erbij, bouillon en tomaten, 25 min koken, brood erbij.' },
-      { id: 'r2', type: 'diner', naam: 'Kikkererwten curry met zilvervliesrijst', vezels: '~13g', tijd: '25 min', ingredienten: '1 blik kikkererwten (400g), 1 blik kokosmelk (400ml), 1 blik tomaten (400g), 1 ui, 2 tl kerriepoeder, 1 tl kurkuma, 300g zilvervliesrijst, verse koriander.', bereiding: 'Ui fruiten, kruiden toevoegen, kikkererwten en tomaten erbij, kokosmelk toevoegen, 15 min sudderen, serveer met rijst.' },
-      { id: 'r3', type: 'diner', naam: 'Geroosterde groenten met quinoa en hummus', vezels: '~12g', tijd: '35 min', ingredienten: '1 courgette, 1 paprika, 1 rode ui, 200g quinoa, 150g hummus, olijfolie, tijm, zout/peper, handje rucola.', bereiding: 'Groenten in blokjes met olie en tijm, 25 min op 200°C, quinoa koken, serveer met hummus en rucola.' },
-      { id: 'r4', type: 'diner', naam: 'Zwarte bonen taco\'s met avocado', vezels: '~11g', tijd: '20 min', ingredienten: '1 blik zwarte bonen (400g), 2 avocado\'s, 1 limoen, 4 volkoren tortilla\'s, 1 tl komijn, 1 tl paprikapoeder, rode kool (geraspt), salsa, verse koriander.', bereiding: 'Bonen met kruiden opwarmen, avocado pureren met limoensap, tortilla\'s vullen en samenvouwen.' },
-      { id: 'r5', type: 'diner', naam: 'Pasta met spinazie, witte bonen en tomatensaus', vezels: '~10g', tijd: '20 min', ingredienten: '300g volkoren pasta, 1 blik witte bonen (400g), 200g spinazie, 1 blik tomaten (400g), 2 teentjes knoflook, olijfolie, italiaanse kruiden, parmezaan (optioneel).', bereiding: 'Pasta koken, knoflook fruiten, tomaten en bonen erbij, 10 min sudderen, spinazie erdoor, mengen met pasta.' },
-      { id: 'r6', type: 'ontbijt', naam: 'Kwark/yoghurt met muesli & fruit', vezels: '~6g', tijd: '5 min', ingredienten: '150g kwark of Griekse yoghurt, 40g muesli, 1 stuk fruit (banaan, appel of bessen).', bereiding: 'Kwark in kom, muesli en fruit erover.' },
-      { id: 'r7', type: 'ontbijt', naam: 'Havermout met noten en honing', vezels: '~5g', tijd: '10 min', ingredienten: '80g havermout, 300ml melk of plantaardige melk, handjevol noten, 1 tl honing, 1 stuk fruit.', bereiding: 'Havermout met melk opwarmen, noten en fruit erover, honing erdoor.' },
-      { id: 'r8', type: 'lunch', naam: 'Volkoren boterhammen met hummus & groente', vezels: '~8g', tijd: '5 min', ingredienten: '3 sneden volkorenbrood, 3 el hummus, komkommer, tomaat, sla.', bereiding: 'Brood beleggen met hummus en groente.' },
-      { id: 'r9', type: 'lunch', naam: 'Salade met kikkererwten en feta', vezels: '~7g', tijd: '10 min', ingredienten: '1 blik kikkererwten (200g), 50g feta, komkommer, tomaat, rode ui, olijfolie, citroensap.', bereiding: 'Alles mengen, dressing erover.' },
-      { id: 'r10', type: 'snack', naam: 'Appel of peer + handjevol noten', vezels: '~4g', tijd: '1 min', ingredienten: '1 appel of peer, 25g gemengde noten.', bereiding: 'Direct serveren.' },
-      { id: 'r11', type: 'snack', naam: 'Yoghurt met lijnzaad', vezels: '~3g', tijd: '2 min', ingredienten: '150g yoghurt, 1 el lijnzaad, optioneel: honing.', bereiding: 'Lijnzaad over yoghurt, eventueel honing.' }
+      { id: 'r1', type: 'diner', naam: 'Linzensoep met volkorenbrood', vezels: '~14g', eiwitten: '~18g', tijd: '30 min', ingredienten: '200g rode linzen, 1 ui, 2 wortels, 2 stengels bleekselderij, 1 blik tomaten (400g), 1L groentebouillon, 2 tl komijn, zout/peper, 2 sneden volkorenbrood p.p.', bereiding: 'Fruit ui aan, voeg wortel en selderij toe, linzen erbij, bouillon en tomaten, 25 min koken, brood erbij.' },
+      { id: 'r2', type: 'diner', naam: 'Kikkererwten curry met zilvervliesrijst', vezels: '~13g', eiwitten: '~15g', tijd: '25 min', ingredienten: '1 blik kikkererwten (400g), 1 blik kokosmelk (400ml), 1 blik tomaten (400g), 1 ui, 2 tl kerriepoeder, 1 tl kurkuma, 300g zilvervliesrijst, verse koriander.', bereiding: 'Ui fruiten, kruiden toevoegen, kikkererwten en tomaten erbij, kokosmelk toevoegen, 15 min sudderen, serveer met rijst.' },
+      { id: 'r3', type: 'diner', naam: 'Geroosterde groenten met quinoa en hummus', vezels: '~12g', eiwitten: '~14g', tijd: '35 min', ingredienten: '1 courgette, 1 paprika, 1 rode ui, 200g quinoa, 150g hummus, olijfolie, tijm, zout/peper, handje rucola.', bereiding: 'Groenten in blokjes met olie en tijm, 25 min op 200°C, quinoa koken, serveer met hummus en rucola.' },
+      { id: 'r4', type: 'diner', naam: 'Zwarte bonen taco\'s met avocado', vezels: '~11g', eiwitten: '~12g', tijd: '20 min', ingredienten: '1 blik zwarte bonen (400g), 2 avocado\'s, 1 limoen, 4 volkoren tortilla\'s, 1 tl komijn, 1 tl paprikapoeder, rode kool (geraspt), salsa, verse koriander.', bereiding: 'Bonen met kruiden opwarmen, avocado pureren met limoensap, tortilla\'s vullen en samenvouwen.' },
+      { id: 'r5', type: 'diner', naam: 'Pasta met spinazie, witte bonen en tomatensaus', vezels: '~10g', eiwitten: '~16g', tijd: '20 min', ingredienten: '300g volkoren pasta, 1 blik witte bonen (400g), 200g spinazie, 1 blik tomaten (400g), 2 teentjes knoflook, olijfolie, italiaanse kruiden, parmezaan (optioneel).', bereiding: 'Pasta koken, knoflook fruiten, tomaten en bonen erbij, 10 min sudderen, spinazie erdoor, mengen met pasta.' },
+      { id: 'r6', type: 'ontbijt', naam: 'Kwark/yoghurt met muesli & fruit', vezels: '~6g', eiwitten: '~20g', tijd: '5 min', ingredienten: '150g kwark of Griekse yoghurt, 40g muesli, 1 stuk fruit (banaan, appel of bessen).', bereiding: 'Kwark in kom, muesli en fruit erover.' },
+      { id: 'r7', type: 'ontbijt', naam: 'Havermout met noten en honing', vezels: '~5g', eiwitten: '~13g', tijd: '10 min', ingredienten: '80g havermout, 300ml melk of plantaardige melk, handjevol noten, 1 tl honing, 1 stuk fruit.', bereiding: 'Havermout met melk opwarmen, noten en fruit erover, honing erdoor.' },
+      { id: 'r8', type: 'lunch', naam: 'Volkoren boterhammen met hummus & groente', vezels: '~8g', eiwitten: '~12g', tijd: '5 min', ingredienten: '3 sneden volkorenbrood, 3 el hummus, komkommer, tomaat, sla.', bereiding: 'Brood beleggen met hummus en groente.' },
+      { id: 'r9', type: 'lunch', naam: 'Salade met kikkererwten en feta', vezels: '~7g', eiwitten: '~14g', tijd: '10 min', ingredienten: '1 blik kikkererwten (200g), 50g feta, komkommer, tomaat, rode ui, olijfolie, citroensap.', bereiding: 'Alles mengen, dressing erover.' },
+      { id: 'r10', type: 'snack', naam: 'Appel of peer + handjevol noten', vezels: '~4g', eiwitten: '~5g', tijd: '1 min', ingredienten: '1 appel of peer, 25g gemengde noten.', bereiding: 'Direct serveren.' },
+      { id: 'r11', type: 'snack', naam: 'Yoghurt met lijnzaad', vezels: '~3g', eiwitten: '~8g', tijd: '2 min', ingredienten: '150g yoghurt, 1 el lijnzaad, optioneel: honing.', bereiding: 'Lijnzaad over yoghurt, eventueel honing.' }
     ],
     stats: { byMonth: {} },
     savedTips: [],
@@ -3952,14 +4005,47 @@ function updateStreakUI() {
 
 // ─── VANDAAG TAB ─────────────────────────────────────────────────────────────
 
+async function renderDagCoachLine(todayStr) {
+  const el = document.getElementById('today-coach-line');
+  if (!el) return;
+  const cached = data.dagCoachLine;
+  if (cached && cached.date === todayStr) { el.textContent = cached.text; return; }
+  if (!settings || !settings.anthropicKey) return;
+  try {
+    const weekKey = getISOWeek(new Date(todayStr + 'T12:00:00'));
+    const dayData = (data.weken && data.weken[weekKey] && data.weken[weekKey][todayStr]) || {};
+    const streak = data.streak || 0;
+    const uur = new Date().getHours();
+    const dagNamen = ['zondag','maandag','dinsdag','woensdag','donderdag','vrijdag','zaterdag'];
+    const dagNaam = dagNamen[new Date(todayStr + 'T12:00:00').getDay()];
+    const acts = (dayData.activiteiten || []);
+    const geplande = acts.map(a => a.naam).join(', ') || 'niets gepland';
+    const checkIn = dayData.checkIn || null;
+    const naam = (settings && settings.naam) ? settings.naam : null;
+    const prompt = `Je bent een compacte gezondheidscoach. Schrijf precies ÉÉN zin (max 12 woorden) als persoonlijke dag-opener voor ${naam || 'de gebruiker'}. Context: ${dagNaam}, ${uur < 12 ? 'ochtend' : uur < 18 ? 'middag' : 'avond'}, streak ${streak} dagen, vandaag gepland: ${geplande}${checkIn ? ', check-in: ' + checkIn : ''}. Maak het concreet en persoonlijk. Geen aanhalingstekens.`;
+    const line = await callAIPlain(prompt, 60);
+    if (line && line.length > 5) {
+      data.dagCoachLine = { date: todayStr, text: line.trim() };
+      saveLocal();
+      el.textContent = line.trim();
+    }
+  } catch(_) {}
+}
+
 function renderVandaag() {
   const todayStr = today();
   const d = new Date(todayStr + 'T12:00:00');
   const dagNamen = ['Zondag','Maandag','Dinsdag','Woensdag','Donderdag','Vrijdag','Zaterdag'];
   const maanden = ['januari','februari','maart','april','mei','juni','juli','augustus','september','oktober','november','december'];
 
-  document.getElementById('today-day').textContent = dagNamen[d.getDay()];
-  document.getElementById('today-date-h1').textContent = `${d.getDate()} ${maanden[d.getMonth()]} ${d.getFullYear()}`;
+  document.getElementById('today-day').textContent = `${dagNamen[d.getDay()]} ${d.getDate()} ${maanden[d.getMonth()]}`;
+
+  const uur = new Date().getHours();
+  const groet = uur < 12 ? 'Goedemorgen' : uur < 18 ? 'Goedemiddag' : 'Goedenavond';
+  const naam = (settings && settings.naam) ? ' ' + settings.naam : '';
+  document.getElementById('today-date-h1').textContent = groet + naam;
+
+  renderDagCoachLine(todayStr);
 
   updateStreak();
   renderDailyCoachCard();
@@ -4178,8 +4264,25 @@ function toggleActivity(dateStr, actId, circleEl) {
   setTimeout(() => circleEl.classList.remove('pop-anim'), 300);
   if (act.afgevinkt && navigator.vibrate) navigator.vibrate(15);
 
-  const nameEl = circleEl.closest('.activity-row').querySelector('.activity-name');
+  const row = circleEl.closest('.activity-row');
+  const nameEl = row ? row.querySelector('.activity-name') : null;
   if (nameEl) nameEl.classList.toggle('done', act.afgevinkt);
+
+  if (act.afgevinkt && row) {
+    const existing = row.querySelector('.gevoel-picker');
+    if (!existing) {
+      const picker = document.createElement('div');
+      picker.className = 'gevoel-picker';
+      picker.style.cssText = 'display:flex;gap:6px;align-items:center;padding:6px 0 2px 36px;';
+      picker.innerHTML = ['zwaar','goed','top'].map(label =>
+        `<button onclick="slaGevoelOp('${dateStr}','${actId}','${label}',this.closest('.gevoel-picker'))" style="background:var(--card2);border:1.5px solid var(--border);border-radius:20px;padding:3px 10px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;color:var(--text-2);transition:background .15s;">${label}</button>`
+      ).join('');
+      row.after(picker);
+    }
+  } else if (!act.afgevinkt && row) {
+    const picker = row.nextElementSibling;
+    if (picker && picker.classList.contains('gevoel-picker')) picker.remove();
+  }
 
   updateStreak();
   saveAndSync();
@@ -4279,7 +4382,7 @@ function quickEditMeal(dateStr, slot) {
     ? `<div style="margin-bottom:12px;">
         ${items.map(item => `
           <div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);">
-            <div style="flex:1;font-size:14px;">${item.naam}${item.vezels ? ' <span style="color:var(--muted);font-size:12px;">🌿 '+item.vezels+'</span>' : ''}${item.eiwitten ? ' <span style="color:var(--muted);font-size:12px;"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="vertical-align:-1px;opacity:.9"><path d="M12 2C8.5 2 5 7 5 11.8 5 17.4 8.1 22 12 22s7-4.6 7-10.2C19 7 15.5 2 12 2z"/></svg> '+item.eiwitten+'</span>' : ''}</div>
+            <div style="flex:1;font-size:14px;">${item.naam}${item.vezels ? ' <span style="color:var(--muted);font-size:12px;"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;opacity:.8;"><path d="M12 22c0-6 6-10 6-16a6 6 0 0 0-12 0c0 6 6 10 6 16z"/></svg> '+item.vezels+'</span>' : ''}${item.eiwitten ? ' <span style="color:var(--muted);font-size:12px;"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="vertical-align:-1px;opacity:.9"><path d="M12 2C8.5 2 5 7 5 11.8 5 17.4 8.1 22 12 22s7-4.6 7-10.2C19 7 15.5 2 12 2z"/></svg> '+item.eiwitten+'</span>' : ''}</div>
             <button onclick="deleteTodayMeal('${dateStr}','${slot}','${item.id}')" style="border:none;background:none;color:var(--danger);font-size:18px;cursor:pointer;line-height:1;padding:0 4px;">×</button>
           </div>`).join('')}
       </div>` : '';
@@ -4293,7 +4396,7 @@ function quickEditMeal(dateStr, slot) {
               style="text-align:left;padding:10px 12px;border-radius:8px;border:1.5px solid var(--border);background:var(--card);cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:space-between;">
               <div>
                 <div style="font-size:14px;font-weight:500;">${r.naam}</div>
-                ${r.vezels || r.eiwitten ? `<div style="font-size:11px;color:var(--muted);margin-top:2px;">${r.vezels ? '🌿 '+r.vezels : ''}${r.vezels && r.eiwitten ? ' · ' : ''}${r.eiwitten ? '<svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="vertical-align:-1px;opacity:.9"><path d="M12 2C8.5 2 5 7 5 11.8 5 17.4 8.1 22 12 22s7-4.6 7-10.2C19 7 15.5 2 12 2z"/></svg> '+r.eiwitten : ''}</div>` : ''}
+                ${r.vezels || r.eiwitten ? `<div style="font-size:11px;color:var(--muted);margin-top:2px;">${r.vezels ? '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;opacity:.8;"><path d="M12 22c0-6 6-10 6-16a6 6 0 0 0-12 0c0 6 6 10 6 16z"/></svg> '+r.vezels : ''}${r.vezels && r.eiwitten ? ' · ' : ''}${r.eiwitten ? '<svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="vertical-align:-1px;opacity:.9"><path d="M12 2C8.5 2 5 7 5 11.8 5 17.4 8.1 22 12 22s7-4.6 7-10.2C19 7 15.5 2 12 2z"/></svg> '+r.eiwitten : ''}</div>` : ''}
               </div>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-food)" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             </button>`).join('')}
@@ -4502,12 +4605,35 @@ function toggleWeekActivity(dateStr, actId, circleEl) {
   circleEl.classList.toggle('checked', act.afgevinkt);
   circleEl.classList.add('pop-anim');
   setTimeout(() => circleEl.classList.remove('pop-anim'), 300);
-  const nameEl = circleEl.closest('.activity-row').querySelector('.activity-name');
+  const row = circleEl.closest('.activity-row');
+  const nameEl = row ? row.querySelector('.activity-name') : null;
   if (nameEl) nameEl.classList.toggle('done', act.afgevinkt);
+  if (act.afgevinkt && row) {
+    const existing = row.querySelector('.gevoel-picker');
+    if (!existing) {
+      const picker = document.createElement('div');
+      picker.className = 'gevoel-picker';
+      picker.style.cssText = 'display:flex;gap:6px;align-items:center;padding:6px 0 2px 36px;';
+      picker.innerHTML = ['zwaar','goed','top'].map(label => {
+        return `<button onclick="slaGevoelOp('${dateStr}','${actId}','${label}',this.closest('.gevoel-picker'))" style="background:var(--card2);border:1.5px solid var(--border);border-radius:20px;padding:3px 10px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;color:var(--text-2);transition:background .15s;">${label}</button>`;
+      }).join('');
+      row.after(picker);
+    }
+  } else if (!act.afgevinkt && row) {
+    const picker = row.nextElementSibling;
+    if (picker && picker.classList.contains('gevoel-picker')) picker.remove();
+  }
   updateStreak();
   saveAndSync();
   updateWeekProgress();
   if (dateStr === today()) renderTodayActivities(dateStr);
+}
+
+function slaGevoelOp(dateStr, actId, gevoel, pickerEl) {
+  const weekKey = getISOWeek(new Date(dateStr + 'T12:00:00'));
+  const act = (data.weken[weekKey][dateStr].activiteiten || []).find(a => a.id === actId);
+  if (act) { act.gevoel = gevoel; saveAndSync(); }
+  if (pickerEl) pickerEl.remove();
 }
 
 function updateWeekProgress() {
@@ -4725,6 +4851,14 @@ function _renderFoodChef() {
       ${micInput('gen-focus-input', 'Of typ: pasta, paprika, tomaat…', '')}
     </div>
 
+    <input type="file" id="chef-foto-input" accept="image/*" style="display:none;" onchange="analyseChefFoto(this)">
+    <button class="btn btn-ghost btn-full" id="chef-foto-btn" onclick="document.getElementById('chef-foto-input').click()" style="font-size:13px;border-color:var(--accent-move);color:var(--accent-move);margin-bottom:12px;">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+      Foto of screenshot van recept analyseren
+    </button>
+    <div id="chef-foto-preview" style="display:none;font-size:12px;color:var(--muted);padding:8px 10px;background:var(--card2);border-radius:8px;margin-bottom:12px;"></div>
+    <div id="chef-foto-result" style="display:none;font-size:12px;background:var(--card2);border-radius:10px;padding:12px 14px;margin-bottom:12px;line-height:1.6;"></div>
+
     <div class="recipe-gen-card" style="margin-bottom:12px;padding:14px 14px 10px;">
       <div class="recipe-gen-row">
         <span class="recipe-gen-label">Recepten</span>
@@ -4801,13 +4935,13 @@ function _renderFoodReceptenList() {
           <div class="recipe-header-main">
             <span class="recipe-title">${r.naam}</span>
             <div class="recipe-badges">
-              <span class="fiber-badge">🌿 ${r.vezels || '?'}</span>
+              <span class="fiber-badge"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;opacity:.85;"><path d="M12 22c0-6 6-10 6-16a6 6 0 0 0-12 0c0 6 6 10 6 16z"/></svg> ${r.vezels || '?'}</span>
               ${r.eiwitten ? `<span class="protein-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="vertical-align:-1px;opacity:.9"><path d="M12 2C8.5 2 5 7 5 11.8 5 17.4 8.1 22 12 22s7-4.6 7-10.2C19 7 15.5 2 12 2z"/></svg> ${r.eiwitten}</span>` : ''}
               <span class="time-badge">${r.tijd}</span>
             </div>
           </div>
           <div class="recipe-header-actions">
-            <button class="rec-fav-btn ${r.favoriet ? 'active' : ''}" onclick="event.stopPropagation();toggleFavoriet('${r.id}')" aria-label="Favoriet">⭐</button>
+            <button class="rec-fav-btn ${r.favoriet ? 'active' : ''}" onclick="event.stopPropagation();toggleFavoriet('${r.id}')" aria-label="Favoriet"><svg width="15" height="15" viewBox="0 0 24 24" fill="${r.favoriet ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></button>
             <button class="rec-delete-btn" onclick="event.stopPropagation();deleteRecept('${r.id}')" aria-label="Verwijder recept">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
             </button>
@@ -4841,7 +4975,7 @@ function _renderFoodReceptenList() {
               <option value="diner"${defaultSlot==='diner'?' selected':''}>Diner</option>
               <option value="snack"${defaultSlot==='snack'?' selected':''}>Snack</option>
             </select>
-            <button class="btn btn-secondary btn-sm" onclick="planRecipeForDay('${r.id}')">Plan →</button>
+            <button class="btn btn-secondary btn-sm" onclick="planRecipeForDay('${r.id}')">Plan <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-left:2px;"><polyline points="9 18 15 12 9 6"/></svg></button>
           </div>
           <button class="kookmodus-btn" onclick="enterKookmodus('${r.id}')">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
@@ -4849,7 +4983,7 @@ function _renderFoodReceptenList() {
           </button>
           <button class="nutrition-calc-btn" id="calc-btn-${r.id}" onclick="calculateNutrition('${r.id}')">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-            Bereken vezels &amp; eiwitten
+            ${(r.vezels && r.vezels !== '?' && r.eiwitten) ? 'Herbereken vezels &amp; eiwitten' : 'Bereken vezels &amp; eiwitten'}
           </button>
           <button class="btn btn-ghost btn-full btn-sm" style="margin-top:6px;" onclick="editReceptModal('${r.id}')">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
@@ -5041,7 +5175,7 @@ function _renderShopPicker() {
     </div>
     <p style="font-size:13px;color:var(--muted);margin-bottom:10px;">Welke gerechten wil je meenemen?</p>
     <div class="shop-picker">${rows}</div>
-    <button class="btn btn-primary btn-full" style="margin-top:14px;" onclick="_buildAndShowShopList()">Maak lijst →</button>
+    <button class="btn btn-primary btn-full" style="margin-top:14px;" onclick="_buildAndShowShopList()">Maak lijst <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-left:3px;"><polyline points="9 18 15 12 9 6"/></svg></button>
   `);
 }
 
@@ -5056,10 +5190,14 @@ async function generateIngredientsForMeal(mealId) {
   const btn = document.querySelector(`[onclick*="generateIngredientsForMeal('${mealId}')"]`);
   if (btn) { btn.textContent = '⏳'; btn.disabled = true; }
   try {
-    const prompt = `Geef de ingrediënten voor het gerecht "${meal.naam}" (2 personen). Geef ALLEEN een JSON-array van strings met hoeveelheid en ingredient, bijv. ["200g kipfilet","1 ui","2 el olijfolie"]. Geen uitleg.`;
-    const raw = await callAIPlain(prompt, 250);
-    const ingredienten = safeParseJSON(raw);
-    if (!Array.isArray(ingredienten) || ingredienten.length === 0) throw new Error();
+    const prompt = `Maak een compleet recept voor "${meal.naam}" (2 personen). Geef ALLEEN JSON:
+{"ingredienten":["200g kipfilet","1 ui","2 el olijfolie"],"bereiding":["Verwarm olijfolie in pan.","Bak ui glazig.","Voeg kip toe en bak 8 min."]}
+Maximaal 8 ingrediënten, maximaal 6 stappen. Geen uitleg buiten de JSON.`;
+    const raw = await callAIPlain(prompt, 400);
+    const parsed = safeParseJSON(raw);
+    const ingredienten = parsed && Array.isArray(parsed.ingredienten) ? parsed.ingredienten : (Array.isArray(parsed) ? parsed : null);
+    if (!ingredienten || ingredienten.length === 0) throw new Error();
+    const bereiding = (parsed && Array.isArray(parsed.bereiding)) ? parsed.bereiding : [];
 
     // Sla op als echt recept zodat het zichtbaar en persistent is
     ensureRecepten();
@@ -5067,7 +5205,7 @@ async function generateIngredientsForMeal(mealId) {
       id: 'ai-' + Date.now(),
       naam: meal.naam,
       ingredienten,
-      bereiding: [],
+      bereiding,
       vezels: 0,
       eiwitten: 0,
       tijd: 30,
@@ -5168,14 +5306,18 @@ async function _buildAndShowShopList() {
 
   showModal(`
     <div class="modal-header"><h2>🛒 Boodschappenlijst</h2><button class="modal-close" onclick="closeModal()">✕</button></div>
-    <button onclick="_renderShopPicker()" style="background:none;border:none;color:var(--muted);font-size:13px;cursor:pointer;padding:0 0 10px;display:flex;align-items:center;gap:4px;font-family:inherit;">← Terug</button>
+    <button onclick="_renderShopPicker()" style="background:none;border:none;color:var(--muted);font-size:13px;cursor:pointer;padding:0 0 10px;display:flex;align-items:center;gap:4px;font-family:inherit;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg> Terug</button>
     <div class="shop-scroll"><div class="shop-list">${listHTML}</div></div>
     <div style="display:flex;gap:8px;margin-top:14px;">
       <input id="shop-extra-input" type="text" placeholder="Extra item toevoegen…" style="flex:1;min-height:40px;border-radius:8px;border:1.5px solid var(--border);background:var(--card2);color:var(--text);padding:0 10px;font-size:14px;font-family:inherit;" onkeydown="if(event.key==='Enter')_addShopExtra()">
       <button onclick="_addShopExtra()" class="btn btn-secondary" style="min-height:40px;padding:0 14px;">+</button>
     </div>
-    <button class="btn btn-ghost btn-full" style="margin-top:10px;" onclick="copyToClipboard(window._shopListText)">📋 Kopieer lijst</button>
-    ${data.boodschappenExtra && data.boodschappenExtra.length ? `<button onclick="clearBoodschappenExtra()" style="background:none;border:none;font-size:12px;color:var(--muted);cursor:pointer;margin-top:6px;font-family:inherit;text-decoration:underline;">🗑 Coach-items wissen (${data.boodschappenExtra.length})</button>` : ''}
+    <button class="btn btn-ghost btn-full" style="margin-top:10px;" onclick="copyToClipboard(window._shopListText)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>Kopieer lijst</button>
+    <button class="btn btn-ghost btn-full" style="margin-top:6px;border-color:var(--accent-food);color:var(--accent-food);" onclick="gaNaarChef('')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+      Naar Chef — recept uitwerken
+    </button>
+    ${data.boodschappenExtra && data.boodschappenExtra.length ? `<button onclick="clearBoodschappenExtra()" style="background:none;border:none;font-size:12px;color:var(--muted);cursor:pointer;margin-top:6px;font-family:inherit;display:flex;align-items:center;gap:4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>Coach-items wissen (${data.boodschappenExtra.length})</button>` : ''}
   `);
 }
 
@@ -6098,7 +6240,7 @@ function renderChatHistory() {
     <div class="chat-msg ${msg.role}">
       ${msg.role === 'assistant' ? '<div class="chat-avatar">🤖</div>' : ''}
       <div class="chat-bubble">${msg.role === 'assistant' ? formatCoachText(msg.content) : msg.content}</div>
-      ${msg.role === 'assistant' ? `<button class="pin-btn" onclick="pinTip(${i})" title="Tip opslaan">📌</button>` : ''}
+      ${msg.role === 'assistant' ? `<button class="pin-btn" onclick="pinTip(${i})" title="Tip opslaan"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></button>` : ''}
       ${msg.role === 'user' ? '<div class="chat-avatar">👤</div>' : ''}
     </div>
   `).join('');
@@ -6234,11 +6376,18 @@ function _lds(d) {
 let _inzichtDagen = 7;
 
 function setInzichtPeriode(delta) {
-  const stap = Math.abs(delta);
-  _inzichtDagen = Math.max(7, Math.min(90, _inzichtDagen + (delta > 0 ? stap : -stap)));
-  const lbl = document.getElementById('inzicht-periode-label');
-  if (lbl) lbl.textContent = _inzichtDagen + 'd';
+  _inzichtDagen = Math.max(1, Math.min(365, _inzichtDagen + delta));
+  const inp = document.getElementById('inzicht-periode-input');
+  if (inp) inp.value = _inzichtDagen;
   renderPatroonGrid();
+}
+
+function setInzichtPeriodeDirect(val) {
+  const n = parseInt(val, 10);
+  if (!isNaN(n) && n >= 1 && n <= 365) {
+    _inzichtDagen = n;
+    renderPatroonGrid();
+  }
 }
 
 function renderPatroonGrid() {
@@ -6272,7 +6421,7 @@ function renderPatroonGrid() {
 
   const rowsHTML = rows.map(row => {
     const cells = row.map(d => {
-      if (!d) return `<span class="dag-dot score-0" style="visibility:hidden;pointer-events:none;"></span>`;
+      if (!d) return `<button class="dag-dot score-0" style="visibility:hidden;pointer-events:none;" tabindex="-1"></button>`;
       const ds = _lds(d);
       const score = calcDagScore(ds);
       let cls = 'dag-dot' + (score === 2 ? ' score-2' : score === 1 ? ' score-1' : ' score-0');
@@ -6445,90 +6594,17 @@ async function startWeekTerugblik() {
   const coachBtn = document.querySelector('.tab-btn[onclick*="coach"]');
   if (coachBtn) switchTab('coach', coachBtn);
 
+  // Scroll naar het chatvenster zodat de terugblik zichtbaar is
   const win = document.getElementById('coach-front-chat');
   if (win) {
-    const intro = document.createElement('div');
-    intro.className = 'coach-bubble-ai';
-    intro.innerHTML = '<em style="color:var(--accent-food);font-size:13px;">🔄 Weekterugblik gestart</em>';
-    win.appendChild(intro);
     win.scrollTop = win.scrollHeight;
+    win.closest('.tab-content')?.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  await coachFrontSend(terugblikPrompt);
+  // Stuur de data als verborgen prompt; toon alleen een korte label
+  await coachFrontSend(terugblikPrompt, `Weekterugblik (${periodeLabel})`);
 }
 
-function togglePeriodeAnalyse() {
-  const el = document.getElementById('periode-analyse-sectie');
-  if (el) el.style.display = el.style.display === 'none' ? 'block' : 'none';
-}
-
-function stepTerugblik(delta) {
-  const inp = document.getElementById('terugblik-dagen-input');
-  if (!inp) return;
-  const v = Math.max(1, Math.min(365, (parseInt(inp.value) || 3) + delta));
-  inp.value = v;
-}
-
-async function doTerugblik() {
-  const resultEl = document.getElementById('terugblik-result');
-  resultEl.innerHTML = '<div class="typing-dots" style="justify-content:center; padding:16px;"><span></span><span></span><span></span></div>';
-
-  const inp = document.getElementById('terugblik-dagen-input');
-  const dagen = Math.max(1, Math.min(365, parseInt(inp && inp.value) || 3));
-  const periodeLabel = dagen === 1 ? 'gisteren' : `de afgelopen ${dagen} dagen`;
-
-  // Collect day data for the period
-  const now = new Date();
-  let gepland = 0, afgevinkt = 0, sportDagen = 0, rustDagen = 0;
-  const sportTypes = {};
-  let maaltijdLines = [];
-
-  for (let i = 1; i <= dagen; i++) {
-    const d = new Date(now);
-    d.setDate(d.getDate() - i);
-    const dateStr = d.toISOString().slice(0,10);
-    const wk = getISOWeek(d);
-    const dayData = data.weken && data.weken[wk] && data.weken[wk][dateStr];
-    if (!dayData) continue;
-
-    if (dayData.activiteiten && dayData.activiteiten.length > 0) {
-      const acts = dayData.activiteiten;
-      gepland += acts.length;
-      const done = acts.filter(a => a.afgevinkt);
-      afgevinkt += done.length;
-      if (done.length > 0) {
-        sportDagen++;
-        done.forEach(a => { sportTypes[a.type || a.naam] = (sportTypes[a.type || a.naam] || 0) + 1; });
-      } else {
-        rustDagen++;
-      }
-    }
-    if (dayData.maaltijden) {
-      Object.values(dayData.maaltijden).flatMap(v => Array.isArray(v) ? v : (v && v.naam ? [v] : [])).forEach(m => {
-        if (m && m.naam && m.gegeten) maaltijdLines.push(m.naam);
-      });
-    }
-  }
-
-  const pct = gepland === 0 ? 0 : Math.round(afgevinkt / gepland * 100);
-  const sportSummary = Object.entries(sportTypes).map(([t,n]) => `${t} (${n}×)`).join(', ') || 'geen';
-  let context = `Terugblik voor de gebruiker over ${periodeLabel}. `;
-  context += gepland > 0
-    ? `${afgevinkt} van ${gepland} activiteiten afgevinkt (${pct}%). Sport: ${sportSummary}. Sportdagen: ${sportDagen}, rustdagen: ${rustDagen}. `
-    : 'Geen activiteiten gelogd in deze periode. ';
-  if (maaltijdLines.length > 0) {
-    context += `Gegeten: ${maaltijdLines.slice(0,6).join(', ')}${maaltijdLines.length > 6 ? ' (…)' : ''}. `;
-  }
-
-  const prompt = `${context}Geef een persoonlijke terugblik: benoem wat goed ging, en geef 1 concrete tip voor de komende dagen. Spreek de gebruiker direct aan. Maximaal 4 zinnen. Wees warm maar zakelijk.`;
-
-  try {
-    const reply = await callAI(prompt, 400);
-    resultEl.innerHTML = `<div class="terugblik-card">${reply}</div>`;
-  } catch(e) {
-    resultEl.innerHTML = `<p style="color:var(--muted); font-size:14px; margin-top:8px;">${e.message || 'Coach is even niet bereikbaar. Probeer het later.'}</p>`;
-  }
-}
 
 // ─── NUTRITION CALCULATOR ────────────────────────────────────────────────────
 
@@ -6695,21 +6771,23 @@ function renderFoodWeekmenu() {
       const items = Array.isArray(meals[s]) ? meals[s] : [];
       if (items.length > 0) {
         return items.map((m, idx) => {
-          const fiber = [m.vezels ? `🌿 ${m.vezels}` : '', m.eiwitten ? `<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="vertical-align:-1px;opacity:.9"><path d="M12 2C8.5 2 5 7 5 11.8 5 17.4 8.1 22 12 22s7-4.6 7-10.2C19 7 15.5 2 12 2z"/></svg> ${m.eiwitten}` : ''].filter(Boolean).join(' · ');
-          const fiberSpan = fiber ? `<span style="color:var(--muted);font-size:11px;"> · ${fiber}</span>` : '';
+          const nutriParts = [];
+          if (m.vezels) nutriParts.push(`V: ${m.vezels}`);
+          if (m.eiwitten) nutriParts.push(`E: ${m.eiwitten}`);
+          const fiberSpan = nutriParts.length > 0 ? `<span style="color:var(--muted);font-size:11px;"> · ${nutriParts.join(' · ')}</span>` : '';
           return `<div class="weekmenu-row" onclick="editWeekMenuMeal('${d}','${s}')">
             <span class="weekmenu-slot-label">${idx === 0 ? slotLabel[s] : ''}</span>
             <span class="weekmenu-meal-name">${m.naam}${fiberSpan}</span>
-            <span class="weekmenu-del" onclick="event.stopPropagation();deleteWeekMenuMealItem('${d}','${s}','${m.id}')">×</span>
+            <span class="weekmenu-del" onclick="event.stopPropagation();deleteWeekMenuMealItem('${d}','${s}','${m.id}')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>
           </div>`;
         }).join('') + `<div class="weekmenu-row weekmenu-row-empty" onclick="editWeekMenuMeal('${d}','${s}')">
           <span class="weekmenu-slot-label"></span>
-          <span style="font-size:12px;color:var(--muted);">+ nog iets toevoegen</span>
+          <span style="font-size:12px;color:var(--muted);display:flex;align-items:center;gap:4px;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>nog iets toevoegen</span>
         </div>`;
       } else {
         return `<div class="weekmenu-row weekmenu-row-empty" onclick="editWeekMenuMeal('${d}','${s}')">
           <span class="weekmenu-slot-label">${slotLabel[s]}</span>
-          <span style="font-size:13px;color:var(--muted);">+ toevoegen</span>
+          <span style="font-size:13px;color:var(--muted);display:flex;align-items:center;gap:4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>toevoegen</span>
         </div>`;
       }
     }).join('');
@@ -6718,7 +6796,7 @@ function renderFoodWeekmenu() {
     return `<div class="weekmenu-day ${isToday ? 'today' : ''}">
       <div class="weekmenu-day-label" style="display:flex;align-items:center;justify-content:space-between;">
         <span>${dagKort[i]}${isToday ? ' — vandaag' : ''}</span>
-        ${hasAnyMeal ? `<button onclick="clearWeekMenuDay('${d}')" style="border:none;background:none;color:var(--muted);font-size:11px;cursor:pointer;padding:0;line-height:1;" title="Dag leegmaken">wissen</button>` : ''}
+        ${hasAnyMeal ? `<button onclick="clearWeekMenuDay('${d}')" style="border:none;background:none;color:var(--muted);cursor:pointer;padding:2px;line-height:1;display:flex;align-items:center;" title="Dag leegmaken"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg></button>` : ''}
       </div>
       ${mealRows}
     </div>`;
@@ -6771,15 +6849,34 @@ function editWeekMenuMeal(dateStr, slot) {
     </div>
     <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px;">
       ${micInput('wm-naam', 'Naam gerecht', m.naam||'')}
+      <input type="file" id="wm-foto-input" accept="image/*" style="display:none;" onchange="analyseeMaaltijdFoto(this)">
+      <button class="btn btn-ghost btn-full" id="wm-foto-btn" onclick="document.getElementById('wm-foto-input').click()" style="font-size:13px;border-color:var(--accent-move);color:var(--accent-move);">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        Foto of screenshot analyseren
+      </button>
+      <div id="wm-foto-preview" style="display:none;font-size:12px;color:var(--muted);padding:8px 10px;background:var(--bg);border-radius:8px;"></div>
       <button class="btn btn-ghost btn-full" id="wm-bereken-btn" onclick="berekenNutriWeekmenu()" style="font-size:13px;">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
         Bereken vezels &amp; eiwitten
       </button>
       <div id="wm-nutri-preview" style="display:${m.vezels||m.eiwitten?'block':'none'};font-size:12px;color:var(--muted);padding:8px 10px;background:var(--bg);border-radius:8px;">
-        ${m.vezels ? '🌿 '+m.vezels : ''} ${m.eiwitten ? '· <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="vertical-align:-1px;opacity:.9"><path d="M12 2C8.5 2 5 7 5 11.8 5 17.4 8.1 22 12 22s7-4.6 7-10.2C19 7 15.5 2 12 2z"/></svg> '+m.eiwitten : ''}
+        ${m.vezels ? '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;opacity:.8;"><path d="M12 22c0-6 6-10 6-16a6 6 0 0 0-12 0c0 6 6 10 6 16z"/></svg> '+m.vezels : ''} ${m.eiwitten ? '· <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="vertical-align:-1px;opacity:.9"><path d="M12 2C8.5 2 5 7 5 11.8 5 17.4 8.1 22 12 22s7-4.6 7-10.2C19 7 15.5 2 12 2z"/></svg> '+m.eiwitten : ''}
       </div>
       <button class="btn btn-ghost btn-full" onclick="pickRecipeForSlot('${dateStr}','${slot}')">
-        📋 Kies uit mijn recepten
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>Kies uit mijn recepten
+      </button>
+      <button class="btn btn-ghost btn-full" id="wm-gen-btn" onclick="genereeerWMRecept('${dateStr}','${slot}')" style="font-size:13px;border-color:var(--accent-food);color:var(--accent-food);">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        Genereer ingrediënten &amp; recept
+      </button>
+      <div id="wm-recept-result" style="display:none;font-size:12px;background:var(--bg);border-radius:10px;padding:10px 12px;"></div>
+      <button class="btn btn-ghost btn-full" onclick="gaNaarChef(document.getElementById('wm-naam').value)" style="font-size:13px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+        Ga naar Chef
+      </button>
+      <button id="wm-sla-op-btn" class="btn btn-ghost btn-full" style="display:none;font-size:13px;" onclick="slaWMGerechOp('${dateStr}','${slot}')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v14a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        Sla op als recept
       </button>
       <div style="display:flex;gap:8px;margin-top:4px;">
         <button class="btn btn-ghost" style="flex:1;color:#ef4444;border-color:#ef4444;" onclick="clearWeekMenuMeal('${dateStr}','${slot}');closeModal()">Verwijder</button>
@@ -6787,6 +6884,153 @@ function editWeekMenuMeal(dateStr, slot) {
       </div>
     </div>
   `);
+}
+
+async function analyseChefFoto(inputEl) {
+  const file = inputEl.files[0];
+  if (!file) return;
+  inputEl.value = '';
+  const btn = document.getElementById('chef-foto-btn');
+  const preview = document.getElementById('chef-foto-preview');
+  const resultDiv = document.getElementById('chef-foto-result');
+  if (btn) { btn.disabled = true; btn.textContent = 'Analyseren…'; }
+  if (preview) { preview.style.display = 'block'; preview.textContent = 'Wordt geanalyseerd…'; }
+  if (resultDiv) resultDiv.style.display = 'none';
+  try {
+    const base64 = await new Promise((res, rej) => {
+      const reader = new FileReader();
+      reader.onload = e => res(e.target.result.split(',')[1]);
+      reader.onerror = rej;
+      reader.readAsDataURL(file);
+    });
+    const mediaType = file.type && file.type.startsWith('image/') ? file.type : 'image/jpeg';
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-api-key': settings.anthropicKey, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 500,
+        messages: [{ role: 'user', content: [
+          { type: 'image', source: { type: 'base64', media_type: mediaType, data: base64 } },
+          { type: 'text', text: 'Extraheer het recept uit deze afbeelding (foto van gerecht, kookboek of screenshot). Geef ALLEEN JSON: {"naam":"...","vezels":"~Xg","eiwitten":"~Xg","tijd":"X min","ingredienten":["..."],"bereiding":["..."]}. Max 8 ingrediënten, max 5 stappen. Geen uitleg.' }
+        ]}]
+      })
+    });
+    if (!resp.ok) throw new Error('API fout');
+    const json = await resp.json();
+    const result = safeParseJSON(json.content[0].text);
+    if (!result || !result.naam) throw new Error();
+    const naamEl = document.getElementById('gen-focus-input');
+    window._chefFotoResult = result;
+    if (naamEl) naamEl.value = result.naam;
+    if (preview) preview.innerHTML = `<strong>${result.naam}</strong>${result.vezels ? ' · V: ' + result.vezels : ''}${result.eiwitten ? ' · E: ' + result.eiwitten : ''} <span style="color:var(--accent-food);">✓</span>`;
+    if (resultDiv && result.ingredienten && result.bereiding) {
+      resultDiv.style.display = 'block';
+      resultDiv.innerHTML =
+        `<div style="font-weight:700;margin-bottom:6px;color:var(--text);">Ingrediënten</div>` +
+        `<ul style="margin:0 0 10px 16px;">${result.ingredienten.map(i=>`<li>${i}</li>`).join('')}</ul>` +
+        `<div style="font-weight:700;margin-bottom:6px;color:var(--text);">Bereiding</div>` +
+        `<ol style="margin:0 0 10px 16px;">${result.bereiding.map(s=>`<li>${s}</li>`).join('')}</ol>` +
+        `<button onclick="slaChefFotoReceptOp()" style="width:100%;padding:10px;background:var(--accent-food);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;">Sla op als recept</button>`;
+    }
+  } catch(_) {
+    if (preview) preview.textContent = 'Kon het recept niet herkennen — probeer een duidelijkere foto.';
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg> Foto of screenshot van recept analyseren';
+    }
+  }
+}
+
+function slaChefFotoReceptOp() {
+  const result = window._chefFotoResult;
+  if (!result) return;
+  if (!data.recepten) data.recepten = [];
+  const bestaatAl = data.recepten.some(r => r.naam.toLowerCase() === result.naam.toLowerCase());
+  if (bestaatAl) { showBanner('yellow', 'Recept staat al in je lijst.'); return; }
+  data.recepten.unshift({
+    id: 'r' + Date.now(),
+    type: 'diner',
+    naam: result.naam,
+    vezels: result.vezels || '',
+    eiwitten: result.eiwitten || '',
+    tijd: result.tijd || '',
+    ingredienten: (result.ingredienten || []).join(', '),
+    bereiding: (result.bereiding || []).join(' '),
+    favoriet: false
+  });
+  saveAndSync();
+  showBanner('green', `"${result.naam}" opgeslagen in recepten.`);
+  document.getElementById('chef-foto-result').style.display = 'none';
+  document.getElementById('chef-foto-preview').style.display = 'none';
+  renderRecepten();
+}
+
+async function analyseeMaaltijdFoto(inputEl) {
+  const file = inputEl.files[0];
+  if (!file) return;
+  inputEl.value = '';
+  const btn = document.getElementById('wm-foto-btn');
+  const preview = document.getElementById('wm-foto-preview');
+  if (btn) { btn.disabled = true; btn.textContent = 'Analyseren…'; }
+  if (preview) { preview.style.display = 'block'; preview.textContent = 'Wordt geanalyseerd…'; }
+  try {
+    const base64 = await new Promise((res, rej) => {
+      const reader = new FileReader();
+      reader.onload = e => res(e.target.result.split(',')[1]);
+      reader.onerror = rej;
+      reader.readAsDataURL(file);
+    });
+    const mediaType = file.type && file.type.startsWith('image/') ? file.type : 'image/jpeg';
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-api-key': settings.anthropicKey, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 400,
+        messages: [{ role: 'user', content: [
+          { type: 'image', source: { type: 'base64', media_type: mediaType, data: base64 } },
+          { type: 'text', text: 'Analyseer deze afbeelding. Is het een foto van een bereide maaltijd, OF een recept/screenshot met ingrediënten en bereidingsstappen?\n\nAls het een MAALTIJDFOTO is, geef dan: {"type":"maaltijd","naam":"...","vezels":"~Xg","eiwitten":"~Xg"}\n\nAls het een RECEPT is (tekst, screenshot, kookboekpagina), geef dan: {"type":"recept","naam":"...","vezels":"~Xg","eiwitten":"~Xg","ingredienten":["..."],"bereiding":["..."]}\n\nGeen uitleg, alleen JSON.' }
+        ]}]
+      })
+    });
+    if (!resp.ok) throw new Error('API fout');
+    const json = await resp.json();
+    const result = safeParseJSON(json.content[0].text);
+    if (!result || !result.naam) throw new Error();
+
+    const naamEl = document.getElementById('wm-naam');
+    if (naamEl) naamEl.value = result.naam;
+    window._wmNutri = { vezels: result.vezels || '', eiwitten: result.eiwitten || '' };
+    const nutriPrev = document.getElementById('wm-nutri-preview');
+    if (nutriPrev) { nutriPrev.style.display = 'block'; nutriPrev.innerHTML = `V: ${result.vezels||'?'} · E: ${result.eiwitten||'?'}`; }
+
+    if (result.type === 'recept' && result.ingredienten && result.bereiding) {
+      window._wmGegenereerd = { naam: result.naam, ingredienten: result.ingredienten, bereiding: result.bereiding };
+      const resultDiv = document.getElementById('wm-recept-result');
+      if (resultDiv) {
+        resultDiv.style.display = 'block';
+        resultDiv.innerHTML =
+          `<div style="font-weight:700;margin-bottom:6px;">Ingrediënten</div>` +
+          `<ul style="margin:0 0 10px 16px;line-height:1.6;">${result.ingredienten.map(i=>`<li>${i}</li>`).join('')}</ul>` +
+          `<div style="font-weight:700;margin-bottom:6px;">Bereiding</div>` +
+          `<ol style="margin:0 0 0 16px;line-height:1.6;">${result.bereiding.map(s=>`<li>${s}</li>`).join('')}</ol>`;
+      }
+      const slaOp = document.getElementById('wm-sla-op-btn');
+      if (slaOp) slaOp.style.display = 'flex';
+      if (preview) preview.innerHTML = `<strong>${result.naam}</strong> — recept herkend · V: ${result.vezels||'?'} · E: ${result.eiwitten||'?'} <span style="color:var(--accent-food);">✓</span>`;
+    } else {
+      if (preview) preview.innerHTML = `<strong>${result.naam}</strong> · V: ${result.vezels||'?'} · E: ${result.eiwitten||'?'} <span style="color:var(--accent-food);">✓</span>`;
+    }
+  } catch(_) {
+    if (preview) preview.textContent = 'Kon niet herkennen — typ de naam handmatig.';
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg> Foto of screenshot analyseren';
+    }
+  }
 }
 
 async function berekenNutriWeekmenu() {
@@ -6816,15 +7060,92 @@ async function berekenNutriWeekmenu() {
   }
 }
 
-function saveWeekMenuMeal(dateStr, slot) {
+async function genereeerWMRecept(dateStr, slot) {
+  const naam = (document.getElementById('wm-naam') ? document.getElementById('wm-naam').value : '').trim();
+  if (!naam) { showBanner('yellow', 'Typ eerst een gerechtnaam in.'); return; }
+  const btn = document.getElementById('wm-gen-btn');
+  const resultDiv = document.getElementById('wm-recept-result');
+  if (btn) { btn.disabled = true; btn.textContent = 'Bezig…'; }
+  try {
+    const prompt = `Maak een kort recept voor "${naam}" (2 personen). Geef ALLEEN JSON:
+{"ingredienten":["200g pasta","1 ui","..."],"bereiding":["Kook pasta al dente.","Fruit ui aan.","..."]}
+Maximaal 6 ingrediënten, maximaal 5 bereidingsstappen. Geen uitleg buiten de JSON.`;
+    const raw = await callAIPlain(prompt, 300);
+    const result = safeParseJSON(raw);
+    if (result && result.ingredienten && result.bereiding) {
+      window._wmGegenereerd = { naam, ingredienten: result.ingredienten, bereiding: result.bereiding };
+      if (resultDiv) {
+        resultDiv.style.display = 'block';
+        resultDiv.innerHTML =
+          `<div style="font-weight:700;margin-bottom:6px;color:var(--text);">Ingrediënten</div>` +
+          `<ul style="margin:0 0 10px 16px;line-height:1.6;">${result.ingredienten.map(i => `<li>${i}</li>`).join('')}</ul>` +
+          `<div style="font-weight:700;margin-bottom:6px;color:var(--text);">Bereiding</div>` +
+          `<ol style="margin:0 0 0 16px;line-height:1.6;">${result.bereiding.map(s => `<li>${s}</li>`).join('')}</ol>`;
+      }
+      const slaOp = document.getElementById('wm-sla-op-btn');
+      if (slaOp) slaOp.style.display = 'flex';
+    } else throw new Error();
+  } catch(_) {
+    if (resultDiv) { resultDiv.style.display = 'block'; resultDiv.textContent = 'Kon recept niet genereren — probeer opnieuw.'; }
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> Genereer opnieuw';
+    }
+  }
+}
+
+function gaNaarChef(gerecht) {
+  closeModal();
+  const foodBtn = document.querySelector('.tab-btn[onclick*="recepten"]');
+  if (foodBtn) switchTab('recepten', foodBtn);
+  switchFoodTab('chef');
+  setTimeout(() => {
+    const inp = document.getElementById('gen-focus-input');
+    if (inp && gerecht) { inp.value = gerecht; inp.focus(); }
+  }, 100);
+}
+
+function slaWMGerechOp(dateStr, slot) {
+  const gen = window._wmGegenereerd;
+  const naam = (document.getElementById('wm-naam') ? document.getElementById('wm-naam').value : '').trim() || (gen && gen.naam) || '';
+  if (!naam) { showBanner('yellow', 'Geen gerechtnaam gevonden.'); return; }
+  if (!data.recepten) data.recepten = [];
+  const bestaand = data.recepten.find(r => r.naam.toLowerCase() === naam.toLowerCase());
+  if (bestaand) { showBanner('yellow', `"${naam}" staat al in je recepten.`); return; }
+  data.recepten.push({
+    id: 'r' + Date.now(),
+    naam,
+    vezels: (window._wmNutri && window._wmNutri.vezels) || '',
+    eiwitten: (window._wmNutri && window._wmNutri.eiwitten) || '',
+    tijd: '30 min',
+    ingredienten: (gen && gen.ingredienten) || [],
+    bereiding: (gen && gen.bereiding) || [],
+    personen: 2,
+    type: slot,
+    favoriet: false
+  });
+  saveAndSync();
+  showBanner('green', `"${naam}" opgeslagen in je recepten.`);
+  const slaOp = document.getElementById('wm-sla-op-btn');
+  if (slaOp) { slaOp.disabled = true; slaOp.textContent = '✓ Opgeslagen'; }
+}
+
+async function saveWeekMenuMeal(dateStr, slot) {
   const naam = (document.getElementById('wm-naam') ? document.getElementById('wm-naam').value : '').trim();
   const weekKey = getISOWeek(new Date(dateStr + 'T12:00:00'));
   if (!data.weken[weekKey]) ensureWeek(weekKey);
   if (!data.weken[weekKey][dateStr]) return;
   const arr = data.weken[weekKey][dateStr].maaltijden;
   if (!Array.isArray(arr[slot])) arr[slot] = [];
-  const nutri = window._wmNutri || {};
+  let nutri = window._wmNutri || {};
   window._wmNutri = null;
+  if (naam && !nutri.vezels && !nutri.eiwitten) {
+    try {
+      const raw = await callAIPlain(`Schat voor "${naam}" (1 portie): vezels in gram en eiwitten in gram. Geef ALLEEN JSON: {"vezels":"~Xg","eiwitten":"~Xg"}. Geen uitleg.`, 60);
+      nutri = safeParseJSON(raw) || {};
+    } catch(_) {}
+  }
   arr[slot].push({ id:'m'+Date.now()+Math.random().toString(36).slice(2,5), naam, vezels:nutri.vezels||'', eiwitten:nutri.eiwitten||'', kcal:'', gegeten:false, gepland:true, receptId:null });
   saveAndSync();
   closeModal();
@@ -6843,7 +7164,7 @@ function pickRecipeForSlot(dateStr, slot) {
       style="text-align:left;padding:12px;border-radius:10px;border:1.5px solid var(--border);background:var(--card);cursor:pointer;width:100%;font-family:inherit;">
       <div style="font-weight:600;font-size:15px;">${r.naam}</div>
       <div style="font-size:12px;color:var(--muted);margin-top:3px;">
-        ${r.vezels ? '🌿 ' + r.vezels : ''}${r.eiwitten ? ' · <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="vertical-align:-1px;opacity:.9"><path d="M12 2C8.5 2 5 7 5 11.8 5 17.4 8.1 22 12 22s7-4.6 7-10.2C19 7 15.5 2 12 2z"/></svg> ' + r.eiwitten : ''}${r.tijd ? ' · ⏱ ' + r.tijd : ''}
+        ${r.vezels ? '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;opacity:.8;"><path d="M12 22c0-6 6-10 6-16a6 6 0 0 0-12 0c0 6 6 10 6 16z"/></svg> ' + r.vezels : ''}${r.eiwitten ? ' · <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="vertical-align:-1px;opacity:.9"><path d="M12 2C8.5 2 5 7 5 11.8 5 17.4 8.1 22 12 22s7-4.6 7-10.2C19 7 15.5 2 12 2z"/></svg> ' + r.eiwitten : ''}${r.tijd ? ' · <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;opacity:.8;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> ' + r.tijd : ''}
       </div>
     </button>`;
 
@@ -7354,9 +7675,8 @@ async function speakCoach(text) {
     .replace(/[\u{1F300}-\u{1FAFF}]/gu, '').replace(/\n{2,}/g, '. ').trim();
   if (settings.openaiKey) {
     try { await _speakOpenAI(clean, settings.openaiKey, settings.ttsVoice || 'nova'); return; }
-    catch(e) { console.warn('OpenAI TTS fallback:', e.message); }
+    catch(e) { console.warn('OpenAI TTS fout:', e.message); }
   }
-  _speakBrowser(clean);
 }
 
 async function _speakOpenAI(text, apiKey, voice) {
@@ -7937,6 +8257,12 @@ async function askAdviesVandaag() {
   coachFrontSend(prompt, label);
 }
 
+function askAdviesMorgen() {
+  const morgenNaam = ['zondag','maandag','dinsdag','woensdag','donderdag','vrijdag','zaterdag'][new Date(Date.now() + 86400000).getDay()];
+  const prompt = `Geef me alvast een concreet advies voor morgen (${morgenNaam}) qua training en voeding. Wat is een goede focus voor morgen? Houd het kort en praktisch.`;
+  coachFrontSend(prompt, `💡 Advies morgen (${morgenNaam})`);
+}
+
 async function askOppepper() {
   const dagStr = today();
   const wk = getISOWeek(new Date());
@@ -7968,8 +8294,8 @@ function addFrontBubble(role, text) {
       `<div style="display:flex;align-items:center;gap:8px;margin-top:8px;flex-wrap:wrap;">
         <button class="bubble-play-btn" data-playing="false" onclick="toggleBubblePlay(this,'${safeText}')" title="Afspelen"
           style="display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:var(--card2);border:1.5px solid var(--border);cursor:pointer;color:var(--text-2);flex-shrink:0;">${_iconPlay()}</button>
-        <button onclick="askUitgebreider(this)" style="background:none;border:1px solid var(--border);border-radius:7px;font-size:12px;color:var(--muted);cursor:pointer;padding:3px 9px;font-family:inherit;">+ Meer detail</button>
-        <button onclick="pinFrontTip('${tipId}',this)" style="background:none;border:none;font-size:12px;color:rgba(0,0,0,.4);cursor:pointer;padding:0;font-family:inherit;margin-left:2px;">📌 Opslaan</button>
+        <button onclick="askUitgebreider(this)" style="background:none;border:1px solid var(--border);border-radius:7px;font-size:12px;color:var(--muted);cursor:pointer;padding:3px 9px;font-family:inherit;display:inline-flex;align-items:center;gap:4px;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Meer detail</button>
+        <button onclick="pinFrontTip('${tipId}',this)" style="background:none;border:1px solid var(--border);border-radius:7px;font-size:12px;color:var(--muted);cursor:pointer;padding:3px 9px;font-family:inherit;display:inline-flex;align-items:center;gap:4px;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>Opslaan</button>
       </div>`;
     div.dataset.tipText = text;
     div.dataset.tipId = tipId;
