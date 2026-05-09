@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>Coach & Chef</title>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -2384,6 +2387,20 @@ select.modal-input { appearance: auto; }
 
 <script>
 'use strict';
+
+// ─── VERSION CHECK (forceert Safari herlading bij nieuwe versie) ──────────────
+const APP_VERSION = '20260509-2';
+(function() {
+  try {
+    const stored = localStorage.getItem('hc_app_version');
+    if (stored && stored !== APP_VERSION) {
+      localStorage.setItem('hc_app_version', APP_VERSION);
+      location.reload(true);
+    } else {
+      localStorage.setItem('hc_app_version', APP_VERSION);
+    }
+  } catch(_) {}
+})();
 
 // ─── CONSTANTS ───────────────────────────────────────────────────────────────
 
