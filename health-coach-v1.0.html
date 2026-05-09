@@ -6543,7 +6543,7 @@ Geef PRECIES 3 inzichten als JSON array. Elk heeft "type" (kies: patroon, trend 
 Geef ALLEEN de JSON array.`;
 
   try {
-    const raw = await callAI(prompt, 350);
+    const raw = await callAIPlain(prompt, 350);
     const match = raw.match(/\[[\s\S]*\]/);
     const inzichten = JSON.parse(match ? match[0] : raw);
     const iconMap = { patroon:'🔍', trend:'📈', tip:'💡' };
@@ -6611,15 +6611,12 @@ async function startWeekTerugblik() {
   const coachBtn = document.querySelector('.tab-btn[onclick*="coach"]');
   if (coachBtn) switchTab('coach', coachBtn);
 
-  // Scroll naar het chatvenster zodat de terugblik zichtbaar is
-  const win = document.getElementById('coach-front-chat');
-  if (win) {
-    win.scrollTop = win.scrollHeight;
-    win.closest('.tab-content')?.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
   // Stuur de data als verborgen prompt; toon alleen een korte label
   await coachFrontSend(terugblikPrompt, `Weekterugblik (${periodeLabel})`);
+
+  // Scroll naar het chatvenster nadat de bubble zichtbaar is
+  const win = document.getElementById('coach-front-chat');
+  if (win) win.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 
