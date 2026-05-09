@@ -6607,16 +6607,16 @@ async function startWeekTerugblik() {
 
   const terugblikPrompt = `${terugblikData}\n\nGeef een persoonlijke terugblik over deze ${periodeLabel} in 3 delen: (1) wat ging goed, (2) wat kon beter of werd gemist, (3) één concreet aandachtspunt. Spreek de gebruiker direct aan. Houd het kort en eerlijk.`;
 
-  // Schakel over naar coach-tab en start gesprek
-  const coachBtn = document.querySelector('.tab-btn[onclick*="coach"]');
-  if (coachBtn) switchTab('coach', coachBtn);
+  // Zorg dat de chat zichtbaar is en scroll ernaar vóór het sturen
+  const win = document.getElementById('coach-front-chat');
+  if (win) {
+    win.style.display = 'block';
+    win.style.minHeight = '60px';
+    setTimeout(() => win.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+  }
 
   // Stuur de data als verborgen prompt; toon alleen een korte label
   await coachFrontSend(terugblikPrompt, `Weekterugblik (${periodeLabel})`);
-
-  // Scroll naar het chatvenster nadat de bubble zichtbaar is
-  const win = document.getElementById('coach-front-chat');
-  if (win) win.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 
@@ -8316,6 +8316,8 @@ function addFrontBubble(role, text) {
     window._lastCoachReply = { text, id: tipId };
   }
   win.appendChild(div);
+  win.style.display = '';
+  win.style.minHeight = '';
   win.scrollTop = win.scrollHeight;
 }
 
