@@ -2168,6 +2168,9 @@ select.modal-input { appearance: auto; }
       <!-- Chat input -->
       <div class="coach-input-row" style="margin-top:10px;">
         <input id="coach-front-input" type="text" placeholder="Of typ hier een vraag…" onkeydown="if(event.key==='Enter')coachFrontSend()">
+        <button id="tts-toggle-front" class="tts-toggle-btn" onclick="toggleTTS()" title="Spraak aan/uit" style="flex-shrink:0;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+        </button>
         <button onclick="coachFrontSend()" aria-label="Verstuur">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
         </button>
@@ -7680,8 +7683,8 @@ function _stopCurrentAudio() {
   _updatePlayButtons(false);
 }
 
-async function speakCoach(text) {
-  if (!_ttsEnabled) return;
+async function speakCoach(text, forcePlay = false) {
+  if (!forcePlay && !_ttsEnabled) return;
   _stopCurrentAudio();
   const clean = text
     .replace(/\*\*(.+?)\*\*/g, '$1').replace(/\*(.+?)\*/g, '$1')
@@ -7691,6 +7694,8 @@ async function speakCoach(text) {
     try { await _speakOpenAI(clean, settings.openaiKey, settings.ttsVoice || 'nova'); return; }
     catch(e) { console.warn('OpenAI TTS fout:', e.message); }
   }
+  // Fallback: browser stem
+  _speakBrowser(clean);
 }
 
 async function _speakOpenAI(text, apiKey, voice) {
@@ -7748,7 +7753,7 @@ function _updatePlayButtons(playing) {
 function toggleBubblePlay(btn, text) {
   if (btn.dataset.playing === 'true') { _stopCurrentAudio(); return; }
   document.querySelectorAll('.bubble-play-btn').forEach(b => { b.innerHTML = _iconPlay(); b.dataset.playing = 'false'; });
-  speakCoach(text);
+  speakCoach(text, true); // forcePlay: altijd afspelen ongeacht TTS-toggle
   btn.innerHTML = _iconStop(); btn.dataset.playing = 'true'; btn.title = 'Stop';
 }
 
