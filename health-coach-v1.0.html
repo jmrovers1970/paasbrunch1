@@ -821,6 +821,38 @@ select.modal-input { appearance: auto; }
   font-size: 22px; color: var(--border); font-weight: 300;
   flex-shrink: 0; margin-bottom: 20px;
 }
+.intro-examples {
+  width: 100%; margin-bottom: 20px; text-align: left;
+}
+.intro-ex-summary {
+  list-style: none; display: flex; align-items: center; justify-content: space-between;
+  cursor: pointer; padding: 11px 14px;
+  background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+  font-size: 13px; font-weight: 700; color: var(--text); user-select: none;
+  transition: background .15s;
+}
+.intro-ex-summary::-webkit-details-marker { display: none; }
+.intro-ex-summary:active { background: var(--card2); }
+details[open] .intro-ex-summary { border-radius: 12px 12px 0 0; border-bottom-color: transparent; }
+.intro-ex-body {
+  background: var(--card); border: 1px solid var(--border); border-top: none;
+  border-radius: 0 0 12px 12px; padding: 4px 0 8px;
+}
+.intro-ex-group { padding: 12px 14px 4px; }
+.intro-ex-group + .intro-ex-group { border-top: 1px solid var(--border); padding-top: 14px; }
+.intro-ex-head {
+  font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px;
+  margin-bottom: 10px; display: flex; align-items: center; gap: 5px;
+}
+.intro-ex-item { margin-bottom: 9px; }
+.intro-ex-phrase {
+  font-size: 13px; color: var(--text); font-weight: 500; line-height: 1.35;
+  display: flex; align-items: flex-start; gap: 6px;
+}
+.intro-ex-phrase svg { flex-shrink: 0; margin-top: 2px; opacity: .5; }
+.intro-ex-result {
+  font-size: 11.5px; color: var(--muted); padding-left: 22px; margin-top: 2px; line-height: 1.35;
+}
 .intro-btn {
   width: 100%; padding: 16px; border-radius: 999px;
   background: var(--accent-move); color: #fff;
@@ -1269,19 +1301,14 @@ select.modal-input { appearance: auto; }
   to   { transform: translateY(0);    opacity: 1; }
 }
 .splash-icon-wrap {
-  width: 112px; height: 112px; border-radius: 32px;
-  background: #ffffff;
-  display: flex; align-items: center; justify-content: center;
-  margin: 0 auto 28px;
-  box-shadow: 0 16px 48px rgba(0,0,0,.4);
+  display: flex; gap: 14px; justify-content: center; align-items: center;
+  margin: 0 auto 32px;
   animation: splashIconPop .7s .1s cubic-bezier(.2,1.4,.4,1) both;
 }
-.splash-logo-text {
-  font-size: 34px; font-weight: 900;
-  color: #18181b; letter-spacing: -.04em; line-height: 1;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", system-ui, sans-serif;
+.splash-circle {
+  width: 72px; height: 72px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
 }
-.splash-logo-text .amp { font-size: 24px; font-weight: 500; opacity: .55; }
 @keyframes splashIconPop {
   from { transform: scale(.6); opacity: 0; }
   to   { transform: scale(1);  opacity: 1; }
@@ -1854,7 +1881,12 @@ select.modal-input { appearance: auto; }
 <div id="splash-overlay" onclick="skipSplash()">
   <div class="splash-inner">
     <div class="splash-icon-wrap">
-      <div class="splash-logo-text">C<span class="amp">&amp;</span>C</div>
+      <div class="splash-circle" style="background:#ea5a0c;box-shadow:0 8px 28px rgba(234,90,12,.45);">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+      </div>
+      <div class="splash-circle" style="background:#0d9488;box-shadow:0 8px 28px rgba(13,148,136,.45);">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v12"/><path d="M18 9a3 3 0 0 0-3-3H6"/><path d="M6 15a6 6 0 0 0 12 0"/></svg>
+      </div>
     </div>
     <h1 class="splash-title">Coach &amp; Chef</h1>
     <p class="splash-sub" id="splash-sub">Jouw persoonlijke gezondheidscoach</p>
@@ -2531,6 +2563,58 @@ select.modal-input { appearance: auto; }
         <div class="intro-how-label">Plan &amp; inzicht</div>
       </div>
     </div>
+
+    <!-- Uitklap: wat kun je zeggen -->
+    <details class="intro-examples">
+      <summary class="intro-ex-summary">
+        <span>Voorbeelden — zo gebruik je het</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </summary>
+      <div class="intro-ex-body">
+        <div style="padding:10px 14px 0;font-size:12px;color:var(--muted);font-style:italic;">Spreek vrij in — geen exacte formule nodig.</div>
+
+        <!-- Coach -->
+        <div class="intro-ex-group">
+          <div class="intro-ex-head" style="color:var(--accent-move);">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+            Coach — beweging &amp; advies
+          </div>
+          <div class="intro-ex-item">
+            <div class="intro-ex-phrase"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>"Ik heb 45 min hardgelopen"</div>
+            <div class="intro-ex-result">→ week bijgewerkt · hersteladvies &amp; wat je nu het best kunt eten</div>
+          </div>
+          <div class="intro-ex-item">
+            <div class="intro-ex-phrase"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>"Plan dinsdag en donderdag een run"</div>
+            <div class="intro-ex-result">→ trainingen ingepland in je weekoverzicht</div>
+          </div>
+          <div class="intro-ex-item">
+            <div class="intro-ex-phrase"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>"Hoe gaat het met mijn doel?"</div>
+            <div class="intro-ex-result">→ voortgang, streak &amp; patronen geanalyseerd</div>
+          </div>
+        </div>
+
+        <!-- Chef -->
+        <div class="intro-ex-group">
+          <div class="intro-ex-head" style="color:var(--accent-food);">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v12"/><path d="M18 9a3 3 0 0 0-3-3H6"/><path d="M6 15a6 6 0 0 0 12 0"/></svg>
+            Chef — voeding &amp; recepten
+          </div>
+          <div class="intro-ex-item">
+            <div class="intro-ex-phrase"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>"Pasta met zalm gegeten vanavond"</div>
+            <div class="intro-ex-result">→ vezels &amp; eiwitten bijgehouden, dagbalans zichtbaar</div>
+          </div>
+          <div class="intro-ex-item">
+            <div class="intro-ex-phrase"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>"Maak 3 recepten met weinig koolhydraten"</div>
+            <div class="intro-ex-result">→ recepten gegenereerd, direct in weekmenu te zetten</div>
+          </div>
+          <div class="intro-ex-item">
+            <div class="intro-ex-phrase"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>"Wat heb ik nodig voor komende week?"</div>
+            <div class="intro-ex-result">→ boodschappenlijst op basis van je weekmenu</div>
+          </div>
+        </div>
+
+      </div>
+    </details>
 
     <button class="intro-btn" onclick="dismissIntro()">
       Aan de slag
