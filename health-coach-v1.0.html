@@ -1150,13 +1150,31 @@ select.modal-input { appearance: auto; }
 }
 .gen-count-btn.active { background: var(--accent-move); color: #fff; border-color: var(--accent-move); }
 .gen-recipe-card {
-  background: var(--card2); border: 1.5px solid var(--border);
-  border-radius: 14px; padding: 14px 16px; margin-bottom: 10px;
+  background: var(--card); border: 1px solid var(--border);
+  border-top: 3px solid var(--accent-food);
+  border-radius: var(--radius-lg); padding: 14px 16px; margin-bottom: 10px;
   transition: border-color .15s, background .15s;
 }
 .gen-recipe-card:has(input:checked) {
-  border-color: var(--accent-move); background: var(--accent-move-soft);
+  border-color: var(--accent-food); border-top-color: var(--accent-food); background: var(--accent-food-soft);
 }
+.gen-slot-btns { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 6px; }
+.gen-slot-btn {
+  flex: 1; min-width: 0; padding: 7px 4px; border-radius: 8px;
+  border: 1.5px solid var(--border); background: var(--card2);
+  color: var(--text-2); font-size: 12px; font-weight: 600;
+  cursor: pointer; font-family: inherit; text-align: center;
+  transition: all .12s;
+}
+.gen-slot-btn.active { background: var(--accent-food); border-color: var(--accent-food); color: #fff; }
+.gen-all-slot-btn {
+  flex: 1; min-width: 0; padding: 7px 8px; border-radius: 8px;
+  border: 1.5px solid var(--border); background: var(--card2);
+  color: var(--text-2); font-size: 12px; font-weight: 600;
+  cursor: pointer; font-family: inherit; text-align: center;
+  transition: all .12s;
+}
+.gen-all-slot-btn.active { background: var(--accent-food); border-color: var(--accent-food); color: #fff; }
 
 /* ─── SCROLLBAR ─── */
 ::-webkit-scrollbar { width: 4px; }
@@ -2204,6 +2222,13 @@ select.modal-input { appearance: auto; }
 
     <!-- Weekmenu tab: static structure so renderFoodWeekmenu/WeekOverview can write to named divs -->
     <div id="food-week-content" class="food-inner-content" style="display:none;">
+      <!-- Week navigatie -->
+      <div class="week-nav" style="margin-bottom:10px;">
+        <button onclick="navWeekMenu(-1)" style="background:var(--card);border:1px solid var(--border);color:var(--muted);border-radius:50%;width:36px;height:36px;flex-shrink:0;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:border-color .15s,color .15s;">&#8249;</button>
+        <span id="weekmenu-nav-label" class="week-label">Deze week</span>
+        <button onclick="navWeekMenu(1)" style="background:var(--card);border:1px solid var(--border);color:var(--muted);border-radius:50%;width:36px;height:36px;flex-shrink:0;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:border-color .15s,color .15s;">&#8250;</button>
+      </div>
+
       <button class="food-top-btn food-top-btn-primary" style="width:100%;margin-bottom:12px;" onclick="showShoppingList()">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
         Boodschappenlijst
@@ -3394,6 +3419,7 @@ const MILESTONE_MSGS = {
 let settings = {};
 let data = {};
 let currentWeekOffset = 0;
+let _weekmenuOffset = 0;
 let genCount = 3;
 let genFocus = 'combi';
 
@@ -3435,6 +3461,30 @@ function currentWeekKey() {
   const d = new Date();
   d.setDate(d.getDate() + currentWeekOffset * 7);
   return getISOWeek(d);
+}
+
+function currentWeekMenuKey() {
+  const d = new Date();
+  d.setDate(d.getDate() + _weekmenuOffset * 7);
+  return getISOWeek(d);
+}
+
+function navWeekMenu(delta) {
+  _weekmenuOffset = Math.max(-2, Math.min(4, _weekmenuOffset + delta));
+  _updateWeekMenuLabel();
+  renderFoodWeekmenu();
+  renderFoodWeekOverview();
+}
+
+function _updateWeekMenuLabel() {
+  const labelEl = document.getElementById('weekmenu-nav-label');
+  if (!labelEl) return;
+  const weekKey = currentWeekMenuKey();
+  const days = getWeekDates(weekKey);
+  const label = _weekmenuOffset === 0 ? `Deze week · Ma ${formatShortDate(days[0])} – Zo ${formatShortDate(days[6])}`
+    : _weekmenuOffset === 1 ? `Volgende week · Ma ${formatShortDate(days[0])} – Zo ${formatShortDate(days[6])}`
+    : `Ma ${formatShortDate(days[0])} – Zo ${formatShortDate(days[6])}`;
+  labelEl.textContent = label;
 }
 
 function formatShortDate(dateStr) {
@@ -5356,6 +5406,7 @@ function switchFoodTab(name) {
     if (btn) btn.classList.toggle('active', t === name);
   });
   if (name === 'recepten') _renderFoodReceptenList();
+  if (name === 'weekmenu') { renderFoodWeekmenu(); renderFoodWeekOverview(); }
 }
 
 const _recSectionClosed = new Set(); // secties die dichtgeklapt zijn
@@ -5420,7 +5471,7 @@ function planRecipeForDay(recipeId) {
 }
 
 function showShoppingList() {
-  const weekKey = currentWeekKey();
+  const weekKey = currentWeekMenuKey();
   ensureWeek(weekKey);
   const weekDays = data.weken[weekKey];
   const slots = ['ontbijt','lunch','diner','snack'];
@@ -5900,9 +5951,17 @@ function recipeCardHTML(r) {
       onclick="selectDagChip('${r._tmpId}',${i})">${dagLabels[i]}</button>`
   ).join('');
 
+  const slots = ['ontbijt','lunch','diner','snack'];
+  const slotLabels = { ontbijt:'Ontbijt', lunch:'Lunch', diner:'Diner', snack:'Snack' };
+  const defaultSlot = r._type || 'diner';
+  const slotBtns = slots.map(s =>
+    `<button type="button" class="gen-slot-btn${s === defaultSlot ? ' active' : ''}" id="slotbtn-${r._tmpId}-${s}"
+      onclick="_selectGenSlot('${r._tmpId}','${s}')">${slotLabels[s]}</button>`
+  ).join('');
+
   return `<div class="gen-recipe-card" id="gencard-${r._tmpId}">
     <label style="display:flex;align-items:flex-start;gap:12px;cursor:pointer;">
-      <input type="checkbox" id="chk-${r._tmpId}" checked style="margin-top:3px;width:20px;height:20px;accent-color:var(--accent-move);flex-shrink:0;">
+      <input type="checkbox" id="chk-${r._tmpId}" checked style="margin-top:3px;width:20px;height:20px;accent-color:var(--accent-food);flex-shrink:0;">
       <div style="flex:1;min-width:0;">
         <div style="font-weight:700;font-size:16px;margin-bottom:4px;">${r.naam}</div>
         <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px;">
@@ -5916,22 +5975,18 @@ function recipeCardHTML(r) {
       </div>
     </label>
     <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);">
-      <div style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:6px;">DAG</div>
+      <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px;">Maaltijdmoment</div>
+      <div class="gen-slot-btns">${slotBtns}</div>
+      <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px;margin-top:10px;">Dag</div>
       <div class="dag-chip-row" id="dagchips-${r._tmpId}">${dagChips}</div>
       <div style="display:flex;gap:8px;margin-top:10px;">
-        <select id="plan-slot-${r._tmpId}" style="flex:1;padding:9px 10px;border-radius:10px;border:1.5px solid var(--border);background:var(--card);color:var(--text);font-size:14px;min-height:42px;" onchange="_syncGenType('${r._tmpId}',this.value)">
-          <option value="ontbijt">Ontbijt</option>
-          <option value="lunch">Lunch</option>
-          <option value="diner" selected>Diner</option>
-          <option value="snack">Snack</option>
-        </select>
         <button onclick="logGenRecipeNow('${r._tmpId}')"
-          style="flex:0 0 auto;padding:9px 14px;border-radius:10px;background:var(--accent-move);color:#fff;border:none;font-size:14px;font-weight:700;cursor:pointer;min-height:42px;">
+          style="flex:1;padding:9px 0;border-radius:10px;background:var(--accent-food-soft);color:var(--accent-food);border:1.5px solid var(--accent-food);font-size:14px;font-weight:700;cursor:pointer;min-height:42px;font-family:inherit;">
           Log vandaag
         </button>
         <button onclick="planGenRecipe('${r._tmpId}')"
-          style="flex:0 0 auto;padding:9px 14px;border-radius:10px;background:var(--accent-food);color:#fff;border:none;font-size:14px;font-weight:700;cursor:pointer;min-height:42px;">
-          Plan
+          style="flex:1;padding:9px 0;border-radius:10px;background:var(--accent-food);color:#fff;border:none;font-size:14px;font-weight:700;cursor:pointer;min-height:42px;font-family:inherit;">
+          Plan in weekmenu
         </button>
       </div>
     </div>
@@ -5956,7 +6011,7 @@ function planGenRecipe(tmpId) {
   if (!recept) return;
   const dateStr = getSelectedDagChipDate(tmpId);
   if (!dateStr) { showBanner('red', 'Kies eerst een dag.'); return; }
-  const slot = document.getElementById('plan-slot-' + tmpId).value;
+  const slot = recept._type || 'diner';
   const weekKey = getISOWeek(new Date(dateStr + 'T12:00:00'));
   ensureDay(dateStr);
   // Sla recept op als het nog niet bestaat
@@ -5983,8 +6038,7 @@ function planGenRecipe(tmpId) {
 function logGenRecipeNow(tmpId) {
   const recept = (window._generatedRecepten || []).find(r => r._tmpId === tmpId);
   if (!recept) return;
-  const uur = new Date().getHours();
-  const slot = uur < 10 ? 'ontbijt' : uur < 14 ? 'lunch' : uur < 17 ? 'snack' : 'diner';
+  const slot = recept._type || 'diner';
   const dateStr = today();
   const weekKey = getISOWeek(new Date(dateStr + 'T12:00:00'));
   ensureDay(dateStr);
@@ -6026,9 +6080,11 @@ function showGeneratedPreview(recepten) {
       <h2>Recepten gegenereerd</h2>
       <button class="modal-close" onclick="closeModal();window._generatedRecepten=[];">✕</button>
     </div>
-    <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
-      <span style="font-size:12px;font-weight:700;color:var(--muted);">Alles instellen als:</span>
-      ${['ontbijt','lunch','diner','snack'].map(s => `<button class="gen-pill" style="width:auto;padding:0 12px;font-size:13px;" onclick="_setAllGenType('${s}')">${s.charAt(0).toUpperCase()+s.slice(1)}</button>`).join('')}
+    <div style="margin-bottom:14px;">
+      <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:7px;">Alles instellen als</div>
+      <div style="display:flex;gap:6px;">
+        ${['ontbijt','lunch','diner','snack'].map(s => `<button class="gen-all-slot-btn" data-slot="${s}" onclick="_setAllGenType('${s}')">${s.charAt(0).toUpperCase()+s.slice(1)}</button>`).join('')}
+      </div>
     </div>
     <div id="gen-preview-list">${nieuw.map(recipeCardHTML).join('')}</div>
     <button id="gen-meer-btn" class="btn btn-ghost btn-full" style="margin-top:10px;" onclick="generateMeer()">Meer recepten genereren</button>
@@ -6076,12 +6132,26 @@ function _syncGenType(tmpId, val) {
   if (r) r._type = val;
 }
 
+function _selectGenSlot(tmpId, slot) {
+  const r = (window._generatedRecepten || []).find(r => r._tmpId === tmpId);
+  if (r) r._type = slot;
+  ['ontbijt','lunch','diner','snack'].forEach(s => {
+    const btn = document.getElementById(`slotbtn-${tmpId}-${s}`);
+    if (btn) btn.classList.toggle('active', s === slot);
+  });
+}
+
 function _setAllGenType(slot) {
   (window._generatedRecepten || []).forEach(r => {
     r._type = slot;
-    const sel = document.getElementById('plan-slot-' + r._tmpId);
-    if (sel) sel.value = slot;
+    ['ontbijt','lunch','diner','snack'].forEach(s => {
+      const btn = document.getElementById(`slotbtn-${r._tmpId}-${s}`);
+      if (btn) btn.classList.toggle('active', s === slot);
+    });
   });
+  // Visual feedback on the "alles instellen" row
+  document.querySelectorAll('.gen-all-slot-btn').forEach(b => b.classList.toggle('active', b.dataset.slot === slot));
+  showBanner('green', `Alle recepten ingesteld als ${slot.charAt(0).toUpperCase() + slot.slice(1)}.`);
 }
 
 function changeRecPersonen(recId, n) {
@@ -6109,8 +6179,7 @@ function saveSelectedRecepten() {
   if (selected.length === 0) { showBanner('yellow', 'Geen recepten geselecteerd.'); return; }
   if (!data.recepten) data.recepten = [];
   selected.forEach(r => {
-    const slotEl = document.getElementById('plan-slot-' + r._tmpId);
-    const type = (slotEl && slotEl.value) || r._type || 'diner';
+    const type = r._type || 'diner';
     data.recepten.push({
       id: 'r' + Date.now() + Math.random().toString(36).slice(2, 5),
       naam: r.naam || 'Recept',
@@ -7096,7 +7165,9 @@ function renderFoodTab() {
 function renderFoodWeekmenu() {
   const container = document.getElementById('food-weekmenu');
   if (!container) return;
-  const weekKey = getISOWeek(new Date());
+  const weekKey = currentWeekMenuKey();
+  ensureWeek(weekKey);
+  _updateWeekMenuLabel();
   const weekData = (data.weken && data.weken[weekKey]) || {};
   const dates = getWeekDates(weekKey);
   const dagKort = ['Ma','Di','Wo','Do','Vr','Za','Zo'];
@@ -7559,7 +7630,7 @@ function applyRecipeToSlot(receptId, dateStr, slot) {
 function renderFoodWeekOverview() {
   const container = document.getElementById('food-week-overview');
   if (!container) return;
-  const weekKey = getISOWeek(new Date());
+  const weekKey = currentWeekMenuKey();
   const weekData = (data.weken && data.weken[weekKey]) || {};
   const dagKort = ['Ma','Di','Wo','Do','Vr','Za','Zo'];
   const dates = getWeekDates(weekKey);
@@ -7774,11 +7845,12 @@ function closeModal() {
 // ─── SMART VOICE INPUT ───────────────────────────────────────────────────────
 
 function safeParseJSON(raw) {
+  if (!raw) return null;
   const s = raw.trim().replace(/^```json?\n?/i, '').replace(/\n?```$/i, '').trim();
   try { return JSON.parse(s); } catch(_) {}
   const obj = s.match(/\{[\s\S]*\}/); if (obj) { try { return JSON.parse(obj[0]); } catch(_) {} }
   const arr = s.match(/\[[\s\S]*\]/);  if (arr) { try { return JSON.parse(arr[0]); } catch(_) {} }
-  throw new SyntaxError('safeParseJSON: no valid JSON found');
+  return null;
 }
 
 async function parseActivityVoice(text) {
@@ -9015,7 +9087,7 @@ Regels:
 Lege arrays [] voor activiteiten/maaltijden als geen van toepassing. Geen uitleg, alleen JSON.`;
 
   try {
-    const raw = await callAIPlain(prompt, 300);
+    const raw = await callAIPlain(prompt, 600);
     const parsed = safeParseJSON(raw);
     if (!parsed) { showBanner('red', 'Kon invoer niet verwerken.'); return; }
 
