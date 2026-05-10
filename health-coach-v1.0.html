@@ -225,28 +225,49 @@ label { display: block; font-size: 14px; font-weight: 600; color: var(--text-2);
 .today-progress.complete .today-progress-title { color: var(--accent-food); }
 
 /* ─── CHECK-IN ─── */
-.checkin-btns { display: flex; gap: 10px; margin-top: 14px; }
+#checkin-card {
+  border-top: 3px solid var(--accent-move);
+}
+.checkin-btns { display: flex; gap: 8px; margin-top: 12px; }
 .checkin-btn {
   flex: 1; background: var(--card2); border: 1.5px solid var(--border);
-  border-radius: 14px; padding: 14px 8px;
-  color: var(--text); font-size: 15px; font-weight: 600;
-  cursor: pointer; min-height: 64px; transition: all .15s;
-  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  border-radius: 12px; padding: 10px 6px;
+  color: var(--text); font-size: 14px; font-weight: 600;
+  cursor: pointer; min-height: 52px; transition: all .15s;
+  display: flex; flex-direction: column; align-items: center; gap: 5px;
   font-family: inherit;
 }
-.checkin-btn svg { width: 26px; height: 26px; }
+.checkin-btn svg { width: 22px; height: 22px; }
 .checkin-btn:active { transform: scale(.97); }
 .checkin-btn.selected {
   border-color: var(--accent-move); background: var(--accent-move-soft);
   color: var(--accent-move);
 }
 .checkin-response {
-  margin-top: 14px; padding: 14px 16px;
-  background: var(--accent-move-soft); border-radius: 12px;
-  font-size: 15px; line-height: 1.55;
+  margin-top: 12px; padding: 12px 14px;
+  background: var(--accent-move-soft); border-radius: 10px;
+  font-size: 14px; line-height: 1.55;
   border-left: 3px solid var(--accent-move);
   color: var(--text);
 }
+
+/* ─── VANDAAG SECTION LABELS ─── */
+.vandaag-section-h {
+  font-size: 13px; font-weight: 700; color: var(--muted);
+  text-transform: uppercase; letter-spacing: .4px;
+  margin-bottom: 10px; padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* ─── WATER STRIP ─── */
+.water-strip {
+  background: var(--card); border: 1px solid var(--border);
+  border-left: 3px solid var(--accent-food);
+  border-radius: var(--radius); padding: 10px 14px 10px 13px;
+  margin-bottom: 14px; box-shadow: none;
+}
+.water-strip .water-tracker { margin: 0; }
+.water-strip .water-tracker-label { margin-bottom: 8px; }
 
 /* ─── ACTIVITIES ─── */
 .activity-row {
@@ -370,26 +391,41 @@ label { display: block; font-size: 14px; font-weight: 600; color: var(--text-2);
   cursor: pointer; font-family: inherit;
   min-height: 36px;
 }
-.meal-quick-chip:active { background: var(--accent-move-soft); border-color: var(--accent-move); color: var(--accent-move); }
+.meal-quick-chip:active { background: var(--accent-food-soft); border-color: var(--accent-food); color: var(--accent-food); }
 
 /* ─── WEEK TAB ─── */
 .week-nav {
   display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 18px; gap: 10px;
+  margin-bottom: 10px; gap: 10px;
 }
 .week-nav button {
-  background: var(--card); border: 1px solid var(--border-strong);
-  color: var(--text); border-radius: 12px;
-  width: 44px; height: 44px;
+  background: var(--card); border: 1px solid var(--border);
+  color: var(--muted); border-radius: 50%;
+  width: 36px; height: 36px; flex-shrink: 0;
   font-size: 20px; cursor: pointer;
   display: flex; align-items: center; justify-content: center;
+  transition: border-color .15s, color .15s;
 }
-.week-label { font-size: 16px; font-weight: 700; }
+.week-nav button:active { border-color: var(--accent-move); color: var(--accent-move); }
+.week-label {
+  font-size: 15px; font-weight: 700; color: var(--text);
+  text-align: center; flex: 1;
+}
 
+.week-progress-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 6px;
+}
+.week-progress-label {
+  font-size: 11px; font-weight: 700; color: var(--muted);
+  text-transform: uppercase; letter-spacing: .4px;
+}
+.week-progress-count {
+  font-size: 12px; font-weight: 700; color: var(--accent-move);
+}
 .progress-bar-wrap {
   background: var(--card2); border-radius: 999px;
-  height: 10px; overflow: hidden; margin-bottom: 18px;
-  position: relative;
+  height: 6px; overflow: hidden; margin-bottom: 16px;
 }
 .progress-bar-fill {
   height: 100%; background: linear-gradient(90deg, var(--accent-move), #f97316);
@@ -398,24 +434,30 @@ label { display: block; font-size: 14px; font-weight: 600; color: var(--text-2);
 
 .day-card {
   background: var(--card); border: 1px solid var(--border);
-  border-radius: var(--radius); margin-bottom: 10px; overflow: hidden;
-  box-shadow: var(--shadow-sm);
+  border-radius: var(--radius); margin-bottom: 8px; overflow: hidden;
+  box-shadow: none;
 }
-.day-card.today { border-color: var(--accent-move); border-width: 2px; }
+.day-card.today {
+  border-color: var(--border);
+  border-left: 3px solid var(--accent-move);
+}
+.day-card.today .day-card-header {
+  background: rgba(234,90,12,.04);
+}
 .day-card-header {
   display: flex; align-items: center; gap: 0;
-  padding: 12px 14px 10px; cursor: pointer;
+  padding: 10px 14px 9px; cursor: pointer;
   user-select: none;
 }
 .day-card-header:active { background: var(--card2); }
-.dchr-status { width:20px; flex-shrink:0; display:flex; align-items:center; }
-.dch-dot { width:9px; height:9px; border-radius:50%; border:2px solid var(--border); display:inline-block; }
-.dchr-center { flex:1; text-align:center; }
-.dchr-dayname { font-size:19px; font-weight:800; line-height:1.1; letter-spacing:-.3px; }
-.dchr-date { font-size:11px; color:var(--muted); margin-top:1px; }
-.dchr-sport { font-size:12px; color:var(--muted); margin-top:3px; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:160px; margin-left:auto; margin-right:auto; }
-.dchr-right { display:flex; align-items:center; gap:5px; flex-shrink:0; width:44px; justify-content:flex-end; }
-.dchr-dur { font-size:12px; font-weight:700; color:var(--accent-move); }
+.dchr-status { width: 20px; flex-shrink: 0; display: flex; align-items: center; }
+.dch-dot { width: 11px; height: 11px; border-radius: 50%; border: 2px solid var(--border); display: inline-block; }
+.dchr-center { flex: 1; text-align: center; }
+.dchr-dayname { font-size: 17px; font-weight: 800; line-height: 1.1; letter-spacing: -.2px; }
+.dchr-date { font-size: 11px; color: var(--muted); margin-top: 1px; }
+.dchr-sport { font-size: 12px; color: var(--muted); margin-top: 2px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 160px; margin-left: auto; margin-right: auto; }
+.dchr-right { display: flex; align-items: center; gap: 5px; flex-shrink: 0; width: 44px; justify-content: flex-end; }
+.dchr-dur { font-size: 12px; font-weight: 700; color: var(--accent-move); }
 .day-name { font-weight: 700; font-size: 15px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; min-width: 32px; }
 .day-title-block { flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 .day-meta-row { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); }
@@ -436,16 +478,16 @@ label { display: block; font-size: 14px; font-weight: 600; color: var(--text-2);
 .chevron { color: var(--muted); transition: transform .2s; }
 .chevron.open { transform: rotate(180deg); }
 
-.day-card-body { padding: 4px 16px 16px; border-top: 1px solid var(--border); }
+.day-card-body { padding: 4px 16px 14px; border-top: 1px solid var(--border); }
 .add-activity-btn {
-  display: flex; align-items: center; gap: 8px; justify-content: center;
-  background: none; border: 1.5px dashed var(--border-strong);
-  color: var(--muted); border-radius: 12px;
-  padding: 12px 14px; font-size: 15px; font-weight: 600; cursor: pointer;
-  width: 100%; margin-top: 12px; min-height: 48px;
-  font-family: inherit;
+  display: flex; align-items: center; gap: 7px; justify-content: center;
+  background: var(--accent-move-soft); border: 1.5px solid rgba(234,90,12,.25);
+  color: var(--accent-move); border-radius: 12px;
+  padding: 10px 14px; font-size: 14px; font-weight: 600; cursor: pointer;
+  width: 100%; margin-top: 10px; min-height: 44px;
+  font-family: inherit; transition: background .15s, border-color .15s;
 }
-.add-activity-btn:active { background: var(--card2); }
+.add-activity-btn:active { background: rgba(234,90,12,.18); border-color: var(--accent-move); }
 .activity-edit-btn {
   background: none; border: none; color: var(--muted);
   cursor: pointer; padding: 8px; min-height: 44px; min-width: 44px;
@@ -694,17 +736,21 @@ select.modal-input { appearance: auto; }
 .inzicht-tekst { font-size:14px; line-height:1.55; color:var(--text); }
 
 /* ─── INSTRUCTIEKAARTEN ─── */
-.instructie-details { margin-bottom: 12px; }
+.instructie-details { margin-bottom: 14px; }
 .instructie-summary {
   display: flex; align-items: center; gap: 8px;
-  padding: 12px 14px; background: var(--card);
+  padding: 10px 14px; background: var(--card);
   border-radius: var(--radius); border: 1px solid var(--border);
-  font-size: 14px; font-weight: 600; color: var(--text-2);
+  border-left: 3px solid var(--accent-move);
+  font-size: 13px; font-weight: 600; color: var(--text-2);
   cursor: pointer; list-style: none; user-select: none;
+  transition: background .15s;
 }
+.instructie-summary:active { background: var(--accent-move-soft); }
 .instructie-summary::-webkit-details-marker { display: none; }
+.instructie-summary svg { color: var(--accent-move); flex-shrink: 0; }
 .instructie-summary::after {
-  content: '›'; margin-left: auto; font-size: 18px; color: var(--muted);
+  content: '›'; margin-left: auto; font-size: 18px; color: var(--accent-move);
   transition: transform .2s; display: inline-block;
 }
 .instructie-details[open] .instructie-summary::after { transform: rotate(90deg); }
@@ -728,43 +774,56 @@ select.modal-input { appearance: auto; }
 #intro-overlay {
   position: fixed; inset: 0; z-index: 500;
   background: var(--bg);
-  display: flex; align-items: center; justify-content: center;
-  padding: 24px;
-  padding-top: calc(24px + env(safe-area-inset-top, 0px));
-  padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+  display: flex; align-items: flex-start; justify-content: center;
+  overflow-y: auto;
+  padding: 32px 20px 40px;
+  padding-top: calc(32px + env(safe-area-inset-top, 0px));
+  padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px));
 }
 .intro-card {
-  max-width: 380px; width: 100%;
+  max-width: 390px; width: 100%;
   display: flex; flex-direction: column; align-items: center;
   text-align: center;
 }
-.intro-logo { margin-bottom: 14px; }
-.intro-title { font-size: 30px; font-weight: 800; letter-spacing: -.5px; margin-bottom: 8px; }
-.intro-sub { font-size: 15px; color: var(--muted); margin-bottom: 24px; line-height: 1.45; }
+.intro-logo { margin-bottom: 22px; }
+.intro-title { font-size: 28px; font-weight: 800; letter-spacing: -.5px; margin-bottom: 6px; }
+.intro-tagline {
+  font-size: 16px; color: var(--muted); margin-bottom: 28px;
+  line-height: 1.45; font-weight: 400;
+}
 .intro-feature-list {
   width: 100%; display: flex; flex-direction: column; gap: 10px;
-  margin-bottom: 24px; text-align: left;
+  margin-bottom: 28px; text-align: left;
 }
 .intro-feature {
-  display: flex; align-items: center; gap: 14px;
+  display: flex; align-items: flex-start; gap: 14px;
   background: var(--card); border: 1px solid var(--border);
   border-radius: 14px; padding: 14px 16px;
+  box-shadow: 0 1px 6px rgba(0,0,0,.04);
 }
+.intro-feature.coach-feat { border-top: 2px solid var(--accent-move); }
+.intro-feature.chef-feat  { border-top: 2px solid var(--accent-food); }
+.intro-feature.smart-feat { border-top: 2px solid #7c3aed; }
 .intro-feature-icon {
-  width: 40px; height: 40px; border-radius: 12px;
-  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  width: 38px; height: 38px; border-radius: 11px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; margin-top: 1px;
 }
-.intro-feat-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
-.intro-feat-sub { font-size: 12px; color: var(--muted); line-height: 1.4; }
-.intro-disclaimer {
-  font-size: 12px; color: var(--muted-2); margin-bottom: 20px;
-  line-height: 1.4; font-style: italic;
-}
+.intro-feat-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+.intro-feat-sub { font-size: 12.5px; color: var(--muted); line-height: 1.45; }
+.intro-feat-sub em { font-style: normal; color: var(--text); font-weight: 500; }
 .intro-btn {
-  width: 100%; padding: 16px; border-radius: var(--radius);
+  width: 100%; padding: 16px; border-radius: 999px;
   background: var(--accent-move); color: #fff;
   border: none; font-size: 17px; font-weight: 700;
   cursor: pointer; font-family: inherit;
+  box-shadow: 0 4px 16px rgba(234,90,12,.28);
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  transition: opacity .15s;
+}
+.intro-btn:active { opacity: .88; }
+.intro-privacy {
+  display: flex; align-items: center; justify-content: center; gap: 5px;
+  font-size: 12px; color: var(--muted); margin-top: 14px; line-height: 1.4;
 }
 
 /* ─── STATS ─── */
@@ -922,6 +981,7 @@ select.modal-input { appearance: auto; }
 /* ─── RECIPE GEN CARD ─── */
 .recipe-gen-card {
   background: var(--card); border: 1px solid var(--border);
+  border-top: 3px solid var(--accent-food);
   border-radius: var(--radius-lg); padding: 18px 16px 12px;
   margin-bottom: 14px; box-shadow: var(--shadow-sm);
 }
@@ -935,7 +995,7 @@ select.modal-input { appearance: auto; }
   font-size: 15px; font-weight: 700; cursor: pointer; color: var(--text);
   display: flex; align-items: center; justify-content: center; transition: all .15s;
 }
-.gen-pill.active { background: var(--accent-move); border-color: var(--accent-move); color: #fff; }
+.gen-pill.active { background: var(--accent-food); border-color: var(--accent-food); color: #fff; }
 .gen-focus-pill { width: auto; padding: 0 11px; gap: 4px; font-size: 13px; }
 .vega-toggle-wrap { margin-left: auto; display: flex; align-items: center; }
 .vega-toggle-input { display: none; }
@@ -1229,8 +1289,9 @@ select.modal-input { appearance: auto; }
   background: var(--card2);
   border-radius: 12px;
   padding: 3px;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
   gap: 2px;
+  box-shadow: 0 0 0 1.5px var(--accent-food-soft);
 }
 .food-inner-tab {
   flex: 1; padding: 9px 4px; border: none; background: none;
@@ -1243,15 +1304,34 @@ select.modal-input { appearance: auto; }
 .chef-hero-title { font-size: 22px; font-weight: 800; color: var(--text); margin-bottom: 4px; }
 .chef-hero-sub { font-size: 13px; color: var(--muted); margin-bottom: 22px; }
 .chef-mic-big {
-  width: 108px; height: 108px; border-radius: 50%;
-  background: var(--accent-move); border: none; color: #fff;
+  width: 96px; height: 96px; border-radius: 50%;
+  background: var(--accent-food); border: none; color: #fff;
   display: flex; align-items: center; justify-content: center;
   cursor: pointer; margin: 0 auto 10px; transition: transform .12s, box-shadow .12s;
-  box-shadow: 0 4px 20px rgba(234,90,12,.35);
+  box-shadow: 0 4px 20px rgba(13,148,136,.32);
 }
 .chef-mic-big:active { transform: scale(.93); }
-.chef-mic-big.listening { animation: micPulse 1s ease infinite; box-shadow: 0 0 0 12px rgba(234,90,12,.15); }
-.chef-mic-label { font-size: 13px; font-weight: 600; color: var(--accent-move); }
+.chef-mic-big.listening { animation: micPulse 1s ease infinite; box-shadow: 0 0 0 12px rgba(13,148,136,.15); }
+.chef-mic-label { font-size: 13px; font-weight: 600; color: var(--accent-food); }
+.chef-input-zone {
+  background: var(--card); border: 1px solid var(--border);
+  border-top: 3px solid var(--accent-food);
+  border-radius: var(--radius-lg); padding: 20px 16px 16px;
+  margin-bottom: 14px; text-align: center;
+  box-shadow: 0 2px 10px rgba(0,0,0,.05);
+}
+.chef-text-photo-row {
+  display: flex; gap: 8px; align-items: center; margin-top: 14px; text-align: left;
+}
+.chef-text-photo-row .input-mic-wrap { flex: 1; }
+.chef-foto-icon-btn {
+  flex-shrink: 0; width: 40px; height: 40px; border-radius: 50%;
+  border: 1.5px solid var(--border); background: var(--card2);
+  color: var(--accent-food); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color .15s, background .15s;
+}
+.chef-foto-icon-btn:active { background: rgba(13,148,136,.1); border-color: var(--accent-food); }
 .food-filter-chips {
   display: flex; gap: 6px; flex-wrap: nowrap; overflow-x: auto;
   -webkit-overflow-scrolling: touch; padding-bottom: 8px; margin-bottom: 12px; scrollbar-width: none;
@@ -1271,7 +1351,7 @@ select.modal-input { appearance: auto; }
   cursor: pointer;
 }
 .food-filter-btn.active { background: var(--accent-food); color: #fff; border-color: var(--accent-food); }
-.food-card { background: var(--card); border-radius: var(--radius); padding: 16px; margin-bottom: 10px; }
+.food-card { background: var(--card); border-radius: var(--radius); padding: 16px; margin-bottom: 10px; border-top: 2px solid var(--accent-food-soft); }
 .food-card-header { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .food-card-title { font-weight: 600; font-size: 15px; flex: 1; }
 .food-type-badge { font-size: 11px; padding: 3px 8px; border-radius: 12px; font-weight: 600; }
@@ -1289,7 +1369,7 @@ select.modal-input { appearance: auto; }
 .food-week-row:last-child { border-bottom: none; }
 .weekmenu-day { padding: 8px 0; border-bottom: 1px solid var(--border); }
 .weekmenu-day:last-child { border-bottom: none; }
-.weekmenu-day.today .weekmenu-day-label { color: var(--accent-move); font-weight: 700; }
+.weekmenu-day.today .weekmenu-day-label { color: var(--accent-food); font-weight: 700; }
 .weekmenu-day-label { font-size: 13px; color: var(--muted); margin-bottom: 4px; }
 .weekmenu-row {
   display: flex; align-items: center; gap: 6px;
@@ -1309,7 +1389,7 @@ select.modal-input { appearance: auto; }
 .weekmenu-row-empty { opacity: 0.5; }
 .weekmenu-row-empty:active { opacity: 1; background: var(--card2); }
 .food-fiber-bar { height: 6px; border-radius: 3px; margin-top: 3px; background: #e5e7eb; overflow: hidden; }
-.food-fiber-fill { height: 100%; border-radius: 3px; transition: width .3s; }
+.food-fiber-fill { height: 100%; border-radius: 3px; transition: width .3s; background: var(--accent-food); }
 
 /* ─── WATER TRACKER ─── */
 .water-tracker { margin: 0 0 4px 0; }
@@ -1503,10 +1583,13 @@ select.modal-input { appearance: auto; }
 
 /* ─── COACH FRONTPAGE ─── */
 .coach-front-card {
-  background: var(--card); border: 1px solid var(--border);
-  border-radius: var(--radius-lg); padding: 20px 16px 16px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--accent-move);
+  border-radius: var(--radius-lg);
+  padding: 18px 16px 14px;
   margin-bottom: 14px;
-  box-shadow: 0 2px 12px rgba(0,0,0,.06);
+  box-shadow: 0 2px 12px rgba(0,0,0,.05);
 }
 .coach-front-label {
   color: var(--muted); font-size: 13px; font-weight: 500;
@@ -1604,8 +1687,8 @@ select.modal-input { appearance: auto; }
 }
 .coach-input-row button:active { background: var(--accent-move-soft); border-color: var(--accent-move); color: var(--accent-move); }
 .quick-q-row {
-  display: grid; grid-template-columns: 1fr 1fr;
-  gap: 6px; margin-top: 10px;
+  display: flex; flex-direction: column;
+  gap: 7px; margin-top: 10px;
 }
 .quick-q-btn {
   background: var(--card2); border: 1.5px solid var(--border);
@@ -1618,9 +1701,23 @@ select.modal-input { appearance: auto; }
 .quick-q-btn.quick-q-oppepper {
   background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);
   color: #fff; border-color: transparent;
-  font-weight: 700;
+  font-weight: 700; justify-content: center; border-radius: 10px;
+  padding: 10px 16px; font-size: 14px;
 }
-.quick-q-btn.quick-q-oppepper:active { background: linear-gradient(135deg, #d97706, #c2410c); }
+.quick-q-btn.quick-q-oppepper:active { opacity: .88; }
+.quick-q-chips {
+  display: flex; gap: 6px; overflow-x: auto;
+  -webkit-overflow-scrolling: touch; scrollbar-width: none; padding-bottom: 2px;
+}
+.quick-q-chips::-webkit-scrollbar { display: none; }
+.quick-q-chip {
+  flex-shrink: 0; background: var(--card2); border: 1.5px solid var(--border);
+  color: var(--text-2); border-radius: 20px; padding: 6px 11px;
+  font-size: 12px; font-weight: 500; cursor: pointer; white-space: nowrap;
+  display: inline-flex; align-items: center; gap: 5px;
+  font-family: inherit; transition: background .15s, border-color .15s, color .15s;
+}
+.quick-q-chip:active { background: var(--accent-move-soft); border-color: var(--accent-move); color: var(--accent-move); }
 
 /* ─── PROTEIN TRACKING BAR ─── */
 .nutri-bars { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
@@ -1703,7 +1800,7 @@ select.modal-input { appearance: auto; }
   margin-bottom: 4px;
 }
 .rec-section-title { font-size: 14px; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 7px; }
-.rec-section-count { font-size: 12px; color: var(--muted); font-weight: 500; background: var(--card2); border-radius: 999px; padding: 1px 7px; }
+.rec-section-count { font-size: 12px; color: var(--accent-food); font-weight: 700; background: var(--accent-food-soft); border-radius: 999px; padding: 1px 7px; }
 .rec-section-chev { transition: transform .2s; color: var(--muted); }
 .rec-section-chev.open { transform: rotate(180deg); }
 .rec-section-body { }
@@ -1937,7 +2034,7 @@ select.modal-input { appearance: auto; }
       <div style="min-width:0; flex:1;">
         <div id="today-day" style="font-size:12px; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:.5px;"></div>
         <h1 id="today-date-h1" style="margin-top:1px; font-size:22px;"></h1>
-        <div id="today-coach-line" style="font-size:13px;color:var(--muted);margin-top:2px;line-height:1.4;min-height:18px;"></div>
+        <div id="today-coach-line" style="font-size:13px;color:var(--muted);margin-top:4px;line-height:1.4;min-height:18px;padding-left:8px;border-left:2px solid var(--accent-move);opacity:.85;"></div>
       </div>
       <div style="display:flex; align-items:center; gap:10px; flex-shrink:0;">
         <div class="streak-badge">
@@ -1958,7 +2055,7 @@ select.modal-input { appearance: auto; }
 
     <!-- Check-in -->
     <div class="card" id="checkin-card">
-      <h3>Hoe voel je je vandaag?</h3>
+      <div class="vandaag-section-h">Hoe voel je je vandaag?</div>
       <div class="checkin-btns">
         <button class="checkin-btn" onclick="doCheckIn('goed', this)">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
@@ -1978,12 +2075,12 @@ select.modal-input { appearance: auto; }
     </div>
 
     <!-- Hydratatie tracker -->
-    <div class="card">
+    <div class="water-strip">
       <div class="water-tracker">
         <div class="water-tracker-label">
           <span style="display:flex;align-items:center;gap:6px;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--accent-food)" stroke="none"><path d="M12 2C6 10 4 14 4 17a8 8 0 0 0 16 0c0-3-2-7-8-15z"/></svg>
-            Water
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="var(--accent-food)" stroke="none"><path d="M12 2C6 10 4 14 4 17a8 8 0 0 0 16 0c0-3-2-7-8-15z"/></svg>
+            <span style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;">Water</span>
           </span>
           <span class="water-count-label" id="water-count">0 / 8</span>
         </div>
@@ -1992,20 +2089,21 @@ select.modal-input { appearance: auto; }
     </div>
 
     <!-- Activiteiten vandaag -->
-    <div class="card">
-      <h3 style="margin-bottom:14px;">Activiteiten</h3>
+    <div class="card" style="border-left:3px solid var(--accent-move);padding-left:13px;">
+      <div class="vandaag-section-h">Activiteiten</div>
       <div id="today-activities"></div>
     </div>
 
     <!-- Maaltijden vandaag -->
-    <div class="card">
+    <div class="card" style="border-top:3px solid var(--accent-food);">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
-        <h3>Maaltijden</h3>
+        <div class="vandaag-section-h" style="margin-bottom:0;padding-bottom:0;border-bottom:none;">Maaltijden</div>
         <button class="voeding-voice-btn" id="voeding-voice-btn-vandaag" onclick="startVoedingIntake(null, null, 'vandaag')">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
           Wat heb/ga je eten?
         </button>
       </div>
+      <div style="border-bottom:1px solid var(--border);margin-bottom:10px;"></div>
       <div id="today-nutri-bar" style="margin-bottom:10px;"></div>
       <div id="today-meals"></div>
     </div>
@@ -2017,6 +2115,10 @@ select.modal-input { appearance: auto; }
       <button onclick="navWeek(-1)">&#8249;</button>
       <span class="week-label" id="week-label"></span>
       <button onclick="navWeek(1)">&#8250;</button>
+    </div>
+    <div class="week-progress-header">
+      <span class="week-progress-label">Week voortgang</span>
+      <span class="week-progress-count" id="week-progress-count"></span>
     </div>
     <div class="progress-bar-wrap">
       <div class="progress-bar-fill" id="week-progress" style="width:0%"></div>
@@ -2106,7 +2208,7 @@ select.modal-input { appearance: auto; }
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
         Boodschappenlijst
       </button>
-      <div class="card" style="margin-bottom:12px;">
+      <div class="card" style="margin-bottom:12px;border-top:3px solid var(--accent-food);">
         <button class="voeding-voice-btn voeding-voice-full" id="voeding-voice-btn-food" onclick="startVoedingIntake(null,null,'food')">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
           Wat ga je eten?
@@ -2114,7 +2216,10 @@ select.modal-input { appearance: auto; }
         <div id="food-weekmenu"></div>
       </div>
       <details style="margin-bottom:16px;">
-        <summary style="cursor:pointer;font-size:14px;font-weight:600;padding:12px 0;color:var(--muted);">Vezels &amp; Eiwitten deze week</summary>
+        <summary style="cursor:pointer;font-size:14px;font-weight:700;padding:10px 0;color:var(--text-2);border-left:3px solid var(--accent-food-soft);padding-left:10px;list-style:none;display:flex;align-items:center;justify-content:space-between;">
+          <span>Vezels &amp; Eiwitten deze week</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </summary>
         <div id="food-week-overview" style="margin-top:8px;"></div>
       </details>
     </div>
@@ -2138,32 +2243,34 @@ select.modal-input { appearance: auto; }
       </div>
       <div id="mic-status-label" class="mic-status-label"></div>
       <div id="big-praat-status" class="big-praat-status"></div>
-      <!-- Snelvragen (incl. oppepper) direct onder de knop -->
+      <!-- Snelvragen: Oppepper prominent, overige 5 als scrollbare chips -->
       <div class="quick-q-row" style="margin-top:10px;">
         <button class="quick-q-btn quick-q-oppepper" onclick="askOppepper()">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
           Oppepper
         </button>
-        <button class="quick-q-btn" onclick="askAdviesVandaag()">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-          Advies vandaag
-        </button>
-        <button class="quick-q-btn" onclick="askAdviesMorgen()">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-          Advies morgen
-        </button>
-        <button class="quick-q-btn" onclick="askNaHetSporten()">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v12"/><path d="M18 9a3 3 0 0 0-3-3H6"/><path d="M6 15a6 6 0 0 0 12 0"/></svg>
-          Na het sporten
-        </button>
-        <button class="quick-q-btn" onclick="askQuickQ('Hoe gaat het met mijn voortgang en streak?')">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-          Voortgang
-        </button>
-        <button class="quick-q-btn" onclick="askQuickQ('Hoe ging mijn week qua sport en voeding?')">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-          Mijn week
-        </button>
+        <div class="quick-q-chips">
+          <button class="quick-q-chip" onclick="askAdviesVandaag()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            Advies vandaag
+          </button>
+          <button class="quick-q-chip" onclick="askAdviesMorgen()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Advies morgen
+          </button>
+          <button class="quick-q-chip" onclick="askNaHetSporten()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v12"/><path d="M18 9a3 3 0 0 0-3-3H6"/><path d="M6 15a6 6 0 0 0 12 0"/></svg>
+            Na het sporten
+          </button>
+          <button class="quick-q-chip" onclick="askQuickQ('Hoe gaat het met mijn voortgang en streak?')">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            Voortgang
+          </button>
+          <button class="quick-q-chip" onclick="askQuickQ('Hoe ging mijn week qua sport en voeding?')">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Mijn week
+          </button>
+        </div>
       </div>
       <!-- Chat input -->
       <div class="coach-input-row" style="margin-top:10px;">
@@ -2197,15 +2304,16 @@ select.modal-input { appearance: auto; }
       <button onclick="dismissWeekplanCard()" style="display:block;margin-top:8px;background:none;border:none;color:var(--muted);font-size:13px;cursor:pointer;width:100%;text-align:center;">Overslaan</button>
     </div>
 
-    <div class="card" style="margin-bottom:14px;">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
-        <h3 style="margin-bottom:0;">Inzicht</h3>
-        <div style="display:flex;align-items:center;gap:5px;">
-          <button onclick="setInzichtPeriode(-1)" style="width:26px;height:26px;border-radius:50%;border:1.5px solid var(--border);background:var(--card2);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text-2);font-family:inherit;line-height:1;">−</button>
+    <div class="card" style="margin-bottom:14px;box-shadow:none;border-color:var(--border);">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--border);">
+        <h3 style="margin-bottom:0;font-size:14px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;">Inzicht</h3>
+        <div style="display:flex;align-items:center;gap:4px;">
+          <button onclick="setInzichtPeriode(-1)" style="width:24px;height:24px;border-radius:50%;border:1.5px solid var(--border);background:var(--card2);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);font-family:inherit;line-height:1;">−</button>
           <input id="inzicht-periode-input" type="number" min="1" max="365" value="7"
-            style="width:46px;height:26px;border:1.5px solid var(--border);border-radius:8px;background:var(--card2);font-size:13px;font-weight:600;color:var(--text-2);text-align:center;font-family:inherit;padding:0 4px;"
+            style="width:40px;height:24px;border:1.5px solid var(--border);border-radius:7px;background:var(--card2);font-size:12px;font-weight:600;color:var(--text-2);text-align:center;font-family:inherit;padding:0 3px;"
             oninput="setInzichtPeriodeDirect(this.value)">
-          <button onclick="setInzichtPeriode(1)" style="width:26px;height:26px;border-radius:50%;border:1.5px solid var(--border);background:var(--card2);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text-2);font-family:inherit;line-height:1;">+</button>
+          <span style="font-size:11px;color:var(--muted);font-weight:500;">d</span>
+          <button onclick="setInzichtPeriode(1)" style="width:24px;height:24px;border-radius:50%;border:1.5px solid var(--border);background:var(--card2);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);font-family:inherit;line-height:1;">+</button>
         </div>
       </div>
 
@@ -2331,46 +2439,80 @@ select.modal-input { appearance: auto; }
 <!-- INTRO OVERLAY -->
 <div id="intro-overlay" style="display:none;">
   <div class="intro-card">
-    <div class="intro-logo" style="margin-bottom:20px;">
-      <div style="width:80px;height:80px;border-radius:26px;background:#18181b;display:flex;align-items:center;justify-content:center;margin:0 auto;box-shadow:0 6px 28px rgba(0,0,0,.22);">
-        <span style="color:#fff;font-size:22px;font-weight:900;letter-spacing:-.04em;line-height:1;font-family:inherit;">C<span style="font-size:16px;font-weight:500;opacity:.55;">&amp;</span>C</span>
+
+    <!-- Logo: twee cirkels, twee kleuren, één systeem -->
+    <div class="intro-logo">
+      <div style="display:flex;gap:8px;justify-content:center;align-items:center;">
+        <div style="width:52px;height:52px;border-radius:50%;background:var(--accent-move);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(234,90,12,.30);">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+        </div>
+        <div style="width:52px;height:52px;border-radius:50%;background:var(--accent-food);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(13,148,136,.30);">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v12"/><path d="M18 9a3 3 0 0 0-3-3H6"/><path d="M6 15a6 6 0 0 0 12 0"/></svg>
+        </div>
       </div>
     </div>
+
     <h1 class="intro-title">Coach & Chef</h1>
-    <p class="intro-sub" style="font-size:16px;margin-bottom:28px;">Spreek of typ — over sport, eten, water, hoe je je voelt. Coach & Chef regelen de rest.</p>
+    <p class="intro-tagline">Vertel wat je doet.<br>Wij denken de rest.</p>
 
     <div class="intro-feature-list">
-      <div class="intro-feature">
-        <div class="intro-feature-icon" style="background:rgba(234,90,12,.1);">
+
+      <!-- 1: Input — makkelijkheid -->
+      <div class="intro-feature coach-feat">
+        <div class="intro-feature-icon" style="background:rgba(234,90,12,.10);">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-move)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
         </div>
         <div>
-          <div class="intro-feat-title">Log in één zin</div>
-          <div class="intro-feat-sub">"Ik heb 45 min hardgelopen en pasta gegeten"</div>
+          <div class="intro-feat-title">Spreek, typ of scan</div>
+          <div class="intro-feat-sub"><em>"Ik heb 45 min hardgelopen en pasta gegeten"</em> — klaar. Of maak een foto van een recept en Chef haalt alles eruit.</div>
         </div>
       </div>
-      <div class="intro-feature">
-        <div class="intro-feature-icon" style="background:rgba(13,148,136,.1);">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-food)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+
+      <!-- 2: Chef — slimheid voeding -->
+      <div class="intro-feature chef-feat">
+        <div class="intro-feature-icon" style="background:rgba(13,148,136,.10);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-food)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v12"/><path d="M18 9a3 3 0 0 0-3-3H6"/><path d="M6 15a6 6 0 0 0 12 0"/></svg>
         </div>
         <div>
-          <div class="intro-feat-title">Eiwitten, vezels & activiteiten</div>
-          <div class="intro-feat-sub">Jij vertelt het — Coach & Chef registreren en berekenen alles</div>
+          <div class="intro-feat-title">Chef berekent, plant en stelt voor</div>
+          <div class="intro-feat-sub">Vezels, eiwitten en recepten automatisch bijgehouden. Chef weet wat je nog nodig hebt — en laat zien welk recept dat oplost.</div>
         </div>
       </div>
-      <div class="intro-feature">
-        <div class="intro-feature-icon" style="background:rgba(124,58,237,.1);">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+
+      <!-- 3: Coach — slimheid beweging + proactief -->
+      <div class="intro-feature coach-feat">
+        <div class="intro-feature-icon" style="background:rgba(234,90,12,.10);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-move)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
         </div>
         <div>
-          <div class="intro-feat-title">Plan je week</div>
-          <div class="intro-feat-sub">Weekschema, boodschappenlijst en recepten op maat</div>
+          <div class="intro-feat-title">Coach denkt een stap vooruit</div>
+          <div class="intro-feat-sub">Na krachttraining meteen hersteladvies. Achter op je maandelijkse doel? Coach ziet het. Patronen die je zelf niet ziet, benoemt Coach vanzelf.</div>
         </div>
       </div>
+
+      <!-- 4: Inzicht — slimheid patroonherkenning -->
+      <div class="intro-feature smart-feat">
+        <div class="intro-feature-icon" style="background:rgba(124,58,237,.10);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        </div>
+        <div>
+          <div class="intro-feat-title">Inzicht zonder extra werk</div>
+          <div class="intro-feat-sub">Welke dag mis je altijd? Hoeveel vezels kom je structureel tekort? Alles zichtbaar op basis van jouw data — geen aparte invoer nodig.</div>
+        </div>
+      </div>
+
     </div>
 
-    <button class="intro-btn" onclick="dismissIntro()" style="font-size:17px;display:inline-flex;align-items:center;gap:8px;">Starten <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
-    <p style="font-size:12px;color:var(--muted-2);margin-top:14px;font-style:italic;">Geen data gedeeld — alles blijft op jouw apparaat</p>
+    <button class="intro-btn" onclick="dismissIntro()">
+      Aan de slag
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+
+    <div class="intro-privacy">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      Geen data gedeeld — alles blijft op jouw apparaat
+    </div>
+
   </div>
 </div>
 
@@ -2593,8 +2735,9 @@ function buildSystemPrompt() {
 
   const streakHuidig = (data && data.streak && data.streak.huidig) || 0;
 
-  // Historische context: afgelopen 4 weken
+  // Historische context: afgelopen 4 weken + specifieke activiteiten afgelopen 14 dagen
   let historischeTekst = '';
+  let recenteActiviteitenTekst = '';
   try {
     const nu = new Date();
     const weekStats = [];
@@ -2623,15 +2766,44 @@ function buildSystemPrompt() {
       weekStats.push(`W-${w}: ${actDagen} actieve dagen, ${duurStr} beweging, gem. vezels ${gemVez}`);
     }
     if (weekStats.length > 0) historischeTekst = '\n\nAFGELOPEN 4 WEKEN (van recent naar oud):\n' + weekStats.map(s => `- ${s}`).join('\n');
+
+    // Specifieke activiteiten afgelopen 14 dagen (inclusief handmatig toegevoegde)
+    const recenteActs = [];
+    for (let d = 1; d <= 14; d++) {
+      const ref = new Date(nu);
+      ref.setDate(ref.getDate() - d);
+      const ds = ref.toISOString().slice(0, 10);
+      const wk = getISOWeek(ref);
+      const dayData = (data.weken || {})[wk] && (data.weken[wk][ds]);
+      if (!dayData) continue;
+      const acts = (dayData.activiteiten || []).filter(a => a.afgevinkt);
+      acts.forEach(a => {
+        const parts = [ds, a.naam];
+        if (a.duur) parts.push(a.duur + ' min');
+        if (a.detail) parts.push(a.detail);
+        if (a.gevoel) parts.push('gevoel: ' + a.gevoel);
+        recenteActs.push(parts.join(' · '));
+      });
+    }
+    if (recenteActs.length > 0) {
+      const capped = recenteActs.slice(0, 20);
+      recenteActiviteitenTekst = '\n\nRECENTE ACTIVITEITEN (afgelopen 14 dagen):\n' + capped.map(s => `- ${s}`).join('\n');
+    }
   } catch(_) {}
 
-  // Doelen + voortgang berekenen
+  // Doelen + voortgang + trajectanalyse
   let doelenTekst = '';
   try {
     const doelen = (data && data.doelen) || [];
     if (doelen.length > 0) {
       const nu = new Date();
       const maandStart = new Date(nu.getFullYear(), nu.getMonth(), 1);
+      const daysInMonth = new Date(nu.getFullYear(), nu.getMonth() + 1, 0).getDate();
+      const daysElapsed = Math.max(1, nu.getDate());
+      const daysLeft = daysInMonth - daysElapsed;
+      const dagVanWeek = nu.getDay() === 0 ? 6 : nu.getDay() - 1; // 0=ma..6=zo
+      const dagenRestWeek = Math.max(0, 6 - dagVanWeek);
+
       const doelenRegels = doelen.map(d => {
         let voortgang = '';
         if (d.type === 'km_maand') {
@@ -2646,15 +2818,78 @@ function buildSystemPrompt() {
               }
             });
           });
-          voortgang = ` → ${kmTotal.toFixed(1)}km van ${d.waarde || '?'}km deze maand`;
+          const target = parseFloat(d.waarde) || 0;
+          const projected = target > 0 ? (kmTotal / daysElapsed * daysInMonth).toFixed(1) : null;
+          const nodig = target > 0 ? Math.max(0, target - kmTotal).toFixed(1) : null;
+          let traject = '';
+          if (projected !== null) {
+            if (parseFloat(projected) >= target) traject = ` · op schema (prognose: ${projected}km)`;
+            else traject = ` · nog ${nodig}km nodig in ${daysLeft} dagen`;
+          }
+          voortgang = ` → ${kmTotal.toFixed(1)}km van ${d.waarde || '?'}km deze maand${traject}`;
         } else if (d.type === 'vezels_dag') {
           voortgang = ` → vandaag ${vezelTotaal}g van ${d.waarde || 30}g`;
         } else if (d.type === 'sessies_week') {
-          voortgang = ` → ${activeDaysDezeWeek} actieve dagen deze week`;
+          const target = parseInt(d.waarde) || 0;
+          const resterend = Math.max(0, target - activeDaysDezeWeek);
+          const haalbaar = resterend <= dagenRestWeek;
+          const trajectNote = target > 0
+            ? (activeDaysDezeWeek >= target ? ' · weekdoel gehaald ✓' : haalbaar ? ` · nog ${resterend} sessie(s) in ${dagenRestWeek} dagen` : ' · weekdoel buiten bereik deze week')
+            : '';
+          voortgang = ` → ${activeDaysDezeWeek} van ${d.waarde || '?'} actieve dagen${trajectNote}`;
         }
         return `- ${d.omschrijving}${voortgang}`;
       });
       doelenTekst = '\n\nDOELEN EN VOORTGANG:\n' + doelenRegels.join('\n');
+    }
+  } catch(_) {}
+
+  // Patroonherkenning: welke weekdag + maaltijdslot structureel gemist (afgelopen 4 weken)
+  let patroonTekst = '';
+  try {
+    const dagNamen4 = ['ma','di','wo','do','vr','za','zo'];
+    const actMisses = [0,0,0,0,0,0,0];   // per weekdag: hoe vaak activiteit gemist
+    const actTotaal = [0,0,0,0,0,0,0];   // per weekdag: hoe vaak was er een activiteit gepland/verwacht
+    const vezelMisses = { ontbijt:0, lunch:0, diner:0, snack:0 };
+    const vezelTotalen = { ontbijt:0, lunch:0, diner:0, snack:0 };
+    const nu3 = new Date();
+    for (let w = 1; w <= 4; w++) {
+      const ref = new Date(nu3);
+      ref.setDate(ref.getDate() - w * 7);
+      const wk = getISOWeek(ref);
+      const weekData = (data.weken || {})[wk];
+      if (!weekData) continue;
+      Object.entries(weekData).forEach(([ds, dd]) => {
+        const dagIdx = (new Date(ds).getDay() + 6) % 7;
+        const heeftAct = (dd.activiteiten || []).some(a => a.type !== 'rest');
+        const afgevinkt = (dd.activiteiten || []).some(a => a.afgevinkt);
+        if (heeftAct) { actTotaal[dagIdx]++; if (!afgevinkt) actMisses[dagIdx]++; }
+        ['ontbijt','lunch','diner','snack'].forEach(slot => {
+          const items = Array.isArray((dd.maaltijden || {})[slot]) ? dd.maaltijden[slot] : [];
+          if (items.length > 0) {
+            vezelTotalen[slot]++;
+            const vez = items.reduce((s, m) => s + (parseFloat((m.vezels || '').replace(/[^\d.]/g, '')) || 0), 0);
+            const doel = { ontbijt:6, lunch:8, diner:10, snack:4 }[slot];
+            if (vez < doel) vezelMisses[slot]++;
+          }
+        });
+      });
+    }
+    const actPatroon = dagNamen4.map((d, i) => actTotaal[i] >= 2 && actMisses[i] / actTotaal[i] >= 0.6 ? d : null).filter(Boolean);
+    const vezelPatroon = Object.entries(vezelMisses).filter(([slot, n]) => vezelTotalen[slot] >= 2 && n / vezelTotalen[slot] >= 0.6).map(([slot]) => slot);
+    const delen = [];
+    if (actPatroon.length > 0) delen.push(`Activiteiten structureel gemist op: ${actPatroon.join(', ')}`);
+    if (vezelPatroon.length > 0) delen.push(`Vezeldoel structureel gemist bij: ${vezelPatroon.join(', ')}`);
+    if (delen.length > 0) patroonTekst = '\n\nSTRUCTURELE PATRONEN (afgelopen 4 weken):\n' + delen.map(s => `- ${s}`).join('\n');
+  } catch(_) {}
+
+  // Einde-van-dag voedingsgat: na 20:00 met vezeltekort → vraag of gebruiker een snacksuggestie wil
+  let avondGapTekst = '';
+  try {
+    const uurNu = today.getHours();
+    if (uurNu >= 20 && vezelTotaal < 30) {
+      const tekort = 30 - vezelTotaal;
+      avondGapTekst = `\n\nAVONDGAP: Het is ${uurNu}:00 en er ontbreekt nog ${tekort}g vezels voor het dagdoel. Vraag de gebruiker of hij/zij nog een vezelrijke avondsnack wil — focus op lichte snacks die je door de avond kunt eten (noten, fruit, volkoren crackers, edamame etc.), geen volledige maaltijden. Geef pas een concrete suggestie als de gebruiker ja zegt. Verwijs dan eventueel ook naar de Chef-tab voor receptideeën.`;
     }
   } catch(_) {}
 
@@ -2758,7 +2993,7 @@ VANDAAG GELOGD:
 TIJDSCONTEXT: ${tijdsContext}
 ${checkInPatroon ? 'CHECK-IN PATROON (7 dagen): ' + checkInPatroon : ''}
 
-${historischeTekst}${doelenTekst}
+${historischeTekst}${recenteActiviteitenTekst}${doelenTekst}${patroonTekst}${avondGapTekst}
 
 WEEKMENU (geplande maaltijden deze week):
 ${buildWeekMenuContext()}${buildPatternContext()}
@@ -2768,6 +3003,66 @@ Vezels dagdoel: 30g (ontbijt ~6g / lunch ~8g / diner ~10-14g / snack ~4g).
 Eiwitten dagdoel: 80g. Na het sporten is eiwitrijke voeding extra belangrijk.
 Signaleer proactief als de gebruiker de vezeldoelen dreigt te missen.
 Groen ≥30g vezels / oranje 20-29g / rood <20g.
+
+VOEDINGSADVIES STIJL:
+Als je voedingsadvies geeft, leg dan altijd KORT uit WAAROM iets verstandig is (bijv. "eiwitten zijn belangrijk voor spierherstel na krachttraining", "vezels houden je langer verzadigd", "koolhydraten voor energie vóór een lange duurloop"). Verwijs bij suggesties bij voorkeur naar recepten uit de receptenbibliotheek — die staan hieronder gesorteerd op relevantie. Geef nooit willekeurige gerechten maar verwijs naar bekende recepten.
+
+PROACTIEVE KRUISVERBANDEN (doe dit zonder dat de gebruiker erom vraagt):
+- Na krachttraining vandaag: benoem proactief het belang van eiwitten voor spierherstel als de eiwitinname laag is.
+- Na een duurloop of interval: suggereer herstelvoeding (eiwitten + koolhydraten) als er nog geen diner gelogd is.
+- Als morgen een zware training staat én de avondmaaltijd nog niet gelogd is: hint vanavond over koolhydraatrijke voeding als energievoorraad.
+- Als het na 19:00 is en vezeldoel nog niet gehaald: benoem concreet hoeveel vezels er nog nodig zijn en welk recept uit de bibliotheek dat oplost.
+- Verbind altijd activiteit met voeding: "Je hebt vandaag X gedaan, daarvoor/daarna is Y verstandig omdat Z."
+
+RECEPTENBIBLIOTHEEK (gebruik deze bij suggesties):
+${(() => {
+  const recs = (data && data.recepten || []);
+  if (recs.length === 0) return 'Nog geen recepten opgeslagen.';
+
+  // Bepaal trainingscontext vandaag + morgen
+  const todayActs = activiteitenVandaag.toLowerCase();
+  const nu2 = new Date();
+  const morgenStr = new Date(nu2.setDate(nu2.getDate() + 1)).toISOString().slice(0, 10);
+  const morgenWk = getISOWeek(new Date(morgenStr));
+  const morgenActs = ((data.weken && data.weken[morgenWk] && data.weken[morgenWk][morgenStr] && data.weken[morgenWk][morgenStr].activiteiten) || []).map(a => a.naam.toLowerCase()).join(' ');
+  const isKracht = /gym|upper|lower|kracht|dumbbell/i.test(todayActs);
+  const isDuurloop = /run|loop|hardloop|interval|fiet/i.test(todayActs);
+  const morgenZwaar = /run|loop|interval|lange/i.test(morgenActs);
+  const vezelTekort = vezelTotaal < 20;
+
+  // Scoor recepten op relevantie voor huidige context
+  const gescoord = recs.map(r => {
+    const eiw = parseFloat((r.eiwitten || '').replace(/[^\d.]/g, '')) || 0;
+    const vez = parseFloat((r.vezels || '').replace(/[^\d.]/g, '')) || 0;
+    let score = 0;
+    if (isKracht && eiw >= 20) score += 3;
+    if (isDuurloop && vez >= 8) score += 2;
+    if (morgenZwaar && eiw >= 15) score += 2;
+    if (vezelTekort && vez >= 10) score += 3;
+    return { r, score };
+  });
+
+  // Sorteer: hoogste score eerst, dan favorieten, dan rest
+  gescoord.sort((a, b) => {
+    if (b.score !== a.score) return b.score - a.score;
+    if (b.r.favoriet !== a.r.favoriet) return b.r.favoriet ? 1 : -1;
+    return 0;
+  });
+
+  const top = gescoord.slice(0, 12).map(({ r }) =>
+    `- ${r.naam}${r.vezels ? ' (' + r.vezels + ' vezels' : ''}${r.eiwitten ? ', ' + r.eiwitten + ' eiwit)' : r.vezels ? ')' : ''}`
+  );
+
+  // Hint voor de coach over de context
+  const hints = [];
+  if (isKracht) hints.push('vandaag krachttraining → eiwitrijke opties bovenaan');
+  if (isDuurloop) hints.push('vandaag duurloop → koolhydraten/vezels relevant');
+  if (morgenZwaar) hints.push('morgen zware training → herstelmaatregel vanavond');
+  if (vezelTekort) hints.push('vezeltekort vandaag → vezelrijke opties geprioriteerd');
+  const contextHint = hints.length > 0 ? `[Context: ${hints.join('; ')}]\n` : '';
+
+  return contextHint + top.join('\n');
+})()}
 
 PATRONEN:
 Na 2+ weken data: analyseer welke dagen consistent gemist worden,
@@ -4668,6 +4963,8 @@ function updateWeekProgress() {
   const pct = total === 0 ? 0 : Math.round(done / total * 100);
   const bar = document.getElementById('week-progress');
   if (bar) bar.style.width = pct + '%';
+  const count = document.getElementById('week-progress-count');
+  if (count) count.textContent = total === 0 ? '' : done === total ? `${done} / ${total} ✓` : `${done} / ${total}`;
 }
 
 function editWeekMeal(dateStr) { quickEditWeekMeal(dateStr); }
@@ -4859,23 +5156,20 @@ function _renderFoodChef() {
 
   const micSVG = `<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>`;
 
+  const cameraIconSVG = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>`;
+
   container.innerHTML = `
-    <div class="chef-hero">
+    <div class="chef-input-zone">
       <div class="chef-hero-title">Wat wil je eten?</div>
-      <div class="chef-hero-sub">Zeg maar wat je wil — een gerecht, ingrediënt, wat je in huis hebt, of gewoon "iets snels met kip"</div>
+      <div class="chef-hero-sub" style="margin-bottom:18px;">Zeg maar wat je wil — een gerecht, ingrediënt, wat je in huis hebt, of gewoon "iets snels met kip"</div>
       <button id="voice-recipe-btn" class="chef-mic-big" onclick="smartVoiceRecipe()">${micSVG}</button>
       <div class="chef-mic-label" id="chef-mic-label">Spreek je wens in</div>
+      <div class="chef-text-photo-row">
+        ${micInput('gen-focus-input', 'Of typ: pasta, paprika, tomaat…', '')}
+        <input type="file" id="chef-foto-input" accept="image/*" style="display:none;" onchange="analyseChefFoto(this)">
+        <button class="chef-foto-icon-btn" id="chef-foto-btn" onclick="document.getElementById('chef-foto-input').click()" title="Foto of screenshot analyseren">${cameraIconSVG}</button>
+      </div>
     </div>
-
-    <div style="margin-bottom:12px;">
-      ${micInput('gen-focus-input', 'Of typ: pasta, paprika, tomaat…', '')}
-    </div>
-
-    <input type="file" id="chef-foto-input" accept="image/*" style="display:none;" onchange="analyseChefFoto(this)">
-    <button class="btn btn-ghost btn-full" id="chef-foto-btn" onclick="document.getElementById('chef-foto-input').click()" style="font-size:13px;border-color:var(--accent-move);color:var(--accent-move);margin-bottom:12px;">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-      Foto of screenshot van recept analyseren
-    </button>
     <div id="chef-foto-preview" style="display:none;font-size:12px;color:var(--muted);padding:8px 10px;background:var(--card2);border-radius:8px;margin-bottom:12px;"></div>
     <div id="chef-foto-result" style="display:none;font-size:12px;background:var(--card2);border-radius:10px;padding:12px 14px;margin-bottom:12px;line-height:1.6;"></div>
 
@@ -6636,18 +6930,20 @@ async function calculateNutrition(receptId) {
     ? recept.ingredienten.join('\n')
     : recept.ingredienten || '';
 
-  const prompt = `Bereken voor dit recept (1 portie) de voedingswaarden op basis van de ingrediënten.
+  const prompt = `${_EXTRACT_PRINCIPLE}
+
+Bereken voor dit recept (1 portie) de voedingswaarden op basis van de ingrediënten.
 Recept: ${recept.naam}
 Ingrediënten:
 ${ing}
 
-Geef ALLEEN dit JSON-object terug, niets anders:
+Geef ALLEEN dit JSON-object terug:
 {"vezels":"~Xg","eiwitten":"~Xg"}
 
-Gebruik realistische waarden per portie. Rond af op hele grammen.`;
+Gebruik standaard voedingswaardentabellen. Rond af op hele grammen.`;
 
   try {
-    const raw = await callAI(prompt, 80);
+    const raw = await callAIForNutrition(prompt, 80);
     const result = safeParseJSON(raw);
     if (result && (result.vezels || result.eiwitten)) {
       const idx = data.recepten.findIndex(r => r.id === receptId);
@@ -6695,6 +6991,10 @@ async function lookupFoodFacts(query) {
 }
 
 // ─── AI CALLS ────────────────────────────────────────────────────────────────
+// EXTRACTIEPRINCIPE: bij alle structured data calls geldt — correctheid > volledigheid > beknoptheid.
+// Nooit content-count limieten ("max X items") in prompts — stuur via max_tokens.
+// Gebruik de constante _EXTRACT_PRINCIPLE als prefix bij extractie-prompts.
+const _EXTRACT_PRINCIPLE = 'Volledigheid en correctheid gaan altijd voor beknoptheid. Laat niets weg. Geef ALLEEN het gevraagde JSON-formaat terug, geen uitleg.';
 
 async function callAI(userMsg, maxTokens) {
   return callAIMessages([{ role: 'user', content: userMsg }], maxTokens);
@@ -6741,6 +7041,31 @@ async function callAIPlain(userMsg, maxTokens) {
     body: JSON.stringify({
       model: 'claude-sonnet-4-20250514',
       max_tokens: maxTokens,
+      messages: [{ role: 'user', content: userMsg }]
+    })
+  });
+  if (resp.status === 401) throw new Error('API-sleutel niet geldig — check instellingen.');
+  if (resp.status === 429) throw new Error('Wacht even en probeer het opnieuw.');
+  if (!resp.ok) throw new Error(`API fout: ${resp.status}`);
+  const json = await resp.json();
+  return json.content[0].text;
+}
+
+// Nutrition-only AI call with temperature=0 for consistent, reproducible results
+async function callAIForNutrition(userMsg, maxTokens) {
+  if (!settings.anthropicKey) throw new Error('No API key');
+  const resp = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': settings.anthropicKey,
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true'
+    },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: maxTokens,
+      temperature: 0,
       messages: [{ role: 'user', content: userMsg }]
     })
   });
@@ -6926,10 +7251,10 @@ async function analyseChefFoto(inputEl) {
       headers: { 'Content-Type': 'application/json', 'x-api-key': settings.anthropicKey, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
-        max_tokens: 500,
+        max_tokens: 1500,
         messages: [{ role: 'user', content: [
           { type: 'image', source: { type: 'base64', media_type: mediaType, data: base64 } },
-          { type: 'text', text: 'Extraheer het recept uit deze afbeelding (foto van gerecht, kookboek of screenshot). Geef ALLEEN JSON: {"naam":"...","vezels":"~Xg","eiwitten":"~Xg","tijd":"X min","ingredienten":["..."],"bereiding":["..."]}. Max 8 ingrediënten, max 5 stappen. Geen uitleg.' }
+          { type: 'text', text: _EXTRACT_PRINCIPLE + '\n\nExtraheer het volledige recept uit deze afbeelding (foto van gerecht, kookboek of screenshot).\nGeef ALLEEN dit JSON-object terug:\n{"naam":"...","vezels":"~Xg","eiwitten":"~Xg","tijd":"X min","ingredienten":["200g rode linzen","1 ui","..."],"bereiding":["Stap 1...","Stap 2...","..."]}\nRegels:\n- ingredienten: kopieer ALLE ingrediënten met exacte hoeveelheden en eenheden zoals vermeld — sla niets over\n- bereiding: alle stappen volledig en in volgorde\n- vezels en eiwitten: schat op basis van ingrediënten' }
         ]}]
       })
     });
@@ -6948,7 +7273,10 @@ async function analyseChefFoto(inputEl) {
         `<ul style="margin:0 0 10px 16px;">${result.ingredienten.map(i=>`<li>${i}</li>`).join('')}</ul>` +
         `<div style="font-weight:700;margin-bottom:6px;color:var(--text);">Bereiding</div>` +
         `<ol style="margin:0 0 10px 16px;">${result.bereiding.map(s=>`<li>${s}</li>`).join('')}</ol>` +
-        `<button onclick="slaChefFotoReceptOp()" style="width:100%;padding:10px;background:var(--accent-food);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;">Sla op als recept</button>`;
+        `<div style="display:flex;gap:8px;">` +
+        `<button onclick="verwijderChefFotoResultaat()" style="flex:1;padding:10px;background:transparent;color:#ef4444;border:1.5px solid #ef4444;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;">Niet opslaan</button>` +
+        `<button onclick="slaChefFotoReceptOp()" style="flex:2;padding:10px;background:var(--accent-food);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;">Sla op als recept</button>` +
+        `</div>`;
     }
   } catch(_) {
     if (preview) preview.textContent = 'Kon het recept niet herkennen — probeer een duidelijkere foto.';
@@ -6982,6 +7310,14 @@ function slaChefFotoReceptOp() {
   document.getElementById('chef-foto-result').style.display = 'none';
   document.getElementById('chef-foto-preview').style.display = 'none';
   renderRecepten();
+}
+
+function verwijderChefFotoResultaat() {
+  window._chefFotoResult = null;
+  const resultDiv = document.getElementById('chef-foto-result');
+  const preview = document.getElementById('chef-foto-preview');
+  if (resultDiv) resultDiv.style.display = 'none';
+  if (preview) { preview.style.display = 'none'; preview.textContent = ''; }
 }
 
 async function analyseeMaaltijdFoto(inputEl) {
@@ -7702,7 +8038,7 @@ async function _speakOpenAI(text, apiKey, voice) {
   const resp = await fetch('https://api.openai.com/v1/audio/speech', {
     method: 'POST',
     headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ model: 'tts-1', input: text.slice(0, 4096), voice, speed: 0.88 })
+    body: JSON.stringify({ model: 'tts-1-hd', input: text.slice(0, 4096), voice, speed: 1.0 })
   });
   if (!resp.ok) throw new Error(`OpenAI TTS ${resp.status}`);
   const blob = await resp.blob();
