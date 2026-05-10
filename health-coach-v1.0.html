@@ -8135,7 +8135,11 @@ function _stopCurrentAudio() {
     try { _currentAudio.pause(); _currentAudio.currentTime = 0; } catch(_) {}
     _currentAudio = null;
   }
-  if (window.speechSynthesis) window.speechSynthesis.cancel();
+  // Alleen cancel() als er echt iets speelt — op iOS corrupts een onnodige cancel() de audio-sessie
+  // waarna SpeechRecognition stil faalt (geen callbacks meer)
+  if (window.speechSynthesis && window.speechSynthesis.speaking) {
+    window.speechSynthesis.cancel();
+  }
   _updatePlayButtons(false);
 }
 
@@ -8210,6 +8214,7 @@ function _updatePlayButtons(playing) {
 function toggleBubblePlay(btn, text) {
   if (btn.dataset.playing === 'true') { _stopCurrentAudio(); return; }
   document.querySelectorAll('.bubble-play-btn').forEach(b => { b.innerHTML = _iconPlay(); b.dataset.playing = 'false'; });
+  unlockTTS(); // iOS vereist audio-unlock binnen user gesture — anders blokkeert audio.play() na async fetch
   speakCoach(text, true); // forcePlay: altijd afspelen ongeacht TTS-toggle
   btn.innerHTML = _iconStop(); btn.dataset.playing = 'true'; btn.title = 'Stop';
 }
