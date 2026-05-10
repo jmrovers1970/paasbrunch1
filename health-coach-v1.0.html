@@ -8153,27 +8153,40 @@ async function speakCoach(text, forcePlay = false) {
     .replace(/[\u{1F300}-\u{1FAFF}]/gu, '').replace(/\n{2,}/g, '. ').trim();
   if (settings.openaiKey) {
     try { await _speakOpenAI(clean, settings.openaiKey, settings.ttsVoice || 'nova'); return; }
-    catch(e) { console.warn('OpenAI TTS fout:', e.message); }
+    catch(e) { showBanner('yellow', `Nova stem mislukt: ${e.message || '?'} — iPhone stem als backup.`); }
   }
   // Fallback: browser stem
   _speakBrowser(clean);
 }
 
 async function _speakOpenAI(text, apiKey, voice) {
+  // Audio-element aanmaken vóór await — iOS vereist user-gesture context voor play()
+  const audio = new Audio();
+  _currentAudio = audio;
+
   const resp = await fetch('https://api.openai.com/v1/audio/speech', {
     method: 'POST',
     headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({ model: 'tts-1-hd', input: text.slice(0, 4096), voice, speed: 1.0 })
   });
-  if (!resp.ok) throw new Error(`OpenAI TTS ${resp.status}`);
+  if (!resp.ok) {
+    _currentAudio = null;
+    throw new Error(`OpenAI TTS ${resp.status}`);
+  }
   const blob = await resp.blob();
   const url = URL.createObjectURL(blob);
-  const audio = new Audio(url);
-  _currentAudio = audio;
-  _updatePlayButtons(true);
+  audio.src = url;
   audio.onended = () => { URL.revokeObjectURL(url); _currentAudio = null; _updatePlayButtons(false); };
   audio.onerror = () => { URL.revokeObjectURL(url); _currentAudio = null; _updatePlayButtons(false); };
-  await audio.play();
+  _updatePlayButtons(true);
+  try {
+    await audio.play();
+  } catch(e) {
+    URL.revokeObjectURL(url);
+    _currentAudio = null;
+    _updatePlayButtons(false);
+    throw e;
+  }
 }
 
 function _speakBrowser(text) {
