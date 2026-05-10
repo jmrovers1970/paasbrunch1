@@ -788,29 +788,39 @@ select.modal-input { appearance: auto; }
 .intro-logo { margin-bottom: 22px; }
 .intro-title { font-size: 28px; font-weight: 800; letter-spacing: -.5px; margin-bottom: 6px; }
 .intro-tagline {
-  font-size: 16px; color: var(--muted); margin-bottom: 28px;
-  line-height: 1.45; font-weight: 400;
+  font-size: 17px; color: var(--text-2); margin-bottom: 24px;
+  line-height: 1.5; font-weight: 500;
 }
-.intro-feature-list {
-  width: 100%; display: flex; flex-direction: column; gap: 10px;
-  margin-bottom: 28px; text-align: left;
+.intro-hero-row {
+  display: flex; gap: 10px; width: 100%; margin-bottom: 16px;
 }
-.intro-feature {
-  display: flex; align-items: flex-start; gap: 14px;
-  background: var(--card); border: 1px solid var(--border);
-  border-radius: 14px; padding: 14px 16px;
-  box-shadow: 0 1px 6px rgba(0,0,0,.04);
+.intro-hero-tile {
+  flex: 1; border-radius: 16px; border: 1px solid var(--border);
+  padding: 20px 12px 16px; text-align: center;
+  box-shadow: 0 2px 10px rgba(0,0,0,.05);
 }
-.intro-feature.coach-feat { border-top: 2px solid var(--accent-move); }
-.intro-feature.chef-feat  { border-top: 2px solid var(--accent-food); }
-.intro-feature.smart-feat { border-top: 2px solid #7c3aed; }
-.intro-feature-icon {
-  width: 38px; height: 38px; border-radius: 11px; flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center; margin-top: 1px;
+.intro-hero-name { font-size: 18px; font-weight: 800; margin-bottom: 5px; }
+.intro-hero-sub { font-size: 12px; color: var(--muted); line-height: 1.4; }
+.intro-how-row {
+  display: flex; align-items: center; gap: 4px;
+  width: 100%; margin-bottom: 26px;
 }
-.intro-feat-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
-.intro-feat-sub { font-size: 12.5px; color: var(--muted); line-height: 1.45; }
-.intro-feat-sub em { font-style: normal; color: var(--text); font-weight: 500; }
+.intro-how-step {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; gap: 7px;
+}
+.intro-how-icon {
+  width: 44px; height: 44px; border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+}
+.intro-how-label {
+  font-size: 11px; font-weight: 700; color: var(--text-2);
+  text-align: center; line-height: 1.3;
+}
+.intro-how-arrow {
+  font-size: 22px; color: var(--border); font-weight: 300;
+  flex-shrink: 0; margin-bottom: 20px;
+}
 .intro-btn {
   width: 100%; padding: 16px; border-radius: 999px;
   background: var(--accent-move); color: #fff;
@@ -2478,54 +2488,48 @@ select.modal-input { appearance: auto; }
     </div>
 
     <h1 class="intro-title">Coach & Chef</h1>
-    <p class="intro-tagline">Vertel wat je doet.<br>Wij denken de rest.</p>
+    <p class="intro-tagline">Zeg wat je doet.<br>Wij regelen de rest.</p>
 
-    <div class="intro-feature-list">
+    <!-- Hero tiles: Coach & Chef -->
+    <div class="intro-hero-row">
+      <div class="intro-hero-tile" style="border-top:3px solid var(--accent-move);background:rgba(234,90,12,.05);">
+        <div style="width:48px;height:48px;border-radius:50%;background:var(--accent-move);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;box-shadow:0 4px 14px rgba(234,90,12,.28);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+        </div>
+        <div class="intro-hero-name" style="color:var(--accent-move);">Coach</div>
+        <div class="intro-hero-sub">Beweging, herstel &amp; slim advies op maat</div>
+      </div>
+      <div class="intro-hero-tile" style="border-top:3px solid var(--accent-food);background:rgba(13,148,136,.05);">
+        <div style="width:48px;height:48px;border-radius:50%;background:var(--accent-food);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;box-shadow:0 4px 14px rgba(13,148,136,.28);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v12"/><path d="M18 9a3 3 0 0 0-3-3H6"/><path d="M6 15a6 6 0 0 0 12 0"/></svg>
+        </div>
+        <div class="intro-hero-name" style="color:var(--accent-food);">Chef</div>
+        <div class="intro-hero-sub">Recepten, weekmenu &amp; voeding geregeld</div>
+      </div>
+    </div>
 
-      <!-- 1: Input — makkelijkheid -->
-      <div class="intro-feature coach-feat">
-        <div class="intro-feature-icon" style="background:rgba(234,90,12,.10);">
+    <!-- Hoe werkt het: 3 stappen -->
+    <div class="intro-how-row">
+      <div class="intro-how-step">
+        <div class="intro-how-icon" style="background:rgba(234,90,12,.10);">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-move)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
         </div>
-        <div>
-          <div class="intro-feat-title">Spreek, typ of scan</div>
-          <div class="intro-feat-sub"><em>"Ik heb 45 min hardgelopen en pasta gegeten"</em> — klaar. Of maak een foto van een recept en Chef haalt alles eruit.</div>
-        </div>
+        <div class="intro-how-label">Spreek of typ</div>
       </div>
-
-      <!-- 2: Chef — slimheid voeding -->
-      <div class="intro-feature chef-feat">
-        <div class="intro-feature-icon" style="background:rgba(13,148,136,.10);">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-food)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v12"/><path d="M18 9a3 3 0 0 0-3-3H6"/><path d="M6 15a6 6 0 0 0 12 0"/></svg>
+      <div class="intro-how-arrow">›</div>
+      <div class="intro-how-step">
+        <div class="intro-how-icon" style="background:rgba(124,58,237,.10);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
         </div>
-        <div>
-          <div class="intro-feat-title">Chef berekent, plant en stelt voor</div>
-          <div class="intro-feat-sub">Vezels, eiwitten en recepten automatisch bijgehouden. Chef weet wat je nog nodig hebt — en laat zien welk recept dat oplost.</div>
-        </div>
+        <div class="intro-how-label">AI denkt mee</div>
       </div>
-
-      <!-- 3: Coach — slimheid beweging + proactief -->
-      <div class="intro-feature coach-feat">
-        <div class="intro-feature-icon" style="background:rgba(234,90,12,.10);">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-move)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <div class="intro-how-arrow">›</div>
+      <div class="intro-how-step">
+        <div class="intro-how-icon" style="background:rgba(13,148,136,.10);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-food)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
         </div>
-        <div>
-          <div class="intro-feat-title">Coach denkt een stap vooruit</div>
-          <div class="intro-feat-sub">Na krachttraining meteen hersteladvies. Achter op je maandelijkse doel? Coach ziet het. Patronen die je zelf niet ziet, benoemt Coach vanzelf.</div>
-        </div>
+        <div class="intro-how-label">Plan &amp; inzicht</div>
       </div>
-
-      <!-- 4: Inzicht — slimheid patroonherkenning -->
-      <div class="intro-feature smart-feat">
-        <div class="intro-feature-icon" style="background:rgba(124,58,237,.10);">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-        </div>
-        <div>
-          <div class="intro-feat-title">Inzicht zonder extra werk</div>
-          <div class="intro-feat-sub">Welke dag mis je altijd? Hoeveel vezels kom je structureel tekort? Alles zichtbaar op basis van jouw data — geen aparte invoer nodig.</div>
-        </div>
-      </div>
-
     </div>
 
     <button class="intro-btn" onclick="dismissIntro()">
@@ -7942,21 +7946,34 @@ function smartVoiceRecipe() {
   if (!SR) { showBanner('yellow', 'Spraakinvoer niet beschikbaar in deze browser.'); return; }
 
   const btn = document.getElementById('voice-recipe-btn');
+  const lbl = document.getElementById('chef-mic-label');
 
-  const recognition = new (SR)();
+  // Toggle off if already listening
+  if (window._chefVoiceRec) {
+    window._chefVoiceRec._aborted = true;
+    try { window._chefVoiceRec.stop(); } catch(_) {}
+    window._chefVoiceRec = null;
+    if (btn) btn.classList.remove('listening');
+    if (lbl) lbl.textContent = 'Spreek je wens in';
+    return;
+  }
+
+  const recognition = new SR();
   recognition.lang = 'nl-NL';
   recognition.interimResults = false;
   recognition.maxAlternatives = 1;
+  recognition._aborted = false;
+  window._chefVoiceRec = recognition;
 
   if (btn) btn.classList.add('listening');
-  const _chefLbl = document.getElementById('chef-mic-label');
-  if (_chefLbl) _chefLbl.textContent = 'Luisteren…';
+  if (lbl) lbl.textContent = 'Luisteren…';
 
   recognition.onresult = async (e) => {
+    recognition._aborted = true;
+    window._chefVoiceRec = null;
     const text = e.results[0][0].transcript;
     if (btn) btn.classList.remove('listening');
-    if (_chefLbl) _chefLbl.textContent = 'Spreek je wens in';
-
+    if (lbl) lbl.textContent = 'Spreek je wens in';
     // Route via _doGenerateRecepten zodat het aantal uit de picker wordt gerespecteerd
     const focusEl = document.getElementById('gen-focus-input');
     if (focusEl) focusEl.value = text;
@@ -7964,17 +7981,22 @@ function smartVoiceRecipe() {
     await _doGenerateRecepten(text, isVega);
   };
 
-  recognition.onerror = () => {
+  recognition.onerror = (e) => {
+    window._chefVoiceRec = null;
     if (btn) btn.classList.remove('listening');
-    const lbl = document.getElementById('chef-mic-label');
     if (lbl) lbl.textContent = 'Spreek je wens in';
-    showBanner('yellow', 'Luisteren mislukt. Probeer opnieuw.');
+    // Only show error for real failures — not abort or no-speech (user just stayed quiet)
+    if (!recognition._aborted && e.error !== 'aborted' && e.error !== 'no-speech') {
+      showBanner('yellow', 'Luisteren mislukt. Probeer opnieuw.');
+    }
   };
+
   recognition.onend = () => {
+    window._chefVoiceRec = null;
     if (btn) btn.classList.remove('listening');
-    const lbl = document.getElementById('chef-mic-label');
     if (lbl) lbl.textContent = 'Spreek je wens in';
   };
+
   recognition.start();
 }
 
@@ -8082,6 +8104,32 @@ function _pickNlVoice(voices) {
 
 let _currentAudio = null;
 
+function _stopAllVoiceInput() {
+  // Stop coach big-praat mic
+  if (window._bigPraatRec) {
+    try { window._bigPraatRec.abort(); } catch(_) {}
+    // onerror/resetBtn wordt daarna vanzelf aangeroepen
+  }
+  // Stop chef recipe mic
+  if (window._chefVoiceRec) {
+    window._chefVoiceRec._aborted = true;
+    try { window._chefVoiceRec.stop(); } catch(_) {}
+    window._chefVoiceRec = null;
+    const b = document.getElementById('voice-recipe-btn');
+    if (b) b.classList.remove('listening');
+    const l = document.getElementById('chef-mic-label');
+    if (l) l.textContent = 'Spreek je wens in';
+  }
+  // Stop chat mic
+  if (window._chatVoiceRec) {
+    window._chatVoiceRec._aborted = true;
+    try { window._chatVoiceRec.stop(); } catch(_) {}
+    window._chatVoiceRec = null;
+    const b = document.getElementById('mic-chat-input');
+    if (b) b.classList.remove('listening');
+  }
+}
+
 function _stopCurrentAudio() {
   if (_currentAudio) {
     try { _currentAudio.pause(); _currentAudio.currentTime = 0; } catch(_) {}
@@ -8093,6 +8141,7 @@ function _stopCurrentAudio() {
 
 async function speakCoach(text, forcePlay = false) {
   if (!forcePlay && !_ttsEnabled) return;
+  _stopAllVoiceInput(); // stop mic zodat TTS niet wordt opgenomen
   _stopCurrentAudio();
   const clean = text
     .replace(/\*\*(.+?)\*\*/g, '$1').replace(/\*(.+?)\*/g, '$1')
@@ -8173,25 +8222,50 @@ function testTTS() {
 function startVoiceChatInput() {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SR) { showBanner('yellow', 'Spraakinvoer niet beschikbaar in deze browser.'); return; }
+
+  const btn = document.getElementById('mic-chat-input');
+
+  // Toggle off als al bezig
+  if (window._chatVoiceRec) {
+    window._chatVoiceRec._aborted = true;
+    try { window._chatVoiceRec.stop(); } catch(_) {}
+    window._chatVoiceRec = null;
+    if (btn) btn.classList.remove('listening');
+    return;
+  }
+
+  _stopCurrentAudio(); // stop TTS zodat mic niet de spraak opneemt
+
   if (_ttsEnabled) unlockTTS();
   const recognition = new SR();
   recognition.lang = 'nl-NL';
   recognition.interimResults = false;
   recognition.maxAlternatives = 1;
+  recognition._aborted = false;
+  window._chatVoiceRec = recognition;
+
   const input = document.getElementById('chat-input');
-  const btn = document.getElementById('mic-chat-input');
   if (btn) btn.classList.add('listening');
+
   recognition.onresult = e => {
+    recognition._aborted = true;
+    window._chatVoiceRec = null;
     const t = e.results[0][0].transcript;
     if (input) input.value = t;
     if (btn) btn.classList.remove('listening');
     sendChat();
   };
-  recognition.onerror = () => {
+  recognition.onerror = (e) => {
+    window._chatVoiceRec = null;
     if (btn) btn.classList.remove('listening');
-    showBanner('yellow', 'Spraakinvoer mislukt. Probeer opnieuw.');
+    if (!recognition._aborted && e.error !== 'aborted' && e.error !== 'no-speech') {
+      showBanner('yellow', 'Spraakinvoer mislukt. Probeer opnieuw.');
+    }
   };
-  recognition.onend = () => { if (btn) btn.classList.remove('listening'); };
+  recognition.onend = () => {
+    window._chatVoiceRec = null;
+    if (btn) btn.classList.remove('listening');
+  };
   recognition.start();
 }
 
@@ -8593,6 +8667,8 @@ async function bigPraatStart() {
     return;
   }
 
+  _stopCurrentAudio(); // stop TTS zodat mic niet de spraak opneemt
+
   if (window._bigPraatRec) {
     try { window._bigPraatRec.abort(); } catch(e) {}
     window._bigPraatRec = null;
@@ -8632,11 +8708,11 @@ async function bigPraatStart() {
   };
 
   recognition.onerror = e => {
-    if (e.error === 'aborted') { _aborted = true; return; }
-    resetBtn();
+    _aborted = (e.error === 'aborted' || e.error === 'no-speech');
+    resetBtn(); // altijd resetten — onend is niet gegarandeerd op iOS na een error
     if (e.error === 'not-allowed') showBanner('red', 'Microfoon geblokkeerd — sta toegang toe in je browserinstellingen.');
     else if (e.error === 'network') showBanner('red', 'Netwerk nodig voor spraakherkenning.');
-    else showBanner('red', 'Spraakopname mislukt (' + (e.error || '?') + ').');
+    else if (!_aborted) showBanner('red', 'Spraakopname mislukt (' + (e.error || '?') + ').');
   };
   recognition.onend = async () => {
     const t = transcript.trim();
