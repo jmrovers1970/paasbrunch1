@@ -2158,6 +2158,8 @@ details[open] .intro-ex-summary { border-radius: 12px 12px 0 0; border-bottom-co
     </div>
   </div>
 
+  <div style="text-align:center;font-size:11px;color:var(--muted);padding:4px 0 10px;">Coach &amp; Chef — versie <span id="app-version-label"></span></div>
+
   <div class="settings-section">
     <h3>Coach brein</h3>
     <div id="brain-overview" style="font-size:14px;"></div>
@@ -2685,7 +2687,7 @@ details[open] .intro-ex-summary { border-radius: 12px 12px 0 0; border-bottom-co
 'use strict';
 
 // ─── VERSION CHECK (forceert Safari herlading bij nieuwe versie) ──────────────
-const APP_VERSION = '20260716-9';
+const APP_VERSION = '20260716-11';
 (function() {
   try {
     const stored = localStorage.getItem('hc_app_version');
@@ -4080,6 +4082,8 @@ function openSettings() {
   document.getElementById('set-gist').value = settings.gistId || '';
   document.getElementById('set-openai').value = settings.openaiKey || '';
   document.getElementById('set-tts-voice').value = settings.ttsVoice || 'nova';
+  const verEl = document.getElementById('app-version-label');
+  if (verEl) verEl.textContent = APP_VERSION;
   document.getElementById('settings-overlay').classList.add('visible');
   renderBrainOverview();
   renderPartners();
@@ -5479,8 +5483,9 @@ function _renderFoodChef() {
         <div class="input-mic-wrap"><input id="gen-focus-input" type="text" placeholder="Of typ: pasta, paprika, tomaat…" autocomplete="off"></div>
         <input type="file" id="chef-foto-input" accept="image/*" style="display:none;" onchange="analyseChefFoto(this)">
         <button class="chef-foto-icon-btn" id="chef-foto-btn" onclick="document.getElementById('chef-foto-input').click()" title="Foto of screenshot analyseren">${cameraIconSVG}</button>
-        <button class="chef-foto-icon-btn" onclick="showVoorraadModal()" title="Wat heb ik in huis?">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <button class="chef-foto-icon-btn" onclick="showVoorraadModal()" title="Wat heb ik in huis?" style="width:auto;border-radius:20px;padding:0 12px;gap:5px;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          <span style="font-size:12px;font-weight:650;">In huis</span>
         </button>
       </div>
       ${_voorraadLineHTML()}
@@ -6267,6 +6272,15 @@ function recipeCardHTML(r) {
       <div class="gen-slot-btns">${slotBtns}</div>
       <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px;margin-top:10px;">Dag</div>
       <div class="dag-chip-row" id="dagchips-${r._tmpId}">${dagChips}</div>
+      <button onclick="toggleAanpasVeld('${r._tmpId}')"
+        style="width:100%;margin-top:10px;padding:8px 0;border-radius:10px;background:none;border:1.5px dashed var(--border-strong);color:var(--muted);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:6px;">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
+        Pas aan — bijv. "geen tempeh maar tofu"
+      </button>
+      <div id="aanpas-wrap-${r._tmpId}" style="display:none;margin-top:8px;">
+        ${micInput('aanpas-' + r._tmpId, 'geen champignons, graag vervanger…', '')}
+        <button id="aanpas-btn-${r._tmpId}" class="btn btn-primary btn-full" style="margin-top:8px;" onclick="pasReceptAan('${r._tmpId}')">Pas recept aan</button>
+      </div>
       <div style="display:flex;gap:8px;margin-top:10px;">
         <button onclick="logGenRecipeNow('${r._tmpId}')"
           style="flex:1;padding:9px 0;border-radius:10px;background:var(--accent-food-soft);color:var(--accent-food);border:1.5px solid var(--accent-food);font-size:14px;font-weight:700;cursor:pointer;min-height:42px;font-family:inherit;">
@@ -6321,6 +6335,61 @@ function planGenRecipe(tmpId) {
   const dates = getWeekDates(weekKey);
   const dagLabel = dagNamen[dates.indexOf(dateStr)] || dateStr;
   showBanner('green', `${saved.naam} gepland op ${dagLabel} — ${slot}`);
+}
+
+function toggleAanpasVeld(tmpId) {
+  const wrap = document.getElementById('aanpas-wrap-' + tmpId);
+  if (!wrap) return;
+  const open = wrap.style.display !== 'none';
+  wrap.style.display = open ? 'none' : 'block';
+  if (!open) {
+    const inp = document.getElementById('aanpas-' + tmpId);
+    if (inp) inp.focus();
+  }
+}
+
+async function pasReceptAan(tmpId) {
+  const input = document.getElementById('aanpas-' + tmpId);
+  const instructie = input ? input.value.trim() : '';
+  if (!instructie) { showBanner('yellow', 'Typ of spreek eerst je aanpassing in.'); return; }
+  const recept = (window._generatedRecepten || []).find(r => r._tmpId === tmpId);
+  if (!recept) return;
+  const btn = document.getElementById('aanpas-btn-' + tmpId);
+  if (btn) { btn.disabled = true; btn.textContent = 'Bezig…'; }
+  try {
+    const prompt = `Pas dit recept aan volgens de instructie van de gebruiker.
+Recept (JSON): ${JSON.stringify({ naam: recept.naam, vezels: recept.vezels, eiwitten: recept.eiwitten, tijd: recept.tijd, ingredienten: recept.ingredienten, bereiding: recept.bereiding })}
+Instructie van de gebruiker: "${instructie.replace(/"/g, "'")}"
+
+Regels:
+- Voer de instructie letterlijk uit (vervangen, weglaten, toevoegen). Bij "graag een vervanger" of "geen X in huis": kies een logische culinaire vervanging die bij het gerecht past.
+- ${_dieetRegel()}
+- Herbereken vezels en eiwitten realistisch op basis van de nieuwe ingrediënten.
+- Pas de bereidingsstappen aan waar de wijziging dat vraagt.
+- Pas de naam alleen aan als een hoofdingrediënt wijzigt.
+Antwoord ALLEEN met geldige JSON in exact dit formaat, zonder uitleg:
+{"naam":"...","vezels":"~Xg","eiwitten":"~Xg","tijd":"X min","ingredienten":["hoeveelheid ingredient","..."],"bereiding":["Stap 1...","..."]}`;
+    const raw = await callAI(prompt, 900);
+    const nieuw = safeParseJSON(raw);
+    if (!nieuw || !nieuw.naam || !Array.isArray(nieuw.ingredienten) || nieuw.ingredienten.length === 0) {
+      throw new Error('Aanpassen mislukt — probeer het nog eens.');
+    }
+    Object.assign(recept, {
+      naam: nieuw.naam,
+      vezels: nieuw.vezels || recept.vezels,
+      eiwitten: nieuw.eiwitten || recept.eiwitten,
+      tijd: nieuw.tijd || recept.tijd,
+      ingredienten: nieuw.ingredienten,
+      bereiding: Array.isArray(nieuw.bereiding) && nieuw.bereiding.length ? nieuw.bereiding : recept.bereiding
+    });
+    const kaart = document.getElementById('gencard-' + tmpId);
+    if (kaart) kaart.outerHTML = recipeCardHTML(recept);
+    showBanner('green', `✓ Recept aangepast: ${recept.naam}`);
+  } catch(e) {
+    showBanner('red', e.message || 'Aanpassen mislukt.');
+    const b = document.getElementById('aanpas-btn-' + tmpId);
+    if (b) { b.disabled = false; b.textContent = 'Pas recept aan'; }
+  }
 }
 
 function logGenRecipeNow(tmpId) {
