@@ -2687,7 +2687,7 @@ details[open] .intro-ex-summary { border-radius: 12px 12px 0 0; border-bottom-co
 'use strict';
 
 // ─── VERSION CHECK (forceert Safari herlading bij nieuwe versie) ──────────────
-const APP_VERSION = '20260716-14';
+const APP_VERSION = '20260716-15';
 (function() {
   try {
     const stored = localStorage.getItem('hc_app_version');
@@ -4397,6 +4397,48 @@ function switchTab(name, btn) {
   if (name === 'recepten') renderFoodTab();
 }
 
+function showDagActiviteitenModal(dateStr) {
+  const weekKey = getISOWeek(new Date(dateStr + 'T12:00:00'));
+  ensureDay(dateStr);
+  const acts = data.weken[weekKey][dateStr].activiteiten || [];
+  const dagNamenVol = ['Zondag','Maandag','Dinsdag','Woensdag','Donderdag','Vrijdag','Zaterdag'];
+  const titel = `${dagNamenVol[new Date(dateStr + 'T12:00:00').getDay()]} ${formatShortDate(dateStr)}`;
+  const rows = acts.length === 0
+    ? `<p style="font-size:14px;color:var(--muted);padding:6px 0 2px;">Nog niets gepland op deze dag.</p>`
+    : acts.map(a => `
+      <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);">
+        <div style="flex:1;min-width:0;">
+          <div style="font-weight:650;font-size:14.5px;">${a.naam}</div>
+          <div style="font-size:12px;color:var(--muted);">${a.detail ? a.detail + ' · ' : ''}${a.afgevinkt ? '✓ gedaan' : 'gepland'}</div>
+        </div>
+        <button onclick="verwijderActiviteitVanDag('${dateStr}','${a.id}')" aria-label="Verwijderen"
+          style="background:none;border:none;color:var(--muted);font-size:17px;cursor:pointer;padding:6px 10px;font-family:inherit;flex-shrink:0;">✕</button>
+      </div>`).join('');
+  showModal(`
+    <div class="modal-header">
+      <h2>${titel}</h2>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div id="dag-act-lijst">${rows}</div>
+    <button class="btn btn-ghost btn-full" style="margin-top:14px;" onclick="closeModal(); addActivity('${dateStr}')">+ Activiteit toevoegen</button>
+  `);
+}
+
+function verwijderActiviteitVanDag(dateStr, actId) {
+  const weekKey = getISOWeek(new Date(dateStr + 'T12:00:00'));
+  const day = (data.weken[weekKey] || {})[dateStr];
+  if (!day || !Array.isArray(day.activiteiten)) return;
+  const idx = day.activiteiten.findIndex(a => a.id === actId);
+  if (idx < 0) return;
+  const naam = day.activiteiten[idx].naam;
+  day.activiteiten.splice(idx, 1);
+  saveAndSync();
+  showDagActiviteitenModal(dateStr); // venster verversen
+  renderWeekOvTab();
+  if (dateStr === today()) { try { renderVandaag(); } catch(_) {} }
+  showBanner('green', `✓ ${naam} verwijderd`);
+}
+
 function renderWeekOvTab() {
   const weekKey = currentWeekKey();
   const days = getWeekDates(weekKey);
@@ -4503,7 +4545,7 @@ function renderWeekOvTab() {
     const dotBorder = allDone ? 'var(--accent-food)' : someDone ? 'var(--accent-move)' : isToday ? 'var(--accent-move)' : 'var(--border-strong)';
     const dayColor = isToday ? 'var(--accent-move)' : allDone ? 'var(--accent-food)' : isFuture ? 'var(--muted)' : 'var(--text)';
 
-    return `<div class="weekov-row${isToday ? ' is-today' : ''}" style="${isFuture ? 'opacity:.45;' : ''}">
+    return `<div class="weekov-row${isToday ? ' is-today' : ''}" style="${isFuture ? 'opacity:.55;' : ''}cursor:pointer;" onclick="showDagActiviteitenModal('${dateStr}')">
       <div class="weekov-row-left">
         <span style="width:9px;height:9px;border-radius:50%;border:2px solid ${dotBorder};background:${dotBg};display:inline-block;flex-shrink:0;margin-top:2px;"></span>
         <div>
