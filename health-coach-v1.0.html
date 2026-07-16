@@ -12,23 +12,23 @@
 
 :root {
   /* LIGHT THEME — soft warm off-white, generous contrast */
-  --bg:           #f7f5f1;
+  --bg:           #f4f8f5;
   --card:         #ffffff;
-  --card2:        #f3f0ea;
+  --card2:        #eef4ef;
   --accent-move:  #ea5a0c;          /* deeper orange — better contrast on light */
   --accent-move-soft: #fff1e6;
   --accent-move-tint: rgba(234,90,12,.10);
-  --accent-food:  #0d9488;          /* teal — voeding/balans, complement aan oranje */
-  --accent-food-soft: #f0fdfa;
-  --accent-food-tint: rgba(13,148,136,.10);
+  --accent-food:  #10b981;          /* teal — voeding/balans, complement aan oranje */
+  --accent-food-soft: #ecfdf5;
+  --accent-food-tint: rgba(16,185,129,.10);
   --accent-bike:  #1d4ed8;
   --accent-gym:   #6d28d9;
-  --text:         #1a1a1a;
-  --text-2:       #404040;
-  --muted:        #6b6b6b;
-  --muted-2:      #8a8a8a;
-  --border:       #e6e1d8;
-  --border-strong:#d4cdbf;
+  --text:         #22312a;
+  --text-2:       #43524a;
+  --muted:        #67766d;
+  --muted-2:      #8b978f;
+  --border:       #dfe8e2;
+  --border-strong:#c7d5cb;
   --danger:       #b91c1c;
   --danger-soft:  #fef2f2;
 
@@ -36,14 +36,14 @@
   --radius-lg:    20px;
   --tab-h:        72px;
 
-  --shadow-sm:    0 1px 2px rgba(40,30,15,.04), 0 1px 1px rgba(40,30,15,.03);
-  --shadow:       0 1px 3px rgba(40,30,15,.06), 0 4px 12px rgba(40,30,15,.04);
-  --shadow-lg:    0 6px 24px rgba(40,30,15,.10), 0 2px 8px rgba(40,30,15,.05);
+  --shadow-sm:    0 1px 2px rgba(20,40,30,.04), 0 1px 1px rgba(20,40,30,.03);
+  --shadow:       0 1px 3px rgba(20,40,30,.06), 0 4px 12px rgba(20,40,30,.04);
+  --shadow-lg:    0 6px 24px rgba(20,40,30,.10), 0 2px 8px rgba(20,40,30,.05);
 }
 
 html, body {
   height: 100%;
-  background: var(--bg);
+  background: linear-gradient(180deg, #e9f5ee 0%, var(--bg) 190px) no-repeat var(--bg);
   color: var(--text);
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
   font-size: 17px;
@@ -102,12 +102,51 @@ body { display: flex; flex-direction: column; overflow: hidden; }
   font-size: 11px; font-weight: 600; cursor: pointer;
   transition: color .15s; min-height: 44px;
   letter-spacing: .2px;
+  position: relative;
+}
+.tab-btn > * { position: relative; z-index: 1; }
+.tab-btn.active::before {
+  content: ''; position: absolute; top: 7px; bottom: 7px; left: 16%; right: 16%;
+  background: var(--accent-move-tint); border-radius: 16px;
 }
 .tab-btn.active { color: var(--accent-move); }
+.tab-btn.active:last-child { color: var(--accent-food); }
+.tab-btn.active:last-child::before { background: var(--accent-food-tint); }
 .tab-btn svg { width: 24px; height: 24px; stroke-width: 2; }
 .tab-btn.active svg { stroke-width: 2.4; }
 
 /* ─── CARDS ─── */
+.collapse-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 10px;
+  box-shadow: var(--shadow-sm);
+}
+.collapse-card > summary {
+  list-style: none;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 18px;
+  font-size: 14px; font-weight: 650; color: var(--text-2);
+  letter-spacing: -.01em;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  min-height: 44px;
+}
+.collapse-card > summary::-webkit-details-marker { display: none; }
+.collapse-card > summary .cc-chevron {
+  flex-shrink: 0; color: var(--muted);
+  transition: transform .2s;
+  background: var(--card2); border-radius: 50%;
+  width: 24px; height: 24px; padding: 4px;
+}
+.collapse-card[open] > summary .cc-chevron { transform: rotate(180deg); }
+.collapse-card > .cc-body { padding: 0 18px 16px; }
+.cc-section-label {
+  font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px;
+  color: var(--muted); margin: 18px 2px 10px;
+}
+
 .card {
   background: var(--card);
   border: 1px solid var(--border);
@@ -125,9 +164,9 @@ body { display: flex; flex-direction: column; overflow: hidden; }
 }
 
 /* ─── TYPOGRAPHY ─── */
-h1 { font-size: 28px; font-weight: 700; letter-spacing: -.02em; }
-h2 { font-size: 22px; font-weight: 700; letter-spacing: -.01em; }
-h3 { font-size: 17px; font-weight: 700; letter-spacing: -.005em; }
+h1 { font-size: 28px; font-weight: 800; letter-spacing: -.03em; line-height: 1.15; }
+h2 { font-size: 22px; font-weight: 750; letter-spacing: -.02em; line-height: 1.2; }
+h3 { font-size: 16px; font-weight: 700; letter-spacing: -.01em; }
 .muted { color: var(--muted); font-size: 14px; }
 .green { color: var(--accent-food); }
 .orange { color: var(--accent-move); }
@@ -226,18 +265,27 @@ label { display: block; font-size: 14px; font-weight: 600; color: var(--text-2);
 
 /* ─── CHECK-IN ─── */
 #checkin-card {
-  border-top: 3px solid var(--accent-move);
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  flex-wrap: wrap;
+  padding: 10px 14px;
+  box-shadow: none;
+  background: transparent;
+  border: 1px dashed var(--border-strong);
 }
-.checkin-btns { display: flex; gap: 8px; margin-top: 12px; }
+#checkin-card .checkin-q {
+  font-size: 13px; font-weight: 600; color: var(--muted);
+  flex-shrink: 0;
+}
+.checkin-btns { display: flex; gap: 6px; }
 .checkin-btn {
-  flex: 1; background: var(--card2); border: 1.5px solid var(--border);
-  border-radius: 12px; padding: 10px 6px;
-  color: var(--text); font-size: 14px; font-weight: 600;
-  cursor: pointer; min-height: 52px; transition: all .15s;
-  display: flex; flex-direction: column; align-items: center; gap: 5px;
+  background: var(--card); border: 1.5px solid var(--border);
+  border-radius: 999px; padding: 8px 13px;
+  color: var(--text-2); font-size: 13px; font-weight: 600;
+  cursor: pointer; min-height: 36px; transition: all .15s;
+  display: flex; flex-direction: row; align-items: center; gap: 5px;
   font-family: inherit;
 }
-.checkin-btn svg { width: 22px; height: 22px; }
+.checkin-btn svg { width: 14px; height: 14px; }
 .checkin-btn:active { transform: scale(.97); }
 .checkin-btn.selected {
   border-color: var(--accent-move); background: var(--accent-move-soft);
@@ -253,8 +301,8 @@ label { display: block; font-size: 14px; font-weight: 600; color: var(--text-2);
 
 /* ─── VANDAAG SECTION LABELS ─── */
 .vandaag-section-h {
-  font-size: 13px; font-weight: 700; color: var(--muted);
-  text-transform: uppercase; letter-spacing: .4px;
+  font-size: 12px; font-weight: 800; color: var(--muted);
+  text-transform: uppercase; letter-spacing: .8px;
   margin-bottom: 10px; padding-bottom: 8px;
   border-bottom: 1px solid var(--border);
 }
@@ -302,7 +350,7 @@ label { display: block; font-size: 14px; font-weight: 600; color: var(--text-2);
 .type-icon.run     { background: var(--accent-move-tint); }
 .type-icon.gym     { background: rgba(109,40,217,.10); }
 .type-icon.bike    { background: rgba(29,78,216,.10); }
-.type-icon.commute { background: rgba(13,148,136,.10); }
+.type-icon.commute { background: rgba(16,185,129,.10); }
 .type-icon.walk    { background: rgba(22,163,74,.12); }
 .type-icon.walkdog { background: rgba(180,83,9,.12); }
 .type-icon.other   { background: var(--accent-food-tint); }
@@ -468,7 +516,7 @@ label { display: block; font-size: 14px; font-weight: 600; color: var(--text-2);
 .badge-run  { background: var(--accent-move-tint); color: var(--accent-move); }
 .badge-gym  { background: rgba(109,40,217,.10); color: var(--accent-gym); }
 .badge-bike { background: rgba(29,78,216,.10); color: var(--accent-bike); }
-.badge-commute { background: rgba(13,148,136,.10); color: #0f766e; }
+.badge-commute { background: rgba(16,185,129,.10); color: #0f766e; }
 .badge-walk    { background: rgba(22,163,74,.12); color: #16a34a; }
 .badge-walkdog { background: rgba(180,83,9,.12); color: #b45309; }
 .badge-rest { background: var(--card2); color: var(--muted); }
@@ -1029,16 +1077,22 @@ details[open] .intro-ex-summary { border-radius: 12px 12px 0 0; border-bottom-co
 }
 .recipe-gen-title { font-size: 17px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
 .recipe-gen-sub { font-size: 13px; color: var(--muted); margin-bottom: 14px; }
-.recipe-gen-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; flex-wrap: nowrap; }
-.recipe-gen-label { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .4px; }
+.recipe-gen-row { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; flex-wrap: nowrap; }
+.recipe-gen-label {
+  font-size: 11px; font-weight: 800; color: var(--muted);
+  text-transform: uppercase; letter-spacing: .5px;
+  width: 52px; flex-shrink: 0;
+}
 .gen-pill {
   background: var(--card2); border: 1.5px solid var(--border);
-  border-radius: 999px; width: 36px; height: 36px;
-  font-size: 15px; font-weight: 700; cursor: pointer; color: var(--text);
-  display: flex; align-items: center; justify-content: center; transition: all .15s;
+  border-radius: 999px; flex: 1 1 0; min-width: 0; height: 32px; padding: 0 6px;
+  font-size: 12.5px; font-weight: 650; cursor: pointer; color: var(--text);
+  display: flex; align-items: center; justify-content: center; gap: 4px;
+  white-space: nowrap; overflow: hidden; transition: all .15s;
+  font-family: inherit;
 }
 .gen-pill.active { background: var(--accent-food); border-color: var(--accent-food); color: #fff; }
-.gen-focus-pill { width: auto; padding: 0 11px; gap: 4px; font-size: 13px; }
+/* v2.0: alle gen-pillen delen dezelfde ovale vorm — geen aparte overrides meer */
 .vega-toggle-wrap { margin-left: auto; display: flex; align-items: center; }
 .vega-toggle-input { display: none; }
 .vega-toggle-label {
@@ -1356,24 +1410,26 @@ details[open] .intro-ex-summary { border-radius: 12px 12px 0 0; border-bottom-co
 .food-inner-tab.active { background: var(--card); color: var(--accent-food); box-shadow: 0 1px 3px rgba(0,0,0,.08); }
 .food-chef-big-voice { display: none; }
 .chef-hero { text-align: center; padding: 8px 0 20px; }
-.chef-hero-title { font-size: 22px; font-weight: 800; color: var(--text); margin-bottom: 4px; }
-.chef-hero-sub { font-size: 13px; color: var(--muted); margin-bottom: 22px; }
+.chef-hero-title { font-size: 23px; font-weight: 800; color: var(--accent-food); letter-spacing: -.02em; margin-bottom: 4px; }
+.chef-hero-sub { font-size: 13px; color: #5c7d6d; margin-bottom: 22px; }
 .chef-mic-big {
   width: 96px; height: 96px; border-radius: 50%;
-  background: var(--accent-food); border: none; color: #fff;
+  background: linear-gradient(140deg, #34d399 0%, #0da271 100%);
+  border: none; color: #fff;
   display: flex; align-items: center; justify-content: center;
   cursor: pointer; margin: 0 auto 10px; transition: transform .12s, box-shadow .12s;
-  box-shadow: 0 4px 20px rgba(13,148,136,.32);
+  box-shadow: 0 6px 24px rgba(16,185,129,.38), inset 0 1px 0 rgba(255,255,255,.25);
 }
 .chef-mic-big:active { transform: scale(.93); }
-.chef-mic-big.listening { animation: micPulse 1s ease infinite; box-shadow: 0 0 0 12px rgba(13,148,136,.15); }
+.chef-mic-big.listening { animation: micPulse 1s ease infinite; box-shadow: 0 0 0 12px rgba(16,185,129,.15); }
 .chef-mic-label { font-size: 13px; font-weight: 600; color: var(--accent-food); }
 .chef-input-zone {
-  background: var(--card); border: 1px solid var(--border);
+  background: linear-gradient(180deg, #eafcf3 0%, #ffffff 75%);
+  border: 1px solid #cdeeda;
   border-top: 3px solid var(--accent-food);
   border-radius: var(--radius-lg); padding: 20px 16px 16px;
   margin-bottom: 14px; text-align: center;
-  box-shadow: 0 2px 10px rgba(0,0,0,.05);
+  box-shadow: 0 2px 14px rgba(16,185,129,.10);
 }
 .chef-text-photo-row {
   display: flex; gap: 8px; align-items: center; margin-top: 14px; text-align: left;
@@ -1386,7 +1442,7 @@ details[open] .intro-ex-summary { border-radius: 12px 12px 0 0; border-bottom-co
   display: flex; align-items: center; justify-content: center;
   transition: border-color .15s, background .15s;
 }
-.chef-foto-icon-btn:active { background: rgba(13,148,136,.1); border-color: var(--accent-food); }
+.chef-foto-icon-btn:active { background: rgba(16,185,129,.1); border-color: var(--accent-food); }
 .food-filter-chips {
   display: flex; gap: 6px; flex-wrap: nowrap; overflow-x: auto;
   -webkit-overflow-scrolling: touch; padding-bottom: 8px; margin-bottom: 12px; scrollbar-width: none;
@@ -1637,14 +1693,28 @@ details[open] .intro-ex-summary { border-radius: 12px 12px 0 0; border-bottom-co
 }
 
 /* ─── COACH FRONTPAGE ─── */
+.persona-avatar {
+  width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.persona-avatar.coach {
+  background: linear-gradient(140deg, #fb8b3c 0%, #e2540a 100%);
+  box-shadow: 0 3px 10px rgba(234,90,12,.30);
+}
+.persona-avatar.chef {
+  background: linear-gradient(140deg, #34d399 0%, #0da271 100%);
+  box-shadow: 0 3px 10px rgba(16,185,129,.30);
+  margin: 0 auto 8px;
+}
+
 .coach-front-card {
-  background: var(--card);
-  border: 1px solid var(--border);
+  background: linear-gradient(180deg, #fff3ea 0%, #ffffff 75%);
+  border: 1px solid #f4ddc9;
   border-top: 3px solid var(--accent-move);
   border-radius: var(--radius-lg);
   padding: 18px 16px 14px;
   margin-bottom: 14px;
-  box-shadow: 0 2px 12px rgba(0,0,0,.05);
+  box-shadow: 0 2px 14px rgba(234,90,12,.10);
 }
 .coach-front-label {
   color: var(--muted); font-size: 13px; font-weight: 500;
@@ -1652,11 +1722,11 @@ details[open] .intro-ex-summary { border-radius: 12px 12px 0 0; border-bottom-co
 }
 .big-praat-btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 12px;
-  background: var(--accent-move); color: #fff;
+  background: linear-gradient(140deg, #fb8b3c 0%, #e2540a 100%); color: #fff;
   border: none; border-radius: 999px;
   padding: 16px 28px; font-size: 17px; font-weight: 700;
   cursor: pointer; min-height: 58px; width: 100%;
-  box-shadow: 0 4px 16px rgba(234,90,12,.30);
+  box-shadow: 0 6px 22px rgba(234,90,12,.35), inset 0 1px 0 rgba(255,255,255,.28);
   transition: transform .1s, box-shadow .15s;
   font-family: inherit;
 }
@@ -1753,13 +1823,11 @@ details[open] .intro-ex-summary { border-radius: 12px 12px 0 0; border-bottom-co
   line-height: 1.2; display: flex; flex-direction: row; align-items: center; gap: 7px;
 }
 .quick-q-btn:active { background: var(--accent-move-soft); border-color: var(--accent-move); color: var(--accent-move); }
-.quick-q-btn.quick-q-oppepper {
-  background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);
-  color: #fff; border-color: transparent;
-  font-weight: 700; justify-content: center; border-radius: 10px;
-  padding: 10px 16px; font-size: 14px;
+.quick-q-chip.quick-q-oppepper {
+  background: var(--accent-move-soft); border-color: rgba(234,90,12,.35);
+  color: var(--accent-move); font-weight: 650;
 }
-.quick-q-btn.quick-q-oppepper:active { opacity: .88; }
+.quick-q-chip.quick-q-oppepper:active { opacity: .85; }
 .quick-q-chips {
   display: flex; gap: 6px; overflow-x: auto;
   -webkit-overflow-scrolling: touch; scrollbar-width: none; padding-bottom: 2px;
@@ -1884,7 +1952,7 @@ details[open] .intro-ex-summary { border-radius: 12px 12px 0 0; border-bottom-co
       <div class="splash-circle" style="background:#ea5a0c;box-shadow:0 8px 28px rgba(234,90,12,.45);">
         <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
       </div>
-      <div class="splash-circle" style="background:#0d9488;box-shadow:0 8px 28px rgba(13,148,136,.45);">
+      <div class="splash-circle" style="background:#10b981;box-shadow:0 8px 28px rgba(16,185,129,.45);">
         <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v12"/><path d="M18 9a3 3 0 0 0-3-3H6"/><path d="M6 15a6 6 0 0 0 12 0"/></svg>
       </div>
     </div>
@@ -1920,7 +1988,17 @@ details[open] .intro-ex-summary { border-radius: 12px 12px 0 0; border-bottom-co
   </div>
 
   <div class="form-group">
-    <label>GitHub Personal Access Token</label>
+    <label>Welke sport(en) doe je? <span style="font-weight:400;color:var(--muted);">(optioneel)</span></label>
+    <input id="setup-sporten" type="text" placeholder="bijv. hardlopen, fitness, wandelen" autocomplete="off">
+  </div>
+
+  <div class="form-group">
+    <label>Vaste eetgewoontes? <span style="font-weight:400;color:var(--muted);">(optioneel)</span></label>
+    <input id="setup-eten" type="text" placeholder="bijv. yoghurt-ontbijt, weinig vlees" autocomplete="off">
+  </div>
+
+  <div class="form-group">
+    <label>GitHub Personal Access Token <span style="font-weight:400;color:var(--muted);">(optioneel — voor sync tussen apparaten)</span></label>
     <input id="setup-token" type="password" placeholder="ghp_..." autocomplete="off">
     <p class="setup-help">
       Ga naar <a href="https://github.com/settings/tokens" target="_blank">GitHub → Settings → Developer Settings → Personal Access Tokens</a>.
@@ -1929,7 +2007,7 @@ details[open] .intro-ex-summary { border-radius: 12px 12px 0 0; border-bottom-co
   </div>
 
   <div class="form-group">
-    <label>GitHub Gist ID</label>
+    <label>GitHub Gist ID <span style="font-weight:400;color:var(--muted);">(optioneel)</span></label>
     <input id="setup-gist" type="text" placeholder="abc123def456..." autocomplete="off">
     <p class="setup-help">
       Maak een lege privé Gist aan op <a href="https://gist.github.com" target="_blank">gist.github.com</a>.
@@ -1998,6 +2076,10 @@ details[open] .intro-ex-summary { border-radius: 12px 12px 0 0; border-bottom-co
     <div class="form-group">
       <label>Favoriet of veelgegeten eten</label>
       <input id="set-eten" type="text" placeholder="bijv. pasta, kwark, smoothies">
+    </div>
+    <div class="form-group">
+      <label>Vast weekritme (optioneel)</label>
+      <input id="set-weekritme" type="text" placeholder="bijv. ma hardlopen · wo krachttraining · za wandelen">
     </div>
     <div class="form-group">
       <label>Slaap &amp; routine</label>
@@ -2069,12 +2151,22 @@ details[open] .intro-ex-summary { border-radius: 12px 12px 0 0; border-bottom-co
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
         Maaltijden wissen
       </button>
+      <button class="btn btn-secondary btn-full" onclick="resetToday()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.9"/></svg>
+        Vandaag wissen
+      </button>
     </div>
   </div>
 
   <div class="settings-section">
     <h3>Coach brein</h3>
     <div id="brain-overview" style="font-size:14px;"></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-top:16px;">
+      <h3 style="margin-bottom:0;">Trainingspartners</h3>
+      <button class="btn btn-ghost" style="font-size:13px;padding:6px 12px;" onclick="showAddPartnerModal()">+ Toevoegen</button>
+    </div>
+    <p style="font-size:12px;color:var(--muted);margin:4px 0 8px;">De coach herkent partners automatisch als je ze noemt in je weekplan.</p>
+    <div id="partners-list"></div>
   </div>
 
   <div class="settings-section">
@@ -2089,7 +2181,7 @@ details[open] .intro-ex-summary { border-radius: 12px 12px 0 0; border-bottom-co
 <div id="app" style="display:none;">
 
   <!-- TAB 1: VANDAAG -->
-  <div id="tab-vandaag" class="tab-content">
+  <div id="tab-vandaag" class="tab-content active">
     <div class="page-header">
       <div style="min-width:0; flex:1;">
         <div id="today-day" style="font-size:12px; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:.5px;"></div>
@@ -2101,13 +2193,73 @@ details[open] .intro-ex-summary { border-radius: 12px 12px 0 0; border-bottom-co
           <svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67zM11.71 19c-1.78 0-3.22-1.4-3.22-3.14 0-1.62 1.05-2.76 2.81-3.12 1.77-.36 3.6-1.21 4.62-2.58.39 1.29.59 2.65.59 4.04 0 2.65-2.15 4.8-4.8 4.8z"/></svg>
           <span id="header-streak">0</span>
         </div>
-        <button class="icon-btn" onclick="resetToday()" aria-label="Vandaag wissen" title="Vandaag wissen" style="color:var(--muted);">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.9"/></svg>
-        </button>
         <button class="icon-btn" onclick="openSettings()" aria-label="Instellingen">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
         </button>
       </div>
+    </div>
+
+
+    <!-- Grote praat-knop -->
+    <div class="coach-front-card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+        <div style="display:flex;align-items:center;gap:10px;min-width:0;">
+          <div class="persona-avatar coach">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+          </div>
+          <div class="coach-front-label" style="margin-bottom:0;text-align:left;">Zeg het maar — sport, eten, water, hoe je je voelt</div>
+        </div>
+        <button onclick="showIntro()" aria-label="Hoe werkt het?" title="Hoe werkt het?" style="flex-shrink:0;margin-left:10px;width:28px;height:28px;border-radius:50%;border:1.5px solid var(--border);background:var(--card2);color:var(--muted);font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:inherit;line-height:1;">?</button>
+      </div>
+      <div class="praat-btn-row">
+        <button id="big-praat-btn" class="big-praat-btn" onclick="bigPraatStart()">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+          Praat met de coach
+        </button>
+      </div>
+      <div id="mic-status-label" class="mic-status-label"></div>
+      <div id="big-praat-status" class="big-praat-status"></div>
+      <!-- Snelvragen: Oppepper prominent, overige 5 als scrollbare chips -->
+      <div class="quick-q-row" style="margin-top:10px;">
+        <div class="quick-q-chips">
+          <button class="quick-q-chip quick-q-oppepper" onclick="askOppepper()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            Oppepper
+          </button>
+          <button class="quick-q-chip" onclick="askAdviesVandaag()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            Advies vandaag
+          </button>
+          <button class="quick-q-chip" onclick="askAdviesMorgen()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Advies morgen
+          </button>
+          <button class="quick-q-chip" onclick="askNaHetSporten()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v12"/><path d="M18 9a3 3 0 0 0-3-3H6"/><path d="M6 15a6 6 0 0 0 12 0"/></svg>
+            Na het sporten
+          </button>
+          <button class="quick-q-chip" onclick="askQuickQ('Hoe gaat het met mijn voortgang en streak?')">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            Voortgang
+          </button>
+          <button class="quick-q-chip" onclick="askQuickQ('Hoe ging mijn week qua sport en voeding?')">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Mijn week
+          </button>
+        </div>
+      </div>
+      <!-- Chat input -->
+      <div class="coach-input-row" style="margin-top:10px;">
+        <input id="coach-front-input" type="text" placeholder="Of typ hier een vraag…" onkeydown="if(event.key==='Enter')coachFrontSend()">
+        <button id="tts-toggle-front" class="tts-toggle-btn" onclick="toggleTTS()" title="Spraak aan/uit" style="flex-shrink:0;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+        </button>
+        <button onclick="coachFrontSend()" aria-label="Verstuur">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+        </button>
+      </div>
+      <!-- Chatvenster onder de input -->
+      <div id="coach-front-chat" class="coach-chat-window"></div>
     </div>
 
     <!-- Vandaag-progress -->
@@ -2115,7 +2267,7 @@ details[open] .intro-ex-summary { border-radius: 12px 12px 0 0; border-bottom-co
 
     <!-- Check-in -->
     <div class="card" id="checkin-card">
-      <div class="vandaag-section-h">Hoe voel je je vandaag?</div>
+      <span class="checkin-q">Hoe voel je je?</span>
       <div class="checkin-btns">
         <button class="checkin-btn" onclick="doCheckIn('goed', this)">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
@@ -2130,8 +2282,8 @@ details[open] .intro-ex-summary { border-radius: 12px 12px 0 0; border-bottom-co
           Zwaar
         </button>
       </div>
-      <div id="checkin-response" class="checkin-response" style="display:none;"></div>
-      <div id="voorstel-container"></div>
+      <div id="checkin-response" class="checkin-response" style="display:none;flex-basis:100%;"></div>
+      <div id="voorstel-container" style="flex-basis:100%;"></div>
     </div>
 
     <!-- Hydratatie tracker -->
@@ -2150,7 +2302,13 @@ details[open] .intro-ex-summary { border-radius: 12px 12px 0 0; border-bottom-co
 
     <!-- Activiteiten vandaag -->
     <div class="card" style="border-left:3px solid var(--accent-move);padding-left:13px;">
-      <div class="vandaag-section-h">Activiteiten</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <div class="vandaag-section-h" style="margin-bottom:0;padding-bottom:0;border-bottom:none;">Activiteiten</div>
+        <button class="icon-btn" onclick="addActivity(today())" aria-label="Activiteit toevoegen" title="Activiteit toevoegen" style="color:var(--muted);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+      </div>
+      <div style="border-bottom:1px solid var(--border);margin:8px 0 10px;"></div>
       <div id="today-activities"></div>
     </div>
 
@@ -2167,30 +2325,107 @@ details[open] .intro-ex-summary { border-radius: 12px 12px 0 0; border-bottom-co
       <div id="today-nutri-bar" style="margin-bottom:10px;"></div>
       <div id="today-meals"></div>
     </div>
-  </div>
 
-  <!-- TAB 2: BEWEGEN -->
-  <div id="tab-week" class="tab-content">
+    <div id="weekplan-card" class="weekplan-card" style="display:none;">
+      <div class="weekplan-card-title">📅 Plan je week — zondag</div>
+      <div class="weekplan-card-sub">Vertel de coach je plannen voor de komende week. Trainingen, boodschappen en maaltijden worden automatisch ingevuld.</div>
+      <button class="weekplan-card-btn" onclick="startWeekplanGesprek()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+        Weekplan bespreken
+      </button>
+      <button onclick="dismissWeekplanCard()" style="display:block;margin-top:8px;background:none;border:none;color:var(--muted);font-size:13px;cursor:pointer;width:100%;text-align:center;">Overslaan</button>
+    </div>
+
+    <div class="cc-section-label">Inzicht &amp; meer</div>
+
+    <details class="collapse-card">
+      <summary>Deze week <svg class="cc-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></summary>
+      <div class="cc-body">
     <div class="week-nav">
       <button onclick="navWeek(-1)">&#8249;</button>
-      <span class="week-label" id="week-label"></span>
+      <span class="week-label" id="weekov-label"></span>
       <button onclick="navWeek(1)">&#8250;</button>
     </div>
-    <div class="week-progress-header">
-      <span class="week-progress-label">Week voortgang</span>
-      <span class="week-progress-count" id="week-progress-count"></span>
-    </div>
-    <div class="progress-bar-wrap">
-      <div class="progress-bar-fill" id="week-progress" style="width:0%"></div>
-    </div>
+    <div id="weekov-days"></div>
+      </div>
+    </details>
 
-    <!-- Instructiekaarten -->
-    <details class="instructie-details" id="instructie-panel">
-      <summary class="instructie-summary">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-        Instructiekaarten
-      </summary>
-      <div class="instructie-body">
+    <details class="collapse-card">
+      <summary>Inzicht &amp; statistieken <svg class="cc-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></summary>
+      <div class="cc-body">
+      <div style="display:flex;align-items:center;justify-content:flex-end;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--border);">
+        <div style="display:flex;align-items:center;gap:4px;">
+          <button onclick="setInzichtPeriode(-1)" style="width:24px;height:24px;border-radius:50%;border:1.5px solid var(--border);background:var(--card2);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);font-family:inherit;line-height:1;">−</button>
+          <input id="inzicht-periode-input" type="number" min="1" max="365" value="7"
+            style="width:40px;height:24px;border:1.5px solid var(--border);border-radius:7px;background:var(--card2);font-size:12px;font-weight:600;color:var(--text-2);text-align:center;font-family:inherit;padding:0 3px;"
+            oninput="setInzichtPeriodeDirect(this.value)">
+          <span style="font-size:11px;color:var(--muted);font-weight:500;">d</span>
+          <button onclick="setInzichtPeriode(1)" style="width:24px;height:24px;border-radius:50%;border:1.5px solid var(--border);background:var(--card2);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);font-family:inherit;line-height:1;">+</button>
+        </div>
+      </div>
+
+      <div id="patroon-stats" class="patroon-stats"></div>
+      <div id="patroon-grid"></div>
+      <div id="dag-detail-bar" class="dag-detail-bar"></div>
+
+      <div style="display:flex;gap:8px;margin-top:8px;">
+        <button onclick="analysePatronen()" style="flex:1;background:var(--card2);border:1.5px solid var(--border);border-radius:11px;padding:10px 14px;cursor:pointer;font-family:inherit;display:flex;flex-direction:column;align-items:center;gap:3px;transition:opacity .15s;">
+          <div style="display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--text-2);">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            Analyseer
+          </div>
+          <div style="font-size:11px;color:var(--muted);font-weight:400;text-align:center;line-height:1.3;">Toont 3 inzicht-kaarten hier<br>op basis van jouw logdata</div>
+        </button>
+        <button onclick="startWeekTerugblik()" style="flex:1;background:var(--accent-food);color:#fff;border:none;border-radius:11px;padding:10px 14px;cursor:pointer;font-family:inherit;display:flex;flex-direction:column;align-items:center;gap:3px;transition:opacity .15s;">
+          <div style="display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.9"/></svg>
+            Terugblik
+          </div>
+          <div style="font-size:11px;opacity:.85;font-weight:400;text-align:center;line-height:1.3;">Persoonlijk gesprek<br>met je coach in de chat</div>
+        </button>
+      </div>
+      <div id="patroon-inzichten"></div>
+      <div style="border-top:1px solid var(--border);margin:18px 0 14px;"></div>
+      <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Bewegingsstatistieken</div>
+      <div class="stats-period-tabs">
+        <button class="stats-tab active" onclick="setStatsPeriod('week',this)">Week</button>
+        <button class="stats-tab" onclick="setStatsPeriod('month',this)">Maand</button>
+        <button class="stats-tab" onclick="setStatsPeriod('year',this)">Jaar</button>
+        <button class="stats-tab" onclick="setStatsPeriod('all',this)">Totaal</button>
+      </div>
+      <div id="stats-content"></div>
+      </div>
+    </details>
+
+    <details class="collapse-card">
+      <summary>Streak &amp; mijlpalen <svg class="cc-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></summary>
+      <div class="cc-body">
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <div class="streak-display">
+          <div class="streak-flame">
+            <svg class="flame-bg" viewBox="0 0 24 24" fill="currentColor" style="color:var(--accent-move);"><path d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67zM11.71 19c-1.78 0-3.22-1.4-3.22-3.14 0-1.62 1.05-2.76 2.81-3.12 1.77-.36 3.6-1.21 4.62-2.58.39 1.29.59 2.65.59 4.04 0 2.65-2.15 4.8-4.8 4.8z"/></svg>
+            <div class="streak-number-wrap">
+              <div class="streak-number" id="coach-streak">0</div>
+              <div class="streak-unit">d</div>
+            </div>
+          </div>
+          <div class="streak-label">op rij volgehouden</div>
+          <div class="streak-record" id="coach-record">Record: 0</div>
+        </div>
+        <button onclick="toggleStreakCard()" id="streak-toggle-btn" title="Streak verbergen"
+          style="background:none;border:none;cursor:pointer;color:var(--muted);padding:4px;font-size:13px;flex-shrink:0;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="streak-toggle-icon"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+        </button>
+      </div>
+      <div id="streak-body">
+        <div id="milestone-msg" style="margin-top:8px;"></div>
+      </div>
+      </div>
+    </details>
+
+    <details class="collapse-card">
+      <summary>Oefeningen <svg class="cc-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></summary>
+      <div class="cc-body">
         <div class="instructie-group">
           <div class="instructie-group-label">Upper body</div>
           <div class="instructie-chips">
@@ -2233,37 +2468,55 @@ details[open] .intro-ex-summary { border-radius: 12px 12px 0 0; border-bottom-co
       </div>
     </details>
 
-    <div id="week-days"></div>
+
+    <details class="collapse-card">
+      <summary>Tips &amp; gesprekken <svg class="cc-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></summary>
+      <div class="cc-body">
+        <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Opgeslagen tips</div>
+        <div id="saved-tips-list"></div>
+        <div style="border-top:1px solid var(--border);margin:18px 0 14px;"></div>
+        <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Gesprekshistorie</div>
+      <div style="display:flex; align-items:center; justify-content:flex-end; margin-bottom:4px;">
+        <div style="display:flex;gap:6px;align-items:center;">
+          <button onclick="clearChat()" style="background:none;border:none;font-size:12px;color:var(--muted);cursor:pointer;padding:4px 8px;border-radius:6px;font-family:inherit;" title="Gesprek wissen">🗑 Wis chat</button>
+          <button id="tts-toggle" class="tts-toggle-btn active" onclick="toggleTTS()" title="Spraak uit">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+          </button>
+        </div>
+      </div>
+      <div id="chat-history" class="chat-history"></div>
+      </div>
+    </details>
+
+
+
   </div>
 
-  <!-- TAB 3: WEEKOVERZICHT -->
-  <div id="tab-weekov" class="tab-content">
-    <div class="week-nav">
-      <button onclick="navWeek(-1)">&#8249;</button>
-      <span class="week-label" id="weekov-label"></span>
-      <button onclick="navWeek(1)">&#8250;</button>
-    </div>
-    <div id="weekov-days"></div>
-  </div>
-
-  <!-- TAB 4: FOOD -->
+  <!-- TAB 2: CHEF (FOOD) -->
   <div id="tab-recepten" class="tab-content">
 
-    <!-- Inner tab bar -->
-    <div class="food-inner-tabs">
-      <button class="food-inner-tab active" id="fitab-chef" onclick="switchFoodTab('chef')">Chef</button>
-      <button class="food-inner-tab" id="fitab-recepten" onclick="switchFoodTab('recepten')">Recepten</button>
-      <button class="food-inner-tab" id="fitab-weekmenu" onclick="switchFoodTab('weekmenu')">Weekmenu</button>
-    </div>
-
-    <!-- Chef tab: populated by JS (_renderFoodChef) -->
+    <!-- Chef-invoer: populated by JS (_renderFoodChef) -->
     <div id="food-chef-content" class="food-inner-content"></div>
 
-    <!-- Recepten tab: populated by JS (_renderFoodReceptenList) -->
-    <div id="food-rec-content" class="food-inner-content" style="display:none;"></div>
+    <button class="food-top-btn food-top-btn-primary" style="width:100%;margin-bottom:14px;" onclick="showShoppingList()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      Boodschappenlijst
+    </button>
 
-    <!-- Weekmenu tab: static structure so renderFoodWeekmenu/WeekOverview can write to named divs -->
-    <div id="food-week-content" class="food-inner-content" style="display:none;">
+    <div class="cc-section-label">Bibliotheek &amp; planning</div>
+
+    <details class="collapse-card" id="food-sec-recepten">
+      <summary>Recepten <svg class="cc-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></summary>
+      <div class="cc-body">
+        <div id="food-rec-content" class="food-inner-content"></div>
+      </div>
+    </details>
+
+    <!-- Weekmenu: static structure so renderFoodWeekmenu/WeekOverview can write to named divs -->
+    <details class="collapse-card" id="food-sec-weekmenu">
+      <summary>Weekmenu <svg class="cc-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></summary>
+      <div class="cc-body">
+    <div id="food-week-content" class="food-inner-content">
       <!-- Week navigatie -->
       <div class="week-nav" style="margin-bottom:10px;">
         <button onclick="navWeekMenu(-1)" style="background:var(--card);border:1px solid var(--border);color:var(--muted);border-radius:50%;width:36px;height:36px;flex-shrink:0;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:border-color .15s,color .15s;">&#8249;</button>
@@ -2271,10 +2524,6 @@ details[open] .intro-ex-summary { border-radius: 12px 12px 0 0; border-bottom-co
         <button onclick="navWeekMenu(1)" style="background:var(--card);border:1px solid var(--border);color:var(--muted);border-radius:50%;width:36px;height:36px;flex-shrink:0;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:border-color .15s,color .15s;">&#8250;</button>
       </div>
 
-      <button class="food-top-btn food-top-btn-primary" style="width:100%;margin-bottom:12px;" onclick="showShoppingList()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-        Boodschappenlijst
-      </button>
       <div class="card" style="margin-bottom:12px;border-top:3px solid var(--accent-food);">
         <button class="voeding-voice-btn voeding-voice-full" id="voeding-voice-btn-food" onclick="startVoedingIntake(null,null,'food')">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
@@ -2290,215 +2539,21 @@ details[open] .intro-ex-summary { border-radius: 12px 12px 0 0; border-bottom-co
         <div id="food-week-overview" style="margin-top:8px;"></div>
       </details>
     </div>
+      </div>
+    </details>
 
   </div>
 
-  <!-- TAB 4: COACH -->
-  <div id="tab-coach" class="tab-content active">
-
-    <!-- Grote praat-knop -->
-    <div class="coach-front-card">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
-        <div class="coach-front-label" style="margin-bottom:0;text-align:left;">Zeg het maar — sport, eten, water, hoe je je voelt</div>
-        <button onclick="showIntro()" aria-label="Hoe werkt het?" title="Hoe werkt het?" style="flex-shrink:0;margin-left:10px;width:28px;height:28px;border-radius:50%;border:1.5px solid var(--border);background:var(--card2);color:var(--muted);font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:inherit;line-height:1;">?</button>
-      </div>
-      <div class="praat-btn-row">
-        <button id="big-praat-btn" class="big-praat-btn" onclick="bigPraatStart()">
-          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
-          Praat met de coach
-        </button>
-      </div>
-      <div id="mic-status-label" class="mic-status-label"></div>
-      <div id="big-praat-status" class="big-praat-status"></div>
-      <!-- Snelvragen: Oppepper prominent, overige 5 als scrollbare chips -->
-      <div class="quick-q-row" style="margin-top:10px;">
-        <button class="quick-q-btn quick-q-oppepper" onclick="askOppepper()">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-          Oppepper
-        </button>
-        <div class="quick-q-chips">
-          <button class="quick-q-chip" onclick="askAdviesVandaag()">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-            Advies vandaag
-          </button>
-          <button class="quick-q-chip" onclick="askAdviesMorgen()">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-            Advies morgen
-          </button>
-          <button class="quick-q-chip" onclick="askNaHetSporten()">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v12"/><path d="M18 9a3 3 0 0 0-3-3H6"/><path d="M6 15a6 6 0 0 0 12 0"/></svg>
-            Na het sporten
-          </button>
-          <button class="quick-q-chip" onclick="askQuickQ('Hoe gaat het met mijn voortgang en streak?')">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-            Voortgang
-          </button>
-          <button class="quick-q-chip" onclick="askQuickQ('Hoe ging mijn week qua sport en voeding?')">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-            Mijn week
-          </button>
-        </div>
-      </div>
-      <!-- Chat input -->
-      <div class="coach-input-row" style="margin-top:10px;">
-        <input id="coach-front-input" type="text" placeholder="Of typ hier een vraag…" onkeydown="if(event.key==='Enter')coachFrontSend()">
-        <button id="tts-toggle-front" class="tts-toggle-btn" onclick="toggleTTS()" title="Spraak aan/uit" style="flex-shrink:0;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
-        </button>
-        <button onclick="coachFrontSend()" aria-label="Verstuur">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
-        </button>
-      </div>
-      <!-- Chatvenster onder de input -->
-      <div id="coach-front-chat" class="coach-chat-window"></div>
-    </div>
-
-    <div class="card" style="margin-bottom:14px;" id="coach-nutri-card">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
-        <h3 style="font-size:15px;">Voeding vandaag</h3>
-        <span style="font-size:12px;color:var(--muted);" id="coach-nutri-date"></span>
-      </div>
-      <div id="coach-nutri-bars"></div>
-    </div>
-
-    <div id="weekplan-card" class="weekplan-card" style="display:none;">
-      <div class="weekplan-card-title">📅 Plan je week — zondag</div>
-      <div class="weekplan-card-sub">Vertel de coach je plannen voor de komende week. Trainingen, boodschappen en maaltijden worden automatisch ingevuld.</div>
-      <button class="weekplan-card-btn" onclick="startWeekplanGesprek()">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
-        Weekplan bespreken
-      </button>
-      <button onclick="dismissWeekplanCard()" style="display:block;margin-top:8px;background:none;border:none;color:var(--muted);font-size:13px;cursor:pointer;width:100%;text-align:center;">Overslaan</button>
-    </div>
-
-    <div class="card" style="margin-bottom:14px;box-shadow:none;border-color:var(--border);">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--border);">
-        <h3 style="margin-bottom:0;font-size:14px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;">Inzicht</h3>
-        <div style="display:flex;align-items:center;gap:4px;">
-          <button onclick="setInzichtPeriode(-1)" style="width:24px;height:24px;border-radius:50%;border:1.5px solid var(--border);background:var(--card2);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);font-family:inherit;line-height:1;">−</button>
-          <input id="inzicht-periode-input" type="number" min="1" max="365" value="7"
-            style="width:40px;height:24px;border:1.5px solid var(--border);border-radius:7px;background:var(--card2);font-size:12px;font-weight:600;color:var(--text-2);text-align:center;font-family:inherit;padding:0 3px;"
-            oninput="setInzichtPeriodeDirect(this.value)">
-          <span style="font-size:11px;color:var(--muted);font-weight:500;">d</span>
-          <button onclick="setInzichtPeriode(1)" style="width:24px;height:24px;border-radius:50%;border:1.5px solid var(--border);background:var(--card2);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);font-family:inherit;line-height:1;">+</button>
-        </div>
-      </div>
-
-      <div id="patroon-stats" class="patroon-stats"></div>
-      <div id="patroon-grid"></div>
-      <div id="dag-detail-bar" class="dag-detail-bar"></div>
-
-      <div style="display:flex;gap:8px;margin-top:8px;">
-        <button onclick="analysePatronen()" style="flex:1;background:var(--card2);border:1.5px solid var(--border);border-radius:11px;padding:10px 14px;cursor:pointer;font-family:inherit;display:flex;flex-direction:column;align-items:center;gap:3px;transition:opacity .15s;">
-          <div style="display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--text-2);">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            Analyseer
-          </div>
-          <div style="font-size:11px;color:var(--muted);font-weight:400;text-align:center;line-height:1.3;">Toont 3 inzicht-kaarten hier<br>op basis van jouw logdata</div>
-        </button>
-        <button onclick="startWeekTerugblik()" style="flex:1;background:var(--accent-food);color:#fff;border:none;border-radius:11px;padding:10px 14px;cursor:pointer;font-family:inherit;display:flex;flex-direction:column;align-items:center;gap:3px;transition:opacity .15s;">
-          <div style="display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.9"/></svg>
-            Terugblik
-          </div>
-          <div style="font-size:11px;opacity:.85;font-weight:400;text-align:center;line-height:1.3;">Persoonlijk gesprek<br>met je coach in de chat</div>
-        </button>
-      </div>
-      <div id="patroon-inzichten"></div>
-    </div>
-
-    <div class="card" style="margin-bottom:14px;">
-      <div style="display:flex;align-items:center;justify-content:space-between;">
-        <div class="streak-display">
-          <div class="streak-flame">
-            <svg class="flame-bg" viewBox="0 0 24 24" fill="currentColor" style="color:var(--accent-move);"><path d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67zM11.71 19c-1.78 0-3.22-1.4-3.22-3.14 0-1.62 1.05-2.76 2.81-3.12 1.77-.36 3.6-1.21 4.62-2.58.39 1.29.59 2.65.59 4.04 0 2.65-2.15 4.8-4.8 4.8z"/></svg>
-            <div class="streak-number-wrap">
-              <div class="streak-number" id="coach-streak">0</div>
-              <div class="streak-unit">d</div>
-            </div>
-          </div>
-          <div class="streak-label">op rij volgehouden</div>
-          <div class="streak-record" id="coach-record">Record: 0</div>
-        </div>
-        <button onclick="toggleStreakCard()" id="streak-toggle-btn" title="Streak verbergen"
-          style="background:none;border:none;cursor:pointer;color:var(--muted);padding:4px;font-size:13px;flex-shrink:0;">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="streak-toggle-icon"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
-        </button>
-      </div>
-      <div id="streak-body">
-        <div id="milestone-msg" style="margin-top:8px;"></div>
-      </div>
-    </div>
-
-    <div class="card" style="margin-bottom:14px;">
-      <h3 style="margin-bottom:12px;">Bewegingsstatistieken</h3>
-      <div class="stats-period-tabs">
-        <button class="stats-tab active" onclick="setStatsPeriod('week',this)">Week</button>
-        <button class="stats-tab" onclick="setStatsPeriod('month',this)">Maand</button>
-        <button class="stats-tab" onclick="setStatsPeriod('year',this)">Jaar</button>
-        <button class="stats-tab" onclick="setStatsPeriod('all',this)">Totaal</button>
-      </div>
-      <div id="stats-content"></div>
-    </div>
-
-    <div class="card" style="margin-bottom:14px;">
-      <div class="saved-tips-section">
-        <button class="saved-tips-toggle" onclick="toggleSavedTips(this)">
-          <span style="display:flex;align-items:center;gap:6px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>Opgeslagen tips</span>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-        </button>
-        <div id="saved-tips-list" style="display:none;"></div>
-      </div>
-    </div>
-
-    <div class="card" style="margin-bottom:14px;">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
-        <h3>Trainingspartners</h3>
-        <button class="btn btn-ghost" style="font-size:13px;padding:6px 12px;" onclick="showAddPartnerModal()">+ Toevoegen</button>
-      </div>
-      <div id="partners-list"></div>
-    </div>
-
-    <div class="card">
-      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:4px;">
-        <span style="font-size:13px;color:var(--muted);font-weight:500;">Gesprekshistorie</span>
-        <div style="display:flex;gap:6px;align-items:center;">
-          <button onclick="clearChat()" style="background:none;border:none;font-size:12px;color:var(--muted);cursor:pointer;padding:4px 8px;border-radius:6px;font-family:inherit;" title="Gesprek wissen">🗑 Wis chat</button>
-          <button id="tts-toggle" class="tts-toggle-btn active" onclick="toggleTTS()" title="Spraak uit">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
-          </button>
-        </div>
-      </div>
-      <div id="chat-history" class="chat-history"></div>
-    </div>
-
-    <div style="text-align:center;padding:8px 0 4px;display:flex;justify-content:center;gap:16px;">
-      <button onclick="resetApp()" style="background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;text-decoration:underline;padding:8px 12px;">App volledig resetten</button>
-      <button onclick="showIntro()" style="background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;text-decoration:underline;padding:8px 12px;">Intro bekijken</button>
-    </div>
-  </div>
 
   <!-- BOTTOM TABS -->
   <div id="tabs">
-    <button class="tab-btn active" onclick="switchTab('coach', this)">
+    <button class="tab-btn active" onclick="switchTab('vandaag', this)">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
       Coach
     </button>
-    <button class="tab-btn" onclick="switchTab('vandaag', this)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-      Vandaag
-    </button>
-    <button class="tab-btn" onclick="switchTab('week', this)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-      Bewegen
-    </button>
     <button class="tab-btn" onclick="switchTab('recepten', this)">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v12"/><path d="M18 9a3 3 0 0 0-3-3H6"/><path d="M6 15a6 6 0 0 0 12 0"/></svg>
-      Food
-    </button>
-    <button class="tab-btn" onclick="switchTab('weekov', this)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-      Week
+      Chef
     </button>
   </div>
 </div>
@@ -2513,7 +2568,7 @@ details[open] .intro-ex-summary { border-radius: 12px 12px 0 0; border-bottom-co
         <div style="width:52px;height:52px;border-radius:50%;background:var(--accent-move);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(234,90,12,.30);">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
         </div>
-        <div style="width:52px;height:52px;border-radius:50%;background:var(--accent-food);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(13,148,136,.30);">
+        <div style="width:52px;height:52px;border-radius:50%;background:var(--accent-food);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(16,185,129,.30);">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v12"/><path d="M18 9a3 3 0 0 0-3-3H6"/><path d="M6 15a6 6 0 0 0 12 0"/></svg>
         </div>
       </div>
@@ -2529,14 +2584,14 @@ details[open] .intro-ex-summary { border-radius: 12px 12px 0 0; border-bottom-co
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
         </div>
         <div class="intro-hero-name" style="color:var(--accent-move);">Coach</div>
-        <div class="intro-hero-sub">Beweging, herstel &amp; slim advies op maat</div>
+        <div class="intro-hero-sub">Beweging &amp; advies</div>
       </div>
-      <div class="intro-hero-tile" style="border-top:3px solid var(--accent-food);background:rgba(13,148,136,.05);">
-        <div style="width:48px;height:48px;border-radius:50%;background:var(--accent-food);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;box-shadow:0 4px 14px rgba(13,148,136,.28);">
+      <div class="intro-hero-tile" style="border-top:3px solid var(--accent-food);background:rgba(16,185,129,.05);">
+        <div style="width:48px;height:48px;border-radius:50%;background:var(--accent-food);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;box-shadow:0 4px 14px rgba(16,185,129,.28);">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v12"/><path d="M18 9a3 3 0 0 0-3-3H6"/><path d="M6 15a6 6 0 0 0 12 0"/></svg>
         </div>
         <div class="intro-hero-name" style="color:var(--accent-food);">Chef</div>
-        <div class="intro-hero-sub">Recepten, weekmenu &amp; voeding geregeld</div>
+        <div class="intro-hero-sub">Recepten &amp; voeding</div>
       </div>
     </div>
 
@@ -2557,7 +2612,7 @@ details[open] .intro-ex-summary { border-radius: 12px 12px 0 0; border-bottom-co
       </div>
       <div class="intro-how-arrow">›</div>
       <div class="intro-how-step">
-        <div class="intro-how-icon" style="background:rgba(13,148,136,.10);">
+        <div class="intro-how-icon" style="background:rgba(16,185,129,.10);">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-food)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
         </div>
         <div class="intro-how-label">Plan &amp; inzicht</div>
@@ -2571,7 +2626,7 @@ details[open] .intro-ex-summary { border-radius: 12px 12px 0 0; border-bottom-co
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
       </summary>
       <div class="intro-ex-body">
-        <div style="padding:10px 14px 0;font-size:12px;color:var(--muted);font-style:italic;">Spreek vrij in — geen exacte formule nodig.</div>
+        <div style="padding:10px 14px 0;font-size:12px;color:var(--muted);font-style:italic;">Spreek vrij in — geen vaste formule.</div>
 
         <!-- Coach -->
         <div class="intro-ex-group">
@@ -2581,15 +2636,11 @@ details[open] .intro-ex-summary { border-radius: 12px 12px 0 0; border-bottom-co
           </div>
           <div class="intro-ex-item">
             <div class="intro-ex-phrase"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>"Ik heb 45 min hardgelopen"</div>
-            <div class="intro-ex-result">→ week bijgewerkt · hersteladvies &amp; wat je nu het best kunt eten</div>
+            <div class="intro-ex-result">→ gelogd &amp; hersteladvies</div>
           </div>
           <div class="intro-ex-item">
-            <div class="intro-ex-phrase"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>"Plan dinsdag en donderdag een run"</div>
-            <div class="intro-ex-result">→ trainingen ingepland in je weekoverzicht</div>
-          </div>
-          <div class="intro-ex-item">
-            <div class="intro-ex-phrase"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>"Hoe gaat het met mijn doel?"</div>
-            <div class="intro-ex-result">→ voortgang, streak &amp; patronen geanalyseerd</div>
+            <div class="intro-ex-phrase"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>"Plan dinsdag een run"</div>
+            <div class="intro-ex-result">→ staat in je week</div>
           </div>
         </div>
 
@@ -2600,16 +2651,12 @@ details[open] .intro-ex-summary { border-radius: 12px 12px 0 0; border-bottom-co
             Chef — voeding &amp; recepten
           </div>
           <div class="intro-ex-item">
-            <div class="intro-ex-phrase"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>"Pasta met zalm gegeten vanavond"</div>
-            <div class="intro-ex-result">→ vezels &amp; eiwitten bijgehouden, dagbalans zichtbaar</div>
-          </div>
-          <div class="intro-ex-item">
-            <div class="intro-ex-phrase"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>"Maak 3 recepten met weinig koolhydraten"</div>
-            <div class="intro-ex-result">→ recepten gegenereerd, direct in weekmenu te zetten</div>
+            <div class="intro-ex-phrase"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>"Wat eet ik het beste vóór mijn duurloop?"</div>
+            <div class="intro-ex-result">→ advies op maat voor dat moment</div>
           </div>
           <div class="intro-ex-item">
             <div class="intro-ex-phrase"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>"Wat heb ik nodig voor komende week?"</div>
-            <div class="intro-ex-result">→ boodschappenlijst op basis van je weekmenu</div>
+            <div class="intro-ex-result">→ boodschappenlijst klaar</div>
           </div>
         </div>
 
@@ -2634,11 +2681,6 @@ details[open] .intro-ex-summary { border-radius: 12px 12px 0 0; border-bottom-co
   <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
 </button>
 
-<!-- FLOATING COACH BUTTON (alle tabs) -->
-<button id="fab-coach" class="fab-coach" onclick="fabCoachTap()" aria-label="Praat met de coach">
-  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
-  <span id="fab-label" style="display:none;font-size:10px;font-weight:700;letter-spacing:.3px;margin-top:2px;line-height:1;">LOG</span>
-</button>
 
 <!-- MODAL CONTAINER -->
 <div id="modal-container"></div>
@@ -2647,7 +2689,7 @@ details[open] .intro-ex-summary { border-radius: 12px 12px 0 0; border-bottom-co
 'use strict';
 
 // ─── VERSION CHECK (forceert Safari herlading bij nieuwe versie) ──────────────
-const APP_VERSION = '20260509-2';
+const APP_VERSION = '20260716-3';
 (function() {
   try {
     const stored = localStorage.getItem('hc_app_version');
@@ -3070,25 +3112,42 @@ function buildSystemPrompt() {
     ? `\nPERSOONLIJKE INFO: Je mist nog wat context over deze gebruiker (${_ontbrekendeInfo.join(', ')}). Als het heel natuurlijk past mag je af en toe één korte vraag stellen — maar alleen als het écht relevant is voor je antwoord, nooit als verplichting, nooit meerdere tegelijk. De gebruiker hoeft niet te antwoorden.\n`
     : `\nPROFIEL COMPLEET: je kent deze gebruiker goed. Gebruik die kennis actief.\n`;
 
+  const _sportRegel = (settings && settings.sporten)
+    ? `Sport en materiaal van de gebruiker: ${settings.sporten}.`
+    : `Sport: nog onbekend — vraag ernaar zodra dat relevant is, zodat het onthouden wordt.`;
+  const _voedingProfielRegel = (settings && settings.eten)
+    ? `Voeding: focus op vezels en eiwitten. Vaste gewoontes: ${settings.eten}.`
+    : `Voeding: focus op vezels en eiwitten.`;
   return `Je bent een vriendelijke maar directe persoonlijke gezondheidscoach.
-Focus op hardlopen (hoofdsport), thuisgym (bankje + dumbbells) en fietsen.
-Voeding: vezelfocus, vast ontbijt is kwark/yoghurt met muesli en fruit.
-Houd antwoorden standaard KORT en praktisch: max 3-4 punten, geen lange uitleg. Spreek de gebruiker aan met 'je'${_naam ? ` of bij naam (${_naam})` : ''}.
-Als de gebruiker meer detail wil, bied je aan om uit te breiden — maar doe dat niet spontaan.
-Reageer altijd in het Nederlands.
+${_sportRegel}
+${_voedingProfielRegel}
+
+STIJL — je antwoorden worden gelezen én hardop voorgelezen:
+- Schrijf zoals je praat: korte, vloeiende zinnen in natuurlijk Nederlands. Geen opsommingstekens, geen kopjes, geen markdown, geen emoji.
+- Standaard 2 tot 4 zinnen, het belangrijkste eerst. Alleen langer als de gebruiker om uitleg of detail vraagt.
+- Schrijf eenheden voluit zodat het goed klinkt: "30 gram vezels", "5 kilometer", "45 minuten" — niet "30g" of "5km".
+- Maximaal één vraag per antwoord, en sluit niet elk antwoord met een vraag af. Een goed antwoord mag gewoon eindigen.
+- Spreek de gebruiker aan met 'je'${_naam ? ` of bij naam (${_naam})` : ''}.
+- Reageer altijd in het Nederlands.
 ${_profielBlok}${_vraagHint}
 
-WEEKSCHEMA:
-Ma: Easy run 5-6km zone 2
-Di: Upper body (Dumbbell press, Dumbbell rows, Bicep curls, Shoulder press — 3×12)
-Wo: Intervaltraining 5×1km @ 5K-tempo, 4 min rust
-Do: Lower body (Goblet squat, Lunges, Hip thrust, Romanian deadlift — 3×12)
-Vr: Fietstocht 45-60 min herstel
-Za: Lange duurloop 10-12km zone 2
-Zo: Rustdag
-
-RECEPTEN: Linzensoep 14g / Kikkererwten curry 13g / Quinoa groenten 12g / Bonen taco's 11g / Spinazie pasta 10g
-VEZELDOELEN: ontbijt 6g / lunch 8g / diner 10-14g / snack 4g / dagdoel 30g
+WEEKPLANNING DEZE WEEK (werkelijk gepland, ✓ = gedaan):
+${(() => {
+  try {
+    const wk = getISOWeek(today);
+    const wd = (data.weken || {})[wk] || {};
+    const dagen = getWeekDates(wk);
+    const kort = ['ma','di','wo','do','vr','za','zo'];
+    return dagen.map((ds, i) => {
+      const acts = ((wd[ds] || {}).activiteiten || []);
+      const txt = acts.length ? acts.map(a => `${a.naam}${a.detail ? ' — ' + a.detail : ''}${a.afgevinkt ? ' ✓' : ''}`).join(', ') : 'niets gepland';
+      return `${kort[i]}${ds === dateStr ? ' (VANDAAG)' : ''}: ${txt}`;
+    }).join('\n');
+  } catch(_) {
+    return 'nog niets gepland deze week';
+  }
+})()}
+${settings && settings.weekritme ? `STANDAARD WEEKRITME (basis waar de gebruiker van kan afwijken): ${settings.weekritme}\n\n` : ''}VEZELDOELEN: ontbijt 6g / lunch 8g / diner 10-14g / snack 4g / dagdoel 30g
 
 HUIDIGE STAAT:
 - Datum: ${dateStr} (${dagNaam})
@@ -3510,6 +3569,84 @@ let currentWeekOffset = 0;
 let _weekmenuOffset = 0;
 let genCount = 3;
 let genFocus = 'combi';
+let genDieet = localStorage.getItem('hc_dieet') || 'vega';   // vega | vis | vlees
+let genMoment = '';                                          // '' | voor | tijdens | na (per sessie)
+
+function setGenDieet(v, btn) {
+  genDieet = v;
+  localStorage.setItem('hc_dieet', v);
+  document.querySelectorAll('.gen-dieet-pill').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+}
+
+function setGenMoment(v, btn) {
+  // Tik op actieve pil = uit (geen sportmoment)
+  if (genMoment === v) {
+    genMoment = '';
+    if (btn) btn.classList.remove('active');
+    return;
+  }
+  genMoment = v;
+  document.querySelectorAll('.gen-moment-pill').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+}
+
+let genMaaltijd = '';  // '' | ontbijt | lunch | diner | snack (per sessie)
+
+function setGenMaaltijd(v, btn) {
+  if (genMaaltijd === v) {
+    genMaaltijd = '';
+    if (btn) btn.classList.remove('active');
+    return;
+  }
+  genMaaltijd = v;
+  document.querySelectorAll('.gen-maaltijd-pill').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+}
+
+function _maaltijdRegel() {
+  if (!genMaaltijd) return '';
+  const uitleg = {
+    ontbijt: 'een ONTBIJT: snel klaar (max 10-15 min bereiding), passend bij de ochtend',
+    lunch:   'een LUNCH: licht maar vullend, doordeweeks haalbaar',
+    diner:   'een DINER: volwaardige avondmaaltijd',
+    snack:   'een SNACK: klein tussendoortje, max 5-10 min, bescheiden portie'
+  };
+  return `\n- Dit wordt ${uitleg[genMaaltijd]}. Kies gerecht, portiegrootte en energie passend bij dit moment.`;
+}
+
+function _voorraadRegel() {
+  const v = data && data.chefVoorraad;
+  if (!v || v.datum !== today() || !(v.items || []).length) return '';
+  return `\n- IN HUIS: de gebruiker heeft nog in huis: ${v.items.join(', ')}. Gebruik hier zoveel mogelijk van; vul alleen aan met gangbare basisboodschappen.`;
+}
+
+function _dieetRegel() {
+  return genDieet === 'vega' ? 'Volledig vegetarisch: GEEN vlees en GEEN vis.'
+       : genDieet === 'vis'  ? 'GEEN VLEES. Vis en zeevruchten zijn WEL toegestaan.'
+       : 'Vlees en vis zijn toegestaan; kies wat het beste past bij het gerecht en de voedingsdoelen.';
+}
+
+function _vandaagTraining() {
+  try {
+    const t = today();
+    const wk = getISOWeek(new Date(t + 'T12:00:00'));
+    const acts = ((data.weken[wk] || {})[t] || {}).activiteiten || [];
+    return acts.map(a => `${a.naam}${a.detail ? ' (' + a.detail + ')' : ''}${a.afgevinkt ? ' — al gedaan' : ' — gepland'}`).join('; ');
+  } catch(_) { return ''; }
+}
+
+function _momentRegel() {
+  if (!genMoment) return '';
+  const act = _vandaagTraining();
+  const actTxt = act ? ` Training vandaag: ${act}.` : '';
+  if (genMoment === 'voor') return `
+SPORTMOMENT: dit wordt VOOR het sporten gegeten.${actTxt} Regels: licht verteerbaar, koolhydraatrijk, matig eiwit, weinig vet en BEWUST WEINIG VEZELS (max ~5g per portie) — vezels zitten dwars tijdens de training, dus wijk hier af van het gebruikelijke vezeldoel. Ideaal 1-3 uur vooraf. Benoem in de beschrijving kort waarom dit een goede pre-workout keuze is.`;
+  if (genMoment === 'tijdens') return `
+SPORTMOMENT: dit wordt TIJDENS het sporten gegeten.${actTxt} Regels: alleen zinvol bij duurtraining langer dan ±60 minuten — lijkt de training korter, zeg dat dan eerlijk in de beschrijving. Snelle koolhydraten, klein, licht en meeneembaar (denk banaan, dadels, rijstwafel), vrijwel geen vezels, vet of eiwit. Noem ook kort het belang van drinken.`;
+  return `
+SPORTMOMENT: dit wordt NA het sporten gegeten (herstel).${actTxt} Regels: 20-30g eiwit per portie plus voldoende koolhydraten om aan te vullen, het liefst binnen 1-2 uur na de training. Vezels mogen hier wél gewoon. Benoem kort waarom dit goed herstelt.`;
+}
 
 // ─── DATE HELPERS ─────────────────────────────────────────────────────────────
 
@@ -3808,7 +3945,19 @@ async function loadGist() {
 
 // ─── BANNERS ─────────────────────────────────────────────────────────────────
 
-function showBanner(type, msg, hasRetry = false, id = null, retryFn = null, undoFn = null) {
+function checkBackupReminder() {
+  try {
+    if (settings && settings.githubToken && settings.gistId) return; // cloud sync = vangnet aanwezig
+    const heeftData = data && data.weken && Object.keys(data.weken).length > 1;
+    if (!heeftData) return;
+    const last = parseInt(localStorage.getItem('hc_backup_reminder') || '0', 10);
+    if (Date.now() - last < 30 * 24 * 60 * 60 * 1000) return;
+    localStorage.setItem('hc_backup_reminder', String(Date.now()));
+    showBanner('yellow', 'Je data staat alleen op dit apparaat. Even een reservekopie maken?', true, 'backup-reminder', () => { exportData(); }, null, 'Download');
+  } catch(_) {}
+}
+
+function showBanner(type, msg, hasRetry = false, id = null, retryFn = null, undoFn = null, btnLabel = null) {
   const container = document.getElementById('banners');
   if (id && document.getElementById('banner-' + id)) return;
   const div = document.createElement('div');
@@ -3817,7 +3966,7 @@ function showBanner(type, msg, hasRetry = false, id = null, retryFn = null, undo
   div.innerHTML = `<span>${msg}</span>`;
   if (hasRetry && retryFn) {
     const btn = document.createElement('button');
-    btn.textContent = 'Opnieuw';
+    btn.textContent = btnLabel || 'Opnieuw';
     btn.onclick = () => { removeBanner(id); retryFn(); };
     div.appendChild(btn);
   } else if (!hasRetry) {
@@ -3844,6 +3993,22 @@ function removeBanner(id) {
 
 // ─── SETUP ───────────────────────────────────────────────────────────────────
 
+function migreerProfielV2() {
+  // Eenmalig: installaties mét historie krijgen het oude vaste profiel als instelling,
+  // zodat de coach identiek blijft. Verse installaties beginnen leeg (eigen profiel).
+  try {
+    if (!settings || settings._profielV2) return;
+    const heeftHistorie = data && data.weken && Object.keys(data.weken).length > 1;
+    if (heeftHistorie) {
+      if (!settings.sporten) settings.sporten = 'hardlopen (hoofdsport), thuisgym met bankje en dumbbells, fietsen';
+      if (!settings.eten) settings.eten = 'vast ontbijt: kwark of yoghurt met muesli en fruit';
+      if (!settings.weekritme) settings.weekritme = 'ma easy run · di upper body · wo interval · do lower body · vr fietsen · za lange duurloop · zo rust';
+    }
+    settings._profielV2 = true;
+    saveSettingsData(settings);
+  } catch(_) {}
+}
+
 function loadSettings() {
   try {
     const raw = localStorage.getItem(SETTINGS_KEY);
@@ -3859,6 +4024,8 @@ function saveSettingsData(s) {
 
 async function finishSetup() {
   const naam = document.getElementById('setup-naam').value.trim();
+  const sporten = (document.getElementById('setup-sporten') ? document.getElementById('setup-sporten').value.trim() : '');
+  const eten = (document.getElementById('setup-eten') ? document.getElementById('setup-eten').value.trim() : '');
   const anthropicKey = document.getElementById('setup-anthropic').value.trim();
   const githubToken = document.getElementById('setup-token').value.trim();
   const gistId = document.getElementById('setup-gist').value.trim();
@@ -3871,7 +4038,7 @@ async function finishSetup() {
   }
   errEl.style.display = 'none';
 
-  saveSettingsData({ ...settings, naam, anthropicKey, githubToken, gistId, setupDone: true });
+  saveSettingsData({ ...settings, naam, sporten, eten, anthropicKey, githubToken, gistId, setupDone: true, _profielV2: true });
 
   const importFile = document.getElementById('setup-import').files[0];
   if (importFile) {
@@ -3888,7 +4055,7 @@ async function finishSetup() {
 }
 
 function skipSetup() {
-  saveSettingsData({ naam: 'Gebruiker', anthropicKey: '', githubToken: '', gistId: '', setupDone: true });
+  saveSettingsData({ naam: 'Gebruiker', anthropicKey: '', githubToken: '', gistId: '', setupDone: true, _profielV2: true });
   data = defaultData();
   saveLocal();
   document.getElementById('setup-overlay').classList.remove('visible');
@@ -3909,6 +4076,7 @@ function openSettings() {
   document.getElementById('set-doel').value = settings.doel || '';
   document.getElementById('set-sporten').value = settings.sporten || '';
   document.getElementById('set-eten').value = settings.eten || '';
+  document.getElementById('set-weekritme').value = settings.weekritme || '';
   document.getElementById('set-slaap').value = settings.slaap || '';
   document.getElementById('set-anthropic').value = settings.anthropicKey || '';
   document.getElementById('set-token').value = settings.githubToken || '';
@@ -3917,6 +4085,7 @@ function openSettings() {
   document.getElementById('set-tts-voice').value = settings.ttsVoice || 'nova';
   document.getElementById('settings-overlay').classList.add('visible');
   renderBrainOverview();
+  renderPartners();
 }
 
 function closeSettings() {
@@ -3933,12 +4102,13 @@ function saveSettings() {
   const sporten = document.getElementById('set-sporten').value.trim();
   const eten = document.getElementById('set-eten').value.trim();
   const slaap = document.getElementById('set-slaap').value.trim();
+  const weekritme = document.getElementById('set-weekritme').value.trim();
   const anthropicKey = document.getElementById('set-anthropic').value.trim();
   const githubToken = document.getElementById('set-token').value.trim();
   const gistId = document.getElementById('set-gist').value.trim();
   const openaiKey  = document.getElementById('set-openai').value.trim();
   const ttsVoice   = document.getElementById('set-tts-voice').value;
-  saveSettingsData({ ...settings, naam, leeftijd, geslacht, gewicht, streefgewicht, doel, sporten, eten, slaap, anthropicKey, githubToken, gistId, openaiKey, ttsVoice });
+  saveSettingsData({ ...settings, naam, leeftijd, geslacht, gewicht, streefgewicht, doel, sporten, eten, slaap, weekritme, anthropicKey, githubToken, gistId, openaiKey, ttsVoice });
   showBanner('yellow', 'Instellingen opgeslagen.');
   closeSettings();
 }
@@ -4204,13 +4374,10 @@ function switchTab(name, btn) {
   document.getElementById('tab-' + name).classList.add('active');
   btn.classList.add('active');
   const fab = document.getElementById('fab-coach');
-  if (fab) fab.style.display = name === 'coach' ? 'none' : 'flex';
+  if (fab) fab.style.display = name === 'vandaag' ? 'none' : 'flex';
   const fabLabel = document.getElementById('fab-label');
-  if (fabLabel) fabLabel.style.display = name === 'coach' ? 'none' : 'block';
-  if (name === 'vandaag') renderVandaag();
-  if (name === 'week') renderWeek();
-  if (name === 'weekov') renderWeekOvTab();
-  if (name === 'coach') { renderCoach(); checkWeekplanCard(); }
+  if (fabLabel) fabLabel.style.display = name === 'vandaag' ? 'none' : 'block';
+  if (name === 'vandaag') { renderVandaag(); checkWeekplanCard(); }
   if (name === 'recepten') renderFoodTab();
 }
 
@@ -4506,6 +4673,14 @@ function renderVandaag() {
   renderWaterTracker();
   renderTodayActivities(todayStr);
   renderTodayMeals(todayStr);
+  // Coach-onderdelen (samengevoegde tab, v2.0)
+  renderWeekOvTab();
+  renderChatHistory();
+  renderStats();
+  renderSavedTips();
+  renderPartners();
+  _syncTTSButtons();
+  renderPatroonGrid();
 }
 
 function renderCheckIn(dateStr) {
@@ -4952,13 +5127,11 @@ function editMeal(dateStr, mealKey) { quickEditMeal(dateStr, mealKey); }
 
 function navWeek(dir) {
   currentWeekOffset += dir;
-  renderWeek();
-  const weekovTab = document.getElementById('tab-weekov');
-  if (weekovTab && weekovTab.classList.contains('active')) renderWeekOvTab();
-  else renderWeekOvTab(); // keep weekov-label in sync
+  renderWeekOvTab(); // v2.0: weekschema-tab is vervallen; alleen weekoverzicht
 }
 
 function renderWeek() {
+  if (!document.getElementById('week-days')) return; // v2.0: weekschema-tab vervallen
   const weekKey = currentWeekKey();
   const days = getWeekDates(weekKey);
   ensureWeek(weekKey);
@@ -5298,30 +5471,58 @@ function _renderFoodChef() {
 
   container.innerHTML = `
     <div class="chef-input-zone">
+      <div class="persona-avatar chef">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v12"/><path d="M18 9a3 3 0 0 0-3-3H6"/><path d="M6 15a6 6 0 0 0 12 0"/></svg>
+      </div>
       <div class="chef-hero-title">Wat wil je eten?</div>
       <div class="chef-hero-sub" style="margin-bottom:18px;">Zeg maar wat je wil — een gerecht, ingrediënt, wat je in huis hebt, of gewoon "iets snels met kip"</div>
       <button id="voice-recipe-btn" class="chef-mic-big" onclick="smartVoiceRecipe()">${micSVG}</button>
       <div class="chef-mic-label" id="chef-mic-label">Spreek je wens in</div>
       <div class="chef-text-photo-row">
-        ${micInput('gen-focus-input', 'Of typ: pasta, paprika, tomaat…', '')}
+        <div class="input-mic-wrap"><input id="gen-focus-input" type="text" placeholder="Of typ: pasta, paprika, tomaat…" autocomplete="off"></div>
         <input type="file" id="chef-foto-input" accept="image/*" style="display:none;" onchange="analyseChefFoto(this)">
         <button class="chef-foto-icon-btn" id="chef-foto-btn" onclick="document.getElementById('chef-foto-input').click()" title="Foto of screenshot analyseren">${cameraIconSVG}</button>
+        <button class="chef-foto-icon-btn" onclick="showVoorraadModal()" title="Wat heb ik in huis?">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        </button>
       </div>
+      ${_voorraadLineHTML()}
     </div>
     <div id="chef-foto-preview" style="display:none;font-size:12px;color:var(--muted);padding:8px 10px;background:var(--card2);border-radius:8px;margin-bottom:12px;"></div>
     <div id="chef-foto-result" style="display:none;font-size:12px;background:var(--card2);border-radius:10px;padding:12px 14px;margin-bottom:12px;line-height:1.6;"></div>
 
     <div class="recipe-gen-card" style="margin-bottom:12px;padding:14px 14px 10px;">
       <div class="recipe-gen-row">
-        <span class="recipe-gen-label">Recepten</span>
-        ${[1,2,3].map(n => `<button class="gen-pill${genCount===n?' active':''}" onclick="setGenCount(${n})">${n}</button>`).join('')}
-        <label class="vega-toggle-wrap">
-          <input type="checkbox" id="gen-vega" class="vega-toggle-input">
-          <span class="vega-toggle-label">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;"><path d="M2 22c1.25-1.25 2.45-2.45 4-3 2.5-1 5.5.5 8 0 2-.4 4-2 4-2s-2 4-5 5c-2 .7-4.5-.2-6 1H2z"/><path d="M2 22s3-6 6-8 9-2 9-2"/></svg>
-            Vega
-          </span>
-        </label>
+        <span class="recipe-gen-label">Aantal</span>
+        ${[1,2,3].map(n => `<button class="gen-pill gen-count-pill${genCount===n?' active':''}" onclick="setGenCount(${n})">${n}</button>`).join('')}
+      </div>
+      <div class="recipe-gen-row">
+        <span class="recipe-gen-label">Dieet</span>
+        <button class="gen-pill gen-dieet-pill${genDieet==='vega'?' active':''}" onclick="setGenDieet('vega',this)">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;"><path d="M2 22c1.25-1.25 2.45-2.45 4-3 2.5-1 5.5.5 8 0 2-.4 4-2 4-2s-2 4-5 5c-2 .7-4.5-.2-6 1H2z"/><path d="M2 22s3-6 6-8 9-2 9-2"/></svg>
+          Vega
+        </button>
+        <button class="gen-pill gen-dieet-pill${genDieet==='vis'?' active':''}" onclick="setGenDieet('vis',this)">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;"><path d="M6.5 12c.94-3.46 4.94-6 8.5-6 3.56 0 6.06 2.54 7 6-.94 3.47-3.44 6-7 6s-7.56-2.53-8.5-6z"/><path d="M18 12v.5"/><path d="M2 12c1.5-1.5 3-2 4.5-2-1 1.2-1 2.8 0 4C5 14 3.5 13.5 2 12z"/></svg>
+          Vis
+        </button>
+        <button class="gen-pill gen-dieet-pill${genDieet==='vlees'?' active':''}" onclick="setGenDieet('vlees',this)">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;"><path d="M15.5 3.5c2.8 2.8 3.5 6.8 1.5 8.8l-6.7 6.7c-1 1-2.6 1-3.5 0l-1.8-1.8c-1-1-1-2.6 0-3.5l6.7-6.7c2-2 6-1.3 8.8 1.5z" transform="scale(0.9) translate(1,1)"/><line x1="7" y1="17" x2="5" y2="19"/></svg>
+          Vlees
+        </button>
+      </div>
+      <div class="recipe-gen-row">
+        <span class="recipe-gen-label">Maaltijd</span>
+        <button class="gen-pill gen-maaltijd-pill${genMaaltijd==='ontbijt'?' active':''}" onclick="setGenMaaltijd('ontbijt',this)">Ontbijt</button>
+        <button class="gen-pill gen-maaltijd-pill${genMaaltijd==='lunch'?' active':''}" onclick="setGenMaaltijd('lunch',this)">Lunch</button>
+        <button class="gen-pill gen-maaltijd-pill${genMaaltijd==='diner'?' active':''}" onclick="setGenMaaltijd('diner',this)">Diner</button>
+        <button class="gen-pill gen-maaltijd-pill${genMaaltijd==='snack'?' active':''}" onclick="setGenMaaltijd('snack',this)">Snack</button>
+      </div>
+      <div class="recipe-gen-row">
+        <span class="recipe-gen-label">Sport</span>
+        <button class="gen-pill gen-moment-pill${genMoment==='voor'?' active':''}" onclick="setGenMoment('voor',this)">Voor</button>
+        <button class="gen-pill gen-moment-pill${genMoment==='tijdens'?' active':''}" onclick="setGenMoment('tijdens',this)">Tijdens</button>
+        <button class="gen-pill gen-moment-pill${genMoment==='na'?' active':''}" onclick="setGenMoment('na',this)">Na</button>
       </div>
       <div class="recipe-gen-row" style="margin-bottom:0;">
         <span class="recipe-gen-label">Focus</span>
@@ -5486,15 +5687,20 @@ function setFoodRecFilter(key) {
 }
 
 function switchFoodTab(name) {
+  // v2.0: Chef-scherm is gestapeld (geen binnentabs). 'chef' = bovenaan; anders sectie openen.
   _activeFoodTab = name;
-  [['chef','food-chef-content'],['recepten','food-rec-content'],['weekmenu','food-week-content']].forEach(([t, id]) => {
-    const el = document.getElementById(id);
-    if (el) el.style.display = t === name ? '' : 'none';
-    const btn = document.getElementById('fitab-' + t);
-    if (btn) btn.classList.toggle('active', t === name);
-  });
-  if (name === 'recepten') _renderFoodReceptenList();
-  if (name === 'weekmenu') { renderFoodWeekmenu(); renderFoodWeekOverview(); }
+  if (name === 'chef') {
+    const top = document.getElementById('food-chef-content');
+    if (top) top.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    return;
+  }
+  const sec = document.getElementById('food-sec-' + name);
+  if (sec) {
+    sec.open = true;
+    if (name === 'recepten') _renderFoodReceptenList();
+    if (name === 'weekmenu') { renderFoodWeekmenu(); renderFoodWeekOverview(); }
+    sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
 }
 
 const _recSectionClosed = new Set(); // secties die dichtgeklapt zijn
@@ -5923,7 +6129,7 @@ function _categorizeIngredients(items) {
 
 function setGenCount(n) {
   genCount = n;
-  document.querySelectorAll('.gen-pill:not(.gen-focus-pill)').forEach((b, i) => {
+  document.querySelectorAll('.gen-count-pill').forEach((b, i) => {
     b.classList.toggle('active', i + 1 === n);
   });
 }
@@ -5935,7 +6141,7 @@ function setGenFocus(f, btn) {
 }
 
 function getActiveGenCount() {
-  const active = document.querySelector('.gen-pill.active');
+  const active = document.querySelector('.gen-count-pill.active');
   if (active) { const n = parseInt(active.textContent); if (n > 0) return n; }
   return genCount;
 }
@@ -5947,7 +6153,6 @@ async function generateRecepten() {
   }
   const focusEl = document.getElementById('gen-focus-input');
   const focus = focusEl ? focusEl.value.trim() : '';
-  const isVega = !!(document.getElementById('gen-vega') && document.getElementById('gen-vega').checked);
   const btn = document.getElementById('gen-btn');
   if (btn) { btn.disabled = true; btn.textContent = 'Bezig…'; }
 
@@ -5971,23 +6176,20 @@ Is dit een logische combinatie die culinair bij elkaar past? Antwoord ALLEEN met
             <button class="btn btn-primary" style="flex:1;" onclick="closeModal();_forceGenerate()">Toch genereren</button>
           </div>
         `);
-        window._forceGenerate = () => _doGenerateRecepten(focus, isVega);
+        window._forceGenerate = () => _doGenerateRecepten(focus);
         return;
       }
     } catch(_) { /* validatie mislukt, gewoon doorgaan */ }
   }
-  await _doGenerateRecepten(focus, isVega);
+  await _doGenerateRecepten(focus);
 }
 
-async function _doGenerateRecepten(focus, isVegaArg) {
+async function _doGenerateRecepten(focus) {
   const n = getActiveGenCount();
   const btn = document.getElementById('gen-btn');
   if (btn) { btn.disabled = true; btn.textContent = 'Bezig…'; }
-  const isVega = isVegaArg !== undefined ? isVegaArg : !!(document.getElementById('gen-vega') && document.getElementById('gen-vega').checked);
   const focusTxt = focus ? ` Focus op: ${focus}.` : '';
-  const vleesRegel = isVega
-    ? 'GEEN VLEES. Vis en zeevruchten zijn WEL toegestaan.'
-    : 'Vlees is toegestaan maar geef voorkeur aan vegetarische opties of vis.';
+  const vleesRegel = _dieetRegel() + _momentRegel() + _maaltijdRegel() + _voorraadRegel();
   const bestaandeNamen = (data.recepten || []).map(r => r.naam).join(', ');
   const vermijdDubbel = bestaandeNamen ? `\nVermijd recepten die lijken op: ${bestaandeNamen}.` : '';
   const receptWord = n === 1 ? 'recept' : 'recepten';
@@ -6019,6 +6221,7 @@ JSON-formaat (exact):
     if (!match) throw new Error('Kon geen recepten uit het antwoord halen. Probeer opnieuw.');
     const parsed = JSON.parse(match[0]);
     if (!Array.isArray(parsed) || parsed.length === 0) throw new Error('Geen recepten ontvangen.');
+    if (genMaaltijd) parsed.forEach(r => { r._type = genMaaltijd; });
     window._generatedRecepten = [];
     showGeneratedPreview(parsed);
   } catch(e) {
@@ -6184,8 +6387,7 @@ async function generateMeer() {
   const btn = document.getElementById('gen-meer-btn');
   if (btn) { btn.disabled = true; btn.textContent = 'Bezig…'; }
 
-  const isVega = !!(document.getElementById('gen-vega') && document.getElementById('gen-vega').checked);
-  const vleesRegel = isVega ? 'GEEN VLEES, vis mag wel.' : 'Vlees mag maar geef voorkeur aan vegetarisch of vis.';
+  const vleesRegel = _dieetRegel() + _momentRegel() + _maaltijdRegel() + _voorraadRegel();
   const bestaandeNamen = [
     ...(data.recepten || []).map(r => r.naam),
     ...(window._generatedRecepten || []).map(r => r.naam)
@@ -6632,15 +6834,8 @@ function renderCoachNutri() {
   }
 }
 
-function renderCoach() {
-  updateStreakUI();
-  renderCoachNutri();
-  renderChatHistory();
-  renderStats();
-  renderSavedTips();
-  renderPartners();
-  _syncTTSButtons();
-  renderPatroonGrid();
+function renderCoach() { // v2.0: alias — Coach en Vandaag zijn samengevoegd
+  renderVandaag();
 }
 
 function linkExercises(line) {
@@ -7387,6 +7582,95 @@ function editWeekMenuMeal(dateStr, slot) {
   `);
 }
 
+function _voorraadLineHTML() {
+  const v = data && data.chefVoorraad;
+  if (!v || v.datum !== today() || !(v.items || []).length) return '';
+  return `<div style="display:flex;align-items:center;gap:6px;margin-top:10px;padding:7px 12px;background:var(--accent-food-tint);border:1px solid rgba(16,185,129,.25);border-radius:10px;font-size:12.5px;color:#20654c;text-align:left;">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+    <span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;"><strong>In huis:</strong> ${v.items.join(', ')}</span>
+    <button onclick="clearVoorraad()" style="background:none;border:none;color:#20654c;font-size:14px;cursor:pointer;padding:2px 4px;flex-shrink:0;font-family:inherit;" title="Wissen">✕</button>
+  </div>`;
+}
+
+function showVoorraadModal() {
+  const v = (data && data.chefVoorraad && data.chefVoorraad.datum === today()) ? data.chefVoorraad.items.join(', ') : '';
+  showModal(`
+    <div class="modal-header">
+      <h2>Wat heb ik in huis?</h2>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <p style="font-size:13px;color:var(--muted);margin:4px 0 12px;">Spreek in, typ, of maak een foto van je koelkast of voorraadkast. Chef gebruikt dit vandaag bij het genereren van recepten.</p>
+    ${micInput('voorraad-input', 'paprika, halve courgette, feta…', v)}
+    <div id="voorraad-foto-status" style="display:none;font-size:12px;color:var(--muted);margin-top:8px;"></div>
+    <input type="file" id="voorraad-foto-input" accept="image/*" style="display:none;" onchange="analyseVoorraadFoto(this)">
+    <div style="display:flex;gap:8px;margin-top:14px;">
+      <button class="btn btn-ghost" style="flex:1;" onclick="document.getElementById('voorraad-foto-input').click()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        Foto
+      </button>
+      <button class="btn btn-primary" style="flex:1;" onclick="saveVoorraad()">Bewaren</button>
+    </div>
+  `);
+}
+
+function saveVoorraad() {
+  const el = document.getElementById('voorraad-input');
+  const items = (el ? el.value : '').split(/[,;\n]| en /).map(s => s.trim()).filter(Boolean);
+  data.chefVoorraad = items.length ? { datum: today(), items } : null;
+  saveAndSync();
+  closeModal();
+  _renderFoodChef();
+  if (items.length) showBanner('green', `✓ ${items.length} ingrediënt${items.length === 1 ? '' : 'en'} in huis — Chef neemt ze mee`);
+}
+
+function clearVoorraad() {
+  data.chefVoorraad = null;
+  saveAndSync();
+  _renderFoodChef();
+}
+
+async function analyseVoorraadFoto(inputEl) {
+  const file = inputEl.files[0];
+  if (!file) return;
+  inputEl.value = '';
+  if (!settings.anthropicKey) { showBanner('red', 'Geen API-sleutel — voeg je Anthropic sleutel in via Instellingen.'); return; }
+  const status = document.getElementById('voorraad-foto-status');
+  if (status) { status.style.display = 'block'; status.textContent = 'Foto wordt bekeken…'; }
+  try {
+    const base64 = await new Promise((res, rej) => {
+      const reader = new FileReader();
+      reader.onload = e => res(e.target.result.split(',')[1]);
+      reader.onerror = rej;
+      reader.readAsDataURL(file);
+    });
+    const mediaType = file.type && file.type.startsWith('image/') ? file.type : 'image/jpeg';
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-api-key': settings.anthropicKey, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 400,
+        messages: [{ role: 'user', content: [
+          { type: 'image', source: { type: 'base64', media_type: mediaType, data: base64 } },
+          { type: 'text', text: 'Dit is een foto van een koelkast, voorraadkast of losse ingrediënten. Noem alle herkenbare eetbare ingrediënten, kort en zonder hoeveelheden. Antwoord ALLEEN met dit JSON-object: {"items":["paprika","feta","..."]}' }
+        ]}]
+      })
+    });
+    if (!resp.ok) throw new Error();
+    const json = await resp.json();
+    const result = safeParseJSON(json.content[0].text);
+    if (!result || !Array.isArray(result.items) || result.items.length === 0) throw new Error();
+    const el = document.getElementById('voorraad-input');
+    if (el) {
+      const bestaand = el.value.trim();
+      el.value = bestaand ? bestaand + ', ' + result.items.join(', ') : result.items.join(', ');
+    }
+    if (status) status.textContent = `${result.items.length} ingrediënten herkend — pas aan waar nodig en bewaar.`;
+  } catch(_) {
+    if (status) status.textContent = 'Kon geen ingrediënten herkennen. Typ of spreek ze in.';
+  }
+}
+
 async function analyseChefFoto(inputEl) {
   const file = inputEl.files[0];
   if (!file) return;
@@ -7954,6 +8238,7 @@ Beschrijving: "${text.replace(/"/g, "'")}"`;
 function smartVoiceActivity(prefix) {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SR) { showBanner('yellow', 'Spraakinvoer niet beschikbaar in deze browser.'); return; }
+  _stopCurrentAudio(); // stem uit voordat de mic aangaat
 
   const btn = document.getElementById('smart-voice-act-btn');
   const statusEl = document.getElementById('smart-voice-status');
@@ -8020,7 +8305,7 @@ async function generateRecipeFromText(text) {
   const prompt = `Je bent een gezondheidscoach gespecialiseerd in vezelrijke gerechten. Genereer een vezelrijk recept op basis van: "${text.replace(/"/g, "'")}".
 Geef ALLEEN geldige JSON terug (geen uitleg, geen markdown):
 {"naam":"recept naam","vezels":"~Xg","tijd":"X min","ingredienten":["hoeveelheid ingredient","..."],"bereiding":["Stap 1: ...","..."]}
-Regels: minimaal 8g vezels, vegetarisch of vis, max 35 min, concrete stappen in het Nederlands.`;
+Regels: minimaal 8g vezels, ${_dieetRegel()} Max 35 min, concrete stappen in het Nederlands.`;
   const raw = await callAI(prompt, 450);
   return safeParseJSON(raw);
 }
@@ -8061,8 +8346,7 @@ function smartVoiceRecipe() {
     // Route via _doGenerateRecepten zodat het aantal uit de picker wordt gerespecteerd
     const focusEl = document.getElementById('gen-focus-input');
     if (focusEl) focusEl.value = text;
-    const isVega = !!(document.getElementById('gen-vega') && document.getElementById('gen-vega').checked);
-    await _doGenerateRecepten(text, isVega);
+    await _doGenerateRecepten(text);
   };
 
   recognition.onerror = (e) => {
@@ -8101,10 +8385,13 @@ function confirmVoiceRecipe() {
 function startVoiceInput(inputId) {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SR) { showBanner('yellow', 'Spraakinvoer niet beschikbaar in deze browser.'); return; }
+  _stopCurrentAudio();   // stem uit, anders neemt de mic de stem op
+  _stopAllVoiceInput();  // nooit twee mics tegelijk
   const recognition = new SR();
   recognition.lang = 'nl-NL';
   recognition.interimResults = false;
   recognition.maxAlternatives = 1;
+  window._genericVoiceRec = recognition;
   const input = document.getElementById(inputId);
   const btn = document.getElementById('mic-' + inputId);
   if (btn) btn.classList.add('listening');
@@ -8114,10 +8401,11 @@ function startVoiceInput(inputId) {
     if (btn) btn.classList.remove('listening');
   };
   recognition.onerror = () => {
+    window._genericVoiceRec = null;
     if (btn) btn.classList.remove('listening');
-    showBanner('yellow', 'Spraakinvoer mislukt. Probeer opnieuw.');
+    if (!recognition._aborted) showBanner('yellow', 'Spraakinvoer mislukt. Probeer opnieuw.');
   };
-  recognition.onend = () => { if (btn) btn.classList.remove('listening'); };
+  recognition.onend = () => { window._genericVoiceRec = null; if (btn) btn.classList.remove('listening'); };
   recognition.start();
 }
 
@@ -8143,7 +8431,7 @@ function toggleTTS() {
   localStorage.setItem('hc_tts', _ttsEnabled ? 'on' : 'off');
   _syncTTSButtons();
   if (_ttsEnabled) unlockTTS();
-  else window.speechSynthesis.cancel();
+  else _stopCurrentAudio(); // stopt óók ladende Nova-audio en wachtende browser-spraak
 }
 
 function _syncTTSButtons() {
@@ -8187,8 +8475,17 @@ function _pickNlVoice(voices) {
 }
 
 let _currentAudio = null;
+let _speakToken = 0;          // elke nieuwe spreekopdracht maakt oudere ongeldig
+let _ttsAbort = null;         // AbortController voor lopende OpenAI TTS fetch
+let _browserTtsPending = false; // browser-utterance aangevraagd maar nog niet sprekend
 
 function _stopAllVoiceInput() {
+  // Stop generieke invoerveld-mic
+  if (window._genericVoiceRec) {
+    window._genericVoiceRec._aborted = true;
+    try { window._genericVoiceRec.abort(); } catch(_) {}
+    window._genericVoiceRec = null;
+  }
   // Stop coach big-praat mic
   if (window._bigPraatRec) {
     try { window._bigPraatRec.abort(); } catch(_) {}
@@ -8215,14 +8512,17 @@ function _stopAllVoiceInput() {
 }
 
 function _stopCurrentAudio() {
+  _speakToken++; // lopende (nog ladende) TTS-opdrachten vervallen
+  if (_ttsAbort) { try { _ttsAbort.abort(); } catch(_) {} _ttsAbort = null; }
   if (_currentAudio) {
     try { _currentAudio.pause(); _currentAudio.currentTime = 0; } catch(_) {}
     _currentAudio = null;
   }
-  // Alleen cancel() als er echt iets speelt — op iOS corrupts een onnodige cancel() de audio-sessie
-  // waarna SpeechRecognition stil faalt (geen callbacks meer)
-  if (window.speechSynthesis && window.speechSynthesis.speaking) {
+  // Alleen cancel() als er echt iets speelt of in de wachtrij staat — op iOS corrupts
+  // een onnodige cancel() de audio-sessie waarna SpeechRecognition stil faalt
+  if (window.speechSynthesis && (window.speechSynthesis.speaking || _browserTtsPending)) {
     window.speechSynthesis.cancel();
+    _browserTtsPending = false;
   }
   _updatePlayButtons(false);
 }
@@ -8235,29 +8535,38 @@ async function speakCoach(text, forcePlay = false) {
     .replace(/\*\*(.+?)\*\*/g, '$1').replace(/\*(.+?)\*/g, '$1')
     .replace(/#+\s/g, '').replace(/📌[^\n]*/g, '')
     .replace(/[\u{1F300}-\u{1FAFF}]/gu, '').replace(/\n{2,}/g, '. ').trim();
+  const myToken = _speakToken;
   if (settings.openaiKey) {
-    try { await _speakOpenAI(clean, settings.openaiKey, settings.ttsVoice || 'nova'); return; }
-    catch(e) { showBanner('yellow', `Nova stem mislukt: ${e.message || '?'} — iPhone stem als backup.`); }
+    try { await _speakOpenAI(clean, settings.openaiKey, settings.ttsVoice || 'nova', myToken); return; }
+    catch(e) {
+      if (myToken !== _speakToken || (e && e.name === 'AbortError')) return; // vervangen door nieuwere opdracht
+      showBanner('yellow', `Nova stem mislukt: ${e.message || '?'} — iPhone stem als backup.`);
+    }
   }
+  if (myToken !== _speakToken) return;
   // Fallback: browser stem
-  _speakBrowser(clean);
+  _speakBrowser(clean, myToken);
 }
 
-async function _speakOpenAI(text, apiKey, voice) {
+async function _speakOpenAI(text, apiKey, voice, token) {
   // Audio-element aanmaken vóór await — iOS vereist user-gesture context voor play()
   const audio = new Audio();
   _currentAudio = audio;
+  _ttsAbort = new AbortController();
 
   const resp = await fetch('https://api.openai.com/v1/audio/speech', {
     method: 'POST',
     headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ model: 'tts-1-hd', input: text.slice(0, 4096), voice, speed: 1.0 })
+    body: JSON.stringify({ model: 'tts-1', input: text.slice(0, 4096), voice, speed: 1.0 }),
+    signal: _ttsAbort.signal
   });
+  if (token !== _speakToken) { if (_currentAudio === audio) _currentAudio = null; return; } // vervallen
   if (!resp.ok) {
     _currentAudio = null;
     throw new Error(`OpenAI TTS ${resp.status}`);
   }
   const blob = await resp.blob();
+  if (token !== _speakToken) { if (_currentAudio === audio) _currentAudio = null; return; } // vervallen
   const url = URL.createObjectURL(blob);
   audio.src = url;
   audio.onended = () => { URL.revokeObjectURL(url); _currentAudio = null; _updatePlayButtons(false); };
@@ -8273,27 +8582,36 @@ async function _speakOpenAI(text, apiKey, voice) {
   }
 }
 
-function _speakBrowser(text) {
+function _speakBrowser(text, token) {
   if (!window.speechSynthesis) return;
   const utt = new SpeechSynthesisUtterance(text);
   utt.lang = 'nl-NL'; utt.rate = 0.93; utt.pitch = 1.0;
+  let gesproken = false;      // doSpeak mag maar één keer echt spreken
+  let fallbackTimer = null;
   const doSpeak = (voices) => {
+    if (gesproken) return;
+    gesproken = true;
+    if (fallbackTimer) { clearTimeout(fallbackTimer); fallbackTimer = null; }
+    if (token !== undefined && token !== _speakToken) { _browserTtsPending = false; return; } // vervallen
     const voice = _pickNlVoice(voices);
     if (voice) utt.voice = voice;
     _updatePlayButtons(true);
+    _browserTtsPending = true;
     window.speechSynthesis.speak(utt);
     const t = setInterval(() => {
       if (!window.speechSynthesis.speaking) { clearInterval(t); _updatePlayButtons(false); return; }
       window.speechSynthesis.pause(); window.speechSynthesis.resume();
     }, 10000);
-    utt.onend = () => { clearInterval(t); _updatePlayButtons(false); };
-    utt.onerror = () => { clearInterval(t); _updatePlayButtons(false); };
+    utt.onstart = () => { _browserTtsPending = false; };
+    utt.onend = () => { clearInterval(t); _browserTtsPending = false; _updatePlayButtons(false); };
+    utt.onerror = () => { clearInterval(t); _browserTtsPending = false; _updatePlayButtons(false); };
   };
   const voices = window.speechSynthesis.getVoices();
   if (voices.length > 0) doSpeak(voices);
   else {
+    _browserTtsPending = true;
     window.speechSynthesis.onvoiceschanged = () => { window.speechSynthesis.onvoiceschanged = null; doSpeak(window.speechSynthesis.getVoices()); };
-    setTimeout(() => doSpeak(window.speechSynthesis.getVoices()), 500);
+    fallbackTimer = setTimeout(() => doSpeak(window.speechSynthesis.getVoices()), 500);
   }
 }
 
@@ -8502,7 +8820,7 @@ function iconSVG(type, size = 22) {
     commute: `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="#0f766e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="16" r="3"/><circle cx="18" cy="16" r="3"/><path d="M6 16l5-8h3l2 4"/><path d="M9 8h5l3 5"/><path d="M12 2v3"/><path d="M10 2h4"/></svg>`,
     walk:    `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="1.5"/><path d="M9 9l3 2 3-2"/><path d="M12 11v5"/><path d="M9 22l1.5-4"/><path d="M15 22l-1.5-4"/><path d="M8 12l-2 3"/><path d="M16 12l2 3"/></svg>`,
     walkdog: `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="#b45309" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="14" r="3"/><ellipse cx="6.5" cy="10.5" rx="1.5" ry="2"/><ellipse cx="15.5" cy="10.5" rx="1.5" ry="2"/><ellipse cx="8.5" cy="7" rx="1" ry="1.5"/><ellipse cx="14" cy="7" rx="1" ry="1.5"/><path d="M14 14c1 1 3 1 4 0"/></svg>`,
-    rest:    `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="#6b6b6b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`,
+    rest:    `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="#67766d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`,
     other:   `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>`
   };
   return icons[type] || icons.other;
@@ -8641,7 +8959,7 @@ function fabCoachTap() {
   if (!SR) {
     // Geen spraak: spring naar coach-tab
     const coachBtn = document.querySelector('.tab-btn');
-    if (coachBtn) { switchTab('coach', coachBtn); }
+    if (coachBtn) { switchTab('vandaag', coachBtn); }
     return;
   }
 
@@ -8941,7 +9259,7 @@ function _maybeAppendChefLink(userMsg, aiReply) {
   if (!last) return;
   const btn = document.createElement('button');
   btn.style.cssText = 'display:inline-flex;align-items:center;gap:5px;margin-top:8px;background:var(--card2);border:1.5px solid var(--border);border-radius:8px;padding:5px 10px;font-size:12px;font-weight:600;color:var(--accent-food);cursor:pointer;font-family:inherit;';
-  btn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v12"/><path d="M18 9a3 3 0 0 0-3-3H6"/><path d="M6 15a6 6 0 0 0 12 0"/></svg> Naar Food & Chef';
+  btn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v12"/><path d="M18 9a3 3 0 0 0-3-3H6"/><path d="M6 15a6 6 0 0 0 12 0"/></svg> Naar Chef';
   btn.onclick = () => {
     const foodBtn = document.querySelector('.tab-btn[onclick*="recepten"]');
     if (foodBtn) { switchTab('recepten', foodBtn); try { switchFoodTab('chef'); } catch(_) {} }
@@ -9091,9 +9409,47 @@ async function _updateCoachMemory(userMsg, coachReply) {
   } catch(_) {}
 }
 
+// ─── WEKELIJKSE GEHEUGEN-OPSCHONING ──────────────────────────────────────────
+// Eén keer per week: dubbele feiten samenvoegen, tegenstrijdigheden oplossen
+// (nieuwste wint), trivia weg. Houdt het coach-brein scherp op lange termijn.
+async function _consolideerGeheugen() {
+  try {
+    if (!settings || !settings.anthropicKey) return;
+    const wk = getISOWeek(new Date());
+    if (localStorage.getItem('hc_brain_cleanup') === wk) return;
+    const v2 = data.coachMemoryV2;
+    if (!v2) return;
+    const cats = ['voorkeuren','medisch','doelen','schema','overig'];
+    const totaal = cats.reduce((s, c) => s + ((v2[c] || []).length), 0);
+    if (totaal < 8) { localStorage.setItem('hc_brain_cleanup', wk); return; } // nog te weinig om op te schonen
+    const prompt = `Dit is het geheugen van een persoonlijke gezondheidscoach over één gebruiker, per categorie, NIEUWSTE feiten eerst:
+${JSON.stringify(v2)}
+
+Schoon dit geheugen op volgens deze regels:
+1. Voeg overlappende of dubbele feiten samen tot één helder feit.
+2. Bij tegenstrijdige feiten wint het NIEUWSTE (staat eerder in de lijst); verwijder het oude.
+3. Verwijder triviale, eenmalige of verouderde feiten die niet meer relevant zijn voor coaching.
+4. Maximaal 10 feiten per categorie, elk kort en feitelijk geformuleerd.
+5. Verzin NIETS nieuws; alleen samenvoegen, opruimen en herformuleren.
+Antwoord ALLEEN met geldige JSON in exact dit formaat, zonder uitleg:
+{"voorkeuren":[],"medisch":[],"doelen":[],"schema":[],"overig":[]}`;
+    const raw = await callAIPlain(prompt, 800);
+    const schoon = safeParseJSON(raw);
+    if (!schoon || typeof schoon !== 'object') return;
+    if (!cats.every(c => Array.isArray(schoon[c]))) return;
+    const nieuwTotaal = cats.reduce((s, c) => s + schoon[c].length, 0);
+    if (nieuwTotaal === 0) return; // verdacht leeg resultaat — niet toepassen, volgende keer opnieuw
+    cats.forEach(c => { data.coachMemoryV2[c] = schoon[c].map(x => String(x).trim()).filter(Boolean).slice(0, 10); });
+    _syncFlatMemory();
+    saveAndSync();
+    localStorage.setItem('hc_brain_cleanup', wk);
+  } catch(_) { /* stil overslaan — volgende app-start opnieuw proberen */ }
+}
+
 function startVoiceFrontCoach() {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SR) { showBanner('red', 'Spraakinvoer niet beschikbaar in deze browser.'); return; }
+  _stopCurrentAudio(); // stem uit voordat de mic aangaat
   const inputEl = document.getElementById('coach-front-input');
   const recognition = new SR();
   recognition.lang = 'nl-NL';
@@ -9499,12 +9855,12 @@ Lege arrays [] voor activiteiten/maaltijden als geen van toepassing. Geen uitleg
     // Alleen naar coach sturen als gebruiker écht een vraag stelt
     if (parsed.coaching_vraag) {
       const coachBtn = document.querySelector('.tab-btn');
-      if (coachBtn) switchTab('coach', coachBtn);
+      if (coachBtn) switchTab('vandaag', coachBtn);
       coachFrontSend(parsed.coaching_vraag);
     } else if (acties.length === 0) {
       // Niets herkend — stuur transcript als gewone coachvraag
       const coachBtn = document.querySelector('.tab-btn');
-      if (coachBtn) switchTab('coach', coachBtn);
+      if (coachBtn) switchTab('vandaag', coachBtn);
       coachFrontSend(transcript);
     }
     // Bij simpele acties (toevoegen/verwijderen): banner + TTS bevestiging
@@ -9512,7 +9868,7 @@ Lege arrays [] voor activiteiten/maaltijden als geen van toepassing. Geen uitleg
       const bannerTxt = acties.join(' · ');
       showBanner('green', bannerTxt, false, null, null, () => {
         data = _snapshot;
-        saveLocal();
+        saveAndSync(); // óók naar Gist, anders draait de cloud de ongedaanmaking terug
         renderAll();
         showBanner('yellow', 'Ongedaan gemaakt.');
       });
@@ -9532,24 +9888,24 @@ Lege arrays [] voor activiteiten/maaltijden als geen van toepassing. Geen uitleg
 
 function renderAll() {
   renderVandaag();
-  renderWeek();
-  renderWeekOvTab();
   renderFoodTab();
-  renderCoach();
 }
 
 // ─── INIT ────────────────────────────────────────────────────────────────────
 
 function initApp() {
   migrateRemoveTemplateActivities();
+  migreerProfielV2();
   renderAll();
   updateStreak();
   loadGist();
+  setTimeout(_consolideerGeheugen, 8000); // na Gist-load; max 1× per week
+  setTimeout(checkBackupReminder, 5000);  // alleen zonder cloud sync, max 1× per maand
   setupSwipeGestures();
   checkIntro();
   checkWeekplanCard();
   updateMicStatusLabel();
-  // Coach-tab is actief bij start — FAB verbergen
+  // Vandaag-tab (met coach) is actief bij start — FAB verbergen
   const tabs = document.querySelectorAll('.tab-btn');
   tabs.forEach(t => t.classList.remove('active'));
   if (tabs[0]) tabs[0].classList.add('active');
@@ -9561,6 +9917,8 @@ function initApp() {
 function _showWelcomeGreeting() {
   const win = document.getElementById('coach-front-chat');
   if (!win || win.children.length > 0) return;
+  if (localStorage.getItem('hc_greeted')) return; // v2.0: alleen bij eerste gebruik — dagregel in header dekt de dagelijkse groet
+  localStorage.setItem('hc_greeted', '1');
   const naam = (settings && settings.naam) || null;
   const n = naam ? `, ${naam}` : '';
   const uur = new Date().getHours();
