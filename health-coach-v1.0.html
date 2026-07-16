@@ -2687,7 +2687,7 @@ details[open] .intro-ex-summary { border-radius: 12px 12px 0 0; border-bottom-co
 'use strict';
 
 // ─── VERSION CHECK (forceert Safari herlading bij nieuwe versie) ──────────────
-const APP_VERSION = '20260716-11';
+const APP_VERSION = '20260716-13';
 (function() {
   try {
     const stored = localStorage.getItem('hc_app_version');
@@ -3591,6 +3591,21 @@ function setGenMoment(v, btn) {
 }
 
 let genMaaltijd = '';  // '' | ontbijt | lunch | diner | snack (per sessie)
+let genGemak = 'normaal'; // snel | normaal | uitgebreid (per sessie)
+
+function setGenGemak(v, btn) {
+  genGemak = v;
+  document.querySelectorAll('.gen-gemak-pill').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+}
+
+function _gemakRegel() {
+  if (genGemak === 'snel') return `
+- GEMAK: snel & simpel — maximaal 8 ingrediënten, maximaal 6 bereidingsstappen, totaal maximaal 20 minuten, alleen gangbare technieken en gewone supermarkt-ingrediënten. Maar smaak en voedingswaarde blijven de harde eis: geen fantasieloze "gooi een blik leeg"-recepten, kies slimme shortcuts die écht lekker zijn.`;
+  if (genGemak === 'uitgebreid') return `
+- GEMAK: uitgebreid — dit mag een kookproject zijn: gelaagde smaken, meerdere componenten, 45 tot 90 minuten. Kies technieken die het verschil maken (roosteren, marineren, zelf een saus maken) en leg in de bereidingsstappen kort uit waarom een stap belangrijk is.`;
+  return '';
+}
 
 function setGenMaaltijd(v, btn) {
   if (genMaaltijd === v) {
@@ -5049,8 +5064,26 @@ function quickEditMeal(dateStr, slot) {
     </button>
     <div id="nutri-preview" style="display:none;font-size:12px;color:var(--muted);margin-bottom:8px;padding:8px 10px;background:var(--bg);border-radius:8px;"></div>
     <button class="btn btn-primary btn-full" onclick="saveQuickMeal('${dateStr}','${slot}')">Toevoegen</button>
+    <button class="btn btn-ghost btn-full" style="margin-top:8px;font-size:13px;" onclick="vraagChefVoorSlot('${slot}')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><path d="M6 3v12"/><path d="M18 9a3 3 0 0 0-3-3H6"/><path d="M6 15a6 6 0 0 0 12 0"/></svg>
+      Nog geen idee? Vraag Chef
+    </button>
   `);
   setTimeout(() => document.getElementById('quick-meal-input').focus(), 50);
+}
+
+function vraagChefVoorSlot(slot) {
+  closeModal();
+  genMaaltijd = slot; // Chef weet meteen voor welk moment
+  const foodBtn = document.querySelector('.tab-btn[onclick*="recepten"]');
+  if (foodBtn) switchTab('recepten', foodBtn);
+  try { _renderFoodChef(); } catch(_) {}
+  setTimeout(() => {
+    const top = document.getElementById('food-chef-content');
+    if (top) top.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const inp = document.getElementById('gen-focus-input');
+    if (inp) inp.focus();
+  }, 120);
 }
 
 function addReceptToMeal(dateStr, slot, receptId) {
@@ -5512,6 +5545,12 @@ function _renderFoodChef() {
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;"><path d="M15.5 3.5c2.8 2.8 3.5 6.8 1.5 8.8l-6.7 6.7c-1 1-2.6 1-3.5 0l-1.8-1.8c-1-1-1-2.6 0-3.5l6.7-6.7c2-2 6-1.3 8.8 1.5z" transform="scale(0.9) translate(1,1)"/><line x1="7" y1="17" x2="5" y2="19"/></svg>
           Vlees
         </button>
+      </div>
+      <div class="recipe-gen-row">
+        <span class="recipe-gen-label">Gemak</span>
+        <button class="gen-pill gen-gemak-pill${genGemak==='snel'?' active':''}" onclick="setGenGemak('snel',this)">Snel &amp; simpel</button>
+        <button class="gen-pill gen-gemak-pill${genGemak==='normaal'?' active':''}" onclick="setGenGemak('normaal',this)">Normaal</button>
+        <button class="gen-pill gen-gemak-pill${genGemak==='uitgebreid'?' active':''}" onclick="setGenGemak('uitgebreid',this)">Uitgebreid</button>
       </div>
       <div class="recipe-gen-row">
         <span class="recipe-gen-label">Maaltijd</span>
@@ -6191,7 +6230,7 @@ async function _doGenerateRecepten(focus) {
   const btn = document.getElementById('gen-btn');
   if (btn) { btn.disabled = true; btn.textContent = 'Bezig…'; }
   const focusTxt = focus ? ` Focus op: ${focus}.` : '';
-  const vleesRegel = _dieetRegel() + _momentRegel() + _maaltijdRegel() + _voorraadRegel();
+  const vleesRegel = _dieetRegel() + _momentRegel() + _maaltijdRegel() + _gemakRegel() + _voorraadRegel();
   const bestaandeNamen = (data.recepten || []).map(r => r.naam).join(', ');
   const vermijdDubbel = bestaandeNamen ? `\nVermijd recepten die lijken op: ${bestaandeNamen}.` : '';
   const receptWord = n === 1 ? 'recept' : 'recepten';
@@ -6267,6 +6306,17 @@ function recipeCardHTML(r) {
         </div>
       </div>
     </label>
+    <button type="button" onclick="toggleGenDetail('${r._tmpId}')" id="gendetail-btn-${r._tmpId}"
+      style="background:none;border:none;color:var(--accent-food);font-size:13px;font-weight:650;cursor:pointer;padding:8px 0 0;font-family:inherit;display:flex;align-items:center;gap:4px;">
+      Bekijk recept
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div id="gendetail-${r._tmpId}" style="display:none;margin-top:8px;padding:12px;background:var(--card2);border-radius:12px;font-size:13.5px;line-height:1.55;">
+      <div style="font-weight:700;margin-bottom:6px;">Ingrediënten</div>
+      <div style="margin-bottom:12px;">${(r.ingredienten || []).map(i => `• ${i}`).join('<br>')}</div>
+      <div style="font-weight:700;margin-bottom:6px;">Bereiding</div>
+      <div>${(r.bereiding || []).map((s, i) => `${i + 1}. ${s}`).join('<br>')}</div>
+    </div>
     <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);">
       <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px;">Maaltijdmoment</div>
       <div class="gen-slot-btns">${slotBtns}</div>
@@ -6335,6 +6385,15 @@ function planGenRecipe(tmpId) {
   const dates = getWeekDates(weekKey);
   const dagLabel = dagNamen[dates.indexOf(dateStr)] || dateStr;
   showBanner('green', `${saved.naam} gepland op ${dagLabel} — ${slot}`);
+}
+
+function toggleGenDetail(tmpId) {
+  const el = document.getElementById('gendetail-' + tmpId);
+  const btn = document.getElementById('gendetail-btn-' + tmpId);
+  if (!el) return;
+  const open = el.style.display !== 'none';
+  el.style.display = open ? 'none' : 'block';
+  if (btn) btn.firstChild.textContent = open ? 'Bekijk recept ' : 'Verberg recept ';
 }
 
 function toggleAanpasVeld(tmpId) {
@@ -6454,7 +6513,7 @@ async function generateMeer() {
   const btn = document.getElementById('gen-meer-btn');
   if (btn) { btn.disabled = true; btn.textContent = 'Bezig…'; }
 
-  const vleesRegel = _dieetRegel() + _momentRegel() + _maaltijdRegel() + _voorraadRegel();
+  const vleesRegel = _dieetRegel() + _momentRegel() + _maaltijdRegel() + _gemakRegel() + _voorraadRegel();
   const bestaandeNamen = [
     ...(data.recepten || []).map(r => r.naam),
     ...(window._generatedRecepten || []).map(r => r.naam)
