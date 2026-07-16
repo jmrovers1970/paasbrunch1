@@ -2689,7 +2689,7 @@ details[open] .intro-ex-summary { border-radius: 12px 12px 0 0; border-bottom-co
 'use strict';
 
 // ─── VERSION CHECK (forceert Safari herlading bij nieuwe versie) ──────────────
-const APP_VERSION = '20260716-3';
+const APP_VERSION = '20260716-4';
 (function() {
   try {
     const stored = localStorage.getItem('hc_app_version');
@@ -9846,10 +9846,11 @@ Lege arrays [] voor activiteiten/maaltijden als geen van toepassing. Geen uitleg
 
     if (acties.length > 0) {
       saveAndSync();
-      renderVandaag();
-      renderWeek();
-      renderWeekOvTab();
-      try { renderFoodTab(); } catch(_) {}
+      // Elke render apart afgeschermd: een schermfout mag een geslaagde log nooit maskeren
+      try { renderVandaag(); } catch(err) { console.error('renderVandaag:', err); }
+      try { renderWeek(); } catch(err) { console.error('renderWeek:', err); }
+      try { renderWeekOvTab(); } catch(err) { console.error('renderWeekOvTab:', err); }
+      try { renderFoodTab(); } catch(err) { console.error('renderFoodTab:', err); }
     }
 
     // Alleen naar coach sturen als gebruiker écht een vraag stelt
@@ -9880,7 +9881,9 @@ Lege arrays [] voor activiteiten/maaltijden als geen van toepassing. Geen uitleg
     }
 
   } catch(e) {
-    showBanner('red', 'Verwerken mislukt. Probeer opnieuw.');
+    console.error('Smart input fout:', e);
+    const detail = (e && e.message) ? ` (${e.message})` : '';
+    showBanner('red', `Verwerken mislukt${detail}. Probeer opnieuw.`);
   }
 }
 
