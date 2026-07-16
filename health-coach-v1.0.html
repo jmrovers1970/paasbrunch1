@@ -2685,7 +2685,7 @@ details[open] .intro-ex-summary { border-radius: 12px 12px 0 0; border-bottom-co
 'use strict';
 
 // ─── VERSION CHECK (forceert Safari herlading bij nieuwe versie) ──────────────
-const APP_VERSION = '20260716-7';
+const APP_VERSION = '20260716-9';
 (function() {
   try {
     const stored = localStorage.getItem('hc_app_version');
@@ -3123,6 +3123,7 @@ STIJL — je antwoorden worden gelezen én hardop voorgelezen:
 - Standaard 2 tot 4 zinnen, het belangrijkste eerst. Alleen langer als de gebruiker om uitleg of detail vraagt.
 - Schrijf eenheden voluit zodat het goed klinkt: "30 gram vezels", "5 kilometer", "45 minuten" — niet "30g" of "5km".
 - Maximaal één vraag per antwoord, en sluit niet elk antwoord met een vraag af. Een goed antwoord mag gewoon eindigen.
+- Trainingsadvies op hoofdlijnen: benoem het TYPE training (bijv. "een lichte lower body" of "rustige duurloop"), maar som GEEN concrete oefeningen, sets of herhalingen op — alleen als de gebruiker daar expliciet naar vraagt.
 - Spreek de gebruiker aan met 'je'${_naam ? ` of bij naam (${_naam})` : ''}.
 - Reageer altijd in het Nederlands.
 ${_profielBlok}${_vraagHint}
@@ -3173,16 +3174,16 @@ Signaleer proactief als de gebruiker de vezeldoelen dreigt te missen.
 Groen ≥30g vezels / oranje 20-29g / rood <20g.
 
 VOEDINGSADVIES STIJL:
-Als je voedingsadvies geeft, leg dan altijd KORT uit WAAROM iets verstandig is (bijv. "eiwitten zijn belangrijk voor spierherstel na krachttraining", "vezels houden je langer verzadigd", "koolhydraten voor energie vóór een lange duurloop"). Verwijs bij suggesties bij voorkeur naar recepten uit de receptenbibliotheek — die staan hieronder gesorteerd op relevantie. Geef nooit willekeurige gerechten maar verwijs naar bekende recepten.
+Als je voedingsadvies geeft, leg dan altijd KORT uit WAAROM iets verstandig is (bijv. "eiwitten zijn belangrijk voor spierherstel na krachttraining", "vezels houden je langer verzadigd", "koolhydraten voor energie vóór een lange duurloop"). Houd voedingsadvies op het niveau van voedingsstoffen en soort maaltijd (bijv. "een vezelrijk diner met een flinke portie eiwit"); noem GEEN concrete recepten of gerechten uit eigen beweging. ALLEEN als de gebruiker om een gerecht, recept of maaltijdidee vraagt, verwijs je naar recepten uit de receptenbibliotheek hieronder — nooit naar willekeurige gerechten daarbuiten.
 
 PROACTIEVE KRUISVERBANDEN (doe dit zonder dat de gebruiker erom vraagt):
 - Na krachttraining vandaag: benoem proactief het belang van eiwitten voor spierherstel als de eiwitinname laag is.
 - Na een duurloop of interval: suggereer herstelvoeding (eiwitten + koolhydraten) als er nog geen diner gelogd is.
 - Als morgen een zware training staat én de avondmaaltijd nog niet gelogd is: hint vanavond over koolhydraatrijke voeding als energievoorraad.
-- Als het na 19:00 is en vezeldoel nog niet gehaald: benoem concreet hoeveel vezels er nog nodig zijn en welk recept uit de bibliotheek dat oplost.
+- Als het na 19:00 is en vezeldoel nog niet gehaald: benoem concreet hoeveel vezels er nog nodig zijn (een recept noem je alleen als de gebruiker erom vraagt).
 - Verbind altijd activiteit met voeding: "Je hebt vandaag X gedaan, daarvoor/daarna is Y verstandig omdat Z."
 
-RECEPTENBIBLIOTHEEK (gebruik deze bij suggesties):
+RECEPTENBIBLIOTHEEK (alleen gebruiken als de gebruiker om een gerecht, recept of maaltijdidee vraagt):
 ${(() => {
   const recs = (data && data.recepten || []);
   if (recs.length === 0) return 'Nog geen recepten opgeslagen.';
@@ -6339,7 +6340,8 @@ function logGenRecipeNow(tmpId) {
   const slotArr = data.weken[weekKey][dateStr].maaltijden;
   if (!Array.isArray(slotArr[slot])) slotArr[slot] = [];
   const dubbel = slotArr[slot].findIndex(x => x.naam === saved.naam);
-  const item = { id:'m'+Date.now()+Math.random().toString(36).slice(2,5), naam:saved.naam, vezels:saved.vezels||'', eiwitten:saved.eiwitten||'', kcal:'', gepland:true, gegeten:false, receptId:saved.id };
+  // "Log vandaag" betekent: gegeten — telt direct mee in de vezels/eiwitten-balk
+  const item = { id:'m'+Date.now()+Math.random().toString(36).slice(2,5), naam:saved.naam, vezels:saved.vezels||'', eiwitten:saved.eiwitten||'', kcal:'', gepland:false, gegeten:true, receptId:saved.id };
   if (dubbel >= 0) slotArr[slot][dubbel] = item; else slotArr[slot].push(item);
   saveAndSync();
   renderVandaag();
@@ -7111,7 +7113,8 @@ function renderPatroonGrid() {
 
   const dowAvgs = dowScores.map(arr => arr.length ? arr.reduce((a,b)=>a+b,0)/arr.length : 0);
   const maxAvg = Math.max(...dowAvgs);
-  const bestDow = maxAvg > 0 ? dowAvgs.indexOf(maxAvg) : -1;
+  const dagNamen = ['Ma','Di','Wo','Do','Vr','Za','Zo']; // 0=Ma, zelfde volgorde als dowScores
+const bestDow = maxAvg > 0 ? dowAvgs.indexOf(maxAvg) : -1;
   const total = dowScores.flat().length;
   const active = dowScores.flat().filter(s => s > 0).length;
   const pct = total > 0 ? Math.round(active / total * 100) : 0;
@@ -10092,8 +10095,8 @@ async function startVoedingIntake(dateStr, defaultSlot, source) {
 }
 
 async function parseVoeding(transcript, dateStr, defaultSlot, source) {
-  // Detecteer receptverzoek en stuur door naar generator
-  if (/\b(recept|recepten|maak.*recept|geef.*recept|recept.*met|wat kan ik maken|generator)\b/i.test(transcript)) {
+  // Detecteer Chef-verzoek (recept, idee, inspiratie of "chef, ...") en stuur door naar de generator
+  if (/\b(chef|recept|recepten|wat kan ik maken|wat zal ik eten|wat kan ik eten|idee[eë]n? voor|inspiratie|verzin iets|iets lekkers)\b/i.test(transcript)) {
     const focusEl = document.getElementById('gen-focus-input');
     if (focusEl) focusEl.value = transcript.replace(/^.*?(?:recept.*?met|met)\s*/i, '').trim() || transcript;
     const foodBtn = document.querySelector('.tab-btn[onclick*="recepten"]');
