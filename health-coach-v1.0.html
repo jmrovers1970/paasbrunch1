@@ -2685,7 +2685,7 @@ details[open] .intro-ex-summary { border-radius: 12px 12px 0 0; border-bottom-co
 'use strict';
 
 // ─── VERSION CHECK (forceert Safari herlading bij nieuwe versie) ──────────────
-const APP_VERSION = '20260716-6';
+const APP_VERSION = '20260716-7';
 (function() {
   try {
     const stored = localStorage.getItem('hc_app_version');
@@ -9869,11 +9869,8 @@ Lege arrays [] voor activiteiten/maaltijden als geen van toepassing. Geen uitleg
         renderAll();
         showBanner('yellow', 'Ongedaan gemaakt.');
       });
-      if (_ttsEnabled) {
-        const spokenTxt = acties.map(a => a.replace(/^[✓🛒📌]\s*/, '').replace(/·/g, ','))
-          .join('. ');
-        speakCoach(spokenTxt);
-      }
+      // v2.0: logbevestigingen worden niet meer voorgelezen — de groene banner volstaat.
+      // De stem spreekt alleen nog bij echte coach-antwoorden.
     }
 
   } catch(e) {
