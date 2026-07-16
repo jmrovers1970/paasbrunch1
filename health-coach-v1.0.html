@@ -1079,14 +1079,14 @@ details[open] .intro-ex-summary { border-radius: 12px 12px 0 0; border-bottom-co
 .recipe-gen-sub { font-size: 13px; color: var(--muted); margin-bottom: 14px; }
 .recipe-gen-row { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; flex-wrap: nowrap; }
 .recipe-gen-label {
-  font-size: 11px; font-weight: 800; color: var(--muted);
-  text-transform: uppercase; letter-spacing: .5px;
-  width: 52px; flex-shrink: 0;
+  font-size: 10.5px; font-weight: 800; color: var(--muted);
+  text-transform: uppercase; letter-spacing: .4px;
+  width: 58px; flex-shrink: 0;
 }
 .gen-pill {
   background: var(--card2); border: 1.5px solid var(--border);
-  border-radius: 999px; flex: 1 1 0; min-width: 0; height: 32px; padding: 0 6px;
-  font-size: 12.5px; font-weight: 650; cursor: pointer; color: var(--text);
+  border-radius: 999px; flex: 1 1 0; min-width: 0; height: 32px; padding: 0 5px;
+  font-size: 12px; font-weight: 650; cursor: pointer; color: var(--text);
   display: flex; align-items: center; justify-content: center; gap: 4px;
   white-space: nowrap; overflow: hidden; transition: all .15s;
   font-family: inherit;
@@ -2687,7 +2687,7 @@ details[open] .intro-ex-summary { border-radius: 12px 12px 0 0; border-bottom-co
 'use strict';
 
 // ─── VERSION CHECK (forceert Safari herlading bij nieuwe versie) ──────────────
-const APP_VERSION = '20260716-13';
+const APP_VERSION = '20260716-14';
 (function() {
   try {
     const stored = localStorage.getItem('hc_app_version');
@@ -5548,7 +5548,7 @@ function _renderFoodChef() {
       </div>
       <div class="recipe-gen-row">
         <span class="recipe-gen-label">Gemak</span>
-        <button class="gen-pill gen-gemak-pill${genGemak==='snel'?' active':''}" onclick="setGenGemak('snel',this)">Snel &amp; simpel</button>
+        <button class="gen-pill gen-gemak-pill${genGemak==='snel'?' active':''}" onclick="setGenGemak('snel',this)">Snel</button>
         <button class="gen-pill gen-gemak-pill${genGemak==='normaal'?' active':''}" onclick="setGenGemak('normaal',this)">Normaal</button>
         <button class="gen-pill gen-gemak-pill${genGemak==='uitgebreid'?' active':''}" onclick="setGenGemak('uitgebreid',this)">Uitgebreid</button>
       </div>
@@ -6285,15 +6285,14 @@ function recipeCardHTML(r) {
 
   const slots = ['ontbijt','lunch','diner','snack'];
   const slotLabels = { ontbijt:'Ontbijt', lunch:'Lunch', diner:'Diner', snack:'Snack' };
-  const defaultSlot = r._type || 'diner';
+  const defaultSlot = r._type || null; // geen voorselectie: per recept kiezen (nogmaals tikken = uit)
   const slotBtns = slots.map(s =>
     `<button type="button" class="gen-slot-btn${s === defaultSlot ? ' active' : ''}" id="slotbtn-${r._tmpId}-${s}"
       onclick="_selectGenSlot('${r._tmpId}','${s}')">${slotLabels[s]}</button>`
   ).join('');
 
   return `<div class="gen-recipe-card" id="gencard-${r._tmpId}">
-    <label style="display:flex;align-items:flex-start;gap:12px;cursor:pointer;">
-      <input type="checkbox" id="chk-${r._tmpId}" checked style="margin-top:3px;width:20px;height:20px;accent-color:var(--accent-food);flex-shrink:0;">
+    <div style="display:flex;align-items:flex-start;gap:12px;">
       <div style="flex:1;min-width:0;">
         <div style="font-weight:700;font-size:16px;margin-bottom:4px;">${r.naam}</div>
         <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px;">
@@ -6305,7 +6304,7 @@ function recipeCardHTML(r) {
           ${(r.ingredienten || []).slice(0, 4).join(', ')}${(r.ingredienten||[]).length > 4 ? ` + ${r.ingredienten.length - 4} meer` : ''}
         </div>
       </div>
-    </label>
+    </div>
     <button type="button" onclick="toggleGenDetail('${r._tmpId}')" id="gendetail-btn-${r._tmpId}"
       style="background:none;border:none;color:var(--accent-food);font-size:13px;font-weight:650;cursor:pointer;padding:8px 0 0;font-family:inherit;display:flex;align-items:center;gap:4px;">
       Bekijk recept
@@ -6341,6 +6340,10 @@ function recipeCardHTML(r) {
           Plan in weekmenu
         </button>
       </div>
+      <button id="bewaar-btn-${r._tmpId}" onclick="bewaarGenRecept('${r._tmpId}')"
+        style="width:100%;margin-top:8px;padding:8px 0;border-radius:10px;background:none;border:none;color:var(--accent-food);font-size:13px;font-weight:650;cursor:pointer;font-family:inherit;">
+        Bewaar alleen in bibliotheek
+      </button>
     </div>
   </div>`;
 }
@@ -6363,7 +6366,8 @@ function planGenRecipe(tmpId) {
   if (!recept) return;
   const dateStr = getSelectedDagChipDate(tmpId);
   if (!dateStr) { showBanner('red', 'Kies eerst een dag.'); return; }
-  const slot = recept._type || 'diner';
+  if (!recept._type) { showBanner('yellow', 'Kies eerst een maaltijdmoment voor dit recept.'); return; }
+  const slot = recept._type;
   const weekKey = getISOWeek(new Date(dateStr + 'T12:00:00'));
   ensureDay(dateStr);
   // Sla recept op als het nog niet bestaat
@@ -6451,10 +6455,28 @@ Antwoord ALLEEN met geldige JSON in exact dit formaat, zonder uitleg:
   }
 }
 
+function bewaarGenRecept(tmpId) {
+  const recept = (window._generatedRecepten || []).find(r => r._tmpId === tmpId);
+  if (!recept) return;
+  if (!data.recepten) data.recepten = [];
+  let saved = data.recepten.find(r => r.naam === recept.naam);
+  if (!saved) {
+    saved = { ...recept, id: 'r' + Date.now(), type: recept._type || 'diner' };
+    delete saved._tmpId;
+    data.recepten.push(saved);
+    saveAndSync();
+    try { _renderFoodReceptenList(); } catch(_) {}
+  }
+  const btn = document.getElementById('bewaar-btn-' + tmpId);
+  if (btn) { btn.textContent = '✓ Bewaard in bibliotheek'; btn.disabled = true; btn.style.color = 'var(--muted)'; }
+  showBanner('green', `✓ ${recept.naam} bewaard in je bibliotheek`);
+}
+
 function logGenRecipeNow(tmpId) {
   const recept = (window._generatedRecepten || []).find(r => r._tmpId === tmpId);
   if (!recept) return;
-  const slot = recept._type || 'diner';
+  if (!recept._type) { showBanner('yellow', 'Kies eerst een maaltijdmoment voor dit recept.'); return; }
+  const slot = recept._type;
   const dateStr = today();
   const weekKey = getISOWeek(new Date(dateStr + 'T12:00:00'));
   ensureDay(dateStr);
@@ -6505,7 +6527,7 @@ function showGeneratedPreview(recepten) {
     </div>
     <div id="gen-preview-list">${nieuw.map(recipeCardHTML).join('')}</div>
     <button id="gen-meer-btn" class="btn btn-ghost btn-full" style="margin-top:10px;" onclick="generateMeer()">Meer recepten genereren</button>
-    <button class="btn btn-primary btn-full" style="margin-top:8px;" onclick="saveSelectedRecepten()">Voeg geselecteerde toe</button>
+    <button class="btn btn-primary btn-full" style="margin-top:8px;" onclick="closeModal();window._generatedRecepten=[];">Klaar</button>
   `);
 }
 
@@ -6550,10 +6572,11 @@ function _syncGenType(tmpId, val) {
 
 function _selectGenSlot(tmpId, slot) {
   const r = (window._generatedRecepten || []).find(r => r._tmpId === tmpId);
-  if (r) r._type = slot;
+  const nieuw = (r && r._type === slot) ? null : slot; // nogmaals tikken = uit
+  if (r) r._type = nieuw;
   ['ontbijt','lunch','diner','snack'].forEach(s => {
     const btn = document.getElementById(`slotbtn-${tmpId}-${s}`);
-    if (btn) btn.classList.toggle('active', s === slot);
+    if (btn) btn.classList.toggle('active', s === nieuw);
   });
 }
 
