@@ -2687,7 +2687,7 @@ details[open] .intro-ex-summary { border-radius: 12px 12px 0 0; border-bottom-co
 'use strict';
 
 // ─── VERSION CHECK (forceert Safari herlading bij nieuwe versie) ──────────────
-const APP_VERSION = '20260716-15';
+const APP_VERSION = '20260716-17';
 (function() {
   try {
     const stored = localStorage.getItem('hc_app_version');
@@ -4160,8 +4160,29 @@ function importData(input) {
   importFromFile(file).then(() => { renderAll(); showBanner('yellow', 'Data geïmporteerd.'); });
 }
 
-function clearChat() {
-  if (!confirm('Gesprek wissen? Je opgeslagen tips blijven bewaard.')) return;
+function vraagBevestiging(msg, knopTekst = 'Ja, wissen') {
+  return new Promise(resolve => {
+    const ov = document.createElement('div');
+    ov.style.cssText = 'position:fixed;inset:0;background:rgba(20,15,5,.5);z-index:900;display:flex;align-items:center;justify-content:center;padding:24px;';
+    ov.innerHTML = `
+      <div style="background:var(--card);border-radius:18px;padding:20px;max-width:340px;width:100%;box-shadow:0 10px 40px rgba(0,0,0,.25);">
+        <p style="font-size:15px;line-height:1.5;margin-bottom:16px;">${msg}</p>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-secondary" style="flex:1;" data-act="nee">Annuleer</button>
+          <button class="btn btn-primary" style="flex:1;background:var(--danger,#d9534f);" data-act="ja">${knopTekst}</button>
+        </div>
+      </div>`;
+    ov.addEventListener('click', e => {
+      const act = e.target && e.target.dataset ? e.target.dataset.act : null;
+      if (act === 'ja') { ov.remove(); resolve(true); }
+      else if (act === 'nee' || e.target === ov) { ov.remove(); resolve(false); }
+    });
+    document.body.appendChild(ov);
+  });
+}
+
+async function clearChat() {
+  if (!(await vraagBevestiging('Gesprek wissen? Je opgeslagen tips blijven bewaard.'))) return;
   data.chatHistorie = [];
   saveAndSync();
   renderChatHistory();
@@ -4170,8 +4191,8 @@ function clearChat() {
   showBanner('green', 'Chat gewist.');
 }
 
-function resetApp() {
-  if (!confirm('App resetten? Recepten, looppartners en gesprekken blijven bewaard. Alleen je dagelijkse data en instellingen worden gewist.')) return;
+async function resetApp() {
+  if (!(await vraagBevestiging('App resetten? Recepten, looppartners en gesprekken blijven bewaard. Alleen je dagelijkse data en instellingen worden gewist.', 'Reset app'))) return;
   const bewaard = {
     recepten: data.recepten || [],
     partners: data.partners || [],
@@ -4331,8 +4352,8 @@ function renderBrainOverview() {
   el.innerHTML = html;
 }
 
-function resetBrainCategory(cat) {
-  if (!confirm(`"${_brainCatLabels[cat]}" volledig wissen?`)) return;
+async function resetBrainCategory(cat) {
+  if (!(await vraagBevestiging(`"${_brainCatLabels[cat]}" volledig wissen?`))) return;
   if (data.coachMemoryV2) data.coachMemoryV2[cat] = [];
   _syncFlatMemory();
   saveAndSync();
@@ -4355,8 +4376,8 @@ function resetDoel(idx) {
   renderBrainOverview();
 }
 
-function resetAllDoelen() {
-  if (!confirm('Alle persoonlijke doelen wissen?')) return;
+async function resetAllDoelen() {
+  if (!(await vraagBevestiging('Alle persoonlijke doelen wissen?'))) return;
   data.doelen = [];
   if (data.coachMemoryV2) data.coachMemoryV2.doelen = [];
   _syncFlatMemory();
@@ -4365,8 +4386,8 @@ function resetAllDoelen() {
   showBanner('yellow', 'Persoonlijke doelen gewist.');
 }
 
-function resetBrainAll() {
-  if (!confirm('Volledig coachgeheugen wissen? De coach vergeet alle persoonlijke feiten, voorkeuren en doelen.')) return;
+async function resetBrainAll() {
+  if (!(await vraagBevestiging('Volledig coachgeheugen wissen? De coach vergeet alle persoonlijke feiten, voorkeuren en doelen.', 'Wis geheugen'))) return;
   data.coachMemory = [];
   data.coachMemoryV2 = { voorkeuren: [], medisch: [], doelen: [], schema: [], overig: [] };
   data.doelen = [];
@@ -4545,7 +4566,7 @@ function renderWeekOvTab() {
     const dotBorder = allDone ? 'var(--accent-food)' : someDone ? 'var(--accent-move)' : isToday ? 'var(--accent-move)' : 'var(--border-strong)';
     const dayColor = isToday ? 'var(--accent-move)' : allDone ? 'var(--accent-food)' : isFuture ? 'var(--muted)' : 'var(--text)';
 
-    return `<div class="weekov-row${isToday ? ' is-today' : ''}" style="${isFuture ? 'opacity:.55;' : ''}cursor:pointer;" onclick="showDagActiviteitenModal('${dateStr}')">
+    return `<div class="weekov-row${isToday ? ' is-today' : ''}" style="cursor:pointer;" onclick="showDagActiviteitenModal('${dateStr}')">
       <div class="weekov-row-left">
         <span style="width:9px;height:9px;border-radius:50%;border:2px solid ${dotBorder};background:${dotBg};display:inline-block;flex-shrink:0;margin-top:2px;"></span>
         <div>
@@ -4553,7 +4574,8 @@ function renderWeekOvTab() {
           <div style="font-size:11px;color:var(--muted);">${formatShortDate(dateStr)}</div>
         </div>
       </div>
-      <div class="weekov-row-body">
+      <svg style="position:absolute;right:12px;top:14px;color:var(--muted);opacity:.55;" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      <div class="weekov-row-body" style="padding-right:16px;">
         <div class="weekov-row-line">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent-move)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px;"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>
           <span>${beweegTxt}</span>
@@ -4857,13 +4879,10 @@ function renderTodayActivities(dateStr) {
         <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
       </button>
       <div class="type-icon ${a.type}">${iconSVG(a.type)}</div>
-      <div class="activity-info">
+      <div class="activity-info" onclick="editActivity('${dateStr}','${a.id}')" style="cursor:pointer;">
         <div class="activity-name ${a.afgevinkt ? 'done' : ''}">${a.naam}</div>
         <div class="activity-detail">${a.detail}</div>
       </div>
-      <button class="activity-edit-btn" onclick="editActivity('${dateStr}','${a.id}')" title="Bewerken">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-      </button>
       <button class="activity-delete-btn" onclick="deleteActivity('${dateStr}','${a.id}')" title="Verwijderen">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
       </button>
@@ -5440,13 +5459,23 @@ function editActivity(dateStr, actId) {
 }
 
 function deleteActivity(dateStr, actId) {
-  if (!confirm('Activiteit verwijderen?')) return;
+  // Geen confirm(): die popup wordt door iOS onderdrukt in beginscherm-apps.
+  // Direct verwijderen met ongedaan-knop is betrouwbaarder én sneller.
   const weekKey = getISOWeek(new Date(dateStr + 'T12:00:00'));
   const dayData = data.weken[weekKey][dateStr];
+  const act = (dayData.activiteiten || []).find(a => a.id === actId);
+  if (!act) return;
+  const _snapshot = JSON.parse(JSON.stringify(dayData.activiteiten));
   dayData.activiteiten = dayData.activiteiten.filter(a => a.id !== actId);
   dayData.aangepast = true;
   saveAndSync();
-  renderWeek();
+  renderWeekOvTab();
+  showBanner('green', `✓ ${act.naam} verwijderd`, false, null, null, () => {
+    dayData.activiteiten = _snapshot;
+    saveAndSync();
+    renderWeekOvTab();
+    if (dateStr === today()) renderTodayActivities(dateStr);
+  });
   if (dateStr === today()) renderTodayActivities(dateStr);
 }
 
