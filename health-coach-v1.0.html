@@ -12,23 +12,23 @@
 
 :root {
   /* LIGHT THEME — soft warm off-white, generous contrast */
-  --bg:           #f4f8f5;
+  --bg:           #f2faf5;
   --card:         #ffffff;
-  --card2:        #eef4ef;
+  --card2:        #ebf6f0;
   --accent-move:  #ea5a0c;          /* deeper orange — better contrast on light */
   --accent-move-soft: #fff1e6;
   --accent-move-tint: rgba(234,90,12,.10);
-  --accent-food:  #10b981;          /* teal — voeding/balans, complement aan oranje */
-  --accent-food-soft: #ecfdf5;
-  --accent-food-tint: rgba(16,185,129,.10);
+  --accent-food:  #0bbd7f;          /* teal — voeding/balans, complement aan oranje */
+  --accent-food-soft: #e6fcf2;
+  --accent-food-tint: rgba(11,189,127,.10);
   --accent-bike:  #1d4ed8;
   --accent-gym:   #6d28d9;
   --text:         #22312a;
   --text-2:       #43524a;
   --muted:        #67766d;
   --muted-2:      #8b978f;
-  --border:       #dfe8e2;
-  --border-strong:#c7d5cb;
+  --border:       #dcebe1;
+  --border-strong:#c3d8cc;
   --danger:       #b91c1c;
   --danger-soft:  #fef2f2;
 
@@ -43,7 +43,7 @@
 
 html, body {
   height: 100%;
-  background: linear-gradient(180deg, #e9f5ee 0%, var(--bg) 190px) no-repeat var(--bg);
+  background: linear-gradient(180deg, #e2f7eb 0%, var(--bg) 190px) no-repeat var(--bg);
   color: var(--text);
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
   font-size: 17px;
@@ -264,13 +264,16 @@ label { display: block; font-size: 14px; font-weight: 600; color: var(--text-2);
 .today-progress.complete .today-progress-title { color: var(--accent-food); }
 
 /* ─── CHECK-IN ─── */
+.dagstrip {
+  padding: 10px 14px;
+  background: transparent;
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius);
+  margin-bottom: 14px;
+}
 #checkin-card {
   display: flex; align-items: center; justify-content: space-between; gap: 10px;
   flex-wrap: wrap;
-  padding: 10px 14px;
-  box-shadow: none;
-  background: transparent;
-  border: 1px dashed var(--border-strong);
 }
 #checkin-card .checkin-q {
   font-size: 13px; font-weight: 600; color: var(--muted);
@@ -350,7 +353,7 @@ label { display: block; font-size: 14px; font-weight: 600; color: var(--text-2);
 .type-icon.run     { background: var(--accent-move-tint); }
 .type-icon.gym     { background: rgba(109,40,217,.10); }
 .type-icon.bike    { background: rgba(29,78,216,.10); }
-.type-icon.commute { background: rgba(16,185,129,.10); }
+.type-icon.commute { background: rgba(11,189,127,.10); }
 .type-icon.walk    { background: rgba(22,163,74,.12); }
 .type-icon.walkdog { background: rgba(180,83,9,.12); }
 .type-icon.other   { background: var(--accent-food-tint); }
@@ -516,7 +519,7 @@ label { display: block; font-size: 14px; font-weight: 600; color: var(--text-2);
 .badge-run  { background: var(--accent-move-tint); color: var(--accent-move); }
 .badge-gym  { background: rgba(109,40,217,.10); color: var(--accent-gym); }
 .badge-bike { background: rgba(29,78,216,.10); color: var(--accent-bike); }
-.badge-commute { background: rgba(16,185,129,.10); color: #0f766e; }
+.badge-commute { background: rgba(11,189,127,.10); color: #0f766e; }
 .badge-walk    { background: rgba(22,163,74,.12); color: #16a34a; }
 .badge-walkdog { background: rgba(180,83,9,.12); color: #b45309; }
 .badge-rest { background: var(--card2); color: var(--muted); }
@@ -1410,26 +1413,26 @@ details[open] .intro-ex-summary { border-radius: 12px 12px 0 0; border-bottom-co
 .food-inner-tab.active { background: var(--card); color: var(--accent-food); box-shadow: 0 1px 3px rgba(0,0,0,.08); }
 .food-chef-big-voice { display: none; }
 .chef-hero { text-align: center; padding: 8px 0 20px; }
-.chef-hero-title { font-size: 23px; font-weight: 800; color: var(--accent-food); letter-spacing: -.02em; margin-bottom: 4px; }
+.chef-hero-title { font-size: 23px; font-weight: 800; color: var(--accent-food); letter-spacing: -.02em; margin-bottom: 14px; }
 .chef-hero-sub { font-size: 13px; color: #5c7d6d; margin-bottom: 22px; }
 .chef-mic-big {
   width: 96px; height: 96px; border-radius: 50%;
-  background: linear-gradient(140deg, #34d399 0%, #0da271 100%);
+  background: linear-gradient(140deg, #35e3a4 0%, #09b478 100%);
   border: none; color: #fff;
   display: flex; align-items: center; justify-content: center;
   cursor: pointer; margin: 0 auto 10px; transition: transform .12s, box-shadow .12s;
-  box-shadow: 0 6px 24px rgba(16,185,129,.38), inset 0 1px 0 rgba(255,255,255,.25);
+  box-shadow: 0 6px 24px rgba(11,189,127,.38), inset 0 1px 0 rgba(255,255,255,.25);
 }
 .chef-mic-big:active { transform: scale(.93); }
-.chef-mic-big.listening { animation: micPulse 1s ease infinite; box-shadow: 0 0 0 12px rgba(16,185,129,.15); }
+.chef-mic-big.listening { animation: micPulse 1s ease infinite; box-shadow: 0 0 0 12px rgba(11,189,127,.15); }
 .chef-mic-label { font-size: 13px; font-weight: 600; color: var(--accent-food); }
 .chef-input-zone {
-  background: linear-gradient(180deg, #eafcf3 0%, #ffffff 75%);
-  border: 1px solid #cdeeda;
+  background: linear-gradient(180deg, #e3fbee 0%, #ffffff 75%);
+  border: 1px solid #c4f0da;
   border-top: 3px solid var(--accent-food);
   border-radius: var(--radius-lg); padding: 20px 16px 16px;
   margin-bottom: 14px; text-align: center;
-  box-shadow: 0 2px 14px rgba(16,185,129,.10);
+  box-shadow: 0 2px 14px rgba(11,189,127,.10);
 }
 .chef-text-photo-row {
   display: flex; gap: 8px; align-items: center; margin-top: 14px; text-align: left;
@@ -1442,7 +1445,7 @@ details[open] .intro-ex-summary { border-radius: 12px 12px 0 0; border-bottom-co
   display: flex; align-items: center; justify-content: center;
   transition: border-color .15s, background .15s;
 }
-.chef-foto-icon-btn:active { background: rgba(16,185,129,.1); border-color: var(--accent-food); }
+.chef-foto-icon-btn:active { background: rgba(11,189,127,.1); border-color: var(--accent-food); }
 .food-filter-chips {
   display: flex; gap: 6px; flex-wrap: nowrap; overflow-x: auto;
   -webkit-overflow-scrolling: touch; padding-bottom: 8px; margin-bottom: 12px; scrollbar-width: none;
@@ -1702,8 +1705,8 @@ details[open] .intro-ex-summary { border-radius: 12px 12px 0 0; border-bottom-co
   box-shadow: 0 3px 10px rgba(234,90,12,.30);
 }
 .persona-avatar.chef {
-  background: linear-gradient(140deg, #34d399 0%, #0da271 100%);
-  box-shadow: 0 3px 10px rgba(16,185,129,.30);
+  background: linear-gradient(140deg, #35e3a4 0%, #09b478 100%);
+  box-shadow: 0 3px 10px rgba(11,189,127,.30);
   margin: 0 auto 8px;
 }
 
@@ -1755,6 +1758,7 @@ details[open] .intro-ex-summary { border-radius: 12px 12px 0 0; border-bottom-co
 .mic-picker-btn.active {
   border-color: var(--accent-food); color: var(--accent-food);
 }
+.mic-status-label:empty, .big-praat-status:empty { display: none; }
 .mic-status-label {
   text-align: center; font-size: 12px; color: var(--muted);
   margin-top: 4px; min-height: 0;
@@ -1952,7 +1956,7 @@ details[open] .intro-ex-summary { border-radius: 12px 12px 0 0; border-bottom-co
       <div class="splash-circle" style="background:#ea5a0c;box-shadow:0 8px 28px rgba(234,90,12,.45);">
         <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
       </div>
-      <div class="splash-circle" style="background:#10b981;box-shadow:0 8px 28px rgba(16,185,129,.45);">
+      <div class="splash-circle" style="background:#0bbd7f;box-shadow:0 8px 28px rgba(11,189,127,.45);">
         <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v12"/><path d="M18 9a3 3 0 0 0-3-3H6"/><path d="M6 15a6 6 0 0 0 12 0"/></svg>
       </div>
     </div>
@@ -2209,7 +2213,7 @@ details[open] .intro-ex-summary { border-radius: 12px 12px 0 0; border-bottom-co
           <div class="persona-avatar coach">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
           </div>
-          <div class="coach-front-label" style="margin-bottom:0;text-align:left;">Zeg het maar — wat je deed of at, hoe je je voelt, of vraag advies</div>
+          <div class="coach-front-label" style="margin-bottom:0;text-align:left;">Zeg het maar</div>
         </div>
         <button onclick="showIntro()" aria-label="Hoe werkt het?" title="Hoe werkt het?" style="flex-shrink:0;margin-left:10px;width:28px;height:28px;border-radius:50%;border:1.5px solid var(--border);background:var(--card2);color:var(--muted);font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:inherit;line-height:1;">?</button>
       </div>
@@ -2232,17 +2236,9 @@ details[open] .intro-ex-summary { border-radius: 12px 12px 0 0; border-bottom-co
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
             Advies vandaag
           </button>
-          <button class="quick-q-chip" onclick="askAdviesMorgen()">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-            Advies morgen
-          </button>
           <button class="quick-q-chip" onclick="askNaHetSporten()">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v12"/><path d="M18 9a3 3 0 0 0-3-3H6"/><path d="M6 15a6 6 0 0 0 12 0"/></svg>
             Na het sporten
-          </button>
-          <button class="quick-q-chip" onclick="askQuickQ('Hoe gaat het met mijn voortgang en streak?')">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-            Voortgang
           </button>
           <button class="quick-q-chip" onclick="askQuickQ('Hoe ging mijn week qua sport en voeding?')">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
@@ -2252,7 +2248,7 @@ details[open] .intro-ex-summary { border-radius: 12px 12px 0 0; border-bottom-co
       </div>
       <!-- Chat input -->
       <div class="coach-input-row" style="margin-top:10px;">
-        <input id="coach-front-input" type="text" placeholder="Of typ hier een vraag…" onkeydown="if(event.key==='Enter')coachFrontSend()">
+        <input id="coach-front-input" type="text" placeholder="wat je deed, at, voelt — of vraag advies…" onkeydown="if(event.key==='Enter')coachFrontSend()">
         <button id="tts-toggle-front" class="tts-toggle-btn" onclick="toggleTTS()" title="Spraak aan/uit" style="flex-shrink:0;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
         </button>
@@ -2264,11 +2260,9 @@ details[open] .intro-ex-summary { border-radius: 12px 12px 0 0; border-bottom-co
       <div id="coach-front-chat" class="coach-chat-window"></div>
     </div>
 
-    <!-- Vandaag-progress -->
-    <div id="today-progress" class="today-progress" style="display:none;"></div>
-
     <!-- Check-in -->
-    <div class="card" id="checkin-card">
+    <div class="dagstrip">
+    <div id="checkin-card">
       <span class="checkin-q">Hoe voel je je?</span>
       <div class="checkin-btns">
         <button class="checkin-btn" onclick="doCheckIn('goed', this)">
@@ -2287,9 +2281,7 @@ details[open] .intro-ex-summary { border-radius: 12px 12px 0 0; border-bottom-co
       <div id="checkin-response" class="checkin-response" style="display:none;flex-basis:100%;"></div>
       <div id="voorstel-container" style="flex-basis:100%;"></div>
     </div>
-
-    <!-- Hydratatie tracker -->
-    <div class="water-strip">
+    <div id="dagstrip-divider" style="border-top:1px dashed var(--border-strong);margin:10px 0;"></div>
       <div class="water-tracker">
         <div class="water-tracker-label">
           <span style="display:flex;align-items:center;gap:6px;">
@@ -2303,12 +2295,15 @@ details[open] .intro-ex-summary { border-radius: 12px 12px 0 0; border-bottom-co
     </div>
 
     <!-- Activiteiten vandaag -->
-    <div class="card" style="border-left:3px solid var(--accent-move);padding-left:13px;">
-      <div style="display:flex;align-items:center;justify-content:space-between;">
-        <div class="vandaag-section-h" style="margin-bottom:0;padding-bottom:0;border-bottom:none;">Activiteiten</div>
+    <div class="card" style="border-top:3px solid var(--accent-move);">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+        <div class="vandaag-section-h" style="margin-bottom:0;padding-bottom:0;border-bottom:none;">Vandaag</div>
+        <div style="display:flex;align-items:center;gap:4px;">
+        <div id="today-progress-mini"></div>
         <button class="icon-btn" onclick="addActivity(today())" aria-label="Activiteit toevoegen" title="Activiteit toevoegen" style="color:var(--muted);">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         </button>
+        </div>
       </div>
       <div style="border-bottom:1px solid var(--border);margin:8px 0 10px;"></div>
       <div id="today-activities"></div>
@@ -2322,6 +2317,10 @@ details[open] .intro-ex-summary { border-radius: 12px 12px 0 0; border-bottom-co
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
           Wat heb/ga je eten?
         </button>
+        <button class="icon-btn" onclick="document.getElementById('fotolog-input').click()" aria-label="Foto van je bord loggen" title="Foto van je bord loggen" style="color:var(--accent-food);flex-shrink:0;">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        </button>
+        <input type="file" id="fotolog-input" accept="image/*" capture="environment" style="display:none;" onchange="analyseFotoLog(this)">
       </div>
       <div style="border-bottom:1px solid var(--border);margin-bottom:10px;"></div>
       <div id="today-nutri-bar" style="margin-bottom:10px;"></div>
@@ -2570,7 +2569,7 @@ details[open] .intro-ex-summary { border-radius: 12px 12px 0 0; border-bottom-co
         <div style="width:52px;height:52px;border-radius:50%;background:var(--accent-move);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(234,90,12,.30);">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
         </div>
-        <div style="width:52px;height:52px;border-radius:50%;background:var(--accent-food);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(16,185,129,.30);">
+        <div style="width:52px;height:52px;border-radius:50%;background:var(--accent-food);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(11,189,127,.30);">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v12"/><path d="M18 9a3 3 0 0 0-3-3H6"/><path d="M6 15a6 6 0 0 0 12 0"/></svg>
         </div>
       </div>
@@ -2588,8 +2587,8 @@ details[open] .intro-ex-summary { border-radius: 12px 12px 0 0; border-bottom-co
         <div class="intro-hero-name" style="color:var(--accent-move);">Coach</div>
         <div class="intro-hero-sub">Beweging &amp; advies</div>
       </div>
-      <div class="intro-hero-tile" style="border-top:3px solid var(--accent-food);background:rgba(16,185,129,.05);">
-        <div style="width:48px;height:48px;border-radius:50%;background:var(--accent-food);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;box-shadow:0 4px 14px rgba(16,185,129,.28);">
+      <div class="intro-hero-tile" style="border-top:3px solid var(--accent-food);background:rgba(11,189,127,.05);">
+        <div style="width:48px;height:48px;border-radius:50%;background:var(--accent-food);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;box-shadow:0 4px 14px rgba(11,189,127,.28);">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v12"/><path d="M18 9a3 3 0 0 0-3-3H6"/><path d="M6 15a6 6 0 0 0 12 0"/></svg>
         </div>
         <div class="intro-hero-name" style="color:var(--accent-food);">Chef</div>
@@ -2614,7 +2613,7 @@ details[open] .intro-ex-summary { border-radius: 12px 12px 0 0; border-bottom-co
       </div>
       <div class="intro-how-arrow">›</div>
       <div class="intro-how-step">
-        <div class="intro-how-icon" style="background:rgba(16,185,129,.10);">
+        <div class="intro-how-icon" style="background:rgba(11,189,127,.10);">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-food)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
         </div>
         <div class="intro-how-label">Plan &amp; inzicht</div>
@@ -2687,7 +2686,7 @@ details[open] .intro-ex-summary { border-radius: 12px 12px 0 0; border-bottom-co
 'use strict';
 
 // ─── VERSION CHECK (forceert Safari herlading bij nieuwe versie) ──────────────
-const APP_VERSION = '20260716-18';
+const APP_VERSION = '20260717-3';
 (function() {
   try {
     const stored = localStorage.getItem('hc_app_version');
@@ -3594,6 +3593,24 @@ function setGenMoment(v, btn) {
 
 let genMaaltijd = '';  // '' | ontbijt | lunch | diner | snack (per sessie)
 let genGemak = 'normaal'; // snel | normaal | uitgebreid (per sessie)
+let _genOptiesOpen = false; // pillenpaneel standaard dicht — praten is de hoofdweg
+
+function _genOptiesSamenvatting() {
+  const parts = [ { vega:'Vega', vis:'Vis', vlees:'Vlees' }[genDieet] || 'Vega' ];
+  if (genGemak === 'snel') parts.push('Snel');
+  if (genGemak === 'uitgebreid') parts.push('Uitgebreid');
+  if (genFocus === 'vezels') parts.push('Vezels');
+  if (genFocus === 'eiwitten') parts.push('Eiwitten');
+  if (genMaaltijd) parts.push(genMaaltijd.charAt(0).toUpperCase() + genMaaltijd.slice(1));
+  if (genMoment) parts.push({ voor:'Voor sport', tijdens:'Tijdens sport', na:'Na sport' }[genMoment]);
+  parts.push(genCount + (genCount === 1 ? ' recept' : ' recepten'));
+  return parts.join(' · ');
+}
+
+function _updateGenSamenvatting() {
+  const el = document.getElementById('gen-opties-summary');
+  if (el) el.textContent = _genOptiesSamenvatting();
+}
 
 function setGenGemak(v, btn) {
   genGemak = v;
@@ -4771,10 +4788,13 @@ function renderCheckIn(dateStr) {
   ensureWeek(weekKey);
   const dayData = data.weken[weekKey][dateStr];
 
+  const divider = document.getElementById('dagstrip-divider');
   if (dayData && dayData.checkIn) {
     card.style.display = 'none';
+    if (divider) divider.style.display = 'none';
   } else {
-    card.style.display = 'block';
+    card.style.display = 'flex';
+    if (divider) divider.style.display = 'block';
     document.getElementById('checkin-response').style.display = 'none';
     document.getElementById('voorstel-container').innerHTML = '';
     document.querySelectorAll('.checkin-btn').forEach(b => b.classList.remove('selected'));
@@ -4894,35 +4914,26 @@ function renderTodayActivities(dateStr) {
 }
 
 function renderTodayProgress(dateStr) {
-  const el = document.getElementById('today-progress');
+  const el = document.getElementById('today-progress-mini');
   if (!el) return;
   const weekKey = getISOWeek(new Date(dateStr + 'T12:00:00'));
   const dayData = data.weken && data.weken[weekKey] && data.weken[weekKey][dateStr];
-  if (!dayData || !dayData.activiteiten || dayData.activiteiten.length === 0) {
-    el.style.display = 'none';
-    return;
-  }
-  const total = dayData.activiteiten.length;
-  const done = dayData.activiteiten.filter(a => a.afgevinkt).length;
-  const pct = Math.round(done / total * 100);
-  const circ = 2 * Math.PI * 20;
-  const offset = circ - (circ * pct / 100);
+  const acts = (dayData && dayData.activiteiten) || [];
+  if (acts.length === 0) { el.innerHTML = ''; return; }
+  const total = acts.length;
+  const done = acts.filter(a => a.afgevinkt).length;
   const complete = done === total;
-  el.style.display = 'flex';
-  el.classList.toggle('complete', complete);
+  const r = 13, circ = 2 * Math.PI * r;
+  const offset = circ - (circ * (done / total));
   el.innerHTML = `
-    <div class="today-progress-ring">
-      <svg width="48" height="48" viewBox="0 0 48 48">
-        <circle cx="24" cy="24" r="20" stroke="${complete ? 'var(--accent-food-tint)' : 'var(--card2)'}" stroke-width="5" fill="none"/>
-        <circle cx="24" cy="24" r="20" stroke="${complete ? 'var(--accent-food)' : 'var(--accent-move)'}" stroke-width="5" fill="none" stroke-linecap="round" stroke-dasharray="${circ}" stroke-dashoffset="${offset}" style="transition:stroke-dashoffset .4s ease;"/>
+    <div style="position:relative;width:32px;height:32px;" title="${done} van ${total} gedaan">
+      <svg width="32" height="32" viewBox="0 0 32 32" style="transform:rotate(-90deg);">
+        <circle cx="16" cy="16" r="${r}" stroke="var(--card2)" stroke-width="3.5" fill="none"/>
+        <circle cx="16" cy="16" r="${r}" stroke="${complete ? 'var(--accent-food)' : 'var(--accent-move)'}" stroke-width="3.5" fill="none"
+          stroke-linecap="round" stroke-dasharray="${circ}" stroke-dashoffset="${offset}" style="transition:stroke-dashoffset .4s;"/>
       </svg>
-      <div class="today-progress-text">${done}/${total}</div>
-    </div>
-    <div class="today-progress-info">
-      <div class="today-progress-title">${complete ? 'Alles afgerond!' : 'Vandaag'}</div>
-      <div class="today-progress-sub">${complete ? 'Lekker bezig — geniet van je rust' : `Nog ${total - done} ${total - done === 1 ? 'activiteit' : 'activiteiten'} te gaan`}</div>
-    </div>
-  `;
+      <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:${complete ? 'var(--accent-food)' : 'var(--text-2)'};">${complete ? '✓' : done + '/' + total}</div>
+    </div>`;
 }
 
 function showCelebration() {
@@ -5582,11 +5593,11 @@ function _renderFoodChef() {
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v12"/><path d="M18 9a3 3 0 0 0-3-3H6"/><path d="M6 15a6 6 0 0 0 12 0"/></svg>
       </div>
       <div class="chef-hero-title">Wat wil je eten?</div>
-      <div class="chef-hero-sub" style="margin-bottom:18px;">Zeg maar wat je wil — een gerecht, ingrediënt, wat je in huis hebt, of gewoon "iets snels met kip"</div>
+
       <button id="voice-recipe-btn" class="chef-mic-big" onclick="smartVoiceRecipe()">${micSVG}</button>
       <div class="chef-mic-label" id="chef-mic-label">Spreek je wens in</div>
       <div class="chef-text-photo-row">
-        <div class="input-mic-wrap"><input id="gen-focus-input" type="text" placeholder="Of typ: pasta, paprika, tomaat…" autocomplete="off"></div>
+        <div class="input-mic-wrap"><input id="gen-focus-input" type="text" placeholder="een gerecht, ingrediënt, of 'iets snels met kip'…" autocomplete="off"></div>
         <input type="file" id="chef-foto-input" accept="image/*" style="display:none;" onchange="analyseChefFoto(this)">
         <button class="chef-foto-icon-btn" id="chef-foto-btn" onclick="document.getElementById('chef-foto-input').click()" title="Foto of screenshot analyseren">${cameraIconSVG}</button>
         <button class="chef-foto-icon-btn" onclick="showVoorraadModal()" title="Wat heb ik in huis?" style="width:auto;border-radius:20px;padding:0 12px;gap:5px;">
@@ -5599,7 +5610,12 @@ function _renderFoodChef() {
     <div id="chef-foto-preview" style="display:none;font-size:12px;color:var(--muted);padding:8px 10px;background:var(--card2);border-radius:8px;margin-bottom:12px;"></div>
     <div id="chef-foto-result" style="display:none;font-size:12px;background:var(--card2);border-radius:10px;padding:12px 14px;margin-bottom:12px;line-height:1.6;"></div>
 
-    <div class="recipe-gen-card" style="margin-bottom:12px;padding:14px 14px 10px;">
+    <details class="collapse-card" id="gen-opties" ${_genOptiesOpen ? 'open' : ''} ontoggle="_genOptiesOpen=this.open;_updateGenSamenvatting();" style="margin-bottom:12px;">
+      <summary style="font-size:12.5px;font-weight:650;color:var(--muted);padding:12px 16px;min-height:40px;">
+        <span id="gen-opties-summary" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${_genOptiesSamenvatting()}</span>
+        <svg class="cc-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </summary>
+      <div class="cc-body" style="padding-top:2px;">
       <div class="recipe-gen-row">
         <span class="recipe-gen-label">Aantal</span>
         ${[1,2,3].map(n => `<button class="gen-pill gen-count-pill${genCount===n?' active':''}" onclick="setGenCount(${n})">${n}</button>`).join('')}
@@ -5653,7 +5669,8 @@ function _renderFoodChef() {
           Alles
         </button>
       </div>
-    </div>
+      </div>
+    </details>
 
     <button id="gen-btn" class="recipe-gen-main-btn" style="width:100%;margin-bottom:10px;" onclick="generateRecepten()">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
@@ -5708,6 +5725,7 @@ function _renderFoodReceptenList() {
             </div>
           </div>
           <div class="recipe-header-actions">
+            <button class="rec-fav-btn" onclick="event.stopPropagation();deelRecept('${r.id}')" aria-label="Deel recept" title="Deel recept"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>
             <button class="rec-fav-btn ${r.favoriet ? 'active' : ''}" onclick="event.stopPropagation();toggleFavoriet('${r.id}')" aria-label="Favoriet"><svg width="15" height="15" viewBox="0 0 24 24" fill="${r.favoriet ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></button>
             <button class="rec-delete-btn" onclick="event.stopPropagation();deleteRecept('${r.id}')" aria-label="Verwijder recept">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
@@ -6710,7 +6728,72 @@ function saveSelectedRecepten() {
   showBanner('green', `${selected.length} recept${selected.length > 1 ? 'en' : ''} opgeslagen.`);
 }
 
+async function deelRecept(id) {
+  const r = (data.recepten || []).find(x => x.id === id);
+  if (!r) return;
+  const tekst = `${r.naam}
+${r.tijd || ''}${r.vezels ? ' · vezels ' + r.vezels : ''}${r.eiwitten ? ' · eiwitten ' + r.eiwitten : ''}
+
+Ingrediënten:
+${(r.ingredienten || []).map(i => '- ' + i).join('\n')}
+
+Bereiding:
+${(r.bereiding || []).map((s, i) => (i + 1) + '. ' + s).join('\n')}
+
+Gedeeld vanuit Coach & Chef`;
+  if (navigator.share) {
+    try { await navigator.share({ title: r.naam, text: tekst }); return; } catch(e) { if (e && e.name === 'AbortError') return; }
+  }
+  try {
+    await navigator.clipboard.writeText(tekst);
+    showBanner('green', `✓ ${r.naam} gekopieerd — plak het in WhatsApp of een bericht`);
+  } catch(_) {
+    showBanner('yellow', 'Delen wordt niet ondersteund in deze browser.');
+  }
+}
+
 function addReceptModal() {
+  showModal(`
+    <div class="modal-header">
+      <h2>Recept toevoegen</h2>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <p style="font-size:13px;color:var(--muted);margin:2px 0 12px;">Noem een gerecht ("carbonara") of beschrijf je eigen recept — Chef werkt het uit met ingrediënten, stappen en voedingswaarden.</p>
+    ${micInput('eigen-recept-input', 'bijv. carbonara, of je eigen recept…')}
+    <button id="eigen-recept-btn" class="btn btn-primary btn-full" style="margin-top:12px;" onclick="chefWerkEigenReceptUit()">Laat Chef uitwerken</button>
+    <button class="btn btn-ghost btn-full" style="margin-top:8px;font-size:13px;" onclick="addReceptHandmatigModal()">Liever zelf alles invullen</button>
+  `);
+  setTimeout(() => { const el = document.getElementById('eigen-recept-input'); if (el) el.focus(); }, 60);
+}
+
+async function chefWerkEigenReceptUit() {
+  const el = document.getElementById('eigen-recept-input');
+  const tekst = el ? el.value.trim() : '';
+  if (!tekst) { showBanner('yellow', 'Typ of spreek eerst een gerecht of beschrijving in.'); return; }
+  const btn = document.getElementById('eigen-recept-btn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Chef is bezig…'; }
+  try {
+    const prompt = `De gebruiker wil dit recept toevoegen aan zijn bibliotheek: "${tekst.replace(/"/g, "'")}".
+Regels:
+- Is het een bekende gerechtnaam (bijv. "carbonara"): maak de klassieke bereiding voor 2 personen. ${_dieetRegel()}
+- Is het een eigen recept met ingrediënten of stappen: structureer PRECIES wat er staat. Vul alleen ontbrekende hoeveelheden of vanzelfsprekende stappen aan; verzin GEEN nieuwe ingrediënten.
+- Bereken vezels en eiwitten per portie realistisch.
+Antwoord ALLEEN met geldige JSON, zonder uitleg:
+{"naam":"...","vezels":"~Xg","eiwitten":"~Xg","tijd":"X min","ingredienten":["hoeveelheid ingredient","..."],"bereiding":["Stap 1...","..."]}`;
+    const raw = await callAI(prompt, 900);
+    const r = safeParseJSON(raw);
+    if (!r || !r.naam || !Array.isArray(r.ingredienten) || r.ingredienten.length === 0) throw new Error('Uitwerken mislukt — probeer het opnieuw.');
+    if (genMaaltijd) r._type = genMaaltijd;
+    window._generatedRecepten = [];
+    showGeneratedPreview([r]); // zelfde kaart als de generator: Bekijk recept, Pas aan, Log/Plan/Bewaar
+  } catch(e) {
+    showBanner('red', e.message || 'Uitwerken mislukt.');
+    const b = document.getElementById('eigen-recept-btn');
+    if (b) { b.disabled = false; b.textContent = 'Laat Chef uitwerken'; }
+  }
+}
+
+function addReceptHandmatigModal() {
   showModal(`
     <div class="modal-header">
       <h2>Recept toevoegen</h2>
@@ -7808,7 +7891,7 @@ function editWeekMenuMeal(dateStr, slot) {
 function _voorraadLineHTML() {
   const v = data && data.chefVoorraad;
   if (!v || v.datum !== today() || !(v.items || []).length) return '';
-  return `<div style="display:flex;align-items:center;gap:6px;margin-top:10px;padding:7px 12px;background:var(--accent-food-tint);border:1px solid rgba(16,185,129,.25);border-radius:10px;font-size:12.5px;color:#20654c;text-align:left;">
+  return `<div style="display:flex;align-items:center;gap:6px;margin-top:10px;padding:7px 12px;background:var(--accent-food-tint);border:1px solid rgba(11,189,127,.25);border-radius:10px;font-size:12.5px;color:#20654c;text-align:left;">
     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
     <span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;"><strong>In huis:</strong> ${v.items.join(', ')}</span>
     <button onclick="clearVoorraad()" style="background:none;border:none;color:#20654c;font-size:14px;cursor:pointer;padding:2px 4px;flex-shrink:0;font-family:inherit;" title="Wissen">✕</button>
@@ -7850,6 +7933,59 @@ function clearVoorraad() {
   data.chefVoorraad = null;
   saveAndSync();
   _renderFoodChef();
+}
+
+async function analyseFotoLog(inputEl) {
+  const file = inputEl.files[0];
+  if (!file) return;
+  inputEl.value = '';
+  if (!settings.anthropicKey) { showBanner('red', 'Geen API-sleutel — voeg je Anthropic sleutel in via Instellingen.'); return; }
+  showBanner('yellow', 'Chef bekijkt je bord…', false, 'fotolog-bezig');
+  try {
+    const base64 = await new Promise((res, rej) => {
+      const reader = new FileReader();
+      reader.onload = e => res(e.target.result.split(',')[1]);
+      reader.onerror = rej;
+      reader.readAsDataURL(file);
+    });
+    const mediaType = file.type && file.type.startsWith('image/') ? file.type : 'image/jpeg';
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-api-key': settings.anthropicKey, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 300,
+        messages: [{ role: 'user', content: [
+          { type: 'image', source: { type: 'base64', media_type: mediaType, data: base64 } },
+          { type: 'text', text: 'Dit is een foto van een maaltijd die de gebruiker eet of at. Geef een korte Nederlandse naam en schat vezels en eiwitten per portie realistisch. Antwoord ALLEEN met dit JSON-object: {"naam":"korte naam","vezels":"~Xg","eiwitten":"~Xg"}' }
+        ]}]
+      })
+    });
+    if (!resp.ok) throw new Error(`API ${resp.status}`);
+    const json = await resp.json();
+    const r = safeParseJSON(json.content[0].text);
+    if (!r || !r.naam) throw new Error('Kon de maaltijd niet herkennen.');
+    // Maaltijdmoment op basis van het tijdstip
+    const uur = new Date().getHours();
+    const slot = uur < 11 ? 'ontbijt' : uur < 15 ? 'lunch' : uur < 17 ? 'snack' : 'diner';
+    const t = today();
+    const weekKey = getISOWeek(new Date(t + 'T12:00:00'));
+    ensureDay(t);
+    const dayData = data.weken[weekKey][t];
+    if (!dayData.maaltijden) dayData.maaltijden = {};
+    if (!dayData.maaltijden[slot]) dayData.maaltijden[slot] = [];
+    const _snapshot = JSON.parse(JSON.stringify(dayData.maaltijden[slot]));
+    dayData.maaltijden[slot].push({ id: 'm' + Date.now() + Math.random().toString(36).slice(2,5), naam: r.naam, vezels: r.vezels || '', eiwitten: r.eiwitten || '', kcal: '', gepland: false, gegeten: true });
+    saveAndSync();
+    renderVandaag();
+    showBanner('green', `✓ ${r.naam} gelogd als ${slot} (${r.vezels || '?'} vezels, ${r.eiwitten || '?'} eiwit)`, false, null, null, () => {
+      dayData.maaltijden[slot] = _snapshot;
+      saveAndSync();
+      renderVandaag();
+    });
+  } catch(e) {
+    showBanner('red', `Foto-log mislukt${e && e.message ? ' (' + e.message + ')' : ''}. Probeer opnieuw of spreek het in.`);
+  }
 }
 
 async function analyseVoorraadFoto(inputEl) {
@@ -8701,6 +8837,7 @@ let _currentAudio = null;
 let _speakToken = 0;          // elke nieuwe spreekopdracht maakt oudere ongeldig
 let _ttsAbort = null;         // AbortController voor lopende OpenAI TTS fetch
 let _browserTtsPending = false; // browser-utterance aangevraagd maar nog niet sprekend
+let _ttsQuiet = false; // na handmatig stoppen: stil tot de gebruiker zelf weer iets vraagt
 
 function _stopAllVoiceInput() {
   // Stop generieke invoerveld-mic
@@ -8752,6 +8889,8 @@ function _stopCurrentAudio() {
 
 async function speakCoach(text, forcePlay = false) {
   if (!forcePlay && !_ttsEnabled) return;
+  if (!forcePlay && _ttsQuiet) return; // gebruiker heeft net bewust gestopt — respecteer de stilte
+  if (forcePlay) _ttsQuiet = false;
   _stopAllVoiceInput(); // stop mic zodat TTS niet wordt opgenomen
   _stopCurrentAudio();
   const clean = text
@@ -8850,7 +8989,7 @@ function _updatePlayButtons(playing) {
 }
 
 function toggleBubblePlay(btn, text) {
-  if (btn.dataset.playing === 'true') { _stopCurrentAudio(); return; }
+  if (btn.dataset.playing === 'true') { _stopCurrentAudio(); _ttsQuiet = true; return; }
   document.querySelectorAll('.bubble-play-btn').forEach(b => { b.innerHTML = _iconPlay(); b.dataset.playing = 'false'; });
   unlockTTS(); // iOS vereist audio-unlock binnen user gesture — anders blokkeert audio.play() na async fetch
   speakCoach(text, true); // forcePlay: altijd afspelen ongeacht TTS-toggle
@@ -9426,6 +9565,37 @@ async function askOppepper() {
   coachFrontSend(prompt, '⚡ Geef me een oppepper!');
 }
 
+async function checkMaandagbrief() {
+  try {
+    if (!settings || !settings.anthropicKey) return;
+    const nu = new Date();
+    if (nu.getDay() !== 1) return; // alleen op maandag
+    const wk = getISOWeek(nu);
+    if (localStorage.getItem('hc_maandagbrief') === wk) return;
+    // Vorige week samenvatten
+    const vorige = getISOWeek(new Date(nu.getTime() - 7 * 24 * 60 * 60 * 1000));
+    const wd = (data.weken || {})[vorige];
+    if (!wd) return;
+    const regels = [];
+    Object.keys(wd).sort().forEach(ds => {
+      const d = wd[ds];
+      const acts = (d.activiteiten || []).map(a => `${a.naam}${a.detail ? ' (' + a.detail + ')' : ''}${a.afgevinkt ? ' ✓' : ' niet gedaan'}${a.gevoel ? ', voelde ' + a.gevoel : ''}`);
+      const eten = [];
+      Object.values(d.maaltijden || {}).forEach(arr => (arr || []).forEach(m => { if (m.gegeten) eten.push(`${m.naam} (${m.vezels || '?'} vezels)`); }));
+      if (acts.length || eten.length) regels.push(`${ds}: ${[...acts, ...eten].join('; ')}${d.checkIn ? ' | gevoel: ' + d.checkIn : ''}`);
+    });
+    if (regels.length < 2) { localStorage.setItem('hc_maandagbrief', wk); return; } // te weinig om over te schrijven
+    const prompt = `Het is maandagochtend. Schrijf een korte persoonlijke weekbrief voor ${settings.naam || 'de gebruiker'} op basis van vorige week:
+${regels.join('\n')}
+
+Regels: maximaal 4 vloeiende zinnen plus één concrete focus voor deze week. Begin met wat goed ging (specifiek, met getal waar het kan), benoem één opvallend patroon, sluit af met de focus. Warm maar niet zoetsappig, geen opsommingen, geen vragen. Spreektaal.`;
+    const brief = await callAIPlain(prompt, 400);
+    if (!brief || brief.length < 40) return;
+    addFrontBubble('ai', brief);
+    localStorage.setItem('hc_maandagbrief', wk);
+  } catch(_) { /* volgende keer opnieuw */ }
+}
+
 function addFrontBubble(role, text) {
   const win = document.getElementById('coach-front-chat');
   if (!win) return;
@@ -9494,6 +9664,7 @@ async function coachFrontSend(msgOverride, displayMsg) {
   const inputEl = document.getElementById('coach-front-input');
   const msg = msgOverride || (inputEl ? inputEl.value.trim() : '');
   if (!msg) return;
+  _ttsQuiet = false; // nieuwe vraag van de gebruiker: stem mag weer
   if (inputEl && !msgOverride) inputEl.value = '';
   if (_ttsEnabled) unlockTTS();
 
@@ -10124,6 +10295,7 @@ function initApp() {
   loadGist();
   setTimeout(_consolideerGeheugen, 8000); // na Gist-load; max 1× per week
   setTimeout(checkBackupReminder, 5000);  // alleen zonder cloud sync, max 1× per maand
+  setTimeout(checkMaandagbrief, 3000);    // maandagbrief van de coach, 1× per week
   setupSwipeGestures();
   checkIntro();
   checkWeekplanCard();
