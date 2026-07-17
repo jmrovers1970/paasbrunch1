@@ -2686,7 +2686,7 @@ details[open] .intro-ex-summary { border-radius: 12px 12px 0 0; border-bottom-co
 'use strict';
 
 // ─── VERSION CHECK (forceert Safari herlading bij nieuwe versie) ──────────────
-const APP_VERSION = '20260717-3';
+const APP_VERSION = '20260717-5';
 (function() {
   try {
     const stored = localStorage.getItem('hc_app_version');
@@ -3127,6 +3127,7 @@ STIJL — je antwoorden worden gelezen én hardop voorgelezen:
 - Trainingsadvies op hoofdlijnen: benoem het TYPE training (bijv. "een lichte lower body" of "rustige duurloop"), maar som GEEN concrete oefeningen, sets of herhalingen op — alleen als de gebruiker daar expliciet naar vraagt.
 - De gebruiker is een ervaren sporter: GEEN open deuren of beginnersadvies ("zorg voor een goed ontbijt", "luister naar je lichaam", "blijf gehydrateerd", "houd je vezels in de gaten"). Vuistregel: geldt een advies voor vrijwel iedereen op vrijwel elke dag, schrap het dan of maak het concreet.
 - Concreet betekent: getallen en timing. Hoeveelheden ("richting 25 gram eiwit"), momenten ("anderhalf tot twee uur voor de start"), tempo of zone bij duurtraining ("zone 2, praattempo"). Eén scherp advies is meer waard dan drie algemene.
+- KOOLHYDRATEN rond training: adviseer koolhydraatrijk en licht verteerbaar anderhalf tot twee uur vóór duurtraining of intervallen; binnen een uur na een zware sessie koolhydraten MÉT eiwit voor glycogeenherstel; op rustdagen geen nadruk op koolhydraten. Kies gezonde bronnen: havermout, volkorenproducten, fruit, peulvruchten, zuivel — geen snelle suikers behalve direct rond intensieve inspanning.
 - Spreek de gebruiker aan met 'je'${_naam ? ` of bij naam (${_naam})` : ''}.
 - Reageer altijd in het Nederlands.
 ${_profielBlok}${_vraagHint}
@@ -5180,7 +5181,7 @@ async function berekenNutriVoorInput(dateStr, slot) {
   const preview = document.getElementById('nutri-preview');
   if (btn) { btn.disabled = true; btn.textContent = 'Bezig…'; }
   try {
-    const prompt = `Schat voor het gerecht "${naam}" (1 portie): vezels in gram en eiwitten in gram. Geef ALLEEN JSON: {"vezels":"~Xg","eiwitten":"~Xg"}. Geen uitleg.`;
+    const prompt = `Schat voor het gerecht "${naam}" (1 portie): vezels in gram en eiwitten in gram. Geef ALLEEN JSON: {"vezels":"~Xg","eiwitten":"~Xg","koolhydraten":"~Xg"}. Geen uitleg.`;
     const raw = await callAIPlain(prompt, 60);
     const result = safeParseJSON(raw);
     if (result && (result.vezels || result.eiwitten)) {
@@ -5720,7 +5721,7 @@ function _renderFoodReceptenList() {
             <span class="recipe-title">${r.naam}</span>
             <div class="recipe-badges">
               <span class="fiber-badge"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;opacity:.85;"><path d="M12 22c0-6 6-10 6-16a6 6 0 0 0-12 0c0 6 6 10 6 16z"/></svg> ${r.vezels || '?'}</span>
-              ${r.eiwitten ? `<span class="protein-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="vertical-align:-1px;opacity:.9"><path d="M12 2C8.5 2 5 7 5 11.8 5 17.4 8.1 22 12 22s7-4.6 7-10.2C19 7 15.5 2 12 2z"/></svg> ${r.eiwitten}</span>` : ''}
+              ${r.eiwitten ? `<span class="protein-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="vertical-align:-1px;opacity:.9"><path d="M12 2C8.5 2 5 7 5 11.8 5 17.4 8.1 22 12 22s7-4.6 7-10.2C19 7 15.5 2 12 2z"/></svg> ${r.eiwitten}</span>` : ''}${r.koolhydraten ? `<span class="protein-badge" style="color:#b45309;background:#fdf1de;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;opacity:.85;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> ${r.koolhydraten}</span>` : ''}
               <span class="time-badge">${r.tijd}</span>
             </div>
           </div>
@@ -6345,7 +6346,7 @@ Strikte regels:
 - Concrete bereidingsstappen${vermijdDubbel}
 
 JSON-formaat (exact):
-[{"naam":"...","vezels":"~Xg","eiwitten":"~Xg","tijd":"X min","ingredienten":["hoeveelheid ingredient","..."],"bereiding":["Stap 1...","Stap 2..."]}]`;
+[{"naam":"...","vezels":"~Xg","eiwitten":"~Xg","koolhydraten":"~Xg","tijd":"X min","ingredienten":["hoeveelheid ingredient","..."],"bereiding":["Stap 1...","Stap 2..."]}]`;
 
   try {
     const raw = await callAI(prompt, Math.min(n * 850, 3500));
@@ -6388,7 +6389,7 @@ function recipeCardHTML(r) {
         <div style="font-weight:700;font-size:16px;margin-bottom:4px;">${r.naam}</div>
         <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px;">
           <span class="fiber-badge">🌿 ${r.vezels || '?'}</span>
-          ${r.eiwitten ? `<span class="protein-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="vertical-align:-1px;opacity:.9"><path d="M12 2C8.5 2 5 7 5 11.8 5 17.4 8.1 22 12 22s7-4.6 7-10.2C19 7 15.5 2 12 2z"/></svg> ${r.eiwitten}</span>` : ''}
+          ${r.eiwitten ? `<span class="protein-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="vertical-align:-1px;opacity:.9"><path d="M12 2C8.5 2 5 7 5 11.8 5 17.4 8.1 22 12 22s7-4.6 7-10.2C19 7 15.5 2 12 2z"/></svg> ${r.eiwitten}</span>` : ''}${r.koolhydraten ? `<span class="protein-badge" style="color:#b45309;background:#fdf1de;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;opacity:.85;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> ${r.koolhydraten}</span>` : ''}
           <span class="time-badge">${r.tijd}</span>
         </div>
         <div style="font-size:13px;color:var(--muted);line-height:1.5;">
@@ -6471,7 +6472,7 @@ function planGenRecipe(tmpId) {
   }
   const _arr4707 = data.weken[weekKey][dateStr].maaltijden;
   if (!Array.isArray(_arr4707[slot])) _arr4707[slot] = [];
-  _arr4707[slot].push({ id:'m'+Date.now()+Math.random().toString(36).slice(2,5), naam:saved.naam, vezels:saved.vezels||'', eiwitten:saved.eiwitten||'', kcal:'', gepland:true, gegeten:false, receptId:saved.id });
+  _arr4707[slot].push({ id:'m'+Date.now()+Math.random().toString(36).slice(2,5), naam:saved.naam, vezels:saved.vezels||'', eiwitten:saved.eiwitten||'', koolhydraten:saved.koolhydraten||'', kcal:'', gepland:true, gegeten:false, receptId:saved.id });
   // Vink het recept aan in de preview
   const chk = document.getElementById('chk-' + tmpId);
   if (chk) chk.checked = true;
@@ -6522,7 +6523,7 @@ Regels:
 - Pas de bereidingsstappen aan waar de wijziging dat vraagt.
 - Pas de naam alleen aan als een hoofdingrediënt wijzigt.
 Antwoord ALLEEN met geldige JSON in exact dit formaat, zonder uitleg:
-{"naam":"...","vezels":"~Xg","eiwitten":"~Xg","tijd":"X min","ingredienten":["hoeveelheid ingredient","..."],"bereiding":["Stap 1...","..."]}`;
+{"naam":"...","vezels":"~Xg","eiwitten":"~Xg","koolhydraten":"~Xg","tijd":"X min","ingredienten":["hoeveelheid ingredient","..."],"bereiding":["Stap 1...","..."]}`;
     const raw = await callAI(prompt, 900);
     const nieuw = safeParseJSON(raw);
     if (!nieuw || !nieuw.naam || !Array.isArray(nieuw.ingredienten) || nieuw.ingredienten.length === 0) {
@@ -6582,7 +6583,7 @@ function logGenRecipeNow(tmpId) {
   if (!Array.isArray(slotArr[slot])) slotArr[slot] = [];
   const dubbel = slotArr[slot].findIndex(x => x.naam === saved.naam);
   // "Log vandaag" betekent: gegeten — telt direct mee in de vezels/eiwitten-balk
-  const item = { id:'m'+Date.now()+Math.random().toString(36).slice(2,5), naam:saved.naam, vezels:saved.vezels||'', eiwitten:saved.eiwitten||'', kcal:'', gepland:false, gegeten:true, receptId:saved.id };
+  const item = { id:'m'+Date.now()+Math.random().toString(36).slice(2,5), naam:saved.naam, vezels:saved.vezels||'', eiwitten:saved.eiwitten||'', koolhydraten:saved.koolhydraten||'', kcal:'', gepland:false, gegeten:true, receptId:saved.id };
   if (dubbel >= 0) slotArr[slot][dubbel] = item; else slotArr[slot].push(item);
   saveAndSync();
   renderVandaag();
@@ -6641,7 +6642,7 @@ async function generateMeer() {
   const prompt = `Genereer precies ${n} gezond Nederlands ${n===1?'recept':'recepten'} (focus: ${af==='vezels'?'veel vezels':af==='eiwitten'?'veel eiwitten':'vezels én eiwitten'}). Reageer UITSLUITEND met een JSON-array van precies ${n} object${n===1?'':'en'}.${focusTxt}
 Regels: ${vleesRegel} ${nutriRegelM} Max 35 min, LOGISCH COHERENTE gerechten, varieer eiwitbronnen.
 Vermijd recepten die lijken op: ${bestaandeNamen}.
-JSON: [{"naam":"...","vezels":"~Xg","eiwitten":"~Xg","tijd":"X min","ingredienten":["..."],"bereiding":["..."]}]`;
+JSON: [{"naam":"...","vezels":"~Xg","eiwitten":"~Xg","koolhydraten":"~Xg","tijd":"X min","ingredienten":["..."],"bereiding":["..."]}]`;
 
   try {
     const raw = await callAI(prompt, Math.min(n * 850, 3500));
@@ -6779,7 +6780,7 @@ Regels:
 - Is het een eigen recept met ingrediënten of stappen: structureer PRECIES wat er staat. Vul alleen ontbrekende hoeveelheden of vanzelfsprekende stappen aan; verzin GEEN nieuwe ingrediënten.
 - Bereken vezels en eiwitten per portie realistisch.
 Antwoord ALLEEN met geldige JSON, zonder uitleg:
-{"naam":"...","vezels":"~Xg","eiwitten":"~Xg","tijd":"X min","ingredienten":["hoeveelheid ingredient","..."],"bereiding":["Stap 1...","..."]}`;
+{"naam":"...","vezels":"~Xg","eiwitten":"~Xg","koolhydraten":"~Xg","tijd":"X min","ingredienten":["hoeveelheid ingredient","..."],"bereiding":["Stap 1...","..."]}`;
     const raw = await callAI(prompt, 900);
     const r = safeParseJSON(raw);
     if (!r || !r.naam || !Array.isArray(r.ingredienten) || r.ingredienten.length === 0) throw new Error('Uitwerken mislukt — probeer het opnieuw.');
@@ -7596,7 +7597,7 @@ Ingrediënten:
 ${ing}
 
 Geef ALLEEN dit JSON-object terug:
-{"vezels":"~Xg","eiwitten":"~Xg"}
+{"vezels":"~Xg","eiwitten":"~Xg","koolhydraten":"~Xg"}
 
 Gebruik standaard voedingswaardentabellen. Rond af op hele grammen.`;
 
@@ -7957,7 +7958,7 @@ async function analyseFotoLog(inputEl) {
         max_tokens: 300,
         messages: [{ role: 'user', content: [
           { type: 'image', source: { type: 'base64', media_type: mediaType, data: base64 } },
-          { type: 'text', text: 'Dit is een foto van een maaltijd die de gebruiker eet of at. Geef een korte Nederlandse naam en schat vezels en eiwitten per portie realistisch. Antwoord ALLEEN met dit JSON-object: {"naam":"korte naam","vezels":"~Xg","eiwitten":"~Xg"}' }
+          { type: 'text', text: 'Dit is een foto van een maaltijd die de gebruiker eet of at. Geef een korte Nederlandse naam en schat vezels en eiwitten per portie realistisch. Antwoord ALLEEN met dit JSON-object: {"naam":"korte naam","vezels":"~Xg","eiwitten":"~Xg","koolhydraten":"~Xg"}' }
         ]}]
       })
     });
@@ -7975,7 +7976,7 @@ async function analyseFotoLog(inputEl) {
     if (!dayData.maaltijden) dayData.maaltijden = {};
     if (!dayData.maaltijden[slot]) dayData.maaltijden[slot] = [];
     const _snapshot = JSON.parse(JSON.stringify(dayData.maaltijden[slot]));
-    dayData.maaltijden[slot].push({ id: 'm' + Date.now() + Math.random().toString(36).slice(2,5), naam: r.naam, vezels: r.vezels || '', eiwitten: r.eiwitten || '', kcal: '', gepland: false, gegeten: true });
+    dayData.maaltijden[slot].push({ id: 'm' + Date.now() + Math.random().toString(36).slice(2,5), naam: r.naam, vezels: r.vezels || '', eiwitten: r.eiwitten || '', koolhydraten: r.koolhydraten || '', kcal: '', gepland: false, gegeten: true });
     saveAndSync();
     renderVandaag();
     showBanner('green', `✓ ${r.naam} gelogd als ${slot} (${r.vezels || '?'} vezels, ${r.eiwitten || '?'} eiwit)`, false, null, null, () => {
@@ -8056,7 +8057,7 @@ async function analyseChefFoto(inputEl) {
         max_tokens: 1500,
         messages: [{ role: 'user', content: [
           { type: 'image', source: { type: 'base64', media_type: mediaType, data: base64 } },
-          { type: 'text', text: _EXTRACT_PRINCIPLE + '\n\nExtraheer het volledige recept uit deze afbeelding (foto van gerecht, kookboek of screenshot).\nGeef ALLEEN dit JSON-object terug:\n{"naam":"...","vezels":"~Xg","eiwitten":"~Xg","tijd":"X min","ingredienten":["200g rode linzen","1 ui","..."],"bereiding":["Stap 1...","Stap 2...","..."]}\nRegels:\n- ingredienten: kopieer ALLE ingrediënten met exacte hoeveelheden en eenheden zoals vermeld — sla niets over\n- bereiding: alle stappen volledig en in volgorde\n- vezels en eiwitten: schat op basis van ingrediënten' }
+          { type: 'text', text: _EXTRACT_PRINCIPLE + '\n\nExtraheer het volledige recept uit deze afbeelding (foto van gerecht, kookboek of screenshot).\nGeef ALLEEN dit JSON-object terug:\n{"naam":"...","vezels":"~Xg","eiwitten":"~Xg","koolhydraten":"~Xg","tijd":"X min","ingredienten":["200g rode linzen","1 ui","..."],"bereiding":["Stap 1...","Stap 2...","..."]}\nRegels:\n- ingredienten: kopieer ALLE ingrediënten met exacte hoeveelheden en eenheden zoals vermeld — sla niets over\n- bereiding: alle stappen volledig en in volgorde\n- vezels en eiwitten: schat op basis van ingrediënten' }
         ]}]
       })
     });
@@ -8146,7 +8147,7 @@ async function analyseeMaaltijdFoto(inputEl) {
         max_tokens: 400,
         messages: [{ role: 'user', content: [
           { type: 'image', source: { type: 'base64', media_type: mediaType, data: base64 } },
-          { type: 'text', text: 'Analyseer deze afbeelding. Is het een foto van een bereide maaltijd, OF een recept/screenshot met ingrediënten en bereidingsstappen?\n\nAls het een MAALTIJDFOTO is, geef dan: {"type":"maaltijd","naam":"...","vezels":"~Xg","eiwitten":"~Xg"}\n\nAls het een RECEPT is (tekst, screenshot, kookboekpagina), geef dan: {"type":"recept","naam":"...","vezels":"~Xg","eiwitten":"~Xg","ingredienten":["..."],"bereiding":["..."]}\n\nGeen uitleg, alleen JSON.' }
+          { type: 'text', text: 'Analyseer deze afbeelding. Is het een foto van een bereide maaltijd, OF een recept/screenshot met ingrediënten en bereidingsstappen?\n\nAls het een MAALTIJDFOTO is, geef dan: {"type":"maaltijd","naam":"...","vezels":"~Xg","eiwitten":"~Xg","koolhydraten":"~Xg"}\n\nAls het een RECEPT is (tekst, screenshot, kookboekpagina), geef dan: {"type":"recept","naam":"...","vezels":"~Xg","eiwitten":"~Xg","koolhydraten":"~Xg","ingredienten":["..."],"bereiding":["..."]}\n\nGeen uitleg, alleen JSON.' }
         ]}]
       })
     });
@@ -8195,7 +8196,7 @@ async function berekenNutriWeekmenu() {
   const preview = document.getElementById('wm-nutri-preview');
   if (btn) { btn.disabled = true; btn.textContent = 'Bezig…'; }
   try {
-    const prompt = `Schat voor het gerecht "${naam}" (1 portie): vezels in gram en eiwitten in gram. Geef ALLEEN JSON: {"vezels":"~Xg","eiwitten":"~Xg"}. Geen uitleg.`;
+    const prompt = `Schat voor het gerecht "${naam}" (1 portie): vezels in gram en eiwitten in gram. Geef ALLEEN JSON: {"vezels":"~Xg","eiwitten":"~Xg","koolhydraten":"~Xg"}. Geen uitleg.`;
     const raw = await callAIPlain(prompt, 60);
     const result = safeParseJSON(raw);
     if (result && (result.vezels || result.eiwitten)) {
@@ -8297,7 +8298,7 @@ async function saveWeekMenuMeal(dateStr, slot) {
   window._wmNutri = null;
   if (naam && !nutri.vezels && !nutri.eiwitten) {
     try {
-      const raw = await callAIPlain(`Schat voor "${naam}" (1 portie): vezels in gram en eiwitten in gram. Geef ALLEEN JSON: {"vezels":"~Xg","eiwitten":"~Xg"}. Geen uitleg.`, 60);
+      const raw = await callAIPlain(`Schat voor "${naam}" (1 portie): vezels in gram en eiwitten in gram. Geef ALLEEN JSON: {"vezels":"~Xg","eiwitten":"~Xg","koolhydraten":"~Xg"}. Geen uitleg.`, 60);
       nutri = safeParseJSON(raw) || {};
     } catch(_) {}
   }
@@ -10000,7 +10001,7 @@ Analyseer dit en extraheer ALLES. Één zin kan meerdere acties bevatten. Antwoo
 
 Regels:
 - activiteiten: ARRAY van sport/beweging-objecten. Meerdere activiteiten of dagen → meerdere APARTE objecten (nooit twee dagen in één datum-veld). Elk object: {"naam":"5km Hardlopen","type":"run","detail":"rustig tempo","km":5,"duur":30,"datum":"vandaag","herhaal":null,"herhaal_dagen":[]}. km = afstand als GETAL. duur = minuten (schat: 1km lopen ≈ 6 min, 1km fietsen ≈ 3 min). datum: specifieke datum → "YYYY-MM-DD" (bijv. "16 mei" → "2026-05-16"). Weekdag in VERLEDEN tijd (bijv. "maandag hardgelopen") → "afgelopen_maandag". Weekdag in TOEKOMST → dag zelf (bijv. "woensdag"). herhaal = null|"week"|"werkdagen". Types: run, gym, bike, walk, commute, walkdog, other. ALLEEN bij PLANNEN/TOEVOEGEN, niet bij "ik heb gedaan".
-- maaltijden: ARRAY van maaltijd-objecten. Meerdere maaltijden of dagen → meerdere APARTE objecten (nooit twee dagen in één datum-veld). Hoeveelheden in de naam verwerken als één object (naam: "Twee bananen"). Elk object: {"naam":"Yoghurt","slot":"ontbijt","vezels":"~5g","eiwitten":"~12g","kcal":"~350kcal","datum":"vandaag","herhaal":null}. slot: bepaal op basis van tijdswoorden: "vanochtend"/"vanmorgen"/"'s ochtends" → "ontbijt", "vanmiddag"/"'s middags" → "lunch", "vanavond"/"'s avonds" → "diner", "tussendoor"/"als snack" → "snack". Geen tijdswoord → gebruik meest logische slot op basis van het gerecht. datum: specifieke datum → "YYYY-MM-DD". Weekdag in VERLEDEN → "afgelopen_[dag]". herhaal = null|"week"|"werkdagen". Schat ALTIJD vezels én eiwitten.
+- maaltijden: ARRAY van maaltijd-objecten. Meerdere maaltijden of dagen → meerdere APARTE objecten (nooit twee dagen in één datum-veld). Hoeveelheden in de naam verwerken als één object (naam: "Twee bananen"). Elk object: {"naam":"Yoghurt","slot":"ontbijt","vezels":"~5g","eiwitten":"~12g","koolhydraten":"~30g","kcal":"~350kcal","datum":"vandaag","herhaal":null}. slot: bepaal op basis van tijdswoorden: "vanochtend"/"vanmorgen"/"'s ochtends" → "ontbijt", "vanmiddag"/"'s middags" → "lunch", "vanavond"/"'s avonds" → "diner", "tussendoor"/"als snack" → "snack". Geen tijdswoord → gebruik meest logische slot op basis van het gerecht. datum: specifieke datum → "YYYY-MM-DD". Weekdag in VERLEDEN → "afgelopen_[dag]". herhaal = null|"week"|"werkdagen". Schat ALTIJD vezels én eiwitten.
 - water: glazen toe te VOEGEN (bij "nog X glazen" of "X glazen gedronken"). Liters omrekenen: 1 liter = 4 glazen, 1,5 liter = 6 glazen. 0 als niet van toepassing.
 - water_totaal: totaal aantal glazen INSTELLEN (bij "in totaal X glazen" of "ik heb X glazen gehad vandaag"). 0 als niet van toepassing.
 - wijzig_maaltijd: object {"slot":"ontbijt","nieuw_naam":"Havermout","datum":"vandaag","vezels":"~6g","eiwitten":"~8g","kcal":"~350kcal"} als gebruiker een maaltijd wil WIJZIGEN/AANPASSEN (bijv. "verander mijn ontbijt naar havermout", "maak van mijn lunch een wrap"). Wis het bestaande slot en voeg het nieuwe item toe. null als niet van toepassing.
@@ -10540,7 +10541,7 @@ function showVoedingPreview(parsed, dateStr, source) {
   const wanneerKleur = parsed.wanneer === 'gegeten' ? 'var(--accent-food)' : '#7c3aed';
 
   // Offer Open Food Facts lookup button
-  const offBtn = `<button class="btn btn-ghost" style="font-size:12px;padding:6px 12px;margin-top:4px;" onclick="lookupAndUpdateVoedingPreview('${parsed.naam.replace(/'/g,"\\'")}')">🔍 Exacte voedingswaarden zoeken</button>`;
+  const offBtn = `<button class="btn btn-ghost" style="font-size:12px;padding:6px 12px;margin-top:4px;" onclick="lookupAndUpdateVoedingPreview('${parsed.naam.replace(/'/g,"\\'")}')">Voedingswaarden verfijnen</button>`;
 
   showModal(`
     <h3 style="margin-bottom:14px;">Maaltijd herkenning</h3>
@@ -10552,6 +10553,7 @@ function showVoedingPreview(parsed, dateStr, source) {
       <div class="voeding-preview-meta">
         <span class="voeding-preview-pill" style="color:var(--accent-food);">🌿 ${parsed.vezels || '?'}</span>
         <span class="voeding-preview-pill" style="color:#7c3aed;"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="vertical-align:-1px;opacity:.9"><path d="M12 2C8.5 2 5 7 5 11.8 5 17.4 8.1 22 12 22s7-4.6 7-10.2C19 7 15.5 2 12 2z"/></svg> ${parsed.eiwitten || '?'}</span>
+        <span class="voeding-preview-pill" style="color:#b45309;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;opacity:.85;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> ${parsed.koolhydraten || '?'}</span>
         <span class="voeding-preview-pill" style="color:var(--muted);">🔥 ${parsed.kcal || '?'}</span>
       </div>
       ${offBtn}
@@ -10596,29 +10598,47 @@ async function lookupAndUpdateVoedingPreview(naam) {
   if (lookupBtn) { lookupBtn.textContent = 'Zoeken…'; lookupBtn.disabled = true; }
 
   try {
-    const result = await lookupFoodFacts(naam);
-    if (!result) { if (lookupBtn) { lookupBtn.textContent = 'Niet gevonden'; } return; }
+    let result = await lookupFoodFacts(naam);
+    let viaAI = false;
+    if (!result || (result.fiber_100g === null && result.proteins_100g === null)) {
+      // Geen productmatch (logisch bij gerechten) — Chef maakt een zorgvuldige portieschatting
+      if (lookupBtn) lookupBtn.textContent = 'Chef rekent na…';
+      const raw = await callAIPlain(`Geef een zorgvuldige voedingsschatting voor één portie van: "${naam.replace(/"/g, "'")}". Denk aan realistische portiegrootte. Antwoord ALLEEN met JSON: {"vezels":"~Xg","eiwitten":"~Xg","koolhydraten":"~Xg","kcal":"~X"}`, 200);
+      const ai = safeParseJSON(raw);
+      if (!ai || (!ai.vezels && !ai.eiwitten)) { if (lookupBtn) { lookupBtn.textContent = 'Even niet gelukt — tik om opnieuw te proberen'; lookupBtn.disabled = false; } return; }
+      viaAI = true;
+      result = {
+        name: naam,
+        fiber_100g: null, proteins_100g: null, kcal_100g: null,
+        _vezels: ai.vezels || null, _eiwitten: ai.eiwitten || null, _koolhydraten: ai.koolhydraten || null, _kcal: ai.kcal || null
+      };
+    }
 
     // Update preview pills
     const pills = el.querySelectorAll('.voeding-preview-pill');
-    if (result.fiber_100g !== null) {
-      const vezels = '~' + Math.round(result.fiber_100g * 2.5) + 'g'; // assume ~250g portion
+    const vezels = result._vezels || (result.fiber_100g !== null ? '~' + Math.round(result.fiber_100g * 2.5) + 'g' : null); // ~250g portie
+    const eiwitten = result._eiwitten || (result.proteins_100g !== null ? '~' + Math.round(result.proteins_100g * 2.5) + 'g' : null);
+    const kcal = result._kcal || (result.kcal_100g !== null ? '~' + Math.round(result.kcal_100g * 2.5) + 'kcal' : null);
+    if (vezels) {
       if (pills[0]) pills[0].textContent = '🌿 ' + vezels;
       if (window._vpParsed) window._vpParsed.vezels = vezels;
     }
-    if (result.proteins_100g !== null) {
-      const eiwitten = '~' + Math.round(result.proteins_100g * 2.5) + 'g';
-      if (pills[1]) pills[1].textContent = '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="vertical-align:-1px;opacity:.9"><path d="M12 2C8.5 2 5 7 5 11.8 5 17.4 8.1 22 12 22s7-4.6 7-10.2C19 7 15.5 2 12 2z"/></svg> ' + eiwitten;
+    if (eiwitten) {
+      if (pills[1]) pills[1].innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="vertical-align:-1px;opacity:.9"><path d="M12 2C8.5 2 5 7 5 11.8 5 17.4 8.1 22 12 22s7-4.6 7-10.2C19 7 15.5 2 12 2z"/></svg> ' + eiwitten;
       if (window._vpParsed) window._vpParsed.eiwitten = eiwitten;
     }
-    if (result.kcal_100g !== null) {
-      const kcal = '~' + Math.round(result.kcal_100g * 2.5) + 'kcal';
-      if (pills[2]) pills[2].textContent = '🔥 ' + kcal;
+    const koolh = result._koolhydraten || null;
+    if (koolh) {
+      if (pills[2]) { const svgdeel = pills[2].querySelector('svg'); pills[2].innerHTML = (svgdeel ? svgdeel.outerHTML : '') + ' ' + koolh; }
+      if (window._vpParsed) window._vpParsed.koolhydraten = koolh;
+    }
+    if (kcal) {
+      if (pills[3]) pills[3].textContent = '🔥 ' + kcal;
       if (window._vpParsed) window._vpParsed.kcal = kcal;
     }
-    if (lookupBtn) { lookupBtn.textContent = '✓ Gevonden: ' + (result.name || naam); lookupBtn.disabled = true; }
+    if (lookupBtn) { lookupBtn.textContent = viaAI ? '✓ Verfijnd door Chef' : '✓ Gevonden: ' + (result.name || naam); lookupBtn.disabled = true; }
   } catch(e) {
-    if (lookupBtn) { lookupBtn.textContent = 'Niet gevonden'; lookupBtn.disabled = false; }
+    if (lookupBtn) { lookupBtn.textContent = 'Even niet gelukt — tik om opnieuw te proberen'; lookupBtn.disabled = false; }
   }
 }
 
@@ -10629,12 +10649,13 @@ function saveVoedingIntake(dateStr, slot, naam, vezels, eiwitten, kcal, source) 
     eiwitten = window._vpParsed.eiwitten || eiwitten;
     kcal = window._vpParsed.kcal || kcal;
   }
+  const koolhydraten = (window._vpParsed && window._vpParsed.koolhydraten) || '';
 
   const weekKey = getISOWeek(new Date(dateStr + 'T12:00:00'));
   ensureDay(dateStr);
   if (!data.weken[weekKey][dateStr].maaltijden) data.weken[weekKey][dateStr].maaltijden = { ontbijt:[], lunch:[], diner:[], snack:[] };
   if (!Array.isArray(data.weken[weekKey][dateStr].maaltijden[slot])) data.weken[weekKey][dateStr].maaltijden[slot] = [];
-  data.weken[weekKey][dateStr].maaltijden[slot].push({ id:'m'+Date.now()+Math.random().toString(36).slice(2,5), naam, vezels, eiwitten, kcal, gegeten: false, gepland: true });
+  data.weken[weekKey][dateStr].maaltijden[slot].push({ id:'m'+Date.now()+Math.random().toString(36).slice(2,5), naam, vezels, koolhydraten, eiwitten, kcal, gegeten: false, gepland: true });
   saveAndSync();
   closeModal();
   window._vpParsed = null;
@@ -11053,7 +11074,7 @@ async function genereerDiners() {
 Dagen: ${labels}
 
 Geef ALLEEN dit JSON-array terug:
-[{"datum":"YYYY-MM-DD","naam":"Receptnaam","vezels":"~Xg","eiwitten":"~Xg"}]
+[{"datum":"YYYY-MM-DD","naam":"Receptnaam","vezels":"~Xg","eiwitten":"~Xg","koolhydraten":"~Xg"}]
 
 Regels: vezels ≥10g per portie, max 30 min bereidingstijd, gezond maar lekker.`;
 
