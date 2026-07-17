@@ -2686,7 +2686,7 @@ details[open] .intro-ex-summary { border-radius: 12px 12px 0 0; border-bottom-co
 'use strict';
 
 // ─── VERSION CHECK (forceert Safari herlading bij nieuwe versie) ──────────────
-const APP_VERSION = '20260717-6';
+const APP_VERSION = '20260717-7';
 (function() {
   try {
     const stored = localStorage.getItem('hc_app_version');
@@ -8854,7 +8854,38 @@ let _ttsAbort = null;         // AbortController voor lopende OpenAI TTS fetch
 let _browserTtsPending = false; // browser-utterance aangevraagd maar nog niet sprekend
 let _ttsQuiet = false; // na handmatig stoppen: stil tot de gebruiker zelf weer iets vraagt
 
+// Poortwachter rond SpeechRecognition: registreert elke luisteraar centraal.
+// Eén hangende (zombie-)luisteraar blokkeert op iOS de microfoon voor de hele app;
+// daarom stopt élke nieuwe mic-start eerst alle bestaande, wie hem ook maakte.
+(function() {
+  const Native = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!Native) return;
+  window._activeRecs = new Set();
+  function TrackedRecognition() {
+    window._activeRecs.forEach(r => { r._aborted = true; try { r.abort(); } catch(_) {} });
+    window._activeRecs.clear();
+    const r = new Native();
+    window._activeRecs.add(r);
+    const cleanup = () => { try { window._activeRecs.delete(r); } catch(_) {} };
+    r.addEventListener('end', cleanup);
+    r.addEventListener('error', e => {
+      cleanup();
+      if (e && (e.error === 'audio-capture' || e.error === 'not-allowed')) {
+        showBanner('yellow', 'Microfoon niet beschikbaar. Sluit de app volledig (app-wisselaar, omhoog vegen) en open opnieuw.', false, 'mic-busy');
+      }
+    });
+    return r;
+  }
+  window.SpeechRecognition = TrackedRecognition;
+  window.webkitSpeechRecognition = TrackedRecognition;
+})();
+
 function _stopAllVoiceInput() {
+  // Vangnet: ook alle centraal geregistreerde luisteraars stoppen
+  if (window._activeRecs) {
+    window._activeRecs.forEach(r => { r._aborted = true; try { r.abort(); } catch(_) {} });
+    window._activeRecs.clear();
+  }
   // Stop generieke invoerveld-mic
   if (window._genericVoiceRec) {
     window._genericVoiceRec._aborted = true;
