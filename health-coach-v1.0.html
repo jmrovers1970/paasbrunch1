@@ -2686,7 +2686,7 @@ details[open] .intro-ex-summary { border-radius: 12px 12px 0 0; border-bottom-co
 'use strict';
 
 // ─── VERSION CHECK (forceert Safari herlading bij nieuwe versie) ──────────────
-const APP_VERSION = '20260717-5';
+const APP_VERSION = '20260717-6';
 (function() {
   try {
     const stored = localStorage.getItem('hc_app_version');
@@ -8745,12 +8745,23 @@ function confirmVoiceRecipe() {
 function startVoiceInput(inputId) {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SR) { showBanner('yellow', 'Spraakinvoer niet beschikbaar in deze browser.'); return; }
+  // Toggle: nogmaals tikken op hetzelfde knopje = netjes stoppen.
+  // stop() (niet abort) laat onresult nog vuren met wat al gehoord is.
+  if (window._genericVoiceRec) {
+    const rec = window._genericVoiceRec;
+    if (rec._inputId === inputId) {
+      rec._userStop = true;
+      try { rec.stop(); } catch(_) { try { rec.abort(); } catch(__) {} }
+      return;
+    }
+  }
   _stopCurrentAudio();   // stem uit, anders neemt de mic de stem op
   _stopAllVoiceInput();  // nooit twee mics tegelijk
   const recognition = new SR();
   recognition.lang = 'nl-NL';
   recognition.interimResults = false;
   recognition.maxAlternatives = 1;
+  recognition._inputId = inputId;
   window._genericVoiceRec = recognition;
   const input = document.getElementById(inputId);
   const btn = document.getElementById('mic-' + inputId);
@@ -8760,10 +8771,13 @@ function startVoiceInput(inputId) {
     if (input) { input.value = t; input.focus(); }
     if (btn) btn.classList.remove('listening');
   };
-  recognition.onerror = () => {
+  recognition.onerror = e => {
     window._genericVoiceRec = null;
     if (btn) btn.classList.remove('listening');
-    if (!recognition._aborted) showBanner('yellow', 'Spraakinvoer mislukt. Probeer opnieuw.');
+    const err = e && e.error;
+    if (recognition._aborted || recognition._userStop || err === 'aborted') return; // bewust gestopt: geen melding
+    if (err === 'no-speech') { showBanner('yellow', 'Niets gehoord — probeer opnieuw.'); return; }
+    showBanner('yellow', 'Spraakinvoer mislukt' + (err ? ' (' + err + ')' : '') + '. Probeer opnieuw.');
   };
   recognition.onend = () => { window._genericVoiceRec = null; if (btn) btn.classList.remove('listening'); };
   recognition.start();
