@@ -2581,7 +2581,7 @@ body .compact-track>span{background:var(--cc-lime)!important;border-radius:var(-
 'use strict';
 
 // ─── VERSION CHECK (forceert Safari herlading bij nieuwe versie) ──────────────
-const APP_VERSION = 'lime-20261001-16';
+const APP_VERSION = 'lime-20261002-1';
 // Eén plek voor de modellen: Sonnet voor gesprekken en recepten, Haiku voor snelle achtergrondtaken.
 const CC_MODEL_MAIN = 'claude-sonnet-4-6';
 const CC_MODEL_FAST = 'claude-haiku-4-5-20251001';
@@ -5914,12 +5914,71 @@ function smartVoiceRecipe(){return flowChefVoice();}
 let _ttsEnabled = localStorage.getItem('hc_tts') !== 'off';
 let _audioUnlocked = false;
 
+// ─── Web Audio-uitvoer ───────────────────────────────────────────────────────
+// Op iOS zet een <audio>-element de audiosessie in afspeelmodus en geeft die daarna niet
+// terug aan de microfoon: de spraakherkenning start dan wel ("Ik luister…") maar krijgt
+// geen geluid binnen ("Geen spraak ontvangen"). Web Audio deelt de sessie wél met de
+// microfoon. Daarom loopt voorgelezen audio via een AudioContext; het <audio>-element
+// is alleen nog een vangnet voor browsers zonder Web Audio.
+let ccAudioCtx = null, ccAudioSource = null;
+function ccGetAudioCtx() {
+  const AC = window.AudioContext || window.webkitAudioContext;
+  if (!AC) return null;
+  if (!ccAudioCtx || ccAudioCtx.state === 'closed') { try { ccAudioCtx = new AC(); } catch(_) { ccAudioCtx = null; } }
+  return ccAudioCtx;
+}
+// Binnen een tik aanroepen: daarna mag de AudioContext ook na een netwerkverzoek afspelen.
+function ccUnlockAudioCtx() {
+  const ctx = ccGetAudioCtx(); if (!ctx) return false;
+  try {
+    if (ctx.state !== 'running') { const p = ctx.resume(); if (p && p.catch) p.catch(() => {}); }
+    const s = ctx.createBufferSource(); s.buffer = ctx.createBuffer(1, 1, 22050); s.connect(ctx.destination); s.start(0);
+    return true;
+  } catch(_) { return false; }
+}
+// iOS 17+: vertel WebKit expliciet of we opnemen ('play-and-record') of alleen afspelen ('auto').
+function ccAudioSessionType(type) {
+  try { if (navigator.audioSession && navigator.audioSession.type !== type) navigator.audioSession.type = type; } catch(_) {}
+}
+// Speelt een audiofragment af via Web Audio. true = afgehandeld (gespeeld, gestopt of vervallen);
+// false = Web Audio lukt hier niet, de aanroeper valt dan terug op het <audio>-element.
+async function ccPlayBlob(blob, alive) {
+  const ctx = ccGetAudioCtx(); if (!ctx) return false;
+  let buffer;
+  try {
+    if (ctx.state !== 'running') await Promise.race([ctx.resume(), new Promise(r => setTimeout(r, 400))]);
+    if (ctx.state !== 'running') return false;
+    const bytes = await blob.arrayBuffer();
+    buffer = await new Promise((res, rej) => { const p = ctx.decodeAudioData(bytes, res, rej); if (p && p.catch) p.catch(rej); });
+  } catch(_) { return false; }
+  if (!alive()) return true;
+  return new Promise(res => {
+    let node = null, finished = false, safety = null;
+    const fin = () => {
+      if (finished) return; finished = true; clearTimeout(safety);
+      if (ccAudioSource === node) ccAudioSource = null;
+      try { node.onended = null; node.disconnect(); } catch(_) {}
+      res(true);
+    };
+    try {
+      node = ctx.createBufferSource(); node.buffer = buffer; node.connect(ctx.destination);
+      node.onended = fin; node._ccFin = fin; ccAudioSource = node;
+      _updatePlayButtons(true);
+      node.start(0);
+      safety = setTimeout(fin, buffer.duration * 1000 + 1500); // onended blijft soms uit als iOS de sessie onderbreekt
+    } catch(_) { finished = true; if (ccAudioSource === node) ccAudioSource = null; res(false); }
+  });
+}
+
 function unlockTTS() {
-  if (!window.speechSynthesis) return;
-  const utt = new SpeechSynthesisUtterance('');
-  utt.volume = 0;
-  window.speechSynthesis.speak(utt);
-  if (!_audioUnlocked) {
+  const webAudio = ccUnlockAudioCtx();
+  // De lege browser-uiting is alleen nodig als de browserstem ook echt gaat voorlezen
+  if (window.speechSynthesis && !(webAudio && settings.openaiKey)) {
+    const utt = new SpeechSynthesisUtterance('');
+    utt.volume = 0;
+    window.speechSynthesis.speak(utt);
+  }
+  if (!webAudio && !_audioUnlocked) {
     const silent = new Audio('data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=');
     silent.volume = 0;
     silent.play().then(() => { _audioUnlocked = true; }).catch(() => {});
@@ -6007,6 +6066,7 @@ let _ttsQuiet = false; // na handmatig stoppen: stil tot de gebruiker zelf weer 
 })();
 
 function _stopAllVoiceInput() {
+  window._micEpoch = (window._micEpoch || 0) + 1; // een mic-start die nog in voorbereiding is vervalt hiermee
   if(typeof flowSpeech!=='undefined'&&flowSpeech?.cleanup){const session=flowSpeech;session.cleanup();try{session.rec.abort();}catch(_) {}}
   if(typeof flowSpeech!=='undefined' && flowSpeech){flowSpeech.cancelled=true;try{flowSpeech.rec.abort();}catch(_) {}}
   if(window._bigPraatRec)window._bigPraatRec.flowCancelled=true;
@@ -6054,6 +6114,7 @@ function _stopCurrentAudio() {
     if(_currentAudio._limeObjectUrl)URL.revokeObjectURL(_currentAudio._limeObjectUrl);
     _currentAudio = null;
   }
+  if (ccAudioSource) { const node = ccAudioSource; ccAudioSource = null; try { node.stop(0); } catch(_) {} if (node._ccFin) node._ccFin(); }
   // Alleen cancel() als er echt iets speelt of in de wachtrij staat — op iOS corrupts
   // een onnodige cancel() de audio-sessie waarna SpeechRecognition stil faalt
   if (window.speechSynthesis && (window.speechSynthesis.speaking || _browserTtsPending)) {
@@ -6105,6 +6166,10 @@ async function _speakOpenAI(text, apiKey, voice, token) {
   }
   const blob = await resp.blob();
   if (token !== _speakToken) { if (_currentAudio === audio) _currentAudio = null; return; } // vervallen
+  if (_currentAudio === audio) _currentAudio = null;
+  if (await ccPlayBlob(blob, () => token === _speakToken)) { if (token === _speakToken) _updatePlayButtons(false); return; }
+  if (token !== _speakToken) return; // vervallen
+  _currentAudio = audio; // vangnet: <audio>-element
   const url = URL.createObjectURL(blob);
   audio.src = url;audio._limeObjectUrl=url;
   audio.onended = () => { URL.revokeObjectURL(url); _currentAudio = null; _updatePlayButtons(false); };
@@ -6851,11 +6916,15 @@ async function callAIStream(messages, maxTokens, options = {}) {
 let ccSpokenDraft = '', ccSpokenTurn = false;   // tekst die net is ingesproken; alleen dan leest Coach automatisch voor
 let ccSharedAudio = null; // één audio-element, op iOS vrijgegeven tijdens de tik op versturen
 function ccPrimeAudio() {
- try {
-  if (!ccSharedAudio) { ccSharedAudio = new Audio(); ccSharedAudio.setAttribute('playsinline', ''); }
-  ccSharedAudio.src = 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=';
-  const p = ccSharedAudio.play(); if (p && p.catch) p.catch(() => {});
- } catch(_) {}
+ ccAudioSessionType('auto');
+ // Web Audio is de hoofdroute; het <audio>-element alleen vrijgeven als Web Audio ontbreekt (zie Web Audio-uitvoer)
+ if (!ccUnlockAudioCtx()) {
+  try {
+   if (!ccSharedAudio) { ccSharedAudio = new Audio(); ccSharedAudio.setAttribute('playsinline', ''); }
+   ccSharedAudio.src = 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=';
+   const p = ccSharedAudio.play(); if (p && p.catch) p.catch(() => {});
+  } catch(_) {}
+ }
  try { unlockTTS(); } catch(_) {}
 }
 function ccCreateSentenceSpeaker() {
@@ -6873,7 +6942,7 @@ function ccCreateSentenceSpeaker() {
    headers: {'Authorization': `Bearer ${settings.openaiKey}`, 'Content-Type': 'application/json'},
    body: JSON.stringify({model: 'tts-1', input: text.slice(0, 4096), voice: settings.ttsVoice || 'nova', speed: 1.0})});
   if (!resp.ok) throw new Error('OpenAI TTS ' + resp.status);
-  return URL.createObjectURL(await resp.blob());
+  return await resp.blob();
  };
  const playUrl = (url) => new Promise(res => {
   const a = ccSharedAudio || new Audio(); let finished = false;
@@ -6897,12 +6966,12 @@ function ccCreateSentenceSpeaker() {
   while (queue.length && alive()) {
    const item = queue.shift();
    if (item.clip && !openAIFailed) {
-    let url = null;
-    try { url = await item.clip; } catch(e) {
+    let clip = null;
+    try { clip = await item.clip; } catch(e) {
      if (!alive() || e?.name === 'AbortError') break;
      openAIFailed = true; showBanner('yellow', 'Voorlezen via OpenAI lukt niet. De browserstem wordt geprobeerd.');
     }
-    if (url) { await playUrl(url); continue; }
+    if (clip) { if (!(await ccPlayBlob(clip, alive)) && alive()) await playUrl(URL.createObjectURL(clip)); continue; }
    }
    await speakBrowser(item.text);
   }
@@ -9203,25 +9272,41 @@ function ccSaveMemory(id){
  }catch(e){error.textContent=e.message;}
 }
 
+// Maakt de audio-uitvoer vrij voordat de microfoon start. Liep het voorlezen nog, dan krijgt
+// iOS even de tijd om van afspelen naar opnemen te schakelen (zie Web Audio-uitvoer).
+async function ccPrepareMic(){
+ const synth=window.speechSynthesis;
+ const busy=!!ccAudioSource||!!(_currentAudio&&!_currentAudio.paused)||!!(synth&&(synth.speaking||synth.pending))||_browserTtsPending;
+ _stopCurrentAudio();
+ if(ccSharedAudio){try{ccSharedAudio.pause();ccSharedAudio.removeAttribute('src');ccSharedAudio.load();}catch(_){}}
+ ccAudioSessionType('play-and-record');
+ if(busy)await new Promise(r=>setTimeout(r,350));
+}
 // One speech session owns its callbacks. Speech becomes a reviewable draft.
 async function bigPraatStart(){
  if(_smartBusy||limeReplyController){showBanner('yellow','Je vorige bericht wordt nog verwerkt. Je tekst blijft staan.');return;}
  if(window._bigPraatRec){window._bigPraatRec.stop();return;}
+ if(window._bigPraatPreparing)return;
  if(flowSpeech){flowSpeech.cancelled=true;flowSpeech.rec.abort();}
  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
  const input=document.getElementById('coach-front-input'),btn=document.getElementById('big-praat-btn'),status=document.getElementById('big-praat-status');
  document.getElementById('smart-input-status').textContent='';
  if(!SR){status.textContent='Spraak is hier niet beschikbaar. Typ je bericht hieronder.';input.focus();return;}
- _stopCurrentAudio();
- const rec=new SR(),original=input.value.trim(),markup=btn.innerHTML;let failed=false,ended=false;
+ const epoch=window._micEpoch||0;window._bigPraatPreparing=true;
+ try{await ccPrepareMic();}finally{window._bigPraatPreparing=false;}
+ if((window._micEpoch||0)!==epoch||window._bigPraatRec||_smartBusy||limeReplyController){ccAudioSessionType('auto');return;}
+ const rec=new SR(),original=input.value.trim(),markup=btn.innerHTML;let failed=false,ended=false,heard=false,watchdog=null;
  rec.lang='nl-NL';rec.continuous=false;rec.interimResults=true;window._bigPraatRec=rec;
  const active=()=>!ended&&!rec.flowCancelled&&window._bigPraatRec===rec;
- const reset=()=>{if(window._bigPraatRec!==rec)return;window._bigPraatRec=null;input.readOnly=false;btn.innerHTML=markup;btn.setAttribute('aria-pressed','false');document.getElementById('smart-send-btn').disabled=false;};
+ const reset=()=>{clearTimeout(watchdog);if(window._bigPraatRec!==rec)return;window._bigPraatRec=null;ccAudioSessionType('auto');input.readOnly=false;btn.innerHTML=markup;btn.setAttribute('aria-pressed','false');document.getElementById('smart-send-btn').disabled=false;};
  input.readOnly=true;document.getElementById('smart-send-btn').disabled=true;btn.textContent='Stop opname';btn.setAttribute('aria-pressed','true');status.textContent='Ik luister…';
- rec.onresult=e=>{if(!active())return;const words=Array.from(e.results,r=>r[0].transcript).join(' ').trim();input.value=[original,words].filter(Boolean).join(' ');ccResizeComposer(input);};
- rec.onerror=e=>{if(!active())return;failed=true;status.textContent=e.error==='not-allowed'?'Geef toegang tot je microfoon of typ je bericht.':input.value.trim()!==original?'Opname gestopt. Controleer je tekst en tik op versturen.':'Geen spraak ontvangen. Probeer opnieuw of typ je bericht.';};
+ // Waakhond: komt er helemaal niets binnen en meldt de browser dat zelf niet, dan de sessie afbreken zodat de knop niet blijft hangen
+ const stuck=()=>{if(!active()||heard)return;failed=true;ended=true;try{rec.abort();}catch(_){}reset();status.textContent='De microfoon reageert niet. Tik nog een keer op de microfoon of typ je bericht.';};
+ rec.onspeechstart=()=>{heard=true;};
+ rec.onresult=e=>{if(!active())return;heard=true;const words=Array.from(e.results,r=>r[0].transcript).join(' ').trim();input.value=[original,words].filter(Boolean).join(' ');ccResizeComposer(input);};
+ rec.onerror=e=>{if(!active())return;failed=true;status.textContent=e.error==='not-allowed'?'Geef toegang tot je microfoon of typ je bericht.':input.value.trim()!==original?'Opname gestopt. Controleer je tekst en tik op versturen.':e.error==='audio-capture'?'De microfoon is niet beschikbaar. Sluit de app volledig af, open hem opnieuw of typ je bericht.':e.error==='network'?'Spraakherkenning heeft geen verbinding. Probeer opnieuw of typ je bericht.':'Geen spraak ontvangen. Probeer opnieuw of typ je bericht.';};
  rec.onend=()=>{if(ended)return;const cancelled=rec.flowCancelled||window._bigPraatRec!==rec;ended=true;reset();if(cancelled)return;if(!failed&&input.value.trim()!==original)ccSpokenDraft=input.value.trim();if(!failed)status.textContent=input.value.trim()!==original?'Controleer je tekst en tik op versturen.':'Geen spraak ontvangen. Probeer opnieuw of typ je bericht.';};
- try{rec.start();}catch(e){ended=true;reset();status.textContent='Opname niet gestart. Typ je bericht of probeer opnieuw.';}
+ try{rec.start();watchdog=setTimeout(stuck,12000);}catch(e){ended=true;reset();status.textContent='Opname niet gestart. Typ je bericht of probeer opnieuw.';}
 }
 async function ccEstimateNutrition(description){
  if(!settings.anthropicKey)throw Error('Verbind je AI-sleutel bij Instellingen om te schatten.');
