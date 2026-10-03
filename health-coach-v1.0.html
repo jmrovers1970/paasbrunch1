@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#4ccbe2">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -1160,7 +1161,6 @@ button,input,textarea{font-family:inherit}
 .conversation-link{color:var(--acid)}
 .coach-front-card .coach-bubble-ai{background:#242d3e;color:#fff;border:0;box-shadow:none;border-radius:10px;font-size:15px}
 .coach-front-card .coach-chat-window{background:transparent;border:0;padding:0;box-shadow:none}
-.coach-front-card .log-feedback{color:var(--ink);background:#e7efcf;border-color:var(--acid)}
 #today-nutri-bar{margin:0 0 26px}
 .day-section{background:transparent;border:0;border-top:0!important;border-radius:0;padding:0 0 22px;margin-bottom:20px;box-shadow:none;border-bottom:1px solid var(--border)}
 .vandaag-section-h{font-size:20px;font-weight:750;text-transform:none;letter-spacing:-.6px;color:var(--ink)}
@@ -1187,7 +1187,7 @@ button:focus-visible,summary:focus-visible,input:focus-visible,textarea:focus-vi
 /* Light surfaces, lime identity, consistent meal and recipe hierarchy. */
 .coach-front-card{background:#ecf3cf!important;color:var(--text);border:1px solid #dce8b6!important}
 .composer-status,.speech-transcript,.chef-mic-label{color:#53614b}
-.conversation-link{color:#315346}
+.conversation-link{color:var(--cc-green)}
 .coach-front-card .coach-bubble-ai{background:#fff;color:var(--text)}
 .tab-btn.active,.tab-btn.active:last-child{background:var(--acid);color:#243752}.btn-primary{background:#315346;color:#fff;border-color:#315346}
 .meal-entry{padding:20px 0;border-bottom:1px solid var(--border);display:grid;grid-template-columns:minmax(0,1fr);gap:7px}
@@ -1274,14 +1274,13 @@ button{touch-action:manipulation}
 .unified-composer:focus-within,.flow-chef-card #gen-focus-input:focus{border-color:#6d8446;box-shadow:0 0 0 3px #d7f65340;outline:none}
 #coach-front-input{font-size:14px;min-height:44px;color:var(--text);background:transparent}#coach-front-input::placeholder,#gen-focus-input::placeholder{color:#667161;opacity:1}
 .composer-actions{margin:0;align-items:center}.composer-actions .composer-send{background:#e9eddf;color:var(--text);border:1px solid #ced8bd;border-radius:7px;font-size:12px;min-height:40px;padding:8px 13px;font-weight:650}
-.composer-photo{font-size:12px;color:var(--text);min-height:40px}.composer-status,.speech-transcript,.flow-status{font-size:12px;color:var(--muted);line-height:1.5}
+.composer-photo{font-size:12px;color:var(--text);min-height:40px}.composer-status,.speech-transcript,.flow-status{font-size:12px;color:var(--cc-muted);line-height:1.5}
 .composer-status:empty,.speech-transcript:empty,.flow-status:empty,.coach-chat-window:empty,#log-feedback:empty{display:none;margin:0;padding:0;min-height:0}
 #ritme-tile-host{gap:14px}
 .vandaag-section-h,.ritme-tile-head h2{font-size:18px!important;color:var(--text);font-weight:700;letter-spacing:-.45px}
 .flow-meal-title{color:var(--text)!important}.flow-meal-heading,.meal-entry-nutrients{color:var(--muted)!important}
 #today-nutri-bar{background:#eef0e4;border:1px solid var(--border);border-radius:12px}
 .ritme-custom-tile{border-radius:16px;background:var(--card);border-color:var(--border)}.ritme-custom-tile p,.ritme-menu-row span,.ritme-next-name small{color:var(--muted)}.ritme-food-number{color:var(--text)}
-.lime-page-label{font-size:11px;font-weight:650;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px}
 .flow-chef-card #gen-focus-input{font-size:14px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:10px;min-height:68px;padding:13px;margin-top:10px}.flow-extra>summary{color:var(--text);font-size:12px;min-height:44px}.flow-text-action{color:var(--text);font-size:12px;min-height:44px}
 .collapse-card{border-color:var(--border);border-radius:12px;background:var(--card);box-shadow:none}.collapse-card>summary{font-size:15px;color:var(--text);min-height:52px;font-weight:650}.flow-advice{border-color:var(--border);background:var(--card)}.flow-timeline li:before{background:var(--acid);border-color:#9aac5a}.flow-eyebrow,.flow-timeline strong{color:#536b3f}
 #tabs{background:#fffef9f5;border-top:1px solid var(--border);box-shadow:0 -4px 20px #243d3205}.tab-btn{color:var(--muted);font-size:14px;font-weight:600;min-height:48px}.tab-btn.active,.tab-btn.active:last-child{color:var(--text);background:#eaf2ce;border-radius:10px}.tab-btn.active:before{background:var(--acid)}
@@ -1407,7 +1406,7 @@ button:has(>.cc-icon):hover{color:#315346}
 .cc-memory-note>span{flex:1 1 190px;overflow-wrap:anywhere}
 .cc-memory-note strong,.cc-memory-note small{display:block;color:var(--muted);font-size:12px}
 .cc-memory-note button{font:inherit;color:var(--text);background:transparent;border:1px solid var(--border);border-radius:8px;min-height:36px;padding:6px 9px;cursor:pointer}
-#cc-memory-notice{margin:8px 0;border-left:3px solid #c9f34c;padding-left:10px}
+#cc-memory-notice{margin:8px 0;border-left:3px solid var(--cc-lime);padding-left:10px;color:var(--cc-ink)}
 #cc-memory-notice[hidden]{display:none}
 
 #ritme-next.ritme-custom-tile{background:#eff2e6!important;border:1px solid #dce2d4!important;color:var(--text)!important;box-shadow:none}
@@ -1442,18 +1441,22 @@ button:has(>.cc-icon):hover{color:#315346}
    Eén laag die de oudere stijlen overstemt. Lime = "doe dit" en "gelukt".
    Lettermaten 28/20/16/14/12 · afronding 12 (element) / 18 (kaart) / 999 (pil) · ruimte 4/8/16/24/32 */
 :root{
- --cc-lime:#d7f653;--cc-lime-soft:#f1f8d2;--cc-ink:#22312a;--cc-green:#2f4a3c;--cc-muted:#5f6e65;
+ --cc-lime:#d7f653;--cc-lime-soft:#f1f8d2;--cc-coach:#4ccbe2;--cc-petrol:#0e3b47;--cc-ink:#22312a;--cc-green:#2f4a3c;--cc-muted:#5f6e65;
  --cc-line:#e3e8df;--cc-tint:#ecf0e8;--cc-track:#e1e7da;--cc-bg:#f6f6f1;--cc-card:#fffffd;
  --cc-r-el:12px;--cc-r-card:18px;--cc-r-pill:999px;
  --acid:var(--cc-lime);
 }
 body{background:var(--cc-bg)!important;color:var(--cc-ink)}
-/* Kop en lime-zone */
-.brand-header{background:var(--cc-lime-soft)!important;border-bottom:0!important;box-shadow:none!important}
+/* Kop en zones: Coach turquoise, Chef lime. Binnen een zone is alle tekst petrol, ook in de witte knoppen. */
+.brand-header,#tab-vandaag#tab-vandaag .day-heading,#tab-vandaag#tab-vandaag .coach-front-card,#tab-recepten#tab-recepten .flow-chef-card{--cc-zone:var(--cc-coach);--cc-ink:var(--cc-petrol);--cc-green:var(--cc-petrol);--cc-muted:var(--cc-petrol)}
+body:has(#tab-recepten.active) .brand-header,#tab-recepten#tab-recepten .flow-chef-card{--cc-zone:var(--cc-lime)}
+.brand-header{background:var(--cc-zone)!important;border-bottom:0!important;box-shadow:none!important}
 .brand-header .flow-brand-tag{display:none!important}
-.brand-header .brand-amp{background:var(--cc-lime)!important;border-radius:8px!important}
+.brand-header .wordmark,.brand-header .brand-dot,.brand-header .brand-settings{color:var(--cc-ink)!important}
+.brand-header .brand-amp{background:var(--cc-lime)!important;color:var(--cc-ink)!important;border-radius:8px!important}
+body:has(#tab-recepten.active) .brand-header .brand-amp{background:var(--cc-coach)!important;color:var(--cc-petrol)!important}
 #tab-vandaag#tab-vandaag .day-heading,#tab-vandaag#tab-vandaag .coach-front-card,
-#tab-recepten#tab-recepten .flow-chef-card{background:var(--cc-lime-soft)!important;box-shadow:0 0 0 100vmax var(--cc-lime-soft)!important;clip-path:inset(0 -100vmax)!important}
+#tab-recepten#tab-recepten .flow-chef-card{background:var(--cc-zone)!important;box-shadow:0 0 0 100vmax var(--cc-zone)!important;clip-path:inset(0 -100vmax)!important}
 #tab-vandaag#tab-vandaag .day-heading{display:flex!important;flex-direction:column-reverse;gap:4px;margin:0!important;padding:16px 0 8px!important;border:0!important}
 #today-day{font-size:12px!important;font-weight:600!important;letter-spacing:.08em!important;text-transform:uppercase!important;color:var(--cc-muted)!important}
 #today-date-h1{font-size:28px!important;line-height:1.15!important;font-weight:750!important;letter-spacing:-.02em!important;color:var(--cc-ink)!important;margin:0!important}
@@ -1480,10 +1483,9 @@ body{background:var(--cc-bg)!important;color:var(--cc-ink)}
 #tab-vandaag#tab-vandaag .lime-plan-choices button strong{font-weight:600!important;font-size:14px!important}
 /* Gesprek: coach als gewone tekst, jij als witte pil */
 #coach-front-chat{background:transparent!important;border:0!important;box-shadow:none!important;padding:0!important;margin-top:16px!important}
-#coach-front-chat .coach-bubble-ai{background:transparent!important;border:0!important;box-shadow:none!important;padding:0!important;font-size:16px!important;line-height:1.45!important;color:var(--cc-ink)!important}
+#coach-front-chat .coach-bubble-ai{max-width:none!important;background:transparent!important;border:0!important;box-shadow:none!important;padding:0!important;font-size:16px!important;line-height:1.45!important;color:var(--cc-ink)!important}
 #coach-front-chat .coach-bubble-user,#coach-front-chat .coach-bubble-me{background:var(--cc-card)!important;border:1px solid var(--cc-line)!important;border-radius:var(--cc-r-card)!important;box-shadow:none!important}
 #lime-close-reply{border-radius:var(--cc-r-pill)!important;background:transparent!important;border:1px solid var(--cc-line)!important;width:36px;height:36px}
-.bubble-play-btn{border-radius:var(--cc-r-pill)!important}
 /* Jouw dag */
 #tab-vandaag#tab-vandaag .card.day-section,.collapse-card{background:var(--cc-card)!important;border:1px solid var(--cc-line)!important;border-radius:var(--cc-r-card)!important;box-shadow:none!important}
 #tab-vandaag#tab-vandaag .card.day-section{padding:8px 16px!important}
@@ -1499,7 +1501,8 @@ body .vandaag-section-h{font-size:13px!important;font-weight:650!important;text-
 #tabs .tab-btn.active{background:var(--cc-lime)!important;color:var(--cc-ink)!important;font-weight:700!important}
 /* Chef */
 #tab-recepten#tab-recepten .flow-chef-card{border:0!important;border-radius:0!important;padding:16px 0 24px!important;margin:0 0 24px!important}
-#tab-recepten#tab-recepten .lime-page-label{font-size:12px!important;font-weight:600!important;letter-spacing:.08em!important;text-transform:uppercase!important;color:var(--cc-muted)!important}
+.cc-eyebrow{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.cc-page-tag{display:inline-flex;align-items:center;height:24px;padding:0 10px;border-radius:999px;background:var(--cc-ink);color:var(--cc-lime);font:700 12px/1 -apple-system,'SF Pro Text',system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase}
 #tab-recepten#tab-recepten .flow-chef-card h1{font-size:28px!important;font-weight:750!important;letter-spacing:-.02em!important;color:var(--cc-ink)!important}
 #tab-recepten#tab-recepten .flow-chef-card>.flow-helper{font-size:16px!important;color:var(--cc-muted)!important}
 #tab-recepten#tab-recepten #voice-recipe-btn{border-radius:var(--cc-r-pill)!important;min-height:56px}
@@ -1512,12 +1515,13 @@ body .vandaag-section-h{font-size:13px!important;font-weight:650!important;text-
 #tab-recepten#tab-recepten .cc-chef-modes .vandaag-section-h:first-child{margin-top:0}
 .cc-chef-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
 #tab-recepten#tab-recepten .cc-chef-row button{all:unset;box-sizing:border-box;display:flex;align-items:center;justify-content:center;height:44px;padding:0 8px;border-radius:999px;border:1px solid var(--cc-line);background:var(--cc-card);color:var(--cc-ink);font:600 14px/1 -apple-system,'SF Pro Text',system-ui,sans-serif;white-space:nowrap;cursor:pointer}
-#tab-recepten#tab-recepten .cc-chef-row button[aria-pressed="true"]{background:var(--cc-lime);border-color:var(--cc-lime);font-weight:700}
+#tab-recepten#tab-recepten .cc-chef-row button[aria-pressed="true"]{background:var(--cc-ink);border-color:var(--cc-ink);color:var(--cc-lime);font-weight:700}
 #tab-recepten#tab-recepten .cc-chef-row button:focus-visible{outline:2px solid var(--cc-green);outline-offset:2px}
 .collapse-card>.cc-body{padding:0 16px 16px!important}
 .cc-section-label{font-size:13px!important;font-weight:650!important;letter-spacing:.06em!important;color:var(--cc-muted)!important}
 
 #tab-vandaag#tab-vandaag .day-heading{clip-path:inset(-48px -100vmax 0)!important}
+#tab-vandaag#tab-vandaag .coach-front-card{clip-path:inset(-1px -100vmax 0)!important}
 #tab-vandaag #big-praat-btn#big-praat-btn .flow-voice-glyph{position:static!important;margin:0!important}
 #tab-vandaag#tab-vandaag .composer-photo>span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 #tab-vandaag#tab-vandaag .composer-photo{background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%2322312a' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 8h3l2-3h6l2 3h3v11H4z'/%3E%3Ccircle cx='12' cy='13' r='3.5'/%3E%3C/svg%3E") center/20px no-repeat!important}
@@ -1642,6 +1646,14 @@ body .vandaag-section-h{font-size:13px!important;font-weight:650!important;text-
 #tab-recepten#tab-recepten #chef-foto-btn svg{width:20px;height:20px}
 #tab-recepten#tab-recepten #gen-btn{flex:none;width:44px!important;height:44px!important;min-width:44px;border-radius:999px!important;margin:0!important}
 #tab-recepten#tab-recepten .cc-chip{all:unset;box-sizing:border-box;display:inline-flex;align-items:center;height:36px;padding:0 12px;border-radius:999px;background:var(--cc-card);border:1px solid var(--cc-line);color:var(--cc-ink);font:600 14px/1 -apple-system,'SF Pro Text',system-ui,sans-serif;cursor:pointer}
+.coach-front-card .log-feedback{padding:16px;background:var(--cc-card);border:1px solid var(--cc-line);border-radius:18px;color:var(--cc-ink)}
+.log-feedback-actions button{all:unset;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;height:44px;padding:0 16px;border-radius:999px;background:var(--cc-card);border:1px solid var(--cc-line);color:var(--cc-ink);font:600 14px/1 -apple-system,'SF Pro Text',system-ui,sans-serif;cursor:pointer}
+.log-feedback-actions button:focus-visible{outline:2px solid var(--cc-green);outline-offset:2px}
+.cc-reply-tools{display:flex;align-items:center;gap:8px;margin-top:8px;flex-wrap:wrap}
+.cc-reply-btn{all:unset;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;gap:4px;height:32px;padding:0 12px;border-radius:999px;background:var(--cc-card);border:1px solid var(--cc-line);color:var(--cc-ink);font:600 12px/1 -apple-system,'SF Pro Text',system-ui,sans-serif;cursor:pointer}
+.cc-reply-btn.bubble-play-btn{width:32px;padding:0}
+.cc-reply-btn:disabled{cursor:default;opacity:.6}
+.cc-reply-btn:focus-visible{outline:2px solid var(--cc-green);outline-offset:2px}
 .cc-fb-group{display:inline-flex;gap:4px;margin-left:auto}
 .cc-fb{all:unset;box-sizing:border-box;width:32px;height:32px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;color:var(--cc-muted);cursor:pointer}
 .cc-fb:hover{background:var(--cc-tint)}
@@ -1979,7 +1991,7 @@ body input[type="checkbox"]:disabled{opacity:.4;cursor:default}
   <!-- TAB 1: VANDAAG -->
   <div id="tab-vandaag" class="tab-content active">
     <div class="page-header day-heading">
-      <h1 id="today-date-h1">Vandaag</h1><div id="today-day"></div>
+      <h1 id="today-date-h1">Vandaag</h1><div class="cc-eyebrow"><span class="cc-page-tag">Coach</span><span id="today-day"></span></div>
     </div>
 
 
@@ -2194,7 +2206,7 @@ body input[type="checkbox"]:disabled{opacity:.4;cursor:default}
 'use strict';
 
 // ─── VERSION CHECK (forceert Safari herlading bij nieuwe versie) ──────────────
-const APP_VERSION = 'lime-20261003-19';
+const APP_VERSION = 'lime-20261003-20';
 // Eén plek voor de modellen: Sonnet voor gesprekken en recepten, Haiku voor snelle achtergrondtaken.
 const CC_MODEL_MAIN = 'claude-sonnet-4-6';
 const CC_MODEL_FAST = 'claude-haiku-4-5-20251001';
@@ -3090,6 +3102,7 @@ function switchTab(name, btn) {
   if (fab) fab.style.display = name === 'vandaag' ? 'none' : 'flex';
   const fabLabel = document.getElementById('fab-label');
   if (fabLabel) fabLabel.style.display = name === 'vandaag' ? 'none' : 'block';
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', getComputedStyle(document.documentElement).getPropertyValue(name === 'recepten' ? '--cc-lime' : '--cc-coach').trim());
   if (name === 'vandaag') renderVandaag();
   if (name === 'recepten') renderFoodTab();
 }
@@ -5661,11 +5674,10 @@ function addFrontBubble(role, text) {
     const tipId = 'ft' + Date.now();
     const safeText = text.replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/\n/g,' ');
     div.innerHTML = formatCoachText(text) +
-      `<div style="display:flex;align-items:center;gap:8px;margin-top:8px;flex-wrap:wrap;">
-        <button class="bubble-play-btn" data-playing="false" onclick="toggleBubblePlay(this,${flowArg(text)})" title="Antwoord voorlezen" aria-label="Antwoord voorlezen"
-          style="display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:var(--card2);border:1.5px solid var(--border);cursor:pointer;color:var(--text-2);flex-shrink:0;">${_iconPlay()}</button>
-        <button onclick="askUitgebreider(this)" style="background:none;border:1px solid var(--border);border-radius:7px;font-size:12px;color:var(--muted);cursor:pointer;padding:3px 9px;font-family:inherit;display:inline-flex;align-items:center;gap:4px;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Meer detail</button>
-        <button onclick="pinFrontTip('${tipId}',this)" style="background:none;border:1px solid var(--border);border-radius:7px;font-size:12px;color:var(--muted);cursor:pointer;padding:3px 9px;font-family:inherit;display:inline-flex;align-items:center;gap:4px;"><svg class="cc-icon" data-cc-icon="bookmark" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4z"/></svg>Opslaan</button>
+      `<div class="cc-reply-tools">
+        <button class="bubble-play-btn cc-reply-btn" data-playing="false" onclick="toggleBubblePlay(this,${flowArg(text)})" title="Antwoord voorlezen" aria-label="Antwoord voorlezen">${_iconPlay()}</button>
+        <button class="cc-reply-btn" onclick="askUitgebreider(this)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Meer detail</button>
+        <button class="cc-reply-btn" onclick="pinFrontTip('${tipId}',this)"><svg class="cc-icon" data-cc-icon="bookmark" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4z"/></svg>Opslaan</button>
       </div>`;
     const fb = document.createElement('span'); fb.className = 'cc-fb-group';
     fb.innerHTML = `<button type="button" class="cc-fb" aria-pressed="false" aria-label="Goed antwoord" onclick="ccFeedback(this,'up')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 10v11H4V10zM7 10l4-7a2 2 0 0 1 3 2l-1 5h6a2 2 0 0 1 2 2.3l-1.3 7A2 2 0 0 1 17.7 21H7"/></svg></button><button type="button" class="cc-fb" aria-pressed="false" aria-label="Niet goed antwoord" onclick="ccFeedback(this,'down')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="transform:rotate(180deg)"><path d="M7 10v11H4V10zM7 10l4-7a2 2 0 0 1 3 2l-1 5h6a2 2 0 0 1 2 2.3l-1.3 7A2 2 0 0 1 17.7 21H7"/></svg></button>`;
@@ -5698,8 +5710,7 @@ function pinFrontTip(id, btn) {
   data.savedTips.unshift({ id, date: today(), content: text, createdAt: Date.now(), conversationId: limeConversationId() });
   saveAndSync();
   btn.textContent = '✓ Opgeslagen';
-  btn.style.color = 'rgba(0,0,0,.25)';
-  btn.onclick = null;
+  btn.disabled = true;
   showBanner('green', 'Tip opgeslagen onder Coach → Opgeslagen tips.');
 }
 
@@ -7323,7 +7334,7 @@ function flowWeekPlanVoice(){return flowListen('weekplan','weekplan-draft','flow
 
 // Flow: speech-first food advice, recipe capture and a compact personal library.
 let flowChefMode='auto',flowChefBusy=false,flowChefTurns=[],flowChefAdvice=null,flowPhotoKind='recipe',flowRecipePhoto=null,flowRecipeSelected=new Set(),flowRecipeSelecting=false;
-function flowRenderChef(){const container=document.getElementById('food-chef-content');if(!container)return;const draft=document.getElementById('gen-focus-input')?.value||'';container.innerHTML=`<section class="flow-chef-card"><div class="lime-page-label">Chef</div><h1>Wat eet je?</h1><div class="cc-chef-bar"><button id="voice-recipe-btn" class="flow-speak" onclick="smartVoiceRecipe()">${flowVoiceGlyph()} Spreek je eetwens in</button><label class="sr-only" for="gen-focus-input">Je vraag of receptwens</label><textarea id="gen-focus-input" rows="1" oninput="ccResizeComposer(this)" placeholder="Wat wil je eten?">${escapeText(draft)}</textarea><button type="button" class="cc-clear" onclick="ccClearInput('gen-focus-input','chef-mic-label')" aria-label="Tekst wissen"><svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="14" fill="currentColor" opacity=".14"/><path d="m10 10 8 8m0-8-8 8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button><button id="chef-foto-btn" onclick="flowPhotoMenu()" aria-label="Foto toevoegen: recept, gerecht of voorraad" title="Foto: recept, gerecht of voorraad"><svg class="cc-icon" data-cc-icon="camera" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6 10 3h4l2 3h4v14H4V6z"/><circle cx="12" cy="13" r="4"/></svg><span>Foto toevoegen</span></button><button id="gen-btn" class="flow-send" onclick="generateRecepten()" aria-label="Verstuur" title="Verstuur"><svg class="cc-icon" data-cc-icon="send" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5m-6 6 6-6 6 6"/></svg></button></div><p id="chef-mic-label" class="flow-status" role="status"></p><input id="chef-foto-input" type="file" accept="image/*" style="display:none" onchange="analyseChefFoto(this)"><div class="cc-chef-modes"><h2 class="vandaag-section-h">Bij sport</h2><div class="cc-chef-row">${[['voor','Voor'],['tijdens','Tijdens'],['na','Na']].map(flowChefModeButton).join('')}</div><h2 class="vandaag-section-h">Maaltijd</h2><div class="cc-chef-row">${[['makkelijk','Makkelijk'],['uitgebreid','Uitgebreid'],['comfort','Comfort']].map(flowChefModeButton).join('')}</div><h2 class="vandaag-section-h">Uit je voorraad</h2><button type="button" class="cc-entry" aria-haspopup="dialog" onclick="showVoorraadModal()"><span id="cc-voorraad-label">${ccVoorraadText()}</span>${CC_CHEVRON}</button></div></section><div id="flow-photo-resume"></div><div id="flow-chef-answer" aria-live="polite"></div>`;if(draft)ccResizeComposer(document.getElementById('gen-focus-input'));if(flowChefAdvice)flowRenderAdvice();flowPhotoResume();}
+function flowRenderChef(){const container=document.getElementById('food-chef-content');if(!container)return;const draft=document.getElementById('gen-focus-input')?.value||'';container.innerHTML=`<section class="flow-chef-card"><div class="cc-eyebrow"><span class="cc-page-tag">Chef</span></div><h1>Wat eet je?</h1><div class="cc-chef-bar"><button id="voice-recipe-btn" class="flow-speak" onclick="smartVoiceRecipe()">${flowVoiceGlyph()} Spreek je eetwens in</button><label class="sr-only" for="gen-focus-input">Je vraag of receptwens</label><textarea id="gen-focus-input" rows="1" oninput="ccResizeComposer(this)" placeholder="Wat wil je eten?">${escapeText(draft)}</textarea><button type="button" class="cc-clear" onclick="ccClearInput('gen-focus-input','chef-mic-label')" aria-label="Tekst wissen"><svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="14" fill="currentColor" opacity=".14"/><path d="m10 10 8 8m0-8-8 8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button><button id="chef-foto-btn" onclick="flowPhotoMenu()" aria-label="Foto toevoegen: recept, gerecht of voorraad" title="Foto: recept, gerecht of voorraad"><svg class="cc-icon" data-cc-icon="camera" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6 10 3h4l2 3h4v14H4V6z"/><circle cx="12" cy="13" r="4"/></svg><span>Foto toevoegen</span></button><button id="gen-btn" class="flow-send" onclick="generateRecepten()" aria-label="Verstuur" title="Verstuur"><svg class="cc-icon" data-cc-icon="send" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5m-6 6 6-6 6 6"/></svg></button></div><p id="chef-mic-label" class="flow-status" role="status"></p><input id="chef-foto-input" type="file" accept="image/*" style="display:none" onchange="analyseChefFoto(this)"><div class="cc-chef-modes"><h2 class="vandaag-section-h">Bij sport</h2><div class="cc-chef-row">${[['voor','Voor'],['tijdens','Tijdens'],['na','Na']].map(flowChefModeButton).join('')}</div><h2 class="vandaag-section-h">Maaltijd</h2><div class="cc-chef-row">${[['makkelijk','Makkelijk'],['uitgebreid','Uitgebreid'],['comfort','Comfort']].map(flowChefModeButton).join('')}</div><h2 class="vandaag-section-h">Uit je voorraad</h2><button type="button" class="cc-entry" aria-haspopup="dialog" onclick="showVoorraadModal()"><span id="cc-voorraad-label">${ccVoorraadText()}</span>${CC_CHEVRON}</button></div></section><div id="flow-photo-resume"></div><div id="flow-chef-answer" aria-live="polite"></div>`;if(draft)ccResizeComposer(document.getElementById('gen-focus-input'));if(flowChefAdvice)flowRenderAdvice();flowPhotoResume();}
 function flowSetPersons(value){const n=Number(value);if(!Number.isInteger(n)||n<1||n>6)return;genPersonen=n;localStorage.setItem('hc_gen_personen',String(n));const el=document.getElementById('chef-personen');if(el)el.textContent=n;const min=document.getElementById('chef-personen-min'),plus=document.getElementById('chef-personen-plus');if(min)min.disabled=n<=1;if(plus)plus.disabled=n>=6;ccRenderKitchen();}
 function flowSetCount(n){if(![1,2,3].includes(n))return;genCount=n;localStorage.setItem('hc_gen_count',String(n));document.querySelectorAll('.gen-count-pill').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.textContent)===n)));ccRenderKitchen();}
 function flowSetDieet(v){if(!['vlees','vis','vega'].includes(v))return;genDieet=v;localStorage.setItem('hc_dieet',v);document.querySelectorAll('.gen-diet-pill').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.dieet===v)));ccRenderKitchen();}
