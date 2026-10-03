@@ -1407,7 +1407,7 @@ button:has(>.cc-icon):hover{color:#315346}
 .cc-memory-note>span{flex:1 1 190px;overflow-wrap:anywhere}
 .cc-memory-note strong,.cc-memory-note small{display:block;color:var(--muted);font-size:12px}
 .cc-memory-note button{font:inherit;color:var(--text);background:transparent;border:1px solid var(--border);border-radius:8px;min-height:36px;padding:6px 9px;cursor:pointer}
-#cc-memory-notice{margin:8px 0;border-left:3px solid #c9f34c;padding-left:10px}
+#cc-memory-notice{margin:8px 0;border-left:3px solid var(--cc-lime);padding-left:10px;color:var(--cc-ink)}
 #cc-memory-notice[hidden]{display:none}
 
 #ritme-next.ritme-custom-tile{background:#eff2e6!important;border:1px solid #dce2d4!important;color:var(--text)!important;box-shadow:none}
@@ -1442,20 +1442,20 @@ button:has(>.cc-icon):hover{color:#315346}
    Eén laag die de oudere stijlen overstemt. Lime = "doe dit" en "gelukt".
    Lettermaten 28/20/16/14/12 · afronding 12 (element) / 18 (kaart) / 999 (pil) · ruimte 4/8/16/24/32 */
 :root{
- --cc-lime:#d7f653;--cc-lime-soft:#f1f8d2;--cc-coach:#4ccbe2;--cc-coach-ink:#0e3b47;--cc-chef-ink:#1f3d2b;--cc-ink:#22312a;--cc-green:#2f4a3c;--cc-muted:#5f6e65;
+ --cc-lime:#d7f653;--cc-lime-soft:#f1f8d2;--cc-coach:#4ccbe2;--cc-petrol:#0e3b47;--cc-ink:#22312a;--cc-green:#2f4a3c;--cc-muted:#5f6e65;
  --cc-line:#e3e8df;--cc-tint:#ecf0e8;--cc-track:#e1e7da;--cc-bg:#f6f6f1;--cc-card:#fffffd;
  --cc-r-el:12px;--cc-r-card:18px;--cc-r-pill:999px;
  --acid:var(--cc-lime);
 }
 body{background:var(--cc-bg)!important;color:var(--cc-ink)}
-/* Kop en zones: Coach turquoise, Chef lime. Binnen een zone krijgt alle tekst de inkt van die zone, ook in de witte knoppen. */
-.brand-header,#tab-vandaag#tab-vandaag .day-heading,#tab-vandaag#tab-vandaag .coach-front-card{--cc-zone:var(--cc-coach);--cc-ink:var(--cc-coach-ink);--cc-green:var(--cc-coach-ink);--cc-muted:var(--cc-coach-ink)}
-body:has(#tab-recepten.active) .brand-header,#tab-recepten#tab-recepten .flow-chef-card{--cc-zone:var(--cc-lime);--cc-ink:var(--cc-chef-ink);--cc-green:var(--cc-chef-ink);--cc-muted:var(--cc-chef-ink)}
+/* Kop en zones: Coach turquoise, Chef lime. Binnen een zone is alle tekst petrol, ook in de witte knoppen. */
+.brand-header,#tab-vandaag#tab-vandaag .day-heading,#tab-vandaag#tab-vandaag .coach-front-card,#tab-recepten#tab-recepten .flow-chef-card{--cc-zone:var(--cc-coach);--cc-ink:var(--cc-petrol);--cc-green:var(--cc-petrol);--cc-muted:var(--cc-petrol)}
+body:has(#tab-recepten.active) .brand-header,#tab-recepten#tab-recepten .flow-chef-card{--cc-zone:var(--cc-lime)}
 .brand-header{background:var(--cc-zone)!important;border-bottom:0!important;box-shadow:none!important}
 .brand-header .flow-brand-tag{display:none!important}
 .brand-header .wordmark,.brand-header .brand-dot,.brand-header .brand-settings{color:var(--cc-ink)!important}
 .brand-header .brand-amp{background:var(--cc-lime)!important;color:var(--cc-ink)!important;border-radius:8px!important}
-body:has(#tab-recepten.active) .brand-header .brand-amp{background:var(--cc-coach)!important;color:var(--cc-coach-ink)!important}
+body:has(#tab-recepten.active) .brand-header .brand-amp{background:var(--cc-coach)!important;color:var(--cc-petrol)!important}
 #tab-vandaag#tab-vandaag .day-heading,#tab-vandaag#tab-vandaag .coach-front-card,
 #tab-recepten#tab-recepten .flow-chef-card{background:var(--cc-zone)!important;box-shadow:0 0 0 100vmax var(--cc-zone)!important;clip-path:inset(0 -100vmax)!important}
 #tab-vandaag#tab-vandaag .day-heading{display:flex!important;flex-direction:column-reverse;gap:4px;margin:0!important;padding:16px 0 8px!important;border:0!important}

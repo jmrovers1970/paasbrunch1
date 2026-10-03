@@ -51,8 +51,8 @@ Gebruiker: Jim. Primair op iPhone (Safari), in het Nederlands. Loopt (hoofdsport
 ```
 --cc-lime #d7f653      lime = "doe dit" (één hoofdactie per scherm) én "gelukt" (vinkjes, voortgang, actieve tab)
 --cc-lime-soft #f1f8d2 zacht lime vlak (icoonrondjes, tikfeedback)
---cc-coach #4ccbe2     turquoise zone bovenaan Coach    --cc-coach-ink #0e3b47 petrol tekst in die zone
-                       Chef-zone = --cc-lime            --cc-chef-ink #1f3d2b donkergroene tekst in die zone
+--cc-coach #4ccbe2     turquoise zone bovenaan Coach (Chef-zone = --cc-lime)
+--cc-petrol #0e3b47    tekst in beide zones
 --cc-ink #22312a       tekst, donkere secundaire knop (verzenden)
 --cc-green #2f4a3c     tekstlinks, "+ Toevoegen", focusrand
 --cc-muted #5f6e65     subtekst
@@ -64,7 +64,7 @@ Lettertype: -apple-system, 'SF Pro Text', system-ui, sans-serif.
 ```
 
 ### Zones bovenaan
-Kop + begroeting + invoer van Coach is turquoise, kop + invoer + knoppen van Chef is lime (`.brand-header` via `body:has(#tab-recepten.active)`). Een zone zet `--cc-zone` en herdefinieert `--cc-ink`, `--cc-green` en `--cc-muted` naar zijn eigen inkt; alles erin (ook tekst in witte knoppen, verzendknop, antwoord, links) volgt vanzelf. Gebruik in een zone dus altijd de tokens, nooit vaste grijzen. Op lime valt lime weg: een gekozen Chef-knop is gevuld met de inkt en heeft lime tekst; de "&" in de kop is bij Chef turquoise (spiegelt Coach: lime "&" op turquoise). De microfoon blijft lime (staat in de witte pil). `theme-color` volgt de tab (`switchTab`).
+Kop + begroeting + invoer van Coach is turquoise, kop + invoer + knoppen van Chef is lime (`.brand-header` via `body:has(#tab-recepten.active)`). Een zone zet `--cc-zone` en herdefinieert `--cc-ink`, `--cc-green` en `--cc-muted` naar `--cc-petrol` (één tekstkleur voor beide zones); alles erin (ook tekst in witte knoppen, verzendknop, antwoord, links) volgt vanzelf. Gebruik in een zone dus altijd de tokens, nooit vaste grijzen. Op lime valt lime weg: een gekozen Chef-knop is gevuld met de inkt en heeft lime tekst; de "&" in de kop is bij Chef turquoise (spiegelt Coach: lime "&" op turquoise). De microfoon blijft lime (staat in de witte pil). `theme-color` volgt de tab (`switchTab`).
 
 ### Vaste patronen (hergebruik, niet opnieuw uitvinden)
 - **Invoerbalk** (Coach en Chef): witte pil met lime ronde microfoon (52 px), tekstveld, camera-icoon (44 px), donkere ronde verzendknop. Zodra er tekst staat, neemt een ✕ (`.cc-clear`, `ccClearInput`) de plek van de camera over. Tijdens opname wordt de microfoon een pil "Stop opname" (`[aria-pressed="true"]`). Opnieuw inspreken vervangt de tekst; er wordt nooit automatisch verstuurd.
