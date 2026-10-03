@@ -599,12 +599,8 @@ select.modal-input { appearance: auto; }
 /* ─── INTRO OVERLAY ─── */
 #intro-overlay {
   position: fixed; inset: 0; z-index: 500;
-  background: var(--bg);
   display: flex; align-items: flex-start; justify-content: center;
   overflow-y: auto;
-  padding: 32px 20px 40px;
-  padding-top: calc(32px + env(safe-area-inset-top, 0px));
-  padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px));
 }
 
 /* ─── STATS ─── */
@@ -778,16 +774,11 @@ select.modal-input { appearance: auto; }
 
 /* ─── SETTINGS OVERLAY ─── */
 #settings-overlay {
-  position: fixed; inset: 0; background: var(--bg);
+  position: fixed; inset: 0;
   z-index: 400; overflow-y: auto;
   display: none;
-  padding: calc(20px + env(safe-area-inset-top, 0px)) 18px 40px;
 }
 #settings-overlay.visible { display: block; }
-.settings-header {
-  display: flex; align-items: center; gap: 14px; margin-bottom: 28px;
-}
-.settings-header h2 { font-size: 24px; }
 
 /* ─── HERPLANNING VOORSTEL ─── */
 
@@ -1137,9 +1128,6 @@ button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-v
 
 /* Compact dagelijks overzicht: invoer eerst, voedingsinformatie ondersteunend. */
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-.composer-heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-.composer-heading h2{font-size:21px;letter-spacing:-.03em}
-.composer-help{width:36px;min-height:36px;background:transparent;border:1px solid var(--border);border-radius:50%;color:var(--muted);font:inherit;cursor:pointer}
 .coach-front-card{flex-shrink:0;margin-bottom:12px!important;padding:16px!important;border:1px solid var(--border)!important;background:#fff!important}
 .unified-composer{border:1px solid #d1ded4;border-radius:14px;background:#f8faf7;padding:12px}
 .unified-composer:focus-within{border-color:#769882;box-shadow:0 0 0 2px #e4eee6}
@@ -1181,9 +1169,6 @@ button,input,textarea{font-family:inherit}
 #today-date-h1{font-size:20px!important;letter-spacing:-.6px;font-weight:750}
 #today-day{font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);text-align:right}
 .coach-front-card{background:var(--ink)!important;border:0!important;padding:24px!important;border-radius:20px;box-shadow:none;margin-bottom:0!important;color:#fff}
-.composer-heading{align-items:flex-start;margin-bottom:20px}
-.composer-heading h2{font-size:clamp(34px,7.8vw,48px);font-weight:800;line-height:.96;letter-spacing:-2px}
-.composer-help{font-size:11px;color:#c6cad6;border:0;border-bottom:1px solid #616979;border-radius:0;width:auto;min-height:32px;padding:3px 0;margin-top:3px}
 .unified-composer{background:#fff;border:2px solid transparent;border-radius:12px;padding:15px}
 .unified-composer:focus-within{border-color:var(--acid);box-shadow:0 0 0 2px var(--acid)}
 #coach-front-input{font-size:16px;min-height:54px;color:var(--ink);line-height:1.5}
@@ -1216,15 +1201,14 @@ button,input,textarea{font-family:inherit}
 .btn-primary{background:var(--ink);color:var(--acid);border-color:var(--ink)}
 .streak-flame .flame-bg{display:none}.streak-flame{background:var(--acid);border-radius:14px}.streak-number,.streak-unit{color:var(--ink)}
 button:focus-visible,summary:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid #315346;outline-offset:3px}
-@media(min-width:760px){.brand-header{padding-left:max(24px,calc((100% - 700px)/2));padding-right:max(24px,calc((100% - 700px)/2))}.composer-heading h2 br{display:none}.composer-heading h2 br:after{content:' '}}
+@media(min-width:760px){.brand-header{padding-left:max(24px,calc((100% - 700px)/2));padding-right:max(24px,calc((100% - 700px)/2))}}
 @media(max-width:380px){.brand-header{padding:12px 14px}.wordmark{font-size:24px}.brand-amp{width:26px;height:26px;font-size:21px}.brand-settings{font-size:11px}.coach-front-card{padding:19px!important}.tab-content{padding-left:14px;padding-right:14px}.composer-actions button{padding:0 10px;font-size:12px}.composer-actions .composer-send{padding:0 12px}.day-heading{align-items:flex-start}#today-day{max-width:130px;line-height:1.4}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
-@media(max-height:650px){.brand-header{padding-top:10px;padding-bottom:10px}.tab-content{padding-top:13px}.day-heading{margin-bottom:12px}.coach-front-card{padding:19px!important}.composer-heading{margin-bottom:15px}.composer-heading h2{font-size:34px;letter-spacing:-1.5px}.composer-heading h2 br{display:none}.unified-composer{padding:12px}.composer-status{margin-top:9px}}
+@media(max-height:650px){.brand-header{padding-top:10px;padding-bottom:10px}.tab-content{padding-top:13px}.day-heading{margin-bottom:12px}.coach-front-card{padding:19px!important}.unified-composer{padding:12px}.composer-status{margin-top:9px}}
 
 /* Light surfaces, lime identity, consistent meal and recipe hierarchy. */
 .coach-front-card{background:#ecf3cf!important;color:var(--text);border:1px solid #dce8b6!important}
-.composer-heading h2{color:#243752}
-.composer-help{color:#40546c;border-color:#a7b797}.composer-status,.speech-transcript,.chef-mic-label{color:#53614b}
+.composer-status,.speech-transcript,.chef-mic-label{color:#53614b}
 .conversation-link{color:#315346}
 .coach-front-card .coach-bubble-ai{background:#fff;color:var(--text)}
 .tab-btn.active,.tab-btn.active:last-child{background:var(--acid);color:#243752}.btn-primary{background:#315346;color:#fff;border-color:#315346}
@@ -1242,7 +1226,7 @@ button:focus-visible,summary:focus-visible,input:focus-visible,textarea:focus-vi
 body{font-family:Inter,'Helvetica Neue',Arial,sans-serif}.brand-header{padding-top:12px;padding-bottom:12px}.wordmark{font-size:26px}.flow-brand-tag{font-size:11px;letter-spacing:.9px;text-transform:uppercase;margin-left:10px;color:#506035;font-weight:650}.brand-settings{font-size:12px;color:#315346}
 .tab-content>*{flex-shrink:0}.day-heading{margin-bottom:16px}#today-date-h1{font-size:21px!important}#today-day{font-size:11px;color:#536078}.flow-eyebrow{font-size:10px;text-transform:uppercase;font-weight:700;letter-spacing:1px;color:#586641;margin-bottom:9px}
 .coach-front-card,.flow-chef-card{background:#eff4d9!important;border:1px solid #dde6c2!important;border-radius:18px;padding:22px!important;color:var(--text);box-shadow:none}
-.composer-heading{margin-bottom:7px}.composer-heading h2,.flow-chef-card h1{font-size:32px;line-height:1.06;letter-spacing:-1.25px;font-weight:800;color:var(--text)}.flow-chef-card h1 span{color:#315346}.composer-help{font-size:11px;min-height:36px;color:#465371;border:0}.flow-helper{font-size:13px;line-height:1.5;color:#526156;margin:8px 0 16px;max-width:48ch}
+.flow-chef-card h1{font-size:32px;line-height:1.06;letter-spacing:-1.25px;font-weight:800;color:var(--text)}.flow-chef-card h1 span{color:#315346}.flow-helper{font-size:13px;line-height:1.5;color:#526156;margin:8px 0 16px;max-width:48ch}
 .flow-speak{display:flex;align-items:center;justify-content:center;gap:10px;border:1px solid #bdd340;background:var(--acid);color:#243d32;font:inherit;font-size:15px;font-weight:750;border-radius:11px;width:100%;min-height:50px;padding:12px 16px;cursor:pointer;box-shadow:none}
 .flow-speak.listening,.flow-speak[aria-pressed=true]{background:#315346;border-color:#315346;color:#fff}.flow-voice-glyph{flex-shrink:0;display:block!important}.flow-speak:disabled{opacity:.6;cursor:wait}
 .unified-composer{background:white;border:1px solid #d5decc;padding:11px 12px;margin-top:12px;border-radius:11px}.unified-composer:focus-within{border-color:#315346;box-shadow:0 0 0 2px #e1e9cf}
@@ -1256,10 +1240,9 @@ body{font-family:Inter,'Helvetica Neue',Arial,sans-serif}.brand-header{padding-t
 .modal{border-radius:18px!important;padding:24px!important;background:#fff;max-width:560px}.modal-header{gap:12px;align-items:flex-start;margin-bottom:17px}.modal-header h2{font-size:23px;line-height:1.2;letter-spacing:-.6px}.modal-close{font:inherit;font-size:11px!important;width:auto!important;min-width:48px!important;min-height:36px!important;border:0!important;background:transparent!important;color:#59667b!important;padding:6px!important}.modal h3{font-size:17px}.flow-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}.flow-field{display:flex;flex-direction:column;gap:7px;font-size:12px;color:#455773;margin:12px 0;min-width:0}.flow-form-grid .flow-field{margin:0}.flow-field>span{font-size:10px;color:#687486}.flow-field input,.flow-field select,.flow-field textarea{width:100%;min-width:0;background:#f9faf6;border:1px solid #ccd6bf;border-radius:9px;color:#253b58;font:inherit;font-size:15px;min-height:45px;padding:11px;line-height:1.4}.flow-field textarea{resize:vertical;min-height:100px}.flow-field[hidden]{display:none}.flow-draft{width:100%;font:inherit;font-size:14px;border:1px solid #d4dcca;border-radius:10px;resize:vertical;padding:12px;margin-top:12px;color:var(--text)}
 .flow-action-stack{display:flex;flex-direction:column;gap:10px;margin-top:20px}.flow-action-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}.btn{font-size:13px;min-height:44px;border-radius:9px;box-shadow:none}.btn-primary{background:#315346;color:#fff;border:1px solid #315346}.btn-secondary{background:#f1f4e8;color:#344d70;border:1px solid #ccd8bc}.btn-ghost{color:#315346;background:transparent}.btn:disabled,button:disabled{opacity:.48;cursor:not-allowed}.flow-subhead{margin:24px 0 12px}.flow-review-note{background:#f4f5e4;padding:14px;border-radius:10px;font-size:13px;margin:16px 0}.flow-review-note ul{padding-left:18px;margin-top:8px}.flow-check{display:flex;align-items:flex-start;gap:10px;font-size:12px;line-height:1.5;margin:15px 0}.flow-check input{width:18px;height:18px;flex-shrink:0;accent-color:#315346}
 .flow-week-nav{display:flex;justify-content:space-between;align-items:center;gap:8px}.flow-week-nav strong{font-size:13px}.flow-week-list{margin:12px 0 20px}.flow-week-list>button{display:flex;gap:17px;align-items:flex-start;width:100%;text-align:left;border:0;border-bottom:1px solid var(--border);background:none;padding:14px 0;color:#263d59;cursor:pointer;font:inherit;font-size:13px}.flow-week-list>button>strong{min-width:50px;font-size:12px}.flow-week-list small{display:block;font-size:11px;color:#687387;margin-top:4px}.flow-day-meal{padding:12px 0;border-bottom:1px solid var(--border)}.flow-day-meal small{display:block;color:#6c7583;font-size:11px;margin-bottom:4px}.flow-day-meal strong{font-size:14px}.flow-recipe-meta{font-size:12px;color:#60718b;margin-bottom:8px}.flow-recipe-actions{display:flex;gap:10px;margin:22px 0}.flow-recipe-actions .btn{flex:1;min-height:48px}.flow-portions{flex-direction:row;align-items:center;justify-content:space-between}.flow-portions select{width:80px}.flow-recipe-body h3{font-size:16px;margin:24px 0 12px}.flow-recipe-body ul,.flow-recipe-body ol{padding-left:21px;font-size:14px;line-height:1.65}.flow-recipe-body li{margin:7px 0}.chef-proposal{padding:18px;box-shadow:none}.chef-proposal-actions{gap:8px}.chef-proposal-actions .btn{font-size:12px}.chef-proposal summary{font-size:13px}
-#intro-overlay{background:#f7f7f2f5;padding:22px;overflow-y:auto}.flow-intro{max-width:430px;width:100%;margin:auto;background:#fff;border:1px solid var(--border);border-radius:20px;padding:26px;color:var(--text)}.flow-intro .wordmark{font-size:25px}.flow-intro h1{font-size:32px;letter-spacing:-1.2px;line-height:1.1;margin:25px 0 10px}.flow-intro>p{font-size:14px;line-height:1.5;color:#59677c}.flow-intro-grid{display:grid;gap:13px;margin:23px 0}.flow-intro-grid>div{display:grid;grid-template-columns:30px 1fr;column-gap:12px;align-items:start}.flow-intro-grid b{background:var(--acid);border-radius:8px;color:#2a3e47;width:29px;height:29px;display:flex;align-items:center;justify-content:center;font-size:12px}.flow-intro-grid strong{font-size:14px;line-height:1.4}.flow-intro-grid span{grid-column:2;font-size:12px;color:#626e82;line-height:1.5}.flow-intro-example{background:#f0f4e1;border-radius:12px;padding:14px;margin:19px 0;font-size:12px;line-height:1.5}.flow-intro-example strong{display:block;margin-top:9px;color:#315346}.flow-intro .flow-privacy{font-size:10px;color:#6c7580;margin-top:12px}
 .tab-btn.active,.tab-btn.active:last-child{background:var(--acid);color:#243f4b}.tab-btn{font-size:15px}#tabs{height:calc(66px + env(safe-area-inset-bottom,0px));padding-top:7px;padding-bottom:calc(7px + env(safe-area-inset-bottom,0px))}
-@media(max-width:390px){.brand-header{padding-left:15px;padding-right:15px}.wordmark{font-size:23px}.flow-brand-tag{font-size:9px;margin-left:7px}.brand-settings{font-size:10px}.composer-heading h2,.flow-chef-card h1{font-size:29px}.flow-helper{font-size:12px}.flow-speak{font-size:14px}.flow-week-strip{gap:3px}.flow-day-mark{width:29px;height:29px}.modal{padding:19px!important}.flow-form-grid{gap:10px}.flow-intro{padding:22px}.flow-intro h1{font-size:29px}}
-@media(max-height:650px){.flow-intro{padding:20px}.flow-intro h1{font-size:27px;margin-top:16px}.flow-intro-grid{gap:10px;margin:16px 0}.flow-intro-example{margin:12px 0}.flow-intro .flow-privacy{margin-top:8px}.coach-front-card{padding:18px!important}.composer-heading h2{font-size:28px}.flow-speak{min-height:46px}.flow-helper{margin:6px 0 12px}}
+@media(max-width:390px){.brand-header{padding-left:15px;padding-right:15px}.wordmark{font-size:23px}.flow-brand-tag{font-size:9px;margin-left:7px}.brand-settings{font-size:10px}.flow-chef-card h1{font-size:29px}.flow-helper{font-size:12px}.flow-speak{font-size:14px}.flow-week-strip{gap:3px}.flow-day-mark{width:29px;height:29px}.modal{padding:19px!important}.flow-form-grid{gap:10px}}
+@media(max-height:650px){.coach-front-card{padding:18px!important}.flow-speak{min-height:46px}.flow-helper{margin:6px 0 12px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 .flow-field{display:block}.flow-field>span{display:inline;margin-left:4px}.flow-field>input,.flow-field>select,.flow-field>textarea{display:block;margin-top:7px}.flow-portions{display:flex}.flow-portions select{margin-top:0}
 /* Flow design contract: one type scale, lime interaction, cobalt action, warm white surfaces. */
@@ -1271,15 +1254,15 @@ body{font-family:Inter,'Helvetica Neue',Arial,sans-serif}.brand-header{padding-t
 /* Mijn ritme: expressive data, quiet controls, one coherent visual system. */
 [hidden]{display:none!important}
 .ritme-kicker{display:block;font-size:10px;letter-spacing:.09em;text-transform:uppercase;font-weight:650;color:#63704d;line-height:1.5}
-.ritme-tile-head button,.ritme-link,.ritme-settings-header>button{font:inherit;font-size:12px;border:0;background:none;color:#315346;padding:8px 0;min-height:40px;cursor:pointer;text-align:left}
+.ritme-tile-head button,.ritme-link{font:inherit;font-size:12px;border:0;background:none;color:#315346;padding:8px 0;min-height:40px;cursor:pointer;text-align:left}
 .ritme-plan-actions{gap:8px 16px}.ritme-plan-actions button:nth-child(2){color:#315346;font-weight:700;border-bottom:2px solid #bfd547}
 #ritme-tile-host{display:flex;flex-direction:column;gap:15px}#ritme-tile-host>section{margin:0!important}
 .ritme-custom-tile{background:#fff;border:1px solid #d9e0ce;border-radius:16px;padding:20px}.ritme-tile-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}.ritme-tile-head h2{font-size:19px;letter-spacing:-.5px;margin:0}.ritme-tile-head button{padding:3px 0;min-height:32px}.ritme-custom-tile p{font-size:13px;line-height:1.6;color:#57657a;margin:9px 0}.ritme-custom-tile>small{font-size:10px;color:#6d7888}.ritme-food-number{font-size:38px;font-weight:700;letter-spacing:-1.2px;margin:6px 0}.ritme-food-number small{font-size:15px;color:#6c788a;font-weight:400;letter-spacing:0}.ritme-meter{height:7px;background:#e9eddc;border-radius:9px;overflow:hidden;margin:12px 0}.ritme-meter>span{display:block;height:100%;background:#aac33b;border-radius:9px}.ritme-link{display:block;font-weight:600;margin-top:7px}.ritme-next-name{display:block;font-size:23px;letter-spacing:-.7px;line-height:1.3}.ritme-menu-row{display:block;text-align:left;width:100%;border:0;background:none;padding:12px 0;font:inherit;color:var(--text);cursor:pointer;border-bottom:1px solid #e5e9df}.ritme-menu-row span{display:block;font-size:10px;color:#6b7889;margin-bottom:4px}.ritme-menu-row strong{font-size:14px;font-weight:600;line-height:1.45}.ritme-menu-row:last-child{border:0}
 .ritme-periods{display:flex;background:#edf0e3;border-radius:11px;padding:4px;gap:4px;margin:12px 0}.ritme-periods button{flex:1;font:inherit;font-size:12px;color:#53637b;border:0;background:transparent;padding:9px 5px;min-height:39px;border-radius:8px;cursor:pointer}.ritme-periods button[aria-pressed=true]{background:#fff;color:#315346;font-weight:650}.ritme-period-note{font-size:11px;color:#6b778a;line-height:1.5;margin:12px 0}.ritme-insight-lead{display:flex;align-items:center;gap:16px;background:#edf4d3;padding:17px 20px;border-radius:12px;margin:18px 0}.ritme-insight-lead>strong{font-size:52px;letter-spacing:-2px;line-height:1}.ritme-insight-lead>span{font-size:16px;line-height:1.5}.ritme-insight-lead small{font-size:11px;color:#64714f}.ritme-comparisons{display:grid;grid-template-columns:1fr 1fr;gap:12px}.ritme-comparisons>button{background:#f8f9f4;border:1px solid #dce2d2;border-radius:11px;padding:14px;text-align:left;color:var(--text);font:inherit;cursor:pointer}.ritme-comparisons>button>span:first-child{display:block;font-size:12px;line-height:1.4}.ritme-comparisons strong{font-size:27px;display:block;letter-spacing:-.7px;margin:5px 0}.ritme-comparisons strong small{font-size:12px;font-weight:400}.ritme-comparisons>button>small{font-size:10px;color:#627087;display:block}.ritme-compare-bar{display:block;margin-top:12px}.ritme-compare-bar i,.ritme-compare-bar b{display:block;height:5px;background:#9db444;border-radius:4px;margin-top:4px}.ritme-compare-bar b{background:#bdc7d9}.ritme-caption{font-size:10px;color:#687588;line-height:1.5;margin:10px 0 20px}.ritme-food-insight{padding:20px 0;border-top:1px solid #d8dfcd}.ritme-food-insight h3{margin:0 0 10px}.ritme-food-insight p{font-size:13px;line-height:1.6;margin:9px 0}.ritme-food-insight>div{display:flex;justify-content:space-between;gap:12px;font-size:12px;padding:10px 0;border-bottom:1px solid #e8ecdf}.ritme-food-insight>small{display:block;color:#697587;font-size:10px;line-height:1.6;margin:12px 0}.ritme-reflection{padding:18px;background:#f0f3e7;border-radius:12px}.ritme-reflection>p{font-size:14px;line-height:1.6;margin:10px 0 18px}#ritme-advice-status{font-size:12px;color:#687588}#ritme-advice-answer section{border-top:1px solid #dbe2cb;padding:13px 0}#ritme-advice-answer h3{font-size:13px;color:#315346}#ritme-advice-answer p{font-size:14px;line-height:1.6;margin-top:6px}
 .ritme-tile-options{margin:18px 0}.ritme-tile-options label{display:flex;align-items:center;gap:13px;padding:12px 0;border-bottom:1px solid #e0e6d5;cursor:pointer}.ritme-tile-options input{width:21px;height:21px;accent-color:#315346;flex-shrink:0}.ritme-tile-options strong{display:block;font-size:14px}.ritme-tile-options small{display:block;font-size:11px;color:#67758a;margin-top:4px;line-height:1.4}.ritme-order-row{display:flex;align-items:center;gap:9px;font-size:12px;margin:6px 0}.ritme-order-row>span{flex:1}.ritme-order-row button{font:inherit;font-size:10px;padding:9px 2px;border:0;color:#315346;background:none;cursor:pointer;min-height:36px}#ritme-tile-order h3{font-size:14px;margin:20px 0 10px}.ritme-exercise{width:100%;display:block;padding:13px 0;border:0;border-bottom:1px solid #e0e5d6;background:none;text-align:left;font:inherit;color:var(--text);cursor:pointer}.ritme-exercise strong{display:block;font-size:14px}.ritme-exercise span{display:block;font-size:11px;color:#687689;margin-top:5px}#ritme-exercise-results{margin-bottom:20px}
-#settings-overlay{padding:0 18px 40px;background:#f7f8f1}.ritme-settings-wrap{max-width:650px;margin:auto}.ritme-settings-header{display:flex;justify-content:space-between;align-items:center;gap:15px;padding:28px 0 10px}.ritme-settings-header h1{font-size:32px;letter-spacing:-1.2px;line-height:1.15;margin-top:5px}.ritme-settings-header>button{font-size:12px}.ritme-settings-intro{font-size:13px;color:#62718a;margin:8px 0 20px}.ritme-settings-shortcut{display:flex;align-items:center;justify-content:space-between;gap:15px;background:#e7f1b9;border-radius:13px;padding:18px;margin-bottom:20px}.ritme-settings-shortcut strong{font-size:15px}.ritme-settings-shortcut p{font-size:12px;color:#617146;margin:5px 0 0}.ritme-settings-shortcut button{font:inherit;font-size:12px;border:0;background:white;color:#315346;border-radius:8px;padding:10px 14px;min-height:40px;cursor:pointer}.ritme-setting-group{border-top:1px solid #d3ddc4}.ritme-setting-group>summary{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:20px 0;list-style:none;cursor:pointer}.ritme-setting-group>summary::-webkit-details-marker{display:none}.ritme-setting-group>summary strong{display:block;font-size:17px;letter-spacing:-.3px}.ritme-setting-group>summary small{display:block;font-size:11px;color:#6a7789;margin-top:5px;line-height:1.5}.ritme-setting-group>summary>b{background:#e7ecd9;color:#65764c;font-size:11px;width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}.ritme-setting-group[open]>summary>b{background:#d9f54e;color:#2f4533}.ritme-setting-group>div{padding:0 0 22px}.ritme-setting-group p{font-size:13px;line-height:1.65;color:#62718a;margin:12px 0}.ritme-setting-group .flow-field{font-size:12px}.ritme-setting-group .flow-field input,.ritme-setting-group .flow-field select{background:#fff;font-size:14px}.ritme-settings-save{position:sticky;bottom:0;background:#f7f8f1ef;backdrop-filter:blur(8px);padding:10px 0}.ritme-settings-save small{display:block;font-size:10px;color:#6d798a;text-align:center;margin-top:8px}.ritme-settings-save .flow-error:empty{display:none}.ritme-version{font-size:10px;color:#778494;text-align:center;margin-top:17px}.ritme-file-label{display:flex;align-items:center;justify-content:center;cursor:pointer}.ritme-file-label input{display:none}
+.ritme-file-label{display:flex;align-items:center;justify-content:center;cursor:pointer}.ritme-file-label input{display:none}
 @media(min-width:640px){#ritme-tile-host{display:grid;grid-template-columns:1fr 1fr;align-items:start}#ritme-movement,#ritme-meals,#today-nutri-bar{grid-column:1/-1}}
-@media(max-width:390px){.ritme-custom-tile{padding:17px!important}.ritme-settings-header h1{font-size:28px}.ritme-insight-lead small{font-size:10px}.flow-brand-tag{font-size:8px}}
+@media(max-width:390px){.ritme-custom-tile{padding:17px!important}.ritme-insight-lead small{font-size:10px}.flow-brand-tag{font-size:8px}}
 
 .ritme-saved-tip{border-bottom:1px solid #dce2d1;padding:15px 0}.ritme-saved-tip small{font-size:11px;color:#718097}.ritme-saved-tip p{white-space:pre-wrap;font-size:14px;line-height:1.6;margin-top:9px}
 
@@ -1305,8 +1288,7 @@ button{touch-action:manipulation}
 .tab-content{padding-top:18px}.day-heading{margin:0 0 14px;align-items:baseline}
 #today-date-h1{font-size:14px!important;font-weight:650;letter-spacing:0;color:var(--text)}#today-day{font-size:12px;color:var(--muted)}
 .coach-front-card,.flow-chef-card{position:relative;background:var(--card)!important;border:1px solid var(--border)!important;border-top:5px solid var(--acid)!important;border-radius:6px 6px 20px 20px;padding:22px!important;box-shadow:0 8px 30px #243d3205}
-.composer-heading{align-items:center;gap:12px;margin-bottom:0}.composer-heading h2,.flow-chef-card h1{font-size:clamp(30px,7vw,38px);font-weight:820;letter-spacing:-1.5px;line-height:1.1;color:var(--text);margin:0}
-.composer-help{font-size:12px;color:var(--muted);min-height:44px;background:none;padding:8px 0;white-space:nowrap}
+.flow-chef-card h1{font-size:clamp(30px,7vw,38px);font-weight:820;letter-spacing:-1.5px;line-height:1.1;color:var(--text);margin:0}
 .flow-helper{font-size:13px;line-height:1.55;color:var(--muted);margin:9px 0 19px;max-width:45ch}
 .flow-speak{background:var(--acid);color:var(--text);border:1px solid #bfd63d;border-radius:10px;min-height:56px;font-size:16px;font-weight:750;justify-content:flex-start;padding:13px 17px;gap:13px}
 .flow-speak:hover{background:#d1ed4f}.flow-speak.listening,.flow-speak[aria-pressed=true]{color:#fffef9;background:#315346;border-color:#315346}
@@ -1328,9 +1310,8 @@ button{touch-action:manipulation}
 .btn-primary{background:var(--acid);color:var(--text);border-color:#bdd43a}.btn-secondary{background:#e9eddf;color:var(--text);border-color:var(--border)}.btn-ghost{color:var(--text)}
 .modal{background:var(--card);border-radius:20px;color:var(--text)}.modal-header h2{color:var(--text)}.muted,.flow-field,.flow-field span{color:var(--muted)}.flow-field input,.flow-field select,.flow-field textarea{color:var(--text);border-color:var(--border)}
 #splash-overlay{background:var(--bg);transition:opacity .15s;cursor:pointer}.lime-launch{display:flex;flex-direction:column;align-items:center;gap:22px}.lime-launch .wordmark{font-size:38px}.lime-launch p{color:var(--muted);font-size:14px;margin:0}.lime-emblem{display:grid;place-items:center;width:76px;height:76px;background:var(--acid);color:var(--text);font-size:57px;line-height:1;font-weight:800;letter-spacing:-4px;border-radius:18px 5px 18px 5px;transform:rotate(-7deg)}
-.flow-intro{background:var(--card);border-color:var(--border);border-top:6px solid var(--acid);border-radius:6px 6px 20px 20px}.flow-intro h1{color:var(--text)}.flow-intro-grid b{background:var(--acid);color:var(--text)}.flow-intro-grid strong{color:var(--text)}.flow-intro p,.flow-intro-grid span{color:var(--muted)}.flow-intro-example{border-color:var(--border);background:#edf1e2;color:var(--text)}
 @media(min-width:640px){.coach-front-card,.flow-chef-card{padding:27px!important}.brand-header{padding-left:24px;padding-right:24px}.modal{border-radius:20px}}
-@media(max-width:390px){.brand-header{padding:12px 16px}.wordmark{font-size:24px}.flow-brand-tag{display:none}.brand-settings{font-size:11px}.coach-front-card,.flow-chef-card{padding:18px!important}.composer-heading h2,.flow-chef-card h1{font-size:30px}.composer-help{font-size:11px}.flow-speak{font-size:15px}}
+@media(max-width:390px){.brand-header{padding:12px 16px}.wordmark{font-size:24px}.flow-brand-tag{display:none}.brand-settings{font-size:11px}.coach-front-card,.flow-chef-card{padding:18px!important}.flow-chef-card h1{font-size:30px}.flow-speak{font-size:15px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 
 /* Compact tiles, with a small shared lime signature. */
@@ -1396,8 +1377,6 @@ button{touch-action:manipulation}
 button:has(>.cc-icon){display:inline-flex;align-items:center;justify-content:center;gap:7px}
 button[hidden]{display:none!important}
 .brand-settings,.lime-layout-action button{gap:7px}
-.composer-heading .composer-help{display:inline-flex;align-items:center;justify-content:center;width:40px;min-height:40px;padding:8px;border:0;border-radius:8px}
-.composer-help .cc-icon{width:21px;height:21px}
 .lime-input-group .composer-send{display:inline-flex;align-items:center;justify-content:center;min-width:42px;min-height:42px;padding:9px!important}
 .composer-send .cc-icon,.flow-send .cc-icon{width:21px;height:21px}
 #ritme-next .cc-next-plan{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:48px;padding:3px 0;border:0;background:none;font:inherit;text-align:left;color:var(--text);cursor:pointer}
@@ -1503,9 +1482,7 @@ body{background:var(--cc-bg)!important;color:var(--cc-ink)}
 /* Invoer: geen kaart-in-kaart */
 #tab-vandaag#tab-vandaag .coach-front-card{border:0!important;border-radius:0!important;padding:8px 0 24px!important;margin:0 0 24px!important;position:relative}
 #tab-vandaag#tab-vandaag .coach-front-card::before,#tab-vandaag#tab-vandaag .coach-front-card::after,#tab-recepten#tab-recepten .flow-chef-card::before,#tab-recepten#tab-recepten .flow-chef-card::after{display:none!important}
-#tab-vandaag#tab-vandaag .composer-heading h2,#tab-vandaag#tab-vandaag .coach-front-card>.flow-helper{display:none!important}
-#tab-vandaag#tab-vandaag .composer-heading{position:absolute;right:0;top:-44px;margin:0!important}
-#tab-vandaag#tab-vandaag .composer-help{width:44px;height:44px;border-radius:var(--cc-r-pill)!important;background:transparent!important;border:0!important}
+#tab-vandaag#tab-vandaag .coach-front-card>.flow-helper{display:none!important}
 #tab-vandaag#tab-vandaag .lime-input-group{display:grid!important;grid-template-columns:auto 1fr;gap:8px;align-items:center;background:var(--cc-card)!important;border:1px solid var(--cc-line)!important;border-radius:32px!important;padding:6px!important;box-shadow:none!important}
 #tab-vandaag#tab-vandaag .lime-input-group>.cc-composer-bottom{grid-column:1/-1;padding:0 8px 4px}
 .flow-speak{background:var(--cc-lime)!important;color:var(--cc-ink)!important;border:0!important;box-shadow:none!important}
@@ -1785,6 +1762,55 @@ body .vandaag-section-h{font-size:13px!important;font-weight:650!important;text-
 .cc-line-open strong{font:600 16px/1.3 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .cc-line-open small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font:400 14px/1.2 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-muted)}
 .cc-week-ask{margin-top:16px}
+/* ── Instellingen: kaart met het belangrijkste, Meer instellingen inklapbaar, pagina's met terug ── */
+#settings-overlay{background:var(--cc-bg);padding:calc(8px + env(safe-area-inset-top,0px)) 16px 0}
+.cc-settings{max-width:560px;margin:0 auto}
+.cc-set-head{display:flex;align-items:center;gap:8px;min-height:56px;margin:8px 0 16px}
+.cc-set-head h1,.cc-set-head h2{flex:1;min-width:0;margin:0;font:700 28px/1.15 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-ink)}
+.cc-set-head h2{font-size:20px}
+.cc-set-head :focus{outline:none}
+#settings-overlay .cc-set-icon{all:unset;box-sizing:border-box;flex:none;display:grid;place-items:center;width:44px;height:44px;border-radius:999px;color:var(--cc-ink);cursor:pointer}
+#settings-overlay .cc-set-head h1+.cc-set-icon{margin-right:-10px}
+#settings-overlay .cc-set-head .cc-set-icon:first-child{margin-left:-12px}
+#settings-overlay .cc-set-icon:focus-visible{outline:2px solid var(--cc-green);outline-offset:-2px}
+#settings-overlay .cc-list+.cc-list,#settings-overlay .cc-set-note+.cc-list{margin-top:24px}
+.cc-set-row{position:relative;display:flex;align-items:center;gap:16px;min-height:56px;padding:0 16px;cursor:pointer}
+.cc-set-row+.cc-set-row::before,#cc-set-more>.cc-row::before{content:'';position:absolute;left:16px;right:0;top:0;height:1px;background:var(--cc-line)}
+.cc-set-row>span{flex:none;font:600 16px/1.25 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-ink)}
+#settings-overlay .cc-set-row input:not([type=checkbox]){all:unset;flex:1;min-width:0;text-align:right;font:400 16px/1.3 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-muted);-webkit-text-fill-color:currentColor}
+#settings-overlay .cc-set-row input:not([type=checkbox])::placeholder{color:var(--cc-muted);opacity:.7}
+#settings-overlay .cc-set-row input[type=checkbox]{margin-left:auto!important}
+.cc-set-row:focus-within{background:var(--cc-tint)}
+#settings-overlay .cc-row{all:unset;box-sizing:border-box;position:relative;display:flex;align-items:center;gap:8px;width:100%;min-height:56px;padding:0 16px;color:var(--cc-ink);cursor:pointer;-webkit-tap-highlight-color:transparent}
+#settings-overlay .cc-row:active{background:var(--cc-tint)}
+#settings-overlay .cc-row:focus-visible{outline:2px solid var(--cc-green);outline-offset:-2px}
+#settings-overlay .cc-row[aria-expanded] .cc-chev{transform:rotate(90deg);transition:transform .2s}
+#settings-overlay .cc-row[aria-expanded="true"] .cc-chev{transform:rotate(-90deg)}
+@media (prefers-reduced-motion:reduce){#settings-overlay .cc-row[aria-expanded] .cc-chev{transition:none}}
+.cc-set-note{margin:8px 0 0;font:400 14px/1.45 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-muted)}
+.cc-set-sub{margin:24px 0 8px;font:650 13px/1.2 -apple-system,'SF Pro Text',system-ui,sans-serif;text-transform:uppercase;letter-spacing:.06em;color:var(--cc-muted)}
+.cc-set-page .flow-field{margin-top:16px}
+#cc-memory-panel:not(:empty){margin-bottom:16px}
+.cc-set-save[hidden]{display:none}
+.cc-set-save{position:sticky;bottom:0;margin-top:32px;padding:16px 0 calc(16px + env(safe-area-inset-bottom,0px));background:var(--cc-bg)}
+.cc-set-version{margin:24px 0;text-align:center;font:400 12px/1.4 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-muted)}
+/* ── Opening ── */
+#intro-overlay{background:var(--cc-bg);padding:calc(16px + env(safe-area-inset-top,0px)) 16px calc(16px + env(safe-area-inset-bottom,0px))}
+.cc-intro{width:100%;max-width:430px;margin:auto;padding:24px;background:var(--cc-card);border:1px solid var(--cc-line);border-radius:18px;color:var(--cc-ink)}
+.cc-intro .wordmark{font-size:24px}
+.cc-intro h1{margin:24px 0 8px;font:700 28px/1.15 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-ink)}
+.cc-intro h1:focus{outline:none}
+.cc-intro-lead{margin:0;font:400 16px/1.45 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-muted)}
+.cc-intro-list{list-style:none;margin:24px 0;padding:0;display:flex;flex-direction:column;gap:16px}
+.cc-intro-list li{display:flex;align-items:center;gap:16px}
+.cc-intro-ic{flex:none;display:grid;place-items:center;width:44px;height:44px;border-radius:999px;background:var(--cc-lime-soft);color:var(--cc-ink)}
+.cc-intro-list li>span:last-child{display:flex;flex-direction:column;gap:2px;min-width:0}
+.cc-intro-list strong{font:600 16px/1.25 -apple-system,'SF Pro Text',system-ui,sans-serif}
+.cc-intro-list small{font:400 14px/1.35 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-muted)}
+.cc-intro-note{margin:0 0 16px;font:400 14px/1.45 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-muted)}
+#intro-overlay .cc-intro-start{all:unset;box-sizing:border-box;display:flex;align-items:center;justify-content:center;width:100%;height:52px;border-radius:999px;background:var(--cc-lime);color:var(--cc-ink);font:700 16px/1 -apple-system,'SF Pro Text',system-ui,sans-serif;cursor:pointer;-webkit-tap-highlight-color:transparent}
+#intro-overlay .cc-intro-start:focus-visible{outline:2px solid var(--cc-green);outline-offset:2px}
+.cc-intro-hide{display:flex;align-items:center;justify-content:center;gap:8px;min-height:44px;margin-top:8px;font:400 14px/1.2 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-muted);cursor:pointer}
 /* ── Coach: Beweging en Maaltijden, zelfde kop en regels als het weekmenu ── */
 #tab-vandaag#tab-vandaag .cc-day-head .vandaag-section-h{margin:0;padding:0;border:0;line-height:1.2}
 #tab-vandaag#tab-vandaag .cc-day-empty{margin:0 0 8px;font:400 14px/1.4 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-muted)}
@@ -1965,7 +1991,6 @@ body input[type="checkbox"]:disabled{opacity:.4;cursor:default}
 
 
     <section class="coach-front-card" aria-label="Zeg het maar">
-      <div class="composer-heading"><h2>Zeg het maar.</h2><button class="composer-help" onclick="showIntro()" aria-label="Hoe werkt Coach &amp; Chef?" title="Zo werkt Coach &amp; Chef"><svg class="cc-icon" data-cc-icon="help" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 8a9 9 0 1 0 1 5M9 9a3 3 0 0 1 6 0c0 2-3 2-3 4m0 4h.01"/></svg></button></div>
       <p class="flow-helper">Eten, bewegen, plannen. Of gewoon een vraag.</p>
       <div class="lime-input-group"><button id="big-praat-btn" class="flow-speak" onclick="bigPraatStart()" aria-label="Spreek je bericht in en controleer de tekst" aria-pressed="false"><svg class="flow-voice-glyph" width="25" height="24" viewBox="0 0 25 24" aria-hidden="true"><path d="M2 10v4m5-8v12m5-16v20m5-17v14m5-10v6" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>Vertel het Coach</button>
       <div class="unified-composer"><label class="sr-only" for="coach-front-input">Je bericht aan Coach</label><textarea id="coach-front-input" rows="1" oninput="ccResizeComposer(this)" placeholder="Typ of spreek in…" onkeydown="if(event.key==='Enter'&&!event.shiftKey&&!event.isComposing){event.preventDefault();submitSmartInput()}"></textarea><button type="button" class="cc-clear" onclick="ccClearInput('coach-front-input','big-praat-status')" aria-label="Tekst wissen"><svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="14" fill="currentColor" opacity=".14"/><path d="m10 10 8 8m0-8-8 8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button><div class="composer-actions"><button class="composer-photo" onclick="document.getElementById('fotolog-input').click()" title="Maak of kies een foto van je eten. Controleer de herkende maaltijd en geschatte voedingswaarden vóór het opslaan."><svg class="cc-icon" data-cc-icon="camera" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6 10 3h4l2 3h4v14H4V6z"/><circle cx="12" cy="13" r="4"/></svg><span>Foto van je eten</span></button><button id="smart-send-btn" class="composer-send" onclick="submitSmartInput()" aria-label="Verstuur" title="Verstuur"><span class="cc-send-arrow" aria-hidden="true">↑</span></button></div></div>
@@ -2167,7 +2192,7 @@ body input[type="checkbox"]:disabled{opacity:.4;cursor:default}
 </div>
 
 <!-- INTRO OVERLAY -->
-<div id="intro-overlay" style="display:none;"><section class="flow-intro" aria-label="Welkom bij Coach &amp; Chef"><div class="wordmark">coach<span class="brand-amp">&amp;</span>chef<span class="brand-dot">.</span><span class="flow-brand-tag">Lime</span></div><h1>Jouw dag.<br>Meer overzicht.</h1><p>Bewegen en eten, met een coach die meedenkt.</p><div class="flow-intro-grid"><div><b>01</b><strong>Spreek vrijuit</strong><span>Vertel wat je doet, eet of van plan bent.</span></div><div><b>02</b><strong>Krijg hulp die past</strong><span>Van motivatie tot eten rond je training en recepten.</span></div><div><b>03</b><strong>Zie je dag en week</strong><span>Gepland en gedaan, helder bij elkaar.</span></div></div><div class="flow-intro-example">“Morgen 8 km hardlopen.”<strong>Morgen · Hardlopen · 8 km · Gepland</strong></div><button class="btn btn-primary btn-full" onclick="dismissIntro()">Begin mijn dag</button><p class="flow-privacy">Typen en receptfoto’s kunnen ook. Handmatig loggen werkt zonder AI-sleutel. Voor slim verwerken stel je je AI-sleutel in bij Instellingen.</p></section></div>
+<div id="intro-overlay" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="cc-intro-title"><section class="cc-intro"><div class="wordmark">coach<span class="brand-amp">&amp;</span>chef<span class="brand-dot">.</span></div><h1 id="cc-intro-title" tabindex="-1">Eten en bewegen.</h1><p class="cc-intro-lead">Zeg wat je deed, krijg antwoord, motivatie en advies.</p><ul class="cc-intro-list"><li><span class="cc-intro-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></span><span><strong>Praten of typen</strong><small>Zeg wat je deed of at, en het staat erin.</small></span></li><li><span class="cc-intro-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 0 1-11.6 7.1L4 20l1-4.2A8 8 0 1 1 20 12z"/></svg></span><span><strong>Coach</strong><small>Motiveert, adviseert en denkt mee over je week.</small></span></li><li><span class="cc-intro-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11h14a0 0 0 0 1 0 0 6 6 0 0 1-6 6H9a6 6 0 0 1-6-6zM17 12h4M8 7c0-1.5 1-2 1-3.5M12 7c0-1.5 1-2 1-3.5"/></svg></span><span><strong>Chef</strong><small>Recepten op maat, ook rond je training.</small></span></li><li><span class="cc-intro-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></span><span><strong>Inzicht</strong><small>Je week in beeld: vezels, eiwit en water.</small></span></li><li><span class="cc-intro-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span><span><strong>Privé</strong><small>Je gegevens blijven op je telefoon.</small></span></li></ul><p id="cc-intro-key" class="cc-intro-note" hidden>Voor de slimme coach vul je je AI-sleutel in bij Instellingen.</p><button type="button" class="cc-intro-start" onclick="flowDismissIntro()">Begin</button><label class="cc-intro-hide"><input type="checkbox" id="cc-intro-hide">Niet meer tonen</label></section></div>
 
 <!-- MODAL CONTAINER -->
 <div id="modal-container"></div>
@@ -2176,7 +2201,7 @@ body input[type="checkbox"]:disabled{opacity:.4;cursor:default}
 'use strict';
 
 // ─── VERSION CHECK (forceert Safari herlading bij nieuwe versie) ──────────────
-const APP_VERSION = 'lime-20261003-13';
+const APP_VERSION = 'lime-20261003-14';
 // Eén plek voor de modellen: Sonnet voor gesprekken en recepten, Haiku voor snelle achtergrondtaken.
 const CC_MODEL_MAIN = 'claude-sonnet-4-6';
 const CC_MODEL_FAST = 'claude-haiku-4-5-20251001';
@@ -3212,7 +3237,7 @@ function switchTab(name, btn) {
   if (fab) fab.style.display = name === 'vandaag' ? 'none' : 'flex';
   const fabLabel = document.getElementById('fab-label');
   if (fabLabel) fabLabel.style.display = name === 'vandaag' ? 'none' : 'block';
-  if (name === 'vandaag') { renderVandaag(); checkWeekplanCard(); }
+  if (name === 'vandaag') renderVandaag();
   if (name === 'recepten') renderFoodTab();
 }
 
@@ -3396,15 +3421,15 @@ function renderWeekOvTab() {
 
 
 const INTRO_KEY = 'hc_intro_seen';
-function checkIntro(){return flowCheckIntro();}
 
-function dismissIntro(){return flowDismissIntro();}
 
+// Opening: bij elke start, tot "Niet meer tonen" is aangevinkt. Terug te vinden via Instellingen › Uitleg over de app.
 function showIntro() {
   const el = document.getElementById('intro-overlay');
-  el.style.opacity = '1';
-  el.style.transition = '';
-  el.style.display = 'flex';
+  document.getElementById('cc-intro-hide').checked = localStorage.getItem('hc_intro_hide') === '1';
+  document.getElementById('cc-intro-key').hidden = !!settings.anthropicKey;
+  el.style.display = 'flex'; el.scrollTop = 0;
+  document.getElementById('cc-intro-title').focus();
 }
 
 // ─── STREAK ──────────────────────────────────────────────────────────────────
@@ -6608,8 +6633,7 @@ function initApp() {
   setTimeout(checkBackupReminder, 5000);  // alleen zonder cloud sync, max 1× per maand
   setTimeout(checkMaandagbrief, 3000);    // maandagbrief van de coach, 1× per week
   setupSwipeGestures();
-  checkIntro();
-  checkWeekplanCard();
+  flowCheckIntro();
   updateMicStatusLabel();
   // Vandaag-tab (met coach) is actief bij start — FAB verbergen
   const tabs = document.querySelectorAll('.tab-btn');
@@ -7347,8 +7371,8 @@ let flowSpeech=null,flowActivityEdit=null,flowWeekOffset=0;
 function flowArg(value){return escapeText(JSON.stringify(value));}
 function flowVoiceGlyph(){return '<svg class="flow-voice-glyph" width="25" height="24" viewBox="0 0 25 24" aria-hidden="true"><path d="M2 10v4m5-8v12m5-16v20m5-17v14m5-10v6" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>';}
 function flowClose(){return '<button class="modal-close" aria-label="Sluiten" onclick="closeModal()" title="Sluiten"><svg class="cc-icon" data-cc-icon="close" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button>';}
-function flowCheckIntro(){if(!localStorage.getItem('hc_flow_intro_seen'))showIntro();}
-function flowDismissIntro(){localStorage.setItem('hc_flow_intro_seen','1');document.getElementById('intro-overlay').style.display='none';}
+function flowCheckIntro(){if(localStorage.getItem('hc_intro_hide')!=='1')showIntro();}
+function flowDismissIntro(){if(document.getElementById('cc-intro-hide').checked)localStorage.setItem('hc_intro_hide','1');else localStorage.removeItem('hc_intro_hide');document.getElementById('intro-overlay').style.display='none';}
 function flowWeekDates(offset=0){const d=new Date(today()+'T12:00:00');d.setDate(d.getDate()+offset*7);return getWeekDates(getISOWeek(d));}
 function flowDay(date){return data.weken?.[getISOWeek(new Date(date+'T12:00:00'))]?.[date]||{activiteiten:[],maaltijden:{}};}
 function flowDayState(date){const acts=(flowDay(date).activiteiten||[]).filter(a=>a.type!=='rest');const done=acts.filter(a=>a.afgevinkt).length;return {acts,done,state:!acts.length?'empty':done===acts.length?'done':done?'partial':'planned'};}
@@ -7548,7 +7572,6 @@ function ritmeGroupNote(g){return `${g.count} ${g.count===1?'activiteit':'activi
 
 
 function flowMovement(){ritmeRenderTiles();ritmeRenderSummary();}
-function checkWeekplanCard(){}
 // Nieuwe tegels komen één keer bij een eigen indeling; daarna beslist de gebruiker.
 const RITME_NEW_TILES=[['water','_waterTileV1','meals'],['mood','_moodTileV1','water']];
 function ritmeSelected(){const selected=Array.isArray(settings.coachTiles)?[...new Set(settings.coachTiles.filter(k=>RITME_TILES[k]))]:[];const out=selected.length?selected:[...RITME_DEFAULT];const todo=selected.length?RITME_NEW_TILES.filter(([,flag])=>!settings[flag]):[];if(todo.length){const flags={};for(const [key,flag,after] of todo){flags[flag]=true;if(!out.includes(key)){const at=out.indexOf(after);out.splice(at>=0?at+1:out.length,0,key);}}try{saveSettingsData({...settings,coachTiles:[...out],...flags});}catch(_){}}return out;}
@@ -7587,18 +7610,33 @@ function ritmeExerciseResults(query){const q=query.trim().toLowerCase(),recent=A
 function ritmeExerciseDetail(key){const o=OEFENINGEN[key];if(!o||typeof o==='string')return;saveSettingsData({...settings,ritmeRecentExercises:[key,...(settings.ritmeRecentExercises||[]).filter(k=>k!==key)].slice(0,4)});showModal(`<div class="modal-header"><h2>${escapeText(o.naam)}</h2>${flowClose()}</div><p class="ritme-kicker">${escapeText((o.spieren||[]).join(' · '))}</p><div class="flow-recipe-body"><h3>Start</h3><p>${escapeText(o.startpositie||'')}</p><h3>Uitvoering</h3><ol>${(o.stappen||[]).map(x=>`<li>${escapeText(x)}</li>`).join('')}</ol><div class="flow-review-note"><strong>Aandachtspunt</strong><p>${escapeText(o.tip||'')}</p></div></div><button class="btn btn-secondary btn-full" onclick="ritmeExercises()">Andere oefening zoeken</button>`);}
 function ritmeSavedTips(){showModal(`<div class="modal-header"><h2>Bewaarde tips</h2>${flowClose()}</div>${(data.savedTips||[]).map(t=>`<section class="ritme-saved-tip"><small>${escapeText(t.date||'')}</small><p>${escapeText(t.content||'')}</p><button class="ritme-link" onclick="deleteSavedTip(${flowArg(t.id)});ritmeSavedTips()"><svg class="cc-icon" data-cc-icon="delete" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M9 6V3h6v3M6 6l1 15h10l1-15M10 10v7m4-7v7"/></svg><span>Verwijderen</span></button></section>`).join('')||'<p class="muted">Nog geen tips bewaard. Je kunt een antwoord van Coach bewaren voor later.</p>'}<button class="btn btn-secondary btn-full" onclick="showConversationHistory()">Eerdere gesprekken</button>`);}
 const RITME_SETTINGS={naam:'naam',leeftijd:'leeftijd',geslacht:'geslacht',gewicht:'gewicht',streefgewicht:'streefgewicht',doel:'doel',sporten:'sporten',eten:'eten',weekritme:'weekritme',slaap:'slaap',anthropic:'anthropicKey',token:'githubToken',gist:'gistId',syncpass:'syncWachtwoord',woorden:'eigenWoorden',openai:'openaiKey','tts-voice':'ttsVoice'};
+// Instellingen: bovenaan het belangrijkste, de rest onder "Meer instellingen". Elke rij opent een eigen pagina; één Bewaar bewaart alles.
+let ccSetOpener=null;
 function openSettings(){
  const el=document.getElementById('settings-overlay'),goals=nutritionGoals();
  const field=(id,label,placeholder='',type='text')=>`<label class="flow-field">${label}<input id="set-${id}" type="${type}" placeholder="${placeholder}" ${type==='password'?'autocomplete="off" spellcheck="false"':''}></label>`;
- el.innerHTML=`<div class="ritme-settings-wrap"><header class="ritme-settings-header"><div><span class="ritme-kicker">Coach &amp; Chef · Mijn ritme</span><h1>Maak het van jou.</h1></div><button onclick="closeSettings()">Sluiten</button></header><p class="ritme-settings-intro">Wat helpt jou? Vul alleen in wat je wilt delen.</p>
- <div class="ritme-settings-shortcut"><div><strong>Jouw Coach, jouw tegels</strong><p>Kies wat je dagelijks wilt zien.</p></div><button onclick="ritmeCustomize()">Indelen</button></div>
- <details class="ritme-setting-group" open><summary><span><strong>Over jou</strong><small>Je naam, wensen en favoriete beweging</small></span><b>01</b></summary><div>${field('naam','Hoe mogen we je noemen?','Je naam')}${field('doel','Waar wil je naartoe?','Bijvoorbeeld meer energie of vaker bewegen')}${field('sporten','Wat doe je graag?','Bijvoorbeeld zwemmen, dansen, wandelen')}${field('weekritme','Je weekritme','Welke dagen passen goed?')}${field('slaap','Slaap en routine','Alleen als je dit wilt meenemen')}<details class="flow-extra"><summary>Persoonlijke gegevens · optioneel</summary><p class="muted">Vul deze alleen in als je wilt dat Coach ze kan meenemen.</p><div class="flow-form-grid">${field('leeftijd','Leeftijd','','number')}<label class="flow-field">Geslacht<select id="set-geslacht"><option value="">Niet opgegeven</option><option value="man">Man</option><option value="vrouw">Vrouw</option><option value="anders">Anders / liever niet zeggen</option></select></label>${field('gewicht','Gewicht · kg','','number')}${field('streefgewicht','Streefgewicht · kg','','number')}</div></details></div></details>
- <details class="ritme-setting-group"><summary><span><strong>Eten &amp; je eigen doelen</strong><small>Voorkeuren voor praktisch advies</small></span><b>02</b></summary><div>${field('eten','Wat eet je graag of liever niet?','Voorkeuren, gewoontes of ingrediënten')}${field('woorden','Eigen woorden voor spraak','Bijvoorbeeld namen, oefeningen of gerechten, gescheiden door komma\'s')}<p class="muted">Deze getallen zijn jouw instellingen voor het overzicht; ze zijn geen persoonlijk voedingsadvies.</p><div class="flow-form-grid"><label class="flow-field">Vezels · g per dag<input id="ritme-goal-fiber" inputmode="decimal" value="${goals.vezels}"></label><label class="flow-field">Eiwit · g per dag<input id="ritme-goal-protein" inputmode="decimal" value="${goals.eiwitten}"></label></div></div></details>
- <details class="ritme-setting-group"><summary><span><strong>Inspreken &amp; luisteren</strong><small>Praat met Coach op jouw manier</small></span><b>03</b></summary><div><p>Je kunt inspreken via de knoppen in de app. Je browser vraagt toestemming voor de microfoon; typen blijft altijd mogelijk.</p><label class="flow-check"><input id="ritme-tts" type="checkbox" ${_ttsEnabled?'checked':''}>Laat Coach antwoorden voorlezen</label><label class="flow-field">Stem bij verbonden voorlezen<select id="set-tts-voice">${['nova','shimmer','echo','onyx','alloy','fable'].map(v=>`<option value="${v}">${v[0].toUpperCase()+v.slice(1)}</option>`).join('')}</select></label><p class="muted">Zonder extra verbinding gebruikt de app de beschikbare browserstem.</p></div></details>
- <details class="ritme-setting-group"><summary><span><strong>Wat Coach van je onthoudt</strong><small>Bekijk en beheer je voorkeuren</small></span><b>04</b></summary><div><div id="cc-memory-panel"></div><div id="brain-overview"></div><h3 class="flow-subhead">Samen bewegen</h3><p class="muted">Namen die je in je plannen gebruikt.</p><div id="partners-list"></div><button class="ritme-link" onclick="showAddPartnerModal()">Iemand toevoegen</button></div></details>
- <details class="ritme-setting-group" id="ritme-connections"><summary><span><strong>Verbindingen &amp; bewaren</strong><small>${settings.anthropicKey?'Slimme Coach ingesteld':'Slimme Coach nog niet verbonden'} · ${settings.githubToken&&settings.gistId?'synchronisatie ingesteld':'op dit apparaat'}</small></span><b>05</b></summary><div><p>Handmatig loggen en je overzicht werken zonder verbinding. Slim verwerken en foto’s lezen gebruiken de ingestelde AI-dienst.</p><details class="flow-extra"><summary>Slimme Coach verbinden</summary>${field('anthropic','Anthropic API-sleutel','Je sleutel','password')}<p class="muted">Je berichten en gekozen foto’s worden hiervoor naar de AI-dienst gestuurd. De sleutel blijft in de instellingen van deze browser.</p></details><details class="flow-extra"><summary>Extra stem verbinden · optioneel</summary>${field('openai','OpenAI API-sleutel','Je sleutel','password')}</details><details class="flow-extra"><summary>Synchronisatie tussen apparaten · optioneel</summary><p class="muted">Voor de bestaande GitHub Gist-koppeling. Alleen nodig als je deze gebruikt.</p>${field('token','GitHub toegangssleutel','Personal access token','password')}${field('gist','Gist-ID','ID van je eigen Gist')}${field('syncpass','Synchronisatiewachtwoord','Optioneel: versleutelt je cloudkopie','password')}<label class="flow-check cc-privacy-check"><input id="ritme-privacy" type="checkbox" ${settings.privacyModus?'checked':''}>Privacymodus</label><p class="muted">Aan: de AI krijgt alleen je bericht en wat je vandaag logde. Geen profiel, geen eerdere dagen en geen herinneringen; er worden ook geen nieuwe herinneringen gemaakt. Je gegevens blijven gewoon op dit apparaat staan. Uit: alles werkt weer met volledige context.</p><h3 class="cc-eval-h">Patronen die de coach ziet</h3><div id="cc-patterns-box">${ccPatternsHtml()}</div><button type="button" class="cc-eval-open" onclick="ccOpenEval()">Coach testen</button><p class="muted">Stuurt 12 vaste testvragen met nepdata naar de coach en laat een tweede AI de antwoorden beoordelen. Je eigen logboek en gesprekken blijven onaangeroerd. Kost een paar cent.</p><button type="button" class="cc-eval-open" onclick="ccOpenChefEval()">Chef testen</button><p class="muted">Stuurt 5 vaste receptvragen naar Chef, meet de snelheid en laat een tweede AI de recepten beoordelen. Je recepten en logboek blijven onaangeroerd.</p><p class="muted">Met een wachtwoord wordt je cloudkopie versleuteld voordat hij naar GitHub gaat. Vergeet je het, dan is de cloudkopie niet meer te openen; je gegevens op dit apparaat en je exports blijven wel bruikbaar. Eerdere onversleutelde versies blijven in de geschiedenis van je Gist staan, dus begin bij voorkeur met een nieuwe, lege Gist.</p><p class="muted">Een ingestelde koppeling is nog geen bevestiging dat synchronisatie bereikbaar is.</p></details><div class="flow-action-stack"><button class="btn btn-secondary" onclick="exportData()">Download een kopie van mijn logboek</button><label class="btn btn-ghost ritme-file-label">Een logboek terugzetten<input type="file" accept=".json" onchange="importData(this)"></label></div><details class="flow-extra"><summary>Opruimen en opnieuw beginnen</summary><p class="muted">Maak eerst een kopie als je iets wilt behouden. Je krijgt nog een bevestiging.</p><div class="flow-action-stack"><button class="btn btn-ghost" onclick="openResetActiviteitenModal()">Activiteiten wissen</button><button class="btn btn-ghost" onclick="openResetMaaltijdenModal()">Maaltijden wissen</button><button class="btn btn-ghost" onclick="resetApp()">Hele app opnieuw beginnen</button></div></details></div></details>
- <div class="ritme-settings-save"><p id="ritme-settings-error" class="flow-error" role="alert"></p><button class="btn btn-primary btn-full" onclick="saveSettings()">Bewaar mijn instellingen</button><button class="btn btn-ghost btn-full" onclick="closeSettings()">Sluiten zonder opslaan</button><small>Wijzigingen worden pas bewaard als je op Bewaar drukt.</small></div><p class="ritme-version">Mijn ritme · ${APP_VERSION}</p></div>`;
+ const page=(id,title,body)=>`<section class="cc-set-page" data-page="${id}" hidden><div class="cc-set-head"><button type="button" class="cc-set-icon" onclick="ccSetPage('')" aria-label="Terug naar instellingen"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg></button><h2 tabindex="-1">${title}</h2></div>${body}</section>`;
+ const row=(label,meta,action)=>`<button type="button" class="cc-row" onclick="${action}"><span class="cc-row-label">${label}</span><span class="cc-row-meta">${escapeText(meta)}</span>${CC_CHEVRON}</button>`;
+ const voice=settings.ttsVoice||'nova',mem=ccMemoryItems().length;
+ el.innerHTML=`<div class="cc-settings"><section class="cc-set-page" data-page=""><div class="cc-set-head"><h1 tabindex="-1">Instellingen</h1><button type="button" class="cc-set-icon" onclick="closeSettings()" aria-label="Sluiten zonder opslaan"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div>
+ <div class="cc-list"><label class="cc-set-row"><span>Naam</span><input id="set-naam" placeholder="Je naam" autocomplete="given-name"></label><label class="cc-set-row"><span>AI-sleutel</span><input id="set-anthropic" type="password" placeholder="Plak je sleutel" autocomplete="off" spellcheck="false"></label><label class="cc-set-row"><span>Voorlezen</span><input id="ritme-tts" type="checkbox" ${_ttsEnabled?'checked':''}></label><label class="cc-set-row"><span>Privacymodus</span><input id="ritme-privacy" type="checkbox" ${settings.privacyModus?'checked':''}></label></div>
+ <p class="cc-set-note">De sleutel blijft op deze telefoon. Privacymodus aan: de AI krijgt alleen je bericht en wat je vandaag logde.</p>
+ <div class="cc-list"><button type="button" class="cc-row" aria-expanded="false" aria-controls="cc-set-more" onclick="ccToggleSetMore(this)"><span class="cc-row-label">Meer instellingen</span><span class="cc-row-meta"></span>${CC_CHEVRON}</button><div id="cc-set-more" hidden>${row('Over jou','',"ccSetPage('over',this)")}${row('Eten en doelen',goals.vezels+' g vezels',"ccSetPage('eten',this)")}${row('Stem en spraak',voice[0].toUpperCase()+voice.slice(1),"ccSetPage('stem',this)")}${row('Wat Coach onthoudt',mem?String(mem):'',"ccSetPage('geheugen',this)")}${row('Coach-tegels','','ritmeCustomize()')}${row('Synchronisatie',settings.githubToken&&settings.gistId?'Aan':'Uit',"ccSetPage('sync',this)")}${row('Testen','',"ccSetPage('testen',this)")}${row('Kopie en opnieuw','',"ccSetPage('kopie',this)")}${row('Uitleg over de app','','showIntro()')}</div></div></section>
+ ${page('over','Over jou',`${field('doel','Waar wil je naartoe?','Bijvoorbeeld meer energie of vaker bewegen')}${field('sporten','Wat doe je graag?','Bijvoorbeeld hardlopen, fietsen, wandelen')}${field('weekritme','Je weekritme','Welke dagen passen goed?')}${field('slaap','Slaap en routine','Alleen als je dit wilt meenemen')}<h3 class="cc-set-sub">Optioneel</h3><div class="flow-form-grid">${field('leeftijd','Leeftijd','','number')}<label class="flow-field">Geslacht<select id="set-geslacht"><option value="">Niet opgegeven</option><option value="man">Man</option><option value="vrouw">Vrouw</option><option value="anders">Anders / liever niet zeggen</option></select></label>${field('gewicht','Gewicht · kg','','number')}${field('streefgewicht','Streefgewicht · kg','','number')}</div><p class="cc-set-note">Vul alleen in wat Coach mag meenemen.</p>`)}
+ ${page('eten','Eten en doelen',`${field('eten','Wat eet je graag of liever niet?','Voorkeuren, gewoontes of ingrediënten')}<div class="flow-form-grid"><label class="flow-field">Vezels · g per dag<input id="ritme-goal-fiber" inputmode="decimal" value="${goals.vezels}"></label><label class="flow-field">Eiwit · g per dag<input id="ritme-goal-protein" inputmode="decimal" value="${goals.eiwitten}"></label></div><p class="cc-set-note">Jouw eigen doelen voor het overzicht, geen voedingsadvies.</p>`)}
+ ${page('stem','Stem en spraak',`<label class="flow-field">Stem bij voorlezen<select id="set-tts-voice">${['nova','shimmer','echo','onyx','alloy','fable'].map(v=>`<option value="${v}">${v[0].toUpperCase()+v.slice(1)}</option>`).join('')}</select></label>${field('openai','OpenAI-sleutel · optioneel','Voor een natuurlijkere stem','password')}<p class="cc-set-note">Zonder OpenAI-sleutel leest de stem van je telefoon voor.</p>${field('woorden','Eigen woorden voor spraak','Namen, oefeningen of gerechten, met komma\'s')}`)}
+ ${page('geheugen','Wat Coach onthoudt',`<div id="cc-memory-panel"></div><div id="brain-overview"></div><h3 class="cc-set-sub">Samen bewegen</h3><div id="partners-list"></div><button type="button" class="ritme-link" onclick="showAddPartnerModal()">Iemand toevoegen</button><h3 class="cc-set-sub">Patronen</h3><div id="cc-patterns-box">${ccPatternsHtml()}</div>`)}
+ ${page('sync','Synchronisatie',`<p class="cc-set-note">Bewaart een kopie in je eigen GitHub Gist, zodat je op meer apparaten kunt werken.</p>${field('token','GitHub-toegangssleutel','Personal access token','password')}${field('gist','Gist-ID','ID van je eigen Gist')}${field('syncpass','Wachtwoord · optioneel','Versleutelt je cloudkopie','password')}<p class="cc-set-note">Vergeet je het wachtwoord, dan is de cloudkopie niet meer te openen; je gegevens op deze telefoon blijven wel bruikbaar. Begin bij voorkeur met een nieuwe, lege Gist.</p>`)}
+ ${page('testen','Testen',`<div class="cc-list">${row('Coach testen','12 vragen','ccOpenEval()')}${row('Chef testen','5 vragen','ccOpenChefEval()')}</div><p class="cc-set-note">Vaste vragen met nepdata; een tweede AI beoordeelt de antwoorden. Je eigen gegevens blijven onaangeroerd. Kost een paar cent.</p>`)}
+ ${page('kopie','Kopie en opnieuw',`<div class="flow-action-stack"><button class="btn btn-secondary" onclick="exportData()">Download een kopie</button><label class="btn btn-ghost ritme-file-label">Een kopie terugzetten<input type="file" accept=".json" onchange="importData(this)"></label></div><h3 class="cc-set-sub">Opnieuw beginnen</h3><p class="cc-set-note">Maak eerst een kopie. Je krijgt nog een bevestiging.</p><div class="flow-action-stack"><button class="btn btn-ghost" onclick="openResetActiviteitenModal()">Activiteiten wissen</button><button class="btn btn-ghost" onclick="openResetMaaltijdenModal()">Maaltijden wissen</button><button class="btn btn-ghost" onclick="resetApp()">Hele app opnieuw beginnen</button></div>`)}
+ <div class="cc-set-save"><p id="ritme-settings-error" class="flow-error" role="alert"></p><button type="button" class="btn btn-primary btn-full" onclick="saveSettings()">Bewaar</button></div><p class="cc-set-version">${APP_VERSION}</p></div>`;
  Object.entries(RITME_SETTINGS).forEach(([id,key])=>{document.getElementById('set-'+id).value=settings[key]||(key==='ttsVoice'?'nova':'');});el.classList.add('visible');document.getElementById('app').inert=true;el.scrollTop=0;renderBrainOverview();renderPartners();
+}
+function ccToggleSetMore(btn){const box=document.getElementById('cc-set-more'),open=box.hidden;box.hidden=!open;btn.setAttribute('aria-expanded',String(open));}
+function ccSetPage(id,opener){
+ const el=document.getElementById('settings-overlay');if(id)ccSetOpener=opener||null;
+ el.querySelectorAll('.cc-set-page').forEach(p=>p.hidden=p.dataset.page!==id);el.querySelector('.cc-set-save').hidden=['geheugen','testen','kopie'].includes(id);el.scrollTop=0;
+ if(!id&&ccSetOpener?.isConnected)ccSetOpener.focus();else el.querySelector(`.cc-set-page[data-page="${id}"] [tabindex="-1"]`)?.focus();
 }
 function saveSettings(){
  const next={...settings};Object.entries(RITME_SETTINGS).forEach(([id,key])=>next[key]=document.getElementById('set-'+id).value.trim());
