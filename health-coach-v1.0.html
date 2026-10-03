@@ -1748,9 +1748,20 @@ body .vandaag-section-h{font-size:13px!important;font-weight:650!important;text-
 #tab-vandaag#tab-vandaag .cc-entry-half>span{flex:0 1 auto}
 #tab-vandaag#tab-vandaag .cc-entry-half>svg{flex:none;color:var(--cc-green)}
 #modal-container .cc-ex-note{margin:0 0 16px}
-#modal-container .cc-ex-list{margin-bottom:24px}
-#modal-container .cc-ex-list .cc-row-label{flex:1;min-width:0;white-space:normal;font-weight:500}
-#modal-container .cc-ex-list .cc-row-meta{display:none}
+#settings-overlay .cc-mem-row{min-height:56px;padding-top:12px;padding-bottom:12px}
+#settings-overlay .cc-mem-row .cc-row-label{flex:1;min-width:0;white-space:normal;font-weight:500;line-height:1.35}
+#settings-overlay .cc-mem-row .cc-row-meta{flex:none}
+#settings-overlay .cc-mem-forget{all:unset;box-sizing:border-box;display:inline-flex;align-items:center;min-height:44px;margin-top:8px;font:600 14px/1 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-green);cursor:pointer}
+#settings-overlay .cc-mem-forget:focus-visible{outline:2px solid var(--cc-green);outline-offset:2px}
+.cc-ex-card{margin-bottom:16px;padding:16px;background:var(--cc-card);border:1px solid var(--cc-line);border-radius:18px}
+.cc-ex-head{display:flex;align-items:center;gap:12px}
+.cc-ex-head>span:last-child{display:flex;flex-direction:column;gap:2px}
+.cc-ex-head strong{font:600 16px/1.25 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-ink)}
+.cc-ex-head small{font:400 14px/1.3 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-muted)}
+.cc-ex-bubbles{display:flex;flex-direction:column;align-items:flex-start;gap:8px;margin-top:16px}
+#modal-container .cc-ex-bubble{all:unset;box-sizing:border-box;max-width:100%;min-height:44px;padding:12px 16px;border-radius:18px 18px 18px 6px;background:var(--cc-tint);font:400 16px/1.3 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-ink);cursor:pointer;-webkit-tap-highlight-color:transparent}
+#modal-container .cc-ex-bubble:active{background:var(--cc-lime-soft)}
+#modal-container .cc-ex-bubble:focus-visible{outline:2px solid var(--cc-green);outline-offset:2px}
 /* ── Wizard: eerste keer instellen ── */
 #setup-overlay{background:var(--cc-bg);padding:calc(8px + env(safe-area-inset-top,0px)) 16px calc(16px + env(safe-area-inset-bottom,0px))}
 .cc-wiz{max-width:430px;min-height:100%;margin:0 auto;display:flex;flex-direction:column}
@@ -2183,7 +2194,7 @@ body input[type="checkbox"]:disabled{opacity:.4;cursor:default}
 'use strict';
 
 // ─── VERSION CHECK (forceert Safari herlading bij nieuwe versie) ──────────────
-const APP_VERSION = 'lime-20261003-18';
+const APP_VERSION = 'lime-20261003-19';
 // Eén plek voor de modellen: Sonnet voor gesprekken en recepten, Haiku voor snelle achtergrondtaken.
 const CC_MODEL_MAIN = 'claude-sonnet-4-6';
 const CC_MODEL_FAST = 'claude-haiku-4-5-20251001';
@@ -3044,117 +3055,19 @@ function confirmResetMaaltijden() {
 
 // ─── RESET BREIN ─────────────────────────────────────────────────────────────
 
-const _brainCatLabels = {
-  voorkeuren: 'Voorkeuren & intoleranties',
-  medisch: 'Medisch & blessures',
-  doelen: 'Doelen',
-  schema: 'Schema & routine',
-  overig: 'Overig'
-};
 
-function renderBrainOverview() {
-  ccMemoryPanel();
-  const el = document.getElementById('brain-overview');
-  if (!el) return;
-  const v2 = data.coachMemoryV2 || {};
-  const doelen = data.doelen || [];
-  let html = '';
-  let heeftData = false;
 
-  Object.entries({}).forEach(([cat, label]) => {
-    const items = (v2[cat] || []);
-    if (items.length === 0) return;
-    heeftData = true;
-    html += `<div style="margin-bottom:14px;">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
-        <span style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;">${label}</span>
-        <button onclick="resetBrainCategory('${cat}')" style="font-size:11px;color:#ef4444;background:none;border:none;cursor:pointer;padding:2px 6px;border-radius:6px;">Wis alles</button>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:4px;">
-        ${items.map((item, idx) => `
-          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;background:var(--card2);border-radius:8px;padding:7px 10px;">
-            <span style="font-size:13px;line-height:1.4;">${item}</span>
-            <button onclick="resetBrainItem('${cat}',${idx})" style="flex-shrink:0;background:none;border:none;cursor:pointer;color:var(--muted);padding:0;line-height:1;" title="Verwijderen">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-            </button>
-          </div>`).join('')}
-      </div>
-    </div>`;
-  });
 
-  if (doelen.length > 0) {
-    heeftData = true;
-    html += `<div style="margin-bottom:14px;">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
-        <span style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;">Persoonlijke doelen</span>
-        <button onclick="resetAllDoelen()" style="font-size:11px;color:#ef4444;background:none;border:none;cursor:pointer;padding:2px 6px;border-radius:6px;">Wis alles</button>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:4px;">
-        ${doelen.map((d, idx) => `
-          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;background:var(--card2);border-radius:8px;padding:7px 10px;">
-            <span style="font-size:13px;line-height:1.4;">🎯 ${d.omschrijving}</span>
-            <button onclick="resetDoel(${idx})" style="flex-shrink:0;background:none;border:none;cursor:pointer;color:var(--muted);padding:0;line-height:1;" title="Verwijderen">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-            </button>
-          </div>`).join('')}
-      </div>
-    </div>`;
-  }
 
-  if (!heeftData && !ccMemoryItems().length) {
-    html = `<p style="color:var(--muted);font-size:13px;font-style:italic;">Het brein is leeg — er zijn nog geen persoonlijke feiten opgeslagen.</p>`;
-  } else {
-    html += `<button class="btn btn-danger btn-full" style="margin-top:6px;" onclick="resetBrainAll()">Volledig brein wissen</button>`;
-  }
 
-  el.innerHTML = html;
-}
 
-async function resetBrainCategory(cat) {
-  if (!(await vraagBevestiging(`"${_brainCatLabels[cat]}" volledig wissen?`))) return;
-  if (data.coachMemoryV2) data.coachMemoryV2[cat] = [];
-  _syncFlatMemory();
-  saveAndSync();
-  renderBrainOverview();
-  showBanner('yellow', `${_brainCatLabels[cat]} gewist.`);
-}
-
-function resetBrainItem(cat, idx) {
-  if (!data.coachMemoryV2 || !data.coachMemoryV2[cat]) return;
-  data.coachMemoryV2[cat].splice(idx, 1);
-  _syncFlatMemory();
-  saveAndSync();
-  renderBrainOverview();
-}
-
-function resetDoel(idx) {
-  if (!data.doelen) return;
-  data.doelen.splice(idx, 1);
-  saveAndSync();
-  renderBrainOverview();
-}
-
-async function resetAllDoelen() {
-  if (!(await vraagBevestiging('Alle persoonlijke doelen wissen?'))) return;
-  ccAddDeletion({facts:ccMemoryItems().filter(m=>m.category==='doelen').map(m=>ccFingerprint(m.text))});
-  data.doelen = [];
-  if (data.coachMemoryV2) data.coachMemoryV2.doelen = [];
-  _syncFlatMemory();
-  saveAndSync();
-  renderBrainOverview();
-  showBanner('yellow', 'Persoonlijke doelen gewist.');
-}
-
-async function resetBrainAll() {
-  if (!(await vraagBevestiging('Volledig coachgeheugen wissen? De coach vergeet alle persoonlijke feiten, voorkeuren en doelen.', 'Wis geheugen'))) return;
+async function ccForgetAllMemory() {
+  if (!(await vraagBevestiging('Alles vergeten wat Coach over je onthoudt? Je doelen en logboek blijven staan.', 'Alles vergeten'))) return;
   limePrivacyRevision++;ccAddDeletion({facts:ccMemoryItems().map(m=>ccFingerprint(m.text))});
-  data.coachMemoryEvidence=[];
-  data.coachMemory = [];
+  data.coachMemoryEvidence=[];data.coachMemory=[];
   data.coachMemoryV2 = { voorkeuren: [], medisch: [], doelen: [], schema: [], overig: [] };
-  data.doelen = [];
-  saveAndSync();
-  renderBrainOverview();
-  showBanner('yellow', 'Coachgeheugen volledig gewist.');
+  saveAndSync();ccMemoryPanel();ccRenderMemoryNotice();
+  showBanner('green', 'Coach is alles vergeten.');
 }
 
 function _syncFlatMemory() {
@@ -4871,9 +4784,9 @@ function ccRenderMood(){
  el.innerHTML=`<div class="cc-water-row"><div class="cc-water-label"><h2 class="vandaag-section-h">Gevoel</h2><span class="cc-water-count" aria-live="polite">${label?`<strong>${label}</strong>`:'Hoe is het?'}</span></div><div class="cc-moods" role="group" aria-label="Hoe voel je je vandaag?">${CC_MOODS.map(([k,l,mouth])=>`<button type="button" class="cc-mood" aria-pressed="${mood===k}" aria-label="${l}" onclick="ccSetMood('${k}')"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9.2"/><circle cx="9" cy="10" r=".9" fill="currentColor" stroke="none"/><circle cx="15" cy="10" r=".9" fill="currentColor" stroke="none"/><path d="${mouth}"/></svg></button>`).join('')}</div></div>`;
 }
 // Wat kan ik vragen? Eén lijst voorbeelden voor Coach (venster), de opening en het einde van de wizard.
-const CC_EXAMPLES=[['Loggen',['Vanochtend 8 km gelopen','Havermout met banaan als ontbijt']],['Advies',['Wat eet ik na mijn training?','Ik ben moe, wat nu?']],['Inzicht',['Hoeveel heb ik deze week bewogen?','Hoe sta ik ervoor met vezels?']],['Plannen',['Zet morgen een wandeling op de planning','Schuif mijn run naar donderdag']]];
-function ccOpenExamples(){showModal(`<div class="modal-header"><h2>Wat kan ik vragen?</h2>${flowClose()}</div><p class="cc-sheet-note cc-ex-note">Tik op een voorbeeld; het komt in het invoerveld. Pas het aan en verstuur.</p>${CC_EXAMPLES.map(([kop,items],i)=>`<h3 class="vandaag-section-h cc-move-h">${kop}</h3><div class="cc-list cc-ex-list">${items.map((t,j)=>`<button type="button" class="cc-row" onclick="ccUseExample(${i},${j})"><span class="cc-row-label">“${t}”</span><span class="cc-row-meta"></span>${CC_CHEVRON}</button>`).join('')}</div>`).join('')}`);}
-function ccUseExample(i,j){const input=document.getElementById('coach-front-input'),t=CC_EXAMPLES[i]?.[1]?.[j];if(!input||!t)return;closeModal();input.value=t;ccResizeComposer(input);input.focus();}
+const CC_EXAMPLES=[{kop:'Loggen',sub:'Zeg wat je deed of at',icon:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>',items:['Vanochtend 8 km gelopen','Havermout met banaan als ontbijt']},{kop:'Advies',sub:'Vraag wat past bij je dag',icon:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 0 1-11.6 7.1L4 20l1-4.2A8 8 0 1 1 20 12z"/></svg>',items:['Wat eet ik na mijn training?','Ik ben moe, wat nu?']},{kop:'Inzicht',sub:'Zie hoe je week gaat',icon:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>',items:['Hoeveel heb ik deze week bewogen?','Hoe sta ik ervoor met vezels?']},{kop:'Plannen',sub:'Zet iets klaar of schuif het op',icon:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4m6-4v4"/></svg>',items:['Zet morgen een wandeling op de planning','Schuif mijn run naar donderdag']}];
+function ccOpenExamples(){showModal(`<div class="modal-header"><h2>Wat kan ik vragen?</h2>${flowClose()}</div><p class="cc-sheet-note cc-ex-note">Tik op een voorbeeld; het komt klaar te staan in je invoer.</p>${CC_EXAMPLES.map((g,i)=>`<section class="cc-ex-card"><div class="cc-ex-head"><span class="cc-intro-ic">${g.icon}</span><span><strong>${g.kop}</strong><small>${g.sub}</small></span></div><div class="cc-ex-bubbles">${g.items.map((t,j)=>`<button type="button" class="cc-ex-bubble" onclick="ccUseExample(${i},${j})">${t}</button>`).join('')}</div></section>`).join('')}`);}
+function ccUseExample(i,j){const input=document.getElementById('coach-front-input'),t=CC_EXAMPLES[i]?.items[j];if(!input||!t)return;closeModal();input.value=t;ccResizeComposer(input);input.focus();}
 
 // Eerste keer instellen: één vraag per scherm, tikken in plaats van typen. Ook later te starten via Instellingen › Opnieuw instellen.
 const CC_SPORTS=['Hardlopen','Fietsen','Krachttraining','Wandelen','Zwemmen','Yoga'];
@@ -4900,7 +4813,7 @@ function ccWizRender(){
   `<h1 id="cc-wiz-title" tabindex="-1">Jouw doelen</h1><p class="cc-wiz-sub">Later altijd aan te passen.</p><div class="cc-wiz-card">${stepper('beweging','Bewegen','min per week',15,30,600)}${stepper('vezels','Vezels','gram per dag',5,10,60)}${stepper('eiwit','Eiwit','gram per dag',5,30,250)}</div>`,
   `<h1 id="cc-wiz-title" tabindex="-1">Wat eet je?</h1><div class="cc-seg cc-wiz-seg">${[['vlees','Alles'],['vis','Vis'],['vega','Vega']].map(([v,l])=>`<button type="button" aria-pressed="${w.dieet===v}" onclick="ccWizDiet('${v}')">${l}</button>`).join('')}</div><p class="cc-wiz-sub">Liever niet</p><div class="cc-wiz-chips">${CC_AVOID.map(v=>chip('liever',v)).join('')}</div>`,
   `<h1 id="cc-wiz-title" tabindex="-1">Slimme coach</h1><p class="cc-wiz-sub">Met een AI-sleutel praat de coach terug en maakt Chef recepten. Kan ook later.</p><div class="cc-wiz-card"><label class="cc-set-row"><span>AI-sleutel</span><input id="cc-wiz-key" type="password" value="${escapeText(w.key)}" placeholder="Plak je sleutel" autocomplete="off" spellcheck="false"></label><label class="cc-set-row"><span>Voorlezen</span><input id="cc-wiz-tts" type="checkbox" ${w.tts?'checked':''}></label><label class="cc-set-row"><span>Privacymodus</span><input id="cc-wiz-privacy" type="checkbox" ${w.privacy?'checked':''}></label></div>`,
-  `<h1 id="cc-wiz-title" tabindex="-1">Klaar${w.naam?', '+escapeText(w.naam):''}!</h1><p class="cc-wiz-sub">Zeg of typ bijvoorbeeld:</p><ul class="cc-wiz-examples">${CC_EXAMPLES.map(([,items])=>`<li>“${items[0]}”</li>`).join('')}</ul>`
+  `<h1 id="cc-wiz-title" tabindex="-1">Klaar${w.naam?', '+escapeText(w.naam):''}!</h1><p class="cc-wiz-sub">Zeg of typ bijvoorbeeld:</p><ul class="cc-wiz-examples">${CC_EXAMPLES.map(g=>`<li>“${g.items[0]}”</li>`).join('')}</ul>`
  ][st];
  el.innerHTML=`<div class="cc-wiz-top">${st?`<button type="button" class="cc-set-icon" aria-label="Terug" onclick="ccWizGo(${st-1})"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg></button>`:'<span class="cc-wiz-space"></span>'}<div class="cc-wiz-dots" role="img" aria-label="Stap ${st+1} van 6">${[0,1,2,3,4,5].map(i=>`<i class="${i<=st?'is-on':''}"></i>`).join('')}</div>${st<5?`<button type="button" class="cc-wiz-skip" onclick="ccWizGo(${st+1})">Overslaan</button>`:'<span class="cc-wiz-space"></span>'}</div><div class="cc-wiz-body">${body}</div><button type="button" class="cc-wiz-next" onclick="${st<5?`ccWizGo(${st+1})`:'ccWizFinish()'}">${st<5?'Volgende':'Begin'}</button>`;
  document.getElementById('cc-wiz-title').focus();document.getElementById('setup-overlay').scrollTop=0;
@@ -5889,11 +5802,15 @@ function ccEvalCases(){
   {id:'geen-zin',vraag:'Ik heb echt geen zin vandaag.',uur:'17:30',dag:{activiteiten:[act('r3','run','Easy run',false,40)]},criteria:'Motiverend zonder druk of schuld; stelt een kleine, haalbare stap voor (bijvoorbeeld kortere run of wandeling).'},
   {id:'spraak',vraag:'ik heb drie sets goblet squad gedaan',uur:'19:00',dag:{},criteria:'Begrijpt dat goblet squat bedoeld is en gebruikt die schrijfwijze. Bevestigt kort.'},
   {id:'otis',vraag:'Zet een wandeling met Otis op zaterdag.',uur:'12:00',dag:{},criteria:'Gebruikt de tool voeg_activiteit_toe met type walkdog op '+sat+' (de eerstvolgende zaterdag; vandaag als het vandaag zaterdag is). Zegt niet dat het al is ingepland.'}
+,
+  {id:'geheugen',vraag:'Wat zal ik vanavond eten?',uur:'18:00',dag:{},geheugen:[['voorkeuren','Ik eet geen paprika',ccDateOffset(today(),-20)]],criteria:'Houdt rekening met de herinnering dat de gebruiker geen paprika eet: het voorstel bevat geen paprika.'},
+  {id:'geheugen-nieuw',vraag:'Welke sport doe ik het liefst?',uur:'12:00',dag:{},geheugen:[['voorkeuren','Ik fiets het liefst',ccDateOffset(today(),-60)],['voorkeuren','Hardlopen is nu echt mijn favoriete sport',ccDateOffset(today(),-3)]],criteria:'Noemt hardlopen als favoriet (de nieuwste uitspraak), niet fietsen.'}
  ];
 }
 function ccEvalFixture(c){
  const fx=JSON.parse(JSON.stringify(data));
- fx.coachMemoryV2={};fx.coachMemoryEvidence=[];fx.chatHistorie=[];
+ fx.coachMemoryV2={};fx.coachMemoryEvidence=[];fx.chatHistorie=[];fx.coachMemory=[];
+ for(const [cat,feit,datum] of c.geheugen||[]){(fx.coachMemoryV2[cat] ||= []).push(feit);fx.coachMemoryEvidence.push({id:ccId('memory'),feit,categorie:cat,datum,createdAt:new Date(datum+'T12:00:00').getTime(),expires:null,bron:'test'});}
  if(c.leegWeek)fx.weken={};
  const saved=data;data=fx;
  try{const day=ensureDay(today());day.activiteiten=c.dag.activiteiten||[];day.maaltijden=c.dag.maaltijden||{ontbijt:[],lunch:[],diner:[],snack:[]};day.waterGlazen=c.dag.waterGlazen||0;delete day.checkIn;
@@ -5976,7 +5893,7 @@ function ccOpenEval(){
  const runs=(data.coachEvalRuns||[]).slice(-5).reverse();
  const downs=(data.coachFeedback||[]).filter(f=>f.value==='down').slice(-5).reverse();
  showModal('<div class="modal-header"><h2>Coach testen</h2><button class="modal-close" onclick="closeModal()" aria-label="Sluiten">×</button></div>'
-  +'<p class="muted">12 vaste testvragen met nepdata. Een tweede AI beoordeelt elk antwoord als goed, matig of fout. Draai dit na elke aanpassing aan de coach en vergelijk de score.</p>'
+  +'<p class="muted">14 vaste testvragen met nepdata, waarvan 2 over het geheugen (overgeslagen in privacymodus). Een tweede AI beoordeelt elk antwoord als goed, matig of fout. Draai dit na elke aanpassing aan de coach en vergelijk de score.</p>'
   +'<button type="button" class="cc-eval-start" onclick="ccRunEval(this)">Start test</button><div id="cc-eval-results" class="cc-eval-results"></div>'
   +(runs.length?'<h3 class="cc-eval-h">Eerdere scores</h3><ul class="cc-eval-history">'+runs.map(r=>'<li><strong>'+r.goed+' goed</strong> · '+r.matig+' matig · '+r.fout+' fout <span>'+escapeText(new Date(r.at).toLocaleString('nl-NL',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}))+' · '+escapeText(r.version)+(r.privacy?' · privé':'')+'</span></li>').join('')+'</ul>':'')
   +(downs.length?'<h3 class="cc-eval-h">Jouw laatste duimpjes omlaag</h3><ul class="cc-eval-history">'+downs.map(f=>'<li>'+(f.question?'<strong>'+escapeText(f.question.slice(0,80))+'</strong><br>':'')+escapeText(f.text.slice(0,140))+'</li>').join('')+'</ul>':''));
@@ -5984,7 +5901,7 @@ function ccOpenEval(){
 async function ccRunEval(btn){
  if(ccEvalBusy)return;if(!settings.anthropicKey){showBanner('yellow','Vul eerst je Anthropic-sleutel in bij Instellingen.');return;}
  ccEvalBusy=true;btn.disabled=true;btn.textContent='Bezig…';
- const box=document.getElementById('cc-eval-results');box.innerHTML='';const cases=ccEvalCases();const tally={goed:0,matig:0,fout:0};const details=[];
+ const box=document.getElementById('cc-eval-results');box.innerHTML='';const cases=ccEvalCases().filter(c=>!(settings.privacyModus&&c.geheugen));const tally={goed:0,matig:0,fout:0};const details=[];
  try{
   for(const [i,c] of cases.entries()){
    btn.textContent='Bezig… '+(i+1)+' van '+cases.length;
@@ -7609,12 +7526,12 @@ function openSettings(){
  ${page('over','Over jou',`${field('doel','Waar wil je naartoe?','Bijvoorbeeld meer energie of vaker bewegen')}${field('sporten','Wat doe je graag?','Bijvoorbeeld hardlopen, fietsen, wandelen')}${field('weekritme','Je weekritme','Welke dagen passen goed?')}${field('slaap','Slaap en routine','Alleen als je dit wilt meenemen')}${field('eten','Wat eet je graag of liever niet?','Voorkeuren, gewoontes of ingrediënten')}<h3 class="cc-set-sub">Optioneel</h3><div class="flow-form-grid">${field('leeftijd','Leeftijd','','number')}<label class="flow-field">Geslacht<select id="set-geslacht"><option value="">Niet opgegeven</option><option value="man">Man</option><option value="vrouw">Vrouw</option><option value="anders">Anders / liever niet zeggen</option></select></label>${field('gewicht','Gewicht · kg','','number')}${field('streefgewicht','Streefgewicht · kg','','number')}</div><p class="cc-set-note">Vul alleen in wat Coach mag meenemen.</p>`)}
  ${page('doelen','Doelen',`<label class="flow-field">Bewegen · min per week<input id="ritme-goal-move" inputmode="numeric" value="${ccMoveGoal()}"></label><div class="flow-form-grid"><label class="flow-field">Vezels · g per dag<input id="ritme-goal-fiber" inputmode="decimal" value="${goals.vezels}"></label><label class="flow-field">Eiwit · g per dag<input id="ritme-goal-protein" inputmode="decimal" value="${goals.eiwitten}"></label></div><p class="cc-set-note">Jouw eigen doelen voor het overzicht. De Beweegrichtlijn noemt 150 minuten per week.</p>`)}
  ${page('stem','Stem en spraak',`<label class="flow-field">Stem bij voorlezen<select id="set-tts-voice">${['nova','shimmer','echo','onyx','alloy','fable'].map(v=>`<option value="${v}">${v[0].toUpperCase()+v.slice(1)}</option>`).join('')}</select></label>${field('openai','OpenAI-sleutel · optioneel','Voor een natuurlijkere stem','password')}<p class="cc-set-note">Zonder OpenAI-sleutel leest de stem van je telefoon voor.</p>${field('woorden','Eigen woorden voor spraak','Namen, oefeningen of gerechten, met komma\'s')}`)}
- ${page('geheugen','Wat Coach onthoudt',`<div id="cc-memory-panel"></div><div id="brain-overview"></div><h3 class="cc-set-sub">Samen bewegen</h3><div id="partners-list"></div><button type="button" class="ritme-link" onclick="showAddPartnerModal()">Iemand toevoegen</button><h3 class="cc-set-sub">Patronen</h3><div id="cc-patterns-box">${ccPatternsHtml()}</div>`)}
+ ${page('geheugen','Wat Coach onthoudt',`<div id="cc-memory-panel"></div><h3 class="cc-set-sub">Samen bewegen</h3><div id="partners-list"></div><button type="button" class="ritme-link" onclick="showAddPartnerModal()">Iemand toevoegen</button><h3 class="cc-set-sub">Patronen</h3><div id="cc-patterns-box">${ccPatternsHtml()}</div>`)}
  ${page('sync','Synchronisatie',`<p class="cc-set-note">Bewaart een kopie in je eigen GitHub Gist, zodat je op meer apparaten kunt werken.</p>${field('token','GitHub-toegangssleutel','Personal access token','password')}${field('gist','Gist-ID','ID van je eigen Gist')}${field('syncpass','Wachtwoord · optioneel','Versleutelt je cloudkopie','password')}<p class="cc-set-note">Vergeet je het wachtwoord, dan is de cloudkopie niet meer te openen; je gegevens op deze telefoon blijven wel bruikbaar. Begin bij voorkeur met een nieuwe, lege Gist.</p>`)}
- ${page('testen','Testen',`<div class="cc-list">${row('Coach testen','12 vragen','ccOpenEval()')}${row('Chef testen','5 vragen','ccOpenChefEval()')}</div><p class="cc-set-note">Vaste vragen met nepdata; een tweede AI beoordeelt de antwoorden. Je eigen gegevens blijven onaangeroerd. Kost een paar cent.</p>`)}
+ ${page('testen','Testen',`<div class="cc-list">${row('Coach testen','14 vragen','ccOpenEval()')}${row('Chef testen','5 vragen','ccOpenChefEval()')}</div><p class="cc-set-note">Vaste vragen met nepdata; een tweede AI beoordeelt de antwoorden. Je eigen gegevens blijven onaangeroerd. Kost een paar cent.</p>`)}
  ${page('kopie','Kopie en opnieuw',`<div class="flow-action-stack"><button class="btn btn-secondary" onclick="exportData()">Download een kopie</button><label class="btn btn-ghost ritme-file-label">Een kopie terugzetten<input type="file" accept=".json" onchange="importData(this)"></label></div><h3 class="cc-set-sub">Opnieuw beginnen</h3><p class="cc-set-note">Maak eerst een kopie. Je krijgt nog een bevestiging.</p><div class="flow-action-stack"><button class="btn btn-ghost" onclick="openResetActiviteitenModal()">Activiteiten wissen</button><button class="btn btn-ghost" onclick="openResetMaaltijdenModal()">Maaltijden wissen</button><button class="btn btn-ghost" onclick="resetApp()">Hele app opnieuw beginnen</button></div>`)}
  <div class="cc-set-save"><p id="ritme-settings-error" class="flow-error" role="alert"></p><button type="button" class="btn btn-primary btn-full" onclick="saveSettings()">Bewaar</button></div><p class="cc-set-version">${APP_VERSION}</p></div>`;
- Object.entries(RITME_SETTINGS).forEach(([id,key])=>{document.getElementById('set-'+id).value=settings[key]||(key==='ttsVoice'?'nova':'');});el.classList.add('visible');document.getElementById('app').inert=true;el.scrollTop=0;renderBrainOverview();renderPartners();
+ Object.entries(RITME_SETTINGS).forEach(([id,key])=>{document.getElementById('set-'+id).value=settings[key]||(key==='ttsVoice'?'nova':'');});el.classList.add('visible');document.getElementById('app').inert=true;el.scrollTop=0;ccMemoryPanel();renderPartners();
 }
 function ccToggleSetMore(btn){const box=document.getElementById('cc-set-more'),open=box.hidden;box.hidden=!open;btn.setAttribute('aria-expanded',String(open));}
 function ccSetPage(id,opener){
@@ -8003,14 +7920,14 @@ function ccMemoryItems(){
  for(const [category,facts] of Object.entries(data.coachMemoryV2||{}))for(const text of Array.isArray(facts)?facts:[]){
   if(typeof text!=='string')continue;
   const e=evidence.find(e=>e.feit===text&&e.categorie===category)||{};
-  items.push({id:e.id||'old-'+ccFingerprint(category+'|'+text),text,category,date:e.datum||null,expires:e.expires||null,createdAt:e.createdAt||0,conversationId:e.conversationId||null,legacy:!e.id});
+  items.push({id:e.id||'old-'+ccFingerprint(category+'|'+text),text,category,date:e.datum||null,expires:e.expires||null,replaced:e.vervangt||null,createdAt:e.createdAt||0,conversationId:e.conversationId||null,legacy:!e.id});
  }
  for(const text of data.coachMemory||[])if(typeof text==='string'&&!items.some(m=>m.text===text))items.push({id:'old-'+ccFingerprint('overig|'+text),text,category:'overig',legacy:true,createdAt:0});
  return items;
 }
 function ccActiveMemory(query){
  const food=/eten|eet|voed|recept|maaltijd|eiwit|vezel|allerg|dieet|vegetar/i.test(query),sport=/sport|loop|fiets|train|beweeg|wand|otis|herstel/i.test(query);
- return ccMemoryItems().filter(m=>!m.expires||m.expires>=today()).map(m=>({...m,score:ccRelevant(m.text,query)+(food&&m.category==='voorkeuren'?1:0)+(sport&&['doelen','schema'].includes(m.category)?1:0)+(m.category==='medisch'&&((food&&/allerg|intolerant|diabet|coeliak/i.test(m.text))||(sport&&/blessur|knie|rug|herstel|pijn|hart/i.test(m.text)))?5:0)})).filter(m=>m.score>0).sort((a,b)=>b.score-a.score).slice(0,8);
+ return ccMemoryItems().filter(m=>!m.expires||m.expires>=today()).map(m=>({...m,score:ccRelevant(m.text,query)+(food&&m.category==='voorkeuren'?1:0)+(sport&&['doelen','schema'].includes(m.category)?1:0)+(m.category==='medisch'&&((food&&/allerg|intolerant|diabet|coeliak/i.test(m.text))||(sport&&/blessur|knie|rug|herstel|pijn|hart/i.test(m.text)))?5:0)+(!m.expires&&['voorkeuren','doelen','schema'].includes(m.category)?1:0)})).filter(m=>m.score>0).sort((a,b)=>b.score-a.score||b.createdAt-a.createdAt).slice(0,8);
 }
 // ─── Dagbriefje: altijd een korte, vaste basis van je dag voor de coach ──
 let ccNowOverride=null;
@@ -8085,7 +8002,8 @@ async function _updateCoachMemory(userMsg){
  if(ccMemoryJobs.has(userMsg))return ccMemoryJobs.get(userMsg);
  const revision=limePrivacyRevision,conversationId=limeConversationId();
  const job=(async()=>{try{
-  const raw=await callAIFast(`Selecteer maximaal twee letterlijke zelfstandige eigen uitspraken uit dit bericht. Geen vragen, hypothetische voorbeelden, dagelijkse maaltijd-/activiteitregistraties of gegevens over anderen. Medisch of gevoelig (gezondheid, seksualiteit, relaties, financiën): alleen bij expliciet verzoek om te onthouden. Geef JSON [{"categorie":"voorkeuren|doelen|schema|medisch|overig","citaat":"exact citaat","duurzaam":true,"scope":"permanent|temporary","dagen":7}]. Tijdelijke omstandigheden zijn temporary; standaard 7 dagen, hoogstens 30. Onzeker of geen relevante eigen uitspraak: []. Bericht: ${JSON.stringify(userMsg)}`,400);
+  const known=ccMemoryItems().filter(m=>!m.expires||m.expires>=today()).slice(0,20);
+  const raw=await callAIFast(`Selecteer maximaal twee letterlijke zelfstandige eigen uitspraken uit dit bericht. Geen vragen, hypothetische voorbeelden, dagelijkse maaltijd-/activiteitregistraties of gegevens over anderen. Medisch of gevoelig (gezondheid, seksualiteit, relaties, financiën): alleen bij expliciet verzoek om te onthouden. Geef JSON [{"categorie":"voorkeuren|doelen|schema|medisch|overig","citaat":"exact citaat","duurzaam":true,"scope":"permanent|temporary","dagen":7,"vervangt":null}]. Tijdelijke omstandigheden zijn temporary; standaard 7 dagen, hoogstens 30. Spreekt de uitspraak een bestaande herinnering tegen of werkt hij die bij, zet dan bij vervangt het nummer van die herinnering, anders null. Bestaande herinneringen: ${JSON.stringify(known.map((m,i)=>({nr:i+1,tekst:m.text})))}. Onzeker of geen relevante eigen uitspraak: []. Bericht: ${JSON.stringify(userMsg)}`,500);
   if(revision!==limePrivacyRevision)return;
   const facts=safeParseJSON(raw);if(!Array.isArray(facts))return;
   let changed=false;
@@ -8100,8 +8018,10 @@ async function _updateCoachMemory(userMsg){
    for(const old of ccMemoryItems().filter(m=>m.text.toLowerCase()===text.toLowerCase()))ccRemoveMemory(old);
    data.coachMemoryV2 ||= {};data.coachMemoryEvidence ||= [];
    const expires=temporary?ccDateOffset(today(),Math.max(1,Math.min(30,Number(f.dagen)||7))):null;
+   const old=Number.isInteger(f.vervangt)?known[f.vervangt-1]:null,replaced=old&&ccMemoryItems().some(m=>m.text===old.text)?old.text:null;
+   if(replaced){ccAddDeletion({facts:[ccFingerprint(replaced)]});ccRemoveMemory(old);}
    (data.coachMemoryV2[f.categorie] ||= []).unshift(text);
-   data.coachMemoryEvidence.unshift({id:ccId('memory'),feit:text,categorie:f.categorie,datum:today(),createdAt:Date.now(),expires,conversationId,bron:'gebruikersbericht'});
+   data.coachMemoryEvidence.unshift({id:ccId('memory'),feit:text,categorie:f.categorie,datum:today(),createdAt:Date.now(),expires,conversationId,bron:'gebruikersbericht',vervangt:replaced});
    changed=true;
   }
   if(changed){_syncFlatMemory();saveAndSync();ccRenderMemoryNotice();}
@@ -8112,15 +8032,16 @@ function ccRenderMemoryNotice(){
  const el=document.getElementById('cc-memory-notice');if(!el)return;
  const facts=ccMemoryItems().filter(m=>m.conversationId===data.coachConversationId&&(!m.expires||m.expires>=today())).slice(0,2);
  el.hidden=!facts.length;
- el.innerHTML=facts.map(m=>`<div class="cc-memory-note"><span><strong>${m.expires?'Tijdelijk onthouden':'Onthouden'}</strong> ${escapeText(m.text)}${m.expires?` <small>tot ${escapeText(m.expires)}</small>`:''}</span><button onclick="ccEditMemory(${flowArg(m.id)})">Aanpassen</button><button onclick="ccForgetMemory(${flowArg(m.id)})">Vergeten</button></div>`).join('');
+ el.innerHTML=facts.map(m=>`<div class="cc-memory-note"><span><strong>${m.expires?'Tijdelijk onthouden':'Onthouden'}</strong> ${escapeText(m.text)}${m.expires?` <small>tot ${escapeText(m.expires)}</small>`:''}${m.replaced?` <small>vervangt: ${escapeText(m.replaced)}</small>`:''}</span><button onclick="ccEditMemory(${flowArg(m.id)})">Aanpassen</button><button onclick="ccForgetMemory(${flowArg(m.id)})">Vergeten</button></div>`).join('');
 }
 function ccMemoryPanel(){
  const el=document.getElementById('cc-memory-panel');if(!el)return;
- el.innerHTML=ccMemoryItems().map(m=>`<div class="cc-memory-note"><span>${escapeText(m.text)}<small>${m.expires?(m.expires<today()?'Verlopen · ':'Geldig tot ')+escapeText(m.expires):m.legacy?'Oud geheugen · bron niet volledig bekend':'Blijvend'} </small></span><button onclick="ccEditMemory(${flowArg(m.id)})">Aanpassen</button><button onclick="ccForgetMemory(${flowArg(m.id)})">Vergeten</button></div>`).join('')||'<p class="muted">Nog geen herinneringen.</p>';
+ const items=ccMemoryItems().sort((a,b)=>(b.createdAt||0)-(a.createdAt||0)),meta=m=>m.expires?(m.expires<today()?'Verlopen':'Tot '+formatShortDate(m.expires)):'Blijvend';
+ el.innerHTML=items.length?`<div class="cc-list">${items.map(m=>`<button type="button" class="cc-row cc-mem-row" aria-haspopup="dialog" onclick="ccEditMemory(${flowArg(m.id)})"><span class="cc-row-label">${escapeText(m.text)}</span><span class="cc-row-meta">${escapeText(meta(m))}</span>${CC_CHEVRON}</button>`).join('')}</div><p class="cc-set-note">Tik op een herinnering om hem aan te passen of te vergeten. Coach onthoudt alleen wat je zelf zegt.</p><button type="button" class="cc-mem-forget" onclick="ccForgetAllMemory()">Alles vergeten</button>`:'<p class="cc-set-note">Nog niets onthouden. Vertel Coach bijvoorbeeld wat je liever niet eet of wanneer je het liefst traint.</p>';
 }
 function ccEditMemory(id){
  const m=ccMemoryItems().find(m=>m.id===id);if(!m)return;
- showModal(`<div class="modal-header"><h2>Wat mag Coach onthouden?</h2>${flowClose()}</div><label class="flow-field">Uitspraak<textarea id="cc-memory-text" maxlength="350">${escapeText(m.text)}</textarea></label><label class="flow-field">Geldig tot <span>leeg = blijvend</span><input id="cc-memory-expiry" type="date" value="${m.expires||''}"></label><p id="cc-memory-error" class="flow-error" role="alert"></p><button class="btn btn-primary btn-full" onclick="ccSaveMemory(${flowArg(id)})">Bewaar wijziging</button>`);
+ showModal(`<div class="modal-header"><h2>Wat mag Coach onthouden?</h2>${flowClose()}</div><label class="flow-field">Uitspraak<textarea id="cc-memory-text" maxlength="350">${escapeText(m.text)}</textarea></label><label class="flow-field">Geldig tot <span>leeg = blijvend</span><input id="cc-memory-expiry" type="date" value="${m.expires||''}"></label><p id="cc-memory-error" class="flow-error" role="alert"></p><button class="btn btn-primary btn-full" onclick="ccSaveMemory(${flowArg(id)})">Bewaar wijziging</button><button class="btn btn-ghost btn-full cc-week-ask" onclick="closeModal();ccForgetMemory(${flowArg(id)})">Vergeten</button>`);
 }
 function ccRemoveMemory(m){
  if(data.coachMemoryV2)for(const k of Object.keys(data.coachMemoryV2))data.coachMemoryV2[k]=data.coachMemoryV2[k].filter(t=>t!==m.text);
