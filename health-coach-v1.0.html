@@ -2623,7 +2623,7 @@ body input[type="checkbox"]:disabled{opacity:.4;cursor:default}
 'use strict';
 
 // ─── VERSION CHECK (forceert Safari herlading bij nieuwe versie) ──────────────
-const APP_VERSION = 'lime-20261003-8';
+const APP_VERSION = 'lime-20261003-9';
 // Eén plek voor de modellen: Sonnet voor gesprekken en recepten, Haiku voor snelle achtergrondtaken.
 const CC_MODEL_MAIN = 'claude-sonnet-4-6';
 const CC_MODEL_FAST = 'claude-haiku-4-5-20251001';
@@ -6927,48 +6927,47 @@ const CC_CHEF_EVAL=[
 const CC_CHEF_EVAL_ALGEMEEN='Voor iedereen: sportief en trendy, gezond zonder dieetgedoe; vormen als bowl, wrap, bakplaat of één pan; hoeveelheden in gram of ml; Nederlandse supermarkt; korte pakkende naam; korte concrete stappen; klopt en is haalbaar.';
 async function ccChefEvalJudge(c,recipes){
  const kort=recipes.map(r=>({naam:r.naam,tijd:r.tijd,personen:r.personen,eiwit:r.eiwitten,vezels:r.vezels,ingredienten:r.ingredienten,bereiding:r.bereiding}));
- const raw=await callAIFast('Je beoordeelt receptvoorstellen van een kook-app. Wees streng maar redelijk.\nVraag: '+JSON.stringify(c.vraag)+'\nCriteria: '+c.criteria+' '+CC_CHEF_EVAL_ALGEMEEN+'\nRecepten: '+JSON.stringify(kort)+'\nGeef alleen JSON: {"oordeel":"goed"|"matig"|"fout","reden":"max 20 woorden"}',200);
- const r=safeParseJSON(raw)||{};return {oordeel:['goed','matig','fout'].includes(r.oordeel)?r.oordeel:'matig',reden:String(r.reden||'Geen toelichting.').slice(0,200)};
+ const raw=await callAIFast('Je beoordeelt receptvoorstellen van een kook-app. Wees streng maar redelijk.\nVraag: '+JSON.stringify(c.vraag)+'\nCriteria: '+c.criteria+' '+CC_CHEF_EVAL_ALGEMEEN+'\nRecepten: '+JSON.stringify(kort)+'\nAntwoord met alleen dit JSON-object en niets anders, zonder aanhalingstekens in de reden: {"oordeel":"goed"|"matig"|"fout","reden":"max 20 woorden"}',400);
+ const r=safeParseJSON(raw)||{},o=r.oordeel||(String(raw).match(/"oordeel"\s*:\s*"(goed|matig|fout)"/)||[])[1],reden=r.reden||(String(raw).match(/"reden"\s*:\s*"([^"]+)/)||[])[1];
+ return {oordeel:['goed','matig','fout'].includes(o)?o:'matig',reden:String(reden||'Geen toelichting.').slice(0,200)};
 }
-async function ccChefEvalRun(c,oud){
+async function ccChefEvalRun(c){
  const keep={flowChefMode,genPersonen,genCount,genDieet,genFocus,genMaaltijd};
  flowChefMode=c.modus;genPersonen=2;genCount=2;genDieet='vlees';genFocus='combi';genMaaltijd='';
  const t0=performance.now();let eerste=null;
  try{
-  const recipes=oud?await requestChefRecipesOud(c.vraag,2):await requestChefRecipes(c.vraag,2,[],()=>{eerste??=performance.now()-t0;});
+  const recipes=await requestChefRecipes(c.vraag,2,[],()=>{eerste??=performance.now()-t0;});
   const klaar=performance.now()-t0;
   return {klaar,eerste:eerste??klaar,recipes,...await ccChefEvalJudge(c,recipes)};
  }catch(e){return {klaar:performance.now()-t0,eerste:null,recipes:[],oordeel:'fout',reden:'Fout bij testen: '+(e.message||'onbekend')};}
  finally{({flowChefMode,genPersonen,genCount,genDieet,genFocus,genMaaltijd}=keep);}
 }
-const ccSec=ms=>ms==null?'–':Math.round(ms/1000)+'\u00a0s';
-function ccChefEvalSummary(r,oud){return r.goed+' goed · '+r.matig+' matig · '+r.fout+' fout · '+(oud?'klaar na ':'eerste recept '+ccSec(r.eerste)+', klaar ')+ccSec(r.klaar);}
+const ccSec=ms=>ms==null?'–':Math.round(ms/1000)+' s';
+function ccChefEvalSummary(r){return r.goed+' goed · '+r.matig+' matig · '+r.fout+' fout · eerste recept '+ccSec(r.eerste)+', klaar '+ccSec(r.klaar);}
 function ccOpenChefEval(){
  const runs=(data.chefEvalRuns||[]).slice(-5).reverse();
  showModal('<div class="modal-header"><h2>Chef testen</h2>'+flowClose()+'</div>'
-  +'<p class="muted">5 vaste receptvragen. Per vraag meet de app hoe snel het eerste recept er is, en een tweede AI beoordeelt de recepten volgens jouw lijn. Ter vergelijking draait ook de oude werkwijze (maken en daarna controleren). Duurt een paar minuten, kost ongeveer 50 cent.</p>'
+  +'<p class="muted">5 vaste receptvragen. Per vraag meet de app hoe snel het eerste recept er is, en een tweede AI beoordeelt de recepten volgens jouw lijn. Duurt ongeveer twee minuten, kost ongeveer 20 cent.</p>'
   +'<button type="button" class="cc-eval-start" onclick="ccRunChefEval(this)">Start test</button><div id="cc-chef-eval-results" class="cc-eval-results"></div>'
-  +(runs.length?'<h3 class="cc-eval-h">Eerdere scores</h3><ul class="cc-eval-history">'+runs.map(r=>'<li><strong>Nieuw:</strong> '+ccChefEvalSummary(r.nieuw)+(r.oud?'<br><strong>Oud:</strong> '+ccChefEvalSummary(r.oud,true):'')+' <span>'+escapeText(new Date(r.at).toLocaleString('nl-NL',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}))+' · '+escapeText(r.version)+'</span></li>').join('')+'</ul>':''));
+  +(runs.length?'<h3 class="cc-eval-h">Eerdere scores</h3><ul class="cc-eval-history">'+runs.map(r=>'<li>'+ccChefEvalSummary(r.nieuw)+' <span>'+escapeText(new Date(r.at).toLocaleString('nl-NL',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}))+' · '+escapeText(r.version)+'</span></li>').join('')+'</ul>':''));
 }
 async function ccRunChefEval(btn){
  if(ccEvalBusy)return;if(!settings.anthropicKey){showBanner('yellow','Vul eerst je Anthropic-sleutel in bij Instellingen.');return;}
  ccEvalBusy=true;btn.disabled=true;
  const box=document.getElementById('cc-chef-eval-results');box.innerHTML='';
- const totaal=()=>({goed:0,matig:0,fout:0,eerste:0,klaar:0,n:0}),nieuw=totaal(),oud=totaal();
- const tel=(t,r)=>{t[r.oordeel]++;t.klaar+=r.klaar;t.eerste+=r.eerste??r.klaar;t.n++;};
- const gem=t=>({goed:t.goed,matig:t.matig,fout:t.fout,eerste:t.n?t.eerste/t.n:null,klaar:t.n?t.klaar/t.n:null});
+ const t={goed:0,matig:0,fout:0,eerste:0,klaar:0};
  const mark=o=>'<span class="cc-eval-mark is-'+o+'">'+({goed:'✓',matig:'~',fout:'✗'})[o]+'</span>';
  try{
   for(const [i,c] of CC_CHEF_EVAL.entries()){
    btn.textContent='Bezig… '+(i+1)+' van '+CC_CHEF_EVAL.length;
-   const a=await ccChefEvalRun(c,false),b=await ccChefEvalRun(c,true);tel(nieuw,a);tel(oud,b);
+   const a=await ccChefEvalRun(c);t[a.oordeel]++;t.klaar+=a.klaar;t.eerste+=a.eerste??a.klaar;
    const row=document.createElement('details');row.className='cc-eval-row';box.appendChild(row);
-   row.innerHTML='<summary>'+mark(a.oordeel)+'<span><strong>'+escapeText(c.vraag)+'</strong><small>Nieuw: eerste recept '+ccSec(a.eerste)+', klaar '+ccSec(a.klaar)+' · Oud: '+ccSec(b.klaar)+' ('+escapeText(b.oordeel)+')</small><small>'+escapeText(a.reden)+'</small></span></summary>'
-    +'<div class="cc-eval-body"><p><b>Nieuw:</b> '+escapeText(a.recipes.map(r=>r.naam).join(' · ')||'(geen recepten)')+'</p><p><b>Oud:</b> '+escapeText(b.recipes.map(r=>r.naam).join(' · ')||'(geen recepten)')+' — '+escapeText(b.reden)+'</p><p class="muted"><b>Criteria:</b> '+escapeText(c.criteria)+'</p></div>';
+   row.innerHTML='<summary>'+mark(a.oordeel)+'<span><strong>'+escapeText(c.vraag)+'</strong><small>Eerste recept '+ccSec(a.eerste)+', klaar '+ccSec(a.klaar)+'</small><small>'+escapeText(a.reden)+'</small></span></summary>'
+    +'<div class="cc-eval-body"><p><b>Recepten:</b> '+escapeText(a.recipes.map(r=>r.naam).join(' · ')||'(geen recepten)')+'</p><p class="muted"><b>Criteria:</b> '+escapeText(c.criteria)+'</p></div>';
   }
-  const run={at:new Date().toISOString(),version:APP_VERSION,model:CC_MODEL_MAIN,nieuw:gem(nieuw),oud:gem(oud)};
+  const n=CC_CHEF_EVAL.length,run={at:new Date().toISOString(),version:APP_VERSION,model:CC_MODEL_MAIN,nieuw:{goed:t.goed,matig:t.matig,fout:t.fout,eerste:t.eerste/n,klaar:t.klaar/n}};
   data.chefEvalRuns=[...(data.chefEvalRuns||[]),run].slice(-10);saveAndSync();
-  const sum=document.createElement('p');sum.className='cc-eval-score';sum.innerHTML='<strong>Nieuw:</strong> '+ccChefEvalSummary(run.nieuw)+'<br><strong>Oud:</strong> '+ccChefEvalSummary(run.oud,true);box.prepend(sum);
+  const sum=document.createElement('p');sum.className='cc-eval-score';sum.innerHTML='<strong>'+ccChefEvalSummary(run.nieuw)+'</strong>';box.prepend(sum);
  }finally{ccEvalBusy=false;btn.disabled=false;btn.textContent='Opnieuw testen';}
 }
 let ccEvalBusy=false;
@@ -8627,14 +8626,14 @@ const CHEF_STIJL=`STIJL VAN CHEF:
 - Eiwit ruim en zichtbaar: een maaltijd 30–45 g eiwit per portie, een snack 5–20 g. Slimme bronnen: Griekse yoghurt, kwark, cottage cheese, eieren, peulvruchten, tofu, tempeh, edamame, en vis of vlees als het eetpatroon dat toestaat.
 - Groente voorop, met contrast: iets fris of zuurs, iets knapperigs, een saus of dip, verse kruiden.
 - Snel waar het kan: de meeste recepten in 5–20 minuten.
-- Hoeveelheden in gram of ml waar het kan, ook bij groente, fruit en kaas (bijvoorbeeld "150 g avocado" in plaats van "1 avocado"); alleen eieren en kleine dingen zoals een teentje knoflook in stuks. Nooit cups of ounces. Ingrediënten uit een gewone Nederlandse supermarkt.
+- Hoeveelheden in gram of ml waar het kan, ook bij groente, fruit en kaas (bijvoorbeeld "150 g avocado" in plaats van "1 avocado"); alleen eieren en kleine dingen zoals een teentje knoflook in stuks; zout, peper en verse kruiden mogen "naar smaak". Nooit cups of ounces. Ingrediënten uit een gewone Nederlandse supermarkt.
 - Naam: kort en pakkend, het gerecht plus de smaakmaker die het verschil maakt, bijvoorbeeld "Crispy tofu-bowl met sesam-limoen" of "Bakplaat-zalm met zoete aardappel en tahin". Gangbare foodwoorden als bowl, wrap en crispy mogen.
 - Stappen: kort, actief en concreet, bijvoorbeeld "Rooster 20 min op 220 °C". Geen lappen tekst.`;
 const CHEF_SCHEMA='[{"naam":"...","personen":2,"voedingsbasis":"per_portie","vezels":"~Xg","eiwitten":"~Xg","koolhydraten":"~Xg","tijd":"20 min","ingredienten":["200 g ingrediënt"],"bereiding":["Concrete stap met tijd en indien nodig temperatuur"]}]';
 function validateChefRecipe(r,persons){
   if(!r||typeof r.naam!=='string'||!r.naam.trim()||r.naam.length>180||r.personen!==persons||r.voedingsbasis!=='per_portie')throw Error('Porties of voedingsbasis ontbreken. Probeer opnieuw.');
   for(const key of ['ingredienten','bereiding'])if(!Array.isArray(r[key])||!r[key].length||!r[key].every(x=>typeof x==='string'&&x.trim()))throw Error('Ingrediënten of bereidingsstappen ontbreken. Probeer opnieuw.');
-  if(!r.ingredienten.every(x=>/\d|[½¼¾⅓⅔]|snuf|naar smaak/i.test(x)))throw Error('Niet alle hoeveelheden zijn duidelijk. Probeer opnieuw.');
+  if(r.ingredienten.filter(x=>!/\d|[½¼¾⅓⅔]|snuf|naar smaak/i.test(x)).length>3)throw Error('Niet alle hoeveelheden zijn duidelijk. Probeer opnieuw.');
   if(typeof r.tijd!=='string'||!/^\d+\s*min$/.test(r.tijd)||parseInt(r.tijd)<1)throw Error('De bereidingstijd ontbreekt. Probeer opnieuw.');
   for(const key of ['vezels','eiwitten','koolhydraten'])if(typeof r[key]!=='string'||!/^~?\d+(?:[.,]\d+)?\s*g$/.test(r[key]))throw Error('Voedingswaarden per portie ontbreken. Probeer opnieuw.');
   return {...r,naam:r.naam.trim(),_basePersonen:persons,personen:persons,_type:(flowChefMode==='tijdens'||flowChefMode==='voorraadsnack'?'snack':genMaaltijd)||undefined};
@@ -8679,13 +8678,6 @@ async function requestChefRecipes(focus,n,previous=[],onRecipe,signal){
   const good=found.filter(Boolean);
   if(!good.length)throw problem||Error('Chef gaf geen volledig voorstel. Probeer opnieuw.');
   return good;
-}
-// Tijdelijk (fase 2): de oude werkwijze in twee stappen, alleen voor de vergelijking in Chef testen. Weg na de meting.
-async function requestChefRecipesOud(focus,n){
-  const {prompt,persons}=chefRecipePrompt(focus,n,[],false);
-  const draft=await callAIPlain(prompt,Math.min(4500,n*1300));
-  const reviewed=await callAIPlain(`Controleer deze receptvoorstellen voor de oorspronkelijke opdracht hieronder. Herstel fouten in hoeveelheden, porties, voedingsschattingen per portie, ontbrekende ingrediënten in stappen, kookvolgorde, totale bereidingstijd en temperaturen waar nodig. Controleer of het praktisch te koken is en culinair samenhangt. Houd rekening met alle opgegeven dieetwensen. Behoud de stijl, de namen en het karakter van de recepten; verbeter alleen wat niet klopt. Verzin geen keurmerk of zekerheid. Geef precies ${n} volledige gecorrigeerde recepten als JSON-array volgens hetzelfde schema, voor ${persons} personen.\nOPDRACHT: ${prompt}\nVOORSTELLEN: ${draft}`,Math.min(4500,n*1300));
-  return validateChefRecipes(safeParseJSON(reviewed),persons,n);
 }
 let _chefGenerating=false;
 function generateRecepten(){return flowChefSubmit();}
