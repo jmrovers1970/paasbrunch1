@@ -40,7 +40,7 @@ Gebruiker: Jim. Primair op iPhone (Safari), in het Nederlands. Loopt (hoofdsport
 
 **De repository is openbaar** (GitHub Pages op een gratis account vereist dat). Er mogen dus nooit sleutels, tokens of persoonsgegevens in code, commits of testbestanden staan.
 
-**Versie**: constante `APP_VERSION = 'lime-YYYYMMDD-N'` bovenin het script. Getoond in Instellingen. Elke nieuwe versie: datum van vandaag en N doornummeren. Huidige basis: `lime-20261003-17`.
+**Versie**: constante `APP_VERSION = 'lime-YYYYMMDD-N'` bovenin het script. Getoond in Instellingen. Elke nieuwe versie: datum van vandaag en N doornummeren. Huidige basis: `lime-20261003-18`.
 
 ### CSS — twee lagen
 - **Oude laag**: eerste `<style>` in `<head>`. Historisch gegroeid, veel `!important`. Ongebruikte regels zijn al verwijderd; de rest wordt deels overstemd. Niet uitbreiden.
@@ -63,11 +63,11 @@ Lettertype: -apple-system, 'SF Pro Text', system-ui, sans-serif.
 
 ### Vaste patronen (hergebruik, niet opnieuw uitvinden)
 - **Invoerbalk** (Coach en Chef): witte pil met lime ronde microfoon (52 px), tekstveld, camera-icoon (44 px), donkere ronde verzendknop. Zodra er tekst staat, neemt een ✕ (`.cc-clear`, `ccClearInput`) de plek van de camera over. Tijdens opname wordt de microfoon een pil "Stop opname" (`[aria-pressed="true"]`). Opnieuw inspreken vervangt de tekst; er wordt nooit automatisch verstuurd.
-- **Brede ingang** `.cc-entry`: witte pil 44 px met label en chevron, opent een venster. Chef *Uit je voorraad*, Coach *Plan vandaag*.
+- **Brede ingang** `.cc-entry`: witte pil 44 px met label en chevron, opent een venster. Chef *Uit je voorraad*. Coach heeft twee halve ingangen naast elkaar (`.cc-entry-half`, icoon + label, geen chevron): *Plan vandaag* en *Ideeën* (voorbeeldvragen); bij privacymodus erachter een ronde donkere slot-knop (`#cc-privacy-badge`, 44 px).
 - **Compacte tegel** (Water, Gevoel, Voeding): één rij van 44 px, links een labelkolom van 72 px (`.cc-water-label`: kop + waarde), rechts de bediening. Gevoel: vijf gezichtjes (`CC_MOODS`, `ccSetMood`, slaat `checkIn` van vandaag op, nog een tik wist). Voeding: twee ringen van 44 px (`renderNutriBar`), tik opent de details.
 - **Chips** `.cc-chip`: 36–40 px hoog, wit, rand `--cc-line`, tekst 14 px/600, gecentreerd, geen afbreking.
 - **Status**: rondje 28 px. Leeg = gepland. Lime met donker vinkje = gedaan/gegeten. Geldt voor beweging, eten, en alle `input[type=checkbox]` (globale regel in cc-design-v1).
-- **Kaart**: wit, 1 px rand, 18 px afronding, geen schaduw. Sectiekop: 13 px hoofdletters, `--cc-muted`.
+- **Kaart**: wit, 1 px rand, 18 px afronding, geen schaduw. Twee niveaus koppen: sectiekop `.cc-section-head` met `.cc-section-title` (20 px/700, gewone hoofdletters: *Jouw dag*, *Jouw week*, *Jouw keuken*) en optioneel rechts `.cc-section-meta` (Jouw dag: "3 van 4 gedaan", `ccRenderDayMeta`); kop in een kaart of groep: 13 px hoofdletters, `--cc-muted` (`vandaag-section-h`).
 - **Lijstkaart** `.cc-list` met rijen `.cc-row` (`ccRow(label, meta, actie)`): 56 px, label 16/600 links, meta 14 muted rechts, chevron (`CC_CHEVRON`), ingesprongen scheidingslijn. Elke rij opent een venster; niets klapt inline open. Sectie `.cc-section` met kop `vandaag-section-h`. Voorbeelden: Chef › *Jouw keuken* (`ccRenderKitchen`), Coach › *Jouw week* (`ritmeRenderSummary`).
 - **Vensters** (`showModal`): kop met titel en sluiten (44 px). Eén niveau terug met `ccOpenFrom(terugFunctie, () => openVenster())`; formulieren sluiten met `ccGoBack()` zodat je terugkomt waar je vandaan kwam. Focus gaat naar de titel en terug naar de knop die opende; Escape sluit.
 - **Weekmenu**: één venster voor Chef en Coach, `ccOpenWeekMenu(offset)`; toevoegen per dag via `showTypedMealSlot(datum)` → `quickEditMeal`.
@@ -106,7 +106,7 @@ Lettertype: -apple-system, 'SF Pro Text', system-ui, sans-serif.
 - Instellingen: `openSettings`, `saveSettings`. Bovenaan één kaart (`.cc-set-row`): naam, AI-sleutel, voorlezen, privacymodus. Daaronder *Meer instellingen*, inklapbaar (`ccToggleSetMore`); elke rij opent een pagina in hetzelfde scherm (`ccSetPage(id)`, terug met ‹): Over jou, Doelen (bewegen per week, vezels, eiwit), Stem en spraak, Wat Coach onthoudt, Coach-tegels, Synchronisatie, Testen, Kopie en opnieuw, Uitleg over de app. Alle velden blijven in de DOM; één *Bewaar* bewaart alles (verborgen op pagina's zonder velden).
 - Opening: `#intro-overlay` (`showIntro`, `flowCheckIntro`, `flowDismissIntro`). Bij elke start, tot *Niet meer tonen* (`hc_intro_hide`). Terug te vinden via Instellingen › Uitleg over de app.
 - Eerste keer: opening → wizard in `#setup-overlay` (`ccWizStart('first'|'again')`, `ccWizRender`, `ccWizFinish`): naam (+ kopie terugzetten), sporten (chips), doelen (steppers), eten (Alles/Vis/Vega + liever niet → `settings.lieverNiet`, gaat mee naar Chef via `_dieetRegel` en naar de coach), AI-sleutel/voorlezen/privacy, klaar met voorbeelden. Opnieuw te starten via Instellingen › Opnieuw instellen (logboek blijft).
-- Voorbeeldvragen: `CC_EXAMPLES` (Loggen, Advies, Inzicht, Plannen), venster via Coach › *Wat kan ik vragen?* (`ccOpenExamples`, tik zet de tekst in de invoer: `ccUseExample`); ook in de opening en aan het eind van de wizard.
+- Voorbeeldvragen: `CC_EXAMPLES` (Loggen, Advies, Inzicht, Plannen), venster via Coach › *Ideeën* (`ccOpenExamples`, tik zet de tekst in de invoer: `ccUseExample`); ook in de opening en aan het eind van de wizard.
 
 ## 4. Vaste regels voor code
 

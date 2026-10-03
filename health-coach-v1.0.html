@@ -1569,7 +1569,7 @@ body .vandaag-section-h{font-size:13px!important;font-weight:650!important;text-
 .cc-water-add{background:var(--cc-lime)}
 .cc-water-add:focus-visible{outline:2px solid var(--cc-green);outline-offset:2px}
 @media (prefers-reduced-motion:reduce){.cc-glass-fill{transition:none}.cc-glass.is-pop{animation:none}}
-#tab-vandaag#tab-vandaag .cc-chip-privacy{background:var(--cc-ink);color:#fff;border-color:var(--cc-ink)}
+#tab-vandaag#tab-vandaag .cc-chip-privacy{flex:none;width:44px;padding:0;background:var(--cc-ink);color:#fff;border-color:var(--cc-ink)}
 #tab-vandaag#tab-vandaag .cc-chip-privacy[hidden]{display:none}
 
 /* ── v11: subtiele watertegel ── */
@@ -1675,8 +1675,11 @@ body .vandaag-section-h{font-size:13px!important;font-weight:650!important;text-
 .cc-chev{flex:none;color:var(--cc-muted)}
 /* ── Sectie met lijstkaart: Chef "Jouw keuken", Coach "Jouw dag" en "Jouw week" ── */
 .cc-section{display:block;margin:8px 0 32px}
-#tab-vandaag#tab-vandaag .cc-section .vandaag-section-h,#tab-vandaag#tab-vandaag .cc-section-h,#tab-recepten#tab-recepten .cc-section .vandaag-section-h{margin:0 0 8px;padding:0;border:0;line-height:1.2}
-#tab-vandaag#tab-vandaag .cc-section-h{margin-top:16px}
+.cc-section-head{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin:0 0 16px}
+.cc-section-head.is-day{margin-top:16px}
+#tab-vandaag#tab-vandaag .cc-section-title,#tab-recepten#tab-recepten .cc-section-title{margin:0;padding:0;border:0;font:700 20px/1.2 -apple-system,'SF Pro Text',system-ui,sans-serif;letter-spacing:-.01em;color:var(--cc-ink);text-transform:none}
+.cc-section-meta{font:400 14px/1.2 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-muted);white-space:nowrap}
+.cc-section-meta.is-done{font-weight:600;color:var(--cc-green)}
 .cc-list{background:var(--cc-card);border:1px solid var(--cc-line);border-radius:18px;overflow:hidden}
 #tab-vandaag#tab-vandaag .cc-row,#tab-recepten#tab-recepten .cc-row,#modal-container .cc-row{all:unset;box-sizing:border-box;position:relative;display:flex;align-items:center;gap:8px;width:100%;min-height:56px;padding:0 16px;color:var(--cc-ink);cursor:pointer;-webkit-tap-highlight-color:transparent}
 .cc-row+.cc-row::before{content:'';position:absolute;left:16px;right:0;top:0;height:1px;background:var(--cc-line)}
@@ -1741,8 +1744,9 @@ body .vandaag-section-h{font-size:13px!important;font-weight:650!important;text-
 .cc-line-open small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font:400 14px/1.2 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-muted)}
 .cc-week-ask{margin-top:16px}
 /* ── Wat kan ik vragen? ── */
-#tab-vandaag#tab-vandaag .cc-link{all:unset;box-sizing:border-box;display:inline-flex;align-items:center;min-height:44px;margin-top:4px;font:600 14px/1.2 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-green);cursor:pointer}
-#tab-vandaag#tab-vandaag .cc-link:focus-visible{outline:2px solid var(--cc-green);outline-offset:2px}
+#tab-vandaag#tab-vandaag .cc-entry-half{flex:1 1 auto;width:auto;min-width:0;justify-content:center;gap:6px;padding:0 12px}
+#tab-vandaag#tab-vandaag .cc-entry-half>span{flex:0 1 auto}
+#tab-vandaag#tab-vandaag .cc-entry-half>svg{flex:none;color:var(--cc-green)}
 #modal-container .cc-ex-note{margin:0 0 16px}
 #modal-container .cc-ex-list{margin-bottom:24px}
 #modal-container .cc-ex-list .cc-row-label{flex:1;min-width:0;white-space:normal;font-weight:500}
@@ -1972,9 +1976,9 @@ body input[type="checkbox"]:disabled{opacity:.4;cursor:default}
       <p class="flow-helper">Eten, bewegen, plannen. Of gewoon een vraag.</p>
       <div class="lime-input-group"><button id="big-praat-btn" class="flow-speak" onclick="bigPraatStart()" aria-label="Spreek je bericht in en controleer de tekst" aria-pressed="false"><svg class="flow-voice-glyph" width="25" height="24" viewBox="0 0 25 24" aria-hidden="true"><path d="M2 10v4m5-8v12m5-16v20m5-17v14m5-10v6" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>Vertel het Coach</button>
       <div class="unified-composer"><label class="sr-only" for="coach-front-input">Je bericht aan Coach</label><textarea id="coach-front-input" rows="1" oninput="ccResizeComposer(this)" placeholder="Typ of spreek in…" onkeydown="if(event.key==='Enter'&&!event.shiftKey&&!event.isComposing){event.preventDefault();submitSmartInput()}"></textarea><button type="button" class="cc-clear" onclick="ccClearInput('coach-front-input','big-praat-status')" aria-label="Tekst wissen"><svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="14" fill="currentColor" opacity=".14"/><path d="m10 10 8 8m0-8-8 8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button><div class="composer-actions"><button class="composer-photo" onclick="document.getElementById('fotolog-input').click()" title="Maak of kies een foto van je eten. Controleer de herkende maaltijd en geschatte voedingswaarden vóór het opslaan."><svg class="cc-icon" data-cc-icon="camera" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6 10 3h4l2 3h4v14H4V6z"/><circle cx="12" cy="13" r="4"/></svg><span>Foto van je eten</span></button><button id="smart-send-btn" class="composer-send" onclick="submitSmartInput()" aria-label="Verstuur" title="Verstuur"><span class="cc-send-arrow" aria-hidden="true">↑</span></button></div></div>
-            </div><div class="cc-chip-row"><button type="button" class="cc-entry" aria-haspopup="dialog" onclick="limePlanDay()"><span>Plan vandaag</span><svg class="cc-chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button><button type="button" id="cc-privacy-badge" class="cc-chip cc-chip-privacy" onclick="openSettings()" hidden aria-label="Privacymodus staat aan. Open instellingen"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Privé</button></div><button type="button" class="cc-link" aria-haspopup="dialog" onclick="ccOpenExamples()">Wat kan ik vragen?</button><div id="smart-input-status" class="composer-status" role="status"></div><div id="big-praat-status" class="speech-transcript" role="status"></div><div id="log-feedback" class="log-feedback" role="status" hidden></div><div class="lime-reply-actions"><button id="lime-stop-reply" onclick="limeStopReply()" aria-label="Antwoord stoppen" title="Antwoord stoppen" hidden><svg class="cc-icon" data-cc-icon="stop" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2"/></svg><span>Stop</span></button><button id="lime-close-reply" onclick="limeCloseReply()" aria-label="Antwoord sluiten" title="Antwoord sluiten; teruglezen via Bekijk gesprek" hidden><svg class="cc-icon" data-cc-icon="close" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div><div id="cc-memory-notice" hidden aria-live="polite"></div><div id="coach-front-chat" class="coach-chat-window" aria-live="polite"></div><button id="lime-forget-conversation" class="conversation-link" onclick="limeAskForget()" hidden>Vergeet dit gesprek</button><button id="conversation-history-btn" class="conversation-link" onclick="showConversationHistory()" hidden>Bekijk gesprek</button>
+            </div><div class="cc-chip-row"><button type="button" class="cc-entry cc-entry-half" aria-haspopup="dialog" onclick="limePlanDay()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4m6-4v4"/></svg><span>Plan vandaag</span></button><button type="button" class="cc-entry cc-entry-half" aria-haspopup="dialog" aria-label="Ideeën: wat kan ik vragen?" onclick="ccOpenExamples()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.4 1 1.1 1 1.8V16h5v-.3c0-.7.4-1.4 1-1.8A6 6 0 0 0 12 3z"/></svg><span>Ideeën</span></button><button type="button" id="cc-privacy-badge" class="cc-chip cc-chip-privacy" onclick="openSettings()" hidden aria-label="Privacymodus staat aan. Open instellingen"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></button></div><div id="smart-input-status" class="composer-status" role="status"></div><div id="big-praat-status" class="speech-transcript" role="status"></div><div id="log-feedback" class="log-feedback" role="status" hidden></div><div class="lime-reply-actions"><button id="lime-stop-reply" onclick="limeStopReply()" aria-label="Antwoord stoppen" title="Antwoord stoppen" hidden><svg class="cc-icon" data-cc-icon="stop" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2"/></svg><span>Stop</span></button><button id="lime-close-reply" onclick="limeCloseReply()" aria-label="Antwoord sluiten" title="Antwoord sluiten; teruglezen via Bekijk gesprek" hidden><svg class="cc-icon" data-cc-icon="close" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div><div id="cc-memory-notice" hidden aria-live="polite"></div><div id="coach-front-chat" class="coach-chat-window" aria-live="polite"></div><button id="lime-forget-conversation" class="conversation-link" onclick="limeAskForget()" hidden>Vergeet dit gesprek</button><button id="conversation-history-btn" class="conversation-link" onclick="showConversationHistory()" hidden>Bekijk gesprek</button>
     </section>
-    <h2 class="vandaag-section-h cc-section-h">Jouw dag</h2>
+    <div class="cc-section-head is-day"><h2 class="cc-section-title">Jouw dag</h2><span id="cc-day-meta" class="cc-section-meta" aria-live="polite"></span></div>
     <div id="ritme-tile-host">    <section id="today-nutri-bar" data-ritme-tile="nutrition" aria-label="Voeding vandaag"></section>
 
     <!-- Activiteiten vandaag -->
@@ -2179,7 +2183,7 @@ body input[type="checkbox"]:disabled{opacity:.4;cursor:default}
 'use strict';
 
 // ─── VERSION CHECK (forceert Safari herlading bij nieuwe versie) ──────────────
-const APP_VERSION = 'lime-20261003-17';
+const APP_VERSION = 'lime-20261003-18';
 // Eén plek voor de modellen: Sonnet voor gesprekken en recepten, Haiku voor snelle achtergrondtaken.
 const CC_MODEL_MAIN = 'claude-sonnet-4-6';
 const CC_MODEL_FAST = 'claude-haiku-4-5-20251001';
@@ -4913,6 +4917,8 @@ function ccWizFinish(){
  if(first){saveLocal();const app=document.getElementById('app');app.style.display='flex';app.style.flexDirection='column';initApp();}
  else{saveAndSync();closeSettings();renderAll();showBanner('green','Je instellingen zijn bijgewerkt.');}
 }
+// "Jouw dag": hoeveel van wat er vandaag staat is gedaan of gegeten.
+function ccRenderDayMeta(){const el=document.getElementById('cc-day-meta');if(!el)return;const d=flowDay(today()),acts=(d.activiteiten||[]).filter(a=>a&&a.type!=='rest'),meals=Object.values(d.maaltijden||{}).flat().filter(Boolean),total=acts.length+meals.length,done=acts.filter(a=>a.afgevinkt).length+meals.filter(m=>m.gegeten).length;el.textContent=!total?'':done===total?'Alles gedaan ✓':`${done} van ${total} gedaan`;el.classList.toggle('is-done',!!total&&done===total);}
 function ccApplyPrivacyBadge(){const b=document.getElementById('cc-privacy-badge');if(b)b.hidden=!settings.privacyModus;}
 
 function setWater(n) {
@@ -7414,7 +7420,7 @@ function ccRow(label,meta,action){return `<button type="button" class="cc-row" a
 function ccRenderKitchen(){
  const el=document.getElementById('cc-kitchen');if(!el)return;
  const n=myRecipes().filter(r=>!r.flowDeleted).length,p=ccPlannedCount();
- el.innerHTML=`<h2 class="vandaag-section-h">Jouw keuken</h2><div class="cc-list">${ccRow('Mijn recepten',n?String(n):'Nog leeg','ccOpenRecipes()')}${ccRow('Weekmenu',p?p+' gepland':'Niets gepland','ccOpenWeekMenu(0)')}${ccRow('Boodschappen','','showShoppingList()')}${ccRow('Receptinstellingen',`${genPersonen}p · ${{vlees:'Alles',vis:'Vis',vega:'Vega'}[genDieet]||'Alles'}`,'ccOpenRecipeSettings()')}</div>`;
+ el.innerHTML=`<div class="cc-section-head"><h2 class="cc-section-title">Jouw keuken</h2></div><div class="cc-list">${ccRow('Mijn recepten',n?String(n):'Nog leeg','ccOpenRecipes()')}${ccRow('Weekmenu',p?p+' gepland':'Niets gepland','ccOpenWeekMenu(0)')}${ccRow('Boodschappen','','showShoppingList()')}${ccRow('Receptinstellingen',`${genPersonen}p · ${{vlees:'Alles',vis:'Vis',vega:'Vega'}[genDieet]||'Alles'}`,'ccOpenRecipeSettings()')}</div>`;
 }
 function ccOpenRecipeSettings(){showModal(`<div class="modal-header"><h2>Receptinstellingen</h2>${flowClose()}</div><div class="cc-recipe-settings"><div class="cc-setting-row"><span>Personen</span><div class="cc-stepper"><button type="button" id="chef-personen-min" aria-label="Minder personen" onclick="flowSetPersons(genPersonen-1)" ${genPersonen<=1?'disabled':''}>−</button><strong id="chef-personen" aria-live="polite">${genPersonen}</strong><button type="button" id="chef-personen-plus" aria-label="Meer personen" onclick="flowSetPersons(genPersonen+1)" ${genPersonen>=6?'disabled':''}>+</button></div></div><div class="cc-setting-row"><span>Ideeën</span><div class="cc-seg" role="group" aria-label="Aantal ideeën">${[1,2,3].map(n=>`<button type="button" class="gen-count-pill" aria-pressed="${genCount===n}" onclick="setGenCount(${n})">${n}</button>`).join('')}</div></div><div class="cc-setting-row"><span>Eten</span><div class="cc-seg" role="group" aria-label="Eetvoorkeur">${[['vlees','Alles'],['vis','Vis'],['vega','Vega']].map(([v,l])=>`<button type="button" class="gen-diet-pill" data-dieet="${v}" aria-pressed="${genDieet===v}" onclick="flowSetDieet('${v}')">${l}</button>`).join('')}</div></div></div><p class="cc-sheet-note">Chef onthoudt dit voor je volgende recepten.</p>`);}
 function ccOpenRecipes(){flowRecipeSelecting=false;flowRecipeSelected.clear();ccRecipeQuery='';showModal(`<div class="modal-header"><h2>Mijn recepten</h2>${flowClose()}</div><div id="food-rec-content"></div>`);flowRecipeList();}
@@ -7555,7 +7561,7 @@ function ritmeRenderTiles(){
  const matches=ritmeHighlightActivities(ritmeActivities(ritmeRange().dates)).filter(a=>a.afgevinkt),groups=ritmeGroups(matches),count=matches.length,km=groups.reduce((s,g)=>s+g.km,0),known=groups.reduce((s,g)=>s+g.knownKm,0),label=settings.ritmeActivityText||ritmeTypeLabel(settings.ritmeActivityType||'other');
  put('ritme-highlight',`<div class="ritme-tile-head"><h2>${settings.ritmeActivityType||settings.ritmeActivityText?escapeText(label):'Volg een activiteit'}</h2><button onclick="limeChooseActivity()">Kies activiteit</button></div>${settings.ritmeActivityType||settings.ritmeActivityText?`<div class="ritme-food-number">${known?ritmeN(km):count}<small> ${known?'km':'keer'}</small></div><p>${count} afgeronde ${count===1?'activiteit':'activiteiten'} deze week${known<count?' · afstand niet overal ingevuld':''}.</p>`:'<p>Kies bijvoorbeeld fietsen of wandelen. Hier zie je hoe vaak je dat deze week hebt gedaan en hoeveel kilometer je hebt gelogd.</p>'}`);
  try{ccRenderWater();}catch(_){}
- ccRenderMood();
+ ccRenderMood();ccRenderDayMeta();
  ritmeApplyTiles();
 }
 function ritmeFoodIdea(key){flowGoChef('auto');genFocus=key;flowRenderChef();document.getElementById('gen-focus-input').value=`Ik zoek een makkelijk ${key==='vezels'?'vezelrijk':'eiwitrijk'} idee voor mijn volgende maaltijd.`;ccResizeComposer(document.getElementById('gen-focus-input'));document.getElementById('gen-focus-input').focus();}
@@ -7770,7 +7776,7 @@ function limeCloseReply(){
 function ritmeRenderSummary(){
  const el=document.getElementById('cc-week');if(!el)return;
  const s=ritmeStats(ritmeRange().dates),p=ccPlannedCount(),tips=(data.savedTips||[]).length;
- el.innerHTML=`<h2 class="vandaag-section-h">Jouw week</h2><div class="cc-list">${ccRow('Weekoverzicht',s.minutes?ccMin(s.minutes)+' bewogen':`${s.done} ${s.done===1?'activiteit':'activiteiten'}`,'ritmeOpenInsights()')}${ccRow('Weekmenu',p?p+' gepland':'Niets gepland','ccOpenWeekMenu(0)')}${tips?ccRow('Bewaarde tips',String(tips),'ritmeSavedTips()'):''}</div>`;
+ el.innerHTML=`<div class="cc-section-head"><h2 class="cc-section-title">Jouw week</h2></div><div class="cc-list">${ccRow('Weekoverzicht',s.minutes?ccMin(s.minutes)+' bewogen':`${s.done} ${s.done===1?'activiteit':'activiteiten'}`,'ritmeOpenInsights()')}${ccRow('Weekmenu',p?p+' gepland':'Niets gepland','ccOpenWeekMenu(0)')}${tips?ccRow('Bewaarde tips',String(tips),'ritmeSavedTips()'):''}</div>`;
 }
 
 function limeValidateData(value){
