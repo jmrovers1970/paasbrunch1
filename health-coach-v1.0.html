@@ -221,24 +221,8 @@ label { display: block; font-size: 14px; font-weight: 600; color: var(--text-2);
   margin-bottom: 22px; gap: 12px;
 }
 .page-header h1 { font-size: 26px; }
-.icon-btn {
-  background: var(--card); border: 1px solid var(--border-strong);
-  color: var(--text-2); cursor: pointer;
-  min-height: 44px; min-width: 44px;
-  width: 44px; height: 44px; border-radius: 12px;
-  display: flex; align-items: center; justify-content: center;
-}
-.icon-btn:active { background: var(--card2); }
 
 /* ─── VANDAAG PROGRESS ─── */
-.today-progress {
-  display: flex; align-items: center; gap: 14px;
-  padding: 14px 16px; margin-bottom: 14px;
-  background: var(--card); border: 1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-sm);
-}
-.today-progress.complete { background: var(--accent-food-soft); border-color: #bbf7d0; }
 
 /* ─── CHECK-IN ─── */
 
@@ -1179,8 +1163,6 @@ button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-v
 .nutrition-details th,.nutrition-details td{padding:10px 5px;text-align:left;border-bottom:1px solid var(--border)}
 .nutrition-details th{font-weight:650}.nutrition-details thead{color:var(--muted)}
 .nutrition-extra{font-size:14px}.nutrition-extra summary{cursor:pointer;padding:10px 0}.nutrition-extra p{margin:8px 0}
-.movement-summary{margin:9px 0 12px}
-.movement-next{font-size:14px;line-height:1.5;font-weight:600}.movement-next span{font-weight:400;color:var(--muted)}
 .conversation-history{max-height:60vh;overflow-y:auto;margin-bottom:16px}.conversation-message{padding:12px 0;border-bottom:1px solid var(--border);font-size:14px;line-height:1.6;overflow-wrap:anywhere}.conversation-message strong{color:var(--muted);font-size:12px}
 @media(max-width:360px){.coach-front-card{padding:13px!important}}
 
@@ -1219,7 +1201,6 @@ button,input,textarea{font-family:inherit}
 #today-nutri-bar{margin:0 0 26px}
 .day-section{background:transparent;border:0;border-top:0!important;border-radius:0;padding:0 0 22px;margin-bottom:20px;box-shadow:none;border-bottom:1px solid var(--border)}
 .vandaag-section-h{font-size:20px;font-weight:750;text-transform:none;letter-spacing:-.6px;color:var(--ink)}
-.day-section .icon-btn{font-size:12px;font-weight:700;border:0;background:none;color:var(--accent-move)!important;width:auto;min-width:0;padding:8px;box-shadow:none;min-height:44px}.movement-next{font-size:15px;margin-top:6px}.movement-summary{margin-bottom:12px}
 .type-icon{display:none}
 .meal-row{padding:14px 0;min-height:66px}.meal-label{font-size:12px;font-weight:650}.meal-name{font-size:16px}
 .collapse-card{background:transparent;border:0;border-bottom:1px solid var(--border);border-radius:0;box-shadow:none}
@@ -1247,11 +1228,8 @@ button:focus-visible,summary:focus-visible,input:focus-visible,textarea:focus-vi
 .conversation-link{color:#315346}
 .coach-front-card .coach-bubble-ai{background:#fff;color:var(--text)}
 .tab-btn.active,.tab-btn.active:last-child{background:var(--acid);color:#243752}.btn-primary{background:#315346;color:#fff;border-color:#315346}
-.meal-section-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:4px}
-.meal-add-btn{min-height:44px;border:0;background:transparent;color:#315346;font:inherit;font-size:13px;font-weight:700;padding:8px 0;cursor:pointer}
 .meal-entry{padding:20px 0;border-bottom:1px solid var(--border);display:grid;grid-template-columns:minmax(0,1fr);gap:7px}
 .meal-entry:last-child{border-bottom:0}
-.meal-state{font-size:11px;font-weight:500;padding:2px 7px;border:1px solid #d3d8cd;border-radius:5px}.meal-state.is-eaten{background:#edf5d5;border-color:#cedea3;color:#465332}
 .meal-entry-nutrients{display:flex;flex-wrap:wrap;gap:5px 15px;color:#5d665f;font-size:12px;line-height:1.5;font-variant-numeric:tabular-nums}
 .meal-entry-options{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}.meal-entry-options button{flex:1;min-width:90px}
 .chef-proposal{border:1px solid var(--border);border-radius:14px;padding:20px;margin:18px 0;background:#fff;overflow-wrap:anywhere}
@@ -1269,10 +1247,9 @@ body{font-family:Inter,'Helvetica Neue',Arial,sans-serif}.brand-header{padding-t
 .flow-speak.listening,.flow-speak[aria-pressed=true]{background:#315346;border-color:#315346;color:#fff}.flow-voice-glyph{flex-shrink:0;display:block!important}.flow-speak:disabled{opacity:.6;cursor:wait}
 .unified-composer{background:white;border:1px solid #d5decc;padding:11px 12px;margin-top:12px;border-radius:11px}.unified-composer:focus-within{border-color:#315346;box-shadow:0 0 0 2px #e1e9cf}
 #coach-front-input{font-size:15px;min-height:42px;max-height:180px}#coach-front-input::placeholder,#gen-focus-input::placeholder{color:#687286}.composer-actions{margin-top:4px}.composer-actions button{min-height:40px}.composer-actions .composer-send{background:#315346;color:#fff;font-size:12px;border-radius:8px}.composer-photo{font-size:12px;background:transparent}.composer-status,.speech-transcript{color:#4c5a6a;font-size:11px;line-height:1.5;margin-top:8px}
-.flow-text-action{border:0;background:transparent;color:#315346;font:inherit;font-size:12px;font-weight:650;cursor:pointer;min-height:40px;padding:8px 0;text-align:left}.flow-status{font-size:12px;color:#506079;line-height:1.5;margin:9px 0}.flow-error{font-size:13px;color:#a12835;margin:12px 0}.flow-empty-note{font-size:13px;line-height:1.5;color:#647084;padding:8px 0}
+.flow-text-action{border:0;background:transparent;color:#315346;font:inherit;font-size:12px;font-weight:650;cursor:pointer;min-height:40px;padding:8px 0;text-align:left}.flow-status{font-size:12px;color:#506079;line-height:1.5;margin:9px 0}.flow-error{font-size:13px;color:#a12835;margin:12px 0}
 .day-section{margin-bottom:17px;padding-bottom:18px}.vandaag-section-h{font-size:19px;letter-spacing:-.5px}.flow-week-strip{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;margin:14px 0 8px}.flow-day{display:flex;flex-direction:column;align-items:center;gap:6px;min-width:0;background:transparent;border:0;color:#56627a;font:inherit;font-size:10px;cursor:pointer;padding:5px 0;border-radius:8px;min-height:74px}.flow-day.is-today{background:#edf1dd;color:#233e53}.flow-day-mark{display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:9px;border:1px solid #d7ddcf;color:#586783;background:#fff;font-size:13px;font-weight:650}.flow-day[data-state=planned] .flow-day-mark{border:2px solid #677dbf;color:#315346}.flow-day[data-state=done] .flow-day-mark{background:var(--acid);border-color:#b1c74d;color:#263c44}.flow-day[data-state=partial] .flow-day-mark{background:linear-gradient(0deg,var(--acid) 50%,#fff 50%);border-color:#aaba76;color:#263c44}.flow-day-count{font-variant-numeric:tabular-nums;font-size:10px}.flow-week-caption{display:flex;align-items:center;justify-content:space-between;gap:12px;color:#647087;font-size:11px}.flow-week-caption button,.flow-week-nav button{border:0;background:none;color:#315346;font:inherit;font-size:12px;min-height:40px;cursor:pointer;padding:6px}
-.flow-activity-row{display:flex;align-items:center;gap:11px;padding:14px 0;border-top:1px solid var(--border)}.flow-activity-state{width:35px;height:35px;border:1.5px solid #7f92ab;background:white;border-radius:11px;flex-shrink:0;color:#233749;cursor:pointer;font-size:17px}.flow-activity-state.is-done{background:var(--acid);border-color:#a8bf46}.flow-activity-info{border:0;background:none;text-align:left;min-width:0;flex:1;color:var(--text);font:inherit;cursor:pointer}.flow-activity-info strong{font-size:15px;line-height:1.4;display:block}.flow-activity-info span{display:block;color:#617087;font-size:12px;margin-top:3px}.movement-summary{margin-bottom:10px}
-.flow-meal-row{padding:14px 0;border-bottom:1px solid var(--border)}.flow-meal-row:last-child{border:0}.flow-meal-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:11px;color:#687284;margin-bottom:3px}.flow-meal-state{display:flex;gap:6px;align-items:center;font:inherit;font-size:10px;min-height:28px;color:#5c687b;background:transparent;border:0;cursor:pointer;padding:4px 0 4px 8px}.flow-meal-state span{height:7px;width:7px;border-radius:50%;border:1px solid #8797b4;background:white}.flow-meal-state.is-eaten span{background:#a5bf32;border-color:#80961a}.flow-meal-state.is-eaten{color:#4f6330}.flow-meal-title{display:block;width:100%;border:0;background:transparent;text-align:left;color:var(--text);font:inherit;font-size:16px;letter-spacing:-.25px;font-weight:650;line-height:1.4;padding:0;cursor:pointer}.flow-meal-row .meal-entry-nutrients{font-size:11px;margin-top:5px;gap:12px}.meal-add-btn{font-size:12px}
+.flow-meal-row{padding:14px 0;border-bottom:1px solid var(--border)}.flow-meal-row:last-child{border:0}.flow-meal-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:11px;color:#687284;margin-bottom:3px}.flow-meal-title{display:block;width:100%;border:0;background:transparent;text-align:left;color:var(--text);font:inherit;font-size:16px;letter-spacing:-.25px;font-weight:650;line-height:1.4;padding:0;cursor:pointer}.flow-meal-row .meal-entry-nutrients{font-size:11px;margin-top:5px;gap:12px}
 #today-nutri-bar{margin-bottom:20px}
 .flow-chef-card h1{font-size:34px;margin:0}.flow-chef-card .flow-helper{margin-bottom:15px}.flow-chef-card #gen-focus-input{margin:12px 0 0;display:block;background:#fff;border:1px solid #d5decc;border-radius:11px;width:100%;min-height:76px;font:inherit;font-size:15px;padding:12px;color:var(--text);resize:vertical;max-height:200px}.flow-extra{margin-top:13px;border-top:1px solid var(--border)}.flow-extra>summary{min-height:43px;padding:12px 0;cursor:pointer;font-size:12px;font-weight:600;color:#526156;list-style:none;display:flex;align-items:center;gap:10px;justify-content:space-between}.flow-extra>summary:after{content:'+';font-size:17px;color:#71835a;flex-shrink:0}.flow-extra[open]>summary:after{content:'−'}.flow-extra>summary::-webkit-details-marker{display:none}
 .flow-advice{margin:12px 0 20px;background:#fff;border:1px solid var(--border);border-radius:15px;padding:20px}.flow-advice h2{font-size:21px;line-height:1.25;letter-spacing:-.6px}.flow-timeline{list-style:none;padding:0;margin:18px 0}.flow-timeline li{position:relative;border-left:2px solid #d7e4b2;padding:0 0 20px 18px;margin-left:5px}.flow-timeline li:before{content:'';width:9px;height:9px;background:var(--acid);border:1px solid #a3b957;border-radius:3px;position:absolute;left:-6px;top:4px}.flow-timeline li:last-child{padding-bottom:0}.flow-timeline strong{font-size:13px;color:#315346}.flow-timeline p{font-size:14px;line-height:1.6;margin-top:5px}.flow-advice-question{background:#f0f4e1;border-radius:9px;padding:12px;font-size:14px}
@@ -1280,7 +1257,7 @@ body{font-family:Inter,'Helvetica Neue',Arial,sans-serif}.brand-header{padding-t
 .flow-action-stack{display:flex;flex-direction:column;gap:10px;margin-top:20px}.flow-action-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}.btn{font-size:13px;min-height:44px;border-radius:9px;box-shadow:none}.btn-primary{background:#315346;color:#fff;border:1px solid #315346}.btn-secondary{background:#f1f4e8;color:#344d70;border:1px solid #ccd8bc}.btn-ghost{color:#315346;background:transparent}.btn:disabled,button:disabled{opacity:.48;cursor:not-allowed}.flow-subhead{margin:24px 0 12px}.flow-review-note{background:#f4f5e4;padding:14px;border-radius:10px;font-size:13px;margin:16px 0}.flow-review-note ul{padding-left:18px;margin-top:8px}.flow-check{display:flex;align-items:flex-start;gap:10px;font-size:12px;line-height:1.5;margin:15px 0}.flow-check input{width:18px;height:18px;flex-shrink:0;accent-color:#315346}
 .flow-week-nav{display:flex;justify-content:space-between;align-items:center;gap:8px}.flow-week-nav strong{font-size:13px}.flow-week-list{margin:12px 0 20px}.flow-week-list>button{display:flex;gap:17px;align-items:flex-start;width:100%;text-align:left;border:0;border-bottom:1px solid var(--border);background:none;padding:14px 0;color:#263d59;cursor:pointer;font:inherit;font-size:13px}.flow-week-list>button>strong{min-width:50px;font-size:12px}.flow-week-list small{display:block;font-size:11px;color:#687387;margin-top:4px}.flow-day-meal{padding:12px 0;border-bottom:1px solid var(--border)}.flow-day-meal small{display:block;color:#6c7583;font-size:11px;margin-bottom:4px}.flow-day-meal strong{font-size:14px}.flow-recipe-meta{font-size:12px;color:#60718b;margin-bottom:8px}.flow-recipe-actions{display:flex;gap:10px;margin:22px 0}.flow-recipe-actions .btn{flex:1;min-height:48px}.flow-portions{flex-direction:row;align-items:center;justify-content:space-between}.flow-portions select{width:80px}.flow-recipe-body h3{font-size:16px;margin:24px 0 12px}.flow-recipe-body ul,.flow-recipe-body ol{padding-left:21px;font-size:14px;line-height:1.65}.flow-recipe-body li{margin:7px 0}.chef-proposal{padding:18px;box-shadow:none}.chef-proposal-actions{gap:8px}.chef-proposal-actions .btn{font-size:12px}.chef-proposal summary{font-size:13px}
 #intro-overlay{background:#f7f7f2f5;padding:22px;overflow-y:auto}.flow-intro{max-width:430px;width:100%;margin:auto;background:#fff;border:1px solid var(--border);border-radius:20px;padding:26px;color:var(--text)}.flow-intro .wordmark{font-size:25px}.flow-intro h1{font-size:32px;letter-spacing:-1.2px;line-height:1.1;margin:25px 0 10px}.flow-intro>p{font-size:14px;line-height:1.5;color:#59677c}.flow-intro-grid{display:grid;gap:13px;margin:23px 0}.flow-intro-grid>div{display:grid;grid-template-columns:30px 1fr;column-gap:12px;align-items:start}.flow-intro-grid b{background:var(--acid);border-radius:8px;color:#2a3e47;width:29px;height:29px;display:flex;align-items:center;justify-content:center;font-size:12px}.flow-intro-grid strong{font-size:14px;line-height:1.4}.flow-intro-grid span{grid-column:2;font-size:12px;color:#626e82;line-height:1.5}.flow-intro-example{background:#f0f4e1;border-radius:12px;padding:14px;margin:19px 0;font-size:12px;line-height:1.5}.flow-intro-example strong{display:block;margin-top:9px;color:#315346}.flow-intro .flow-privacy{font-size:10px;color:#6c7580;margin-top:12px}
-.tab-btn.active,.tab-btn.active:last-child{background:var(--acid);color:#243f4b}.tab-btn{font-size:15px}#tabs{height:calc(66px + env(safe-area-inset-bottom,0px));padding-top:7px;padding-bottom:calc(7px + env(safe-area-inset-bottom,0px))}#today-progress-mini{display:none}
+.tab-btn.active,.tab-btn.active:last-child{background:var(--acid);color:#243f4b}.tab-btn{font-size:15px}#tabs{height:calc(66px + env(safe-area-inset-bottom,0px));padding-top:7px;padding-bottom:calc(7px + env(safe-area-inset-bottom,0px))}
 @media(max-width:390px){.brand-header{padding-left:15px;padding-right:15px}.wordmark{font-size:23px}.flow-brand-tag{font-size:9px;margin-left:7px}.brand-settings{font-size:10px}.composer-heading h2,.flow-chef-card h1{font-size:29px}.flow-helper{font-size:12px}.flow-speak{font-size:14px}.flow-week-strip{gap:3px}.flow-day-mark{width:29px;height:29px}.modal{padding:19px!important}.flow-form-grid{gap:10px}.flow-intro{padding:22px}.flow-intro h1{font-size:29px}}
 @media(max-height:650px){.flow-intro{padding:20px}.flow-intro h1{font-size:27px;margin-top:16px}.flow-intro-grid{gap:10px;margin:16px 0}.flow-intro-example{margin:12px 0}.flow-intro .flow-privacy{margin-top:8px}.coach-front-card{padding:18px!important}.composer-heading h2{font-size:28px}.flow-speak{min-height:46px}.flow-helper{margin:6px 0 12px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
@@ -1294,30 +1271,23 @@ body{font-family:Inter,'Helvetica Neue',Arial,sans-serif}.brand-header{padding-t
 /* Mijn ritme: expressive data, quiet controls, one coherent visual system. */
 [hidden]{display:none!important}
 .ritme-kicker{display:block;font-size:10px;letter-spacing:.09em;text-transform:uppercase;font-weight:650;color:#63704d;line-height:1.5}
-.ritme-tile-head button,.ritme-move-lead button,.ritme-link,.ritme-settings-header>button{font:inherit;font-size:12px;border:0;background:none;color:#315346;padding:8px 0;min-height:40px;cursor:pointer;text-align:left}
+.ritme-tile-head button,.ritme-link,.ritme-settings-header>button{font:inherit;font-size:12px;border:0;background:none;color:#315346;padding:8px 0;min-height:40px;cursor:pointer;text-align:left}
 .ritme-plan-actions{gap:8px 16px}.ritme-plan-actions button:nth-child(2){color:#315346;font-weight:700;border-bottom:2px solid #bfd547}
 #ritme-tile-host{display:flex;flex-direction:column;gap:15px}#ritme-tile-host>section{margin:0!important}
-#ritme-movement{padding:20px!important;border:1px solid #d8dfcd!important;border-radius:16px!important;background:linear-gradient(145deg,#fff 0%,#f4f7e6 100%)!important}
-#ritme-movement>.vandaag-section-h{margin-bottom:0}#ritme-movement>div:nth-child(2){display:none}#ritme-movement .movement-summary{margin:0}#ritme-movement .vandaag-section-h{font-size:21px}
-.ritme-move-lead{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:16px 0 0}.ritme-move-lead>div>strong{font-size:42px;line-height:1.2;letter-spacing:-1.5px;display:block}.ritme-move-lead>div>strong>span{font-size:15px;font-weight:500;letter-spacing:-.3px}.ritme-move-lead button{max-width:95px;text-align:right;line-height:1.4}
-.ritme-track{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:9px;margin:18px 0 10px}.ritme-track-day{min-width:0;background:transparent;border:0;display:flex;flex-direction:column;align-items:center;gap:5px;font:inherit;color:#546278;padding:5px 1px;border-radius:9px;cursor:pointer}.ritme-track-day.is-today{background:#e8efce}.ritme-track-day>span:not(.ritme-track-stack){font-size:10px}.ritme-track-day>strong{font-size:11px;font-weight:500}.ritme-track-day small{font-size:9px}.ritme-track-stack{height:76px;display:flex;flex-direction:column-reverse;justify-content:flex-start;gap:3px;width:100%;max-width:42px;padding:0 3px}.ritme-track-stack i{height:12px;border-radius:4px;display:block;flex-shrink:0;background:var(--activity-color);border:1px solid var(--activity-color)}.ritme-track-stack .planned{background:transparent;border-style:dashed}.ritme-track-stack .empty{height:3px;background:#dde4ce;border:0}
-.ritme-track-key{display:flex;flex-wrap:wrap;gap:7px 14px;font-size:10px;color:#5e6b7d}.ritme-track-key>span{display:flex;align-items:center;gap:5px}.ritme-track-key i{width:7px;height:7px;border-radius:2px}.ritme-track-key .ritme-key-explain{flex-basis:100%;color:#6c7581;margin-top:3px}
-.ritme-move-numbers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px;margin:18px 0;border-top:1px solid #dfe4d3;padding-top:17px}.ritme-move-numbers>button{font:inherit;background:none;border:0;color:var(--text);text-align:left;padding:0;cursor:pointer;min-width:0}.ritme-move-numbers>button>span{font-size:11px;display:block;line-height:1.35;min-height:30px}.ritme-move-numbers>button>strong{font-size:27px;letter-spacing:-1px;display:block;margin:2px 0}.ritme-move-numbers strong small{font-size:12px;font-weight:500;letter-spacing:0}.ritme-move-numbers>button>small{display:block;font-size:10px;color:#647087;line-height:1.45}.ritme-today-label{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:#6b775b;margin:19px 0 0}.flow-activity-row{padding:12px 0}.flow-activity-row:last-child{padding-bottom:0}
-#ritme-meals{padding:18px 2px!important}.ritme-custom-tile{background:#fff;border:1px solid #d9e0ce;border-radius:16px;padding:20px}.ritme-tile-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}.ritme-tile-head h2{font-size:19px;letter-spacing:-.5px;margin:0}.ritme-tile-head button{padding:3px 0;min-height:32px}.ritme-custom-tile p{font-size:13px;line-height:1.6;color:#57657a;margin:9px 0}.ritme-custom-tile>small{font-size:10px;color:#6d7888}.ritme-food-number{font-size:38px;font-weight:700;letter-spacing:-1.2px;margin:6px 0}.ritme-food-number small{font-size:15px;color:#6c788a;font-weight:400;letter-spacing:0}.ritme-meter{height:7px;background:#e9eddc;border-radius:9px;overflow:hidden;margin:12px 0}.ritme-meter>span{display:block;height:100%;background:#aac33b;border-radius:9px}.ritme-link{display:block;font-weight:600;margin-top:7px}.ritme-next-name{display:block;font-size:23px;letter-spacing:-.7px;line-height:1.3}.ritme-menu-row{display:block;text-align:left;width:100%;border:0;background:none;padding:12px 0;font:inherit;color:var(--text);cursor:pointer;border-bottom:1px solid #e5e9df}.ritme-menu-row span{display:block;font-size:10px;color:#6b7889;margin-bottom:4px}.ritme-menu-row strong{font-size:14px;font-weight:600;line-height:1.45}.ritme-menu-row:last-child{border:0}
+.ritme-custom-tile{background:#fff;border:1px solid #d9e0ce;border-radius:16px;padding:20px}.ritme-tile-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}.ritme-tile-head h2{font-size:19px;letter-spacing:-.5px;margin:0}.ritme-tile-head button{padding:3px 0;min-height:32px}.ritme-custom-tile p{font-size:13px;line-height:1.6;color:#57657a;margin:9px 0}.ritme-custom-tile>small{font-size:10px;color:#6d7888}.ritme-food-number{font-size:38px;font-weight:700;letter-spacing:-1.2px;margin:6px 0}.ritme-food-number small{font-size:15px;color:#6c788a;font-weight:400;letter-spacing:0}.ritme-meter{height:7px;background:#e9eddc;border-radius:9px;overflow:hidden;margin:12px 0}.ritme-meter>span{display:block;height:100%;background:#aac33b;border-radius:9px}.ritme-link{display:block;font-weight:600;margin-top:7px}.ritme-next-name{display:block;font-size:23px;letter-spacing:-.7px;line-height:1.3}.ritme-menu-row{display:block;text-align:left;width:100%;border:0;background:none;padding:12px 0;font:inherit;color:var(--text);cursor:pointer;border-bottom:1px solid #e5e9df}.ritme-menu-row span{display:block;font-size:10px;color:#6b7889;margin-bottom:4px}.ritme-menu-row strong{font-size:14px;font-weight:600;line-height:1.45}.ritme-menu-row:last-child{border:0}
 .ritme-periods{display:flex;background:#edf0e3;border-radius:11px;padding:4px;gap:4px;margin:12px 0}.ritme-periods button{flex:1;font:inherit;font-size:12px;color:#53637b;border:0;background:transparent;padding:9px 5px;min-height:39px;border-radius:8px;cursor:pointer}.ritme-periods button[aria-pressed=true]{background:#fff;color:#315346;font-weight:650}.ritme-period-note{font-size:11px;color:#6b778a;line-height:1.5;margin:12px 0}.ritme-insight-lead{display:flex;align-items:center;gap:16px;background:#edf4d3;padding:17px 20px;border-radius:12px;margin:18px 0}.ritme-insight-lead>strong{font-size:52px;letter-spacing:-2px;line-height:1}.ritme-insight-lead>span{font-size:16px;line-height:1.5}.ritme-insight-lead small{font-size:11px;color:#64714f}.ritme-comparisons{display:grid;grid-template-columns:1fr 1fr;gap:12px}.ritme-comparisons>button{background:#f8f9f4;border:1px solid #dce2d2;border-radius:11px;padding:14px;text-align:left;color:var(--text);font:inherit;cursor:pointer}.ritme-comparisons>button>span:first-child{display:block;font-size:12px;line-height:1.4}.ritme-comparisons strong{font-size:27px;display:block;letter-spacing:-.7px;margin:5px 0}.ritme-comparisons strong small{font-size:12px;font-weight:400}.ritme-comparisons>button>small{font-size:10px;color:#627087;display:block}.ritme-compare-bar{display:block;margin-top:12px}.ritme-compare-bar i,.ritme-compare-bar b{display:block;height:5px;background:#9db444;border-radius:4px;margin-top:4px}.ritme-compare-bar b{background:#bdc7d9}.ritme-caption{font-size:10px;color:#687588;line-height:1.5;margin:10px 0 20px}.ritme-food-insight{padding:20px 0;border-top:1px solid #d8dfcd}.ritme-food-insight h3{margin:0 0 10px}.ritme-food-insight p{font-size:13px;line-height:1.6;margin:9px 0}.ritme-food-insight>div{display:flex;justify-content:space-between;gap:12px;font-size:12px;padding:10px 0;border-bottom:1px solid #e8ecdf}.ritme-food-insight>small{display:block;color:#697587;font-size:10px;line-height:1.6;margin:12px 0}.ritme-reflection{padding:18px;background:#f0f3e7;border-radius:12px}.ritme-reflection>p{font-size:14px;line-height:1.6;margin:10px 0 18px}#ritme-advice-status{font-size:12px;color:#687588}#ritme-advice-answer section{border-top:1px solid #dbe2cb;padding:13px 0}#ritme-advice-answer h3{font-size:13px;color:#315346}#ritme-advice-answer p{font-size:14px;line-height:1.6;margin-top:6px}
 .ritme-tile-options{margin:18px 0}.ritme-tile-options label{display:flex;align-items:center;gap:13px;padding:12px 0;border-bottom:1px solid #e0e6d5;cursor:pointer}.ritme-tile-options input{width:21px;height:21px;accent-color:#315346;flex-shrink:0}.ritme-tile-options strong{display:block;font-size:14px}.ritme-tile-options small{display:block;font-size:11px;color:#67758a;margin-top:4px;line-height:1.4}.ritme-order-row{display:flex;align-items:center;gap:9px;font-size:12px;margin:6px 0}.ritme-order-row>span{flex:1}.ritme-order-row button{font:inherit;font-size:10px;padding:9px 2px;border:0;color:#315346;background:none;cursor:pointer;min-height:36px}#ritme-tile-order h3{font-size:14px;margin:20px 0 10px}.ritme-exercise{width:100%;display:block;padding:13px 0;border:0;border-bottom:1px solid #e0e5d6;background:none;text-align:left;font:inherit;color:var(--text);cursor:pointer}.ritme-exercise strong{display:block;font-size:14px}.ritme-exercise span{display:block;font-size:11px;color:#687689;margin-top:5px}#ritme-exercise-results{margin-bottom:20px}
 #settings-overlay{padding:0 18px 40px;background:#f7f8f1}.ritme-settings-wrap{max-width:650px;margin:auto}.ritme-settings-header{display:flex;justify-content:space-between;align-items:center;gap:15px;padding:28px 0 10px}.ritme-settings-header h1{font-size:32px;letter-spacing:-1.2px;line-height:1.15;margin-top:5px}.ritme-settings-header>button{font-size:12px}.ritme-settings-intro{font-size:13px;color:#62718a;margin:8px 0 20px}.ritme-settings-shortcut{display:flex;align-items:center;justify-content:space-between;gap:15px;background:#e7f1b9;border-radius:13px;padding:18px;margin-bottom:20px}.ritme-settings-shortcut strong{font-size:15px}.ritme-settings-shortcut p{font-size:12px;color:#617146;margin:5px 0 0}.ritme-settings-shortcut button{font:inherit;font-size:12px;border:0;background:white;color:#315346;border-radius:8px;padding:10px 14px;min-height:40px;cursor:pointer}.ritme-setting-group{border-top:1px solid #d3ddc4}.ritme-setting-group>summary{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:20px 0;list-style:none;cursor:pointer}.ritme-setting-group>summary::-webkit-details-marker{display:none}.ritme-setting-group>summary strong{display:block;font-size:17px;letter-spacing:-.3px}.ritme-setting-group>summary small{display:block;font-size:11px;color:#6a7789;margin-top:5px;line-height:1.5}.ritme-setting-group>summary>b{background:#e7ecd9;color:#65764c;font-size:11px;width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}.ritme-setting-group[open]>summary>b{background:#d9f54e;color:#2f4533}.ritme-setting-group>div{padding:0 0 22px}.ritme-setting-group p{font-size:13px;line-height:1.65;color:#62718a;margin:12px 0}.ritme-setting-group .flow-field{font-size:12px}.ritme-setting-group .flow-field input,.ritme-setting-group .flow-field select{background:#fff;font-size:14px}.ritme-settings-save{position:sticky;bottom:0;background:#f7f8f1ef;backdrop-filter:blur(8px);padding:10px 0}.ritme-settings-save small{display:block;font-size:10px;color:#6d798a;text-align:center;margin-top:8px}.ritme-settings-save .flow-error:empty{display:none}.ritme-version{font-size:10px;color:#778494;text-align:center;margin-top:17px}.ritme-file-label{display:flex;align-items:center;justify-content:center;cursor:pointer}.ritme-file-label input{display:none}
 @media(min-width:640px){#ritme-tile-host{display:grid;grid-template-columns:1fr 1fr;align-items:start}#ritme-movement,#ritme-meals,#today-nutri-bar{grid-column:1/-1}}
-@media(max-width:390px){#ritme-movement,.ritme-custom-tile{padding:17px!important}.ritme-move-lead>div>strong{font-size:36px}.ritme-move-lead>div>strong>span{font-size:12px}.ritme-move-lead button{font-size:11px;max-width:76px}.ritme-track{gap:5px}.ritme-move-numbers{gap:9px}.ritme-move-numbers>button>strong{font-size:24px}.ritme-settings-header h1{font-size:28px}.ritme-insight-lead small{font-size:10px}.ritme-track-key{font-size:9px}.flow-brand-tag{font-size:8px}}
+@media(max-width:390px){.ritme-custom-tile{padding:17px!important}.ritme-settings-header h1{font-size:28px}.ritme-insight-lead small{font-size:10px}.flow-brand-tag{font-size:8px}}
 
 .ritme-saved-tip{border-bottom:1px solid #dce2d1;padding:15px 0}.ritme-saved-tip small{font-size:11px;color:#718097}.ritme-saved-tip p{white-space:pre-wrap;font-size:14px;line-height:1.6;margin-top:9px}
 
 /* Refined interactions, compact meals and a consistent shopping surface. */
 #modal-container{position:relative;z-index:1000}#modal-container .modal-overlay{pointer-events:auto}#modal-container .modal{isolation:isolate}
 .ritme-tile-choice{display:flex;align-items:center;justify-content:space-between;gap:16px;width:100%;padding:14px 12px;margin:6px 0;border:1px solid #d8dfce;border-radius:12px;background:white;color:var(--text);text-align:left;font:inherit;cursor:pointer;touch-action:manipulation}.ritme-tile-choice[aria-pressed="true"]{background:#edf5d4;border-color:#95ad38}.ritme-tile-choice b{font-size:11px;font-weight:600;color:#42542d}.ritme-tile-choice:focus-visible,.ritme-order-row button:focus-visible{outline:3px solid #315346;outline-offset:2px}.ritme-order-row button{padding:10px 8px;min-height:44px}.ritme-order-row button:disabled{opacity:.3;cursor:default}
-#ritme-meals{padding:12px 2px!important}#ritme-meals .flow-meal-row{padding:10px 0;display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:12px;row-gap:3px}#ritme-meals .flow-meal-heading{grid-column:1/-1;margin:0}#ritme-meals .flow-meal-title{font-size:14px;line-height:1.4;align-self:center;overflow-wrap:anywhere}#ritme-meals .meal-entry-nutrients{margin:0;align-self:center;gap:8px;font-size:10px}#ritme-meals .flow-meal-state{min-height:32px}
 .ritme-shop-intro{margin:12px 0 20px}.ritme-shop-intro p{font-size:14px;line-height:1.5}.ritme-shop-picks{margin:12px 0 22px}.ritme-shop-pick{padding:14px 0;border-bottom:1px solid #dce2d3}.ritme-shop-pick label{display:flex;gap:12px;align-items:center;cursor:pointer}.ritme-shop-pick strong,.ritme-shop-pick small{display:block}.ritme-shop-pick strong{font-size:14px;line-height:1.4;margin-top:4px}.ritme-shop-pick small,.ritme-shop-pick>.muted{font-size:11px;color:#68758a}.ritme-shop-pick>.muted{display:block;margin:2px 0 0 36px}.ritme-shop-category{margin:22px 0}.ritme-shop-category h3{font-size:12px;color:#64724c;letter-spacing:.3px;margin-bottom:6px}.ritme-shopping-list .shop-item-row{padding:12px 2px;gap:12px;border-bottom:1px solid #e4e9dd;background:none;border-radius:0;min-height:46px;font-size:14px}.ritme-shop-add{display:flex;align-items:end;gap:10px;margin:20px 0}.ritme-shop-add .flow-field{flex:1;min-width:0;margin:0}.ritme-shop-add .btn{min-height:46px}
-@media(max-width:420px){#ritme-meals .flow-meal-row{grid-template-columns:1fr}#ritme-meals .meal-entry-nutrients{margin-top:2px}}
+
 
 /* LIME: one ink, one action colour, a quiet canvas. */.lime-layout-action{display:flex;justify-content:flex-end;margin-top:6px}.lime-layout-action button{border:0;background:none;color:#59665c;font:inherit;font-size:12px;min-height:44px;padding:10px 0;cursor:pointer;text-decoration:underline;text-underline-offset:4px}
 :root{--bg:#f6f6ef;--card:#fffef9;--card2:#ecefe3;--text:#243d32;--text-2:#526156;--muted:#59665c;--muted-2:#687366;--border:#d8dece;--accent-move:#315346;--accent-food:#315346;--accent-move-tint:#e9efdf;--accent-food-tint:#e9efdf;--acid:#d7f653;--radius:12px;--radius-lg:20px}
@@ -1346,11 +1316,9 @@ button{touch-action:manipulation}
 .composer-actions{margin:0;align-items:center}.composer-actions .composer-send{background:#e9eddf;color:var(--text);border:1px solid #ced8bd;border-radius:7px;font-size:12px;min-height:40px;padding:8px 13px;font-weight:650}
 .composer-photo{font-size:12px;color:var(--text);min-height:40px}.composer-status,.speech-transcript,.flow-status{font-size:12px;color:var(--muted);line-height:1.5}
 .composer-status:empty,.speech-transcript:empty,.flow-status:empty,.coach-chat-window:empty,#log-feedback:empty{display:none;margin:0;padding:0;min-height:0}
-#ritme-tile-host{gap:14px}#ritme-movement{background:#edf1e2!important;border:1px solid #d5dfc6!important;border-radius:16px!important;padding:19px!important}
+#ritme-tile-host{gap:14px}
 .vandaag-section-h,.ritme-tile-head h2{font-size:18px!important;color:var(--text);font-weight:700;letter-spacing:-.45px}
-.ritme-move-lead>div>strong{font-size:38px;color:var(--text)}.ritme-move-lead>div>strong>span{font-size:13px;color:var(--muted)}.ritme-move-lead button{color:var(--text);font-size:12px}
-.ritme-track{gap:7px;margin-top:13px}.ritme-track-stack{height:66px}.ritme-track-day{color:var(--muted)}.ritme-track-day.is-today{background:#dfe9c7}.ritme-track-day>strong{font-size:12px}.ritme-track-key{color:var(--muted);font-size:11px}.ritme-track-key .ritme-key-explain{font-size:11px;color:var(--muted)}
-#ritme-meals{background:var(--card)!important;border:1px solid var(--border)!important;border-radius:16px;padding:17px 19px!important}.meal-section-head{margin-bottom:3px}.meal-add-btn,.icon-btn{color:var(--text)!important;font-size:12px;min-height:44px}.flow-meal-title{color:var(--text)!important}.flow-meal-heading,.flow-meal-state,.meal-entry-nutrients{color:var(--muted)!important}.flow-meal-state.is-eaten{color:#526c28!important}
+.flow-meal-title{color:var(--text)!important}.flow-meal-heading,.meal-entry-nutrients{color:var(--muted)!important}
 #today-nutri-bar{background:#eef0e4;border:1px solid var(--border);border-radius:12px}
 .ritme-custom-tile{border-radius:16px;background:var(--card);border-color:var(--border)}.ritme-custom-tile p,.ritme-menu-row span,.ritme-next-name small{color:var(--muted)}.ritme-food-number{color:var(--text)}
 .lime-page-label{font-size:11px;font-weight:650;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px}
@@ -1368,44 +1336,10 @@ button{touch-action:manipulation}
 /* Compact tiles, with a small shared lime signature. */
 #ritme-tile-host>[data-ritme-tile]{position:relative}
 #ritme-tile-host>[data-ritme-tile]:before{content:'';position:absolute;top:0;left:18px;width:30px;height:3px;border-radius:0 0 3px 3px;background:var(--acid);pointer-events:none}
-#ritme-movement,#ritme-meals{padding:14px 16px!important}
 #ritme-tile-host{gap:10px}
-.ritme-move-lead{margin:4px 0 0;gap:8px;align-items:center}
-.ritme-move-lead>div>strong{font-size:26px;letter-spacing:-.7px}
-.ritme-move-lead>div>strong>span{font-size:13px}
-.ritme-move-lead button{max-width:none;min-height:44px;font-size:12px;flex-shrink:0}
-.ritme-track{margin:8px 0 6px;gap:6px}
-.ritme-track-stack{height:40px;gap:2px}
-.ritme-track-stack i{height:5px;border-radius:2px}
-.ritme-track-day{gap:3px}
-.ritme-track-key{gap:4px 10px;margin-top:5px;font-size:11px}
-.ritme-track-key .ritme-key-explain{font-size:11px}
-.ritme-today-label{margin-top:10px}
-.movement-summary{margin-bottom:4px}
-#ritme-movement .flow-activity-row{padding:6px 0;gap:8px}
-#ritme-movement .flow-activity-state{width:44px;height:44px}
-#ritme-movement .flow-activity-info{min-height:44px}
-.lime-show-all{display:block;min-height:44px}
-#ritme-meals .meal-section-head{margin-bottom:3px}
-#ritme-meals .vandaag-section-h{margin:0;padding:0;border:0}
-.lime-meal-row{display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border);padding:4px 0}
-.lime-meal-row:last-child{border-bottom:0}
-.lime-meal-detail{flex:1;min-width:0;display:grid;grid-template-columns:65px minmax(0,1fr);align-items:center;gap:8px;min-height:44px;padding:3px 0;text-align:left;border:0;background:none;font:inherit;color:var(--text);cursor:pointer}
-.lime-meal-slot{font-size:11px;color:var(--muted)}
-.lime-meal-detail strong{font-size:14px;font-weight:650;line-height:1.4;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-#ritme-meals .flow-meal-state{min-height:44px;font-size:11px;flex-shrink:0;padding:6px 0 6px 4px}
-.lime-add-meal{display:block;background:none;border:0;padding:8px 0;font:inherit;font-size:12px;min-height:44px;cursor:pointer}
-@media(max-width:360px){.lime-meal-detail{grid-template-columns:52px minmax(0,1fr);gap:5px}.lime-meal-row{gap:5px}.ritme-move-lead>div>strong{font-size:23px}.ritme-move-lead>div>strong>span{font-size:12px}}
+
 
 /* Smaller visual checkboxes with a comfortable transparent hit area. */
-#ritme-movement .flow-activity-row{padding:2px 0;gap:6px}
-#ritme-movement .flow-activity-state{position:relative;display:grid;place-items:center;width:36px;height:44px;border:0;background:transparent;border-radius:0;font-size:14px}
-#ritme-movement .flow-activity-state:before{content:'';position:absolute;width:23px;height:23px;border:1.5px solid #7f926d;border-radius:7px;background:var(--card)}
-#ritme-movement .flow-activity-state.is-done:before{background:var(--acid);border-color:#a8bf46}
-#ritme-movement .flow-activity-state>span{position:relative;z-index:1}
-#ritme-movement .flow-activity-info{padding:2px 0}
-#ritme-movement .flow-activity-info span{margin-top:1px}
-#ritme-movement .ritme-today-label{margin-top:7px}
 
 /* Compact next-activity tile. */
 #ritme-next.ritme-custom-tile{padding:12px 16px!important}
@@ -1425,11 +1359,6 @@ button{touch-action:manipulation}
 #ritme-next .ritme-link{grid-column:2;grid-row:2/4;align-self:center;min-height:40px;padding:8px 0;white-space:nowrap}
 
 /* Keep secondary actions close to their content rather than on spacious footer rows. */
-#ritme-meals{padding:10px 14px!important}
-#ritme-meals .meal-section-head{gap:10px;margin:0 0 2px;min-height:36px}
-#ritme-meals .lime-add-meal{display:inline-flex;align-items:center;flex-shrink:0;width:auto;min-height:36px;padding:6px 0;font-size:12px}
-#ritme-meals .lime-meal-row{padding:2px 0}
-#ritme-meals .lime-meal-row:last-child{padding-bottom:0}
 #ritme-tile-host>.ritme-custom-tile:not(#ritme-next){padding:12px 14px!important}
 #ritme-tile-host .ritme-tile-head{margin-bottom:5px}
 #ritme-tile-host .ritme-custom-tile p{margin:5px 0;line-height:1.4}
@@ -1471,7 +1400,6 @@ button[hidden]{display:none!important}
 .composer-help .cc-icon{width:21px;height:21px}
 .lime-input-group .composer-send{display:inline-flex;align-items:center;justify-content:center;min-width:42px;min-height:42px;padding:9px!important}
 .composer-send .cc-icon,.flow-send .cc-icon{width:21px;height:21px}
-#ritme-meals .lime-add-meal,#ritme-movement .icon-btn{display:inline-flex;align-items:center;gap:5px;min-height:40px}
 #ritme-next .cc-next-plan{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:48px;padding:3px 0;border:0;background:none;font:inherit;text-align:left;color:var(--text);cursor:pointer}
 .cc-next-plan>span{min-width:0}
 #ritme-next .cc-next-plan .ritme-next-name{display:block;font-size:16px;line-height:1.35}
@@ -1485,12 +1413,6 @@ button:has(>.cc-icon):hover{color:#315346}
 /* One quiet lower section, with a shared hierarchy and disclosure affordance. */
 
 /* Day cards share a shell; nutrition columns never wrap independently. */
-#ritme-movement,#ritme-meals{background:var(--card)!important;border:1px solid var(--border)!important;border-radius:16px;padding:12px 14px!important;margin-bottom:0}
-.lime-day-card-head,#ritme-meals .meal-section-head{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:40px;margin:0 0 5px}
-.lime-day-card-head .vandaag-section-h,#ritme-meals .vandaag-section-h{font-size:17px!important;font-weight:700;letter-spacing:-.35px;line-height:1.35}
-#ritme-movement .icon-btn,#ritme-meals .lime-add-meal{font-size:12px;font-weight:600;padding:6px 0;min-height:40px}
-#ritme-movement .movement-summary{background:#f0f3e8;border-radius:10px;padding:8px 10px;margin:0 0 4px}
-#ritme-movement .flow-activity-info strong,#ritme-meals .lime-meal-detail strong{font-size:14px;font-weight:650;line-height:1.4;letter-spacing:0}
 #ritme-fiber,#ritme-protein{display:flex;flex-direction:column}
 #ritme-fiber[hidden],#ritme-protein[hidden]{display:none}
 #ritme-fiber .ritme-food-number,#ritme-protein .ritme-food-number{font-size:30px;line-height:1.2;margin:4px 0}
@@ -1517,29 +1439,9 @@ button:has(>.cc-icon):hover{color:#315346}
 #ritme-next>p{color:#d4dece;margin:5px 0}
 #ritme-next>.ritme-link{color:var(--acid);margin:4px 0 0}
 #ritme-next .cc-next-plan:focus-visible{outline-color:var(--acid);outline-offset:5px}
-#ritme-movement,#ritme-meals{border-color:#dce2d4!important;border-radius:16px;padding:10px 14px!important;box-shadow:0 2px 7px #243d3203}
-.lime-day-card-head,#ritme-meals .meal-section-head{min-height:38px;margin-bottom:3px}
-.lime-day-card-head .vandaag-section-h,#ritme-meals .vandaag-section-h{font-size:16px!important;font-weight:750;letter-spacing:-.4px}
-#ritme-movement .icon-btn,#ritme-meals .lime-add-meal{font-size:11px;gap:4px}
-#ritme-movement .icon-btn .cc-icon,#ritme-meals .lime-add-meal .cc-icon{width:16px;height:16px}
-#ritme-movement .movement-summary{background:#f1f4e9;padding:7px 9px;margin-bottom:4px}
-#ritme-movement .flow-activity-row{padding:3px 0;gap:10px;align-items:center;border-color:#e4e8dd}
-#ritme-movement .flow-activity-info{order:1;flex:1;min-width:0}
-#ritme-movement .flow-activity-info span{font-size:12px;color:var(--muted)}
-#ritme-movement .flow-activity-state{order:2;display:inline-flex;align-items:center;justify-content:flex-end;gap:6px;width:auto;min-width:74px;min-height:44px;height:auto;padding:5px 0;border:0;background:none;color:var(--muted);border-radius:6px;font:inherit}
-#ritme-movement .flow-activity-state:before{display:none}
-#ritme-movement .cc-state-dot{display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;position:static;border:1px solid #94a783;border-radius:5px;background:var(--card);font-size:11px;line-height:1;color:#243d32}
-#ritme-movement .is-done .cc-state-dot{background:var(--acid);border-color:#91a948}
-#ritme-movement .cc-activity-status{font-size:11px}
-#ritme-meals .lime-meal-row{gap:10px;padding:3px 0;border-color:#e4e8dd}
-#ritme-meals .flow-meal-state{min-width:74px;justify-content:flex-end;font-size:11px;color:var(--muted)}
-#ritme-meals .flow-meal-state span{width:8px;height:8px;border-color:#94a783}
-#ritme-meals .is-eaten span{background:#a5c637;border-color:#91a948}
-#ritme-meals .lime-meal-detail{grid-template-columns:64px minmax(0,1fr);gap:8px}
-#ritme-meals .lime-meal-slot{font-size:11px;color:var(--muted)}
-@media(hover:hover){#ritme-next:hover{background:#2b493c}#ritme-next .cc-next-plan:hover{color:#fffef9}#ritme-next .cc-next-plan:hover>.cc-icon{transform:translateX(3px);background:#ffffff20}#ritme-meals .lime-meal-detail:hover strong,#ritme-movement .flow-activity-info:hover strong{color:#59702e}}
-@media(prefers-reduced-motion:no-preference){#ritme-next,.cc-next-plan>.cc-icon,.cc-state-dot{transition:background-color .16s ease,transform .16s ease,border-color .16s ease}.cc-next-plan:active{transform:scale(.99)}#ritme-movement .flow-activity-state:active .cc-state-dot{transform:scale(.85)}}
-@media(max-width:360px){#ritme-next.ritme-custom-tile{padding:11px 12px!important}#ritme-next .cc-next-plan{gap:9px}#ritme-next .cc-date-badge{flex-basis:38px;min-height:44px}#ritme-meals .lime-meal-detail{grid-template-columns:50px minmax(0,1fr);gap:5px}.cc-activity-status,#ritme-meals .flow-meal-state{font-size:10px}}
+@media(hover:hover){#ritme-next:hover{background:#2b493c}#ritme-next .cc-next-plan:hover{color:#fffef9}#ritme-next .cc-next-plan:hover>.cc-icon{transform:translateX(3px);background:#ffffff20}}
+@media(prefers-reduced-motion:no-preference){#ritme-next,.cc-next-plan>.cc-icon{transition:background-color .16s ease,transform .16s ease,border-color .16s ease}.cc-next-plan:active{transform:scale(.99)}}
+@media(max-width:360px){#ritme-next.ritme-custom-tile{padding:11px 12px!important}#ritme-next .cc-next-plan{gap:9px}#ritme-next .cc-date-badge{flex-basis:38px;min-height:44px}}
 
 .cc-copy-activity{display:flex;align-items:center;justify-content:center;gap:8px;min-height:42px;margin:0 0 14px;font-size:13px}
 
@@ -1551,29 +1453,19 @@ button:has(>.cc-icon):hover{color:#315346}
 #cc-memory-notice{margin:8px 0;border-left:3px solid #c9f34c;padding-left:10px}
 #cc-memory-notice[hidden]{display:none}
 
-.cc-week-caption{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:13px;color:var(--muted)}
-.cc-week-caption button{border:0;background:none;color:var(--text);font:inherit;min-height:40px;cursor:pointer}
-.cc-week-play{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px;margin:3px 0 12px}
-.cc-week-play button{display:flex;flex-direction:column;align-items:center;gap:6px;border:0;background:none;color:var(--muted);font:inherit;font-size:11px;min-height:60px;padding:4px 0;cursor:pointer}
-.cc-day-orb{width:32px;height:32px;display:grid;place-items:center;background:#eef0e7;border-radius:45% 55% 51% 49%;font-size:19px;color:#8a9484}
-.has-done .cc-day-orb{background:var(--acid);color:#243d32;transform:rotate(-7deg)}
-.has-plan .cc-day-orb{background:#e4ebd5;color:#52683e}
-.cc-week-play .is-today .cc-day-orb{outline:1px solid #5a7352;outline-offset:3px}
-.cc-week-play .is-today{font-weight:700;color:var(--text)}
-#ritme-movement .movement-summary{background:none;padding:0;margin:0}
 #ritme-next.ritme-custom-tile{background:#eff2e6!important;border:1px solid #dce2d4!important;color:var(--text)!important;box-shadow:none}
 #ritme-next .ritme-tile-top,#ritme-next .ritme-kicker,#ritme-next .cc-next-plan,#ritme-next .cc-next-plan strong,#ritme-next>.ritme-next-name{color:var(--text)!important}
 #ritme-next .cc-next-plan small,#ritme-next .ritme-tile-top>span,#ritme-next>p{color:var(--muted)!important}
 #ritme-next .cc-date-badge{background:#d8f575;color:var(--text)}
 #ritme-next .cc-next-plan>.cc-icon{color:var(--text);background:transparent}
-#ritme-next:before,#ritme-meals:before,#ritme-movement:before{display:none!important}
+#ritme-next:before{display:none!important}
 .lime-input-group{padding:10px!important;border-radius:18px!important}
 .lime-input-group #big-praat-btn{min-height:52px;font-size:17px!important;padding:12px!important}
 .lime-input-group .composer-photo{font-size:13px!important;padding:8px!important;min-height:40px}
 .lime-input-group textarea{font-size:16px!important;min-height:70px!important}
 .composer-status:empty,.speech-transcript:empty{display:none}
 .coach-bubble-ai{font-size:15px!important;line-height:1.55!important}
-@media(prefers-reduced-motion:no-preference){.cc-day-orb{transition:transform .18s ease}.cc-week-play button:active .cc-day-orb{transform:scale(.9) rotate(5deg)}}
+
 
 .lime-input-group #big-praat-btn{min-height:46px;padding:10px 12px!important;font-size:16px!important}
 .lime-input-group .unified-composer{margin:4px 0 0;padding:7px 4px}
@@ -1586,9 +1478,6 @@ button:has(>.cc-icon):hover{color:#315346}
 #ritme-next>.ritme-next-name{font-size:18px;line-height:1.3}
 #ritme-next>p{font-size:13px;line-height:1.45}
 #ritme-next[hidden]{display:none!important}
-.cc-empty-movement{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:13px;color:var(--muted)}
-.cc-empty-movement button{min-height:40px;padding:6px 0;border:0;background:none;font:inherit;font-weight:600;color:var(--text);cursor:pointer}
-#ritme-movement:has(.cc-empty-movement) .lime-day-card-head .icon-btn{display:none}
 
 </style>
 <style id="cc-design-v1">
@@ -1645,18 +1534,7 @@ body{background:var(--cc-bg)!important;color:var(--cc-ink)}
 #tab-vandaag#tab-vandaag .card.day-section{padding:8px 16px!important}
 #tab-vandaag#tab-vandaag .card.day-section::before,#today-nutri-bar *::before{box-shadow:none!important}
 body .vandaag-section-h{font-size:13px!important;font-weight:650!important;text-transform:uppercase!important;letter-spacing:.06em!important;color:var(--cc-muted)!important}
-#tab-vandaag#tab-vandaag .icon-btn,#tab-vandaag#tab-vandaag .meal-add-btn{background:transparent!important;border:0!important;box-shadow:none!important;color:var(--cc-green)!important;font-weight:600!important;min-height:44px}
 /* Eén statusstijl: lime rondje met vinkje = gedaan/gegeten, leeg rondje = gepland */
-#tab-vandaag#tab-vandaag .flow-activity-row,#tab-vandaag#tab-vandaag .lime-meal-row{display:flex!important;align-items:center!important;gap:16px!important;padding:12px 0!important;border-top:1px solid var(--cc-line)!important;background:transparent!important;box-shadow:none!important}
-#tab-vandaag#tab-vandaag .flow-activity-state,#tab-vandaag#tab-vandaag .flow-meal-state{order:-1!important;flex:none!important;width:44px!important;min-width:44px!important;height:44px!important;position:relative!important;justify-content:center!important;display:flex!important;align-items:center;justify-content:center;padding:0!important;margin:0!important;background:transparent!important;border:0!important;box-shadow:none!important;font-size:0!important;color:transparent!important}
-#tab-vandaag#tab-vandaag .flow-activity-state .cc-activity-status{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
-#tab-vandaag#tab-vandaag .flow-activity-state .cc-state-dot,#tab-vandaag#tab-vandaag .flow-meal-state>span{width:28px!important;height:28px!important;border-radius:var(--cc-r-pill)!important;border:1.5px solid #b9c4bb!important;background:transparent!important;display:flex!important;align-items:center;justify-content:center;font-size:0!important;color:transparent!important;box-shadow:none!important}
-#tab-vandaag#tab-vandaag .flow-activity-state.is-done .cc-state-dot,#tab-vandaag#tab-vandaag .flow-meal-state.is-eaten>span{background:var(--cc-lime)!important;border-color:var(--cc-lime)!important}
-#tab-vandaag#tab-vandaag .flow-activity-state.is-done .cc-state-dot::after,#tab-vandaag#tab-vandaag .flow-meal-state.is-eaten>span::after{content:"";width:12px;height:7px;border-left:2.5px solid var(--cc-ink);border-bottom:2.5px solid var(--cc-ink);transform:translateY(-2px) rotate(-45deg)}
-#tab-vandaag#tab-vandaag .flow-activity-info,#tab-vandaag#tab-vandaag .lime-meal-detail{flex:1;min-width:0;text-align:left;background:transparent!important;border:0!important;box-shadow:none!important;padding:0!important}
-#tab-vandaag#tab-vandaag .flow-activity-info strong,#tab-vandaag#tab-vandaag .lime-meal-detail strong{font-size:16px!important;font-weight:600!important;color:var(--cc-ink)!important}
-#tab-vandaag#tab-vandaag .flow-activity-info span,#tab-vandaag#tab-vandaag .lime-meal-slot{font-size:14px!important;color:var(--cc-muted)!important}
-#tab-vandaag#tab-vandaag .lime-meal-detail{display:flex!important;flex-direction:column-reverse;align-items:flex-start;gap:2px}
 /* Voeding: lime voortgang */
 /* Lijsten onderaan */
 .collapse-card>summary{min-height:56px;padding:8px 16px!important;display:flex!important;align-items:center;justify-content:space-between;font-size:16px!important;font-weight:600!important;color:var(--cc-ink)!important;background:transparent!important}
@@ -1692,9 +1570,6 @@ body .vandaag-section-h{font-size:13px!important;font-weight:650!important;text-
 #tab-vandaag#tab-vandaag .coach-front-card:has(.coach-bubble-user) .lime-reply-actions{display:flex!important;justify-content:flex-end;margin-top:8px}
 #tab-vandaag#tab-vandaag .lime-plan-choices button,#tab-vandaag#tab-vandaag .lime-plan-choices button strong{font-size:14px!important;height:36px!important;min-height:36px!important}
 
-#tab-vandaag#tab-vandaag .flow-activity-state::before,#tab-vandaag#tab-vandaag .flow-meal-state::before{display:none!important}
-#tab-vandaag#tab-vandaag .lime-meal-row>*:not(.flow-meal-state){margin-left:0!important}
-#tab-vandaag#tab-vandaag .lime-meal-detail{padding-left:0!important;grid-template-columns:none!important}
 #tab-vandaag#tab-vandaag .cc-composer-bottom{padding:0 4px 4px!important;gap:6px!important}
 #tab-vandaag#tab-vandaag .lime-plan-choices button{line-height:1!important;padding:0 12px!important;list-style:none}
 
@@ -1746,7 +1621,7 @@ body .vandaag-section-h{font-size:13px!important;font-weight:650!important;text-
 #ritme-water.cc-water{padding:10px 12px 10px 16px!important}
 .cc-water-row{display:flex;align-items:center;gap:12px;min-height:44px}
 .cc-water-label{flex:none;display:flex;flex-direction:column;gap:2px;width:72px}
-.cc-water-label .vandaag-section-h{border:0!important;padding:0!important;margin:0!important;font-size:12px!important}
+.cc-water-label .vandaag-section-h{border:0!important;padding:0!important;margin:0!important}
 .cc-water-row .cc-water-count{font-size:13px;color:var(--cc-muted);white-space:nowrap}
 .cc-water-row .cc-water-count strong{font-size:16px;margin:0}
 .cc-water-check{color:var(--cc-green);font-weight:800}
@@ -1782,7 +1657,7 @@ body .vandaag-section-h{font-size:13px!important;font-weight:650!important;text-
 #tab-vandaag#tab-vandaag .unified-composer:has(>textarea:placeholder-shown)>.cc-clear,#tab-recepten#tab-recepten .cc-chef-bar:has(>textarea:placeholder-shown)>.cc-clear{display:none}
 #tab-vandaag#tab-vandaag .unified-composer:has(>textarea:not(:placeholder-shown)) .composer-photo,#tab-recepten#tab-recepten .cc-chef-bar:has(>textarea:not(:placeholder-shown))>#chef-foto-btn{display:none!important}
 /* ── Uitleg bij een activiteit ── */
-#tab-vandaag#tab-vandaag .cc-info{all:unset;box-sizing:border-box;order:2;flex:none;width:44px;height:44px;margin-right:-10px;display:grid;place-items:center;border-radius:999px;color:var(--cc-muted);cursor:pointer;-webkit-tap-highlight-color:transparent}
+#tab-vandaag#tab-vandaag .cc-info{all:unset;box-sizing:border-box;flex:none;width:44px;height:44px;margin-right:-10px;display:grid;place-items:center;border-radius:999px;color:var(--cc-muted);cursor:pointer;-webkit-tap-highlight-color:transparent}
 #tab-vandaag#tab-vandaag .cc-info:focus-visible{outline:2px solid var(--cc-green);outline-offset:-2px}
 
 /* ── v13: voorstelkaart ── */
@@ -1896,20 +1771,23 @@ body .vandaag-section-h{font-size:13px!important;font-weight:650!important;text-
 .cc-day-head h3{margin:0;font:700 16px/1.25 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-ink)}
 .cc-day-head h3 span{font-weight:400;font-size:14px;color:var(--cc-muted)}
 .cc-day-head small{display:block;margin-top:2px;font:400 12px/1.3 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-muted)}
-#modal-container .cc-add{all:unset;box-sizing:border-box;flex:none;display:inline-flex;align-items:center;gap:4px;min-height:44px;color:var(--cc-green);font:600 14px/1 -apple-system,'SF Pro Text',system-ui,sans-serif;cursor:pointer}
-#modal-container .cc-add:focus-visible{outline:2px solid var(--cc-green);outline-offset:2px}
-.cc-meal-line{display:flex;align-items:center;gap:4px;min-height:56px}
-#modal-container .cc-status-btn{all:unset;box-sizing:border-box;flex:none;display:grid;place-items:center;width:44px;height:44px;margin-left:-8px;cursor:pointer}
+#tab-vandaag#tab-vandaag .cc-add,#modal-container .cc-add{all:unset;box-sizing:border-box;flex:none;display:inline-flex;align-items:center;gap:4px;min-height:44px;color:var(--cc-green);font:600 14px/1 -apple-system,'SF Pro Text',system-ui,sans-serif;cursor:pointer}
+#tab-vandaag#tab-vandaag .cc-add:focus-visible,#modal-container .cc-add:focus-visible{outline:2px solid var(--cc-green);outline-offset:2px}
+.cc-line{display:flex;align-items:center;gap:4px;min-height:56px}
+#tab-vandaag#tab-vandaag .cc-status-btn,#modal-container .cc-status-btn{all:unset;box-sizing:border-box;flex:none;display:grid;place-items:center;width:44px;height:44px;margin-left:-8px;cursor:pointer}
 #modal-container span.cc-status-btn{cursor:default}
-#modal-container .cc-status-btn:focus-visible{outline:2px solid var(--cc-green);outline-offset:-2px;border-radius:999px}
+#tab-vandaag#tab-vandaag .cc-status-btn:focus-visible,#modal-container .cc-status-btn:focus-visible{outline:2px solid var(--cc-green);outline-offset:-2px;border-radius:999px}
 .cc-status{flex:none;display:block;box-sizing:border-box;width:28px;height:28px;border-radius:999px;border:1.5px solid #b9c4bb;background:#fff center/16px no-repeat}
 .cc-status.is-done{background-color:var(--cc-lime);border-color:var(--cc-lime);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2322312a' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E")}
-#modal-container .cc-meal-open{all:unset;box-sizing:border-box;flex:1;min-width:0;display:flex;align-items:center;gap:8px;min-height:56px;cursor:pointer}
-#modal-container .cc-meal-open:focus-visible{outline:2px solid var(--cc-green);outline-offset:-2px}
-.cc-meal-open>span{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
-.cc-meal-open strong{font:600 16px/1.3 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.cc-meal-open small{font:400 14px/1.2 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-muted)}
+#tab-vandaag#tab-vandaag .cc-line-open,#modal-container .cc-line-open{all:unset;box-sizing:border-box;flex:1;min-width:0;display:flex;align-items:center;gap:8px;min-height:56px;cursor:pointer}
+#tab-vandaag#tab-vandaag .cc-line-open:focus-visible,#modal-container .cc-line-open:focus-visible{outline:2px solid var(--cc-green);outline-offset:-2px}
+.cc-line-open>span{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.cc-line-open strong{font:600 16px/1.3 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cc-line-open small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font:400 14px/1.2 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-muted)}
 .cc-week-ask{margin-top:16px}
+/* ── Coach: Beweging en Maaltijden, zelfde kop en regels als het weekmenu ── */
+#tab-vandaag#tab-vandaag .cc-day-head .vandaag-section-h{margin:0;padding:0;border:0;line-height:1.2}
+#tab-vandaag#tab-vandaag .cc-day-empty{margin:0 0 8px;font:400 14px/1.4 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-muted)}
 @media (prefers-reduced-motion:reduce){.cc-more>summary .cc-chev{transition:none}}
 /* ── Chef: rustige laadtoestand terwijl recepten binnenkomen ── */
 .cc-chef-wait{display:flex;align-items:center;gap:12px;min-height:56px;padding:16px;margin:16px 0;border:1px dashed var(--cc-line);border-radius:18px;color:var(--cc-muted);font:500 14px/1.4 -apple-system,'SF Pro Text',system-ui,sans-serif}
@@ -2098,22 +1976,13 @@ body input[type="checkbox"]:disabled{opacity:.4;cursor:default}
 
     <!-- Activiteiten vandaag -->
     <section id="ritme-movement" data-ritme-tile="movement" class="card day-section">
-      <div class="lime-day-card-head">
-        <div class="vandaag-section-h" style="margin-bottom:0;padding-bottom:0;border-bottom:none;">Beweging</div>
-        <div style="display:flex;align-items:center;gap:4px;">
-        <div id="today-progress-mini"></div>
-        <button class="icon-btn" onclick="addActivity(today())" aria-label="Activiteit toevoegen" title="Activiteit toevoegen" style="color:var(--muted);"><svg class="cc-icon" data-cc-icon="plus" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Toevoegen</span>
-        </button>
-        </div>
-      </div>
-      
-      <div id="movement-summary" class="movement-summary"></div>
+      <div class="cc-day-head"><h2 class="vandaag-section-h">Beweging</h2><button type="button" class="cc-add" aria-label="Activiteit toevoegen" onclick="addActivity(today())"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Toevoegen</span></button></div>
       <div id="today-activities"></div>
     </section>
 
     <!-- Maaltijden vandaag -->
     <section id="ritme-meals" data-ritme-tile="meals" class="card day-section">
-      <div class="meal-section-head"><h2 class="vandaag-section-h">Maaltijden</h2><button class="meal-add-btn lime-add-meal" onclick="showAddMealOptions()" aria-label="Maaltijd toevoegen"><svg class="cc-icon" data-cc-icon="plus" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Toevoegen</span></button></div>
+      <div class="cc-day-head"><h2 class="vandaag-section-h">Maaltijden</h2><button type="button" class="cc-add" aria-label="Maaltijd toevoegen" onclick="showAddMealOptions()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Toevoegen</span></button></div>
       <input type="file" id="fotolog-input" accept="image/*" capture="environment" style="display:none;" onchange="analyseFotoLog(this)">
       <div id="today-meals"></div>
     </section>
@@ -3650,28 +3519,6 @@ function renderVandaag() {
 
 function renderTodayActivities(date){return flowActivities(date);}
 
-function renderTodayProgress(dateStr) {
-  const el = document.getElementById('today-progress-mini');
-  if (!el) return;
-  const weekKey = getISOWeek(new Date(dateStr + 'T12:00:00'));
-  const dayData = data.weken && data.weken[weekKey] && data.weken[weekKey][dateStr];
-  const acts = (dayData && dayData.activiteiten) || [];
-  if (acts.length === 0) { el.innerHTML = ''; return; }
-  const total = acts.length;
-  const done = acts.filter(a => a.afgevinkt).length;
-  const complete = done === total;
-  const r = 13, circ = 2 * Math.PI * r;
-  const offset = circ - (circ * (done / total));
-  el.innerHTML = `
-    <div style="position:relative;width:32px;height:32px;" title="${done} van ${total} gedaan">
-      <svg width="32" height="32" viewBox="0 0 32 32" style="transform:rotate(-90deg);">
-        <circle cx="16" cy="16" r="${r}" stroke="var(--card2)" stroke-width="3.5" fill="none"/>
-        <circle cx="16" cy="16" r="${r}" stroke="${complete ? 'var(--accent-food)' : 'var(--accent-move)'}" stroke-width="3.5" fill="none"
-          stroke-linecap="round" stroke-dasharray="${circ}" stroke-dashoffset="${offset}" style="transition:stroke-dashoffset .4s;"/>
-      </svg>
-      <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:${complete ? 'var(--accent-food)' : 'var(--text-2)'};">${complete ? '✓' : done + '/' + total}</div>
-    </div>`;
-}
 
 
 
@@ -7513,7 +7360,7 @@ function ccActivityHelp(a){
  return found.size===1?[...found][0]:a.type==='gym'||found.size?'gym':'';
 }
 function ccShowActivityHelp(date,id){const a=(flowDay(date).activiteiten||[]).find(x=>x.id===id);const key=a&&ccActivityHelp(a);if(!key)return;if(key==='gym')ritmeExercises();else ritmeExerciseDetail(key);}
-function flowActivities(date){flowMovement();const el=document.getElementById('today-activities');const acts=flowDay(date).activiteiten||[];el.innerHTML=acts.length?acts.slice(0,2).map(a=>`<div class="flow-activity-row"><button class="flow-activity-state ${a.afgevinkt?'is-done':''}" aria-label="${a.afgevinkt?'Markeer als gepland':'Markeer als gedaan'}: ${escapeText(a.naam)}" aria-pressed="${!!a.afgevinkt}" onclick="flowToggleActivity('${date}',${flowArg(a.id)})"><span class="cc-state-dot" aria-hidden="true">${a.afgevinkt?'✓':''}</span><span class="cc-activity-status">${a.afgevinkt?'Gedaan':'Gepland'}</span></button><button class="flow-activity-info" onclick="editActivity('${date}',${flowArg(a.id)})"><strong>${escapeText(a.naam)}</strong><span>${escapeText(flowActivityMeta(a)||a.detail||FLOW_TYPES[a.type]||'Activiteit')}</span></button>${ccActivityHelp(a)?`<button type="button" class="cc-info" aria-haspopup="dialog" aria-label="Uitleg: ${escapeText(a.naam)}" onclick="ccShowActivityHelp('${date}',${flowArg(a.id)})"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5"/><circle cx="12" cy="7.6" r=".6" fill="currentColor"/></svg></button>`:''}</div>`).join(''):'<div class="cc-empty-movement"><span>Nog niets gepland</span><button onclick="addActivity(today())">＋ Activiteit</button></div>';if(acts.length>2)el.innerHTML+=`<button class="ritme-link lime-show-all" onclick="flowOpenDay('${date}')">Alles bekijken (${acts.length})</button>`;renderTodayProgress(date);}
+function flowActivities(date){flowMovement();const el=document.getElementById('today-activities');const acts=flowDay(date).activiteiten||[];el.innerHTML=acts.length?acts.slice(0,3).map(a=>`<div class="cc-line"><button type="button" class="cc-status-btn" aria-pressed="${!!a.afgevinkt}" aria-label="${escapeText(a.naam)} gedaan" onclick="flowToggleActivity('${date}',${flowArg(a.id)})"><span class="cc-status${a.afgevinkt?' is-done':''}"></span></button><button type="button" class="cc-line-open" aria-haspopup="dialog" onclick="editActivity('${date}',${flowArg(a.id)})"><span><strong>${escapeText(a.naam)}</strong><small>${escapeText(flowActivityMeta(a)||a.detail||FLOW_TYPES[a.type]||'Activiteit')}</small></span></button>${ccActivityHelp(a)?`<button type="button" class="cc-info" aria-haspopup="dialog" aria-label="Uitleg: ${escapeText(a.naam)}" onclick="ccShowActivityHelp('${date}',${flowArg(a.id)})"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5"/><circle cx="12" cy="7.6" r=".6" fill="currentColor"/></svg></button>`:''}</div>`).join(''):'<p class="cc-day-empty">Nog niets gepland.</p>';if(acts.length>3)el.innerHTML+=`<button type="button" class="cc-add" aria-haspopup="dialog" onclick="flowOpenDay('${date}')">Alles bekijken (${acts.length})</button>`;}
 function flowToggleActivity(date,id){const a=flowDay(date).activiteiten?.find(x=>x.id===id);if(!a)return;a.afgevinkt=!a.afgevinkt;saveAndSync();updateStreak();renderTodayActivities(date);renderWeekOvTab();}
 function flowOpenWeek(offset=0){flowWeekOffset=offset;const dates=flowWeekDates(offset);showModal(`<div class="modal-header"><h2>Je week</h2>${flowClose()}</div><div class="flow-week-nav"><button onclick="flowOpenWeek(${offset-1})" aria-label="Vorige week">Vorige</button><strong>${formatShortDate(dates[0])} – ${formatShortDate(dates[6])}</strong><button onclick="flowOpenWeek(${offset+1})" aria-label="Volgende week">Volgende</button></div>${flowWeekStrip(offset)}<div class="flow-week-list">${dates.map(d=>{const day=flowDay(d),acts=day.activiteiten||[],meals=Object.values(day.maaltijden||{}).flat();return `<button onclick="flowOpenDay('${d}')"><strong>${formatShortDate(d)}</strong><span>${acts.length?acts.map(a=>escapeText(a.naam)).join(', '):'Geen beweging gepland'}<small>${meals.length?`${meals.filter(m=>m.gegeten).length} gegeten · ${meals.filter(m=>!m.gegeten).length} maaltijden gepland`:'Nog geen maaltijden'}</small></span></button>`;}).join('')}</div><button class="btn btn-secondary btn-full" onclick="closeModal();askQuickQ('Geef een korte terugblik op mijn week tot nu toe, met één haalbare volgende stap.')">Korte terugblik van Coach</button>`);}
 function flowOpenDay(date){const day=flowDay(date);showModal(`<div class="modal-header"><h2>${formatShortDate(date)}</h2>${flowClose()}</div><h3>Beweging</h3><div class="flow-week-list">${(day.activiteiten||[]).map(a=>`<button onclick="editActivity('${date}',${flowArg(a.id)})"><strong>${escapeText(a.naam)}</strong><span>${escapeText(flowActivityMeta(a))}<small>${a.afgevinkt?'Gedaan':'Gepland'}</small></span></button>`).join('')||'<p class="muted">Nog niets gepland.</p>'}</div><button class="btn btn-secondary" onclick="addActivity('${date}')">Activiteit toevoegen</button><h3 class="flow-subhead">Maaltijden</h3>${Object.entries(day.maaltijden||{}).flatMap(([slot,items])=>(items||[]).map(m=>`<div class="flow-day-meal"><small>${slot} · ${m.gegeten?'gegeten':'gepland'}</small><strong>${escapeText(m.naam)}</strong></div>`)).join('')||'<p class="muted">Nog geen maaltijden.</p>'}<button class="btn btn-ghost btn-full" onclick="flowOpenWeek(flowWeekOffset)">Terug naar weekoverzicht</button>`);}
@@ -7592,7 +7439,7 @@ function ccOpenWeekMenu(offset=0){
   const sum=key=>Math.round(meals.reduce((a,{m})=>a+(parseGrams(m[key])||0),0)),v=sum('vezels'),e=sum('eiwitten');
   const meta=[v?v+' g vezels':'',e?e+' g eiwit':''].filter(Boolean).join(' · '),future=date>t;
   const label=date===t?`Vandaag <span>· ${ccDayLabel(date).toLowerCase()}</span>`:ccDayLabel(date);
-  return `<section class="cc-day"><div class="cc-day-head"><div><h3>${label}</h3>${meta?`<small>${meta}</small>`:''}</div><button type="button" class="cc-add" aria-label="Toevoegen op ${ccDayLabel(date)}" onclick="ccOpenFrom(${back},()=>showTypedMealSlot('${date}'))">${CC_PLUS}<span>Toevoegen</span></button></div>${meals.map(({s,m})=>`<div class="cc-meal-line">${future?'<span class="cc-status-btn" aria-hidden="true"><span class="cc-status"></span></span>':`<button type="button" class="cc-status-btn" aria-pressed="${!!m.gegeten}" aria-label="${escapeText(m.naam)} gegeten" onclick="ccWeekToggle('${date}','${s}',${flowArg(m.id)},${offset})"><span class="cc-status${m.gegeten?' is-done':''}"></span></button>`}<button type="button" class="cc-meal-open" aria-haspopup="dialog" onclick="ccOpenFrom(${back},()=>flowMealDetail('${date}','${s}',${flowArg(m.id)}))"><span><strong>${escapeText(m.naam)}</strong><small>${s[0].toUpperCase()+s.slice(1)}</small></span>${CC_CHEVRON}</button></div>`).join('')}</section>`;
+  return `<section class="cc-day"><div class="cc-day-head"><div><h3>${label}</h3>${meta?`<small>${meta}</small>`:''}</div><button type="button" class="cc-add" aria-label="Toevoegen op ${ccDayLabel(date)}" onclick="ccOpenFrom(${back},()=>showTypedMealSlot('${date}'))">${CC_PLUS}<span>Toevoegen</span></button></div>${meals.map(({s,m})=>`<div class="cc-line">${future?'<span class="cc-status-btn" aria-hidden="true"><span class="cc-status"></span></span>':`<button type="button" class="cc-status-btn" aria-pressed="${!!m.gegeten}" aria-label="${escapeText(m.naam)} gegeten" onclick="ccWeekToggle('${date}','${s}',${flowArg(m.id)},${offset})"><span class="cc-status${m.gegeten?' is-done':''}"></span></button>`}<button type="button" class="cc-line-open" aria-haspopup="dialog" onclick="ccOpenFrom(${back},()=>flowMealDetail('${date}','${s}',${flowArg(m.id)}))"><span><strong>${escapeText(m.naam)}</strong><small>${s[0].toUpperCase()+s.slice(1)}</small></span>${CC_CHEVRON}</button></div>`).join('')}</section>`;
  }).join('');
  showModal(`<div class="modal-header"><h2>Weekmenu</h2>${flowClose()}</div><div class="cc-week-nav"><button type="button" aria-label="Vorige week" ${offset<=-2?'disabled':''} onclick="ccOpenWeekMenu(${offset-1})"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg></button><div aria-live="polite"><strong>${ccWeekTitle(offset)}</strong><span>${formatShortDate(dates[0])} – ${formatShortDate(dates[6])}</span></div><button type="button" aria-label="Volgende week" ${offset>=4?'disabled':''} onclick="ccOpenWeekMenu(${offset+1})">${CC_CHEVRON}</button></div>${filled?'':'<p class="cc-week-empty">Nog niets gepland deze week.</p>'}${days}${filled?'':`<button type="button" class="btn btn-primary btn-full cc-week-ask" onclick="closeModal();flowGoChef('auto')">Vraag Chef</button>`}`);
 }
@@ -7698,13 +7545,13 @@ function ritmeGroupValue(g){return g.knownKm?`${ritmeN(g.km)} <small>km</small>`
 function ritmeGroupNote(g){return `${g.count} ${g.count===1?'activiteit':'activiteiten'}${g.knownKm&&g.knownKm<g.count?' · deels afstand bekend':!g.knownKm&&['run','bike','walk','walkdog','swim','commute'].includes(g.type)?' · afstand niet ingevuld':''}${g.knownMinutes?' · '+ritmeN(g.minutes)+' min':''}`;}
 
 
-function flowMovement(){ritmeMovement();ritmeRenderTiles();ritmeRenderSummary();}
+function flowMovement(){ritmeRenderTiles();ritmeRenderSummary();}
 function checkWeekplanCard(){}
 // Nieuwe tegels komen één keer bij een eigen indeling; daarna beslist de gebruiker.
 const RITME_NEW_TILES=[['water','_waterTileV1','meals'],['mood','_moodTileV1','water']];
 function ritmeSelected(){const selected=Array.isArray(settings.coachTiles)?[...new Set(settings.coachTiles.filter(k=>RITME_TILES[k]))]:[];const out=selected.length?selected:[...RITME_DEFAULT];const todo=selected.length?RITME_NEW_TILES.filter(([,flag])=>!settings[flag]):[];if(todo.length){const flags={};for(const [key,flag,after] of todo){flags[flag]=true;if(!out.includes(key)){const at=out.indexOf(after);out.splice(at>=0?at+1:out.length,0,key);}}try{saveSettingsData({...settings,coachTiles:[...out],...flags});}catch(_){}}return out;}
 function ritmeApplyTiles(){const selected=ritmeSelected(),host=document.getElementById('ritme-tile-host');if(!host)return;Object.keys(RITME_TILES).forEach(key=>{const el=document.getElementById(key==='nutrition'?'today-nutri-bar':'ritme-'+key);if(el)el.hidden=!selected.includes(key)||(key==='next'&&!ccNextPlanned());});selected.forEach(key=>{const el=document.getElementById(key==='nutrition'?'today-nutri-bar':'ritme-'+key);if(el)host.appendChild(el);});}
-function ritmeRender(){ritmeMovement();ritmeRenderTiles();ritmeRenderSummary();ritmeApplyTiles();}
+function ritmeRender(){ritmeRenderTiles();ritmeRenderSummary();ritmeApplyTiles();}
 function ritmeFoodTile(key,label){const meals=Object.values(flowDay(today()).maaltijden||{}).flat().filter(m=>m.gegeten),known=meals.filter(m=>m[key]&&/\d/.test(m[key])),goal=nutritionGoals()[key],sum=known.reduce((n,m)=>n+parseGrams(m[key]),0),left=Math.max(0,goal-sum);return `<div class="ritme-tile-head"><h2>${label}</h2><button onclick="showNutritionDetails()">Details</button></div><div class="ritme-food-number">${known.length?ritmeN(sum):'—'}<small> / ${ritmeN(goal)} g</small></div><div class="ritme-meter" role="progressbar" aria-label="${label} gelogd" aria-valuemin="0" aria-valuemax="${goal}" aria-valuenow="${Math.min(sum,goal)}"><span style="width:${Math.min(100,sum/goal*100)}%"></span></div><p>${known.length?(left?`Nog ${ritmeN(left)} g tot je ingestelde doel, op basis van je log.`:'Je ingestelde doel is in je log bereikt.'):'Nog geen gegeten maaltijden met deze voedingswaarde gelogd.'}</p><small>Gelogd · schatting${known.length<meals.length?' · niet alle waarden bekend':''}</small><button class="ritme-link" onclick="ritmeFoodIdea('${key}')">Een ${key==='vezels'?'vezelrijk':'eiwitrijk'} idee</button>`;}
 function ritmeHighlightActivities(acts){return acts.filter(a=>(!settings.ritmeActivityType||a.type===settings.ritmeActivityType)&&(!settings.ritmeActivityText||[a.naam,a.detail,a.partner].filter(Boolean).join(' ').toLocaleLowerCase('nl').includes(settings.ritmeActivityText.toLocaleLowerCase('nl'))));}
 function ritmeRenderTiles(){
@@ -7878,8 +7725,8 @@ function limeSaveActivity(){
 
 function flowRenderMeals(date){
  const day=ensureDay(date),el=document.getElementById('today-meals');
- const entries=Object.entries(day.maaltijden||{}).flatMap(([slot,items])=>(items||[]).map(m=>({slot,m})));
- el.innerHTML=entries.map(({slot,m})=>`<article class="lime-meal-row"><button class="lime-meal-detail" onclick="flowMealDetail('${date}','${slot}',${flowArg(m.id)})"><span class="lime-meal-slot">${escapeText(slot[0].toUpperCase()+slot.slice(1))}</span><strong>${escapeText(m.naam)}</strong></button><button class="flow-meal-state ${m.gegeten?'is-eaten':''}" aria-label="${m.gegeten?'Terug naar gepland':'Markeer als gegeten'}: ${escapeText(m.naam)}" aria-pressed="${!!m.gegeten}" onclick="setMealConsumed('${date}','${slot}',${flowArg(m.id)})"><span aria-hidden="true"></span>${m.gegeten?'Gegeten':'Gepland'}</button></article>`).join('')||'<p class="flow-empty-note">Nog geen maaltijden toegevoegd.</p>';
+ const entries=['ontbijt','lunch','diner','snack'].flatMap(slot=>(day.maaltijden?.[slot]||[]).map(m=>({slot,m})));
+ el.innerHTML=entries.map(({slot,m})=>{const fiber=m.vezels&&/\d/.test(m.vezels)?formatGrams(parseGrams(m.vezels))+' g vezels':'';return `<div class="cc-line"><button type="button" class="cc-status-btn" aria-pressed="${!!m.gegeten}" aria-label="${escapeText(m.naam)} gegeten" onclick="setMealConsumed('${date}','${slot}',${flowArg(m.id)})"><span class="cc-status${m.gegeten?' is-done':''}"></span></button><button type="button" class="cc-line-open" aria-haspopup="dialog" onclick="flowMealDetail('${date}','${slot}',${flowArg(m.id)})"><span><strong>${escapeText(m.naam)}</strong><small>${[slot[0].toUpperCase()+slot.slice(1),fiber].filter(Boolean).join(' · ')}</small></span></button></div>`;}).join('')||'<p class="cc-day-empty">Nog niets gepland.</p>';
  renderNutriBar(date);ritmeRenderTiles();ritmeRenderSummary();
 }
 
@@ -8329,10 +8176,6 @@ async function ccCalculateMeal(date,slot,id){
  document.getElementById('cc-food-save').onclick=()=>{if(input.value.trim()!==text){out.textContent='Je invoer is gewijzigd. Schat opnieuw.';return;}const m=flowDay(date).maaltijden?.[slot]?.find(x=>x.id===id);if(!m){out.textContent='Deze maaltijd bestaat niet meer.';return;}const previous={...m};try{Object.assign(m,result);saveAndSync();renderTodayMeals(today());renderNutriBar(today());flowMealDetail(date,slot,id);}catch(e){Object.assign(m,previous);out.textContent='Niet opgeslagen. '+e.message;}};
  }catch(e){out.textContent=e.message;}finally{btn.disabled=false;}
 }
-function ritmeWeekVisual(){
- const dates=flowWeekDates(),acts=ritmeActivities(dates);
- return `<div class="cc-week-play" aria-label="Je bewegingsweek">${dates.map((date,i)=>{const items=acts.filter(a=>a.date===date),done=items.filter(a=>a.afgevinkt).length;return `<button class="${done?'has-done':items.length?'has-plan':'is-open'} ${date===today()?'is-today':''}" onclick="flowOpenDay('${date}')" aria-label="${formatShortDate(date)}: ${done} gedaan, ${items.length-done} gepland"><span class="cc-day-orb" aria-hidden="true">${done?'✓':items.length?'•':'·'}</span><span>${['ma','di','wo','do','vr','za','zo'][i]}</span></button>`;}).join('')}</div>`;
-}
 async function ccRecipeNutrition(id){
  const r=(data.recepten||[]).find(r=>r.id===id),btn=document.getElementById('cc-recipe-nutrition'),status=document.getElementById('cc-recipe-nutrition-status');if(!r||btn.disabled)return;
  const snapshot=JSON.stringify(r);btn.disabled=true;status.textContent='Even schatten…';
@@ -8342,7 +8185,6 @@ async function ccRecipeNutrition(id){
  if(document.getElementById('cc-recipe-nutrition-status')===status)flowRecipeDetail(id);
  }catch(e){status.textContent=e.message;}finally{btn.disabled=false;}
 }
-function ritmeMovement(){const el=document.getElementById('movement-summary');if(!el)return;const s=ritmeStats(ritmeRange().dates);el.innerHTML=`<div class="cc-week-caption"><span>${s.activeDays?`${s.activeDays} ${s.activeDays===1?'dag':'dagen'} lekker in beweging`:'Een rondje telt ook.'}</span><button onclick="ritmeOpenInsights()">Je week →</button></div>${ritmeWeekVisual()}<span class="sr-only">Vinkje: gedaan. Stip: gepland. Tik op een dag voor details.</span>`;}
 
 // Wist de invoerbalk met één tik (✕ staat er alleen als er tekst is).
 function ccClearInput(inputId,statusId){const input=document.getElementById(inputId);if(!input||input.readOnly)return;input.value='';ccResizeComposer(input);const status=document.getElementById(statusId);if(status)status.textContent='';}

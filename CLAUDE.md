@@ -71,6 +71,7 @@ Lettertype: -apple-system, 'SF Pro Text', system-ui, sans-serif.
 - **Lijstkaart** `.cc-list` met rijen `.cc-row` (`ccRow(label, meta, actie)`): 56 px, label 16/600 links, meta 14 muted rechts, chevron (`CC_CHEVRON`), ingesprongen scheidingslijn. Elke rij opent een venster; niets klapt inline open. Sectie `.cc-section` met kop `vandaag-section-h`. Voorbeelden: Chef › *Jouw keuken* (`ccRenderKitchen`), Coach › *Jouw week* (`ritmeRenderSummary`).
 - **Vensters** (`showModal`): kop met titel en sluiten (44 px). Eén niveau terug met `ccOpenFrom(terugFunctie, () => openVenster())`; formulieren sluiten met `ccGoBack()` zodat je terugkomt waar je vandaan kwam. Focus gaat naar de titel en terug naar de knop die opende; Escape sluit.
 - **Weekmenu**: één venster voor Chef en Coach, `ccOpenWeekMenu(offset)`; toevoegen per dag via `showTypedMealSlot(datum)` → `quickEditMeal`.
+- **Dagregel** `.cc-line`: statusknop (`.cc-status-btn` met `.cc-status`) + `.cc-line-open` (naam 16/600, subregel 14 muted, één regel). Kop `.cc-day-head` met *＋ Toevoegen* (`.cc-add`). Gebruikt in het weekmenu en in Coach › Beweging (`flowActivities`, max. 3 + *Alles bekijken*) en Maaltijden (`flowRenderMeals`, met vezels in de subregel). Leeg: `.cc-day-empty`.
 - **Voorstelkaart** `.cc-proposal`: kop "VOORSTEL", titel, subregel, reden; knoppen *Pas aan* (lime) en *Laat staan* (omlijnd); daarna status + *Ongedaan maken*.
 
 ### Data en opslag
