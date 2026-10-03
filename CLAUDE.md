@@ -40,7 +40,7 @@ Gebruiker: Jim. Primair op iPhone (Safari), in het Nederlands. Loopt (hoofdsport
 
 **De repository is openbaar** (GitHub Pages op een gratis account vereist dat). Er mogen dus nooit sleutels, tokens of persoonsgegevens in code, commits of testbestanden staan.
 
-**Versie**: constante `APP_VERSION = 'lime-YYYYMMDD-N'` bovenin het script. Getoond in Instellingen. Elke nieuwe versie: datum van vandaag en N doornummeren. Huidige basis: `lime-20261003-7`.
+**Versie**: constante `APP_VERSION = 'lime-YYYYMMDD-N'` bovenin het script. Getoond in Instellingen. Elke nieuwe versie: datum van vandaag en N doornummeren. Huidige basis: `lime-20261003-8`.
 
 ### CSS — twee lagen
 - **Oude laag**: eerste `<style>` in `<head>`. Historisch gegroeid, veel `!important`. Ongebruikte regels zijn al verwijderd; de rest wordt deels overstemd. Niet uitbreiden.
@@ -90,12 +90,12 @@ Lettertype: -apple-system, 'SF Pro Text', system-ui, sans-serif.
 - Slim invoeren: `submitSmartInput` → `parseSmartInput` (één aanroep haalt alle acties uit tekst) → daarna eventueel `coachFrontSend`.
 - Spraak in: `bigPraatStart` (Coach) en `flowListen` (velden, Chef), beide `continuous=false`, tekst eerst in het veld. Vóór de microfoon start: `ccPrepareMic()` (stopt voorlezen, zet de audiosessie op opnemen). `bigPraatStart` heeft een waakhond die afbreekt als er niets binnenkomt.
 - Spraak uit: `ccCreateSentenceSpeaker` (per zin, OpenAI of browserstem) alleen als de beurt ingesproken was (`ccSpokenTurn`). Afspelen loopt via **Web Audio**: `ccGetAudioCtx`, `ccUnlockAudioCtx` (binnen een tik), `ccPlayBlob`, `ccAudioSessionType('auto' | 'play-and-record')`. Het `<audio>`-element is alleen een vangnet. **Maak `<audio>` nooit weer de hoofdroute**: op iOS houdt het de audiosessie vast en krijgt de microfoon daarna geen geluid meer ("Geen spraak ontvangen"). iOS-audio vrijgeven met `ccPrimeAudio()` tijdens de tik.
-- Testset in de app: Instellingen › *Coach testen* (`ccOpenEval`): 12 vaste vragen met nepdata, Haiku beoordeelt. Raakt echte data niet aan.
+- Testset in de app: Instellingen › *Coach testen* (`ccOpenEval`): 12 vaste vragen met nepdata, Haiku beoordeelt. Raakt echte data niet aan. *Chef testen* (`ccOpenChefEval`): 5 vaste receptvragen, meet tijd tot eerste recept en beoordeelt volgens `CHEF_STIJL`; vergelijkt tijdelijk met de oude werkwijze (`requestChefRecipesOud`, weghalen na de meting).
 
 ### Belangrijke schermen en functies
 - Tabs: `#tab-vandaag` (Coach), `#tab-recepten` (Chef); `switchTab(name, btn)`.
 - Coach: invoer, coachgesprek (`#coach-front-chat`, `addFrontBubble`), tegels (`RITME_TILES`, `ritmeSelected`, `ritmeRenderTiles`): beweging, maaltijden, water (`ccRenderWater`), voeding. Onderaan uitklaplijst (`.lime-more-panel`).
-- Chef: `flowRenderChef`, modus `flowChefMode` (`CC_CHEF_MODES`: voor/tijdens/na/makkelijk/uitgebreid/comfort/voorraadsnack/voorraad) via `flowSetChefMode`, versturen `flowChefSubmit`, genereren `_doGenerateRecepten` → `requestChefRecipes`. Receptinstellingen: `flowSetPersons`, `flowSetCount`, `flowSetDieet` (bewaard in localStorage). Foto's: `flowPhotoMenu`, `flowChoosePhoto`, `flowAnalyseRecipePhoto`, `analyseVoorraadFoto`, verkleinen `ccPreparePhoto`. Voorraad: `showVoorraadModal` (lijst `data.chefVoorraad.items`, aantikken `toggleVoorraad`, starten `voorraadMaak`). Boodschappen: `showShoppingList`, `_renderShopPicker`, `_buildAndShowShopList`, `_toggleShopMeal`, `ritmeCheckShopping`. Kookmodus: `enterKookmodus`, `ccCook*`.
+- Chef: `flowRenderChef`, modus `flowChefMode` (`CC_CHEF_MODES`: voor/tijdens/na/makkelijk/uitgebreid/comfort/voorraadsnack/voorraad) via `flowSetChefMode`, versturen `flowChefSubmit`, genereren `_doGenerateRecepten` → `requestChefRecipes`: één gestreamde aanroep (`callAIStream` met eigen `system`), elk af recept direct in beeld via `chefPreviewOpen`/`chefPreviewAdd`. Receptinstellingen: `flowSetPersons`, `flowSetCount`, `flowSetDieet` (bewaard in localStorage). Foto's: `flowPhotoMenu`, `flowChoosePhoto`, `flowAnalyseRecipePhoto`, `analyseVoorraadFoto`, verkleinen `ccPreparePhoto`. Voorraad: `showVoorraadModal` (lijst `data.chefVoorraad.items`, aantikken `toggleVoorraad`, starten `voorraadMaak`). Boodschappen: `showShoppingList`, `_renderShopPicker`, `_buildAndShowShopList`, `_toggleShopMeal`, `ritmeCheckShopping`. Kookmodus: `enterKookmodus`, `ccCook*`.
 - Instellingen: `openSettings`, `saveSettings`.
 
 ## 4. Vaste regels voor code

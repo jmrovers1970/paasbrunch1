@@ -2129,6 +2129,15 @@ body .compact-track>span{background:var(--cc-lime)!important;border-radius:var(-
 .cc-eval-h{font-size:14px;margin:16px 0 6px;color:var(--cc-muted);text-transform:uppercase;letter-spacing:.06em}
 .cc-eval-history{margin:0;padding-left:18px;font-size:14px;line-height:1.5}
 .cc-eval-history span{color:var(--cc-muted);font-size:12px}
+.cc-eval-row small+small{margin-top:2px}
+/* ── Chef: rustige laadtoestand terwijl recepten binnenkomen ── */
+.cc-chef-wait{display:flex;align-items:center;gap:12px;min-height:56px;padding:16px;margin:16px 0;border:1px dashed var(--cc-line);border-radius:18px;color:var(--cc-muted);font:500 14px/1.4 -apple-system,'SF Pro Text',system-ui,sans-serif}
+.cc-chef-wait[hidden]{display:none}
+.cc-chef-dot{flex:none;width:10px;height:10px;border-radius:999px;background:var(--cc-lime);animation:cc-chef-pulse 1.2s ease-in-out infinite}
+.cc-chef-wait.is-error{border-style:solid;color:var(--cc-ink)}
+.cc-chef-wait.is-error .cc-chef-dot{display:none}
+@keyframes cc-chef-pulse{0%,100%{opacity:.35;transform:scale(.8)}50%{opacity:1;transform:scale(1)}}
+@media (prefers-reduced-motion:reduce){.cc-chef-dot{animation:none}}
 
 .cc-pattern-list{margin:4px 0 8px;padding-left:18px;font-size:14px;line-height:1.5}
 .cc-pattern-actions{display:flex;gap:8px;flex-wrap:wrap}
@@ -2614,7 +2623,7 @@ body input[type="checkbox"]:disabled{opacity:.4;cursor:default}
 'use strict';
 
 // ─── VERSION CHECK (forceert Safari herlading bij nieuwe versie) ──────────────
-const APP_VERSION = 'lime-20261003-7';
+const APP_VERSION = 'lime-20261003-8';
 // Eén plek voor de modellen: Sonnet voor gesprekken en recepten, Haiku voor snelle achtergrondtaken.
 const CC_MODEL_MAIN = 'claude-sonnet-4-6';
 const CC_MODEL_FAST = 'claude-haiku-4-5-20251001';
@@ -5542,7 +5551,7 @@ async function analyseVoorraadFoto(inputEl) {
   let file = inputEl.files[0];
   if (!file) return;
   inputEl.value = '';
-  file = await ccPreparePhoto(file);
+  file = await ccPreparePhoto(file, 1024);
   if(!file){showBanner('yellow','Deze foto kan ik niet openen. Probeer een andere foto of een schermafbeelding.');return;}
   if (!settings.anthropicKey) { showBanner('red', 'Geen API-sleutel — voeg je Anthropic sleutel in via Instellingen.'); return; }
   const status = document.getElementById('voorraad-foto-status');
@@ -5559,8 +5568,8 @@ async function analyseVoorraadFoto(inputEl) {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'x-api-key': settings.anthropicKey, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
       body: JSON.stringify({
-        model: CC_MODEL_MAIN,
-        max_tokens: 400,
+        model: CC_MODEL_FAST,
+        max_tokens: 600,
         messages: [{ role: 'user', content: [
           { type: 'image', source: { type: 'base64', media_type: mediaType, data: base64 } },
           { type: 'text', text: 'Dit is een foto van een koelkast, voorraadkast of losse ingrediënten. Noem alle herkenbare eetbare ingrediënten, kort, met een geschatte hoeveelheid in gram of ml als je die redelijk kunt inschatten (bijvoorbeeld "ca. 200 g feta"), anders zonder hoeveelheid. Antwoord ALLEEN met dit JSON-object: {"items":["2 paprika","ca. 200 g feta","..."]}' }
@@ -6908,6 +6917,60 @@ async function ccEvalJudge(c,ans){
  const r=safeParseJSON(raw)||{};const o=['goed','matig','fout'].includes(r.oordeel)?r.oordeel:'matig';
  return {oordeel:o,reden:String(r.reden||'Geen toelichting.').slice(0,200)};
 }
+const CC_CHEF_EVAL=[
+ {modus:'voor',vraag:'Eten voor het sporten',criteria:'Koolhydraatrijk, weinig vezels en vet. Een snack voor 30–60 min vooraf en een lichte maaltijd voor 2–3 uur vooraf, met het moment in de naam. 1 portie.'},
+ {modus:'na',vraag:'Eten na het sporten',criteria:'Herstel: 20–30 g eiwit plus koolhydraten. Een snack en een echte maaltijd. 1 portie.'},
+ {modus:'makkelijk',vraag:'Makkelijke maaltijd',criteria:'Hooguit 30 minuten en 8 ingrediënten, toch echt lekker. 30–45 g eiwit per portie.'},
+ {modus:'comfort',vraag:'Comfortfood',criteria:'Warm, vullend en troostend, met een frisse, gezonde draai. Voedzaam.'},
+ {modus:'auto',vraag:'Iets met zalm en broccoli, binnen 20 minuten',criteria:'Gebruikt zalm en broccoli en is binnen 20 minuten klaar.'}
+];
+const CC_CHEF_EVAL_ALGEMEEN='Voor iedereen: sportief en trendy, gezond zonder dieetgedoe; vormen als bowl, wrap, bakplaat of één pan; hoeveelheden in gram of ml; Nederlandse supermarkt; korte pakkende naam; korte concrete stappen; klopt en is haalbaar.';
+async function ccChefEvalJudge(c,recipes){
+ const kort=recipes.map(r=>({naam:r.naam,tijd:r.tijd,personen:r.personen,eiwit:r.eiwitten,vezels:r.vezels,ingredienten:r.ingredienten,bereiding:r.bereiding}));
+ const raw=await callAIFast('Je beoordeelt receptvoorstellen van een kook-app. Wees streng maar redelijk.\nVraag: '+JSON.stringify(c.vraag)+'\nCriteria: '+c.criteria+' '+CC_CHEF_EVAL_ALGEMEEN+'\nRecepten: '+JSON.stringify(kort)+'\nGeef alleen JSON: {"oordeel":"goed"|"matig"|"fout","reden":"max 20 woorden"}',200);
+ const r=safeParseJSON(raw)||{};return {oordeel:['goed','matig','fout'].includes(r.oordeel)?r.oordeel:'matig',reden:String(r.reden||'Geen toelichting.').slice(0,200)};
+}
+async function ccChefEvalRun(c,oud){
+ const keep={flowChefMode,genPersonen,genCount,genDieet,genFocus,genMaaltijd};
+ flowChefMode=c.modus;genPersonen=2;genCount=2;genDieet='vlees';genFocus='combi';genMaaltijd='';
+ const t0=performance.now();let eerste=null;
+ try{
+  const recipes=oud?await requestChefRecipesOud(c.vraag,2):await requestChefRecipes(c.vraag,2,[],()=>{eerste??=performance.now()-t0;});
+  const klaar=performance.now()-t0;
+  return {klaar,eerste:eerste??klaar,recipes,...await ccChefEvalJudge(c,recipes)};
+ }catch(e){return {klaar:performance.now()-t0,eerste:null,recipes:[],oordeel:'fout',reden:'Fout bij testen: '+(e.message||'onbekend')};}
+ finally{({flowChefMode,genPersonen,genCount,genDieet,genFocus,genMaaltijd}=keep);}
+}
+const ccSec=ms=>ms==null?'–':Math.round(ms/1000)+'\u00a0s';
+function ccChefEvalSummary(r,oud){return r.goed+' goed · '+r.matig+' matig · '+r.fout+' fout · '+(oud?'klaar na ':'eerste recept '+ccSec(r.eerste)+', klaar ')+ccSec(r.klaar);}
+function ccOpenChefEval(){
+ const runs=(data.chefEvalRuns||[]).slice(-5).reverse();
+ showModal('<div class="modal-header"><h2>Chef testen</h2>'+flowClose()+'</div>'
+  +'<p class="muted">5 vaste receptvragen. Per vraag meet de app hoe snel het eerste recept er is, en een tweede AI beoordeelt de recepten volgens jouw lijn. Ter vergelijking draait ook de oude werkwijze (maken en daarna controleren). Duurt een paar minuten, kost ongeveer 50 cent.</p>'
+  +'<button type="button" class="cc-eval-start" onclick="ccRunChefEval(this)">Start test</button><div id="cc-chef-eval-results" class="cc-eval-results"></div>'
+  +(runs.length?'<h3 class="cc-eval-h">Eerdere scores</h3><ul class="cc-eval-history">'+runs.map(r=>'<li><strong>Nieuw:</strong> '+ccChefEvalSummary(r.nieuw)+(r.oud?'<br><strong>Oud:</strong> '+ccChefEvalSummary(r.oud,true):'')+' <span>'+escapeText(new Date(r.at).toLocaleString('nl-NL',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}))+' · '+escapeText(r.version)+'</span></li>').join('')+'</ul>':''));
+}
+async function ccRunChefEval(btn){
+ if(ccEvalBusy)return;if(!settings.anthropicKey){showBanner('yellow','Vul eerst je Anthropic-sleutel in bij Instellingen.');return;}
+ ccEvalBusy=true;btn.disabled=true;
+ const box=document.getElementById('cc-chef-eval-results');box.innerHTML='';
+ const totaal=()=>({goed:0,matig:0,fout:0,eerste:0,klaar:0,n:0}),nieuw=totaal(),oud=totaal();
+ const tel=(t,r)=>{t[r.oordeel]++;t.klaar+=r.klaar;t.eerste+=r.eerste??r.klaar;t.n++;};
+ const gem=t=>({goed:t.goed,matig:t.matig,fout:t.fout,eerste:t.n?t.eerste/t.n:null,klaar:t.n?t.klaar/t.n:null});
+ const mark=o=>'<span class="cc-eval-mark is-'+o+'">'+({goed:'✓',matig:'~',fout:'✗'})[o]+'</span>';
+ try{
+  for(const [i,c] of CC_CHEF_EVAL.entries()){
+   btn.textContent='Bezig… '+(i+1)+' van '+CC_CHEF_EVAL.length;
+   const a=await ccChefEvalRun(c,false),b=await ccChefEvalRun(c,true);tel(nieuw,a);tel(oud,b);
+   const row=document.createElement('details');row.className='cc-eval-row';box.appendChild(row);
+   row.innerHTML='<summary>'+mark(a.oordeel)+'<span><strong>'+escapeText(c.vraag)+'</strong><small>Nieuw: eerste recept '+ccSec(a.eerste)+', klaar '+ccSec(a.klaar)+' · Oud: '+ccSec(b.klaar)+' ('+escapeText(b.oordeel)+')</small><small>'+escapeText(a.reden)+'</small></span></summary>'
+    +'<div class="cc-eval-body"><p><b>Nieuw:</b> '+escapeText(a.recipes.map(r=>r.naam).join(' · ')||'(geen recepten)')+'</p><p><b>Oud:</b> '+escapeText(b.recipes.map(r=>r.naam).join(' · ')||'(geen recepten)')+' — '+escapeText(b.reden)+'</p><p class="muted"><b>Criteria:</b> '+escapeText(c.criteria)+'</p></div>';
+  }
+  const run={at:new Date().toISOString(),version:APP_VERSION,model:CC_MODEL_MAIN,nieuw:gem(nieuw),oud:gem(oud)};
+  data.chefEvalRuns=[...(data.chefEvalRuns||[]),run].slice(-10);saveAndSync();
+  const sum=document.createElement('p');sum.className='cc-eval-score';sum.innerHTML='<strong>Nieuw:</strong> '+ccChefEvalSummary(run.nieuw)+'<br><strong>Oud:</strong> '+ccChefEvalSummary(run.oud,true);box.prepend(sum);
+ }finally{ccEvalBusy=false;btn.disabled=false;btn.textContent='Opnieuw testen';}
+}
 let ccEvalBusy=false;
 function ccOpenEval(){
  const runs=(data.coachEvalRuns||[]).slice(-5).reverse();
@@ -6943,8 +7006,8 @@ async function callAIStream(messages, maxTokens, options = {}) {
  const resp = await ccFetch('https://api.anthropic.com/v1/messages', {
   method: 'POST', signal,
   headers: {'Content-Type': 'application/json','x-api-key': settings.anthropicKey,'anthropic-version': '2023-06-01','anthropic-dangerous-direct-browser-access': 'true'},
-  body: JSON.stringify(Object.assign({model: CC_MODEL_MAIN, max_tokens: maxTokens, stream: true,
-   system: buildSystemPrompt([...messages].reverse().find(m=>m.role==='user')?.content||'') + (options.tools ? CC_PROPOSAL_RULES : ''), messages}, options.tools ? {tools: options.tools, tool_choice: {type: 'auto'}} : {}))
+  body: JSON.stringify(Object.assign({model: options.model || CC_MODEL_MAIN, max_tokens: maxTokens, stream: true,
+   system: options.system || (buildSystemPrompt([...messages].reverse().find(m=>m.role==='user')?.content||'') + (options.tools ? CC_PROPOSAL_RULES : '')), messages}, options.tools ? {tools: options.tools, tool_choice: {type: 'auto'}} : {}))
  });
  if (resp.status === 401) throw new Error('API-sleutel niet geldig — check instellingen.');
  if (resp.status === 429) throw new Error('Wacht even en probeer het opnieuw.');
@@ -8568,18 +8631,32 @@ const CHEF_STIJL=`STIJL VAN CHEF:
 - Naam: kort en pakkend, het gerecht plus de smaakmaker die het verschil maakt, bijvoorbeeld "Crispy tofu-bowl met sesam-limoen" of "Bakplaat-zalm met zoete aardappel en tahin". Gangbare foodwoorden als bowl, wrap en crispy mogen.
 - Stappen: kort, actief en concreet, bijvoorbeeld "Rooster 20 min op 220 °C". Geen lappen tekst.`;
 const CHEF_SCHEMA='[{"naam":"...","personen":2,"voedingsbasis":"per_portie","vezels":"~Xg","eiwitten":"~Xg","koolhydraten":"~Xg","tijd":"20 min","ingredienten":["200 g ingrediënt"],"bereiding":["Concrete stap met tijd en indien nodig temperatuur"]}]';
+function validateChefRecipe(r,persons){
+  if(!r||typeof r.naam!=='string'||!r.naam.trim()||r.naam.length>180||r.personen!==persons||r.voedingsbasis!=='per_portie')throw Error('Porties of voedingsbasis ontbreken. Probeer opnieuw.');
+  for(const key of ['ingredienten','bereiding'])if(!Array.isArray(r[key])||!r[key].length||!r[key].every(x=>typeof x==='string'&&x.trim()))throw Error('Ingrediënten of bereidingsstappen ontbreken. Probeer opnieuw.');
+  if(!r.ingredienten.every(x=>/\d|[½¼¾⅓⅔]|snuf|naar smaak/i.test(x)))throw Error('Niet alle hoeveelheden zijn duidelijk. Probeer opnieuw.');
+  if(typeof r.tijd!=='string'||!/^\d+\s*min$/.test(r.tijd)||parseInt(r.tijd)<1)throw Error('De bereidingstijd ontbreekt. Probeer opnieuw.');
+  for(const key of ['vezels','eiwitten','koolhydraten'])if(typeof r[key]!=='string'||!/^~?\d+(?:[.,]\d+)?\s*g$/.test(r[key]))throw Error('Voedingswaarden per portie ontbreken. Probeer opnieuw.');
+  return {...r,naam:r.naam.trim(),_basePersonen:persons,personen:persons,_type:(flowChefMode==='tijdens'||flowChefMode==='voorraadsnack'?'snack':genMaaltijd)||undefined};
+}
 function validateChefRecipes(value,persons,expected){
   if(!Array.isArray(value)||value.length!==expected)throw Error('Chef gaf geen volledig voorstel. Probeer opnieuw.');
-  return value.map(r=>{
-    if(!r||typeof r.naam!=='string'||!r.naam.trim()||r.naam.length>180||r.personen!==persons||r.voedingsbasis!=='per_portie')throw Error('Porties of voedingsbasis ontbreken. Probeer opnieuw.');
-    for(const key of ['ingredienten','bereiding'])if(!Array.isArray(r[key])||!r[key].length||!r[key].every(x=>typeof x==='string'&&x.trim()))throw Error('Ingrediënten of bereidingsstappen ontbreken. Probeer opnieuw.');
-    if(!r.ingredienten.every(x=>/\d|[½¼¾⅓⅔]|snuf|naar smaak/i.test(x)))throw Error('Niet alle hoeveelheden zijn duidelijk. Probeer opnieuw.');
-    if(typeof r.tijd!=='string'||!/^\d+\s*min$/.test(r.tijd)||parseInt(r.tijd)<1)throw Error('De bereidingstijd ontbreekt. Probeer opnieuw.');
-    for(const key of ['vezels','eiwitten','koolhydraten'])if(typeof r[key]!=='string'||!/^~?\d+(?:[.,]\d+)?\s*g$/.test(r[key]))throw Error('Voedingswaarden per portie ontbreken. Probeer opnieuw.');
-    return {...r,naam:r.naam.trim(),_basePersonen:persons,personen:persons,_type:(flowChefMode==='tijdens'||flowChefMode==='voorraadsnack'?'snack':genMaaltijd)||undefined};
-  });
+  return value.map(r=>validateChefRecipe(r,persons));
 }
-async function requestChefRecipes(focus,n,previous=[]){
+// Complete top-level objects in a (still streaming) JSON array, so each recipe can be shown as soon as it is done.
+function ccCompleteObjects(text){
+  const out=[],s=text.indexOf('[');if(s<0)return out;
+  let depth=0,inStr=false,esc=false,start=-1;
+  for(let i=s+1;i<text.length;i++){const ch=text[i];
+    if(inStr){if(esc)esc=false;else if(ch==='\\')esc=true;else if(ch==='"')inStr=false;continue;}
+    if(ch==='"')inStr=true;
+    else if(ch==='{'){if(depth===0)start=i;depth++;}
+    else if(ch==='}'){depth--;if(depth===0&&start>=0){out.push(text.slice(start,i+1));start=-1;}}
+    else if(ch===']'&&depth===0)break;
+  }
+  return out;
+}
+function chefRecipePrompt(focus,n,previous,selfCheck){
   const mode=CC_CHEF_MODES[flowChefMode]||{},persons=mode.sport||mode.snack?1:genPersonen;
   const nutrition=genFocus==='eiwitten'?'Kies een eiwitrijke variant zonder smaak of praktische haalbaarheid op te offeren.':genFocus==='vezels'?'Kies een vezelrijke variant zonder smaak of praktische haalbaarheid op te offeren.':mode.sport||mode.snack||flowChefMode==='comfort'?'':'Lekker én gezond: veel groente, volkoren of peulvruchten, weinig bewerkt. Draag bij aan het vezeldoel van de dag zonder smaak op te offeren.';
   const time=mode.tijd||'Doorgaans maximaal 35 minuten.';
@@ -8589,7 +8666,23 @@ async function requestChefRecipes(focus,n,previous=[]){
     ${nutrition} ${time} Gebruik gewone supermarktingrediënten, concrete hoeveelheden (ook uitlekgewicht waar relevant), smaakmakers en duidelijke stappen met tijden/temperaturen waar nodig.
     Elk recept is voor EXACT ${persons} personen. Alle ingrediënten gelden voor dit hele recept. Voedingswaarden zijn schattingen PER PORTIE, dus gedeeld door ${persons}. Neem personen:${persons} en voedingsbasis:"per_portie" op.
     ${previous.length?'Bied iets anders dan deze zojuist getoonde voorstellen: '+previous.join(', '):''}
+    ${selfCheck?'Controleer elk recept zelf voordat je het opschrijft: kloppen hoeveelheden en porties, komen alle ingrediënten in de stappen voor, is de kookvolgorde logisch, kloppen tijd en temperatuur, en zijn de voedingswaarden per portie realistisch?':''}
     Geef alleen JSON volgens ${CHEF_SCHEMA}. Geen lege waarden, tijd als "X min".`;
+  return {prompt,persons};
+}
+// One streamed call; every finished recipe goes straight to onRecipe.
+async function requestChefRecipes(focus,n,previous=[],onRecipe,signal){
+  const {prompt,persons}=chefRecipePrompt(focus,n,previous,true),found=[];let problem=null;
+  const take=text=>{const objs=ccCompleteObjects(text);while(found.length<Math.min(objs.length,n)){let r=null;try{r=validateChefRecipe(JSON.parse(objs[found.length]),persons);}catch(e){problem=problem||e;}found.push(r);if(r&&onRecipe)onRecipe(r);}};
+  const full=await callAIStream([{role:'user',content:prompt}],Math.min(5000,n*1500),{system:CC_TASK_STYLE+ccVocabNote(),signal,onText:(_,all)=>take(all)});
+  take(full);
+  const good=found.filter(Boolean);
+  if(!good.length)throw problem||Error('Chef gaf geen volledig voorstel. Probeer opnieuw.');
+  return good;
+}
+// Tijdelijk (fase 2): de oude werkwijze in twee stappen, alleen voor de vergelijking in Chef testen. Weg na de meting.
+async function requestChefRecipesOud(focus,n){
+  const {prompt,persons}=chefRecipePrompt(focus,n,[],false);
   const draft=await callAIPlain(prompt,Math.min(4500,n*1300));
   const reviewed=await callAIPlain(`Controleer deze receptvoorstellen voor de oorspronkelijke opdracht hieronder. Herstel fouten in hoeveelheden, porties, voedingsschattingen per portie, ontbrekende ingrediënten in stappen, kookvolgorde, totale bereidingstijd en temperaturen waar nodig. Controleer of het praktisch te koken is en culinair samenhangt. Houd rekening met alle opgegeven dieetwensen. Behoud de stijl, de namen en het karakter van de recepten; verbeter alleen wat niet klopt. Verzin geen keurmerk of zekerheid. Geef precies ${n} volledige gecorrigeerde recepten als JSON-array volgens hetzelfde schema, voor ${persons} personen.\nOPDRACHT: ${prompt}\nVOORSTELLEN: ${draft}`,Math.min(4500,n*1300));
   return validateChefRecipes(safeParseJSON(reviewed),persons,n);
@@ -8597,20 +8690,42 @@ async function requestChefRecipes(focus,n,previous=[]){
 let _chefGenerating=false;
 function generateRecepten(){return flowChefSubmit();}
 
+function chefPreviewOpen(fresh){
+  if(fresh)window._generatedRecepten=[];
+  showModal(`<div class="modal-header"><h2>Waar heb je zin in?</h2>${flowClose()}</div><p class="muted">Kies een idee. Alleen wat je bewaart komt in Mijn recepten.</p><div id="gen-preview-list">${(window._generatedRecepten||[]).map(recipeCardHTML).join('')}</div><div id="gen-preview-wait" class="cc-chef-wait" role="status" hidden><span class="cc-chef-dot" aria-hidden="true"></span><span id="gen-preview-wait-text"></span></div><button id="gen-meer-btn" class="btn btn-secondary btn-full" onclick="generateMeer()">Andere ideeën</button>`);
+}
+function chefPreviewWait(text){
+  const w=document.getElementById('gen-preview-wait'),b=document.getElementById('gen-meer-btn');if(!w)return;
+  w.hidden=!text;w.classList.remove('is-error');document.getElementById('gen-preview-wait-text').textContent=text||'';
+  if(b){b.hidden=!!text;b.textContent='Andere ideeën';}
+}
+function chefPreviewAdd(r){
+  const list=document.getElementById('gen-preview-list');if(!list)return;
+  const item={...r,_tmpId:'g'+window._generatedRecepten.length};window._generatedRecepten.push(item);
+  list.insertAdjacentHTML('beforeend',recipeCardHTML(item));chefPreviewWait('Chef bedenkt nog een idee…');
+}
+function chefPreviewFail(message){
+  if(window._generatedRecepten.length){chefPreviewWait('');return;}
+  const w=document.getElementById('gen-preview-wait'),b=document.getElementById('gen-meer-btn');if(!w)return;
+  chefPreviewWait(message);w.classList.add('is-error');if(b){b.hidden=false;b.textContent='Probeer opnieuw';}
+}
+async function chefStream(focus,previous){
+  const view=ccViewRevision,ctrl=new AbortController();
+  chefPreviewWait(previous.length?'Chef bedenkt nieuwe ideeën…':'Chef bedenkt je eerste idee…');
+  try{await requestChefRecipes(focus,getActiveGenCount(),previous,r=>{if(view!==ccViewRevision){ctrl.abort();return;}chefPreviewAdd(r);},ctrl.signal);if(view===ccViewRevision)chefPreviewWait('');}
+  catch(e){if(e.name!=='AbortError'&&view===ccViewRevision)chefPreviewFail(e.message||'Chef is even niet bereikbaar. Probeer het zo opnieuw.');}
+}
 async function _doGenerateRecepten(focus){
-  const view=ccViewRevision,input=document.getElementById('gen-focus-input'),draft=input?.value;
   if(_chefGenerating)return;
   if(!settings.anthropicKey){showBanner('yellow','Stel je AI-sleutel in bij Instellingen om nieuwe ideeën te maken. Je eigen recepten blijven beschikbaar.');return;}
   const btn=document.getElementById('gen-btn');_chefGenerating=true;if(btn)btn.disabled=true;
-  try{const recipes=await requestChefRecipes(focus,getActiveGenCount());if(view!==ccViewRevision||document.getElementById('gen-focus-input')!==input||input?.value!==draft)return;window._generatedRecepten=[];showGeneratedPreview(recipes);}
-  catch(e){showBanner('red',e.message||'Chef is even niet bereikbaar. Je wens blijft staan.');}
+  try{chefPreviewOpen(true);await chefStream(focus,[]);}
   finally{_chefGenerating=false;if(btn)btn.disabled=false;}
 }
-async function generateMeer(){const view=ccViewRevision;
-  if(_chefGenerating)return;_chefGenerating=true;const btn=document.getElementById('gen-meer-btn');if(btn){btn.disabled=true;btn.textContent='Nieuwe ideeën controleren…';}
-  try{const recipes=await requestChefRecipes(document.getElementById('gen-focus-input')?.value.trim()||'',getActiveGenCount(),(window._generatedRecepten||[]).map(r=>r.naam));showGeneratedPreview(recipes);}
-  catch(e){showBanner('red',e.message||'Nieuwe ideeën maken is niet gelukt.');}
-  finally{_chefGenerating=false;if(btn){btn.disabled=false;btn.textContent='Andere ideeën';}}
+async function generateMeer(){
+  if(_chefGenerating)return;_chefGenerating=true;
+  try{await chefStream(document.getElementById('gen-focus-input')?.value.trim()||'',(window._generatedRecepten||[]).map(r=>r.naam));}
+  finally{_chefGenerating=false;}
 }
 function recipeCardHTML(r){
   return `<article class="chef-proposal" id="gencard-${r._tmpId}"><div class="chef-proposal-meta">${escapeText(r.tijd)} · ${r.personen} ${r.personen===1?'portie':'porties'}</div>
@@ -8618,11 +8733,6 @@ function recipeCardHTML(r){
   <details><summary>Bekijk recept</summary><h4>Ingrediënten voor ${r.personen} ${r.personen===1?'persoon':'personen'}</h4><ul>${r.ingredienten.map(x=>`<li>${escapeText(x)}</li>`).join('')}</ul><h4>Bereiding</h4><ol>${r.bereiding.map(x=>`<li>${escapeText(x)}</li>`).join('')}</ol>
   <div class="chef-adjust"><label for="aanpas-${r._tmpId}">Maak het naar jouw smaak</label><input id="aanpas-${r._tmpId}" class="modal-input" placeholder="Bijvoorbeeld: meer eiwit of zonder feta"><button id="aanpas-btn-${r._tmpId}" class="btn btn-secondary" onclick="pasReceptAan('${r._tmpId}')">Pas recept aan</button></div></details>
   <div class="chef-proposal-actions"><button class="btn btn-primary" onclick="openGeneratedMeal('${r._tmpId}',false)">Inplannen</button><button class="btn btn-secondary" onclick="openGeneratedMeal('${r._tmpId}',true)">Gegeten</button><button class="btn btn-ghost" id="bewaar-btn-${r._tmpId}" onclick="bewaarGenRecept('${r._tmpId}')">Bewaren</button></div></article>`;
-}
-function showGeneratedPreview(recipes){
-  const previous=window._generatedRecepten||[],offset=previous.length;
-  window._generatedRecepten=[...previous,...recipes.map((r,i)=>({...r,_tmpId:'g'+(offset+i)}))];
-  showModal(`<div class="modal-header"><h2>Waar heb je zin in?</h2><button class="modal-close" onclick="closeModal()" aria-label="Sluiten">✕</button></div><p class="muted">Kies een idee. Alleen wat je bewaart komt in Mijn recepten.</p><div id="gen-preview-list">${window._generatedRecepten.map(recipeCardHTML).join('')}</div><button id="gen-meer-btn" class="btn btn-secondary btn-full" onclick="generateMeer()">Andere ideeën</button>`);
 }
 function retainGeneratedRecipe(r,savedByUser=false){
   data.recepten ||= [];
@@ -8720,7 +8830,7 @@ function flowSetChefMode(mode,start){
 }
 function flowGoChef(mode){flowChefTurns=[];flowChefAdvice=null;switchTab('recepten',document.querySelector('.tab-btn[onclick*="recepten"]'));flowChefMode=mode;flowRenderChef();document.getElementById('gen-focus-input').focus();}
 function flowChefVoice(){return flowListen('chef','gen-focus-input','voice-recipe-btn','chef-mic-label',flowChefSubmit);}
-async function flowChefSubmit(){const view=ccViewRevision;if(flowChefBusy||_chefGenerating||flowSpeech?.key==='chef')return;const input=document.getElementById('gen-focus-input'),text=input.value.trim(),status=document.getElementById('chef-mic-label');if(!text){status.textContent='Spreek of typ eerst je vraag of wens.';return;}if(!settings.anthropicKey){status.textContent='Stel je AI-sleutel in bij Instellingen. Je tekst blijft staan.';return;}const explicitRecipe=/\b[a-z]*recept(?:en|idee|ideeën)?\b/i.test(text);const advice=flowChefMode==='auto'&&!explicitRecipe&&(flowChefTurns.length>0||/\b(wanneer|hardlop\w*|kracht\w*|train\w*|sportschool|sporten|marathon|herstel|voor.*sport|na.*sport)\b/i.test(text)||/wat eet ik.*(avond|ochtend|morgen)/i.test(text));if(!advice){status.textContent='Receptideeën maken en controleren…';await _doGenerateRecepten(text);status.textContent='Je wens blijft staan. Je kunt opnieuw inspreken of aanpassen.';return;}flowChefBusy=true;const btn=document.getElementById('gen-btn');btn.disabled=true;status.textContent='Chef denkt mee over je eetmomenten…';try{const context=[...flowWeekDates(),...flowWeekDates(1)].flatMap(d=>(flowDay(d).activiteiten||[]).map(a=>({datum:d,naam:a.naam,km:a.km,minuten:a.duur,tijd:a.tijd,gedaan:!!a.afgevinkt})));const prompt=`Je bent Chef in Coach & Chef. Help eerst met WAT en WANNEER eten; maak nog geen volledige recepten. Vandaag is ${today()}. Bekende beweging: ${JSON.stringify(context)}. Eetvoorkeur: ${_dieetRegel()}. Extra voorkeur: ${genFocus}. Recente dialoog: ${JSON.stringify(flowChefTurns.slice(-6))}. Nieuwe vraag: ${JSON.stringify(text)}.
+async function flowChefSubmit(){const view=ccViewRevision;if(flowChefBusy||_chefGenerating||flowSpeech?.key==='chef')return;const input=document.getElementById('gen-focus-input'),text=input.value.trim(),status=document.getElementById('chef-mic-label');if(!text){status.textContent='Spreek of typ eerst je vraag of wens.';return;}if(!settings.anthropicKey){status.textContent='Stel je AI-sleutel in bij Instellingen. Je tekst blijft staan.';return;}const explicitRecipe=/\b[a-z]*recept(?:en|idee|ideeën)?\b/i.test(text);const advice=flowChefMode==='auto'&&!explicitRecipe&&(flowChefTurns.length>0||/\b(wanneer|hardlop\w*|kracht\w*|train\w*|sportschool|sporten|marathon|herstel|voor.*sport|na.*sport)\b/i.test(text)||/wat eet ik.*(avond|ochtend|morgen)/i.test(text));if(!advice){status.textContent='Chef bedenkt ideeën…';await _doGenerateRecepten(text);status.textContent='Je wens blijft staan. Je kunt opnieuw inspreken of aanpassen.';return;}flowChefBusy=true;const btn=document.getElementById('gen-btn');btn.disabled=true;status.textContent='Chef denkt mee over je eetmomenten…';try{const context=[...flowWeekDates(),...flowWeekDates(1)].flatMap(d=>(flowDay(d).activiteiten||[]).map(a=>({datum:d,naam:a.naam,km:a.km,minuten:a.duur,tijd:a.tijd,gedaan:!!a.afgevinkt})));const prompt=`Je bent Chef in Coach & Chef. Help eerst met WAT en WANNEER eten; maak nog geen volledige recepten. Vandaag is ${today()}. Bekende beweging: ${JSON.stringify(context)}. Eetvoorkeur: ${_dieetRegel()}. Extra voorkeur: ${genFocus}. Recente dialoog: ${JSON.stringify(flowChefTurns.slice(-6))}. Nieuwe vraag: ${JSON.stringify(text)}.
 Geef maximaal 4 beknopte eetmomenten in tijdsvolgorde met concrete, haalbare voedingskeuzes. Bij een snelle snack is één simpel moment voldoende. Neem starttijd, duur, tijd om te koken, eetvoorkeuren en tolerantie mee waar bekend. Verzin geen starttijd, medische toestand of exacte persoonlijke behoefte. Vraag hoogstens één noodzakelijke verduidelijking als die de uitkomst wezenlijk verandert; anders geef praktische opties. Focus op eiwit of vezels is een voorkeur, geen verplicht minimum voor elk moment, en moet passen rond inspanning. Maak geen absolute gezondheidsbeloften. Alleen JSON: {"titel":"...","momenten":[{"wanneer":"...","advies":"max 2 korte zinnen"}],"vraag":"eventuele vraag of lege string","receptwens":"een korte opdracht om bijpassende recepten te maken"}.`;const r=safeParseJSON(await callAI(prompt,1100));if(view!==ccViewRevision||document.getElementById('gen-focus-input')!==input||input.value.trim()!==text)return;if(!r||typeof r.titel!=='string'||(r.vraag!=null&&typeof r.vraag!=='string')||(r.receptwens!=null&&typeof r.receptwens!=='string')||!Array.isArray(r.momenten)||r.momenten.length>4||!r.momenten.every(m=>typeof m.wanneer==='string'&&typeof m.advies==='string')||(!r.momenten.length&&!r.vraag))throw Error('Chef kon geen helder advies maken. Probeer opnieuw.');flowChefAdvice={...r,source:text};flowChefTurns.push({role:'user',content:text},{role:'assistant',content:JSON.stringify(r)});flowChefTurns=flowChefTurns.slice(-6);flowRenderAdvice();status.textContent=r.vraag?'Chef heeft één vraag. Spreek je antwoord in.':'Je advies staat hieronder. Niets is automatisch ingepland.';input.value='';}catch(e){status.textContent=e.message||'Chef is even niet bereikbaar. Je tekst blijft staan.';}finally{flowChefBusy=false;btn.disabled=false;}}
 function flowRenderAdvice(){const r=flowChefAdvice,el=document.getElementById('flow-chef-answer');if(!r||!el)return;el.innerHTML=`<section class="flow-advice"><div class="flow-eyebrow">Jouw eetmomenten</div><h2>${escapeText(r.titel)}</h2><ol class="flow-timeline">${r.momenten.map(m=>`<li><strong>${escapeText(m.wanneer)}</strong><p>${escapeText(m.advies)}</p></li>`).join('')}</ol>${r.vraag?`<p class="flow-advice-question">${escapeText(r.vraag)}</p>`:''}<div class="flow-action-row">${r.receptwens?'<button class="btn btn-primary" onclick="flowAdviceRecipes()">Bijpassende ideeën</button>':''}<button class="btn btn-ghost" onclick="flowResetAdvice()">Nieuwe vraag</button></div></section>`;}
 function flowAdviceRecipes(){if(!flowChefAdvice)return;return _doGenerateRecepten(`${flowChefAdvice.receptwens}. Context en timing: ${JSON.stringify(flowChefAdvice.momenten)}`);}
@@ -8748,7 +8858,7 @@ function flowSaveRecipeEditor(id){try{const name=document.getElementById('flow-r
 function flowKeepPhotoDraft(){const r=flowRecipePhoto;if(!r)return;Object.assign(r,{naam:document.getElementById('flow-photo-name').value,personen:Number(document.getElementById('flow-photo-persons').value)||null,tijd:document.getElementById('flow-photo-time').value,ingredienten:document.getElementById('flow-photo-ing').value.split('\n'),bereiding:document.getElementById('flow-photo-steps').value.split('\n'),checked:!!document.getElementById('flow-photo-confirm')?.checked});}
 function flowPhotoResume(){const el=document.getElementById('flow-photo-resume');if(el)el.innerHTML=flowRecipePhoto?'<button class="flow-photo-resume" onclick="flowPhotoReview()">Ga verder met je receptfoto <span>Controleer en bewaar je recept</span></button>':'';}
 
-function flowBackToRecipe(id){const r=(window._generatedRecepten||[]).find(x=>x._tmpId===id);if(r?._fromLibrary)flowRecipeDetail(r._savedRecipeId);else if(r?.bron)flowPreviewPhoto(r);else showGeneratedPreview([]);}
+function flowBackToRecipe(id){const r=(window._generatedRecepten||[]).find(x=>x._tmpId===id);if(r?._fromLibrary)flowRecipeDetail(r._savedRecipeId);else if(r?.bron)flowPreviewPhoto(r);else chefPreviewOpen(false);}
 function flowOpenGeneratedMeal(id,eaten){
  const r=(window._generatedRecepten||[]).find(x=>x._tmpId===id);if(!r)return;
  showModal(`<div class="modal-header"><h2>${eaten?'Maaltijd gegeten':'Maaltijd inplannen'}</h2>${flowClose()}</div><p>${escapeText(r.naam)}</p><div class="flow-form-grid"><label class="flow-field">Datum<input id="gen-log-date" type="date" value="${today()}"></label><label class="flow-field">Maaltijdmoment<select id="gen-log-slot">${['ontbijt','lunch','diner','snack'].map(s=>`<option value="${s}" ${s===(r._type||'diner')?'selected':''}>${s[0].toUpperCase()+s.slice(1)}</option>`).join('')}</select></label></div><p class="muted">Je registreert één portie. Het recept blijft bij de maaltijd beschikbaar.</p><div class="flow-action-stack"><button class="btn btn-primary" onclick="confirmGeneratedMeal(${flowArg(id)},${eaten})">${eaten?'Opslaan als gegeten':'Inplannen'}</button><button class="btn btn-ghost" onclick="flowBackToRecipe(${flowArg(id)})">Terug naar recept</button></div>`);
@@ -8835,7 +8945,7 @@ function openSettings(){
  <details class="ritme-setting-group"><summary><span><strong>Eten &amp; je eigen doelen</strong><small>Voorkeuren voor praktisch advies</small></span><b>02</b></summary><div>${field('eten','Wat eet je graag of liever niet?','Voorkeuren, gewoontes of ingrediënten')}${field('woorden','Eigen woorden voor spraak','Bijvoorbeeld namen, oefeningen of gerechten, gescheiden door komma\'s')}<p class="muted">Deze getallen zijn jouw instellingen voor het overzicht; ze zijn geen persoonlijk voedingsadvies.</p><div class="flow-form-grid"><label class="flow-field">Vezels · g per dag<input id="ritme-goal-fiber" inputmode="decimal" value="${goals.vezels}"></label><label class="flow-field">Eiwit · g per dag<input id="ritme-goal-protein" inputmode="decimal" value="${goals.eiwitten}"></label></div></div></details>
  <details class="ritme-setting-group"><summary><span><strong>Inspreken &amp; luisteren</strong><small>Praat met Coach op jouw manier</small></span><b>03</b></summary><div><p>Je kunt inspreken via de knoppen in de app. Je browser vraagt toestemming voor de microfoon; typen blijft altijd mogelijk.</p><label class="flow-check"><input id="ritme-tts" type="checkbox" ${_ttsEnabled?'checked':''}>Laat Coach antwoorden voorlezen</label><label class="flow-field">Stem bij verbonden voorlezen<select id="set-tts-voice">${['nova','shimmer','echo','onyx','alloy','fable'].map(v=>`<option value="${v}">${v[0].toUpperCase()+v.slice(1)}</option>`).join('')}</select></label><p class="muted">Zonder extra verbinding gebruikt de app de beschikbare browserstem.</p></div></details>
  <details class="ritme-setting-group"><summary><span><strong>Wat Coach van je onthoudt</strong><small>Bekijk en beheer je voorkeuren</small></span><b>04</b></summary><div><div id="cc-memory-panel"></div><div id="brain-overview"></div><h3 class="flow-subhead">Samen bewegen</h3><p class="muted">Namen die je in je plannen gebruikt.</p><div id="partners-list"></div><button class="ritme-link" onclick="showAddPartnerModal()">Iemand toevoegen</button></div></details>
- <details class="ritme-setting-group" id="ritme-connections"><summary><span><strong>Verbindingen &amp; bewaren</strong><small>${settings.anthropicKey?'Slimme Coach ingesteld':'Slimme Coach nog niet verbonden'} · ${settings.githubToken&&settings.gistId?'synchronisatie ingesteld':'op dit apparaat'}</small></span><b>05</b></summary><div><p>Handmatig loggen en je overzicht werken zonder verbinding. Slim verwerken en foto’s lezen gebruiken de ingestelde AI-dienst.</p><details class="flow-extra"><summary>Slimme Coach verbinden</summary>${field('anthropic','Anthropic API-sleutel','Je sleutel','password')}<p class="muted">Je berichten en gekozen foto’s worden hiervoor naar de AI-dienst gestuurd. De sleutel blijft in de instellingen van deze browser.</p></details><details class="flow-extra"><summary>Extra stem verbinden · optioneel</summary>${field('openai','OpenAI API-sleutel','Je sleutel','password')}</details><details class="flow-extra"><summary>Synchronisatie tussen apparaten · optioneel</summary><p class="muted">Voor de bestaande GitHub Gist-koppeling. Alleen nodig als je deze gebruikt.</p>${field('token','GitHub toegangssleutel','Personal access token','password')}${field('gist','Gist-ID','ID van je eigen Gist')}${field('syncpass','Synchronisatiewachtwoord','Optioneel: versleutelt je cloudkopie','password')}<label class="flow-check cc-privacy-check"><input id="ritme-privacy" type="checkbox" ${settings.privacyModus?'checked':''}>Privacymodus</label><p class="muted">Aan: de AI krijgt alleen je bericht en wat je vandaag logde. Geen profiel, geen eerdere dagen en geen herinneringen; er worden ook geen nieuwe herinneringen gemaakt. Je gegevens blijven gewoon op dit apparaat staan. Uit: alles werkt weer met volledige context.</p><h3 class="cc-eval-h">Patronen die de coach ziet</h3><div id="cc-patterns-box">${ccPatternsHtml()}</div><button type="button" class="cc-eval-open" onclick="ccOpenEval()">Coach testen</button><p class="muted">Stuurt 12 vaste testvragen met nepdata naar de coach en laat een tweede AI de antwoorden beoordelen. Je eigen logboek en gesprekken blijven onaangeroerd. Kost een paar cent.</p><p class="muted">Met een wachtwoord wordt je cloudkopie versleuteld voordat hij naar GitHub gaat. Vergeet je het, dan is de cloudkopie niet meer te openen; je gegevens op dit apparaat en je exports blijven wel bruikbaar. Eerdere onversleutelde versies blijven in de geschiedenis van je Gist staan, dus begin bij voorkeur met een nieuwe, lege Gist.</p><p class="muted">Een ingestelde koppeling is nog geen bevestiging dat synchronisatie bereikbaar is.</p></details><div class="flow-action-stack"><button class="btn btn-secondary" onclick="exportData()">Download een kopie van mijn logboek</button><label class="btn btn-ghost ritme-file-label">Een logboek terugzetten<input type="file" accept=".json" onchange="importData(this)"></label></div><details class="flow-extra"><summary>Opruimen en opnieuw beginnen</summary><p class="muted">Maak eerst een kopie als je iets wilt behouden. Je krijgt nog een bevestiging.</p><div class="flow-action-stack"><button class="btn btn-ghost" onclick="openResetActiviteitenModal()">Activiteiten wissen</button><button class="btn btn-ghost" onclick="openResetMaaltijdenModal()">Maaltijden wissen</button><button class="btn btn-ghost" onclick="resetApp()">Hele app opnieuw beginnen</button></div></details></div></details>
+ <details class="ritme-setting-group" id="ritme-connections"><summary><span><strong>Verbindingen &amp; bewaren</strong><small>${settings.anthropicKey?'Slimme Coach ingesteld':'Slimme Coach nog niet verbonden'} · ${settings.githubToken&&settings.gistId?'synchronisatie ingesteld':'op dit apparaat'}</small></span><b>05</b></summary><div><p>Handmatig loggen en je overzicht werken zonder verbinding. Slim verwerken en foto’s lezen gebruiken de ingestelde AI-dienst.</p><details class="flow-extra"><summary>Slimme Coach verbinden</summary>${field('anthropic','Anthropic API-sleutel','Je sleutel','password')}<p class="muted">Je berichten en gekozen foto’s worden hiervoor naar de AI-dienst gestuurd. De sleutel blijft in de instellingen van deze browser.</p></details><details class="flow-extra"><summary>Extra stem verbinden · optioneel</summary>${field('openai','OpenAI API-sleutel','Je sleutel','password')}</details><details class="flow-extra"><summary>Synchronisatie tussen apparaten · optioneel</summary><p class="muted">Voor de bestaande GitHub Gist-koppeling. Alleen nodig als je deze gebruikt.</p>${field('token','GitHub toegangssleutel','Personal access token','password')}${field('gist','Gist-ID','ID van je eigen Gist')}${field('syncpass','Synchronisatiewachtwoord','Optioneel: versleutelt je cloudkopie','password')}<label class="flow-check cc-privacy-check"><input id="ritme-privacy" type="checkbox" ${settings.privacyModus?'checked':''}>Privacymodus</label><p class="muted">Aan: de AI krijgt alleen je bericht en wat je vandaag logde. Geen profiel, geen eerdere dagen en geen herinneringen; er worden ook geen nieuwe herinneringen gemaakt. Je gegevens blijven gewoon op dit apparaat staan. Uit: alles werkt weer met volledige context.</p><h3 class="cc-eval-h">Patronen die de coach ziet</h3><div id="cc-patterns-box">${ccPatternsHtml()}</div><button type="button" class="cc-eval-open" onclick="ccOpenEval()">Coach testen</button><p class="muted">Stuurt 12 vaste testvragen met nepdata naar de coach en laat een tweede AI de antwoorden beoordelen. Je eigen logboek en gesprekken blijven onaangeroerd. Kost een paar cent.</p><button type="button" class="cc-eval-open" onclick="ccOpenChefEval()">Chef testen</button><p class="muted">Stuurt 5 vaste receptvragen naar Chef, meet de snelheid en laat een tweede AI de recepten beoordelen. Je recepten en logboek blijven onaangeroerd.</p><p class="muted">Met een wachtwoord wordt je cloudkopie versleuteld voordat hij naar GitHub gaat. Vergeet je het, dan is de cloudkopie niet meer te openen; je gegevens op dit apparaat en je exports blijven wel bruikbaar. Eerdere onversleutelde versies blijven in de geschiedenis van je Gist staan, dus begin bij voorkeur met een nieuwe, lege Gist.</p><p class="muted">Een ingestelde koppeling is nog geen bevestiging dat synchronisatie bereikbaar is.</p></details><div class="flow-action-stack"><button class="btn btn-secondary" onclick="exportData()">Download een kopie van mijn logboek</button><label class="btn btn-ghost ritme-file-label">Een logboek terugzetten<input type="file" accept=".json" onchange="importData(this)"></label></div><details class="flow-extra"><summary>Opruimen en opnieuw beginnen</summary><p class="muted">Maak eerst een kopie als je iets wilt behouden. Je krijgt nog een bevestiging.</p><div class="flow-action-stack"><button class="btn btn-ghost" onclick="openResetActiviteitenModal()">Activiteiten wissen</button><button class="btn btn-ghost" onclick="openResetMaaltijdenModal()">Maaltijden wissen</button><button class="btn btn-ghost" onclick="resetApp()">Hele app opnieuw beginnen</button></div></details></div></details>
  <div class="ritme-settings-save"><p id="ritme-settings-error" class="flow-error" role="alert"></p><button class="btn btn-primary btn-full" onclick="saveSettings()">Bewaar mijn instellingen</button><button class="btn btn-ghost btn-full" onclick="closeSettings()">Sluiten zonder opslaan</button><small>Wijzigingen worden pas bewaard als je op Bewaar drukt.</small></div><p class="ritme-version">Mijn ritme · ${APP_VERSION}</p></div>`;
  Object.entries(RITME_SETTINGS).forEach(([id,key])=>{document.getElementById('set-'+id).value=settings[key]||(key==='ttsVoice'?'nova':'');});el.classList.add('visible');document.getElementById('app').inert=true;el.scrollTop=0;renderBrainOverview();renderPartners();
 }
@@ -9462,16 +9572,17 @@ function ccNextPlanned(){return ritmeActivities([...new Set(Object.values(data.w
 // Reliability boundary: recoverable storage, request ownership and cloud ancestry.
 let ccStorageBlocked=false,ccRecoveryRaw=null,ccEditState=null,ccViewRevision=0,ccCheckInRequest=0;
 const ccRequests=new Set();
-async function ccPreparePhoto(file){
+async function ccPreparePhoto(file,max=1600){
  if(!file)return null;
  const ok=['image/jpeg','image/png','image/webp','image/gif'];
  const isImage=/^image\//.test(file.type||'')||/\.(heic|heif)$/i.test(file.name||'');
  if(!isImage)return null;
- if(ok.includes(file.type)&&file.size<=3.5*1024*1024)return file;
+ if(ok.includes(file.type)&&file.size<=400*1024)return file;
  try{
   const url=URL.createObjectURL(file);
   const img=await new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=url;});
-  const max=1600,w=img.naturalWidth||img.width,h=img.naturalHeight||img.height,scale=Math.min(1,max/Math.max(w,h));
+  const w=img.naturalWidth||img.width,h=img.naturalHeight||img.height,scale=Math.min(1,max/Math.max(w,h));
+  if(scale===1&&ok.includes(file.type)&&file.size<=3.5*1024*1024){URL.revokeObjectURL(url);return file;}
   const c=document.createElement('canvas');c.width=Math.max(1,Math.round(w*scale));c.height=Math.max(1,Math.round(h*scale));
   c.getContext('2d').drawImage(img,0,0,c.width,c.height);URL.revokeObjectURL(url);
   const blob=await new Promise(r=>c.toBlob(r,'image/jpeg',0.85));
