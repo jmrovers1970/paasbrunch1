@@ -40,7 +40,7 @@ Gebruiker: Jim. Primair op iPhone (Safari), in het Nederlands. Loopt (hoofdsport
 
 **De repository is openbaar** (GitHub Pages op een gratis account vereist dat). Er mogen dus nooit sleutels, tokens of persoonsgegevens in code, commits of testbestanden staan.
 
-**Versie**: constante `APP_VERSION = 'lime-YYYYMMDD-N'` bovenin het script. Getoond in Instellingen. Elke nieuwe versie: datum van vandaag en N doornummeren. Huidige basis: `lime-20261003-16`.
+**Versie**: constante `APP_VERSION = 'lime-YYYYMMDD-N'` bovenin het script. Getoond in Instellingen. Elke nieuwe versie: datum van vandaag en N doornummeren. Huidige basis: `lime-20261003-17`.
 
 ### CSS — twee lagen
 - **Oude laag**: eerste `<style>` in `<head>`. Historisch gegroeid, veel `!important`. Ongebruikte regels zijn al verwijderd; de rest wordt deels overstemd. Niet uitbreiden.
@@ -105,6 +105,8 @@ Lettertype: -apple-system, 'SF Pro Text', system-ui, sans-serif.
 - Chef: `flowRenderChef`, modus `flowChefMode` (`CC_CHEF_MODES`: voor/tijdens/na/makkelijk/uitgebreid/comfort/voorraadsnack/voorraad) via `flowSetChefMode`, versturen `flowChefSubmit`, genereren `_doGenerateRecepten` → `requestChefRecipes`: één gestreamde aanroep (`callAIStream` met eigen `system`), elk af recept direct in beeld via `chefPreviewOpen`/`chefPreviewAdd`. Receptinstellingen: `flowSetPersons`, `flowSetCount`, `flowSetDieet` (bewaard in localStorage). Foto's: `flowPhotoMenu`, `flowChoosePhoto`, `flowAnalyseRecipePhoto`, `analyseVoorraadFoto`, verkleinen `ccPreparePhoto`. Voorraad: rij *Uit je voorraad* bovenaan opent `showVoorraadModal` (lijst `data.chefVoorraad.items`, aantikken `toggleVoorraad`, starten `voorraadMaak`). Onderaan *Jouw keuken*: Mijn recepten (`ccOpenRecipes` → `flowRecipeList`), Weekmenu (`ccOpenWeekMenu`), Boodschappen, Receptinstellingen (`ccOpenRecipeSettings`). Boodschappen: `showShoppingList`, `_renderShopPicker`, `_buildAndShowShopList`, `_toggleShopMeal`, `ritmeCheckShopping`. Kookmodus: `enterKookmodus`, `ccCook*`.
 - Instellingen: `openSettings`, `saveSettings`. Bovenaan één kaart (`.cc-set-row`): naam, AI-sleutel, voorlezen, privacymodus. Daaronder *Meer instellingen*, inklapbaar (`ccToggleSetMore`); elke rij opent een pagina in hetzelfde scherm (`ccSetPage(id)`, terug met ‹): Over jou, Doelen (bewegen per week, vezels, eiwit), Stem en spraak, Wat Coach onthoudt, Coach-tegels, Synchronisatie, Testen, Kopie en opnieuw, Uitleg over de app. Alle velden blijven in de DOM; één *Bewaar* bewaart alles (verborgen op pagina's zonder velden).
 - Opening: `#intro-overlay` (`showIntro`, `flowCheckIntro`, `flowDismissIntro`). Bij elke start, tot *Niet meer tonen* (`hc_intro_hide`). Terug te vinden via Instellingen › Uitleg over de app.
+- Eerste keer: opening → wizard in `#setup-overlay` (`ccWizStart('first'|'again')`, `ccWizRender`, `ccWizFinish`): naam (+ kopie terugzetten), sporten (chips), doelen (steppers), eten (Alles/Vis/Vega + liever niet → `settings.lieverNiet`, gaat mee naar Chef via `_dieetRegel` en naar de coach), AI-sleutel/voorlezen/privacy, klaar met voorbeelden. Opnieuw te starten via Instellingen › Opnieuw instellen (logboek blijft).
+- Voorbeeldvragen: `CC_EXAMPLES` (Loggen, Advies, Inzicht, Plannen), venster via Coach › *Wat kan ik vragen?* (`ccOpenExamples`, tik zet de tekst in de invoer: `ccUseExample`); ook in de opening en aan het eind van de wizard.
 
 ## 4. Vaste regels voor code
 

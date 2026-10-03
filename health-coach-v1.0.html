@@ -213,7 +213,6 @@ select {
   padding-right: 38px;
 }
 label { display: block; font-size: 14px; font-weight: 600; color: var(--text-2); margin-bottom: 8px; }
-.form-group { margin-bottom: 18px; }
 
 /* ─── HEADER ─── */
 .page-header {
@@ -750,27 +749,11 @@ select.modal-input { appearance: auto; }
 
 /* ─── SETUP SCREEN ─── */
 #setup-overlay {
-  position: fixed; inset: 0; background: var(--bg);
+  position: fixed; inset: 0;
   z-index: 500; overflow-y: auto;
-  padding: calc(40px + env(safe-area-inset-top, 0px)) 22px 40px;
   display: none;
 }
 #setup-overlay.visible { display: block; }
-.setup-logo {
-  display: flex; align-items: center; gap: 14px;
-  margin-bottom: 32px;
-}
-.setup-logo-icon {
-  width: 56px; height: 56px; border-radius: 16px;
-  background: #18181b !important;
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 4px 16px rgba(0,0,0,.2) !important;
-  flex-shrink: 0;
-}
-.setup-logo h1 { font-size: 28px; }
-.setup-logo p { font-size: 15px; color: var(--muted); margin-top: 2px; }
-.setup-help { font-size: 13px; color: var(--muted); margin-top: 6px; line-height: 1.5; }
-.setup-help a { color: var(--accent-move); text-decoration: none; font-weight: 600; }
 
 /* ─── SETTINGS OVERLAY ─── */
 #settings-overlay {
@@ -1757,6 +1740,44 @@ body .vandaag-section-h{font-size:13px!important;font-weight:650!important;text-
 .cc-line-open strong{font:600 16px/1.3 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .cc-line-open small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font:400 14px/1.2 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-muted)}
 .cc-week-ask{margin-top:16px}
+/* ── Wat kan ik vragen? ── */
+#tab-vandaag#tab-vandaag .cc-link{all:unset;box-sizing:border-box;display:inline-flex;align-items:center;min-height:44px;margin-top:4px;font:600 14px/1.2 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-green);cursor:pointer}
+#tab-vandaag#tab-vandaag .cc-link:focus-visible{outline:2px solid var(--cc-green);outline-offset:2px}
+#modal-container .cc-ex-note{margin:0 0 16px}
+#modal-container .cc-ex-list{margin-bottom:24px}
+#modal-container .cc-ex-list .cc-row-label{flex:1;min-width:0;white-space:normal;font-weight:500}
+#modal-container .cc-ex-list .cc-row-meta{display:none}
+/* ── Wizard: eerste keer instellen ── */
+#setup-overlay{background:var(--cc-bg);padding:calc(8px + env(safe-area-inset-top,0px)) 16px calc(16px + env(safe-area-inset-bottom,0px))}
+.cc-wiz{max-width:430px;min-height:100%;margin:0 auto;display:flex;flex-direction:column}
+.cc-wiz-top{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:56px}
+.cc-wiz-top .cc-set-icon{margin-left:-12px}
+.cc-wiz-space{width:44px}
+.cc-wiz-dots{display:flex;gap:6px}
+.cc-wiz-dots i{width:8px;height:8px;border-radius:999px;background:var(--cc-track)}
+.cc-wiz-dots i.is-on{background:var(--cc-ink)}
+#setup-overlay .cc-wiz-skip{all:unset;box-sizing:border-box;min-height:44px;display:inline-flex;align-items:center;font:600 14px/1 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-green);cursor:pointer}
+.cc-wiz-body{flex:1;padding-top:24px}
+.cc-wiz-body h1{margin:0 0 8px;font:700 28px/1.15 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-ink)}
+.cc-wiz-body h1:focus{outline:none}
+.cc-wiz-sub{margin:0 0 16px;font:400 16px/1.4 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-muted)}
+#setup-overlay .cc-wiz-input{all:unset;box-sizing:border-box;display:block;width:100%;height:52px;margin-top:16px;padding:0 16px;border:1px solid var(--cc-line);border-radius:12px;background:var(--cc-card);font:400 16px/1 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-ink)}
+#setup-overlay .cc-wiz-input:focus{border-color:var(--cc-green)}
+.cc-wiz-link{display:inline-flex;align-items:center;min-height:44px;margin-top:16px;font:600 14px/1 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-green);cursor:pointer}
+.cc-wiz-chips{display:flex;flex-wrap:wrap;gap:8px}
+#setup-overlay .cc-chip{all:unset;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;height:44px;padding:0 16px;border-radius:999px;background:var(--cc-card);border:1px solid var(--cc-line);color:var(--cc-ink);font:600 14px/1 -apple-system,'SF Pro Text',system-ui,sans-serif;white-space:nowrap;cursor:pointer;-webkit-tap-highlight-color:transparent}
+#setup-overlay .cc-chip[aria-pressed="true"]{background:var(--cc-lime);border-color:var(--cc-lime)}
+#setup-overlay .cc-chip:focus-visible{outline:2px solid var(--cc-green);outline-offset:2px}
+.cc-wiz-card{padding:0 16px;background:var(--cc-card);border:1px solid var(--cc-line);border-radius:18px}
+.cc-wiz-card .cc-set-row{padding:0}
+#setup-overlay .cc-wiz-seg{width:100%;margin:8px 0 24px}
+.cc-wiz-card .cc-stepper{width:160px;flex:none}
+.cc-wiz-label{display:flex;flex-direction:column;gap:2px;font:600 16px/1.2 -apple-system,'SF Pro Text',system-ui,sans-serif!important}
+.cc-wiz-label small{font:400 14px/1.2 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-muted)}
+.cc-wiz-examples{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px}
+.cc-wiz-examples li{padding:12px 16px;background:var(--cc-card);border:1px solid var(--cc-line);border-radius:12px;font:400 16px/1.35 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-ink)}
+#setup-overlay .cc-wiz-next{all:unset;box-sizing:border-box;display:flex;align-items:center;justify-content:center;width:100%;height:52px;margin-top:24px;border-radius:999px;background:var(--cc-lime);color:var(--cc-ink);font:700 16px/1 -apple-system,'SF Pro Text',system-ui,sans-serif;cursor:pointer;-webkit-tap-highlight-color:transparent}
+#setup-overlay .cc-wiz-next:focus-visible{outline:2px solid var(--cc-green);outline-offset:2px}
 /* ── Weekoverzicht: hoeveel bewogen ── */
 .cc-move{margin:16px 0 24px;padding:16px;background:var(--cc-card);border:1px solid var(--cc-line);border-radius:18px}
 .cc-move-total{margin:0;font:400 16px/1.2 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-muted)}
@@ -1788,7 +1809,7 @@ body .vandaag-section-h{font-size:13px!important;font-weight:650!important;text-
 .cc-set-head h1,.cc-set-head h2{flex:1;min-width:0;margin:0;font:700 28px/1.15 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-ink)}
 .cc-set-head h2{font-size:20px}
 .cc-set-head :focus{outline:none}
-#settings-overlay .cc-set-icon{all:unset;box-sizing:border-box;flex:none;display:grid;place-items:center;width:44px;height:44px;border-radius:999px;color:var(--cc-ink);cursor:pointer}
+#settings-overlay .cc-set-icon,#setup-overlay .cc-set-icon{all:unset;box-sizing:border-box;flex:none;display:grid;place-items:center;width:44px;height:44px;border-radius:999px;color:var(--cc-ink);cursor:pointer}
 #settings-overlay .cc-set-head h1+.cc-set-icon{margin-right:-10px}
 #settings-overlay .cc-set-head .cc-set-icon:first-child{margin-left:-12px}
 #settings-overlay .cc-set-icon:focus-visible{outline:2px solid var(--cc-green);outline-offset:-2px}
@@ -1796,9 +1817,9 @@ body .vandaag-section-h{font-size:13px!important;font-weight:650!important;text-
 .cc-set-row{position:relative;display:flex;align-items:center;gap:16px;min-height:56px;padding:0 16px;cursor:pointer}
 .cc-set-row+.cc-set-row::before,#cc-set-more>.cc-row::before{content:'';position:absolute;left:16px;right:0;top:0;height:1px;background:var(--cc-line)}
 .cc-set-row>span{flex:none;font:600 16px/1.25 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-ink)}
-#settings-overlay .cc-set-row input:not([type=checkbox]){all:unset;flex:1;min-width:0;text-align:right;font:400 16px/1.3 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-muted);-webkit-text-fill-color:currentColor}
+#settings-overlay .cc-set-row input:not([type=checkbox]),#setup-overlay .cc-set-row input:not([type=checkbox]){all:unset;flex:1;min-width:0;text-align:right;font:400 16px/1.3 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-muted);-webkit-text-fill-color:currentColor}
 #settings-overlay .cc-set-row input:not([type=checkbox])::placeholder{color:var(--cc-muted);opacity:.7}
-#settings-overlay .cc-set-row input[type=checkbox]{margin-left:auto!important}
+#settings-overlay .cc-set-row input[type=checkbox],#setup-overlay .cc-set-row input[type=checkbox]{margin-left:auto!important}
 .cc-set-row:focus-within{background:var(--cc-tint)}
 #settings-overlay .cc-row{all:unset;box-sizing:border-box;position:relative;display:flex;align-items:center;gap:8px;width:100%;min-height:56px;padding:0 16px;color:var(--cc-ink);cursor:pointer;-webkit-tap-highlight-color:transparent}
 #settings-overlay .cc-row:active{background:var(--cc-tint)}
@@ -1906,12 +1927,12 @@ body input[type="checkbox"]:disabled{opacity:.4;cursor:default}
 .cc-setting-row+.cc-setting-row{border-top:1px solid var(--cc-line)}
 .cc-setting-row>span{font:600 14px/1.2 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-ink)}
 .cc-seg,.cc-stepper{display:flex;align-items:center;justify-content:space-between;gap:2px;width:200px;padding:2px;border-radius:999px;background:var(--cc-tint)}
-#modal-container .cc-seg button,#modal-container .cc-stepper button{all:unset;box-sizing:border-box;display:flex;align-items:center;justify-content:center;min-width:44px;height:44px;padding:0 14px;border-radius:999px;color:var(--cc-ink);font:600 14px/1 -apple-system,'SF Pro Text',system-ui,sans-serif;cursor:pointer}
-#modal-container .cc-seg button{flex:1;padding:0 8px}
-#modal-container .cc-seg button[aria-pressed="true"]{background:var(--cc-lime);font-weight:700}
-#modal-container .cc-stepper button{width:44px;padding:0;background:var(--cc-card);font-size:20px}
-#modal-container .cc-stepper button:disabled{opacity:.35;cursor:default}
-#modal-container .cc-seg button:focus-visible,#modal-container .cc-stepper button:focus-visible{outline:2px solid var(--cc-green);outline-offset:2px}
+#modal-container .cc-seg button,#modal-container .cc-stepper button,#setup-overlay .cc-seg button,#setup-overlay .cc-stepper button{all:unset;box-sizing:border-box;display:flex;align-items:center;justify-content:center;min-width:44px;height:44px;padding:0 14px;border-radius:999px;color:var(--cc-ink);font:600 14px/1 -apple-system,'SF Pro Text',system-ui,sans-serif;cursor:pointer}
+#modal-container .cc-seg button,#setup-overlay .cc-seg button{flex:1;padding:0 8px}
+#modal-container .cc-seg button[aria-pressed="true"],#setup-overlay .cc-seg button[aria-pressed="true"]{background:var(--cc-lime);font-weight:700}
+#modal-container .cc-stepper button,#setup-overlay .cc-stepper button{width:44px;padding:0;background:var(--cc-card);font-size:20px}
+#modal-container .cc-stepper button:disabled,#setup-overlay .cc-stepper button:disabled{opacity:.35;cursor:default}
+#modal-container .cc-seg button:focus-visible,#modal-container .cc-stepper button:focus-visible,#setup-overlay .cc-seg button:focus-visible,#setup-overlay .cc-stepper button:focus-visible{outline:2px solid var(--cc-green);outline-offset:2px}
 .cc-stepper strong{min-width:32px;text-align:center;font:700 16px/1 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-ink)}
 .cc-pantry-actions .btn{min-height:48px;display:flex;align-items:center;justify-content:center;margin:0}
 #voorraad-foto-status{margin-top:8px;font-size:12px}
@@ -1928,69 +1949,7 @@ body input[type="checkbox"]:disabled{opacity:.4;cursor:default}
 <div id="banners"></div>
 
 <!-- SETUP OVERLAY -->
-<div id="setup-overlay">
-  <div class="setup-logo">
-    <div class="setup-logo-icon">
-      <span style="font-size:15px;font-weight:900;color:#ffffff;letter-spacing:-.04em;line-height:1;">C<span style="font-size:11px;font-weight:500;opacity:.55;">&amp;</span>C</span>
-    </div>
-    <div>
-      <h1>Coach &amp; Chef</h1>
-      <p>Jouw persoonlijke gezondheidscoach</p>
-    </div>
-  </div>
-
-  <div class="form-group">
-    <label>Jouw naam</label>
-    <input id="setup-naam" type="text" placeholder="bijv. Jim" autocomplete="off">
-  </div>
-
-  <div class="form-group">
-    <label>Anthropic API-sleutel</label>
-    <input id="setup-anthropic" type="password" placeholder="sk-ant-api03-..." autocomplete="off">
-    <p class="setup-help">Haal je sleutel op via <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a></p>
-  </div>
-
-  <div class="form-group">
-    <label>Welke sport(en) doe je? <span style="font-weight:400;color:var(--muted);">(optioneel)</span></label>
-    <input id="setup-sporten" type="text" placeholder="bijv. hardlopen, fitness, wandelen" autocomplete="off">
-  </div>
-
-  <div class="form-group">
-    <label>Vaste eetgewoontes? <span style="font-weight:400;color:var(--muted);">(optioneel)</span></label>
-    <input id="setup-eten" type="text" placeholder="bijv. yoghurt-ontbijt, weinig vlees" autocomplete="off">
-  </div>
-
-  <div class="form-group">
-    <label>GitHub Personal Access Token <span style="font-weight:400;color:var(--muted);">(optioneel — voor sync tussen apparaten)</span></label>
-    <input id="setup-token" type="password" placeholder="ghp_..." autocomplete="off">
-    <p class="setup-help">
-      Ga naar <a href="https://github.com/settings/tokens" target="_blank">GitHub → Settings → Developer Settings → Personal Access Tokens</a>.
-      Selecteer <strong>Gist</strong> als scope.
-    </p>
-  </div>
-
-  <div class="form-group">
-    <label>GitHub Gist ID <span style="font-weight:400;color:var(--muted);">(optioneel)</span></label>
-    <input id="setup-gist" type="text" placeholder="abc123def456..." autocomplete="off">
-    <p class="setup-help">
-      Maak een lege privé Gist aan op <a href="https://gist.github.com" target="_blank">gist.github.com</a>.
-      Kopieer het ID uit de URL (de lange code na je gebruikersnaam).
-    </p>
-  </div>
-
-  <div class="form-group" style="margin-top:24px;">
-    <label>Bestaande data importeren (optioneel)</label>
-    <input id="setup-import" type="file" accept=".json" style="padding:8px;">
-  </div>
-
-  <button class="btn btn-primary btn-full" onclick="finishSetup()" style="margin-top:8px;">
-    Aan de slag
-  </button>
-  <button class="btn btn-ghost btn-full" onclick="skipSetup()" style="margin-top:8px; font-size:14px;">
-    Sla setup over — bekijk de app eerst
-  </button>
-  <div id="setup-error" style="color:#fca5a5; font-size:13px; margin-top:10px; display:none;"></div>
-</div>
+<div id="setup-overlay" role="dialog" aria-modal="true" aria-labelledby="cc-wiz-title"><div id="cc-wiz" class="cc-wiz"></div></div>
 
 <!-- SETTINGS OVERLAY -->
 <div id="settings-overlay"></div>
@@ -2013,7 +1972,7 @@ body input[type="checkbox"]:disabled{opacity:.4;cursor:default}
       <p class="flow-helper">Eten, bewegen, plannen. Of gewoon een vraag.</p>
       <div class="lime-input-group"><button id="big-praat-btn" class="flow-speak" onclick="bigPraatStart()" aria-label="Spreek je bericht in en controleer de tekst" aria-pressed="false"><svg class="flow-voice-glyph" width="25" height="24" viewBox="0 0 25 24" aria-hidden="true"><path d="M2 10v4m5-8v12m5-16v20m5-17v14m5-10v6" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>Vertel het Coach</button>
       <div class="unified-composer"><label class="sr-only" for="coach-front-input">Je bericht aan Coach</label><textarea id="coach-front-input" rows="1" oninput="ccResizeComposer(this)" placeholder="Typ of spreek in…" onkeydown="if(event.key==='Enter'&&!event.shiftKey&&!event.isComposing){event.preventDefault();submitSmartInput()}"></textarea><button type="button" class="cc-clear" onclick="ccClearInput('coach-front-input','big-praat-status')" aria-label="Tekst wissen"><svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="14" fill="currentColor" opacity=".14"/><path d="m10 10 8 8m0-8-8 8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button><div class="composer-actions"><button class="composer-photo" onclick="document.getElementById('fotolog-input').click()" title="Maak of kies een foto van je eten. Controleer de herkende maaltijd en geschatte voedingswaarden vóór het opslaan."><svg class="cc-icon" data-cc-icon="camera" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6 10 3h4l2 3h4v14H4V6z"/><circle cx="12" cy="13" r="4"/></svg><span>Foto van je eten</span></button><button id="smart-send-btn" class="composer-send" onclick="submitSmartInput()" aria-label="Verstuur" title="Verstuur"><span class="cc-send-arrow" aria-hidden="true">↑</span></button></div></div>
-            </div><div class="cc-chip-row"><button type="button" class="cc-entry" aria-haspopup="dialog" onclick="limePlanDay()"><span>Plan vandaag</span><svg class="cc-chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button><button type="button" id="cc-privacy-badge" class="cc-chip cc-chip-privacy" onclick="openSettings()" hidden aria-label="Privacymodus staat aan. Open instellingen"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Privé</button></div><div id="smart-input-status" class="composer-status" role="status"></div><div id="big-praat-status" class="speech-transcript" role="status"></div><div id="log-feedback" class="log-feedback" role="status" hidden></div><div class="lime-reply-actions"><button id="lime-stop-reply" onclick="limeStopReply()" aria-label="Antwoord stoppen" title="Antwoord stoppen" hidden><svg class="cc-icon" data-cc-icon="stop" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2"/></svg><span>Stop</span></button><button id="lime-close-reply" onclick="limeCloseReply()" aria-label="Antwoord sluiten" title="Antwoord sluiten; teruglezen via Bekijk gesprek" hidden><svg class="cc-icon" data-cc-icon="close" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div><div id="cc-memory-notice" hidden aria-live="polite"></div><div id="coach-front-chat" class="coach-chat-window" aria-live="polite"></div><button id="lime-forget-conversation" class="conversation-link" onclick="limeAskForget()" hidden>Vergeet dit gesprek</button><button id="conversation-history-btn" class="conversation-link" onclick="showConversationHistory()" hidden>Bekijk gesprek</button>
+            </div><div class="cc-chip-row"><button type="button" class="cc-entry" aria-haspopup="dialog" onclick="limePlanDay()"><span>Plan vandaag</span><svg class="cc-chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button><button type="button" id="cc-privacy-badge" class="cc-chip cc-chip-privacy" onclick="openSettings()" hidden aria-label="Privacymodus staat aan. Open instellingen"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Privé</button></div><button type="button" class="cc-link" aria-haspopup="dialog" onclick="ccOpenExamples()">Wat kan ik vragen?</button><div id="smart-input-status" class="composer-status" role="status"></div><div id="big-praat-status" class="speech-transcript" role="status"></div><div id="log-feedback" class="log-feedback" role="status" hidden></div><div class="lime-reply-actions"><button id="lime-stop-reply" onclick="limeStopReply()" aria-label="Antwoord stoppen" title="Antwoord stoppen" hidden><svg class="cc-icon" data-cc-icon="stop" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2"/></svg><span>Stop</span></button><button id="lime-close-reply" onclick="limeCloseReply()" aria-label="Antwoord sluiten" title="Antwoord sluiten; teruglezen via Bekijk gesprek" hidden><svg class="cc-icon" data-cc-icon="close" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div><div id="cc-memory-notice" hidden aria-live="polite"></div><div id="coach-front-chat" class="coach-chat-window" aria-live="polite"></div><button id="lime-forget-conversation" class="conversation-link" onclick="limeAskForget()" hidden>Vergeet dit gesprek</button><button id="conversation-history-btn" class="conversation-link" onclick="showConversationHistory()" hidden>Bekijk gesprek</button>
     </section>
     <h2 class="vandaag-section-h cc-section-h">Jouw dag</h2>
     <div id="ritme-tile-host">    <section id="today-nutri-bar" data-ritme-tile="nutrition" aria-label="Voeding vandaag"></section>
@@ -2211,7 +2170,7 @@ body input[type="checkbox"]:disabled{opacity:.4;cursor:default}
 </div>
 
 <!-- INTRO OVERLAY -->
-<div id="intro-overlay" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="cc-intro-title"><section class="cc-intro"><div class="wordmark">coach<span class="brand-amp">&amp;</span>chef<span class="brand-dot">.</span></div><h1 id="cc-intro-title" tabindex="-1">Eten en bewegen.</h1><p class="cc-intro-lead">Zeg wat je deed, krijg antwoord, motivatie en advies.</p><ul class="cc-intro-list"><li><span class="cc-intro-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></span><span><strong>Praten of typen</strong><small>Zeg wat je deed of at, en het staat erin.</small></span></li><li><span class="cc-intro-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 0 1-11.6 7.1L4 20l1-4.2A8 8 0 1 1 20 12z"/></svg></span><span><strong>Coach</strong><small>Motiveert, adviseert en denkt mee over je week.</small></span></li><li><span class="cc-intro-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11h14a0 0 0 0 1 0 0 6 6 0 0 1-6 6H9a6 6 0 0 1-6-6zM17 12h4M8 7c0-1.5 1-2 1-3.5M12 7c0-1.5 1-2 1-3.5"/></svg></span><span><strong>Chef</strong><small>Recepten op maat, ook rond je training.</small></span></li><li><span class="cc-intro-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></span><span><strong>Inzicht</strong><small>Je week in beeld: vezels, eiwit en water.</small></span></li><li><span class="cc-intro-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span><span><strong>Privé</strong><small>Je gegevens blijven op je telefoon.</small></span></li></ul><p id="cc-intro-key" class="cc-intro-note" hidden>Voor de slimme coach vul je je AI-sleutel in bij Instellingen.</p><button type="button" class="cc-intro-start" onclick="flowDismissIntro()">Begin</button><label class="cc-intro-hide"><input type="checkbox" id="cc-intro-hide">Niet meer tonen</label></section></div>
+<div id="intro-overlay" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="cc-intro-title"><section class="cc-intro"><div class="wordmark">coach<span class="brand-amp">&amp;</span>chef<span class="brand-dot">.</span></div><h1 id="cc-intro-title" tabindex="-1">Eten en bewegen.</h1><p class="cc-intro-lead">Zeg wat je deed, krijg antwoord, motivatie en advies.</p><ul class="cc-intro-list"><li><span class="cc-intro-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></span><span><strong>Praten of typen</strong><small>Zeg: “Vanochtend 8 km gelopen”.</small></span></li><li><span class="cc-intro-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 0 1-11.6 7.1L4 20l1-4.2A8 8 0 1 1 20 12z"/></svg></span><span><strong>Coach</strong><small>Vraag: “Wat eet ik na mijn training?”</small></span></li><li><span class="cc-intro-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11h14a0 0 0 0 1 0 0 6 6 0 0 1-6 6H9a6 6 0 0 1-6-6zM17 12h4M8 7c0-1.5 1-2 1-3.5M12 7c0-1.5 1-2 1-3.5"/></svg></span><span><strong>Chef</strong><small>Recepten op maat, snel of rond je training.</small></span></li><li><span class="cc-intro-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></span><span><strong>Inzicht</strong><small>“Hoeveel heb ik deze week bewogen?”</small></span></li><li><span class="cc-intro-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span><span><strong>Privé</strong><small>Je gegevens blijven op je telefoon.</small></span></li></ul><p id="cc-intro-key" class="cc-intro-note" hidden>Voor de slimme coach vul je je AI-sleutel in bij Instellingen.</p><button type="button" class="cc-intro-start" onclick="flowDismissIntro()">Begin</button><label class="cc-intro-hide"><input type="checkbox" id="cc-intro-hide">Niet meer tonen</label></section></div>
 
 <!-- MODAL CONTAINER -->
 <div id="modal-container"></div>
@@ -2220,7 +2179,7 @@ body input[type="checkbox"]:disabled{opacity:.4;cursor:default}
 'use strict';
 
 // ─── VERSION CHECK (forceert Safari herlading bij nieuwe versie) ──────────────
-const APP_VERSION = 'lime-20261003-16';
+const APP_VERSION = 'lime-20261003-17';
 // Eén plek voor de modellen: Sonnet voor gesprekken en recepten, Haiku voor snelle achtergrondtaken.
 const CC_MODEL_MAIN = 'claude-sonnet-4-6';
 const CC_MODEL_FAST = 'claude-haiku-4-5-20251001';
@@ -2590,9 +2549,9 @@ function _voorraadRegel() {
 }
 
 function _dieetRegel() {
-  return genDieet === 'vega' ? 'Volledig vegetarisch: GEEN vlees en GEEN vis.'
+  return (settings.lieverNiet?.length ? 'Gebruik GEEN: ' + settings.lieverNiet.join(', ').toLowerCase() + '. ' : '') + (genDieet === 'vega' ? 'Volledig vegetarisch: GEEN vlees en GEEN vis.'
        : genDieet === 'vis'  ? 'GEEN VLEES. Vis en zeevruchten zijn WEL toegestaan.'
-       : 'Vlees en vis zijn toegestaan; kies wat het beste past bij het gerecht en de voedingsdoelen.';
+       : 'Vlees en vis zijn toegestaan; kies wat het beste past bij het gerecht en de voedingsdoelen.');
 }
 
 function _vandaagTraining() {
@@ -2903,48 +2862,6 @@ function saveSettingsData(s) {
   settings = s;
 }
 
-async function finishSetup() {
-  const naam = document.getElementById('setup-naam').value.trim();
-  const sporten = (document.getElementById('setup-sporten') ? document.getElementById('setup-sporten').value.trim() : '');
-  const eten = (document.getElementById('setup-eten') ? document.getElementById('setup-eten').value.trim() : '');
-  const anthropicKey = document.getElementById('setup-anthropic').value.trim();
-  const githubToken = document.getElementById('setup-token').value.trim();
-  const gistId = document.getElementById('setup-gist').value.trim();
-  const errEl = document.getElementById('setup-error');
-
-  if (!naam || !anthropicKey) {
-    errEl.style.display = 'block';
-    errEl.textContent = 'Vul je naam en Anthropic API-sleutel in om door te gaan.';
-    return;
-  }
-  errEl.style.display = 'none';
-
-  saveSettingsData({ ...settings, naam, sporten, eten, anthropicKey, githubToken, gistId, setupDone: true, _profielV2: true });
-
-  const importFile = document.getElementById('setup-import').files[0];
-  if (importFile) {
-    await importFromFile(importFile);
-  } else {
-    data = defaultData();
-    saveLocal();
-  }
-
-  document.getElementById('setup-overlay').classList.remove('visible');
-  document.getElementById('app').style.display = 'flex';
-  document.getElementById('app').style.flexDirection = 'column';
-  initApp();
-}
-
-function skipSetup() {
-  saveSettingsData({ naam: 'Gebruiker', anthropicKey: '', githubToken: '', gistId: '', setupDone: true, _profielV2: true });
-  data = defaultData();
-  saveLocal();
-  document.getElementById('setup-overlay').classList.remove('visible');
-  document.getElementById('app').style.display = 'flex';
-  document.getElementById('app').style.flexDirection = 'column';
-  showBanner('yellow', 'Geen API-sleutels ingesteld — AI en cloud sync niet beschikbaar. Vul ze in via de instellingen.', true, 'no-keys');
-  initApp();
-}
 
 // ─── SETTINGS UI ─────────────────────────────────────────────────────────────
 
@@ -3554,6 +3471,7 @@ function renderVandaag() {
   restoreConversationPreview();
   renderPatroonGrid();
   ritmeRender();
+  ccApplyPrivacyBadge();
 }
 
 
@@ -4947,6 +4865,53 @@ function ccRenderMood(){
  const el=document.getElementById('ritme-mood');if(!el)return;
  const mood=ccMood(),label=CC_MOODS.find(([k])=>k===mood)?.[1]||'';
  el.innerHTML=`<div class="cc-water-row"><div class="cc-water-label"><h2 class="vandaag-section-h">Gevoel</h2><span class="cc-water-count" aria-live="polite">${label?`<strong>${label}</strong>`:'Hoe is het?'}</span></div><div class="cc-moods" role="group" aria-label="Hoe voel je je vandaag?">${CC_MOODS.map(([k,l,mouth])=>`<button type="button" class="cc-mood" aria-pressed="${mood===k}" aria-label="${l}" onclick="ccSetMood('${k}')"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9.2"/><circle cx="9" cy="10" r=".9" fill="currentColor" stroke="none"/><circle cx="15" cy="10" r=".9" fill="currentColor" stroke="none"/><path d="${mouth}"/></svg></button>`).join('')}</div></div>`;
+}
+// Wat kan ik vragen? Eén lijst voorbeelden voor Coach (venster), de opening en het einde van de wizard.
+const CC_EXAMPLES=[['Loggen',['Vanochtend 8 km gelopen','Havermout met banaan als ontbijt']],['Advies',['Wat eet ik na mijn training?','Ik ben moe, wat nu?']],['Inzicht',['Hoeveel heb ik deze week bewogen?','Hoe sta ik ervoor met vezels?']],['Plannen',['Zet morgen een wandeling op de planning','Schuif mijn run naar donderdag']]];
+function ccOpenExamples(){showModal(`<div class="modal-header"><h2>Wat kan ik vragen?</h2>${flowClose()}</div><p class="cc-sheet-note cc-ex-note">Tik op een voorbeeld; het komt in het invoerveld. Pas het aan en verstuur.</p>${CC_EXAMPLES.map(([kop,items],i)=>`<h3 class="vandaag-section-h cc-move-h">${kop}</h3><div class="cc-list cc-ex-list">${items.map((t,j)=>`<button type="button" class="cc-row" onclick="ccUseExample(${i},${j})"><span class="cc-row-label">“${t}”</span><span class="cc-row-meta"></span>${CC_CHEVRON}</button>`).join('')}</div>`).join('')}`);}
+function ccUseExample(i,j){const input=document.getElementById('coach-front-input'),t=CC_EXAMPLES[i]?.[1]?.[j];if(!input||!t)return;closeModal();input.value=t;ccResizeComposer(input);input.focus();}
+
+// Eerste keer instellen: één vraag per scherm, tikken in plaats van typen. Ook later te starten via Instellingen › Opnieuw instellen.
+const CC_SPORTS=['Hardlopen','Fietsen','Krachttraining','Wandelen','Zwemmen','Yoga'];
+const CC_AVOID=['Noten','Lactose','Gluten','Pittig'];
+let ccWiz=null;
+function ccWizStart(mode){
+ const g=nutritionGoals(),sp=String(settings.sporten||'').split(/,\s*/).filter(Boolean);
+ ccWiz={mode,step:0,naam:settings.naam&&settings.naam!=='Gebruiker'?settings.naam:'',sporten:new Set(sp.filter(x=>CC_SPORTS.includes(x))),anders:sp.filter(x=>!CC_SPORTS.includes(x)).join(', '),beweging:ccMoveGoal(),vezels:g.vezels,eiwit:g.eiwitten,dieet:genDieet,liever:new Set(settings.lieverNiet||[]),key:settings.anthropicKey||'',tts:_ttsEnabled,privacy:!!settings.privacyModus,imported:false};
+ document.getElementById('setup-overlay').classList.add('visible');ccWizRender();
+}
+function ccWizKeep(){const w=ccWiz,v=id=>document.getElementById(id);if(v('cc-wiz-naam'))w.naam=v('cc-wiz-naam').value.trim();if(v('cc-wiz-anders'))w.anders=v('cc-wiz-anders').value.trim();if(v('cc-wiz-key'))w.key=v('cc-wiz-key').value.trim();if(v('cc-wiz-tts')){w.tts=v('cc-wiz-tts').checked;w.privacy=v('cc-wiz-privacy').checked;}}
+function ccWizGo(step){ccWizKeep();ccWiz.step=Math.max(0,Math.min(5,step));ccWizRender();}
+function ccWizToggle(set,value,btn){const on=!ccWiz[set].has(value);on?ccWiz[set].add(value):ccWiz[set].delete(value);btn.setAttribute('aria-pressed',String(on));}
+function ccWizStep(key,delta,min,max){ccWiz[key]=Math.max(min,Math.min(max,ccWiz[key]+delta));ccWizRender();}
+function ccWizDiet(v){ccWiz.dieet=v;ccWizRender();}
+async function ccWizImport(input){const f=input.files[0];if(!f)return;if(await importFromFile(f)){ccWiz.imported=true;showBanner('green','Je kopie is teruggezet.');}input.value='';}
+function ccWizRender(){
+ const w=ccWiz,st=w.step,el=document.getElementById('cc-wiz');
+ const chip=(set,v)=>`<button type="button" class="cc-chip" aria-pressed="${w[set].has(v)}" onclick="ccWizToggle('${set}','${v}',this)">${v}</button>`;
+ const stepper=(key,label,unit,step,min,max)=>`<div class="cc-setting-row"><span class="cc-wiz-label">${label}<small>${unit}</small></span><div class="cc-stepper"><button type="button" aria-label="${label} minder" onclick="ccWizStep('${key}',-${step},${min},${max})" ${w[key]<=min?'disabled':''}>−</button><strong>${w[key]}</strong><button type="button" aria-label="${label} meer" onclick="ccWizStep('${key}',${step},${min},${max})" ${w[key]>=max?'disabled':''}>+</button></div></div>`;
+ const body=[
+  `<h1 id="cc-wiz-title" tabindex="-1">Hoe mogen we je noemen?</h1><input id="cc-wiz-naam" class="cc-wiz-input" value="${escapeText(w.naam)}" placeholder="Je naam" autocomplete="given-name">${w.mode==='first'?`<label class="cc-wiz-link">${w.imported?'Kopie teruggezet':'Kopie terugzetten'}<input type="file" accept=".json" hidden onchange="ccWizImport(this)"></label>`:''}`,
+  `<h1 id="cc-wiz-title" tabindex="-1">Wat doe je graag?</h1><p class="cc-wiz-sub">Kies wat past, meerdere mag.</p><div class="cc-wiz-chips">${CC_SPORTS.map(v=>chip('sporten',v)).join('')}</div><input id="cc-wiz-anders" class="cc-wiz-input" value="${escapeText(w.anders)}" placeholder="Iets anders?">`,
+  `<h1 id="cc-wiz-title" tabindex="-1">Jouw doelen</h1><p class="cc-wiz-sub">Later altijd aan te passen.</p><div class="cc-wiz-card">${stepper('beweging','Bewegen','min per week',15,30,600)}${stepper('vezels','Vezels','gram per dag',5,10,60)}${stepper('eiwit','Eiwit','gram per dag',5,30,250)}</div>`,
+  `<h1 id="cc-wiz-title" tabindex="-1">Wat eet je?</h1><div class="cc-seg cc-wiz-seg">${[['vlees','Alles'],['vis','Vis'],['vega','Vega']].map(([v,l])=>`<button type="button" aria-pressed="${w.dieet===v}" onclick="ccWizDiet('${v}')">${l}</button>`).join('')}</div><p class="cc-wiz-sub">Liever niet</p><div class="cc-wiz-chips">${CC_AVOID.map(v=>chip('liever',v)).join('')}</div>`,
+  `<h1 id="cc-wiz-title" tabindex="-1">Slimme coach</h1><p class="cc-wiz-sub">Met een AI-sleutel praat de coach terug en maakt Chef recepten. Kan ook later.</p><div class="cc-wiz-card"><label class="cc-set-row"><span>AI-sleutel</span><input id="cc-wiz-key" type="password" value="${escapeText(w.key)}" placeholder="Plak je sleutel" autocomplete="off" spellcheck="false"></label><label class="cc-set-row"><span>Voorlezen</span><input id="cc-wiz-tts" type="checkbox" ${w.tts?'checked':''}></label><label class="cc-set-row"><span>Privacymodus</span><input id="cc-wiz-privacy" type="checkbox" ${w.privacy?'checked':''}></label></div>`,
+  `<h1 id="cc-wiz-title" tabindex="-1">Klaar${w.naam?', '+escapeText(w.naam):''}!</h1><p class="cc-wiz-sub">Zeg of typ bijvoorbeeld:</p><ul class="cc-wiz-examples">${CC_EXAMPLES.map(([,items])=>`<li>“${items[0]}”</li>`).join('')}</ul>`
+ ][st];
+ el.innerHTML=`<div class="cc-wiz-top">${st?`<button type="button" class="cc-set-icon" aria-label="Terug" onclick="ccWizGo(${st-1})"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg></button>`:'<span class="cc-wiz-space"></span>'}<div class="cc-wiz-dots" role="img" aria-label="Stap ${st+1} van 6">${[0,1,2,3,4,5].map(i=>`<i class="${i<=st?'is-on':''}"></i>`).join('')}</div>${st<5?`<button type="button" class="cc-wiz-skip" onclick="ccWizGo(${st+1})">Overslaan</button>`:'<span class="cc-wiz-space"></span>'}</div><div class="cc-wiz-body">${body}</div><button type="button" class="cc-wiz-next" onclick="${st<5?`ccWizGo(${st+1})`:'ccWizFinish()'}">${st<5?'Volgende':'Begin'}</button>`;
+ document.getElementById('cc-wiz-title').focus();document.getElementById('setup-overlay').scrollTop=0;
+}
+function ccWizFinish(){
+ ccWizKeep();const w=ccWiz,first=w.mode==='first';
+ const sporten=[...CC_SPORTS.filter(x=>w.sporten.has(x)),...w.anders.split(/,\s*/).filter(Boolean)].join(', ');
+ saveSettingsData({...settings,naam:w.naam||settings.naam||'',sporten,lieverNiet:[...w.liever],anthropicKey:w.key,privacyModus:w.privacy,setupDone:true,_profielV2:true});
+ _ttsEnabled=w.tts;localStorage.setItem('hc_tts',w.tts?'on':'off');flowSetDieet(w.dieet);
+ if(first&&!w.imported)data=defaultData();
+ data.doelen=(data.doelen||[]).filter(g=>!['vezels_dag','eiwitten_dag','beweging_week'].includes(g.type));
+ data.doelen.push({id:'goal-vezels_dag',type:'vezels_dag',waarde:w.vezels,omschrijving:`${w.vezels} gram vezels per dag`,aangemaakt:today()},{id:'goal-eiwitten_dag',type:'eiwitten_dag',waarde:w.eiwit,omschrijving:`${w.eiwit} gram eiwit per dag`,aangemaakt:today()},{id:'goal-beweging_week',type:'beweging_week',waarde:w.beweging,omschrijving:`${w.beweging} minuten bewegen per week`,aangemaakt:today()});
+ document.getElementById('setup-overlay').classList.remove('visible');ccWiz=null;
+ if(first){saveLocal();const app=document.getElementById('app');app.style.display='flex';app.style.flexDirection='column';initApp();}
+ else{saveAndSync();closeSettings();renderAll();showBanner('green','Je instellingen zijn bijgewerkt.');}
 }
 function ccApplyPrivacyBadge(){const b=document.getElementById('cc-privacy-badge');if(b)b.hidden=!settings.privacyModus;}
 
@@ -6751,10 +6716,7 @@ function dismissSplash() {
 }
 
 function continueInit() {
-  if (!settings.setupDone) {
-    document.getElementById('setup-overlay').classList.add('visible');
-    return;
-  }
+  if (!settings.setupDone) { showIntro(); return; }
   loadLocal();
   document.getElementById('setup-overlay').classList.remove('visible');
   document.getElementById('app').style.display = 'flex';
@@ -7373,8 +7335,9 @@ let flowSpeech=null,flowActivityEdit=null,flowWeekOffset=0;
 function flowArg(value){return escapeText(JSON.stringify(value));}
 function flowVoiceGlyph(){return '<svg class="flow-voice-glyph" width="25" height="24" viewBox="0 0 25 24" aria-hidden="true"><path d="M2 10v4m5-8v12m5-16v20m5-17v14m5-10v6" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>';}
 function flowClose(){return '<button class="modal-close" aria-label="Sluiten" onclick="closeModal()" title="Sluiten"><svg class="cc-icon" data-cc-icon="close" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button>';}
-function flowCheckIntro(){if(localStorage.getItem('hc_intro_hide')!=='1')showIntro();}
-function flowDismissIntro(){if(document.getElementById('cc-intro-hide').checked)localStorage.setItem('hc_intro_hide','1');else localStorage.removeItem('hc_intro_hide');document.getElementById('intro-overlay').style.display='none';}
+let ccIntroSeen=false;
+function flowCheckIntro(){if(!ccIntroSeen&&localStorage.getItem('hc_intro_hide')!=='1')showIntro();}
+function flowDismissIntro(){if(document.getElementById('cc-intro-hide').checked)localStorage.setItem('hc_intro_hide','1');else localStorage.removeItem('hc_intro_hide');document.getElementById('intro-overlay').style.display='none';ccIntroSeen=true;if(!settings.setupDone)ccWizStart('first');}
 function flowWeekDates(offset=0){const d=new Date(today()+'T12:00:00');d.setDate(d.getDate()+offset*7);return getWeekDates(getISOWeek(d));}
 function flowDay(date){return data.weken?.[getISOWeek(new Date(date+'T12:00:00'))]?.[date]||{activiteiten:[],maaltijden:{}};}
 function flowDayState(date){const acts=(flowDay(date).activiteiten||[]).filter(a=>a.type!=='rest');const done=acts.filter(a=>a.afgevinkt).length;return {acts,done,state:!acts.length?'empty':done===acts.length?'done':done?'partial':'planned'};}
@@ -7636,7 +7599,7 @@ function openSettings(){
  el.innerHTML=`<div class="cc-settings"><section class="cc-set-page" data-page=""><div class="cc-set-head"><h1 tabindex="-1">Instellingen</h1><button type="button" class="cc-set-icon" onclick="closeSettings()" aria-label="Sluiten zonder opslaan"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div>
  <div class="cc-list"><label class="cc-set-row"><span>Naam</span><input id="set-naam" placeholder="Je naam" autocomplete="given-name"></label><label class="cc-set-row"><span>AI-sleutel</span><input id="set-anthropic" type="password" placeholder="Plak je sleutel" autocomplete="off" spellcheck="false"></label><label class="cc-set-row"><span>Voorlezen</span><input id="ritme-tts" type="checkbox" ${_ttsEnabled?'checked':''}></label><label class="cc-set-row"><span>Privacymodus</span><input id="ritme-privacy" type="checkbox" ${settings.privacyModus?'checked':''}></label></div>
  <p class="cc-set-note">De sleutel blijft op deze telefoon. Privacymodus aan: de AI krijgt alleen je bericht en wat je vandaag logde.</p>
- <div class="cc-list"><button type="button" class="cc-row" aria-expanded="false" aria-controls="cc-set-more" onclick="ccToggleSetMore(this)"><span class="cc-row-label">Meer instellingen</span><span class="cc-row-meta"></span>${CC_CHEVRON}</button><div id="cc-set-more" hidden>${row('Over jou','',"ccSetPage('over',this)")}${row('Doelen',ccMoveGoal()+' min · '+goals.vezels+' g',"ccSetPage('doelen',this)")}${row('Stem en spraak',voice[0].toUpperCase()+voice.slice(1),"ccSetPage('stem',this)")}${row('Wat Coach onthoudt',mem?String(mem):'',"ccSetPage('geheugen',this)")}${row('Coach-tegels','','ritmeCustomize()')}${row('Synchronisatie',settings.githubToken&&settings.gistId?'Aan':'Uit',"ccSetPage('sync',this)")}${row('Testen','',"ccSetPage('testen',this)")}${row('Kopie en opnieuw','',"ccSetPage('kopie',this)")}${row('Uitleg over de app','','showIntro()')}</div></div></section>
+ <div class="cc-list"><button type="button" class="cc-row" aria-expanded="false" aria-controls="cc-set-more" onclick="ccToggleSetMore(this)"><span class="cc-row-label">Meer instellingen</span><span class="cc-row-meta"></span>${CC_CHEVRON}</button><div id="cc-set-more" hidden>${row('Over jou','',"ccSetPage('over',this)")}${row('Doelen',ccMoveGoal()+' min · '+goals.vezels+' g',"ccSetPage('doelen',this)")}${row('Stem en spraak',voice[0].toUpperCase()+voice.slice(1),"ccSetPage('stem',this)")}${row('Wat Coach onthoudt',mem?String(mem):'',"ccSetPage('geheugen',this)")}${row('Coach-tegels','','ritmeCustomize()')}${row('Synchronisatie',settings.githubToken&&settings.gistId?'Aan':'Uit',"ccSetPage('sync',this)")}${row('Testen','',"ccSetPage('testen',this)")}${row('Kopie en opnieuw','',"ccSetPage('kopie',this)")}${row('Opnieuw instellen','',"ccWizStart('again')")}${row('Uitleg over de app','','showIntro()')}</div></div></section>
  ${page('over','Over jou',`${field('doel','Waar wil je naartoe?','Bijvoorbeeld meer energie of vaker bewegen')}${field('sporten','Wat doe je graag?','Bijvoorbeeld hardlopen, fietsen, wandelen')}${field('weekritme','Je weekritme','Welke dagen passen goed?')}${field('slaap','Slaap en routine','Alleen als je dit wilt meenemen')}${field('eten','Wat eet je graag of liever niet?','Voorkeuren, gewoontes of ingrediënten')}<h3 class="cc-set-sub">Optioneel</h3><div class="flow-form-grid">${field('leeftijd','Leeftijd','','number')}<label class="flow-field">Geslacht<select id="set-geslacht"><option value="">Niet opgegeven</option><option value="man">Man</option><option value="vrouw">Vrouw</option><option value="anders">Anders / liever niet zeggen</option></select></label>${field('gewicht','Gewicht · kg','','number')}${field('streefgewicht','Streefgewicht · kg','','number')}</div><p class="cc-set-note">Vul alleen in wat Coach mag meenemen.</p>`)}
  ${page('doelen','Doelen',`<label class="flow-field">Bewegen · min per week<input id="ritme-goal-move" inputmode="numeric" value="${ccMoveGoal()}"></label><div class="flow-form-grid"><label class="flow-field">Vezels · g per dag<input id="ritme-goal-fiber" inputmode="decimal" value="${goals.vezels}"></label><label class="flow-field">Eiwit · g per dag<input id="ritme-goal-protein" inputmode="decimal" value="${goals.eiwitten}"></label></div><p class="cc-set-note">Jouw eigen doelen voor het overzicht. De Beweegrichtlijn noemt 150 minuten per week.</p>`)}
  ${page('stem','Stem en spraak',`<label class="flow-field">Stem bij voorlezen<select id="set-tts-voice">${['nova','shimmer','echo','onyx','alloy','fable'].map(v=>`<option value="${v}">${v[0].toUpperCase()+v.slice(1)}</option>`).join('')}</select></label>${field('openai','OpenAI-sleutel · optioneel','Voor een natuurlijkere stem','password')}<p class="cc-set-note">Zonder OpenAI-sleutel leest de stem van je telefoon voor.</p>${field('woorden','Eigen woorden voor spraak','Namen, oefeningen of gerechten, met komma\'s')}`)}
@@ -7663,7 +7626,7 @@ function saveSettings(){
  next.privacyModus=!!document.getElementById('ritme-privacy')?.checked;
  if((next.syncWachtwoord||'')!==(settings.syncWachtwoord||'')&&settings.syncWachtwoord)next._syncWachtwoordVorig=settings.syncWachtwoord;
  saveSettingsData(next);data.doelen ||= [];for(const [type,value,omschrijving] of [['vezels_dag',fiber,`${fiber} gram vezels per dag`],['eiwitten_dag',protein,`${protein} gram eiwit per dag`],['beweging_week',move,`${move} minuten bewegen per week`]]){const goal=data.doelen.find(g=>g.type===type);if(goal)Object.assign(goal,{waarde:value,omschrijving});else data.doelen.push({id:'goal-'+type,type,waarde:value,omschrijving,aangemaakt:today()});}
- _ttsEnabled=!!document.getElementById('ritme-tts').checked;localStorage.setItem('hc_tts',_ttsEnabled?'on':'off');if(!_ttsEnabled)_stopCurrentAudio();saveAndSync();closeSettings();renderAll();ccApplyPrivacyBadge();showBanner('green',settings.privacyModus?'Bewaard. Privacymodus staat aan.':'Je instellingen zijn bewaard.');
+ _ttsEnabled=!!document.getElementById('ritme-tts').checked;localStorage.setItem('hc_tts',_ttsEnabled?'on':'off');if(!_ttsEnabled)_stopCurrentAudio();saveAndSync();closeSettings();renderAll();showBanner('green',settings.privacyModus?'Bewaard. Privacymodus staat aan.':'Je instellingen zijn bewaard.');
 }
 
 // Explicit calendar interpretation: unresolved dates must never become today.
@@ -8094,7 +8057,7 @@ function buildSystemPrompt(query=''){
  }
  const food=/eten|eet|voed|recept|maaltijd|eiwit|vezel|ontbijt|lunch|diner|kook/i.test(query),sport=/sport|loop|fiets|train|beweeg|wand|otis|activiteit|herstel/i.test(query),planning=/plan|morgen|gisteren|vandaag|week|maandag|dinsdag|woensdag|donderdag|vrijdag|zaterdag|zondag/i.test(query),reflection=/terugblik|overzicht|patroon|week.*ging/i.test(query);
  const profile={};for(const key of ['naam','doel'])if(settings[key])profile[key]=settings[key];
- if(food&&settings.eten)profile.eten=settings.eten;if(sport&&settings.sporten)profile.sporten=settings.sporten;if(planning&&settings.weekritme)profile.weekritme=settings.weekritme;
+ if(food&&settings.eten)profile.eten=settings.eten;if(food&&settings.lieverNiet?.length)profile.lieverNiet=settings.lieverNiet;if(sport&&settings.sporten)profile.sporten=settings.sporten;if(planning&&settings.weekritme)profile.weekritme=settings.weekritme;
  const context={dagbriefje:ccDayBrief(true),planningMetIds:ccPlanForTools(true),datum:today(),profiel:profile};if(data.coachPatterns?.lines?.length)context.patronen=data.coachPatterns.lines;
  if(/voel|moe|energie|herstel|train|sport/i.test(query))context.checkIn=flowDay(today()).checkIn||'onbekend';
  const memories=ccActiveMemory(query);if(memories.length)context.herinneringen=memories.map(m=>({uitspraak:m.text,datum:m.date||'onbekend',geldigTot:m.expires||'blijvend, controleer actualiteit'}));
