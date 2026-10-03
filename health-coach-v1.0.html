@@ -2623,7 +2623,7 @@ body input[type="checkbox"]:disabled{opacity:.4;cursor:default}
 'use strict';
 
 // ─── VERSION CHECK (forceert Safari herlading bij nieuwe versie) ──────────────
-const APP_VERSION = 'lime-20261003-9';
+const APP_VERSION = 'lime-20261003-10';
 // Eén plek voor de modellen: Sonnet voor gesprekken en recepten, Haiku voor snelle achtergrondtaken.
 const CC_MODEL_MAIN = 'claude-sonnet-4-6';
 const CC_MODEL_FAST = 'claude-haiku-4-5-20251001';
@@ -7044,7 +7044,7 @@ async function callAIStream(messages, maxTokens, options = {}) {
    }
    if (buf.trim()) handle(buf);
   } finally { clearTimeout(idle); signal?.removeEventListener('abort', stop); }
-  if (stalled) throw new Error('Het antwoord bleef hangen. Probeer opnieuw.');
+  if (stalled) { const e = new Error('Het antwoord bleef hangen. Probeer opnieuw.'); e.name = 'StallError'; throw e; }
  }
  const toolCalls = Object.values(blocks).map(b => { try { return {name: b.name, input: JSON.parse(b.json || '{}')}; } catch(_) { return null; } }).filter(Boolean);
  if (!full.trim() && !toolCalls.length) throw new Error('Geen bruikbaar antwoord ontvangen. Probeer opnieuw.');
@@ -8670,11 +8670,17 @@ function chefRecipePrompt(focus,n,previous,selfCheck){
   return {prompt,persons};
 }
 // One streamed call; every finished recipe goes straight to onRecipe.
-async function requestChefRecipes(focus,n,previous=[],onRecipe,signal){
+// A stalled stream is retried once; recipes that already arrived are kept.
+async function requestChefRecipes(focus,n,previous=[],onRecipe,signal,retry=true){
   const {prompt,persons}=chefRecipePrompt(focus,n,previous,true),found=[];let problem=null;
   const take=text=>{const objs=ccCompleteObjects(text);while(found.length<Math.min(objs.length,n)){let r=null;try{r=validateChefRecipe(JSON.parse(objs[found.length]),persons);}catch(e){problem=problem||e;}found.push(r);if(r&&onRecipe)onRecipe(r);}};
-  const full=await callAIStream([{role:'user',content:prompt}],Math.min(5000,n*1500),{system:CC_TASK_STYLE+ccVocabNote(),signal,onText:(_,all)=>take(all)});
-  take(full);
+  try{take(await callAIStream([{role:'user',content:prompt}],Math.min(5000,n*1500),{system:CC_TASK_STYLE+ccVocabNote(),signal,onText:(_,all)=>take(all)}));}
+  catch(e){
+    if(e.name==='AbortError')throw e;
+    if(found.some(Boolean))return found.filter(Boolean);
+    if(retry&&e.name==='StallError')return requestChefRecipes(focus,n,previous,onRecipe,signal,false);
+    throw e;
+  }
   const good=found.filter(Boolean);
   if(!good.length)throw problem||Error('Chef gaf geen volledig voorstel. Probeer opnieuw.');
   return good;
