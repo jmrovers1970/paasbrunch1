@@ -2593,7 +2593,7 @@ body input[type="checkbox"]:disabled{opacity:.4;cursor:default}
 'use strict';
 
 // ─── VERSION CHECK (forceert Safari herlading bij nieuwe versie) ──────────────
-const APP_VERSION = 'lime-20261003-5';
+const APP_VERSION = 'lime-20261003-6';
 // Eén plek voor de modellen: Sonnet voor gesprekken en recepten, Haiku voor snelle achtergrondtaken.
 const CC_MODEL_MAIN = 'claude-sonnet-4-6';
 const CC_MODEL_FAST = 'claude-haiku-4-5-20251001';
@@ -4473,8 +4473,8 @@ async function generateIngredientsForMeal(mealId) {
   if (btn) { btn.textContent = '⏳'; btn.disabled = true; }
   try {
     const prompt = `Maak een compleet recept voor "${meal.naam}" (2 personen). Geef ALLEEN JSON:
-{"ingredienten":["200g kipfilet","1 ui","2 el olijfolie"],"bereiding":["Verwarm olijfolie in pan.","Bak ui glazig.","Voeg kip toe en bak 8 min."]}
-Maximaal 8 ingrediënten, maximaal 6 stappen. Geen uitleg buiten de JSON.`;
+{"ingredienten":["200 g kipfilet","100 g ui","2 el olijfolie"],"bereiding":["Verwarm olijfolie in pan.","Bak ui glazig.","Voeg kip toe en bak 8 min."]}
+Maximaal 8 ingrediënten, hoeveelheden in gram of ml waar het kan, maximaal 6 stappen. Geen uitleg buiten de JSON.`;
     const raw = await callAIPlain(prompt, 400);
     const parsed = safeParseJSON(raw);
     const ingredienten = parsed && Array.isArray(parsed.ingredienten) ? parsed.ingredienten : (Array.isArray(parsed) ? parsed : null);
@@ -4573,15 +4573,16 @@ function _categorizeIngredients(items) {
   const kw = {
     'Groenten & fruit': ['courgette','paprika','ui','wortel','selderij','spinazie','kool','avocado','koriander','rucola','knoflook','tomaat','prei','broccoli','bloemkool','sla','komkommer','citroen','limoen','appel','peer','banaan','mango','druif','aardbei','gember','biet','asperge','mais','champignon','paddenstoel'],
     'Vlees, vis & eieren': ['kip','vlees','gehakt','spek','ham','vis','zalm','tonijn','garnalen','ei','eieren','tofu','tempeh','seitan'],
-    'Zuivel': ['melk','yoghurt','kwark','kaas','roomkaas','crème fraîche','slagroom','boter','margarine','room'],
+    'Zuivel': ['melk','yoghurt','kwark','kaas','feta','mozzarella','parmezaan','ricotta','cottage cheese','skyr','roomkaas','crème fraîche','slagroom','boter','margarine','room'],
     'Blikken & potten': ['blik','kokosmelk','bouillon','bonen','kikkererwten','linzen','passata','tomatenpuree','pesto','mosterd','soja','sojasaus','ketjap'],
-    'Droog & granen': ['pasta','rijst','quinoa','brood','tortilla','meel','bloem','suiker','olie','olijfolie','azijn','noten','amandelen','cashew','walnoot','pijnboompit','rozijn','haver','havermout','muesli','crackers'],
+    'Droog & granen': ['pasta','rijst','quinoa','brood','tortilla','wrap','meel','bloem','suiker','olie','olijfolie','azijn','noten','amandelen','cashew','walnoot','pijnboompit','rozijn','haver','havermout','muesli','crackers'],
   };
   items.forEach(item => {
-    const k = item.name;
-    let cat = 'Overig';
+    const key = ritmeGroceryKey(item.name), parts = key.split(' ');
+    const hit = w => { const k = ritmeGroceryKey(w); return k.includes(' ') ? key.includes(k) : parts.some(x => x === k || (k.length >= 3 && (x.startsWith(k) || x.endsWith(k)))); };
+    let cat = 'Overig', best = 0;
     for (const [c, words] of Object.entries(kw)) {
-      if (words.some(w => k.includes(w))) { cat = c; break; }
+      for (const w of words) if (w.length > best && hit(w)) { cat = c; best = w.length; }
     }
     cats[cat].push(item);
   });
@@ -4687,9 +4688,6 @@ function deleteRecept(id){return flowDeleteOne(id);}
 
 
 
-function copyToClipboard(text) {
-  navigator.clipboard.writeText(text).then(() => showBanner('yellow', 'Gekopieerd naar klembord.'));
-}
 
 
 
@@ -8538,7 +8536,7 @@ const CHEF_STIJL=`STIJL VAN CHEF:
 - Eiwit ruim en zichtbaar: een maaltijd 30–45 g eiwit per portie, een snack 5–20 g. Slimme bronnen: Griekse yoghurt, kwark, cottage cheese, eieren, peulvruchten, tofu, tempeh, edamame, en vis of vlees als het eetpatroon dat toestaat.
 - Groente voorop, met contrast: iets fris of zuurs, iets knapperigs, een saus of dip, verse kruiden.
 - Snel waar het kan: de meeste recepten in 5–20 minuten.
-- Nederlandse keuken: gram en ml (nooit cups of ounces), ingrediënten uit een gewone Nederlandse supermarkt.
+- Hoeveelheden in gram of ml waar het kan, ook bij groente, fruit en kaas (bijvoorbeeld "150 g avocado" in plaats van "1 avocado"); alleen eieren en kleine dingen zoals een teentje knoflook in stuks. Nooit cups of ounces. Ingrediënten uit een gewone Nederlandse supermarkt.
 - Naam: kort en pakkend, het gerecht plus de smaakmaker die het verschil maakt, bijvoorbeeld "Crispy tofu-bowl met sesam-limoen" of "Bakplaat-zalm met zoete aardappel en tahin". Gangbare foodwoorden als bowl, wrap en crispy mogen.
 - Stappen: kort, actief en concreet, bijvoorbeeld "Rooster 20 min op 220 °C". Geen lappen tekst.`;
 const CHEF_SCHEMA='[{"naam":"...","personen":2,"voedingsbasis":"per_portie","vezels":"~Xg","eiwitten":"~Xg","koolhydraten":"~Xg","tijd":"20 min","ingredienten":["200 g ingrediënt"],"bereiding":["Concrete stap met tijd en indien nodig temperatuur"]}]';
@@ -8874,13 +8872,28 @@ function _buildAndShowShopList(){
  for(const m of s.allMeals){if(!s.selected.has(m.id))continue;if(!m.hasRecept){missing.push(m.naam);continue;}for(const ingredient of m.ingredienten||[])items.push({text:scaleIngredient(ingredient,2,s.persons||2),recept:m.naam});}
  for(const text of s.extraItems)items.push({text,recept:null});
  const cats=_categorizeIngredients(ritmeMergeGroceries(items));
- let text=`Boodschappen (${s.persons||2} personen per gerecht)\n`,markup='';
- for(const [cat,entries] of Object.entries(cats)){if(!entries.length)continue;text+=`\n${cat}\n`;markup+=`<section class="ritme-shop-category"><h3>${escapeText(cat)}</h3>`;for(const item of entries){const checked=s.inHuis.has(item.display);text+=`${checked?'[x]':'[ ]'} ${item.display}\n`;markup+=`<label class="shop-item-row ${checked?'in-huis':''}"><input type="checkbox" ${checked?'checked':''} onchange="ritmeCheckShopping(${flowArg(item.display)},this.checked,this)"><span>${escapeText(item.display)}</span></label>`;}markup+='</section>';}
- if(missing.length){text+='\nIngrediënten zelf aanvullen:\n'+missing.join('\n');markup+=`<div class="flow-review-note"><strong>Nog zelf aanvullen</strong><p>${missing.map(escapeText).join(', ')}: geen ingrediënten bekend.</p></div>`;}
- window._shopListText=text;
- showModal(`<div class="modal-header"><h2>Mijn boodschappen</h2>${flowClose()}</div><button class="ritme-link" onclick="_renderShopPicker()">Gerechten en personen aanpassen</button><p class="muted">Vink af wat je hebt. Hoeveelheden uit je recepten worden omgerekend; controleer de verpakkingen.</p><div class="ritme-shopping-list">${markup||'<p class="muted">Je lijst is nog leeg. Voeg hieronder iets toe.</p>'}</div><div class="ritme-shop-add"><label class="flow-field">Losse boodschap<input id="shop-extra-input" placeholder="Bijvoorbeeld 2 appels" onkeydown="if(event.key===\'Enter\')_addShopExtra()"></label><button class="btn btn-secondary" onclick="_addShopExtra()">Toevoegen</button></div><button class="btn btn-primary btn-full" onclick="copyToClipboard(window._shopListText)">Kopieer lijst</button>${s.extraItems.length?'<button class="btn btn-ghost btn-full" onclick="clearBoodschappenExtra()">Losse boodschappen wissen</button>':''}`);
+ let markup='';
+ for(const [cat,entries] of Object.entries(cats)){if(!entries.length)continue;markup+=`<section class="ritme-shop-category"><h3>${escapeText(cat)}</h3>`;for(const item of entries){const checked=s.inHuis.has(item.display);markup+=`<label class="shop-item-row ${checked?'in-huis':''}"><input type="checkbox" ${checked?'checked':''} onchange="ritmeCheckShopping(${flowArg(item.display)},this.checked,this)"><span>${escapeText(item.display)}</span></label>`;}markup+='</section>';}
+ if(missing.length){markup+=`<div class="flow-review-note"><strong>Nog zelf aanvullen</strong><p>${missing.map(escapeText).join(', ')}: geen ingrediënten bekend.</p></div>`;}
+ window._shopCats=cats;window._shopMissing=missing;
+ showModal(`<div class="modal-header"><h2>Mijn boodschappen</h2>${flowClose()}</div><button class="ritme-link" onclick="_renderShopPicker()">Gerechten en personen aanpassen</button><p class="muted">Vink af wat je hebt. Hoeveelheden uit je recepten worden omgerekend; controleer de verpakkingen.</p><div class="ritme-shopping-list">${markup||'<p class="muted">Je lijst is nog leeg. Voeg hieronder iets toe.</p>'}</div><div class="ritme-shop-add"><label class="flow-field">Losse boodschap<input id="shop-extra-input" placeholder="Bijvoorbeeld 2 appels" onkeydown="if(event.key===\'Enter\')_addShopExtra()"></label><button class="btn btn-secondary" onclick="_addShopExtra()">Toevoegen</button></div><button class="btn btn-primary btn-full" onclick="ritmeCopyShopping(this)">Kopieer lijst</button>${s.extraItems.length?'<button class="btn btn-ghost btn-full" onclick="clearBoodschappenExtra()">Losse boodschappen wissen</button>':''}`);
 }
-function ritmeCheckShopping(text,checked,input){const s=window._shopState;if(checked)s.inHuis.add(text);else s.inHuis.delete(text);input?.closest('label')?.classList.toggle('in-huis',checked);window._shopListText=window._shopListText.split('\n').map(line=>line.slice(4)===text?`${checked?'[x]':'[ ]'} ${text}`:line).join('\n');}
+function ritmeCheckShopping(text,checked,input){const s=window._shopState;if(checked)s.inHuis.add(text);else s.inHuis.delete(text);input?.closest('label')?.classList.toggle('in-huis',checked);}
+function ritmeShopText(){
+ const s=window._shopState;let text='';
+ for(const [cat,entries] of Object.entries(window._shopCats||{})){const todo=entries.filter(i=>!s.inHuis.has(i.display));if(todo.length)text+=`${cat}\n${todo.map(i=>'• '+i.display).join('\n')}\n\n`;}
+ if(window._shopMissing?.length)text+=`Nog zelf aanvullen\n${window._shopMissing.map(x=>'• '+x).join('\n')}\n`;
+ return text.trim();
+}
+function ritmeCopyShopping(btn){
+ const text=ritmeShopText(),show=label=>{btn.textContent=label;setTimeout(()=>{if(btn.isConnected)btn.textContent='Kopieer lijst';},2500);};
+ if(!text){show('Je hebt alles al');return;}
+ if(!navigator.clipboard){show('Kopiëren lukt niet');return;}
+ navigator.clipboard.writeText('Boodschappen\n\n'+text).then(()=>show('Gekopieerd ✓'),()=>show('Kopiëren lukt niet'));
+}
+function ritmeGroceryKey(name){
+ return String(name).toLowerCase().replace(/\([^)]*\)/g,' ').replace(/,.*$/,'').replace(/\b(rijpe?|verse?|grote?|kleine?|halve?|biologische?|ongezouten)\b/g,' ').replace(/['’]s\b/g,'').trim().split(/\s+/).map(w=>w.replace(/(eren|en|s)$/,'').replace(/([aeou])\1/g,'$1')).join(' ');
+}
 function ritmeMergeGroceries(items){
  const merged=new Map();
  for(const item of items){
@@ -8888,11 +8901,10 @@ function ritmeMergeGroceries(items){
   const m=text.match(/^(\d+\s+\d+\/\d+|\d+\/\d+|\d*[½¼¾]|\d+(?:[.,]\d+)?)\s*(g|kg|ml|l|el|tl|stuks?|blikjes?|blik|bosjes?|bos|takjes?|teentjes?|teen|x)?\s+(.+)$/i);
   let qty=null,unit='',name=text.toLowerCase();
   if(m){const raw=m[1];if(/[½¼¾]/.test(raw))qty=Number(raw.slice(0,-1)||0)+({'½':.5,'¼':.25,'¾':.75})[raw.slice(-1)];else if(raw.includes('/')){const f=raw.match(/^(?:(\d+)\s+)?(\d+)\/(\d+)$/);qty=Number(f[1]||0)+Number(f[2])/Number(f[3]);}else qty=Number(raw.replace(',','.'));unit=(m[2]||'').toLowerCase();name=m[3].toLowerCase();if(!Number.isFinite(qty)){qty=null;name=text.toLowerCase();unit='';}}
-  const key=name+'|'+unit+'|'+(qty===null?'unknown': 'number');
-  // Do not collapse unquantified repeated ingredients: that could lose a shopping amount.
-  if(qty===null){merged.set(key+'|'+merged.size,{name,display:text,recepten:item.recept?[item.recept]:[]});continue;}
-  const prior=merged.get(key);const total=(prior?.qty||0)+qty;
-  merged.set(key,{name,qty:total,display:`${new Intl.NumberFormat('nl-NL',{maximumFractionDigits:3}).format(total)}${unit?' '+unit:''} ${name}`,recepten:[...new Set([...(prior?.recepten||[]),...(item.recept?[item.recept]:[])])]});
+  const unitKey=unit.replace(/s$/,''),key=ritmeGroceryKey(name)+'|'+unitKey+'|'+(qty===null?'unknown':'number'),prior=merged.get(key),recepten=[...new Set([...(prior?.recepten||[]),...(item.recept?[item.recept]:[])])];
+  if(qty===null){merged.set(key,{name:prior?.name||name,display:prior?.display||text,recepten});continue;}
+  const total=(prior?.qty||0)+qty,shown=prior&&!(qty>1&&total>1&&!(prior.qty>1))?prior.name:name,shownUnit=total>1&&/je$|^stuk$/.test(unitKey)?unitKey+'s':unitKey;
+  merged.set(key,{name:shown,qty:total,display:`${new Intl.NumberFormat('nl-NL',{maximumFractionDigits:3}).format(total)}${shownUnit?' '+shownUnit:''} ${shown}`,recepten});
  }
  return [...merged.values()];
 }
