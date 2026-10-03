@@ -40,7 +40,7 @@ Gebruiker: Jim. Primair op iPhone (Safari), in het Nederlands. Loopt (hoofdsport
 
 **De repository is openbaar** (GitHub Pages op een gratis account vereist dat). Er mogen dus nooit sleutels, tokens of persoonsgegevens in code, commits of testbestanden staan.
 
-**Versie**: constante `APP_VERSION = 'lime-YYYYMMDD-N'` bovenin het script. Getoond in Instellingen. Elke nieuwe versie: datum van vandaag en N doornummeren. Huidige basis: `lime-20261003-10`.
+**Versie**: constante `APP_VERSION = 'lime-YYYYMMDD-N'` bovenin het script. Getoond in Instellingen. Elke nieuwe versie: datum van vandaag en N doornummeren. Huidige basis: `lime-20261003-11`.
 
 ### CSS — twee lagen
 - **Oude laag**: eerste `<style>` in `<head>`. Historisch gegroeid, veel `!important`. Ongebruikte regels zijn al verwijderd; de rest wordt deels overstemd. Niet uitbreiden.
@@ -66,7 +66,9 @@ Lettertype: -apple-system, 'SF Pro Text', system-ui, sans-serif.
 - **Chips** `.cc-chip`: 36–40 px hoog, wit, rand `--cc-line`, tekst 14 px/600, gecentreerd, geen afbreking.
 - **Status**: rondje 28 px. Leeg = gepland. Lime met donker vinkje = gedaan/gegeten. Geldt voor beweging, eten, en alle `input[type=checkbox]` (globale regel in cc-design-v1).
 - **Kaart**: wit, 1 px rand, 18 px afronding, geen schaduw. Sectiekop: 13 px hoofdletters, `--cc-muted`.
-- **Lijstrijen**: 56 px, scheidingslijn, chevron rechts.
+- **Lijstkaart** `.cc-list` met rijen `.cc-row` (`ccRow(label, meta, actie)`): 56 px, label 16/600 links, meta 14 muted rechts, chevron (`CC_CHEVRON`), ingesprongen scheidingslijn. Elke rij opent een venster; niets klapt inline open. Voorbeeld: Chef › *Jouw keuken* (`ccRenderKitchen`). Coach gaat dit ook gebruiken.
+- **Vensters** (`showModal`): kop met titel en sluiten (44 px). Eén niveau terug met `ccOpenFrom(terugFunctie, () => openVenster())`; formulieren sluiten met `ccGoBack()` zodat je terugkomt waar je vandaan kwam. Focus gaat naar de titel en terug naar de knop die opende; Escape sluit.
+- **Weekmenu**: één venster voor Chef en Coach, `ccOpenWeekMenu(offset)`; toevoegen per dag via `showTypedMealSlot(datum)` → `quickEditMeal`.
 - **Voorstelkaart** `.cc-proposal`: kop "VOORSTEL", titel, subregel, reden; knoppen *Pas aan* (lime) en *Laat staan* (omlijnd); daarna status + *Ongedaan maken*.
 
 ### Data en opslag
@@ -95,7 +97,7 @@ Lettertype: -apple-system, 'SF Pro Text', system-ui, sans-serif.
 ### Belangrijke schermen en functies
 - Tabs: `#tab-vandaag` (Coach), `#tab-recepten` (Chef); `switchTab(name, btn)`.
 - Coach: invoer, coachgesprek (`#coach-front-chat`, `addFrontBubble`), tegels (`RITME_TILES`, `ritmeSelected`, `ritmeRenderTiles`): beweging, maaltijden, water (`ccRenderWater`), voeding. Onderaan uitklaplijst (`.lime-more-panel`).
-- Chef: `flowRenderChef`, modus `flowChefMode` (`CC_CHEF_MODES`: voor/tijdens/na/makkelijk/uitgebreid/comfort/voorraadsnack/voorraad) via `flowSetChefMode`, versturen `flowChefSubmit`, genereren `_doGenerateRecepten` → `requestChefRecipes`: één gestreamde aanroep (`callAIStream` met eigen `system`), elk af recept direct in beeld via `chefPreviewOpen`/`chefPreviewAdd`. Receptinstellingen: `flowSetPersons`, `flowSetCount`, `flowSetDieet` (bewaard in localStorage). Foto's: `flowPhotoMenu`, `flowChoosePhoto`, `flowAnalyseRecipePhoto`, `analyseVoorraadFoto`, verkleinen `ccPreparePhoto`. Voorraad: `showVoorraadModal` (lijst `data.chefVoorraad.items`, aantikken `toggleVoorraad`, starten `voorraadMaak`). Boodschappen: `showShoppingList`, `_renderShopPicker`, `_buildAndShowShopList`, `_toggleShopMeal`, `ritmeCheckShopping`. Kookmodus: `enterKookmodus`, `ccCook*`.
+- Chef: `flowRenderChef`, modus `flowChefMode` (`CC_CHEF_MODES`: voor/tijdens/na/makkelijk/uitgebreid/comfort/voorraadsnack/voorraad) via `flowSetChefMode`, versturen `flowChefSubmit`, genereren `_doGenerateRecepten` → `requestChefRecipes`: één gestreamde aanroep (`callAIStream` met eigen `system`), elk af recept direct in beeld via `chefPreviewOpen`/`chefPreviewAdd`. Receptinstellingen: `flowSetPersons`, `flowSetCount`, `flowSetDieet` (bewaard in localStorage). Foto's: `flowPhotoMenu`, `flowChoosePhoto`, `flowAnalyseRecipePhoto`, `analyseVoorraadFoto`, verkleinen `ccPreparePhoto`. Voorraad: rij *Uit je voorraad* bovenaan opent `showVoorraadModal` (lijst `data.chefVoorraad.items`, aantikken `toggleVoorraad`, starten `voorraadMaak`). Onderaan *Jouw keuken*: Mijn recepten (`ccOpenRecipes` → `flowRecipeList`), Weekmenu (`ccOpenWeekMenu`), Boodschappen, Receptinstellingen (`ccOpenRecipeSettings`). Boodschappen: `showShoppingList`, `_renderShopPicker`, `_buildAndShowShopList`, `_toggleShopMeal`, `ritmeCheckShopping`. Kookmodus: `enterKookmodus`, `ccCook*`.
 - Instellingen: `openSettings`, `saveSettings`.
 
 ## 4. Vaste regels voor code
