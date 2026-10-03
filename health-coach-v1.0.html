@@ -2593,7 +2593,7 @@ body input[type="checkbox"]:disabled{opacity:.4;cursor:default}
 'use strict';
 
 // ─── VERSION CHECK (forceert Safari herlading bij nieuwe versie) ──────────────
-const APP_VERSION = 'lime-20261003-3';
+const APP_VERSION = 'lime-20261003-4';
 // Eén plek voor de modellen: Sonnet voor gesprekken en recepten, Haiku voor snelle achtergrondtaken.
 const CC_MODEL_MAIN = 'claude-sonnet-4-6';
 const CC_MODEL_FAST = 'claude-haiku-4-5-20251001';
@@ -2946,7 +2946,7 @@ function _modusRegel() {
   if (flowChefMode === 'makkelijk') return `
 - MAKKELIJK: weinig werk en weinig afwas — maximaal 8 ingrediënten, maximaal 6 bereidingsstappen, totaal maximaal 30 minuten, alleen gangbare technieken en gewone supermarkt-ingrediënten. Smaak blijft de harde eis: geen fantasieloze "gooi een blik leeg"-recepten, kies slimme shortcuts die écht lekker zijn.`;
   if (flowChefMode === 'comfort') return `
-- COMFORTFOOD: voor troost of om stoom af te blazen. Warm, vullend en een beetje verwennend, zoals een stoofpot, ovenschotel, romige curry of pasta uit de oven. Wel voedzaam, maar smaak en troost staan voorop; wees minder streng over vezels en eiwit.`;
+- COMFORTFOOD: voor troost of om stoom af te blazen. Warm, vullend en een beetje verwennend, zoals een stoofpot, ovenschotel, romige curry of pasta uit de oven, met een frisse, gezonde draai. Wel voedzaam, maar smaak en troost staan voorop; wees minder streng over vezels en eiwit.`;
   if (flowChefMode === 'voor') return `
 - VOOR HET SPORTEN, voor 1 persoon: geef een mix van een kleine snack om 30–60 minuten vooraf te eten (hooguit 5 minuten werk) en een lichte maaltijd of lunch om 2–3 uur vooraf te eten (hooguit 15 minuten werk). Zet in de naam tussen haakjes wanneer je het eet, bijvoorbeeld "(30–60 min vooraf)". Bij één recept: kies wat het best past bij het tijdstip en de training van vandaag.`;
   if (flowChefMode === 'na') return `
@@ -2954,7 +2954,7 @@ function _modusRegel() {
   if (flowChefMode === 'tijdens') return `
 - SNACK: een klein tussendoortje voor 1 persoon, bescheiden portie, weinig of geen afwas.`;
   if (flowChefMode === 'uitgebreid') return `
-- GEMAK: uitgebreid — dit mag een kookproject zijn: gelaagde smaken, meerdere componenten, 45 tot 90 minuten. Kies technieken die het verschil maken (roosteren, marineren, zelf een saus maken) en leg in de bereidingsstappen kort uit waarom een stap belangrijk is.`;
+- GEMAK: uitgebreid — dit mag een kookproject zijn voor de serieuzere kok, groente-gedreven zoals Ottolenghi: gelaagde smaken, meerdere componenten, 45 tot 90 minuten. Kies technieken die het verschil maken (roosteren, marineren, zelf een saus maken) en leg in de bereidingsstappen kort uit waarom een stap belangrijk is.`;
   return '';
 }
 
@@ -8532,6 +8532,15 @@ let genPersonen = [1, 2, 3, 4, 5, 6].includes(Number(localStorage.getItem('hc_ge
 
 
 function saveMealRecipe(id){const r=(data.recepten||[]).find(x=>x.id===id);if(!r)return;r.bewaard=true;r._chefTransient=false;r.flowDeleted=false;saveAndSync();_renderFoodReceptenList();closeModal();showBanner('green','Bewaard in Mijn recepten.');}
+const CHEF_STIJL=`STIJL VAN CHEF:
+- Voor een sportieve, trendy eter: gezond zonder dieetgedoe, fris, veel smaak en een beetje hip, op het niveau van Chickslovefood, Leuke Recepten, OhMyFoodness, Mob, Eat the Gains en Ottolenghi.
+- Vaste vormen die werken: bowl, wrap, bakplaat, één pan, overnight oats, yoghurt- of kwarkbowl. Varieer daarbinnen en wissel af.
+- Eiwit ruim en zichtbaar: een maaltijd 30–45 g eiwit per portie, een snack 5–20 g. Slimme bronnen: Griekse yoghurt, kwark, cottage cheese, eieren, peulvruchten, tofu, tempeh, edamame, en vis of vlees als het eetpatroon dat toestaat.
+- Groente voorop, met contrast: iets fris of zuurs, iets knapperigs, een saus of dip, verse kruiden.
+- Snel waar het kan: de meeste recepten in 5–20 minuten.
+- Nederlandse keuken: gram en ml (nooit cups of ounces), ingrediënten uit een gewone Nederlandse supermarkt.
+- Naam: kort en pakkend, het gerecht plus de smaakmaker die het verschil maakt, bijvoorbeeld "Crispy tofu-bowl met sesam-limoen" of "Bakplaat-zalm met zoete aardappel en tahin". Gangbare foodwoorden als bowl, wrap en crispy mogen.
+- Stappen: kort, actief en concreet, bijvoorbeeld "Rooster 20 min op 220 °C". Geen lappen tekst.`;
 const CHEF_SCHEMA='[{"naam":"...","personen":2,"voedingsbasis":"per_portie","vezels":"~Xg","eiwitten":"~Xg","koolhydraten":"~Xg","tijd":"20 min","ingredienten":["200 g ingrediënt"],"bereiding":["Concrete stap met tijd en indien nodig temperatuur"]}]';
 function validateChefRecipes(value,persons,expected){
   if(!Array.isArray(value)||value.length!==expected)throw Error('Chef gaf geen volledig voorstel. Probeer opnieuw.');
@@ -8549,13 +8558,14 @@ async function requestChefRecipes(focus,n,previous=[]){
   const nutrition=genFocus==='eiwitten'?'Kies een eiwitrijke variant zonder smaak of praktische haalbaarheid op te offeren.':genFocus==='vezels'?'Kies een vezelrijke variant zonder smaak of praktische haalbaarheid op te offeren.':mode.sport||flowChefMode==='comfort'?'':'Lekker én gezond: veel groente, volkoren of peulvruchten, weinig bewerkt. Draag bij aan het vezeldoel van de dag zonder smaak op te offeren.';
   const time=mode.tijd||'Doorgaans maximaal 35 minuten.';
   const prompt=`Maak ${n} verschillende, goed maakbare recepten op basis van deze wens: ${focus||'Geef me inspiratie voor een lekkere maaltijd.'}
+    ${CHEF_STIJL}
     ${_dieetRegel()} ${_maaltijdRegel()} ${_momentRegel()} ${_modusRegel()} ${_voorraadRegel()}
     ${nutrition} ${time} Gebruik gewone supermarktingrediënten, concrete hoeveelheden (ook uitlekgewicht waar relevant), smaakmakers en duidelijke stappen met tijden/temperaturen waar nodig.
     Elk recept is voor EXACT ${persons} personen. Alle ingrediënten gelden voor dit hele recept. Voedingswaarden zijn schattingen PER PORTIE, dus gedeeld door ${persons}. Neem personen:${persons} en voedingsbasis:"per_portie" op.
     ${previous.length?'Bied iets anders dan deze zojuist getoonde voorstellen: '+previous.join(', '):''}
     Geef alleen JSON volgens ${CHEF_SCHEMA}. Geen lege waarden, tijd als "X min".`;
   const draft=await callAIPlain(prompt,Math.min(4500,n*1300));
-  const reviewed=await callAIPlain(`Controleer deze receptvoorstellen voor de oorspronkelijke opdracht hieronder. Herstel fouten in hoeveelheden, porties, voedingsschattingen per portie, ontbrekende ingrediënten in stappen, kookvolgorde, totale bereidingstijd en temperaturen waar nodig. Controleer of het praktisch te koken is en culinair samenhangt. Houd rekening met alle opgegeven dieetwensen. Verzin geen keurmerk of zekerheid. Geef precies ${n} volledige gecorrigeerde recepten als JSON-array volgens hetzelfde schema, voor ${persons} personen.\nOPDRACHT: ${prompt}\nVOORSTELLEN: ${draft}`,Math.min(4500,n*1300));
+  const reviewed=await callAIPlain(`Controleer deze receptvoorstellen voor de oorspronkelijke opdracht hieronder. Herstel fouten in hoeveelheden, porties, voedingsschattingen per portie, ontbrekende ingrediënten in stappen, kookvolgorde, totale bereidingstijd en temperaturen waar nodig. Controleer of het praktisch te koken is en culinair samenhangt. Houd rekening met alle opgegeven dieetwensen. Behoud de stijl, de namen en het karakter van de recepten; verbeter alleen wat niet klopt. Verzin geen keurmerk of zekerheid. Geef precies ${n} volledige gecorrigeerde recepten als JSON-array volgens hetzelfde schema, voor ${persons} personen.\nOPDRACHT: ${prompt}\nVOORSTELLEN: ${draft}`,Math.min(4500,n*1300));
   return validateChefRecipes(safeParseJSON(reviewed),persons,n);
 }
 let _chefGenerating=false;
