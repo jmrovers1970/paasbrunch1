@@ -40,7 +40,7 @@ Gebruiker: Jim. Primair op iPhone (Safari), in het Nederlands. Loopt (hoofdsport
 
 **De repository is openbaar** (GitHub Pages op een gratis account vereist dat). Er mogen dus nooit sleutels, tokens of persoonsgegevens in code, commits of testbestanden staan.
 
-**Versie**: constante `APP_VERSION = 'lime-YYYYMMDD-N'` bovenin het script. Getoond in Instellingen. Elke nieuwe versie: datum van vandaag en N doornummeren. Huidige basis: `lime-20261002-2`.
+**Versie**: constante `APP_VERSION = 'lime-YYYYMMDD-N'` bovenin het script. Getoond in Instellingen. Elke nieuwe versie: datum van vandaag en N doornummeren. Huidige basis: `lime-20261003-5`.
 
 ### CSS — twee lagen
 - **Oude laag**: eerste `<style>` in `<head>`. Historisch gegroeid, veel `!important`. Ongebruikte regels zijn al verwijderd; de rest wordt deels overstemd. Niet uitbreiden.
@@ -85,6 +85,7 @@ Lettertype: -apple-system, 'SF Pro Text', system-ui, sans-serif.
 - Modellen in constanten: `CC_MODEL_MAIN` (gesprek, recepten), `CC_MODEL_FAST` (Haiku: geheugen, voedingsschatting, uitlezen, beoordelen), `CC_MODEL_DEEP` (weekterugblik, met terugval naar MAIN). Nooit een modelnaam hardcoden.
 - Aanroepen: `callAIPlain(prompt, maxTokens, model)`, `callAIFast`, `callAIDeep`, `callAIMessages`, `callAIStream(messages, maxTokens, {signal,onText,tools})`. Fetch via `ccFetch` (timeouts, annuleren).
 - Systeemprompt: `buildSystemPrompt(query)` = `CC_SOUL` + `ccVocabNote()` + context: `dagbriefje` (`ccDayBrief`), `planningMetIds` (`ccPlanForTools`), profiel, `patronen`, herinneringen, registraties. **Privacymodus** (`settings.privacyModus`) stuurt alleen vandaag mee. Wijzig dit gedrag niet ongevraagd.
+- **Chef-stijl** staat in `CHEF_STIJL` (bron: Jims document *Receptinspiratie*, okt 2026): sportief en trendy, gezond zonder dieetgedoe; bowl/wrap/bakplaat/één pan; maaltijd 30–45 g eiwit, snack 5–20 g; groente voorop met contrast; meestal 5–20 min; gram/ml en Nederlandse supermarkt; korte pakkende namen. Chef-knoppen: `CC_CHEF_MODES` (Bij sport: voor/tijdens/na; Maaltijd: makkelijk/uitgebreid/comfort).
 - Coach-voorstellen: `CC_PROPOSAL_TOOLS` (verplaats/wijzig/voeg toe/schrap) → `ccValidProposals` → `ccRenderProposals` → `ccApplyProposal`. Nooit iets wijzigen zonder tik van de gebruiker.
 - Slim invoeren: `submitSmartInput` → `parseSmartInput` (één aanroep haalt alle acties uit tekst) → daarna eventueel `coachFrontSend`.
 - Spraak in: `bigPraatStart` (Coach) en `flowListen` (velden, Chef), beide `continuous=false`, tekst eerst in het veld. Vóór de microfoon start: `ccPrepareMic()` (stopt voorlezen, zet de audiosessie op opnemen). `bigPraatStart` heeft een waakhond die afbreekt als er niets binnenkomt.
