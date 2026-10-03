@@ -1286,7 +1286,7 @@ button{touch-action:manipulation}
 #tabs{background:#fffef9f5;border-top:1px solid var(--border);box-shadow:0 -4px 20px #243d3205}.tab-btn{color:var(--muted);font-size:14px;font-weight:600;min-height:48px}.tab-btn.active,.tab-btn.active:last-child{color:var(--text);background:#eaf2ce;border-radius:10px}.tab-btn.active:before{background:var(--acid)}
 .btn-primary{background:var(--acid);color:var(--text);border-color:#bdd43a}.btn-secondary{background:#e9eddf;color:var(--text);border-color:var(--border)}.btn-ghost{color:var(--text)}
 .modal{background:var(--card);border-radius:20px;color:var(--text)}.modal-header h2{color:var(--text)}.muted,.flow-field,.flow-field span{color:var(--muted)}.flow-field input,.flow-field select,.flow-field textarea{color:var(--text);border-color:var(--border)}
-#splash-overlay{background:var(--bg);transition:opacity .15s;cursor:pointer}.lime-launch{display:flex;flex-direction:column;align-items:center;gap:22px}.lime-launch .wordmark{font-size:38px}.lime-launch p{color:var(--muted);font-size:14px;margin:0}.lime-emblem{display:grid;place-items:center;width:76px;height:76px;background:var(--acid);color:var(--text);font-size:57px;line-height:1;font-weight:800;letter-spacing:-4px;border-radius:18px 5px 18px 5px;transform:rotate(-7deg)}
+#splash-overlay{transition:opacity .15s;cursor:pointer}.lime-launch{display:flex;flex-direction:column;align-items:center;gap:22px}.lime-launch .wordmark{font-size:38px}.lime-launch p{color:var(--cc-ink);font-size:14px;margin:0}.lime-emblem{display:grid;place-items:center;width:76px;height:76px;background:var(--cc-lime);color:var(--cc-ink);font-size:57px;line-height:1;font-weight:800;letter-spacing:-4px;border-radius:18px 5px 18px 5px;transform:rotate(-7deg)}
 @media(min-width:640px){.coach-front-card,.flow-chef-card{padding:27px!important}.brand-header{padding-left:24px;padding-right:24px}.modal{border-radius:20px}}
 @media(max-width:390px){.brand-header{padding:12px 16px}.wordmark{font-size:24px}.flow-brand-tag{display:none}.brand-settings{font-size:11px}.coach-front-card,.flow-chef-card{padding:18px!important}.flow-chef-card h1{font-size:30px}.flow-speak{font-size:15px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
@@ -1452,7 +1452,7 @@ body{background:var(--cc-bg)!important;color:var(--cc-ink)}
 body:has(#tab-recepten.active) .brand-header,#tab-recepten#tab-recepten .flow-chef-card{--cc-zone:var(--cc-lime)}
 .brand-header{background:var(--cc-zone)!important;border-bottom:0!important;box-shadow:none!important}
 .brand-header .flow-brand-tag{display:none!important}
-.brand-header .wordmark,.brand-header .brand-dot,.brand-header .brand-settings{color:var(--cc-ink)!important}
+.wordmark,.wordmark .brand-dot,.brand-header .brand-settings{color:var(--cc-ink)!important}
 .brand-header .brand-amp{background:var(--cc-lime)!important;color:var(--cc-ink)!important;border-radius:8px!important}
 body:has(#tab-recepten.active) .brand-header .brand-amp{background:var(--cc-coach)!important;color:var(--cc-petrol)!important}
 #tab-vandaag#tab-vandaag .day-heading,#tab-vandaag#tab-vandaag .coach-front-card,
@@ -1498,7 +1498,8 @@ body .vandaag-section-h{font-size:13px!important;font-weight:650!important;text-
 /* Onderbalk */
 #tabs{background:var(--cc-card)!important;border-top:1px solid var(--cc-line)!important;box-shadow:none!important;gap:8px!important;padding:8px 16px!important}
 #tabs .tab-btn{border-radius:var(--cc-r-pill)!important;background:transparent!important;color:var(--cc-muted)!important;font-weight:600!important;font-size:16px!important;border:0!important;box-shadow:none!important;min-height:48px}
-#tabs .tab-btn.active{background:var(--cc-lime)!important;color:var(--cc-ink)!important;font-weight:700!important}
+#tabs .tab-btn.active{background:var(--cc-lime)!important;color:var(--cc-petrol)!important;font-weight:700!important}
+#tabs .tab-btn.active:first-child{background:var(--cc-coach)!important}
 /* Chef */
 #tab-recepten#tab-recepten .flow-chef-card{border:0!important;border-radius:0!important;padding:16px 0 24px!important;margin:0 0 24px!important}
 .cc-eyebrow{display:flex;align-items:center;gap:8px;margin-bottom:4px}
@@ -1514,8 +1515,9 @@ body .vandaag-section-h{font-size:13px!important;font-weight:650!important;text-
 #tab-recepten#tab-recepten .cc-chef-modes .vandaag-section-h{margin:16px 0 8px;padding:0;border:0;line-height:1.2}
 #tab-recepten#tab-recepten .cc-chef-modes .vandaag-section-h:first-child{margin-top:0}
 .cc-chef-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
-#tab-recepten#tab-recepten .cc-chef-row button{all:unset;box-sizing:border-box;display:flex;align-items:center;justify-content:center;height:44px;padding:0 8px;border-radius:999px;border:1px solid var(--cc-line);background:var(--cc-card);color:var(--cc-ink);font:600 14px/1 -apple-system,'SF Pro Text',system-ui,sans-serif;white-space:nowrap;cursor:pointer}
+#tab-recepten#tab-recepten .cc-chef-row button{all:unset;box-sizing:border-box;position:relative;display:flex;align-items:center;justify-content:center;height:36px;padding:0 8px;border-radius:999px;border:1px solid transparent;background:var(--cc-card);color:var(--cc-ink);font:600 14px/1 -apple-system,'SF Pro Text',system-ui,sans-serif;white-space:nowrap;cursor:pointer}
 #tab-recepten#tab-recepten .cc-chef-row button[aria-pressed="true"]{background:var(--cc-ink);border-color:var(--cc-ink);color:var(--cc-lime);font-weight:700}
+#tab-recepten#tab-recepten .cc-chef-row button::after,#tab-vandaag#tab-vandaag .cc-chip-privacy::after,#tab-vandaag#tab-vandaag .cc-entry::after,#tab-recepten#tab-recepten .cc-entry::after{content:'';position:absolute;inset:-4px 0}
 #tab-recepten#tab-recepten .cc-chef-row button:focus-visible{outline:2px solid var(--cc-green);outline-offset:2px}
 .collapse-card>.cc-body{padding:0 16px 16px!important}
 .cc-section-label{font-size:13px!important;font-weight:650!important;letter-spacing:.06em!important;color:var(--cc-muted)!important}
@@ -1573,7 +1575,7 @@ body .vandaag-section-h{font-size:13px!important;font-weight:650!important;text-
 .cc-water-add{background:var(--cc-lime)}
 .cc-water-add:focus-visible{outline:2px solid var(--cc-green);outline-offset:2px}
 @media (prefers-reduced-motion:reduce){.cc-glass-fill{transition:none}.cc-glass.is-pop{animation:none}}
-#tab-vandaag#tab-vandaag .cc-chip-privacy{flex:none;width:44px;padding:0;background:var(--cc-ink);color:#fff;border-color:var(--cc-ink)}
+#tab-vandaag#tab-vandaag .cc-chip-privacy{flex:none;position:relative;width:36px;height:36px;padding:0;background:var(--cc-ink);color:#fff;border-color:var(--cc-ink)}
 #tab-vandaag#tab-vandaag .cc-chip-privacy[hidden]{display:none}
 
 /* ── v11: subtiele watertegel ── */
@@ -1680,7 +1682,7 @@ body .vandaag-section-h{font-size:13px!important;font-weight:650!important;text-
 .cc-eval-history span{color:var(--cc-muted);font-size:12px}
 .cc-eval-row small+small{margin-top:2px}
 /* ── Brede ingang in de lime-zone: Chef "Uit je voorraad", Coach "Plan vandaag" ── */
-#tab-vandaag#tab-vandaag .cc-entry,#tab-recepten#tab-recepten .cc-entry{all:unset;box-sizing:border-box;display:flex;align-items:center;gap:8px;width:100%;height:44px;padding:0 16px 0 20px;border-radius:999px;background:var(--cc-card);border:1px solid var(--cc-line);color:var(--cc-ink);font:600 14px/1 -apple-system,'SF Pro Text',system-ui,sans-serif;cursor:pointer;-webkit-tap-highlight-color:transparent}
+#tab-vandaag#tab-vandaag .cc-entry,#tab-recepten#tab-recepten .cc-entry{all:unset;box-sizing:border-box;position:relative;display:flex;align-items:center;gap:8px;width:100%;height:36px;padding:0 16px 0 20px;border-radius:999px;background:var(--cc-card);border:1px solid transparent;color:var(--cc-ink);font:600 14px/1 -apple-system,'SF Pro Text',system-ui,sans-serif;cursor:pointer;-webkit-tap-highlight-color:transparent}
 #tab-vandaag#tab-vandaag .cc-entry>span,#tab-recepten#tab-recepten .cc-entry>span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #tab-vandaag#tab-vandaag .cc-entry:active,#tab-recepten#tab-recepten .cc-entry:active{background:var(--cc-tint)}
 #tab-vandaag#tab-vandaag .cc-entry:focus-visible,#tab-recepten#tab-recepten .cc-entry:focus-visible{outline:2px solid var(--cc-green);outline-offset:2px}
@@ -1775,14 +1777,15 @@ body .vandaag-section-h{font-size:13px!important;font-weight:650!important;text-
 #modal-container .cc-ex-bubble:active{background:var(--cc-lime-soft)}
 #modal-container .cc-ex-bubble:focus-visible{outline:2px solid var(--cc-green);outline-offset:2px}
 /* ── Wizard: eerste keer instellen ── */
-#setup-overlay{background:var(--cc-bg);padding:calc(8px + env(safe-area-inset-top,0px)) 16px calc(16px + env(safe-area-inset-bottom,0px))}
+#splash-overlay,#intro-overlay,#setup-overlay{--cc-ink:var(--cc-petrol);--cc-green:var(--cc-petrol);--cc-muted:var(--cc-petrol);background:var(--cc-coach)!important}
+#setup-overlay{padding:calc(8px + env(safe-area-inset-top,0px)) 16px calc(16px + env(safe-area-inset-bottom,0px))}
 .cc-wiz{max-width:430px;min-height:100%;margin:0 auto;display:flex;flex-direction:column}
 .cc-wiz-top{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:56px}
 .cc-wiz-top .cc-set-icon{margin-left:-12px}
 .cc-wiz-space{width:44px}
 .cc-wiz-dots{display:flex;gap:6px}
-.cc-wiz-dots i{width:8px;height:8px;border-radius:999px;background:var(--cc-track)}
-.cc-wiz-dots i.is-on{background:var(--cc-ink)}
+.cc-wiz-dots i{width:8px;height:8px;border-radius:999px;background:var(--cc-card);opacity:.6}
+.cc-wiz-dots i.is-on{background:var(--cc-ink);opacity:1}
 #setup-overlay .cc-wiz-skip{all:unset;box-sizing:border-box;min-height:44px;display:inline-flex;align-items:center;font:600 14px/1 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-green);cursor:pointer}
 .cc-wiz-body{flex:1;padding-top:24px}
 .cc-wiz-body h1{margin:0 0 8px;font:700 28px/1.15 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-ink)}
@@ -1797,7 +1800,7 @@ body .vandaag-section-h{font-size:13px!important;font-weight:650!important;text-
 #setup-overlay .cc-chip:focus-visible{outline:2px solid var(--cc-green);outline-offset:2px}
 .cc-wiz-card{padding:0 16px;background:var(--cc-card);border:1px solid var(--cc-line);border-radius:18px}
 .cc-wiz-card .cc-set-row{padding:0}
-#setup-overlay .cc-wiz-seg{width:100%;margin:8px 0 24px}
+#setup-overlay .cc-wiz-seg{width:100%;margin:8px 0 24px;background:var(--cc-card);border:1px solid var(--cc-line)}
 .cc-wiz-card .cc-stepper{width:160px;flex:none}
 .cc-wiz-label{display:flex;flex-direction:column;gap:2px;font:600 16px/1.2 -apple-system,'SF Pro Text',system-ui,sans-serif!important}
 .cc-wiz-label small{font:400 14px/1.2 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-muted)}
@@ -1862,7 +1865,7 @@ body .vandaag-section-h{font-size:13px!important;font-weight:650!important;text-
 .cc-set-save{position:sticky;bottom:0;margin-top:32px;padding:16px 0 calc(16px + env(safe-area-inset-bottom,0px));background:var(--cc-bg)}
 .cc-set-version{margin:24px 0;text-align:center;font:400 12px/1.4 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-muted)}
 /* ── Opening ── */
-#intro-overlay{background:var(--cc-bg);padding:calc(16px + env(safe-area-inset-top,0px)) 16px calc(16px + env(safe-area-inset-bottom,0px))}
+#intro-overlay{padding:calc(16px + env(safe-area-inset-top,0px)) 16px calc(16px + env(safe-area-inset-bottom,0px))}
 .cc-intro{width:100%;max-width:430px;margin:auto;padding:24px;background:var(--cc-card);border:1px solid var(--cc-line);border-radius:18px;color:var(--cc-ink)}
 .cc-intro .wordmark{font-size:24px}
 .cc-intro h1{margin:24px 0 8px;font:700 28px/1.15 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-ink)}
@@ -1871,6 +1874,8 @@ body .vandaag-section-h{font-size:13px!important;font-weight:650!important;text-
 .cc-intro-list{list-style:none;margin:24px 0;padding:0;display:flex;flex-direction:column;gap:16px}
 .cc-intro-list li{display:flex;align-items:center;gap:16px}
 .cc-intro-ic{flex:none;display:grid;place-items:center;width:44px;height:44px;border-radius:999px;background:var(--cc-lime-soft);color:var(--cc-ink)}
+.cc-intro-ic.is-coach{background:var(--cc-coach)}
+.cc-intro-ic.is-chef{background:var(--cc-lime)}
 .cc-intro-list li>span:last-child{display:flex;flex-direction:column;gap:2px;min-width:0}
 .cc-intro-list strong{font:600 16px/1.25 -apple-system,'SF Pro Text',system-ui,sans-serif}
 .cc-intro-list small{font:400 14px/1.35 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-muted)}
@@ -2197,7 +2202,7 @@ body input[type="checkbox"]:disabled{opacity:.4;cursor:default}
 </div>
 
 <!-- INTRO OVERLAY -->
-<div id="intro-overlay" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="cc-intro-title"><section class="cc-intro"><div class="wordmark">coach<span class="brand-amp">&amp;</span>chef<span class="brand-dot">.</span></div><h1 id="cc-intro-title" tabindex="-1">Eten en bewegen.</h1><p class="cc-intro-lead">Zeg wat je deed, krijg antwoord, motivatie en advies.</p><ul class="cc-intro-list"><li><span class="cc-intro-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></span><span><strong>Praten of typen</strong><small>Zeg: “Vanochtend 8 km gelopen”.</small></span></li><li><span class="cc-intro-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 0 1-11.6 7.1L4 20l1-4.2A8 8 0 1 1 20 12z"/></svg></span><span><strong>Coach</strong><small>Vraag: “Wat eet ik na mijn training?”</small></span></li><li><span class="cc-intro-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11h14a0 0 0 0 1 0 0 6 6 0 0 1-6 6H9a6 6 0 0 1-6-6zM17 12h4M8 7c0-1.5 1-2 1-3.5M12 7c0-1.5 1-2 1-3.5"/></svg></span><span><strong>Chef</strong><small>Recepten op maat, snel of rond je training.</small></span></li><li><span class="cc-intro-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></span><span><strong>Inzicht</strong><small>“Hoeveel heb ik deze week bewogen?”</small></span></li><li><span class="cc-intro-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span><span><strong>Privé</strong><small>Je gegevens blijven op je telefoon.</small></span></li></ul><p id="cc-intro-key" class="cc-intro-note" hidden>Voor de slimme coach vul je je AI-sleutel in bij Instellingen.</p><button type="button" class="cc-intro-start" onclick="flowDismissIntro()">Begin</button><label class="cc-intro-hide"><input type="checkbox" id="cc-intro-hide">Niet meer tonen</label></section></div>
+<div id="intro-overlay" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="cc-intro-title"><section class="cc-intro"><div class="wordmark">coach<span class="brand-amp">&amp;</span>chef<span class="brand-dot">.</span></div><h1 id="cc-intro-title" tabindex="-1">Eten en bewegen.</h1><p class="cc-intro-lead">Zeg wat je deed, krijg antwoord, motivatie en advies.</p><ul class="cc-intro-list"><li><span class="cc-intro-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></span><span><strong>Praten of typen</strong><small>Zeg: “Vanochtend 8 km gelopen”.</small></span></li><li><span class="cc-intro-ic is-coach"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 0 1-11.6 7.1L4 20l1-4.2A8 8 0 1 1 20 12z"/></svg></span><span><strong>Coach</strong><small>Vraag: “Wat eet ik na mijn training?”</small></span></li><li><span class="cc-intro-ic is-chef"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11h14a0 0 0 0 1 0 0 6 6 0 0 1-6 6H9a6 6 0 0 1-6-6zM17 12h4M8 7c0-1.5 1-2 1-3.5M12 7c0-1.5 1-2 1-3.5"/></svg></span><span><strong>Chef</strong><small>Recepten op maat, snel of rond je training.</small></span></li><li><span class="cc-intro-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></span><span><strong>Inzicht</strong><small>“Hoeveel heb ik deze week bewogen?”</small></span></li><li><span class="cc-intro-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span><span><strong>Privé</strong><small>Je gegevens blijven op je telefoon.</small></span></li></ul><p id="cc-intro-key" class="cc-intro-note" hidden>Voor de slimme coach vul je je AI-sleutel in bij Instellingen.</p><button type="button" class="cc-intro-start" onclick="flowDismissIntro()">Begin</button><label class="cc-intro-hide"><input type="checkbox" id="cc-intro-hide">Niet meer tonen</label></section></div>
 
 <!-- MODAL CONTAINER -->
 <div id="modal-container"></div>
@@ -2206,7 +2211,7 @@ body input[type="checkbox"]:disabled{opacity:.4;cursor:default}
 'use strict';
 
 // ─── VERSION CHECK (forceert Safari herlading bij nieuwe versie) ──────────────
-const APP_VERSION = 'lime-20261003-20';
+const APP_VERSION = 'lime-20261003-21';
 // Eén plek voor de modellen: Sonnet voor gesprekken en recepten, Haiku voor snelle achtergrondtaken.
 const CC_MODEL_MAIN = 'claude-sonnet-4-6';
 const CC_MODEL_FAST = 'claude-haiku-4-5-20251001';
@@ -2572,7 +2577,7 @@ function _maaltijdRegel() {
 function _voorraadRegel() {
   const items = voorraadKeuze();
   if (!flowChefMode.startsWith('voorraad') || !items.length) return '';
-  return `\n- IN HUIS: de gebruiker heeft nog in huis: ${items.join(', ')}. Gebruik hier zoveel mogelijk van; staat er een hoeveelheid bij, ga daar dan niet overheen. Vul alleen aan met gangbare basisboodschappen.`;
+  return `\n- IN HUIS: de gebruiker heeft nog in huis: ${items.join(', ')}. Kies daaruit wat echt samengaat in één smakelijk, logisch gerecht en gebruik daarvan zoveel mogelijk; laat liever iets liggen dan het erin te forceren. Elk recept mag een andere keuze maken. Staat er een hoeveelheid bij, ga daar dan niet overheen. Vul alleen aan met gangbare basisboodschappen.`;
 }
 
 function _dieetRegel() {

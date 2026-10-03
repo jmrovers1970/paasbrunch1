@@ -40,7 +40,7 @@ Gebruiker: Jim. Primair op iPhone (Safari), in het Nederlands. Loopt (hoofdsport
 
 **De repository is openbaar** (GitHub Pages op een gratis account vereist dat). Er mogen dus nooit sleutels, tokens of persoonsgegevens in code, commits of testbestanden staan.
 
-**Versie**: constante `APP_VERSION = 'lime-YYYYMMDD-N'` bovenin het script. Getoond in Instellingen. Elke nieuwe versie: datum van vandaag en N doornummeren. Huidige basis: `lime-20261003-20`.
+**Versie**: constante `APP_VERSION = 'lime-YYYYMMDD-N'` bovenin het script. Getoond in Instellingen. Elke nieuwe versie: datum van vandaag en N doornummeren. Huidige basis: `lime-20261003-21`.
 
 ### CSS — twee lagen
 - **Oude laag**: eerste `<style>` in `<head>`. Historisch gegroeid, veel `!important`. Ongebruikte regels zijn al verwijderd; de rest wordt deels overstemd. Niet uitbreiden.
@@ -49,7 +49,7 @@ Gebruiker: Jim. Primair op iPhone (Safari), in het Nederlands. Loopt (hoofdsport
 
 ### Ontwerptokens (gebruik deze, verzin geen nieuwe kleuren of maten)
 ```
---cc-lime #d7f653      lime = "doe dit" (één hoofdactie per scherm) én "gelukt" (vinkjes, voortgang, actieve tab)
+--cc-lime #d7f653      lime = "doe dit" (één hoofdactie per scherm) én "gelukt" (vinkjes, voortgang)
 --cc-lime-soft #f1f8d2 zacht lime vlak (icoonrondjes, tikfeedback)
 --cc-coach #4ccbe2     turquoise zone bovenaan Coach (Chef-zone = --cc-lime)
 --cc-petrol #0e3b47    tekst in beide zones
@@ -64,11 +64,11 @@ Lettertype: -apple-system, 'SF Pro Text', system-ui, sans-serif.
 ```
 
 ### Zones bovenaan
-Kop + begroeting + invoer van Coach is turquoise, kop + invoer + knoppen van Chef is lime (`.brand-header` via `body:has(#tab-recepten.active)`). Een zone zet `--cc-zone` en herdefinieert `--cc-ink`, `--cc-green` en `--cc-muted` naar `--cc-petrol` (één tekstkleur voor beide zones); alles erin (ook tekst in witte knoppen, verzendknop, antwoord, links) volgt vanzelf. Gebruik in een zone dus altijd de tokens, nooit vaste grijzen. Op lime valt lime weg: een gekozen Chef-knop is gevuld met de inkt en heeft lime tekst; de "&" in de kop is bij Chef turquoise (spiegelt Coach: lime "&" op turquoise). De microfoon blijft lime (staat in de witte pil). Bovenin elke zone staat de paginanaam als label `.cc-page-tag` (petrol pil, lime hoofdletters, 24 px) in `.cc-eyebrow`: *Coach* met de datum ernaast, *Chef* alleen. `theme-color` volgt de tab (`switchTab`).
+Kop + begroeting + invoer van Coach is turquoise, kop + invoer + knoppen van Chef is lime (`.brand-header` via `body:has(#tab-recepten.active)`). Een zone zet `--cc-zone` en herdefinieert `--cc-ink`, `--cc-green` en `--cc-muted` naar `--cc-petrol` (één tekstkleur voor beide zones); alles erin (ook tekst in witte knoppen, verzendknop, antwoord, links) volgt vanzelf. Gebruik in een zone dus altijd de tokens, nooit vaste grijzen. Op lime valt lime weg: een gekozen Chef-knop is gevuld met de inkt en heeft lime tekst; de "&" in de kop is bij Chef turquoise (spiegelt Coach: lime "&" op turquoise). De microfoon blijft lime (staat in de witte pil). Bovenin elke zone staat de paginanaam als label `.cc-page-tag` (petrol pil, lime hoofdletters, 24 px) in `.cc-eyebrow`: *Coach* met de datum ernaast, *Chef* alleen. `theme-color` volgt de tab (`switchTab`). De actieve tab onderaan heeft de kleur van zijn zone (Coach turquoise, Chef lime) met petrol tekst. Startscherm, opening en wizard (`#splash-overlay`, `#intro-overlay`, `#setup-overlay`) zijn hele Coach-zones: turquoise, petrol tekst, witte kaarten en knoppen, lime voor *Begin*/*Volgende* en gekozen chips. In de opening hebben de iconen van Coach en Chef hun eigen kleur (`.cc-intro-ic.is-coach`, `.is-chef`).
 
 ### Vaste patronen (hergebruik, niet opnieuw uitvinden)
 - **Invoerbalk** (Coach en Chef): witte pil met lime ronde microfoon (52 px), tekstveld, camera-icoon (44 px), donkere ronde verzendknop. Zodra er tekst staat, neemt een ✕ (`.cc-clear`, `ccClearInput`) de plek van de camera over. Tijdens opname wordt de microfoon een pil "Stop opname" (`[aria-pressed="true"]`). Opnieuw inspreken vervangt de tekst; er wordt nooit automatisch verstuurd.
-- **Brede ingang** `.cc-entry`: witte pil 44 px met label en chevron, opent een venster. Chef *Uit je voorraad*. Coach heeft twee halve ingangen naast elkaar (`.cc-entry-half`, icoon + label, geen chevron): *Plan vandaag* en *Ideeën* (voorbeeldvragen); bij privacymodus erachter een ronde donkere slot-knop (`#cc-privacy-badge`, 44 px).
+- **Brede ingang** `.cc-entry`: witte pil 36 px zonder rand (tikgebied 44 px via `::after`) met label en chevron, opent een venster. Chef *Uit je voorraad*. Coach heeft twee halve ingangen naast elkaar (`.cc-entry-half`, icoon + label, geen chevron): *Plan vandaag* en *Ideeën* (voorbeeldvragen); bij privacymodus erachter een ronde donkere slot-knop (`#cc-privacy-badge`, 36 px). Chef-knoppen *Bij sport* / *Maaltijd* (`.cc-chef-row`) hebben dezelfde stijl: 36 px, wit, geen rand.
 - **Compacte tegel** (Water, Gevoel, Voeding): één rij van 44 px, links een labelkolom van 72 px (`.cc-water-label`: kop + waarde), rechts de bediening. Gevoel: vijf gezichtjes (`CC_MOODS`, `ccSetMood`, slaat `checkIn` van vandaag op, nog een tik wist). Voeding: twee ringen van 44 px (`renderNutriBar`), tik opent de details.
 - **Chips** `.cc-chip`: 36–40 px hoog, wit, rand `--cc-line`, tekst 14 px/600, gecentreerd, geen afbreking.
 - **Status**: rondje 28 px. Leeg = gepland. Lime met donker vinkje = gedaan/gegeten. Geldt voor beweging, eten, en alle `input[type=checkbox]` (globale regel in cc-design-v1).
