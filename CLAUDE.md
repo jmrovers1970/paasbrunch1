@@ -40,7 +40,7 @@ Gebruiker: Jim. Primair op iPhone (Safari), in het Nederlands. Loopt (hoofdsport
 
 **De repository is openbaar** (GitHub Pages op een gratis account vereist dat). Er mogen dus nooit sleutels, tokens of persoonsgegevens in code, commits of testbestanden staan.
 
-**Versie**: constante `APP_VERSION = 'lime-YYYYMMDD-N'` bovenin het script. Getoond in Instellingen. Elke nieuwe versie: datum van vandaag en N doornummeren. Huidige basis: `lime-20261003-19`.
+**Versie**: constante `APP_VERSION = 'lime-YYYYMMDD-N'` bovenin het script. Getoond in Instellingen. Elke nieuwe versie: datum van vandaag en N doornummeren. Huidige basis: `lime-20261003-20`.
 
 ### CSS — twee lagen
 - **Oude laag**: eerste `<style>` in `<head>`. Historisch gegroeid, veel `!important`. Ongebruikte regels zijn al verwijderd; de rest wordt deels overstemd. Niet uitbreiden.
@@ -50,7 +50,9 @@ Gebruiker: Jim. Primair op iPhone (Safari), in het Nederlands. Loopt (hoofdsport
 ### Ontwerptokens (gebruik deze, verzin geen nieuwe kleuren of maten)
 ```
 --cc-lime #d7f653      lime = "doe dit" (één hoofdactie per scherm) én "gelukt" (vinkjes, voortgang, actieve tab)
---cc-lime-soft #f1f8d2 zacht lime vlak bovenaan Coach en Chef
+--cc-lime-soft #f1f8d2 zacht lime vlak (icoonrondjes, tikfeedback)
+--cc-coach #4ccbe2     turquoise zone bovenaan Coach    --cc-coach-ink #0e3b47 petrol tekst in die zone
+                       Chef-zone = --cc-lime            --cc-chef-ink #1f3d2b donkergroene tekst in die zone
 --cc-ink #22312a       tekst, donkere secundaire knop (verzenden)
 --cc-green #2f4a3c     tekstlinks, "+ Toevoegen", focusrand
 --cc-muted #5f6e65     subtekst
@@ -60,6 +62,9 @@ Afronding: 12 px element, 18 px kaart, 999 px pil/rond.
 Lettermaten: 28 / 20 / 16 / 14 / 12. Ruimte: 4 / 8 / 16 / 24 / 32.
 Lettertype: -apple-system, 'SF Pro Text', system-ui, sans-serif.
 ```
+
+### Zones bovenaan
+Kop + begroeting + invoer van Coach is turquoise, kop + invoer + knoppen van Chef is lime (`.brand-header` via `body:has(#tab-recepten.active)`). Een zone zet `--cc-zone` en herdefinieert `--cc-ink`, `--cc-green` en `--cc-muted` naar zijn eigen inkt; alles erin (ook tekst in witte knoppen, verzendknop, antwoord, links) volgt vanzelf. Gebruik in een zone dus altijd de tokens, nooit vaste grijzen. Op lime valt lime weg: een gekozen Chef-knop is gevuld met de inkt en heeft lime tekst; de "&" in de kop wordt donker met lime. De microfoon blijft lime (staat in de witte pil). `theme-color` volgt de tab (`switchTab`).
 
 ### Vaste patronen (hergebruik, niet opnieuw uitvinden)
 - **Invoerbalk** (Coach en Chef): witte pil met lime ronde microfoon (52 px), tekstveld, camera-icoon (44 px), donkere ronde verzendknop. Zodra er tekst staat, neemt een ✕ (`.cc-clear`, `ccClearInput`) de plek van de camera over. Tijdens opname wordt de microfoon een pil "Stop opname" (`[aria-pressed="true"]`). Opnieuw inspreken vervangt de tekst; er wordt nooit automatisch verstuurd.
@@ -72,6 +77,7 @@ Lettertype: -apple-system, 'SF Pro Text', system-ui, sans-serif.
 - **Vensters** (`showModal`): kop met titel en sluiten (44 px). Eén niveau terug met `ccOpenFrom(terugFunctie, () => openVenster())`; formulieren sluiten met `ccGoBack()` zodat je terugkomt waar je vandaan kwam. Focus gaat naar de titel en terug naar de knop die opende; Escape sluit.
 - **Weekmenu**: één venster voor Chef en Coach, `ccOpenWeekMenu(offset)`; toevoegen per dag via `showTypedMealSlot(datum)` → `quickEditMeal`.
 - **Dagregel** `.cc-line`: statusknop (`.cc-status-btn` met `.cc-status`) + `.cc-line-open` (naam 16/600, subregel 14 muted, één regel). Kop `.cc-day-head` met *＋ Toevoegen* (`.cc-add`). Gebruikt in het weekmenu en in Coach › Beweging (`flowActivities`, max. 3 + *Alles bekijken*) en Eten (`flowRenderMeals`, maaltijden en snacks, met vezels in de subregel). Leeg: `.cc-day-empty`.
+- **Na loggen** `.log-feedback`: witte kaart (zoals de voorstelkaart) met pillen *Wijzigen* / *Ongedaan maken*. Knoppen onder een antwoord: `.cc-reply-tools` met witte pillen `.cc-reply-btn` (voorlezen, Meer detail, Opslaan) en duimpjes `.cc-fb`.
 - **Voorstelkaart** `.cc-proposal`: kop "VOORSTEL", titel, subregel, reden; knoppen *Pas aan* (lime) en *Laat staan* (omlijnd); daarna status + *Ongedaan maken*.
 
 ### Data en opslag
