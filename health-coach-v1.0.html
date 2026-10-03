@@ -1514,8 +1514,9 @@ body .vandaag-section-h{font-size:13px!important;font-weight:650!important;text-
 #tab-recepten#tab-recepten .cc-chef-modes .vandaag-section-h{margin:16px 0 8px;padding:0;border:0;line-height:1.2}
 #tab-recepten#tab-recepten .cc-chef-modes .vandaag-section-h:first-child{margin-top:0}
 .cc-chef-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
-#tab-recepten#tab-recepten .cc-chef-row button{all:unset;box-sizing:border-box;display:flex;align-items:center;justify-content:center;height:44px;padding:0 8px;border-radius:999px;border:1px solid var(--cc-line);background:var(--cc-card);color:var(--cc-ink);font:600 14px/1 -apple-system,'SF Pro Text',system-ui,sans-serif;white-space:nowrap;cursor:pointer}
+#tab-recepten#tab-recepten .cc-chef-row button{all:unset;box-sizing:border-box;position:relative;display:flex;align-items:center;justify-content:center;height:36px;padding:0 8px;border-radius:999px;border:1px solid transparent;background:var(--cc-card);color:var(--cc-ink);font:600 14px/1 -apple-system,'SF Pro Text',system-ui,sans-serif;white-space:nowrap;cursor:pointer}
 #tab-recepten#tab-recepten .cc-chef-row button[aria-pressed="true"]{background:var(--cc-ink);border-color:var(--cc-ink);color:var(--cc-lime);font-weight:700}
+#tab-recepten#tab-recepten .cc-chef-row button::after,#tab-vandaag#tab-vandaag .cc-chip-privacy::after,#tab-vandaag#tab-vandaag .cc-entry::after,#tab-recepten#tab-recepten .cc-entry::after{content:'';position:absolute;inset:-4px 0}
 #tab-recepten#tab-recepten .cc-chef-row button:focus-visible{outline:2px solid var(--cc-green);outline-offset:2px}
 .collapse-card>.cc-body{padding:0 16px 16px!important}
 .cc-section-label{font-size:13px!important;font-weight:650!important;letter-spacing:.06em!important;color:var(--cc-muted)!important}
@@ -1573,7 +1574,7 @@ body .vandaag-section-h{font-size:13px!important;font-weight:650!important;text-
 .cc-water-add{background:var(--cc-lime)}
 .cc-water-add:focus-visible{outline:2px solid var(--cc-green);outline-offset:2px}
 @media (prefers-reduced-motion:reduce){.cc-glass-fill{transition:none}.cc-glass.is-pop{animation:none}}
-#tab-vandaag#tab-vandaag .cc-chip-privacy{flex:none;width:44px;padding:0;background:var(--cc-ink);color:#fff;border-color:var(--cc-ink)}
+#tab-vandaag#tab-vandaag .cc-chip-privacy{flex:none;position:relative;width:36px;height:36px;padding:0;background:var(--cc-ink);color:#fff;border-color:var(--cc-ink)}
 #tab-vandaag#tab-vandaag .cc-chip-privacy[hidden]{display:none}
 
 /* ── v11: subtiele watertegel ── */
@@ -1680,7 +1681,7 @@ body .vandaag-section-h{font-size:13px!important;font-weight:650!important;text-
 .cc-eval-history span{color:var(--cc-muted);font-size:12px}
 .cc-eval-row small+small{margin-top:2px}
 /* ── Brede ingang in de lime-zone: Chef "Uit je voorraad", Coach "Plan vandaag" ── */
-#tab-vandaag#tab-vandaag .cc-entry,#tab-recepten#tab-recepten .cc-entry{all:unset;box-sizing:border-box;display:flex;align-items:center;gap:8px;width:100%;height:44px;padding:0 16px 0 20px;border-radius:999px;background:var(--cc-card);border:1px solid var(--cc-line);color:var(--cc-ink);font:600 14px/1 -apple-system,'SF Pro Text',system-ui,sans-serif;cursor:pointer;-webkit-tap-highlight-color:transparent}
+#tab-vandaag#tab-vandaag .cc-entry,#tab-recepten#tab-recepten .cc-entry{all:unset;box-sizing:border-box;position:relative;display:flex;align-items:center;gap:8px;width:100%;height:36px;padding:0 16px 0 20px;border-radius:999px;background:var(--cc-card);border:1px solid transparent;color:var(--cc-ink);font:600 14px/1 -apple-system,'SF Pro Text',system-ui,sans-serif;cursor:pointer;-webkit-tap-highlight-color:transparent}
 #tab-vandaag#tab-vandaag .cc-entry>span,#tab-recepten#tab-recepten .cc-entry>span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #tab-vandaag#tab-vandaag .cc-entry:active,#tab-recepten#tab-recepten .cc-entry:active{background:var(--cc-tint)}
 #tab-vandaag#tab-vandaag .cc-entry:focus-visible,#tab-recepten#tab-recepten .cc-entry:focus-visible{outline:2px solid var(--cc-green);outline-offset:2px}
@@ -2575,7 +2576,7 @@ function _maaltijdRegel() {
 function _voorraadRegel() {
   const items = voorraadKeuze();
   if (!flowChefMode.startsWith('voorraad') || !items.length) return '';
-  return `\n- IN HUIS: de gebruiker heeft nog in huis: ${items.join(', ')}. Gebruik hier zoveel mogelijk van; staat er een hoeveelheid bij, ga daar dan niet overheen. Vul alleen aan met gangbare basisboodschappen.`;
+  return `\n- IN HUIS: de gebruiker heeft nog in huis: ${items.join(', ')}. Kies daaruit wat echt samengaat in één smakelijk, logisch gerecht en gebruik daarvan zoveel mogelijk; laat liever iets liggen dan het erin te forceren. Elk recept mag een andere keuze maken. Staat er een hoeveelheid bij, ga daar dan niet overheen. Vul alleen aan met gangbare basisboodschappen.`;
 }
 
 function _dieetRegel() {
