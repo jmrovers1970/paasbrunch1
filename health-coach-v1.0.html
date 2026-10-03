@@ -852,20 +852,6 @@ select.modal-input { appearance: auto; }
 
 /* ─── SHOPPING LIST ─── */
 .shop-list { font-size: 15px; }
-.shop-cat { font-weight: 700; color: var(--accent-food); margin-top: 14px; margin-bottom: 4px; font-size: 12px; text-transform: uppercase; letter-spacing: .4px; }
-.shop-picker { max-height: 48vh; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; }
-.shop-pick-row {
-  display: flex; align-items: center; gap: 12px; padding: 10px 12px;
-  border-radius: 10px; background: var(--card2); cursor: pointer; transition: background .15s;
-}
-.shop-pick-row.selected { background: var(--accent-food-tint); border: 1px solid var(--accent-food); }
-.shop-pick-info { flex: 1; min-width: 0; }
-.shop-pick-label { font-size: 11px; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: .3px; }
-.shop-pick-naam { font-size: 14px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.shop-pick-badge { font-size: 11px; color: var(--accent-food); flex-shrink: 0; font-weight: 600; }
-.shop-pick-badge.muted { color: var(--muted); }
-.shop-ai-ing-btn { font-size: 11px; color: var(--accent-move); flex-shrink: 0; font-weight: 600; background: var(--accent-move-soft); border: 1px solid var(--accent-move-tint); border-radius: 6px; padding: 3px 7px; cursor: pointer; }
-.shop-scroll { max-height: 44vh; overflow-y: auto; }
 .shop-item-row {
   display: flex; align-items: center; gap: 10px; padding: 8px 2px;
   font-size: 15px; cursor: pointer; border-bottom: 1px solid var(--border);
@@ -960,17 +946,13 @@ select.modal-input { appearance: auto; }
 .input-mic-wrap input { padding-right: 52px; }
 .mic-btn {
   position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
-  background: rgba(234,90,12,.08); border: 1.5px solid rgba(234,90,12,.25);
-  border-radius: 10px; width: 36px; height: 36px;
+  background: var(--cc-tint); border: 0;
+  border-radius: 999px; width: 40px; height: 40px;
   display: flex; align-items: center; justify-content: center;
-  cursor: pointer; flex-shrink: 0; color: var(--accent-move);
-  transition: background .15s, border-color .15s, color .15s;
+  cursor: pointer; flex-shrink: 0; color: var(--cc-ink);
+  transition: background .15s;
 }
-.mic-btn:hover { background: rgba(234,90,12,.15); border-color: var(--accent-move); }
-.mic-btn.listening {
-  background: var(--accent-move-soft); border-color: var(--accent-move);
-  color: var(--accent-move); animation: micPulse 1s ease infinite;
-}
+.mic-btn.listening { background: var(--cc-lime); animation: micPulse 1s ease infinite; }
 @keyframes micPulse { 0%,100%{opacity:1} 50%{opacity:.35} }
 @keyframes spin { to { transform: rotate(360deg); } }
 
@@ -1000,27 +982,6 @@ select.modal-input { appearance: auto; }
 .food-plan-btn:active { transform: scale(.93); }
 .food-week-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
 .food-week-row:last-child { border-bottom: none; }
-.weekmenu-day { padding: 8px 0; border-bottom: 1px solid var(--border); }
-.weekmenu-day:last-child { border-bottom: none; }
-.weekmenu-day.today .weekmenu-day-label { color: var(--accent-food); font-weight: 700; }
-.weekmenu-day-label { font-size: 13px; color: var(--muted); margin-bottom: 4px; }
-.weekmenu-row {
-  display: flex; align-items: center; gap: 6px;
-  padding: 6px 8px; margin: 2px 0; border-radius: 8px;
-  cursor: pointer; transition: background .15s;
-  position: relative; overflow: hidden;
-}
-.weekmenu-row:active { background: var(--card2); }
-.weekmenu-slot-label { font-size: 12px; color: var(--muted); min-width: 52px; flex-shrink: 0; }
-.weekmenu-meal-name { flex: 1; font-size: 14px; color: var(--text); }
-.weekmenu-del {
-  font-size: 18px; color: var(--muted); padding: 0 4px;
-  line-height: 1; cursor: pointer; flex-shrink: 0;
-  opacity: 0.5; transition: opacity .15s;
-}
-.weekmenu-row:hover .weekmenu-del, .weekmenu-row:active .weekmenu-del { opacity: 1; }
-.weekmenu-row-empty { opacity: 0.5; }
-.weekmenu-row-empty:active { opacity: 1; background: var(--card2); }
 .food-fiber-bar { height: 6px; border-radius: 3px; margin-top: 3px; background: #e5e7eb; overflow: hidden; }
 .food-fiber-fill { height: 100%; border-radius: 3px; transition: width .3s; background: var(--accent-food); }
 
@@ -1085,20 +1046,6 @@ select.modal-input { appearance: auto; }
   margin-top: 10px; padding: 11px 12px; background: var(--accent-move-tint);
   border-radius: 10px; font-size: 14px; color: var(--text-2); line-height: 1.5;
 }
-
-/* ─── WEEK INTAKE BUTTON ─── */
-.week-intake-btn {
-  display: flex; align-items: center; justify-content: center; gap: 10px;
-  width: 100%; padding: 15px 20px; margin-bottom: 12px;
-  border-radius: var(--radius); border: 2px solid var(--accent-move);
-  background: var(--accent-move-soft); color: var(--accent-move);
-  font-size: 16px; font-weight: 700; cursor: pointer;
-  transition: background .15s, transform .1s; min-height: 52px;
-}
-.week-intake-btn:active { background: var(--accent-move); color: #fff; transform: scale(.98); }
-.week-intake-btn.recording {
-  background: var(--accent-move); color: #fff; animation: pulse-rec 1s infinite;
-}
 @keyframes pulse-rec {
   0%, 100% { box-shadow: 0 0 0 0 rgba(234,90,12,.4); }
   50% { box-shadow: 0 0 0 8px rgba(234,90,12,0); }
@@ -1115,26 +1062,6 @@ select.modal-input { appearance: auto; }
   background: var(--accent-food); color: #fff; border-color: var(--accent-food);
 }
 .dag-chip:active { opacity: .75; }
-
-/* ─── VOEDING VOICE BTN ─── */
-.voeding-voice-btn {
-  display: inline-flex; align-items: center; gap: 7px;
-  padding: 8px 14px; border-radius: 20px;
-  border: 1.5px solid var(--accent-food); background: var(--accent-food-soft);
-  color: var(--accent-food); font-size: 13px; font-weight: 600;
-  cursor: pointer; transition: background .15s, color .15s; white-space: nowrap;
-  min-height: 36px;
-}
-.voeding-voice-btn:active { background: var(--accent-food); color: #fff; }
-.voeding-voice-btn.recording {
-  background: var(--accent-food); color: #fff;
-  animation: pulse-rec 1s infinite;
-}
-.voeding-voice-full {
-  display: flex; width: 100%; justify-content: center;
-  margin-bottom: 12px; border-radius: 12px; padding: 11px 14px;
-  font-size: 14px;
-}
 
 /* ─── VOEDING PREVIEW CARD ─── */
 .voeding-preview {
@@ -1316,19 +1243,6 @@ select.modal-input { appearance: auto; }
   text-transform: uppercase; letter-spacing: .4px; margin-bottom: 6px;
 }
 
-/* ─── RECIPE DELETE BTN IN HEADER ─── */
-
-/* ─── FOOD TOP KNOPPEN ─── */
-.food-top-btn {
-  flex: 1; display: flex; align-items: center; justify-content: center; gap: 7px;
-  padding: 11px 0; border-radius: var(--radius); border: 1.5px solid var(--border);
-  background: var(--card); color: var(--text-2); font-size: 14px; font-weight: 600;
-  cursor: pointer; transition: all .15s; font-family: inherit;
-}
-.food-top-btn:active { background: var(--card2); }
-.food-top-btn-primary { background: var(--accent-food-soft); border-color: var(--accent-food); color: var(--accent-food); }
-.food-top-btn-primary:active { background: var(--accent-food); color: #fff; }
-
 /* ─── RECEPTEN CATEGORIEËN ─── */
 
 /* Vandaag: voedingsfocus, duidelijk contrast en compacte bediening. */
@@ -1439,7 +1353,7 @@ button,input,textarea{font-family:inherit}
 .nutrition-metric>div:first-child{font-size:12px}.nutrition-metric strong{font-variant-numeric:tabular-nums}.compact-track{height:3px;background:#dddfd6}.compact-track span{background:#6b7562}
 .day-section{background:transparent;border:0;border-top:0!important;border-radius:0;padding:0 0 22px;margin-bottom:20px;box-shadow:none;border-bottom:1px solid var(--border)}
 .vandaag-section-h{font-size:20px;font-weight:750;text-transform:none;letter-spacing:-.6px;color:var(--ink)}
-.day-section .icon-btn,.voeding-voice-btn{font-size:12px;font-weight:700;border:0;background:none;color:var(--accent-move)!important;width:auto;min-width:0;padding:8px;box-shadow:none;min-height:44px}.movement-next{font-size:15px;margin-top:6px}.movement-summary{margin-bottom:12px}
+.day-section .icon-btn{font-size:12px;font-weight:700;border:0;background:none;color:var(--accent-move)!important;width:auto;min-width:0;padding:8px;box-shadow:none;min-height:44px}.movement-next{font-size:15px;margin-top:6px}.movement-summary{margin-bottom:12px}
 .type-icon{display:none}
 .meal-row{padding:14px 0;min-height:66px}.meal-label{font-size:12px;font-weight:650}.meal-name{font-size:16px}
 .weekplan-card{background:var(--acid);border:0;border-radius:16px;padding:24px;color:var(--ink);margin:10px 0 24px}
@@ -1456,17 +1370,13 @@ button,input,textarea{font-family:inherit}
 .tab-btn.active,.tab-btn.active:last-child{background:var(--ink);color:var(--acid)}
 .tab-btn.active::before{display:none}.tab-btn svg{display:none}
 #gen-focus-input{font-size:16px;background:white;color:var(--ink);border:0;border-radius:10px;padding:15px;min-height:56px;width:100%}
-.chef-mic-label{order:3;font-size:12px;color:#c3c9d4;margin-top:12px;text-align:left;font-weight:400}.food-top-btn svg,.gen-pill svg{display:none}
-.food-top-btn{border:1px solid var(--border);border-radius:10px;background:transparent;color:var(--text);min-height:48px}
+.chef-mic-label{order:3;font-size:12px;color:#c3c9d4;margin-top:12px;text-align:left;font-weight:400}.gen-pill svg{display:none}
 .btn-primary{background:var(--ink);color:var(--acid);border-color:var(--ink)}
 .streak-flame .flame-bg{display:none}.streak-flame{background:var(--acid);border-radius:14px}.streak-number,.streak-unit{color:var(--ink)}
 button:focus-visible,summary:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid #315346;outline-offset:3px}
 @media(min-width:760px){.brand-header{padding-left:max(24px,calc((100% - 700px)/2));padding-right:max(24px,calc((100% - 700px)/2))}.composer-heading h2 br{display:none}.composer-heading h2 br:after{content:' '}}
-@media(max-width:380px){.brand-header{padding:12px 14px}.wordmark{font-size:24px}.brand-amp{width:26px;height:26px;font-size:21px}.brand-settings{font-size:11px}.coach-front-card{padding:19px!important}.tab-content{padding-left:14px;padding-right:14px}.composer-actions button{padding:0 10px;font-size:12px}.composer-actions .composer-send{padding:0 12px}.day-heading{align-items:flex-start}#today-day{max-width:130px;line-height:1.4}.day-section .voeding-voice-btn{font-size:11px}.context-suggestions{gap:12px}}
+@media(max-width:380px){.brand-header{padding:12px 14px}.wordmark{font-size:24px}.brand-amp{width:26px;height:26px;font-size:21px}.brand-settings{font-size:11px}.coach-front-card{padding:19px!important}.tab-content{padding-left:14px;padding-right:14px}.composer-actions button{padding:0 10px;font-size:12px}.composer-actions .composer-send{padding:0 12px}.day-heading{align-items:flex-start}#today-day{max-width:130px;line-height:1.4}.context-suggestions{gap:12px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
-
-
-.day-section .voeding-voice-btn{margin-left:auto}
 @media(max-height:650px){.brand-header{padding-top:10px;padding-bottom:10px}.tab-content{padding-top:13px}.day-heading{margin-bottom:12px}.coach-front-card{padding:19px!important}.composer-heading{margin-bottom:15px}.composer-heading h2{font-size:34px;letter-spacing:-1.5px}.composer-heading h2 br{display:none}.unified-composer{padding:12px}.context-suggestions{margin-top:5px}.composer-status{margin-top:9px}}
 
 /* Light surfaces, lime identity, consistent meal and recipe hierarchy. */
@@ -1499,17 +1409,15 @@ body{font-family:Inter,'Helvetica Neue',Arial,sans-serif}.brand-header{padding-t
 .unified-composer{background:white;border:1px solid #d5decc;padding:11px 12px;margin-top:12px;border-radius:11px}.unified-composer:focus-within{border-color:#315346;box-shadow:0 0 0 2px #e1e9cf}
 #coach-front-input{font-size:15px;min-height:42px;max-height:180px}#coach-front-input::placeholder,#gen-focus-input::placeholder{color:#687286}.composer-actions{margin-top:4px}.composer-actions button{min-height:40px}.composer-actions .composer-send{background:#315346;color:#fff;font-size:12px;border-radius:8px}.composer-photo{font-size:12px;background:transparent}.composer-status,.speech-transcript{color:#4c5a6a;font-size:11px;line-height:1.5;margin-top:8px}.context-suggestions{gap:17px;margin-top:5px}.context-suggestions button{font-size:12px;color:#315346;border:0;padding:7px 0;min-height:36px}
 .flow-text-action{border:0;background:transparent;color:#315346;font:inherit;font-size:12px;font-weight:650;cursor:pointer;min-height:40px;padding:8px 0;text-align:left}.flow-status{font-size:12px;color:#506079;line-height:1.5;margin:9px 0}.flow-error{font-size:13px;color:#a12835;margin:12px 0}.flow-empty-note{font-size:13px;line-height:1.5;color:#647084;padding:8px 0}
-.day-section{margin-bottom:17px;padding-bottom:18px}.vandaag-section-h{font-size:19px;letter-spacing:-.5px}.flow-week-strip{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;margin:14px 0 8px}.flow-day{display:flex;flex-direction:column;align-items:center;gap:6px;min-width:0;background:transparent;border:0;color:#56627a;font:inherit;font-size:10px;cursor:pointer;padding:5px 0;border-radius:8px;min-height:74px}.flow-day.is-today{background:#edf1dd;color:#233e53}.flow-day-mark{display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:9px;border:1px solid #d7ddcf;color:#586783;background:#fff;font-size:13px;font-weight:650}.flow-day[data-state=planned] .flow-day-mark{border:2px solid #677dbf;color:#315346}.flow-day[data-state=done] .flow-day-mark{background:var(--acid);border-color:#b1c74d;color:#263c44}.flow-day[data-state=partial] .flow-day-mark{background:linear-gradient(0deg,var(--acid) 50%,#fff 50%);border-color:#aaba76;color:#263c44}.flow-day-count{font-variant-numeric:tabular-nums;font-size:10px}.flow-week-caption{display:flex;align-items:center;justify-content:space-between;gap:12px;color:#647087;font-size:11px}.flow-week-caption button,.flow-library-tools button,.flow-selection-bar button,.flow-restore-row button,.flow-week-nav button{border:0;background:none;color:#315346;font:inherit;font-size:12px;min-height:40px;cursor:pointer;padding:6px}
+.day-section{margin-bottom:17px;padding-bottom:18px}.vandaag-section-h{font-size:19px;letter-spacing:-.5px}.flow-week-strip{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;margin:14px 0 8px}.flow-day{display:flex;flex-direction:column;align-items:center;gap:6px;min-width:0;background:transparent;border:0;color:#56627a;font:inherit;font-size:10px;cursor:pointer;padding:5px 0;border-radius:8px;min-height:74px}.flow-day.is-today{background:#edf1dd;color:#233e53}.flow-day-mark{display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:9px;border:1px solid #d7ddcf;color:#586783;background:#fff;font-size:13px;font-weight:650}.flow-day[data-state=planned] .flow-day-mark{border:2px solid #677dbf;color:#315346}.flow-day[data-state=done] .flow-day-mark{background:var(--acid);border-color:#b1c74d;color:#263c44}.flow-day[data-state=partial] .flow-day-mark{background:linear-gradient(0deg,var(--acid) 50%,#fff 50%);border-color:#aaba76;color:#263c44}.flow-day-count{font-variant-numeric:tabular-nums;font-size:10px}.flow-week-caption{display:flex;align-items:center;justify-content:space-between;gap:12px;color:#647087;font-size:11px}.flow-week-caption button,.flow-week-nav button{border:0;background:none;color:#315346;font:inherit;font-size:12px;min-height:40px;cursor:pointer;padding:6px}
 .flow-activity-row{display:flex;align-items:center;gap:11px;padding:14px 0;border-top:1px solid var(--border)}.flow-activity-state{width:35px;height:35px;border:1.5px solid #7f92ab;background:white;border-radius:11px;flex-shrink:0;color:#233749;cursor:pointer;font-size:17px}.flow-activity-state.is-done{background:var(--acid);border-color:#a8bf46}.flow-activity-info{border:0;background:none;text-align:left;min-width:0;flex:1;color:var(--text);font:inherit;cursor:pointer}.flow-activity-info strong{font-size:15px;line-height:1.4;display:block}.flow-activity-info span{display:block;color:#617087;font-size:12px;margin-top:3px}.movement-summary{margin-bottom:10px}
 .flow-meal-row{padding:14px 0;border-bottom:1px solid var(--border)}.flow-meal-row:last-child{border:0}.flow-meal-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:11px;color:#687284;margin-bottom:3px}.flow-meal-state{display:flex;gap:6px;align-items:center;font:inherit;font-size:10px;min-height:28px;color:#5c687b;background:transparent;border:0;cursor:pointer;padding:4px 0 4px 8px}.flow-meal-state span{height:7px;width:7px;border-radius:50%;border:1px solid #8797b4;background:white}.flow-meal-state.is-eaten span{background:#a5bf32;border-color:#80961a}.flow-meal-state.is-eaten{color:#4f6330}.flow-meal-title{display:block;width:100%;border:0;background:transparent;text-align:left;color:var(--text);font:inherit;font-size:16px;letter-spacing:-.25px;font-weight:650;line-height:1.4;padding:0;cursor:pointer}.flow-meal-row .meal-entry-nutrients{font-size:11px;margin-top:5px;gap:12px}.meal-add-btn{font-size:12px}
 #today-nutri-bar{margin-bottom:20px}.nutrition-strip{padding:14px 1px;border-color:#cbd5be}.nutrition-metric strong{color:#314765}.nutrition-metric>div:first-child{font-size:11px}.compact-track{background:#dae1cf}.compact-track span{background:#7d9350}
-.flow-chef-card h1{font-size:34px;margin:0}.flow-chef-card .flow-helper{margin-bottom:15px}.flow-chef-card #gen-focus-input{margin:12px 0 0;display:block;background:#fff;border:1px solid #d5decc;border-radius:11px;width:100%;min-height:76px;font:inherit;font-size:15px;padding:12px;color:var(--text);resize:vertical;max-height:200px}
-.flow-chef-preferences{padding:17px 0 12px}.flow-extra{margin-top:13px;border-top:1px solid var(--border)}.flow-extra>summary{min-height:43px;padding:12px 0;cursor:pointer;font-size:12px;font-weight:600;color:#526156;list-style:none;display:flex;align-items:center;gap:10px;justify-content:space-between}.flow-extra>summary:after{content:'+';font-size:17px;color:#71835a;flex-shrink:0}.flow-extra[open]>summary:after{content:'−'}.flow-extra>summary::-webkit-details-marker{display:none}
+.flow-chef-card h1{font-size:34px;margin:0}.flow-chef-card .flow-helper{margin-bottom:15px}.flow-chef-card #gen-focus-input{margin:12px 0 0;display:block;background:#fff;border:1px solid #d5decc;border-radius:11px;width:100%;min-height:76px;font:inherit;font-size:15px;padding:12px;color:var(--text);resize:vertical;max-height:200px}.flow-extra{margin-top:13px;border-top:1px solid var(--border)}.flow-extra>summary{min-height:43px;padding:12px 0;cursor:pointer;font-size:12px;font-weight:600;color:#526156;list-style:none;display:flex;align-items:center;gap:10px;justify-content:space-between}.flow-extra>summary:after{content:'+';font-size:17px;color:#71835a;flex-shrink:0}.flow-extra[open]>summary:after{content:'−'}.flow-extra>summary::-webkit-details-marker{display:none}
 .flow-advice{margin:12px 0 20px;background:#fff;border:1px solid var(--border);border-radius:15px;padding:20px}.flow-advice h2{font-size:21px;line-height:1.25;letter-spacing:-.6px}.flow-timeline{list-style:none;padding:0;margin:18px 0}.flow-timeline li{position:relative;border-left:2px solid #d7e4b2;padding:0 0 20px 18px;margin-left:5px}.flow-timeline li:before{content:'';width:9px;height:9px;background:var(--acid);border:1px solid #a3b957;border-radius:3px;position:absolute;left:-6px;top:4px}.flow-timeline li:last-child{padding-bottom:0}.flow-timeline strong{font-size:13px;color:#315346}.flow-timeline p{font-size:14px;line-height:1.6;margin-top:5px}.flow-advice-question{background:#f0f4e1;border-radius:9px;padding:12px;font-size:14px}
 .modal{border-radius:18px!important;padding:24px!important;background:#fff;max-width:560px}.modal-header{gap:12px;align-items:flex-start;margin-bottom:17px}.modal-header h2{font-size:23px;line-height:1.2;letter-spacing:-.6px}.modal-close{font:inherit;font-size:11px!important;width:auto!important;min-width:48px!important;min-height:36px!important;border:0!important;background:transparent!important;color:#59667b!important;padding:6px!important}.modal h3{font-size:17px}.flow-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}.flow-field{display:flex;flex-direction:column;gap:7px;font-size:12px;color:#455773;margin:12px 0;min-width:0}.flow-form-grid .flow-field{margin:0}.flow-field>span{font-size:10px;color:#687486}.flow-field input,.flow-field select,.flow-field textarea{width:100%;min-width:0;background:#f9faf6;border:1px solid #ccd6bf;border-radius:9px;color:#253b58;font:inherit;font-size:15px;min-height:45px;padding:11px;line-height:1.4}.flow-field textarea{resize:vertical;min-height:100px}.flow-field[hidden]{display:none}.flow-draft{width:100%;font:inherit;font-size:14px;border:1px solid #d4dcca;border-radius:10px;resize:vertical;padding:12px;margin-top:12px;color:var(--text)}
 .flow-action-stack{display:flex;flex-direction:column;gap:10px;margin-top:20px}.flow-action-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}.btn{font-size:13px;min-height:44px;border-radius:9px;box-shadow:none}.btn-primary{background:#315346;color:#fff;border:1px solid #315346}.btn-secondary{background:#f1f4e8;color:#344d70;border:1px solid #ccd8bc}.btn-ghost{color:#315346;background:transparent}.btn:disabled,button:disabled{opacity:.48;cursor:not-allowed}.flow-subhead{margin:24px 0 12px}.flow-review-note{background:#f4f5e4;padding:14px;border-radius:10px;font-size:13px;margin:16px 0}.flow-review-note ul{padding-left:18px;margin-top:8px}.flow-check{display:flex;align-items:flex-start;gap:10px;font-size:12px;line-height:1.5;margin:15px 0}.flow-check input{width:18px;height:18px;flex-shrink:0;accent-color:#315346}
-.flow-week-nav{display:flex;justify-content:space-between;align-items:center;gap:8px}.flow-week-nav strong{font-size:13px}.flow-week-list{margin:12px 0 20px}.flow-week-list>button{display:flex;gap:17px;align-items:flex-start;width:100%;text-align:left;border:0;border-bottom:1px solid var(--border);background:none;padding:14px 0;color:#263d59;cursor:pointer;font:inherit;font-size:13px}.flow-week-list>button>strong{min-width:50px;font-size:12px}.flow-week-list small{display:block;font-size:11px;color:#687387;margin-top:4px}.flow-day-meal{padding:12px 0;border-bottom:1px solid var(--border)}.flow-day-meal small{display:block;color:#6c7583;font-size:11px;margin-bottom:4px}.flow-day-meal strong{font-size:14px}
-.flow-library-tools{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:#62718a;margin:4px 0 9px}.flow-recipe-row{display:flex;gap:12px;align-items:center;padding:14px 0;border-bottom:1px solid var(--border)}.flow-recipe-row>button{flex:1;text-align:left;background:none;border:0;padding:0;min-width:0;cursor:pointer;font:inherit;color:var(--text)}.flow-recipe-row strong{font-size:16px;font-weight:650;line-height:1.4;display:block}.flow-recipe-row button>span{display:block;color:#657084;font-size:11px;margin-top:6px}.flow-recipe-row .meal-entry-nutrients{display:flex;gap:14px}.flow-recipe-row input{width:20px;height:20px;flex-shrink:0;accent-color:#315346}.flow-selection-bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;background:#f0f4df;padding:9px;border-radius:10px;font-size:11px}.flow-restore-row{display:flex;align-items:center;gap:12px;justify-content:space-between;font-size:13px;padding:8px 0}.flow-recipe-meta{font-size:12px;color:#60718b;margin-bottom:8px}.flow-recipe-actions{display:flex;gap:10px;margin:22px 0}.flow-recipe-actions .btn{flex:1;min-height:48px}.flow-portions{flex-direction:row;align-items:center;justify-content:space-between}.flow-portions select{width:80px}.flow-recipe-body h3{font-size:16px;margin:24px 0 12px}.flow-recipe-body ul,.flow-recipe-body ol{padding-left:21px;font-size:14px;line-height:1.65}.flow-recipe-body li{margin:7px 0}.chef-proposal{padding:18px;box-shadow:none}.chef-proposal-actions{gap:8px}.chef-proposal-actions .btn{font-size:12px}.chef-proposal summary{font-size:13px}
+.flow-week-nav{display:flex;justify-content:space-between;align-items:center;gap:8px}.flow-week-nav strong{font-size:13px}.flow-week-list{margin:12px 0 20px}.flow-week-list>button{display:flex;gap:17px;align-items:flex-start;width:100%;text-align:left;border:0;border-bottom:1px solid var(--border);background:none;padding:14px 0;color:#263d59;cursor:pointer;font:inherit;font-size:13px}.flow-week-list>button>strong{min-width:50px;font-size:12px}.flow-week-list small{display:block;font-size:11px;color:#687387;margin-top:4px}.flow-day-meal{padding:12px 0;border-bottom:1px solid var(--border)}.flow-day-meal small{display:block;color:#6c7583;font-size:11px;margin-bottom:4px}.flow-day-meal strong{font-size:14px}.flow-recipe-meta{font-size:12px;color:#60718b;margin-bottom:8px}.flow-recipe-actions{display:flex;gap:10px;margin:22px 0}.flow-recipe-actions .btn{flex:1;min-height:48px}.flow-portions{flex-direction:row;align-items:center;justify-content:space-between}.flow-portions select{width:80px}.flow-recipe-body h3{font-size:16px;margin:24px 0 12px}.flow-recipe-body ul,.flow-recipe-body ol{padding-left:21px;font-size:14px;line-height:1.65}.flow-recipe-body li{margin:7px 0}.chef-proposal{padding:18px;box-shadow:none}.chef-proposal-actions{gap:8px}.chef-proposal-actions .btn{font-size:12px}.chef-proposal summary{font-size:13px}
 #intro-overlay{background:#f7f7f2f5;padding:22px;overflow-y:auto}.flow-intro{max-width:430px;width:100%;margin:auto;background:#fff;border:1px solid var(--border);border-radius:20px;padding:26px;color:var(--text)}.flow-intro .wordmark{font-size:25px}.flow-intro h1{font-size:32px;letter-spacing:-1.2px;line-height:1.1;margin:25px 0 10px}.flow-intro>p{font-size:14px;line-height:1.5;color:#59677c}.flow-intro-grid{display:grid;gap:13px;margin:23px 0}.flow-intro-grid>div{display:grid;grid-template-columns:30px 1fr;column-gap:12px;align-items:start}.flow-intro-grid b{background:var(--acid);border-radius:8px;color:#2a3e47;width:29px;height:29px;display:flex;align-items:center;justify-content:center;font-size:12px}.flow-intro-grid strong{font-size:14px;line-height:1.4}.flow-intro-grid span{grid-column:2;font-size:12px;color:#626e82;line-height:1.5}.flow-intro-example{background:#f0f4e1;border-radius:12px;padding:14px;margin:19px 0;font-size:12px;line-height:1.5}.flow-intro-example strong{display:block;margin-top:9px;color:#315346}.flow-intro .flow-privacy{font-size:10px;color:#6c7580;margin-top:12px}
 .weekplan-card{padding:20px;background:#e4f6a0;border:1px solid #ccdf85}.weekplan-card-title{font-size:25px}.weekplan-card-sub{font-size:13px;color:#4a5a43}.weekplan-card-btn{background:#315346;color:#fff}.tab-btn.active,.tab-btn.active:last-child{background:var(--acid);color:#243f4b}.tab-btn{font-size:15px}#tabs{height:calc(66px + env(safe-area-inset-bottom,0px));padding-top:7px;padding-bottom:calc(7px + env(safe-area-inset-bottom,0px))}#today-progress-mini{display:none}
 @media(max-width:390px){.brand-header{padding-left:15px;padding-right:15px}.wordmark{font-size:23px}.flow-brand-tag{font-size:9px;margin-left:7px}.brand-settings{font-size:10px}.composer-heading h2,.flow-chef-card h1{font-size:29px}.flow-helper{font-size:12px}.flow-speak{font-size:14px}.flow-week-strip{gap:3px}.flow-day-mark{width:29px;height:29px}.modal{padding:19px!important}.flow-form-grid{gap:10px}.flow-intro{padding:22px}.flow-intro h1{font-size:29px}}
@@ -1535,7 +1443,7 @@ body{font-family:Inter,'Helvetica Neue',Arial,sans-serif}.brand-header{padding-t
 .ritme-track{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:9px;margin:18px 0 10px}.ritme-track-day{min-width:0;background:transparent;border:0;display:flex;flex-direction:column;align-items:center;gap:5px;font:inherit;color:#546278;padding:5px 1px;border-radius:9px;cursor:pointer}.ritme-track-day.is-today{background:#e8efce}.ritme-track-day>span:not(.ritme-track-stack){font-size:10px}.ritme-track-day>strong{font-size:11px;font-weight:500}.ritme-track-day small{font-size:9px}.ritme-track-stack{height:76px;display:flex;flex-direction:column-reverse;justify-content:flex-start;gap:3px;width:100%;max-width:42px;padding:0 3px}.ritme-track-stack i{height:12px;border-radius:4px;display:block;flex-shrink:0;background:var(--activity-color);border:1px solid var(--activity-color)}.ritme-track-stack .planned{background:transparent;border-style:dashed}.ritme-track-stack .empty{height:3px;background:#dde4ce;border:0}
 .ritme-track-key{display:flex;flex-wrap:wrap;gap:7px 14px;font-size:10px;color:#5e6b7d}.ritme-track-key>span{display:flex;align-items:center;gap:5px}.ritme-track-key i{width:7px;height:7px;border-radius:2px}.ritme-track-key .ritme-key-explain{flex-basis:100%;color:#6c7581;margin-top:3px}
 .ritme-move-numbers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px;margin:18px 0;border-top:1px solid #dfe4d3;padding-top:17px}.ritme-move-numbers>button{font:inherit;background:none;border:0;color:var(--text);text-align:left;padding:0;cursor:pointer;min-width:0}.ritme-move-numbers>button>span{font-size:11px;display:block;line-height:1.35;min-height:30px}.ritme-move-numbers>button>strong{font-size:27px;letter-spacing:-1px;display:block;margin:2px 0}.ritme-move-numbers strong small{font-size:12px;font-weight:500;letter-spacing:0}.ritme-move-numbers>button>small{display:block;font-size:10px;color:#647087;line-height:1.45}.ritme-today-label{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:#6b775b;margin:19px 0 0}.flow-activity-row{padding:12px 0}.flow-activity-row:last-child{padding-bottom:0}
-#ritme-meals{padding:18px 2px!important}.ritme-custom-tile{background:#fff;border:1px solid #d9e0ce;border-radius:16px;padding:20px}.ritme-tile-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}.ritme-tile-head h2{font-size:19px;letter-spacing:-.5px;margin:0}.ritme-tile-head button{padding:3px 0;min-height:32px}.ritme-custom-tile p{font-size:13px;line-height:1.6;color:#57657a;margin:9px 0}.ritme-custom-tile>small{font-size:10px;color:#6d7888}.ritme-food-number{font-size:38px;font-weight:700;letter-spacing:-1.2px;margin:6px 0}.ritme-food-number small{font-size:15px;color:#6c788a;font-weight:400;letter-spacing:0}.ritme-meter{height:7px;background:#e9eddc;border-radius:9px;overflow:hidden;margin:12px 0}.ritme-meter>span{display:block;height:100%;background:#aac33b;border-radius:9px}.ritme-link{display:block;font-weight:600;margin-top:7px}.ritme-next-name{display:block;font-size:23px;letter-spacing:-.7px;line-height:1.3}.ritme-menu-row{display:block;text-align:left;width:100%;border:0;background:none;padding:12px 0;font:inherit;color:var(--text);cursor:pointer;border-bottom:1px solid #e5e9df}.ritme-menu-row span{display:block;font-size:10px;color:#6b7889;margin-bottom:4px}.ritme-menu-row strong{font-size:14px;font-weight:600;line-height:1.45}.ritme-menu-row:last-child{border:0}.ritme-menu-list section{margin:22px 0}.ritme-menu-list h3{font-size:12px;color:#315346}.ritme-manual{display:flex;align-items:center;gap:18px;flex-wrap:wrap;border-top:1px solid #d9dfce;margin:13px 0;padding:7px 0}.ritme-manual span{font-size:11px;color:#67758b}
+#ritme-meals{padding:18px 2px!important}.ritme-custom-tile{background:#fff;border:1px solid #d9e0ce;border-radius:16px;padding:20px}.ritme-tile-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}.ritme-tile-head h2{font-size:19px;letter-spacing:-.5px;margin:0}.ritme-tile-head button{padding:3px 0;min-height:32px}.ritme-custom-tile p{font-size:13px;line-height:1.6;color:#57657a;margin:9px 0}.ritme-custom-tile>small{font-size:10px;color:#6d7888}.ritme-food-number{font-size:38px;font-weight:700;letter-spacing:-1.2px;margin:6px 0}.ritme-food-number small{font-size:15px;color:#6c788a;font-weight:400;letter-spacing:0}.ritme-meter{height:7px;background:#e9eddc;border-radius:9px;overflow:hidden;margin:12px 0}.ritme-meter>span{display:block;height:100%;background:#aac33b;border-radius:9px}.ritme-link{display:block;font-weight:600;margin-top:7px}.ritme-next-name{display:block;font-size:23px;letter-spacing:-.7px;line-height:1.3}.ritme-menu-row{display:block;text-align:left;width:100%;border:0;background:none;padding:12px 0;font:inherit;color:var(--text);cursor:pointer;border-bottom:1px solid #e5e9df}.ritme-menu-row span{display:block;font-size:10px;color:#6b7889;margin-bottom:4px}.ritme-menu-row strong{font-size:14px;font-weight:600;line-height:1.45}.ritme-menu-row:last-child{border:0}.ritme-manual{display:flex;align-items:center;gap:18px;flex-wrap:wrap;border-top:1px solid #d9dfce;margin:13px 0;padding:7px 0}.ritme-manual span{font-size:11px;color:#67758b}
 .ritme-summary{background:#e4efa9;border:1px solid #cbdc8d;border-radius:16px;padding:23px;margin:14px 0;display:flex;align-items:center;gap:20px;justify-content:space-between}.ritme-summary h2{font-size:27px;letter-spacing:-.8px;margin:3px 0}.ritme-summary p{font-size:12px;line-height:1.6;color:#516147;margin:7px 0 0}.ritme-summary>button{background:#315346;color:white;border:0;border-radius:9px;font:inherit;font-size:12px;padding:12px 14px;cursor:pointer;min-height:44px;flex-shrink:0;max-width:130px}.ritme-resources{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin:10px 0 20px}.ritme-resources button{background:transparent;border:0;border-bottom:1px solid #d5deca;text-align:left;padding:15px 0;font:inherit;color:var(--text);cursor:pointer}.ritme-resources strong{display:block;font-size:13px}.ritme-resources span{display:block;font-size:11px;color:#6a7789;margin-top:6px;line-height:1.5}
 .ritme-periods{display:flex;background:#edf0e3;border-radius:11px;padding:4px;gap:4px;margin:12px 0}.ritme-periods button{flex:1;font:inherit;font-size:12px;color:#53637b;border:0;background:transparent;padding:9px 5px;min-height:39px;border-radius:8px;cursor:pointer}.ritme-periods button[aria-pressed=true]{background:#fff;color:#315346;font-weight:650}.ritme-period-note{font-size:11px;color:#6b778a;line-height:1.5;margin:12px 0}.ritme-insight-lead{display:flex;align-items:center;gap:16px;background:#edf4d3;padding:17px 20px;border-radius:12px;margin:18px 0}.ritme-insight-lead>strong{font-size:52px;letter-spacing:-2px;line-height:1}.ritme-insight-lead>span{font-size:16px;line-height:1.5}.ritme-insight-lead small{font-size:11px;color:#64714f}.ritme-comparisons{display:grid;grid-template-columns:1fr 1fr;gap:12px}.ritme-comparisons>button{background:#f8f9f4;border:1px solid #dce2d2;border-radius:11px;padding:14px;text-align:left;color:var(--text);font:inherit;cursor:pointer}.ritme-comparisons>button>span:first-child{display:block;font-size:12px;line-height:1.4}.ritme-comparisons strong{font-size:27px;display:block;letter-spacing:-.7px;margin:5px 0}.ritme-comparisons strong small{font-size:12px;font-weight:400}.ritme-comparisons>button>small{font-size:10px;color:#627087;display:block}.ritme-compare-bar{display:block;margin-top:12px}.ritme-compare-bar i,.ritme-compare-bar b{display:block;height:5px;background:#9db444;border-radius:4px;margin-top:4px}.ritme-compare-bar b{background:#bdc7d9}.ritme-caption{font-size:10px;color:#687588;line-height:1.5;margin:10px 0 20px}.ritme-food-insight{padding:20px 0;border-top:1px solid #d8dfcd}.ritme-food-insight h3{margin:0 0 10px}.ritme-food-insight p{font-size:13px;line-height:1.6;margin:9px 0}.ritme-food-insight>div{display:flex;justify-content:space-between;gap:12px;font-size:12px;padding:10px 0;border-bottom:1px solid #e8ecdf}.ritme-food-insight>small{display:block;color:#697587;font-size:10px;line-height:1.6;margin:12px 0}.ritme-reflection{padding:18px;background:#f0f3e7;border-radius:12px}.ritme-reflection>p{font-size:14px;line-height:1.6;margin:10px 0 18px}#ritme-advice-status{font-size:12px;color:#687588}#ritme-advice-answer section{border-top:1px solid #dbe2cb;padding:13px 0}#ritme-advice-answer h3{font-size:13px;color:#315346}#ritme-advice-answer p{font-size:14px;line-height:1.6;margin-top:6px}
 .ritme-tile-options{margin:18px 0}.ritme-tile-options label{display:flex;align-items:center;gap:13px;padding:12px 0;border-bottom:1px solid #e0e6d5;cursor:pointer}.ritme-tile-options input{width:21px;height:21px;accent-color:#315346;flex-shrink:0}.ritme-tile-options strong{display:block;font-size:14px}.ritme-tile-options small{display:block;font-size:11px;color:#67758a;margin-top:4px;line-height:1.4}.ritme-order-row{display:flex;align-items:center;gap:9px;font-size:12px;margin:6px 0}.ritme-order-row>span{flex:1}.ritme-order-row button{font:inherit;font-size:10px;padding:9px 2px;border:0;color:#315346;background:none;cursor:pointer;min-height:36px}#ritme-tile-order h3{font-size:14px;margin:20px 0 10px}.ritme-exercise{width:100%;display:block;padding:13px 0;border:0;border-bottom:1px solid #e0e5d6;background:none;text-align:left;font:inherit;color:var(--text);cursor:pointer}.ritme-exercise strong{display:block;font-size:14px}.ritme-exercise span{display:block;font-size:11px;color:#687689;margin-top:5px}#ritme-exercise-results{margin-bottom:20px}
@@ -1549,7 +1457,6 @@ body{font-family:Inter,'Helvetica Neue',Arial,sans-serif}.brand-header{padding-t
 #modal-container{position:relative;z-index:1000}#modal-container .modal-overlay{pointer-events:auto}#modal-container .modal{isolation:isolate}
 .ritme-tile-choice{display:flex;align-items:center;justify-content:space-between;gap:16px;width:100%;padding:14px 12px;margin:6px 0;border:1px solid #d8dfce;border-radius:12px;background:white;color:var(--text);text-align:left;font:inherit;cursor:pointer;touch-action:manipulation}.ritme-tile-choice[aria-pressed="true"]{background:#edf5d4;border-color:#95ad38}.ritme-tile-choice b{font-size:11px;font-weight:600;color:#42542d}.ritme-tile-choice:focus-visible,.ritme-order-row button:focus-visible{outline:3px solid #315346;outline-offset:2px}.ritme-order-row button{padding:10px 8px;min-height:44px}.ritme-order-row button:disabled{opacity:.3;cursor:default}
 #ritme-meals{padding:12px 2px!important}#ritme-meals .flow-meal-row{padding:10px 0;display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:12px;row-gap:3px}#ritme-meals .flow-meal-heading{grid-column:1/-1;margin:0}#ritme-meals .flow-meal-title{font-size:14px;line-height:1.4;align-self:center;overflow-wrap:anywhere}#ritme-meals .meal-entry-nutrients{margin:0;align-self:center;gap:8px;font-size:10px}#ritme-meals .flow-meal-state{min-height:32px}
-.ritme-week-jump{display:flex;gap:8px;margin:12px 0}.ritme-week-jump button{flex:1;background:#edf3dc;color:#375332;border:1px solid #d7dfc7;border-radius:10px;padding:12px;font:inherit;font-size:12px;cursor:pointer}.ritme-recipe-choice{display:block;width:100%;text-align:left;border:0;border-bottom:1px solid #dbe1d3;background:none;padding:15px 0;font:inherit;color:var(--text);cursor:pointer}.ritme-recipe-choice strong{display:block;font-size:14px}.ritme-recipe-choice span{display:block;margin-top:5px;color:#637086;font-size:11px}
 .ritme-shop-intro{margin:12px 0 20px}.ritme-shop-intro p{font-size:14px;line-height:1.5}.ritme-shop-picks{margin:12px 0 22px}.ritme-shop-pick{padding:14px 0;border-bottom:1px solid #dce2d3}.ritme-shop-pick label{display:flex;gap:12px;align-items:center;cursor:pointer}.ritme-shop-pick strong,.ritme-shop-pick small{display:block}.ritme-shop-pick strong{font-size:14px;line-height:1.4;margin-top:4px}.ritme-shop-pick small,.ritme-shop-pick>.muted{font-size:11px;color:#68758a}.ritme-shop-pick>.muted{display:block;margin:2px 0 0 36px}.ritme-shop-category{margin:22px 0}.ritme-shop-category h3{font-size:12px;color:#64724c;letter-spacing:.3px;margin-bottom:6px}.ritme-shopping-list .shop-item-row{padding:12px 2px;gap:12px;border-bottom:1px solid #e4e9dd;background:none;border-radius:0;min-height:46px;font-size:14px}.ritme-shop-add{display:flex;align-items:end;gap:10px;margin:20px 0}.ritme-shop-add .flow-field{flex:1;min-width:0;margin:0}.ritme-shop-add .btn{min-height:46px}
 @media(max-width:420px){#ritme-meals .flow-meal-row{grid-template-columns:1fr}#ritme-meals .meal-entry-nutrients{margin-top:2px}}
 
@@ -1589,22 +1496,20 @@ button{touch-action:manipulation}
 #ritme-meals{background:var(--card)!important;border:1px solid var(--border)!important;border-radius:16px;padding:17px 19px!important}.meal-section-head{margin-bottom:3px}.meal-add-btn,.icon-btn{color:var(--text)!important;font-size:12px;min-height:44px}.flow-meal-title{color:var(--text)!important}.flow-meal-heading,.flow-meal-state,.meal-entry-nutrients{color:var(--muted)!important}.flow-meal-state.is-eaten{color:#526c28!important}
 #today-nutri-bar{background:#eef0e4;border:1px solid var(--border);border-radius:12px}
 .ritme-custom-tile{border-radius:16px;background:var(--card);border-color:var(--border)}.ritme-custom-tile p,.ritme-menu-row span,.ritme-next-name small{color:var(--muted)}.ritme-food-number{color:var(--text)}
-.lime-manual,.lime-extras{border-top:1px solid var(--border);margin:17px 0 0}.lime-manual>summary,.lime-extras>summary,.lime-recipe-options>summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:48px;padding:12px 0;font-size:13px;color:var(--text);font-weight:600}.lime-manual>summary:after,.lime-extras>summary:after{content:'+';font-size:18px;font-weight:400}.lime-manual[open]>summary:after,.lime-extras[open]>summary:after{content:'−'}.lime-more>summary::-webkit-details-marker,.lime-manual>summary::-webkit-details-marker,.lime-extras>summary::-webkit-details-marker,.lime-recipe-options>summary::-webkit-details-marker{display:none}
+.lime-manual,.lime-extras{border-top:1px solid var(--border);margin:17px 0 0}.lime-manual>summary,.lime-extras>summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:48px;padding:12px 0;font-size:13px;color:var(--text);font-weight:600}.lime-manual>summary:after,.lime-extras>summary:after{content:'+';font-size:18px;font-weight:400}.lime-manual[open]>summary:after,.lime-extras[open]>summary:after{content:'−'}.lime-more>summary::-webkit-details-marker,.lime-manual>summary::-webkit-details-marker,.lime-extras>summary::-webkit-details-marker{display:none}
 .ritme-manual{border:0;margin:0;padding:0 0 12px}.ritme-manual button{min-height:44px;color:var(--text);font-size:13px}.ritme-resources{margin:0 0 14px}.ritme-resources button{background:var(--card);border:1px solid var(--border);border-radius:10px}.ritme-resources strong{color:var(--text)}.ritme-resources span{color:var(--muted)}
 .day-coach-line{font-size:14px;color:var(--text);font-style:normal;border-left:3px solid var(--acid);padding:0 0 0 13px;margin:5px 0 16px}.day-coach-line:empty{display:none}
 .ritme-summary{background:#e6edda;border-color:#ccd8ba;border-radius:16px;padding:19px;margin:18px 0}.ritme-summary h2{color:var(--text);font-size:23px;letter-spacing:-.6px}.ritme-summary p{color:var(--muted);font-size:13px}.ritme-summary button{background:var(--card);color:var(--text);border:1px solid #ccd8ba;border-radius:8px;min-height:44px}
 .lime-page-label{font-size:11px;font-weight:650;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px}
-.flow-chef-card #gen-focus-input{font-size:14px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:10px;min-height:68px;padding:13px;margin-top:10px}
-.flow-chef-preferences{padding:17px 1px 5px}
-.lime-recipe-options{border-top:1px solid var(--border);margin-top:13px}.lime-recipe-options>summary{font-size:13px;flex-wrap:wrap}.lime-recipe-options>summary span{font-size:12px;font-weight:400;color:var(--muted)}.lime-recipe-options>summary:after{content:'+';font-size:18px;font-weight:400}.lime-recipe-options[open]>summary:after{content:'−'}.flow-extra>summary{color:var(--text);font-size:12px;min-height:44px}.flow-text-action{color:var(--text);font-size:12px;min-height:44px}
-.collapse-card{border-color:var(--border);border-radius:12px;background:var(--card);box-shadow:none}.collapse-card>summary{font-size:15px;color:var(--text);min-height:52px;font-weight:650}.flow-recipe-row{padding:13px 0;border-radius:0;border-bottom:1px solid var(--border)}.flow-recipe-row strong{font-size:15px!important;line-height:1.45;color:var(--text)}.flow-recipe-row span{color:var(--muted)}.flow-library-tools button,.flow-selection-bar button,.flow-restore-row button{color:var(--text);min-height:44px}.flow-advice{border-color:var(--border);background:var(--card)}.flow-timeline li:before{background:var(--acid);border-color:#9aac5a}.flow-eyebrow,.flow-timeline strong{color:#536b3f}
+.flow-chef-card #gen-focus-input{font-size:14px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:10px;min-height:68px;padding:13px;margin-top:10px}.flow-extra>summary{color:var(--text);font-size:12px;min-height:44px}.flow-text-action{color:var(--text);font-size:12px;min-height:44px}
+.collapse-card{border-color:var(--border);border-radius:12px;background:var(--card);box-shadow:none}.collapse-card>summary{font-size:15px;color:var(--text);min-height:52px;font-weight:650}.flow-advice{border-color:var(--border);background:var(--card)}.flow-timeline li:before{background:var(--acid);border-color:#9aac5a}.flow-eyebrow,.flow-timeline strong{color:#536b3f}
 #tabs{background:#fffef9f5;border-top:1px solid var(--border);box-shadow:0 -4px 20px #243d3205}.tab-btn{color:var(--muted);font-size:14px;font-weight:600;min-height:48px}.tab-btn.active,.tab-btn.active:last-child{color:var(--text);background:#eaf2ce;border-radius:10px}.tab-btn.active:before{background:var(--acid)}
 .btn-primary{background:var(--acid);color:var(--text);border-color:#bdd43a}.btn-secondary{background:#e9eddf;color:var(--text);border-color:var(--border)}.btn-ghost{color:var(--text)}
 .modal{background:var(--card);border-radius:20px;color:var(--text)}.modal-header h2{color:var(--text)}.muted,.flow-field,.flow-field span{color:var(--muted)}.flow-field input,.flow-field select,.flow-field textarea{color:var(--text);border-color:var(--border)}
 #splash-overlay{background:var(--bg);transition:opacity .15s;cursor:pointer}.lime-launch{display:flex;flex-direction:column;align-items:center;gap:22px}.lime-launch .wordmark{font-size:38px}.lime-launch p{color:var(--muted);font-size:14px;margin:0}.lime-emblem{display:grid;place-items:center;width:76px;height:76px;background:var(--acid);color:var(--text);font-size:57px;line-height:1;font-weight:800;letter-spacing:-4px;border-radius:18px 5px 18px 5px;transform:rotate(-7deg)}
 .flow-intro{background:var(--card);border-color:var(--border);border-top:6px solid var(--acid);border-radius:6px 6px 20px 20px}.flow-intro h1{color:var(--text)}.flow-intro-grid b{background:var(--acid);color:var(--text)}.flow-intro-grid strong{color:var(--text)}.flow-intro p,.flow-intro-grid span{color:var(--muted)}.flow-intro-example{border-color:var(--border);background:#edf1e2;color:var(--text)}
 @media(min-width:640px){.coach-front-card,.flow-chef-card{padding:27px!important}.brand-header{padding-left:24px;padding-right:24px}.modal{border-radius:20px}.ritme-resources{display:grid;grid-template-columns:1fr 1fr;gap:10px}}
-@media(max-width:390px){.brand-header{padding:12px 16px}.wordmark{font-size:24px}.flow-brand-tag{display:none}.brand-settings{font-size:11px}.coach-front-card,.flow-chef-card{padding:18px!important}.composer-heading h2,.flow-chef-card h1{font-size:30px}.composer-help{font-size:11px}.flow-speak{font-size:15px}.lime-recipe-options>summary span{font-size:11px}}
+@media(max-width:390px){.brand-header{padding:12px 16px}.wordmark{font-size:24px}.flow-brand-tag{display:none}.brand-settings{font-size:11px}.coach-front-card,.flow-chef-card{padding:18px!important}.composer-heading h2,.flow-chef-card h1{font-size:30px}.composer-help{font-size:11px}.flow-speak{font-size:15px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 
 /* Compact tiles, with a small shared lime signature. */
@@ -1710,7 +1615,7 @@ button{touch-action:manipulation}
 
 /* One icon family: quiet green strokes and consistent alignment. */
 .cc-icon{display:inline-block;vertical-align:middle;flex-shrink:0;width:18px;height:18px;pointer-events:none}
-button:has(>.cc-icon),.cc-label{display:inline-flex;align-items:center;justify-content:center;gap:7px}
+button:has(>.cc-icon){display:inline-flex;align-items:center;justify-content:center;gap:7px}
 button[hidden]{display:none!important}
 .brand-settings,.lime-layout-action button{gap:7px}
 .composer-heading .composer-help{display:inline-flex;align-items:center;justify-content:center;width:40px;min-height:40px;padding:8px;border:0;border-radius:8px}
@@ -1724,8 +1629,7 @@ button[hidden]{display:none!important}
 .cc-next-meta{display:block;margin-top:2px;font-size:12px;line-height:1.4;color:var(--muted)}
 .cc-next-plan>.cc-icon{width:18px;height:18px;color:var(--muted)}
 #ritme-menu .ritme-tile-head button{min-width:40px;min-height:40px}
-.lime-recipe-options>summary .cc-label{font-size:13px;font-weight:600;color:var(--text)}
-.modal-close:has(>.cc-icon){min-width:40px;min-height:40px}
+.modal-close:has(>.cc-icon){min-width:44px;min-height:44px}
 button:has(>.cc-icon):focus-visible,.cc-next-plan:focus-visible{outline:2px solid #526c28;outline-offset:3px}
 button:has(>.cc-icon):hover{color:#315346}
 
@@ -1972,7 +1876,6 @@ body .compact-track>span{background:var(--cc-lime)!important;border-radius:var(-
 #tab-recepten#tab-recepten .cc-chef-row button[aria-pressed="true"]{background:var(--cc-lime);border-color:var(--cc-lime);font-weight:700}
 #tab-recepten#tab-recepten .cc-chef-row button:focus-visible{outline:2px solid var(--cc-green);outline-offset:2px}
 .collapse-card>.cc-body{padding:0 16px 16px!important}
-.food-top-btn{border-radius:var(--cc-r-card)!important;background:var(--cc-card)!important;border:1px solid var(--cc-line)!important;box-shadow:none!important;color:var(--cc-ink)!important}
 .cc-section-label{font-size:13px!important;font-weight:650!important;letter-spacing:.06em!important;color:var(--cc-muted)!important}
 
 #tab-vandaag#tab-vandaag .day-heading{clip-path:inset(-48px -100vmax 0)!important}
@@ -2011,8 +1914,6 @@ body .compact-track>span{background:var(--cc-lime)!important;border-radius:var(-
 .lime-more-panel .lime-week-row{border:0!important;background:transparent!important;box-shadow:none!important;width:100%}
 
 #tab-recepten#tab-recepten .flow-chef-card{clip-path:inset(-48px -100vmax 0)!important}
-
-.food-top-btn{flex:0 0 auto!important;height:auto!important;min-height:56px!important;max-height:72px}
 
 /* ── v9: invoerbalk en snelkeuzes ── */
 #tab-vandaag#tab-vandaag .lime-input-group{grid-template-columns:auto 1fr!important;padding:6px!important;border-radius:999px!important;min-height:64px}
@@ -2130,6 +2031,77 @@ body .compact-track>span{background:var(--cc-lime)!important;border-radius:var(-
 .cc-eval-history{margin:0;padding-left:18px;font-size:14px;line-height:1.5}
 .cc-eval-history span{color:var(--cc-muted);font-size:12px}
 .cc-eval-row small+small{margin-top:2px}
+/* ── Chef: voorraadrij in de lime-zone ── */
+#tab-recepten#tab-recepten .cc-entry{all:unset;box-sizing:border-box;display:flex;align-items:center;gap:8px;width:100%;height:44px;padding:0 16px 0 20px;border-radius:999px;background:var(--cc-card);border:1px solid var(--cc-line);color:var(--cc-ink);font:600 14px/1 -apple-system,'SF Pro Text',system-ui,sans-serif;cursor:pointer;-webkit-tap-highlight-color:transparent}
+#tab-recepten#tab-recepten .cc-entry>span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#tab-recepten#tab-recepten .cc-entry:active{background:var(--cc-tint)}
+#tab-recepten#tab-recepten .cc-entry:focus-visible{outline:2px solid var(--cc-green);outline-offset:2px}
+.cc-chev{flex:none;color:var(--cc-muted)}
+/* ── Lijstkaart en rijen: Chef "Jouw keuken", later ook Coach ── */
+.cc-kitchen{display:block;margin:8px 0 32px}
+#tab-recepten#tab-recepten .cc-kitchen .vandaag-section-h{margin:0 0 8px;padding:0;border:0;line-height:1.2}
+.cc-list{background:var(--cc-card);border:1px solid var(--cc-line);border-radius:18px;overflow:hidden}
+#tab-recepten#tab-recepten .cc-row,#modal-container .cc-row{all:unset;box-sizing:border-box;position:relative;display:flex;align-items:center;gap:8px;width:100%;min-height:56px;padding:0 16px;color:var(--cc-ink);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.cc-row+.cc-row::before{content:'';position:absolute;left:16px;right:0;top:0;height:1px;background:var(--cc-line)}
+#tab-recepten#tab-recepten .cc-row:active,#modal-container .cc-row:active{background:var(--cc-tint)}
+#tab-recepten#tab-recepten .cc-row:focus-visible,#modal-container .cc-row:focus-visible{outline:2px solid var(--cc-green);outline-offset:-2px}
+.cc-row-label{flex:none;font:600 16px/1.25 -apple-system,'SF Pro Text',system-ui,sans-serif;white-space:nowrap}
+.cc-row-meta{flex:1 1 auto;min-width:0;text-align:right;font:400 14px/1.3 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums}
+/* ── Vensters: kop met terug, titel en sluiten ── */
+.modal-header h2{flex:1;min-width:0}
+.modal-header h2:focus{outline:none}
+#modal-container .cc-sheet-back{all:unset;box-sizing:border-box;flex:none;display:grid;place-items:center;width:44px;height:44px;margin:-6px 0 0 -12px;border-radius:999px;color:var(--cc-ink);cursor:pointer}
+#modal-container .cc-sheet-back:focus-visible{outline:2px solid var(--cc-green);outline-offset:2px}
+.cc-sheet-note,.cc-empty,.cc-week-empty{margin:16px 0 0;font:400 14px/1.45 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-muted)}
+.cc-week-empty{margin:0 0 16px}
+/* ── Mijn recepten ── */
+.cc-sheet-actions{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:44px;margin:-8px 0 8px}
+.cc-sheet-actions>span{font:600 14px/1 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-ink)}
+#modal-container .cc-sheet-actions button{all:unset;box-sizing:border-box;display:inline-flex;align-items:center;gap:4px;min-height:44px;color:var(--cc-green);font:600 14px/1 -apple-system,'SF Pro Text',system-ui,sans-serif;cursor:pointer}
+#modal-container .cc-sheet-actions button:focus-visible{outline:2px solid var(--cc-green);outline-offset:2px}
+#modal-container .cc-rows .cc-row{padding:8px 0}
+#modal-container .cc-rows .cc-row+.cc-row::before{left:0}
+.cc-row-text{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.cc-row-text strong{font:600 16px/1.3 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cc-row-text small{font:400 14px/1.3 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cc-recipe-row .cc-status{margin-right:8px}
+.cc-more{border-top:1px solid var(--cc-line);margin-top:8px}
+.cc-more>summary{list-style:none;display:flex;align-items:center;justify-content:space-between;min-height:56px;font:600 16px/1.25 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-ink);cursor:pointer}
+.cc-more>summary::-webkit-details-marker{display:none}
+.cc-more>summary .cc-chev{transition:transform .2s}
+.cc-more[open]>summary .cc-chev{transform:rotate(90deg)}
+.cc-restore{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:56px;border-top:1px solid var(--cc-line);font:400 16px/1.3 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-ink)}
+#modal-container .cc-restore button{all:unset;min-height:44px;display:inline-flex;align-items:center;color:var(--cc-green);font:600 14px/1 -apple-system,'SF Pro Text',system-ui,sans-serif;cursor:pointer}
+.cc-sheet-pair{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px}
+.cc-sheet-pair .btn{min-height:48px;margin:0}
+/* ── Weekmenu ── */
+.cc-week-nav{display:grid;grid-template-columns:44px 1fr 44px;align-items:center;min-height:56px;margin:0 0 8px}
+#modal-container .cc-week-nav>button{all:unset;box-sizing:border-box;display:grid;place-items:center;width:44px;height:44px;border-radius:999px;border:1px solid var(--cc-line);color:var(--cc-ink);cursor:pointer}
+#modal-container .cc-week-nav>button:disabled{opacity:.35;cursor:default}
+#modal-container .cc-week-nav>button:focus-visible{outline:2px solid var(--cc-green);outline-offset:2px}
+.cc-week-nav>div{display:flex;flex-direction:column;align-items:center;gap:2px;text-align:center}
+.cc-week-nav strong{font:600 16px/1.2 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-ink)}
+.cc-week-nav span{font:400 14px/1.2 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-muted)}
+.cc-day{border-top:1px solid var(--cc-line);padding:8px 0}
+.cc-day-head{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:44px}
+.cc-day-head h3{margin:0;font:700 16px/1.25 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-ink)}
+.cc-day-head h3 span{font-weight:400;font-size:14px;color:var(--cc-muted)}
+.cc-day-head small{display:block;margin-top:2px;font:400 12px/1.3 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-muted)}
+#modal-container .cc-add{all:unset;box-sizing:border-box;flex:none;display:inline-flex;align-items:center;gap:4px;min-height:44px;color:var(--cc-green);font:600 14px/1 -apple-system,'SF Pro Text',system-ui,sans-serif;cursor:pointer}
+#modal-container .cc-add:focus-visible{outline:2px solid var(--cc-green);outline-offset:2px}
+.cc-meal-line{display:flex;align-items:center;gap:4px;min-height:56px}
+#modal-container .cc-status-btn{all:unset;box-sizing:border-box;flex:none;display:grid;place-items:center;width:44px;height:44px;margin-left:-8px;cursor:pointer}
+#modal-container span.cc-status-btn{cursor:default}
+#modal-container .cc-status-btn:focus-visible{outline:2px solid var(--cc-green);outline-offset:-2px;border-radius:999px}
+.cc-status{flex:none;display:block;box-sizing:border-box;width:28px;height:28px;border-radius:999px;border:1.5px solid #b9c4bb;background:#fff center/16px no-repeat}
+.cc-status.is-done{background-color:var(--cc-lime);border-color:var(--cc-lime);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2322312a' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E")}
+#modal-container .cc-meal-open{all:unset;box-sizing:border-box;flex:1;min-width:0;display:flex;align-items:center;gap:8px;min-height:56px;cursor:pointer}
+#modal-container .cc-meal-open:focus-visible{outline:2px solid var(--cc-green);outline-offset:-2px}
+.cc-meal-open>span{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.cc-meal-open strong{font:600 16px/1.3 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cc-meal-open small{font:400 14px/1.2 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-muted)}
+.cc-week-ask{margin-top:16px}
+@media (prefers-reduced-motion:reduce){.cc-more>summary .cc-chev{transition:none}}
 /* ── Chef: rustige laadtoestand terwijl recepten binnenkomen ── */
 .cc-chef-wait{display:flex;align-items:center;gap:12px;min-height:56px;padding:16px;margin:16px 0;border:1px dashed var(--cc-line);border-radius:18px;color:var(--cc-muted);font:500 14px/1.4 -apple-system,'SF Pro Text',system-ui,sans-serif}
 .cc-chef-wait[hidden]{display:none}
@@ -2171,12 +2143,8 @@ body .compact-track>span{background:var(--cc-lime)!important;border-radius:var(-
 .cc-cook-tools .cc-cook-read{border:1px solid var(--cc-line);background:var(--cc-card)}
 .cc-cook-nav button:focus-visible,.cc-cook-tools button:focus-visible,.cc-cook-exit:focus-visible{outline:2px solid var(--cc-green);outline-offset:2px}
 .cc-cook-status{margin:0;font-size:14px;line-height:1.45;color:var(--cc-muted);text-align:center}
-
-/* ── v16: fotokeuzes en voorraad ── */
-.cc-kitchen-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
-.cc-kitchen-row .food-top-btn{width:100%!important;margin:0!important;min-height:52px!important;display:flex!important;align-items:center;justify-content:center;gap:8px;font-weight:650!important;font-size:15px!important}
 /* ── vinkjes: één vinkstijl voor alle keuzevakjes: rondje, lime met vinkje als aan ── */
-body input[type="checkbox"]{-webkit-appearance:none!important;appearance:none!important;width:24px!important;height:24px!important;min-width:24px!important;min-height:24px!important;max-height:24px!important;flex:none!important;margin:0!important;padding:0!important;border:1.5px solid #b9c4bb!important;border-radius:999px!important;background:#fff center/14px no-repeat!important;cursor:pointer;vertical-align:middle;transition:background-color .15s,border-color .15s;box-shadow:none!important}
+body input[type="checkbox"]{-webkit-appearance:none!important;appearance:none!important;width:28px!important;height:28px!important;min-width:28px!important;min-height:28px!important;max-height:28px!important;flex:none!important;margin:0!important;padding:0!important;border:1.5px solid #b9c4bb!important;border-radius:999px!important;background:#fff center/16px no-repeat!important;cursor:pointer;vertical-align:middle;transition:background-color .15s,border-color .15s;box-shadow:none!important}
 body input[type="checkbox"]:checked{background-color:var(--cc-lime)!important;border-color:var(--cc-lime)!important;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2322312a' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E")!important}
 body input[type="checkbox"]:focus-visible{outline:2px solid var(--cc-green)!important;outline-offset:2px}
 body input[type="checkbox"]:disabled{opacity:.4;cursor:default}
@@ -2206,12 +2174,12 @@ body input[type="checkbox"]:disabled{opacity:.4;cursor:default}
 .cc-setting-row+.cc-setting-row{border-top:1px solid var(--cc-line)}
 .cc-setting-row>span{font:600 14px/1.2 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-ink)}
 .cc-seg,.cc-stepper{display:flex;align-items:center;justify-content:space-between;gap:2px;width:200px;padding:2px;border-radius:999px;background:var(--cc-tint)}
-#tab-recepten#tab-recepten .cc-seg button,#tab-recepten#tab-recepten .cc-stepper button{all:unset;box-sizing:border-box;display:flex;align-items:center;justify-content:center;min-width:44px;height:44px;padding:0 14px;border-radius:999px;color:var(--cc-ink);font:600 14px/1 -apple-system,'SF Pro Text',system-ui,sans-serif;cursor:pointer}
-#tab-recepten#tab-recepten .cc-seg button{flex:1;padding:0 8px}
-#tab-recepten#tab-recepten .cc-seg button[aria-pressed="true"]{background:var(--cc-lime);font-weight:700}
-#tab-recepten#tab-recepten .cc-stepper button{width:44px;padding:0;background:var(--cc-card);font-size:20px}
-#tab-recepten#tab-recepten .cc-stepper button:disabled{opacity:.35;cursor:default}
-#tab-recepten#tab-recepten .cc-seg button:focus-visible,#tab-recepten#tab-recepten .cc-stepper button:focus-visible{outline:2px solid var(--cc-green);outline-offset:2px}
+#modal-container .cc-seg button,#modal-container .cc-stepper button{all:unset;box-sizing:border-box;display:flex;align-items:center;justify-content:center;min-width:44px;height:44px;padding:0 14px;border-radius:999px;color:var(--cc-ink);font:600 14px/1 -apple-system,'SF Pro Text',system-ui,sans-serif;cursor:pointer}
+#modal-container .cc-seg button{flex:1;padding:0 8px}
+#modal-container .cc-seg button[aria-pressed="true"]{background:var(--cc-lime);font-weight:700}
+#modal-container .cc-stepper button{width:44px;padding:0;background:var(--cc-card);font-size:20px}
+#modal-container .cc-stepper button:disabled{opacity:.35;cursor:default}
+#modal-container .cc-seg button:focus-visible,#modal-container .cc-stepper button:focus-visible{outline:2px solid var(--cc-green);outline-offset:2px}
 .cc-stepper strong{min-width:32px;text-align:center;font:700 16px/1 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-ink)}
 .cc-pantry-actions .btn{min-height:48px;display:flex;align-items:center;justify-content:center;margin:0}
 #voorraad-foto-status{margin-top:8px;font-size:12px}
@@ -2555,53 +2523,8 @@ body input[type="checkbox"]:disabled{opacity:.4;cursor:default}
     <!-- Chef-invoer: populated by JS (_renderFoodChef) -->
     <div id="food-chef-content" class="food-inner-content"></div>
 
-    <div class="cc-kitchen-row"><button class="food-top-btn food-top-btn-primary" style="width:100%;margin-bottom:14px;" onclick="showShoppingList()">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-      Boodschappenlijst
-    </button><button class="food-top-btn" onclick="showVoorraadModal()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 8v13H3V8"/><path d="M1 3h22v5H1z"/><path d="M10 12h4"/></svg> Mijn voorraad</button></div>
-
-    <div class="cc-section-label">Jouw recepten &amp; planning</div>
-
-    <details class="collapse-card" id="food-sec-recepten">
-      <summary>Mijn recepten <svg class="cc-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></summary>
-      <div class="cc-body">
-        <div id="food-rec-content" class="food-inner-content"></div>
-      </div>
-    </details>
-
-    <!-- Weekmenu: static structure so renderFoodWeekmenu/WeekOverview can write to named divs -->
-    <details class="collapse-card" id="food-sec-weekmenu">
-      <summary>Weekmenu <svg class="cc-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></summary>
-      <div class="cc-body">
-    <div id="food-week-content" class="food-inner-content">
-      <!-- Week navigatie -->
-      <div class="week-nav" style="margin-bottom:10px;">
-        <button onclick="navWeekMenu(-1)" style="background:var(--card);border:1px solid var(--border);color:var(--muted);border-radius:50%;width:36px;height:36px;flex-shrink:0;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:border-color .15s,color .15s;">&#8249;</button>
-        <span id="weekmenu-nav-label" class="week-label">Deze week</span>
-        <button onclick="navWeekMenu(1)" style="background:var(--card);border:1px solid var(--border);color:var(--muted);border-radius:50%;width:36px;height:36px;flex-shrink:0;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:border-color .15s,color .15s;">&#8250;</button>
-      </div>
-
-      <div class="card" style="margin-bottom:12px;border-top:3px solid var(--accent-food);">
-        <button class="voeding-voice-btn voeding-voice-full" id="voeding-voice-btn-food" onclick="startVoedingIntake(null,null,'food')">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
-          Wat ga je eten?
-        </button>
-        <div class="ritme-week-jump"><button onclick="_weekmenuOffset=0;navWeekMenu(0)">Deze week</button><button onclick="_weekmenuOffset=1;navWeekMenu(0)">Komende week</button></div><div id="food-weekmenu"></div>
-      </div>
-      <details style="margin-bottom:16px;">
-        <summary style="cursor:pointer;font-size:14px;font-weight:700;padding:10px 0;color:var(--text-2);border-left:3px solid var(--accent-food-soft);padding-left:10px;list-style:none;display:flex;align-items:center;justify-content:space-between;">
-          <span>Vezels &amp; Eiwitten deze week</span>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-        </summary>
-        <div id="food-week-overview" style="margin-top:8px;"></div>
-      </details>
-    </div>
-      </div>
-    </details>
-
+    <section id="cc-kitchen" class="cc-kitchen" aria-label="Jouw keuken"></section>
   </div>
-
-
   <!-- BOTTOM TABS -->
   <div id="tabs">
     <button class="tab-btn active" onclick="switchTab('vandaag', this)">
@@ -2623,7 +2546,7 @@ body input[type="checkbox"]:disabled{opacity:.4;cursor:default}
 'use strict';
 
 // ─── VERSION CHECK (forceert Safari herlading bij nieuwe versie) ──────────────
-const APP_VERSION = 'lime-20261003-10';
+const APP_VERSION = 'lime-20261003-11';
 // Eén plek voor de modellen: Sonnet voor gesprekken en recepten, Haiku voor snelle achtergrondtaken.
 const CC_MODEL_MAIN = 'claude-sonnet-4-6';
 const CC_MODEL_FAST = 'claude-haiku-4-5-20251001';
@@ -2945,7 +2868,6 @@ const MILESTONE_MSGS = {
 let settings = {};
 let data = {};
 let currentWeekOffset = 0;
-let _weekmenuOffset = 0;
 let genCount = [1, 2, 3].includes(Number(localStorage.getItem('hc_gen_count'))) ? Number(localStorage.getItem('hc_gen_count')) : 2;
 let genFocus = 'combi';
 let genDieet = localStorage.getItem('hc_dieet') || 'vlees';  // vlees (alles) | vis | vega
@@ -3062,28 +2984,10 @@ function currentWeekKey() {
 }
 
 function currentWeekMenuKey() {
-  const d = new Date();
-  d.setDate(d.getDate() + _weekmenuOffset * 7);
-  return getISOWeek(d);
+  return getISOWeek(new Date());
 }
 
-function navWeekMenu(delta) {
-  _weekmenuOffset = Math.max(-2, Math.min(4, _weekmenuOffset + delta));
-  _updateWeekMenuLabel();
-  renderFoodWeekmenu();
-  renderFoodWeekOverview();
-}
 
-function _updateWeekMenuLabel() {
-  const labelEl = document.getElementById('weekmenu-nav-label');
-  if (!labelEl) return;
-  const weekKey = currentWeekMenuKey();
-  const days = getWeekDates(weekKey);
-  const label = _weekmenuOffset === 0 ? `Deze week · Ma ${formatShortDate(days[0])} – Zo ${formatShortDate(days[6])}`
-    : _weekmenuOffset === 1 ? `Volgende week · Ma ${formatShortDate(days[0])} – Zo ${formatShortDate(days[6])}`
-    : `Ma ${formatShortDate(days[0])} – Zo ${formatShortDate(days[6])}`;
-  labelEl.textContent = label;
-}
 
 function formatShortDate(dateStr) {
   const d = new Date(dateStr + 'T12:00:00');
@@ -4159,7 +4063,7 @@ function addReceptToMeal(dateStr, slot, receptId) {
   if (!Array.isArray(arr[slot])) arr[slot] = [];
   arr[slot].push({ id:'m'+Date.now()+Math.random().toString(36).slice(2,5), naam:recept.naam, vezels:recept.vezels||'', eiwitten:recept.eiwitten||'', kcal:'', gepland:true, gegeten:false, receptId:recept.id });
   saveAndSync();
-  closeModal();
+  ccGoBack();
   renderTodayMeals(today());
 }
 
@@ -4178,7 +4082,7 @@ function saveQuickMeal(dateStr, slot) {
     arr[slot].push({ id:'m'+Date.now()+Math.random().toString(36).slice(2,5), naam:val, vezels:nutri.vezels||'', eiwitten:nutri.eiwitten||'', koolhydraten:nutri.koolhydraten||'', kcal:'', gepland:!eaten, gegeten:eaten });
     saveAndSync();
   }
-  closeModal();
+  ccGoBack();
   renderTodayMeals(today());
 }
 
@@ -4189,7 +4093,7 @@ function deleteTodayMeal(dateStr, slot, itemId) {
     arr[slot] = arr[slot].filter(m => m.id !== itemId);
   }
   saveAndSync();
-  closeModal();
+  ccGoBack();
   renderTodayMeals(today());
   renderNutriBar(today());
 }
@@ -4391,7 +4295,6 @@ function addActivity(date){return flowActivityForm(date);}
 
 // ─── RECEPTEN TAB ────────────────────────────────────────────────────────────
 
-let _activeFoodTab = 'chef';
 let _foodRecFilter = 'alles';
 
 function renderRecepten() {
@@ -4406,21 +4309,9 @@ function _renderFoodReceptenList(){return flowRecipeList();}
 
 
 
-function switchFoodTab(name) {
-  // v2.0: Chef-scherm is gestapeld (geen binnentabs). 'chef' = bovenaan; anders sectie openen.
-  _activeFoodTab = name;
-  if (name === 'chef') {
-    const top = document.getElementById('food-chef-content');
-    if (top) top.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    return;
-  }
-  const sec = document.getElementById('food-sec-' + name);
-  if (sec) {
-    sec.open = true;
-    if (name === 'recepten') _renderFoodReceptenList();
-    if (name === 'weekmenu') { renderFoodWeekmenu(); renderFoodWeekOverview(); }
-    sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
+function switchFoodTab() {
+  const top = document.getElementById('food-chef-content');
+  if (top) top.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 const _recSectionClosed = new Set(); // secties die dichtgeklapt zijn
@@ -5287,146 +5178,13 @@ let _foodFilter = 'alle';
 
 function renderFoodTab() {
   renderRecepten();
-  renderFoodWeekmenu();
-  renderFoodWeekOverview();
+  ccRenderKitchen();
 }
 
-function renderFoodWeekmenu() {
-  const container = document.getElementById('food-weekmenu');
-  if (!container) return;
-  const weekKey = currentWeekMenuKey();
-  ensureWeek(weekKey);
-  _updateWeekMenuLabel();
-  const weekData = (data.weken && data.weken[weekKey]) || {};
-  const dates = getWeekDates(weekKey);
-  const dagKort = ['Ma','Di','Wo','Do','Vr','Za','Zo'];
-  const slots = ['ontbijt','lunch','diner','snack'];
-  const slotLabel = { ontbijt:'Ontbijt', lunch:'Lunch', diner:'Diner', snack:'Snack' };
-  const todayStr = today();
 
-  container.innerHTML = dates.map((d, i) => {
-    const dayData = weekData[d] || {};
-    const meals = dayData.maaltijden || {};
-    const isToday = d === todayStr;
 
-    const mealRows = slots.map(s => {
-      const items = Array.isArray(meals[s]) ? meals[s] : [];
-      if (items.length > 0) {
-        return items.map((m, idx) => {
-          const nutriParts = [];
-          if (m.vezels) nutriParts.push(`V: ${m.vezels}`);
-          if (m.eiwitten) nutriParts.push(`E: ${m.eiwitten}`);
-          const fiberSpan = nutriParts.length > 0 ? `<span style="color:var(--muted);font-size:11px;"> · ${nutriParts.join(' · ')}</span>` : '';
-          return `<div class="weekmenu-row" onclick="editWeekMenuMeal('${d}','${s}')">
-            <span class="weekmenu-slot-label">${idx === 0 ? slotLabel[s] : ''}</span>
-            <span class="weekmenu-meal-name">${m.naam}${fiberSpan}</span>
-            <span class="weekmenu-del" onclick="event.stopPropagation();deleteWeekMenuMealItem('${d}','${s}','${m.id}')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>
-          </div>`;
-        }).join('') + `<div class="weekmenu-row weekmenu-row-empty" onclick="editWeekMenuMeal('${d}','${s}')">
-          <span class="weekmenu-slot-label"></span>
-          <span style="font-size:12px;color:var(--muted);display:flex;align-items:center;gap:4px;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>nog iets toevoegen</span>
-        </div>`;
-      } else {
-        return `<div class="weekmenu-row weekmenu-row-empty" onclick="editWeekMenuMeal('${d}','${s}')">
-          <span class="weekmenu-slot-label">${slotLabel[s]}</span>
-          <span style="font-size:13px;color:var(--muted);display:flex;align-items:center;gap:4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>toevoegen</span>
-        </div>`;
-      }
-    }).join('');
 
-    const hasAnyMeal = slots.some(s => Array.isArray(meals[s]) && meals[s].length > 0);
-    return `<div class="weekmenu-day ${isToday ? 'today' : ''}">
-      <div class="weekmenu-day-label" style="display:flex;align-items:center;justify-content:space-between;">
-        <span>${dagKort[i]}${isToday ? ' — vandaag' : ''}</span>
-        ${hasAnyMeal ? `<button onclick="clearWeekMenuDay('${d}')" style="border:none;background:none;color:var(--muted);cursor:pointer;padding:2px;line-height:1;display:flex;align-items:center;" title="Dag leegmaken"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg></button>` : ''}
-      </div>
-      ${mealRows}
-    </div>`;
-  }).join('');
-}
 
-function clearWeekMenuDay(dateStr) {
-  const weekKey = getISOWeek(new Date(dateStr + 'T12:00:00'));
-  if (!data.weken[weekKey] || !data.weken[weekKey][dateStr]) return;
-  data.weken[weekKey][dateStr].maaltijden = { ontbijt:[], lunch:[], diner:[], snack:[] };
-  saveAndSync();
-  renderFoodWeekmenu();
-  renderFoodWeekOverview();
-}
-
-function clearWeekMenuMeal(dateStr, slot) {
-  const weekKey = getISOWeek(new Date(dateStr + 'T12:00:00'));
-  if (!data.weken[weekKey] || !data.weken[weekKey][dateStr]) return;
-  data.weken[weekKey][dateStr].maaltijden[slot] = [];
-  saveAndSync();
-  renderFoodWeekmenu();
-  renderFoodWeekOverview();
-}
-
-function deleteWeekMenuMealItem(dateStr, slot, itemId) {
-  const weekKey = getISOWeek(new Date(dateStr + 'T12:00:00'));
-  if (!data.weken[weekKey] || !data.weken[weekKey][dateStr]) return;
-  const arr = data.weken[weekKey][dateStr].maaltijden;
-  if (Array.isArray(arr[slot])) arr[slot] = arr[slot].filter(m => m.id !== itemId);
-  saveAndSync();
-  renderFoodWeekmenu();
-  renderFoodWeekOverview();
-}
-
-function editWeekMenuMeal(dateStr, slot) {
-  const weekKey = getISOWeek(new Date(dateStr + 'T12:00:00'));
-  const dayData = (data.weken[weekKey] || {})[dateStr] || {};
-  const meals = dayData.maaltijden || {};
-  const m = (Array.isArray(meals[slot]) && meals[slot].length > 0) ? meals[slot][0] : {};
-  const slotLabel = { ontbijt:'Ontbijt', lunch:'Lunch', diner:'Diner', snack:'Snack' }[slot] || slot;
-  const dagNamen = ['Ma','Di','Wo','Do','Vr','Za','Zo'];
-  const dates = getWeekDates(weekKey);
-  const dagIdx = dates.indexOf(dateStr);
-  const dagLabel = dagIdx >= 0 ? dagNamen[dagIdx] : dateStr;
-
-  showModal(`
-    <div class="modal-header">
-      <h2>${dagLabel} — ${slotLabel}</h2>
-      <button class="modal-close" onclick="closeModal()">✕</button>
-    </div>
-    <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px;">
-      ${micInput('wm-naam', 'Naam gerecht', m.naam||'')}
-      <input type="file" id="wm-foto-input" accept="image/*" style="display:none;" onchange="analyseeMaaltijdFoto(this)">
-      <button class="btn btn-ghost btn-full" id="wm-foto-btn" onclick="document.getElementById('wm-foto-input').click()" style="font-size:13px;border-color:var(--accent-move);color:var(--accent-move);">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-        Foto of screenshot analyseren
-      </button>
-      <div id="wm-foto-preview" style="display:none;font-size:12px;color:var(--muted);padding:8px 10px;background:var(--bg);border-radius:8px;"></div>
-      <button class="btn btn-ghost btn-full" id="wm-bereken-btn" onclick="berekenNutriWeekmenu()" style="font-size:13px;">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
-        Bereken vezels &amp; eiwitten
-      </button>
-      <div id="wm-nutri-preview" style="display:${m.vezels||m.eiwitten?'block':'none'};font-size:12px;color:var(--muted);padding:8px 10px;background:var(--bg);border-radius:8px;">
-        ${m.vezels ? '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;opacity:.8;"><path d="M12 22c0-6 6-10 6-16a6 6 0 0 0-12 0c0 6 6 10 6 16z"/></svg> '+m.vezels : ''} ${m.eiwitten ? '· <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="vertical-align:-1px;opacity:.9"><path d="M12 2C8.5 2 5 7 5 11.8 5 17.4 8.1 22 12 22s7-4.6 7-10.2C19 7 15.5 2 12 2z"/></svg> '+m.eiwitten : ''}
-      </div>
-      <button class="btn btn-ghost btn-full" onclick="pickRecipeForSlot('${dateStr}','${slot}')">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>Kies uit mijn recepten
-      </button>
-      <button class="btn btn-ghost btn-full" id="wm-gen-btn" onclick="genereeerWMRecept('${dateStr}','${slot}')" style="font-size:13px;border-color:var(--accent-food);color:var(--accent-food);">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-        Genereer ingrediënten &amp; recept
-      </button>
-      <div id="wm-recept-result" style="display:none;font-size:12px;background:var(--bg);border-radius:10px;padding:10px 12px;"></div>
-      <button class="btn btn-ghost btn-full" onclick="gaNaarChef(document.getElementById('wm-naam').value)" style="font-size:13px;">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
-        Ga naar Chef
-      </button>
-      <button id="wm-sla-op-btn" class="btn btn-ghost btn-full" style="display:none;font-size:13px;" onclick="slaWMGerechOp('${dateStr}','${slot}')">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v14a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-        Sla op als recept
-      </button>
-      <div style="display:flex;gap:8px;margin-top:4px;">
-        <button class="btn btn-ghost" style="flex:1;color:#ef4444;border-color:#ef4444;" onclick="clearWeekMenuMeal('${dateStr}','${slot}');closeModal()">Verwijder</button>
-        <button class="btn btn-primary" style="flex:1;" onclick="saveWeekMenuMeal('${dateStr}','${slot}')">Opslaan</button>
-      </div>
-    </div>
-  `);
-}
 
 
 
@@ -5444,20 +5202,21 @@ function voorraadAdd(raw){
 function renderVoorraadList(){
   const el=document.getElementById('voorraad-list');if(!el)return;
   const items=voorraadItems(),n=items.filter(x=>voorraadGekozen.has(x.toLowerCase())).length;
-  el.innerHTML=items.length?items.map((x,i)=>{const on=voorraadGekozen.has(x.toLowerCase());return `<span class="cc-pantry-item${on?' is-on':''}"><button type="button" class="cc-pantry-pick" aria-pressed="${on}" onclick="toggleVoorraad(${i})">${escapeText(x)}</button><button type="button" onclick="removeVoorraad(${i})" aria-label="Verwijder ${escapeText(x)}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></span>`;}).join(''):'<p class="cc-pantry-empty">Nog niets in huis. Voeg iets toe of maak een foto.</p>';
+  el.innerHTML=items.length?items.map((x,i)=>{const on=voorraadGekozen.has(x.toLowerCase());return `<span class="cc-pantry-item${on?' is-on':''}"><button type="button" class="cc-pantry-pick" aria-pressed="${on}" onclick="toggleVoorraad(${i})">${escapeText(x)}</button><button type="button" onclick="removeVoorraad(${i})" aria-label="Verwijder ${escapeText(x)}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></span>`;}).join(''):'<p class="cc-pantry-empty">Nog niets in huis. Typ, spreek in of maak een foto.</p>';
   for(const id of ['voorraad-hint','voorraad-wis','voorraad-go'])document.getElementById(id).hidden=!items.length;
+  const entry=document.getElementById('cc-voorraad-label');if(entry)entry.textContent=ccVoorraadText();
   document.getElementById('voorraad-go-label').textContent=n?`Maak met ${n} ${n===1?'product':'producten'}`:'Maak met alles wat je hebt';
 }
 function showVoorraadModal() {
   showModal(`
-    <div class="modal-header"><h2>Wat heb ik in huis?</h2>${flowClose()}</div>
+    <div class="modal-header"><h2>Je voorraad</h2>${flowClose()}</div>
     <p class="muted" id="voorraad-hint">Tik aan wat je wilt gebruiken.</p>
     <div id="voorraad-list" class="cc-pantry-list"></div>
     <div class="cc-pantry-add">${micInput('voorraad-input', 'paprika, 200 g feta…')}<button type="button" class="btn btn-secondary" onclick="saveVoorraad()">Voeg toe</button></div>
     <div class="cc-pantry-tools"><button type="button" onclick="document.getElementById('voorraad-foto-input').click()">Foto</button><button type="button" id="voorraad-wis" onclick="clearVoorraadVraag()">Alles wissen</button></div>
     <div id="voorraad-foto-status" class="muted" role="status" style="display:none;"></div>
     <input type="file" id="voorraad-foto-input" accept="image/*" style="display:none;" onchange="analyseVoorraadFoto(this)">
-    <div id="voorraad-go" class="cc-pantry-go"><p id="voorraad-go-label"></p><div class="cc-pantry-actions"><button type="button" class="btn btn-primary" onclick="voorraadMaak('snack')">Snack</button><button type="button" class="btn btn-primary" onclick="voorraadMaak('maaltijd')">Maaltijd</button></div></div>
+    <div id="voorraad-go" class="cc-pantry-go"><p id="voorraad-go-label"></p><div class="cc-pantry-actions"><button type="button" class="btn btn-secondary" onclick="voorraadMaak('snack')">Snack</button><button type="button" class="btn btn-primary" onclick="voorraadMaak('maaltijd')">Maaltijd</button></div></div>
   `);
   renderVoorraadList();
   document.getElementById('voorraad-input').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();saveVoorraad();}});
@@ -5595,281 +5354,18 @@ function analyseChefFoto(input){return flowAnalyseRecipePhoto(input);}
 
 
 
-async function analyseeMaaltijdFoto(inputEl) {
-  const view=ccViewRevision;
-  let file = inputEl.files[0];
-  if (!file) return;
-  inputEl.value = '';
-  file = await ccPreparePhoto(file);
-  if(!file){showBanner('yellow','Deze foto kan ik niet openen. Probeer een andere foto of een schermafbeelding.');return;}
-  const btn = document.getElementById('wm-foto-btn');
-  const preview = document.getElementById('wm-foto-preview');
-  if (btn) { btn.disabled = true; btn.textContent = 'Analyseren…'; }
-  if (preview) { preview.style.display = 'block'; preview.textContent = 'Wordt geanalyseerd…'; }
-  try {
-    const base64 = await new Promise((res, rej) => {
-      const reader = new FileReader();
-      reader.onload = e => res(e.target.result.split(',')[1]);
-      reader.onerror = rej;
-      reader.readAsDataURL(file);
-    });
-    const mediaType = file.type && file.type.startsWith('image/') ? file.type : 'image/jpeg';
-    const resp = await ccFetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-api-key': settings.anthropicKey, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
-      body: JSON.stringify({
-        model: CC_MODEL_MAIN,
-        max_tokens: 400,
-        messages: [{ role: 'user', content: [
-          { type: 'image', source: { type: 'base64', media_type: mediaType, data: base64 } },
-          { type: 'text', text: 'Analyseer deze afbeelding. Is het een foto van een bereide maaltijd, OF een recept/screenshot met ingrediënten en bereidingsstappen?\n\nAls het een MAALTIJDFOTO is, geef dan: {"type":"maaltijd","naam":"...","vezels":"~Xg","eiwitten":"~Xg","koolhydraten":"~Xg"}\n\nAls het een RECEPT is (tekst, screenshot, kookboekpagina), geef dan: {"type":"recept","naam":"...","vezels":"~Xg","eiwitten":"~Xg","koolhydraten":"~Xg","ingredienten":["..."],"bereiding":["..."]}\n\nGeen uitleg, alleen JSON.' }
-        ]}]
-      })
-    });
-    if (!resp.ok) throw new Error('API fout');
-    const json = await resp.json();if(view!==ccViewRevision)return;
-    const result = safeParseJSON(json.content[0].text);
-    if (!result || !result.naam) throw new Error();
-
-    const naamEl = document.getElementById('wm-naam');
-    if (naamEl) naamEl.value = result.naam;
-    window._wmNutri = { vezels: result.vezels || '', eiwitten: result.eiwitten || '' };
-    const nutriPrev = document.getElementById('wm-nutri-preview');
-    if (nutriPrev) { nutriPrev.style.display = 'block'; nutriPrev.innerHTML = `V: ${escapeText(result.vezels||'?')} · E: ${escapeText(result.eiwitten||'?')}`; }
-
-    if (result.type === 'recept' && result.ingredienten && result.bereiding) {
-      window._wmGegenereerd = { naam: result.naam, ingredienten: result.ingredienten, bereiding: result.bereiding };
-      const resultDiv = document.getElementById('wm-recept-result');
-      if (resultDiv) {
-        resultDiv.style.display = 'block';
-        resultDiv.innerHTML =
-          `<div style="font-weight:700;margin-bottom:6px;">Ingrediënten</div>` +
-          `<ul style="margin:0 0 10px 16px;line-height:1.6;">${result.ingredienten.map(i=>`<li>${i}</li>`).join('')}</ul>` +
-          `<div style="font-weight:700;margin-bottom:6px;">Bereiding</div>` +
-          `<ol style="margin:0 0 0 16px;line-height:1.6;">${result.bereiding.map(s=>`<li>${s}</li>`).join('')}</ol>`;
-      }
-      const slaOp = document.getElementById('wm-sla-op-btn');
-      if (slaOp) slaOp.style.display = 'flex';
-      if (preview) preview.innerHTML = `<strong>${escapeText(result.naam)}</strong> — recept herkend · V: ${escapeText(result.vezels||'?')} · E: ${escapeText(result.eiwitten||'?')} <span style="color:var(--accent-food);">✓</span>`;
-    } else {
-      if (preview) preview.innerHTML = `<strong>${escapeText(result.naam)}</strong> · V: ${escapeText(result.vezels||'?')} · E: ${escapeText(result.eiwitten||'?')} <span style="color:var(--accent-food);">✓</span>`;
-    }
-  } catch(_) {
-    if (preview) preview.textContent = 'Kon niet herkennen — typ de naam handmatig.';
-  } finally {
-    if (btn) {
-      btn.disabled = false;
-      btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg> Foto of screenshot analyseren';
-    }
-  }
-}
-
-async function berekenNutriWeekmenu() {
-  const naam = (document.getElementById('wm-naam') ? document.getElementById('wm-naam').value : '').trim();
-  if (!naam) { showBanner('yellow', 'Typ eerst een gerecht in.'); return; }
-  const btn = document.getElementById('wm-bereken-btn');
-  const preview = document.getElementById('wm-nutri-preview');
-  if (btn) { btn.disabled = true; btn.textContent = 'Bezig…'; }
-  try {
-    const prompt = `Schat voor het gerecht "${naam}" (1 portie): vezels in gram en eiwitten in gram. Geef ALLEEN JSON: {"vezels":"~Xg","eiwitten":"~Xg","koolhydraten":"~Xg"}. Geen uitleg.`;
-    const raw = await callAIPlain(prompt, 60);
-    const result = safeParseJSON(raw);
-    if (result && (result.vezels || result.eiwitten)) {
-      window._wmNutri = result;
-      if (preview) {
-        preview.style.display = 'block';
-        preview.innerHTML = `🌿 Vezels: <strong>${escapeText(result.vezels||'?')}</strong> &nbsp;·&nbsp; <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="vertical-align:-1px;opacity:.9"><path d="M12 2C8.5 2 5 7 5 11.8 5 17.4 8.1 22 12 22s7-4.6 7-10.2C19 7 15.5 2 12 2z"/></svg> Eiwitten: <strong>${escapeText(result.eiwitten||'?')}</strong> &nbsp;<span style="color:var(--accent-food);">✓</span>`;
-      }
-    } else throw new Error();
-  } catch(_) {
-    if (preview) { preview.style.display = 'block'; preview.textContent = 'Kon niet berekenen.'; }
-  } finally {
-    if (btn) {
-      btn.disabled = false;
-      btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg> Bereken vezels &amp; eiwitten';
-    }
-  }
-}
-
-async function genereeerWMRecept(dateStr, slot) {
-  const naam = (document.getElementById('wm-naam') ? document.getElementById('wm-naam').value : '').trim();
-  if (!naam) { showBanner('yellow', 'Typ eerst een gerechtnaam in.'); return; }
-  const btn = document.getElementById('wm-gen-btn');
-  const resultDiv = document.getElementById('wm-recept-result');
-  if (btn) { btn.disabled = true; btn.textContent = 'Bezig…'; }
-  try {
-    const prompt = `Maak een kort recept voor "${naam}" (2 personen). Geef ALLEEN JSON:
-{"ingredienten":["200g pasta","1 ui","..."],"bereiding":["Kook pasta al dente.","Fruit ui aan.","..."]}
-Maximaal 6 ingrediënten, maximaal 5 bereidingsstappen. Geen uitleg buiten de JSON.`;
-    const raw = await callAIPlain(prompt, 300);
-    const result = safeParseJSON(raw);
-    if (result && result.ingredienten && result.bereiding) {
-      window._wmGegenereerd = { naam, ingredienten: result.ingredienten, bereiding: result.bereiding };
-      if (resultDiv) {
-        resultDiv.style.display = 'block';
-        resultDiv.innerHTML =
-          `<div style="font-weight:700;margin-bottom:6px;color:var(--text);">Ingrediënten</div>` +
-          `<ul style="margin:0 0 10px 16px;line-height:1.6;">${result.ingredienten.map(i => `<li>${i}</li>`).join('')}</ul>` +
-          `<div style="font-weight:700;margin-bottom:6px;color:var(--text);">Bereiding</div>` +
-          `<ol style="margin:0 0 0 16px;line-height:1.6;">${result.bereiding.map(s => `<li>${s}</li>`).join('')}</ol>`;
-      }
-      const slaOp = document.getElementById('wm-sla-op-btn');
-      if (slaOp) slaOp.style.display = 'flex';
-    } else throw new Error();
-  } catch(_) {
-    if (resultDiv) { resultDiv.style.display = 'block'; resultDiv.textContent = 'Kon recept niet genereren — probeer opnieuw.'; }
-  } finally {
-    if (btn) {
-      btn.disabled = false;
-      btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> Genereer opnieuw';
-    }
-  }
-}
-
-function gaNaarChef(gerecht) {
-  closeModal();
-  const foodBtn = document.querySelector('.tab-btn[onclick*="recepten"]');
-  if (foodBtn) switchTab('recepten', foodBtn);
-  switchFoodTab('chef');
-  setTimeout(() => {
-    const inp = document.getElementById('gen-focus-input');
-    if (inp && gerecht) { inp.value = gerecht; inp.focus(); }
-  }, 100);
-}
-
-function slaWMGerechOp(dateStr, slot) {
-  const gen = window._wmGegenereerd;
-  const naam = (document.getElementById('wm-naam') ? document.getElementById('wm-naam').value : '').trim() || (gen && gen.naam) || '';
-  if (!naam) { showBanner('yellow', 'Geen gerechtnaam gevonden.'); return; }
-  if (!data.recepten) data.recepten = [];
-  const bestaand = data.recepten.find(r => r.naam.toLowerCase() === naam.toLowerCase());
-  if (bestaand) { showBanner('yellow', `"${naam}" staat al in je recepten.`); return; }
-  data.recepten.push({
-    id: 'r' + Date.now(),
-    naam,
-    vezels: (window._wmNutri && window._wmNutri.vezels) || '',
-    eiwitten: (window._wmNutri && window._wmNutri.eiwitten) || '',
-    tijd: '30 min',
-    ingredienten: (gen && gen.ingredienten) || [],
-    bereiding: (gen && gen.bereiding) || [],
-    personen: 2,
-    type: slot,
-    favoriet: false
-  });
-  saveAndSync();
-  showBanner('green', `"${naam}" opgeslagen in je recepten.`);
-  const slaOp = document.getElementById('wm-sla-op-btn');
-  if (slaOp) { slaOp.disabled = true; slaOp.textContent = '✓ Opgeslagen'; }
-}
-
-async function saveWeekMenuMeal(dateStr, slot) {
-  const naam = (document.getElementById('wm-naam') ? document.getElementById('wm-naam').value : '').trim();
-  const weekKey = getISOWeek(new Date(dateStr + 'T12:00:00'));
-  if (!data.weken[weekKey]) ensureWeek(weekKey);
-  if (!data.weken[weekKey][dateStr]) return;
-  const arr = data.weken[weekKey][dateStr].maaltijden;
-  if (!Array.isArray(arr[slot])) arr[slot] = [];
-  let nutri = window._wmNutri || {};
-  window._wmNutri = null;
-  if (naam && !nutri.vezels && !nutri.eiwitten) {
-    try {
-      const raw = await callAIFast(`Schat voor "${naam}" (1 portie): vezels in gram en eiwitten in gram. Geef ALLEEN JSON: {"vezels":"~Xg","eiwitten":"~Xg","koolhydraten":"~Xg"}. Geen uitleg.`, 60);
-      nutri = safeParseJSON(raw) || {};
-    } catch(_) {}
-  }
-  arr[slot].push({ id:'m'+Date.now()+Math.random().toString(36).slice(2,5), naam, vezels:nutri.vezels||'', eiwitten:nutri.eiwitten||'', kcal:'', gegeten:false, gepland:true, receptId:null });
-  saveAndSync();
-  closeModal();
-  renderFoodWeekmenu();
-  renderFoodWeekOverview();
-}
 
 
 
-function applyRecipeToSlot(receptId, dateStr, slot) {
-  const recept = (data.recepten || []).find(r => r.id === receptId);
-  if (!recept) return;
-  const weekKey = getISOWeek(new Date(dateStr + 'T12:00:00'));
-  if (!data.weken[weekKey]) ensureWeek(weekKey);
-  if (!data.weken[weekKey][dateStr]) return;
-  const _arr5724 = data.weken[weekKey][dateStr].maaltijden;
-  if (!Array.isArray(_arr5724[slot])) _arr5724[slot] = [];
-  _arr5724[slot].push({ id:'m'+Date.now()+Math.random().toString(36).slice(2,5), naam:recept.naam, vezels:recept.vezels||'', eiwitten:recept.eiwitten||'', kcal:'', gepland:true, gegeten:false, receptId:recept.id });
-  saveAndSync();
-  closeModal();
-  renderFoodWeekmenu();
-  renderFoodWeekOverview();
-}
-
-function renderFoodWeekOverview() {
-  const container = document.getElementById('food-week-overview');
-  if (!container) return;
-  const weekKey = currentWeekMenuKey();
-  const weekData = (data.weken && data.weken[weekKey]) || {};
-  const dagKort = ['Ma','Di','Wo','Do','Vr','Za','Zo'];
-  const dates = getWeekDates(weekKey);
-
-  const todayStr = today();
-
-  // Header
-  container.innerHTML = `<div style="display:flex; font-size:11px; color:var(--muted); font-weight:600; margin-bottom:6px; padding:0 2px;">
-    <span style="width:28px;"></span>
-    <span style="flex:1; margin:0 10px;">🌿 Vezels (plan · doel: ${nutritionGoals().vezels}g)</span>
-    <span style="width:70px; text-align:right;"></span>
-    <span style="flex:1; margin:0 10px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="vertical-align:-1px;opacity:.9"><path d="M12 2C8.5 2 5 7 5 11.8 5 17.4 8.1 22 12 22s7-4.6 7-10.2C19 7 15.5 2 12 2z"/></svg> Proteïne (plan · doel: ${nutritionGoals().eiwitten}g)</span>
-    <span style="width:70px; text-align:right;"></span>
-  </div>` + dates.map((d, i) => {
-    const dayData = weekData[d] || {};
-    const meals = dayData.maaltijden || {};
-    let vezels = 0, eiwitten = 0;
-    Object.values(meals).flatMap(v => Array.isArray(v) ? v : (v && v.naam ? [v] : [])).forEach(m => {
-      if (!m) return;
-      const v2 = parseGrams(m.vezels);
-      const e2 = parseGrams(m.eiwitten);
-      if (!isNaN(v2)) vezels += v2;
-      if (!isNaN(e2)) eiwitten += e2;
-    });
-    const vPct = Math.min(100, Math.round(vezels / nutritionGoals().vezels * 100));
-    const vColor = vezels >= nutritionGoals().vezels ? '#4ade80' : vezels >= nutritionGoals().vezels * .7 ? '#fb923c' : '#f87171';
-    const ePct = Math.min(100, Math.round(eiwitten / nutritionGoals().eiwitten * 100));
-    const eColor = eiwitten >= nutritionGoals().eiwitten ? '#a78bfa' : eiwitten >= nutritionGoals().eiwitten * .7 ? '#c4b5fd' : '#e9d5ff';
-    const isToday = d === todayStr;
-    return `<div class="food-week-row" style="${isToday ? 'font-weight:600;' : ''}">
-      <span style="width:28px;font-size:13px;">${dagKort[i]}</span>
-      <div style="flex:1; margin:0 10px;">
-        <div class="food-fiber-bar"><div class="food-fiber-fill" style="width:${vPct}%;background:${vColor};"></div></div>
-      </div>
-      <span style="color:${vColor};font-size:12px;min-width:70px;text-align:right;">${vezels > 0 ? vezels+'g' : '—'}</span>
-      <div style="flex:1; margin:0 10px;">
-        <div class="food-fiber-bar"><div class="food-fiber-fill" style="width:${ePct}%;background:${eColor};"></div></div>
-      </div>
-      <span style="color:${eColor};font-size:12px;min-width:70px;text-align:right;">${eiwitten > 0 ? eiwitten+'g' : '—'}</span>
-    </div>`;
-  }).join('');
-}
 
 
 
-function planRecept(receptId, dateStr, mealType) {
-  const weekKey = getISOWeek(new Date(dateStr + 'T12:00:00'));
-  if (!data.weken[weekKey]) ensureWeek(weekKey);
-  if (!data.weken[weekKey][dateStr]) return;
-  const meals = data.weken[weekKey][dateStr].maaltijden;
-  const recept = (data.recepten || []).find(r => r.id === receptId);
-  if (!recept) return;
 
-  if (!Array.isArray(meals[mealType])) meals[mealType] = [];
-  // Toggle: klik op geplande dag = verwijder
-  const existingIdx = meals[mealType].findIndex(m => m.receptId === receptId);
-  if (existingIdx >= 0) {
-    meals[mealType].splice(existingIdx, 1);
-  } else {
-    meals[mealType].push({ id:'m'+Date.now()+Math.random().toString(36).slice(2,5), naam:recept.naam, vezels:recept.vezels||'', eiwitten:recept.eiwitten||'', kcal:'', gepland:true, gegeten:false, receptId:recept.id });
-  }
-  saveAndSync();
-  renderFoodTab();
-  if (document.getElementById('tab-vandaag').classList.contains('active')) renderVandaag();
-}
+
+
+
+
+
 
 // deleteRecept is defined earlier (modal version) — this duplicate removed
 
@@ -5930,18 +5426,32 @@ function setWater(n) {
 
 // ─── MODAL ───────────────────────────────────────────────────────────────────
 
+// Sheets: one level back (ccOpenFrom), focus to the title and back to the opening button, Escape closes.
+let ccSheetBack = null, ccNextBack = null, ccSheetOpener = null;
 function showModal(html) {
   const container = document.getElementById('modal-container');
+  if (!container.firstElementChild) ccSheetOpener = document.activeElement;
+  ccSheetBack = ccNextBack; ccNextBack = null;
   container.innerHTML = `
     <div class="modal-overlay" onclick="if(event.target===this)closeModal()">
-      <div class="modal">${html}</div>
+      <div class="modal" role="dialog" aria-modal="true">${html}</div>
     </div>`;
+  const head = container.querySelector('.modal-header'), title = head?.querySelector('h2');
+  if (ccSheetBack && head) head.insertAdjacentHTML('afterbegin', '<button type="button" class="cc-sheet-back" aria-label="Terug" onclick="ccGoBack()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg></button>');
+  if (title) { title.id = 'cc-sheet-title'; title.tabIndex = -1; container.querySelector('.modal').setAttribute('aria-labelledby', 'cc-sheet-title'); try { title.focus({ preventScroll: true }); } catch(_) {} }
 }
+function ccOpenFrom(back, open) { ccNextBack = back; try { open(); } finally { ccNextBack = null; } }
+function ccGoBack() { const back = ccSheetBack; if (back) back(); else closeModal(); }
 
 function closeModal() {
   ccCancelView();
   document.getElementById('modal-container').innerHTML = '';
+  ccSheetBack = null;
+  const opener = ccSheetOpener; ccSheetOpener = null;
+  if (opener && opener.isConnected && opener.tagName === 'BUTTON') try { opener.focus({ preventScroll: true }); } catch(_) {}
+  ccRenderKitchen();
 }
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && document.getElementById('modal-container')?.firstElementChild) closeModal(); });
 
 // ─── SMART VOICE INPUT ───────────────────────────────────────────────────────
 
@@ -7764,111 +7274,7 @@ function continueInit() {
 /* ══════════════════════════════════════════════════════════════
    VOEDING VOICE INTAKE — heb gegeten / ga eten
    ══════════════════════════════════════════════════════════════ */
-async function startVoedingIntake(dateStr, defaultSlot, source) {
-  const btnId = source === 'food' ? 'voeding-voice-btn-food' : 'voeding-voice-btn-vandaag';
-  const btn = document.getElementById(btnId);
-  const targetDate = dateStr || today();
 
-  if (!navigator.mediaDevices || !window.SpeechRecognition && !window.webkitSpeechRecognition) {
-    showBanner('red', 'Spraakopname niet ondersteund in deze browser.');
-    return;
-  }
-
-  if (window._voedingRecording) {
-    window._voedingRecording.stop();
-    return;
-  }
-
-  try {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
-    const recognition = new SpeechRec();
-    recognition.lang = 'nl-NL';
-    recognition.continuous = false;
-    recognition.interimResults = false;
-
-    if (btn) { btn.classList.add('recording'); btn.textContent = 'Stop opname'; }
-    window._voedingRecording = recognition;
-
-    let transcript = '';
-
-    recognition.onresult = (e) => {
-      for (let i = e.resultIndex; i < e.results.length; i++) {
-        if (e.results[i].isFinal) transcript += e.results[i][0].transcript + ' ';
-      }
-    };
-
-    const resetBtn = () => {
-      stream.getTracks().forEach(t => t.stop());
-      window._voedingRecording = null;
-      if (btn) {
-        btn.classList.remove('recording');
-        btn.textContent = source === 'food' ? 'Spreek maaltijd in' : 'Inspreken';
-      }
-    };
-
-    recognition.onerror = () => {
-      resetBtn();
-      showBanner('red', 'Spraakopname mislukt.');
-    };
-
-    recognition.onend = async () => {
-      resetBtn();
-      const t = transcript.trim();
-      if (t.length < 3) { showBanner('red', 'Geen spraak herkend. Probeer opnieuw.'); return; }
-      await parseVoeding(t, targetDate, defaultSlot, source);
-    };
-
-    recognition.start();
-
-  } catch(e) {
-    showBanner('red', 'Microfoon toegang geweigerd.');
-  }
-}
-
-async function parseVoeding(transcript, dateStr, defaultSlot, source) {
-  // Detecteer Chef-verzoek (recept, idee, inspiratie of "chef, ...") en stuur door naar de generator
-  if (/\b(chef|recept|recepten|wat kan ik maken|wat zal ik eten|wat kan ik eten|idee[eë]n? voor|inspiratie|verzin iets|iets lekkers)\b/i.test(transcript)) {
-    const focusEl = document.getElementById('gen-focus-input');
-    if (focusEl) focusEl.value = transcript.replace(/^.*?(?:recept.*?met|met)\s*/i, '').trim() || transcript;
-    const foodBtn = document.querySelector('.tab-btn[onclick*="recepten"]');
-    if (foodBtn) switchTab('recepten', foodBtn);
-    await _doGenerateRecepten(focusEl ? focusEl.value : transcript, false);
-    return;
-  }
-
-  showBanner('blue', 'Maaltijd verwerken…');
-
-  // Determine current time-of-day slot as hint
-  const uur = new Date().getHours();
-  const tijdSlot = uur < 10 ? 'ontbijt' : uur < 14 ? 'lunch' : uur < 17 ? 'snack' : 'diner';
-
-  const prompt = `De gebruiker heeft ingesproken wat hij/zij heeft gegeten of gaat eten.
-Transcript: "${transcript}"
-
-Huidig tijdslot (op basis van hoe laat het is): ${tijdSlot}
-Mogelijke slots: ontbijt, lunch, diner, snack
-
-Bepaal:
-1. Wat heeft de gebruiker gegeten/wil eten (naam van het gerecht of product)
-2. Het juiste slot: kijk naar timing-woorden zoals "vanavond/straks/diner" → diner, "vanmiddag/lunch" → lunch, "ontbijt/ochtend" → ontbijt, "tussendoor/snack" → snack. Als geen timing → gebruik huidig tijdslot.
-3. Wanneer: "al gegeten" of "ga nog eten"
-4. Schat de voedingswaarden (1 portie, normaal huishoudengrootte):
-
-Geef ALLEEN dit JSON terug:
-{"naam":"...", "slot":"ontbijt|lunch|diner|snack", "wanneer":"gegeten|gaat eten", "vezels":"~Xg", "eiwitten":"~Xg", "koolhydraten":"~Xg", "kcal":"~Xkcal"}
-
-Regels: naam in het Nederlands, vezels en eiwitten in gram met ~-prefix, kcal met ~-prefix en kcal-suffix.`;
-
-  try {
-    const raw = await callAI(prompt, 180);
-    const parsed = safeParseJSON(raw);
-    if (!parsed || !parsed.naam) { showBanner('red', 'Kon maaltijd niet herkennen. Probeer opnieuw.'); return; }
-    showVoedingPreview(parsed, dateStr, source);
-  } catch(e) {
-    showBanner('red', 'Fout bij verwerken maaltijd.');
-  }
-}
 
 function showVoedingPreview(parsed, dateStr, source) {
   const slotLabel = { ontbijt: 'Ontbijt', lunch: 'Lunch', diner: 'Diner', snack: 'Snack' };
@@ -8186,120 +7592,11 @@ async function answerDailyQuestion(type, value, actId) {
 
 
 
-function confirmWeekIntake(plan) {
-  closeModal();
-  const typeLabels = { run:'Hardlopen', gym:'Gym', bike:'Fietsen', commute:'Fiets werk', rest:'Rust' };
-
-  plan.forEach(act => {
-    const dateStr = act.datum;
-    const weekKey = getISOWeek(new Date(dateStr + 'T12:00:00'));
-    ensureDay(dateStr);
-    if (!data.weken[weekKey][dateStr].activiteiten) data.weken[weekKey][dateStr].activiteiten = [];
-    data.weken[weekKey][dateStr].activiteiten.push({
-      id: Date.now() + Math.random(),
-      type: act.type || 'gym',
-      naam: typeLabels[act.type] || act.naam || 'Training',
-      detail: act.detail || '',
-      duur: act.duur || 60,
-      gedaan: false
-    });
-  });
-
-  saveAndSync();
-  renderWeek();
-  showBanner('green', `${plan.length} activiteiten ingepland!`);
-
-  // Blok 3: offer diner suggestions
-  setTimeout(() => showDinerDagPicker(plan), 600);
-}
 
 /* ══════════════════════════════════════════════════════════════
    BLOK 3 — DINER-SUGGESTIE FLOW
    ══════════════════════════════════════════════════════════════ */
-function showDinerDagPicker(plan) {
-  const dagNamenLang = { maandag:'Maandag', dinsdag:'Dinsdag', woensdag:'Woensdag',
-    donderdag:'Donderdag', vrijdag:'Vrijdag', zaterdag:'Zaterdag', zondag:'Zondag' };
 
-  // Show only days that have a non-rest activity
-  const sportDagen = plan.filter(a => a.type !== 'rest');
-  if (sportDagen.length === 0) return;
-
-  const checks = sportDagen.map(a => `
-    <label class="diner-dag-check">
-      <input type="checkbox" name="dindag" value="${a.datum}" checked>
-      <span class="diner-dag-label">
-        <strong>${dagNamenLang[a.dag] || a.dag}</strong>
-        <small>${a.datum.slice(5)} · ${a.naam}</small>
-      </span>
-    </label>`).join('');
-
-  showModal(`
-    <h3 style="margin-bottom:6px;">Diners genereren?</h3>
-    <p style="color:var(--muted);font-size:13px;margin-bottom:16px;">
-      Voor welke spordagen wil je een diner laten genereren?
-    </p>
-    <style>
-      .diner-dag-check { display:flex; align-items:center; gap:10px; padding:10px 0;
-        border-bottom:1px solid var(--border); cursor:pointer; font-size:15px; }
-      .diner-dag-check:last-child { border-bottom:none; }
-      .diner-dag-check input { width:20px; height:20px; accent-color:var(--accent-food); flex-shrink:0; }
-      .diner-dag-label { display:flex; flex-direction:column; gap:1px; }
-      .diner-dag-label small { color:var(--muted); font-size:12px; }
-    </style>
-    ${checks}
-    <div style="display:flex;gap:8px;margin-top:20px;">
-      <button class="btn btn-ghost" style="flex:1;" onclick="closeModal()">Overslaan</button>
-      <button class="btn btn-primary" style="flex:1;background:var(--accent-food);border-color:var(--accent-food);"
-        onclick="genereerDiners()">Genereer diners</button>
-    </div>
-  `);
-}
-
-async function genereerDiners() {
-  const checkboxes = document.querySelectorAll('input[name="dindag"]:checked');
-  const geselecteerd = Array.from(checkboxes).map(c => c.value);
-  closeModal();
-
-  if (geselecteerd.length === 0) return;
-
-  showBanner('blue', `Diners genereren voor ${geselecteerd.length} dag${geselecteerd.length > 1 ? 'en' : ''}…`);
-
-  const dagNamen = ['zondag','maandag','dinsdag','woensdag','donderdag','vrijdag','zaterdag'];
-  const labels = geselecteerd.map(d => {
-    const dt = new Date(d + 'T12:00:00');
-    return dagNamen[dt.getDay()] + ' ' + d.slice(5);
-  }).join(', ');
-
-  const prompt = `Genereer voor deze ${geselecteerd.length} dag${geselecteerd.length > 1 ? 'en' : ''} een vezelrijk diner-idee (elk uniek, gevarieerd, makkelijk te koken):
-Dagen: ${labels}
-
-Geef ALLEEN dit JSON-array terug:
-[{"datum":"YYYY-MM-DD","naam":"Receptnaam","vezels":"~Xg","eiwitten":"~Xg","koolhydraten":"~Xg"}]
-
-Regels: vezels ≥10g per portie, max 30 min bereidingstijd, gezond maar lekker.`;
-
-  try {
-    const raw = await callAI(prompt, Math.min(geselecteerd.length * 180, 900));
-    const dinners = safeParseJSON(raw);
-    if (!Array.isArray(dinners)) throw new Error('geen array');
-
-    dinners.forEach(din => {
-      const weekKey = getISOWeek(new Date(din.datum + 'T12:00:00'));
-      ensureDay(din.datum);
-      if (!data.weken[weekKey][din.datum].maaltijden) data.weken[weekKey][din.datum].maaltijden = { ontbijt:[], lunch:[], diner:[], snack:[] };
-      if (!Array.isArray(data.weken[weekKey][din.datum].maaltijden.diner)) data.weken[weekKey][din.datum].maaltijden.diner = [];
-      data.weken[weekKey][din.datum].maaltijden.diner.push({ id:'m'+Date.now()+Math.random().toString(36).slice(2,5), naam:din.naam, vezels:din.vezels||'', eiwitten:din.eiwitten||'', kcal:'', gepland:true, gegeten:false });
-    });
-
-    saveAndSync();
-    showBanner('green', `${dinners.length} diners gepland in je weekmenu!`);
-    if (document.getElementById('tab-recepten') && document.getElementById('tab-recepten').classList.contains('active')) {
-      renderFoodTab();
-    }
-  } catch(e) {
-    showBanner('red', 'Kon diners niet genereren. Probeer opnieuw.');
-  }
-}
 
 /* ══════════════════════════════════════════════════════════════
    BLOK 4 — PARTNER-GEHEUGEN
@@ -8609,7 +7906,7 @@ function mealNutrients(m){
 }
 function showAddMealOptions(){return flowAddMeal();}
 
-function showTypedMealSlot(){showModal(`<div class="modal-header"><h2>Voor welk moment?</h2><button class="modal-close" onclick="closeModal()" aria-label="Sluiten">✕</button></div><div class="meal-entry-options">${['ontbijt','lunch','diner','snack'].map(s=>`<button class="btn btn-secondary" onclick="quickEditMeal(today(),'${s}')">${s[0].toUpperCase()+s.slice(1)}</button>`).join('')}</div>`);}
+function showTypedMealSlot(date=today()){showModal(`<div class="modal-header"><h2>Voor welk moment?</h2>${flowClose()}</div>${date!==today()?`<p class="muted">${ccDayLabel(date)}</p>`:''}<div class="meal-entry-options">${['ontbijt','lunch','diner','snack'].map(s=>`<button class="btn btn-secondary" onclick="ccOpenFrom(ccSheetBack,()=>quickEditMeal('${date}','${s}'))">${s[0].toUpperCase()+s.slice(1)}</button>`).join('')}</div>`);}
 function setMealConsumed(date,slot,id){
   const m=ensureDay(date).maaltijden[slot].find(x=>x.id===id);if(!m)return;
   m.gegeten=!m.gegeten;m.gepland=!m.gegeten;saveAndSync();renderTodayMeals(today());renderWeekOvTab();
@@ -8764,7 +8061,7 @@ function flowOpenWeek(offset=0){flowWeekOffset=offset;const dates=flowWeekDates(
 function flowOpenDay(date){const day=flowDay(date);showModal(`<div class="modal-header"><h2>${formatShortDate(date)}</h2>${flowClose()}</div><h3>Beweging</h3><div class="flow-week-list">${(day.activiteiten||[]).map(a=>`<button onclick="editActivity('${date}',${flowArg(a.id)})"><strong>${escapeText(a.naam)}</strong><span>${escapeText(flowActivityMeta(a))}<small>${a.afgevinkt?'Gedaan':'Gepland'}</small></span></button>`).join('')||'<p class="muted">Nog niets gepland.</p>'}</div><button class="btn btn-secondary" onclick="addActivity('${date}')">Activiteit toevoegen</button><h3 class="flow-subhead">Maaltijden</h3>${Object.entries(day.maaltijden||{}).flatMap(([slot,items])=>(items||[]).map(m=>`<div class="flow-day-meal"><small>${slot} · ${m.gegeten?'gegeten':'gepland'}</small><strong>${escapeText(m.naam)}</strong></div>`)).join('')||'<p class="muted">Nog geen maaltijden.</p>'}<button class="btn btn-ghost btn-full" onclick="flowOpenWeek(flowWeekOffset)">Terug naar weekoverzicht</button>`);}
 
 
-function flowMealDetail(date,slot,id){const m=flowDay(date).maaltijden?.[slot]?.find(x=>x.id===id);if(!m)return;showModal(`<div class="modal-header"><h2>${escapeText(m.naam)}</h2>${flowClose()}</div><p>${slot} · ${m.gegeten?'Gegeten':'Gepland'}</p><div class="meal-entry-nutrients">${mealNutrients(m)}</div><button class="btn btn-secondary btn-full" onclick="ccMealNutrition('${date}','${slot}',${flowArg(id)})">Schat eiwit &amp; vezels</button><div class="flow-action-stack"><button class="btn btn-primary" onclick="setMealConsumed('${date}','${slot}',${flowArg(id)});closeModal()">${m.gegeten?'Terug naar gepland':'Markeer als gegeten'}</button>${m.receptId?`<button class="btn btn-secondary" onclick="flowRecipeDetail(${flowArg(m.receptId)})">Bekijk recept</button>`:''}<button class="btn btn-secondary" onclick="flowEditMeal('${date}','${slot}',${flowArg(id)})"><svg class="cc-icon" data-cc-icon="edit" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 16 11-11 4 4L8 20H4zM13 7l4 4"/></svg><span>Maaltijd aanpassen</span></button><button class="btn btn-ghost" onclick="deleteTodayMeal('${date}','${slot}',${flowArg(id)})"><svg class="cc-icon" data-cc-icon="delete" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M9 6V3h6v3M6 6l1 15h10l1-15M10 10v7m4-7v7"/></svg><span>Verwijderen</span></button></div>`);}
+function flowMealDetail(date,slot,id){const m=flowDay(date).maaltijden?.[slot]?.find(x=>x.id===id);if(!m)return;showModal(`<div class="modal-header"><h2>${escapeText(m.naam)}</h2>${flowClose()}</div><p>${slot} · ${m.gegeten?'Gegeten':'Gepland'}</p><div class="meal-entry-nutrients">${mealNutrients(m)}</div><button class="btn btn-secondary btn-full" onclick="ccMealNutrition('${date}','${slot}',${flowArg(id)})">Schat eiwit &amp; vezels</button><div class="flow-action-stack"><button class="btn btn-primary" onclick="setMealConsumed('${date}','${slot}',${flowArg(id)});ccGoBack()">${m.gegeten?'Terug naar gepland':'Markeer als gegeten'}</button>${m.receptId?`<button class="btn btn-secondary" onclick="flowRecipeDetail(${flowArg(m.receptId)})">Bekijk recept</button>`:''}<button class="btn btn-secondary" onclick="flowEditMeal('${date}','${slot}',${flowArg(id)})"><svg class="cc-icon" data-cc-icon="edit" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 16 11-11 4 4L8 20H4zM13 7l4 4"/></svg><span>Maaltijd aanpassen</span></button><button class="btn btn-ghost" onclick="deleteTodayMeal('${date}','${slot}',${flowArg(id)})"><svg class="cc-icon" data-cc-icon="delete" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M9 6V3h6v3M6 6l1 15h10l1-15M10 10v7m4-7v7"/></svg><span>Verwijderen</span></button></div>`);}
 function flowAddMeal(){showModal(`<div class="modal-header"><h2>Wat eet je?</h2>${flowClose()}</div><p class="muted">Vertel wat je hebt gegeten of wat je van plan bent.</p><div class="flow-action-stack"><button class="flow-speak" onclick="closeModal();document.getElementById('coach-front-input').scrollIntoView({block:'center'});bigPraatStart()">${flowVoiceGlyph()} Spreek je maaltijd in</button><button class="btn btn-secondary" onclick="showTypedMealSlot()">Typ je maaltijd</button><button class="btn btn-secondary" onclick="closeModal();document.getElementById('fotolog-input').click()">Foto van je maaltijd</button></div>`);}
 function flowActivityForm(date,id=null){const existing=id?flowDay(date).activiteiten?.find(a=>a.id===id):null;flowActivityEdit={date,id};const a=existing||{},type=a.type||'run';showModal(`<div class="modal-header"><h2>${id?'Activiteit aanpassen':'Wat ga je doen?'}</h2>${flowClose()}</div>${id?`<button class="btn btn-secondary btn-full cc-copy-activity" onclick="limeCopyActivity('${date}',${flowArg(id)},this)"><svg class="cc-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V3H3v13h5"/></svg><span>Kopieer naar morgen</span></button>`:''}<button id="flow-activity-voice" class="flow-speak" onclick="flowActivityVoice()">${flowVoiceGlyph()} Spreek je activiteit in</button><label class="sr-only" for="flow-act-draft">Je gesproken of getypte activiteit</label><textarea id="flow-act-draft" class="flow-draft" rows="2" placeholder="Morgen om 9 uur 8 km hardlopen, ongeveer 45 minuten"></textarea><button id="flow-activity-parse" class="flow-text-action" onclick="flowParseActivity()">Vul de velden in met deze tekst</button><p id="flow-act-status" class="flow-status" role="status">Of vul hieronder direct je activiteit in.</p><div class="flow-form-grid"><label class="flow-field">Activiteit<select id="flow-act-type" onchange="flowActivityType()">${Object.entries(FLOW_TYPES).map(([v,l])=>`<option value="${v}" ${v===type?'selected':''}>${l}</option>`).join('')}</select></label><label class="flow-field">Status<select id="flow-act-done"><option value="planned">Gepland</option><option value="done" ${a.afgevinkt?'selected':''}>Gedaan</option></select></label><label class="flow-field">Datum<input id="flow-act-date" type="date" value="${date}"></label><label class="flow-field">Tijdstip <span>optioneel</span><input id="flow-act-time" type="time" value="${escapeText(a.tijd||'')}"></label><label class="flow-field" id="flow-act-km-wrap">Afstand <span>km · optioneel</span><input id="flow-act-km" inputmode="decimal" placeholder="Bijv. 8,5" value="${a.km??''}"></label><label class="flow-field">Duur <span>min · optioneel</span><input id="flow-act-min" inputmode="decimal" placeholder="Bijv. 45" value="${a.duur??''}"></label></div><details class="flow-extra" ${a.detail?'open':''}><summary>Eigen titel of notitie</summary><label class="flow-field">Titel<input id="flow-act-name" placeholder="${FLOW_TYPES[type]||'Activiteit'}" value="${escapeText(a.naam===FLOW_TYPES[type]?'':a.naam||'')}"></label><label class="flow-field">Notitie<input id="flow-act-note" value="${escapeText(a.detail||'')}"></label></details><p id="flow-act-error" class="flow-error" role="alert"></p><button id="flow-activity-save" class="btn btn-primary btn-full" onclick="flowSaveActivity()">${id?'Wijzigingen opslaan':'Activiteit opslaan'}</button>${id?`<button class="btn btn-ghost btn-full" onclick="deleteActivity('${date}',${flowArg(id)});closeModal()"><svg class="cc-icon" data-cc-icon="delete" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M9 6V3h6v3M6 6l1 15h10l1-15M10 10v7m4-7v7"/></svg><span>Verwijderen</span></button>`:''}`);flowActivityType();}
 function flowActivityType(){const type=document.getElementById('flow-act-type').value;document.getElementById('flow-act-name').placeholder=type==='other'?'Bijvoorbeeld padel of yoga':FLOW_TYPES[type];if(type==='other')document.getElementById('flow-act-name').closest('details').open=true;document.getElementById('flow-act-km-wrap').hidden=!['run','bike','walk','walkdog','commute','swim','other'].includes(type);}
@@ -8807,14 +8104,41 @@ function flowWeekPlanVoice(){return flowListen('weekplan','weekplan-draft','flow
 
 // Flow: speech-first food advice, recipe capture and a compact personal library.
 let flowChefMode='auto',flowChefBusy=false,flowChefTurns=[],flowChefAdvice=null,flowPhotoKind='recipe',flowRecipePhoto=null,flowRecipeSelected=new Set(),flowRecipeSelecting=false;
-function flowRenderChef(){const container=document.getElementById('food-chef-content');if(!container)return;const draft=document.getElementById('gen-focus-input')?.value||'';container.innerHTML=`<section class="flow-chef-card"><div class="lime-page-label">Chef</div><h1>Wat eet je?</h1><p class="flow-helper">Een recept, iets snels of eten rond je training.</p><div class="cc-chef-bar"><button id="voice-recipe-btn" class="flow-speak" onclick="smartVoiceRecipe()">${flowVoiceGlyph()} Spreek je eetwens in</button><label class="sr-only" for="gen-focus-input">Je vraag of receptwens</label><textarea id="gen-focus-input" rows="1" oninput="ccResizeComposer(this)" placeholder="Wat wil je eten?">${escapeText(draft)}</textarea><button id="chef-foto-btn" onclick="flowPhotoMenu()" aria-label="Foto toevoegen: recept, gerecht of voorraad" title="Foto: recept, gerecht of voorraad"><svg class="cc-icon" data-cc-icon="camera" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6 10 3h4l2 3h4v14H4V6z"/><circle cx="12" cy="13" r="4"/></svg><span>Foto toevoegen</span></button><button id="gen-btn" class="flow-send" onclick="generateRecepten()" aria-label="Verstuur" title="Verstuur"><svg class="cc-icon" data-cc-icon="send" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5m-6 6 6-6 6 6"/></svg></button></div><p id="chef-mic-label" class="flow-status" role="status"></p><input id="chef-foto-input" type="file" accept="image/*" style="display:none" onchange="analyseChefFoto(this)"><div class="cc-chef-modes"><h2 class="vandaag-section-h">Bij sport</h2><div class="cc-chef-row">${[['voor','Voor'],['tijdens','Tijdens'],['na','Na']].map(flowChefModeButton).join('')}</div><h2 class="vandaag-section-h">Maaltijd</h2><div class="cc-chef-row">${[['makkelijk','Makkelijk'],['uitgebreid','Uitgebreid'],['comfort','Comfort']].map(flowChefModeButton).join('')}</div></div></section><div id="flow-photo-resume"></div><div id="flow-chef-answer" aria-live="polite"></div><div class="flow-chef-preferences"><details class="lime-recipe-options"><summary><span class="cc-label"><svg class="cc-icon" data-cc-icon="settings" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h5m4 0h7M4 17h9m4 0h3"/><circle cx="11" cy="7" r="2"/><circle cx="15" cy="17" r="2"/></svg>Receptinstellingen</span> <span id="lime-recipe-summary">${limeRecipeText()}</span></summary><div class="cc-recipe-settings"><div class="cc-setting-row"><span>Personen</span><div class="cc-stepper"><button type="button" id="chef-personen-min" aria-label="Minder personen" onclick="flowSetPersons(genPersonen-1)" ${genPersonen<=1?'disabled':''}>−</button><strong id="chef-personen" aria-live="polite">${genPersonen}</strong><button type="button" id="chef-personen-plus" aria-label="Meer personen" onclick="flowSetPersons(genPersonen+1)" ${genPersonen>=6?'disabled':''}>+</button></div></div><div class="cc-setting-row"><span>Ideeën</span><div class="cc-seg" role="group" aria-label="Aantal ideeën">${[1,2,3].map(n=>`<button type="button" class="gen-count-pill" aria-pressed="${genCount===n}" onclick="setGenCount(${n})">${n}</button>`).join('')}</div></div><div class="cc-setting-row"><span>Eten</span><div class="cc-seg" role="group" aria-label="Eetvoorkeur">${[['vlees','Alles'],['vis','Vis'],['vega','Vega']].map(([v,l])=>`<button type="button" class="gen-diet-pill" data-dieet="${v}" aria-pressed="${genDieet===v}" onclick="flowSetDieet('${v}')">${l}</button>`).join('')}</div></div></div></details></div><button class="flow-text-action" onclick="flowOpenRecipeEditor()"><svg class="cc-icon" data-cc-icon="plus" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Zelf een recept toevoegen</span></button>`;if(draft)ccResizeComposer(document.getElementById('gen-focus-input'));if(flowChefAdvice)flowRenderAdvice();flowPhotoResume();}
-function limeRecipeText(){return `${genPersonen} ${genPersonen===1?'persoon':'personen'} · ${genCount} ${genCount===1?'idee':'ideeën'} · ${{vlees:'Alles',vis:'Vis',vega:'Vega'}[genDieet]||'Alles'}`;}
-function limeRecipeSummary(){const el=document.getElementById('lime-recipe-summary');if(el)el.textContent=limeRecipeText();}
-function flowSetPersons(value){const n=Number(value);if(!Number.isInteger(n)||n<1||n>6)return;genPersonen=n;localStorage.setItem('hc_gen_personen',String(n));const el=document.getElementById('chef-personen');if(el)el.textContent=n;const min=document.getElementById('chef-personen-min'),plus=document.getElementById('chef-personen-plus');if(min)min.disabled=n<=1;if(plus)plus.disabled=n>=6;limeRecipeSummary();}
-function flowSetCount(n){if(![1,2,3].includes(n))return;genCount=n;localStorage.setItem('hc_gen_count',String(n));document.querySelectorAll('.gen-count-pill').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.textContent)===n)));limeRecipeSummary();}
-function flowSetDieet(v){if(!['vlees','vis','vega'].includes(v))return;genDieet=v;localStorage.setItem('hc_dieet',v);document.querySelectorAll('.gen-diet-pill').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.dieet===v)));limeRecipeSummary();}
+function flowRenderChef(){const container=document.getElementById('food-chef-content');if(!container)return;const draft=document.getElementById('gen-focus-input')?.value||'';container.innerHTML=`<section class="flow-chef-card"><div class="lime-page-label">Chef</div><h1>Wat eet je?</h1><div class="cc-chef-bar"><button id="voice-recipe-btn" class="flow-speak" onclick="smartVoiceRecipe()">${flowVoiceGlyph()} Spreek je eetwens in</button><label class="sr-only" for="gen-focus-input">Je vraag of receptwens</label><textarea id="gen-focus-input" rows="1" oninput="ccResizeComposer(this)" placeholder="Wat wil je eten?">${escapeText(draft)}</textarea><button id="chef-foto-btn" onclick="flowPhotoMenu()" aria-label="Foto toevoegen: recept, gerecht of voorraad" title="Foto: recept, gerecht of voorraad"><svg class="cc-icon" data-cc-icon="camera" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6 10 3h4l2 3h4v14H4V6z"/><circle cx="12" cy="13" r="4"/></svg><span>Foto toevoegen</span></button><button id="gen-btn" class="flow-send" onclick="generateRecepten()" aria-label="Verstuur" title="Verstuur"><svg class="cc-icon" data-cc-icon="send" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5m-6 6 6-6 6 6"/></svg></button></div><p id="chef-mic-label" class="flow-status" role="status"></p><input id="chef-foto-input" type="file" accept="image/*" style="display:none" onchange="analyseChefFoto(this)"><div class="cc-chef-modes"><h2 class="vandaag-section-h">Bij sport</h2><div class="cc-chef-row">${[['voor','Voor'],['tijdens','Tijdens'],['na','Na']].map(flowChefModeButton).join('')}</div><h2 class="vandaag-section-h">Maaltijd</h2><div class="cc-chef-row">${[['makkelijk','Makkelijk'],['uitgebreid','Uitgebreid'],['comfort','Comfort']].map(flowChefModeButton).join('')}</div><h2 class="vandaag-section-h">Uit je voorraad</h2><button type="button" class="cc-entry" aria-haspopup="dialog" onclick="showVoorraadModal()"><span id="cc-voorraad-label">${ccVoorraadText()}</span>${CC_CHEVRON}</button></div></section><div id="flow-photo-resume"></div><div id="flow-chef-answer" aria-live="polite"></div>`;if(draft)ccResizeComposer(document.getElementById('gen-focus-input'));if(flowChefAdvice)flowRenderAdvice();flowPhotoResume();}
+function flowSetPersons(value){const n=Number(value);if(!Number.isInteger(n)||n<1||n>6)return;genPersonen=n;localStorage.setItem('hc_gen_personen',String(n));const el=document.getElementById('chef-personen');if(el)el.textContent=n;const min=document.getElementById('chef-personen-min'),plus=document.getElementById('chef-personen-plus');if(min)min.disabled=n<=1;if(plus)plus.disabled=n>=6;ccRenderKitchen();}
+function flowSetCount(n){if(![1,2,3].includes(n))return;genCount=n;localStorage.setItem('hc_gen_count',String(n));document.querySelectorAll('.gen-count-pill').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.textContent)===n)));ccRenderKitchen();}
+function flowSetDieet(v){if(!['vlees','vis','vega'].includes(v))return;genDieet=v;localStorage.setItem('hc_dieet',v);document.querySelectorAll('.gen-diet-pill').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.dieet===v)));ccRenderKitchen();}
 const CC_CHEF_MODES={voor:{vraag:'Eten voor het sporten',sport:true,tijd:'Snack hooguit 5 minuten, lichte maaltijd hooguit 15 minuten.'},tijdens:{vraag:'Snack tijdens het sporten',sport:true,tijd:'Geen bereiding nodig: meeneembaar of vooraf klaar te maken. Gebruik "1 min" als tijd als er niets te bereiden is.'},na:{vraag:'Eten na het sporten',sport:true,tijd:'Snack hooguit 10 minuten, maaltijd hooguit 30 minuten.'},makkelijk:{vraag:'Makkelijke maaltijd',tijd:'Hooguit 30 minuten.'},uitgebreid:{vraag:'Uitgebreid koken',tijd:'45 tot 90 minuten mag.'},comfort:{vraag:'Comfortfood',tijd:'Doorgaans maximaal 60 minuten; ovenwerk mag.'},voorraadsnack:{vraag:'Snack uit voorraad',snack:true,tijd:'Hooguit 10 minuten.'},voorraad:{vraag:'Maaltijd uit voorraad',tijd:'Doorgaans maximaal 35 minuten.'}};
 let flowChefDefaultText='';
+const CC_CHEVRON='<svg class="cc-chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>';
+const CC_PLUS='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>';
+function ccVoorraadText(){const n=voorraadItems().length;return n?`${n} ${n===1?'product':'producten'} in huis`:'Wat heb je in huis?';}
+function ccPlannedCount(){const t=today();return flowWeekDates(0).filter(d=>d>=t).reduce((n,d)=>n+Object.values(flowDay(d).maaltijden||{}).flat().filter(m=>m&&!m.gegeten).length,0);}
+function ccRow(label,meta,action){return `<button type="button" class="cc-row" aria-haspopup="dialog" onclick="${action}"><span class="cc-row-label">${label}</span><span class="cc-row-meta">${escapeText(meta)}</span>${CC_CHEVRON}</button>`;}
+function ccRenderKitchen(){
+ const el=document.getElementById('cc-kitchen');if(!el)return;
+ const n=myRecipes().filter(r=>!r.flowDeleted).length,p=ccPlannedCount();
+ el.innerHTML=`<h2 class="vandaag-section-h">Jouw keuken</h2><div class="cc-list">${ccRow('Mijn recepten',n?String(n):'Nog leeg','ccOpenRecipes()')}${ccRow('Weekmenu',p?p+' gepland':'Niets gepland','ccOpenWeekMenu(0)')}${ccRow('Boodschappen','','showShoppingList()')}${ccRow('Receptinstellingen',`${genPersonen}p · ${{vlees:'Alles',vis:'Vis',vega:'Vega'}[genDieet]||'Alles'}`,'ccOpenRecipeSettings()')}</div>`;
+}
+function ccOpenRecipeSettings(){showModal(`<div class="modal-header"><h2>Receptinstellingen</h2>${flowClose()}</div><div class="cc-recipe-settings"><div class="cc-setting-row"><span>Personen</span><div class="cc-stepper"><button type="button" id="chef-personen-min" aria-label="Minder personen" onclick="flowSetPersons(genPersonen-1)" ${genPersonen<=1?'disabled':''}>−</button><strong id="chef-personen" aria-live="polite">${genPersonen}</strong><button type="button" id="chef-personen-plus" aria-label="Meer personen" onclick="flowSetPersons(genPersonen+1)" ${genPersonen>=6?'disabled':''}>+</button></div></div><div class="cc-setting-row"><span>Ideeën</span><div class="cc-seg" role="group" aria-label="Aantal ideeën">${[1,2,3].map(n=>`<button type="button" class="gen-count-pill" aria-pressed="${genCount===n}" onclick="setGenCount(${n})">${n}</button>`).join('')}</div></div><div class="cc-setting-row"><span>Eten</span><div class="cc-seg" role="group" aria-label="Eetvoorkeur">${[['vlees','Alles'],['vis','Vis'],['vega','Vega']].map(([v,l])=>`<button type="button" class="gen-diet-pill" data-dieet="${v}" aria-pressed="${genDieet===v}" onclick="flowSetDieet('${v}')">${l}</button>`).join('')}</div></div></div><p class="cc-sheet-note">Chef onthoudt dit voor je volgende recepten.</p>`);}
+function ccOpenRecipes(){flowRecipeSelecting=false;flowRecipeSelected.clear();showModal(`<div class="modal-header"><h2>Mijn recepten</h2>${flowClose()}</div><div id="food-rec-content"></div>`);flowRecipeList();}
+const CC_DAY=['Zo','Ma','Di','Wo','Do','Vr','Za'];
+function ccDayLabel(date){return `${CC_DAY[new Date(date+'T12:00:00').getDay()]} ${formatShortDate(date)}`;}
+function ccWeekTitle(o){return o===0?'Deze week':o===1?'Volgende week':o===-1?'Vorige week':o>1?`Over ${o} weken`:`${-o} weken terug`;}
+// One week menu for Chef and Coach: what is planned per day, add per day, eaten in one tap.
+function ccOpenWeekMenu(offset=0){
+ offset=Math.max(-2,Math.min(4,offset));
+ const dates=flowWeekDates(offset),t=today(),back=`()=>ccOpenWeekMenu(${offset})`;let filled=false;
+ const days=dates.map(date=>{
+  const meals=['ontbijt','lunch','diner','snack'].flatMap(s=>(flowDay(date).maaltijden?.[s]||[]).map(m=>({s,m})));if(meals.length)filled=true;
+  const sum=key=>Math.round(meals.reduce((a,{m})=>a+(parseGrams(m[key])||0),0)),v=sum('vezels'),e=sum('eiwitten');
+  const meta=[v?v+' g vezels':'',e?e+' g eiwit':''].filter(Boolean).join(' · '),future=date>t;
+  const label=date===t?`Vandaag <span>· ${ccDayLabel(date).toLowerCase()}</span>`:ccDayLabel(date);
+  return `<section class="cc-day"><div class="cc-day-head"><div><h3>${label}</h3>${meta?`<small>${meta}</small>`:''}</div><button type="button" class="cc-add" aria-label="Toevoegen op ${ccDayLabel(date)}" onclick="ccOpenFrom(${back},()=>showTypedMealSlot('${date}'))">${CC_PLUS}<span>Toevoegen</span></button></div>${meals.map(({s,m})=>`<div class="cc-meal-line">${future?'<span class="cc-status-btn" aria-hidden="true"><span class="cc-status"></span></span>':`<button type="button" class="cc-status-btn" aria-pressed="${!!m.gegeten}" aria-label="${escapeText(m.naam)} gegeten" onclick="ccWeekToggle('${date}','${s}',${flowArg(m.id)},${offset})"><span class="cc-status${m.gegeten?' is-done':''}"></span></button>`}<button type="button" class="cc-meal-open" aria-haspopup="dialog" onclick="ccOpenFrom(${back},()=>flowMealDetail('${date}','${s}',${flowArg(m.id)}))"><span><strong>${escapeText(m.naam)}</strong><small>${s[0].toUpperCase()+s.slice(1)}</small></span>${CC_CHEVRON}</button></div>`).join('')}</section>`;
+ }).join('');
+ showModal(`<div class="modal-header"><h2>Weekmenu</h2>${flowClose()}</div><div class="cc-week-nav"><button type="button" aria-label="Vorige week" ${offset<=-2?'disabled':''} onclick="ccOpenWeekMenu(${offset-1})"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg></button><div aria-live="polite"><strong>${ccWeekTitle(offset)}</strong><span>${formatShortDate(dates[0])} – ${formatShortDate(dates[6])}</span></div><button type="button" aria-label="Volgende week" ${offset>=4?'disabled':''} onclick="ccOpenWeekMenu(${offset+1})">${CC_CHEVRON}</button></div>${filled?'':'<p class="cc-week-empty">Nog niets gepland deze week.</p>'}${days}${filled?'':`<button type="button" class="btn btn-primary btn-full cc-week-ask" onclick="closeModal();flowGoChef('auto')">Vraag Chef</button>`}`);
+}
+function ccWeekToggle(date,slot,id,offset){const y=document.querySelector('#modal-container .modal')?.scrollTop||0;setMealConsumed(date,slot,id);ccOpenWeekMenu(offset);const m=document.querySelector('#modal-container .modal');if(m)m.scrollTop=y;}
 function flowChefModeButton([v,l]){return `<button type="button" data-mode="${v}" aria-pressed="${flowChefMode===v}" onclick="flowSetChefMode('${v}')">${l}</button>`;}
 function flowChefPressed(){document.querySelectorAll('.cc-chef-row button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mode===flowChefMode)));}
 function flowSetChefMode(mode,start){
@@ -8841,13 +8165,21 @@ function flowPhotoReview(){const r=flowRecipePhoto;if(!r)return;showModal(`<div 
 function flowConfirmPhoto(){const r=flowRecipePhoto;if(!r)return;try{const name=document.getElementById('flow-photo-name').value.trim(),persons=Number(document.getElementById('flow-photo-persons').value),ingredients=document.getElementById('flow-photo-ing').value.split('\n').map(x=>x.trim()).filter(Boolean),steps=document.getElementById('flow-photo-steps').value.split('\n').map(x=>x.trim()).filter(Boolean);if(!name||!Number.isInteger(persons)||persons<1||persons>30||!ingredients.length||!steps.length)throw Error('Vul titel, porties, ingrediënten en bereiding in.');if([...ingredients,...steps].some(x=>/\[onleesbaar\]/i.test(x)))throw Error('Vervang eerst de gemarkeerde onleesbare tekst.');if(r.onzeker.length&&!document.getElementById('flow-photo-confirm').checked)throw Error('Bevestig dat je de onduidelijke onderdelen hebt gecontroleerd.');const recipe={naam:name,personen:persons,_basePersonen:persons,tijd:document.getElementById('flow-photo-time').value.trim(),ingredienten:ingredients,bereiding:steps,vezels:'',eiwitten:'',koolhydraten:'',voedingsbasis:'per_portie',bron:r.source==='dish'?'Reconstructie van gerechtfoto':'Overgenomen van receptfoto',_tmpId:'photo'+Date.now()};window._generatedRecepten=[recipe];flowRecipePhoto=null;flowPhotoResume();flowPreviewPhoto(recipe);}catch(e){document.getElementById('flow-photo-error').textContent=e.message;}}
 function flowPreviewPhoto(r){showModal(`<div class="modal-header"><h2>Je recept staat klaar</h2>${flowClose()}</div><p class="muted">${escapeText(r.bron)} · voedingswaarden nog onbekend</p>${recipeCardHTML(r)}<button class="btn btn-secondary btn-full" onclick="flowCookGenerated(${flowArg(r._tmpId)})">Koken met dit recept</button>`);}
 function flowCookGenerated(id){const r=(window._generatedRecepten||[]).find(x=>x._tmpId===id);if(!r)return;const saved=retainGeneratedRecipe(r);saveAndSync();closeModal();enterKookmodus(saved.id);}
-function flowRecipeList(){const el=document.getElementById('food-rec-content');if(!el)return;ensureRecepten();const all=myRecipes(),recipes=all.filter(r=>!r.flowDeleted),deleted=(data.recepten||[]).filter(r=>r.flowDeleted),starters=(data.recepten||[]).filter(r=>!r.flowDeleted&&isLegacyStarter(r));const card=r=>`<div class="flow-recipe-row">${flowRecipeSelecting?`<input type="checkbox" aria-label="Selecteer ${escapeText(r.naam)}" ${flowRecipeSelected.has(r.id)?'checked':''} onchange="flowSelectRecipe(${flowArg(r.id)},this.checked)">`:''}<button onclick="${flowRecipeSelecting?`flowSelectRecipe(${flowArg(r.id)},!flowRecipeSelected.has(${flowArg(r.id)}));flowRecipeList()`:`flowRecipeDetail(${flowArg(r.id)})`}"><strong>${escapeText(r.naam)}</strong><span>${escapeText(r.tijd||'Tijd onbekend')} · ${r.personen||2} ${(r.personen||2)===1?'portie':'porties'}</span><span class="meal-entry-nutrients">${mealNutrients(r)}</span></button></div>`;el.innerHTML=`<div class="flow-library-tools"><span>${recipes.length} ${recipes.length===1?'recept':'recepten'}</span>${recipes.length||starters.length?`<button onclick="flowToggleRecipeSelection()">${flowRecipeSelecting?'Klaar':'Selecteren'}</button>`:''}</div>${flowRecipeSelecting?`<div class="flow-selection-bar"><span id="flow-selection-count">${flowRecipeSelected.size} geselecteerd</span><button onclick="flowSelectAllRecipes()">Alles selecteren</button><button id="flow-remove-selected" ${flowRecipeSelected.size?'':'disabled'} onclick="flowDeleteSelected()"><svg class="cc-icon" data-cc-icon="delete" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M9 6V3h6v3M6 6l1 15h10l1-15M10 10v7m4-7v7"/></svg><span>Verwijderen</span></button></div>`:''}${recipes.length?recipes.map(card).join(''):'<p class="flow-empty-note">Bewaar wat je lekker lijkt. Je eigen verzameling groeit vanzelf.</p>'}${starters.length?`<details class="flow-extra"><summary>Eerdere voorbeelden (${starters.length})</summary>${starters.map(card).join('')}</details>`:''}${deleted.length?`<details class="flow-extra"><summary>Verwijderd (${deleted.length})</summary>${deleted.map(r=>`<div class="flow-restore-row"><span>${escapeText(r.naam)}</span><button onclick="flowRestoreRecipe(${flowArg(r.id)})">Herstellen</button></div>`).join('')}</details>`:''}`;}
-function flowSelectRecipe(id,checked){if(checked)flowRecipeSelected.add(id);else flowRecipeSelected.delete(id);const n=document.getElementById('flow-selection-count'),button=document.getElementById('flow-remove-selected');if(n)n.textContent=flowRecipeSelected.size+' geselecteerd';if(button)button.disabled=!flowRecipeSelected.size;}
+function ccRecipeMeta(r){const p=r.personen||2,e=parseGrams(r.eiwitten),v=parseGrams(r.vezels),parts=[/\d/.test(r.tijd||'')?r.tijd:'',e>0?Math.round(e)+' g eiwit':'',v>0?Math.round(v)+' g vezels':''].filter(Boolean);return parts.length?parts.join(' · '):`${p} ${p===1?'portie':'porties'}`;}
+function flowRecipeList(){const el=document.getElementById('food-rec-content');if(!el)return;ensureRecepten();const all=myRecipes(),recipes=all.filter(r=>!r.flowDeleted),deleted=(data.recepten||[]).filter(r=>r.flowDeleted),starters=(data.recepten||[]).filter(r=>!r.flowDeleted&&isLegacyStarter(r)),n=flowRecipeSelected.size;
+ const text=r=>`<span class="cc-row-text"><strong>${escapeText(r.naam)}</strong><small>${escapeText(ccRecipeMeta(r))}</small></span>`;
+ const row=r=>{const on=flowRecipeSelected.has(r.id);return flowRecipeSelecting?`<button type="button" class="cc-row cc-recipe-row" aria-pressed="${on}" onclick="flowSelectRecipe(${flowArg(r.id)},${!on});flowRecipeList()"><span class="cc-status${on?' is-done':''}" aria-hidden="true"></span>${text(r)}</button>`:`<button type="button" class="cc-row cc-recipe-row" aria-haspopup="dialog" onclick="ccOpenFrom(ccOpenRecipes,()=>flowRecipeDetail(${flowArg(r.id)}))">${text(r)}${CC_CHEVRON}</button>`;};
+ el.innerHTML=(flowRecipeSelecting?`<div class="cc-sheet-actions"><span>${n} gekozen</span><button type="button" onclick="flowToggleRecipeSelection()">Klaar</button></div>`:`<div class="cc-sheet-actions"><button type="button" onclick="ccOpenFrom(ccOpenRecipes,()=>flowOpenRecipeEditor())">${CC_PLUS}<span>Eigen recept</span></button>${recipes.length||starters.length?'<button type="button" onclick="flowToggleRecipeSelection()">Selecteer</button>':''}</div>`)
+  +(recipes.length?`<div class="cc-rows">${recipes.map(row).join('')}</div>`:'<p class="cc-empty">Nog geen recepten. Bewaar een idee van Chef of voeg je eigen recept toe.</p>')
+  +(starters.length?`<details class="cc-more"><summary>Eerdere voorbeelden (${starters.length})${CC_CHEVRON}</summary><div class="cc-rows">${starters.map(row).join('')}</div></details>`:'')
+  +(deleted.length?`<details class="cc-more"><summary>Verwijderd (${deleted.length})${CC_CHEVRON}</summary>${deleted.map(r=>`<div class="cc-restore"><span>${escapeText(r.naam)}</span><button type="button" onclick="flowRestoreRecipe(${flowArg(r.id)})">Herstellen</button></div>`).join('')}</details>`:'')
+  +(flowRecipeSelecting?`<div class="cc-sheet-pair"><button type="button" class="btn btn-secondary" onclick="flowSelectAllRecipes()">Alles kiezen</button><button type="button" class="btn btn-secondary" ${n?'':'disabled'} onclick="flowDeleteSelected()">Verwijder (${n})</button></div>`:'');}
+function flowSelectRecipe(id,checked){if(checked)flowRecipeSelected.add(id);else flowRecipeSelected.delete(id);}
 function flowToggleRecipeSelection(){flowRecipeSelecting=!flowRecipeSelecting;flowRecipeSelected.clear();flowRecipeList();}
 function flowSelectAllRecipes(){(data.recepten||[]).filter(r=>!r.flowDeleted&&!r._chefTransient).forEach(r=>flowRecipeSelected.add(r.id));flowRecipeList();}
 function flowDeleteSelected(){if(!flowRecipeSelected.size)return;const ids=[...flowRecipeSelected];ids.forEach(id=>{const r=(data.recepten||[]).find(x=>x.id===id);if(r)r.flowDeleted=true;});flowRecipeSelected.clear();flowRecipeSelecting=false;saveAndSync();flowRecipeList();showBanner('green',`${ids.length} recepten verplaatst naar Verwijderd. Je kunt ze daar herstellen.`);}
 function flowRestoreRecipe(id){const r=(data.recepten||[]).find(x=>x.id===id);if(!r)return;r.flowDeleted=false;saveAndSync();flowRecipeList();}
-function flowDeleteOne(id){flowRecipeSelected=new Set([id]);flowDeleteSelected();closeModal();}
+function flowDeleteOne(id){flowRecipeSelected=new Set([id]);flowDeleteSelected();ccGoBack();}
 function flowRecipeDetail(id){const r=(data.recepten||[]).find(x=>x.id===id);if(!r)return;ensureRecepten();const p=r.personen||2;showModal(`<div class="modal-header"><h2>${escapeText(r.naam)}</h2>${flowClose()}</div><p class="flow-recipe-meta">${escapeText(r.tijd||'Tijd onbekend')} · ${p} ${p===1?'portie':'porties'}</p><div class="meal-entry-nutrients">${mealNutrients(r)}</div><button id="cc-recipe-nutrition" class="btn btn-secondary btn-full" onclick="ccRecipeNutrition(${flowArg(id)})">Schat eiwit &amp; vezels per portie</button><p id="cc-recipe-nutrition-status" role="status"></p><div class="flow-recipe-actions"><button class="btn btn-primary" onclick="closeModal();enterKookmodus(${flowArg(id)})">Koken</button><button class="btn btn-secondary" onclick="flowPlanSavedRecipe(${flowArg(id)})">Inplannen</button></div><label class="flow-field flow-portions">Porties<select onchange="changeRecPersonen(${flowArg(id)},Number(this.value));flowRecipeDetail(${flowArg(id)})">${Array.from({length:Math.max(6,p)},(_,i)=>i+1).map(n=>`<option ${n===p?'selected':''}>${n}</option>`).join('')}</select></label><div class="flow-recipe-body"><h3>Ingrediënten</h3><ul>${r.ingredienten.map(x=>`<li>${escapeText(scaleIngredient(x,r._basePersonen||2,p))}</li>`).join('')}</ul><h3>Bereiding</h3><ol>${r.bereiding.map(x=>`<li>${escapeText(x)}</li>`).join('')}</ol></div><div class="flow-action-row"><button class="btn btn-ghost" onclick="flowOpenRecipeEditor(${flowArg(id)})">Bewerken</button>${!r.bewaard?`<button class="btn btn-ghost" onclick="saveMealRecipe(${flowArg(id)})">Bewaren</button>`:''}<button class="btn btn-ghost" onclick="flowDeleteOne(${flowArg(id)})"><svg class="cc-icon" data-cc-icon="delete" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M9 6V3h6v3M6 6l1 15h10l1-15M10 10v7m4-7v7"/></svg><span>Verwijderen</span></button></div>`);}
 function flowPlanSavedRecipe(id){const r=(data.recepten||[]).find(x=>x.id===id);if(!r)return;const temp={...r,ingredienten:r.ingredienten.map(x=>scaleIngredient(x,r._basePersonen||2,r.personen||2)),_basePersonen:r.personen||2,_fromLibrary:true,_tmpId:'saved-'+id,_savedRecipeId:id,_type:r.type||'diner'};window._generatedRecepten=[...(window._generatedRecepten||[]).filter(x=>x._tmpId!==temp._tmpId),temp];openGeneratedMeal(temp._tmpId,false);}
 function flowOpenRecipeEditor(id=null){const r=id?(data.recepten||[]).find(x=>x.id===id):null;if(id&&!r)return;showModal(`<div class="modal-header"><h2>${r?'Recept bewerken':'Eigen recept'}</h2>${flowClose()}</div><label class="flow-field">Naam<input id="flow-rec-name" value="${escapeText(r?.naam||'')}"></label><div class="flow-form-grid"><label class="flow-field">Porties<input id="flow-rec-persons" type="number" min="1" max="30" value="${r?._basePersonen||r?.personen||2}"></label><label class="flow-field">Tijd<input id="flow-rec-time" value="${escapeText(r?.tijd||'')}" placeholder="25 min"></label></div><label class="flow-field">Ingrediënten · één per regel<textarea id="flow-rec-ing" rows="5">${escapeText((r?.ingredienten||[]).join('\n'))}</textarea></label><label class="flow-field">Bereiding · één stap per regel<textarea id="flow-rec-steps" rows="5">${escapeText((r?.bereiding||[]).join('\n'))}</textarea></label><div class="flow-form-grid"><label class="flow-field">Eiwit per portie <span>optioneel</span><input id="flow-rec-protein" value="${escapeText(r?.eiwitten||'')}" placeholder="Bijv. ~20g"></label><label class="flow-field">Vezels per portie <span>optioneel</span><input id="flow-rec-fiber" value="${escapeText(r?.vezels||'')}" placeholder="Bijv. ~6g"></label></div><p class="flow-error" id="flow-rec-error" role="alert"></p><button class="btn btn-primary btn-full" onclick="flowSaveRecipeEditor(${flowArg(id)})">Opslaan</button>`);}
@@ -8910,14 +8242,13 @@ function ritmeRenderTiles(){
  if(next)put('ritme-next',`<div class="ritme-tile-head"><h2>Je volgende activiteit</h2><span class="ritme-kicker">${next?'Gepland':'Nog niets gepland'}</span></div>${next?`<button class="cc-next-plan" onclick="editActivity('${next.date}',${flowArg(next.id)})" aria-label="Bekijk plan: ${escapeText(next.naam)}">${limeNextDateBadge(next.date)}<span class="cc-next-copy"><strong class="ritme-next-name">${escapeText(next.naam)}</strong><span class="cc-next-meta">${[formatShortDate(next.date),next.tijd,flowActivityMeta({...next,tijd:''})].filter(Boolean).map(escapeText).join(' · ')}</span></span><svg class="cc-icon" data-cc-icon="next" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></button>`:'<strong class="ritme-next-name">Wat wil je vandaag doen?</strong><p>Een rondje lopen, fietsen of sporten.</p><button class="ritme-link" onclick="addActivity(today())">＋ Plan een activiteit</button>'}`);
  else put('ritme-next','');
  const menu=flowWeekDates().flatMap(date=>Object.entries(flowDay(date).maaltijden||{}).flatMap(([slot,items])=>(items||[]).filter(m=>!m.gegeten&&date>=today()).map(m=>({date,slot,m}))));
- put('ritme-menu',`<div class="ritme-tile-head"><h2>Je weekmenu</h2><button onclick="ritmeOpenMenu()" aria-label="Bekijk het volledige weekmenu" title="Bekijk alles"><svg class="cc-icon" data-cc-icon="next" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></button></div>${menu.length?menu.slice(0,3).map(({date,slot,m})=>`<button class="ritme-menu-row" onclick="flowMealDetail('${date}','${slot}',${flowArg(m.id)})"><span>${formatShortDate(date)} · ${slot}</span><strong>${escapeText(m.naam)}</strong></button>`).join(''):'<p>Nog geen maaltijden gepland voor de rest van deze week.</p><button class="ritme-link" onclick="flowGoChef(\'auto\')">Laat Chef meedenken</button>'}`);
+ put('ritme-menu',`<div class="ritme-tile-head"><h2>Je weekmenu</h2><button onclick="ccOpenWeekMenu(0)" aria-label="Bekijk het volledige weekmenu" title="Bekijk alles"><svg class="cc-icon" data-cc-icon="next" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></button></div>${menu.length?menu.slice(0,3).map(({date,slot,m})=>`<button class="ritme-menu-row" onclick="flowMealDetail('${date}','${slot}',${flowArg(m.id)})"><span>${formatShortDate(date)} · ${slot}</span><strong>${escapeText(m.naam)}</strong></button>`).join(''):'<p>Nog geen maaltijden gepland voor de rest van deze week.</p><button class="ritme-link" onclick="flowGoChef(\'auto\')">Laat Chef meedenken</button>'}`);
  const matches=ritmeHighlightActivities(ritmeActivities(ritmeRange().dates)).filter(a=>a.afgevinkt),groups=ritmeGroups(matches),count=matches.length,km=groups.reduce((s,g)=>s+g.km,0),known=groups.reduce((s,g)=>s+g.knownKm,0),label=settings.ritmeActivityText||ritmeTypeLabel(settings.ritmeActivityType||'other');
  put('ritme-highlight',`<div class="ritme-tile-head"><h2>${settings.ritmeActivityType||settings.ritmeActivityText?escapeText(label):'Volg een activiteit'}</h2><button onclick="limeChooseActivity()">Kies activiteit</button></div>${settings.ritmeActivityType||settings.ritmeActivityText?`<div class="ritme-food-number">${known?ritmeN(km):count}<small> ${known?'km':'keer'}</small></div><p>${count} afgeronde ${count===1?'activiteit':'activiteiten'} deze week${known<count?' · afstand niet overal ingevuld':''}.</p>`:'<p>Kies bijvoorbeeld fietsen of wandelen. Hier zie je hoe vaak je dat deze week hebt gedaan en hoeveel kilometer je hebt gelogd.</p>'}`);
  try{ccRenderWater();}catch(_){}
  ritmeApplyTiles();
 }
 function ritmeFoodIdea(key){flowGoChef('auto');genFocus=key;flowRenderChef();document.getElementById('gen-focus-input').value=`Ik zoek een makkelijk ${key==='vezels'?'vezelrijk':'eiwitrijk'} idee voor mijn volgende maaltijd.`;ccResizeComposer(document.getElementById('gen-focus-input'));document.getElementById('gen-focus-input').focus();}
-function ritmeOpenMenu(offset=0){showModal(`<div class="modal-header"><h2>Je weekmenu</h2>${flowClose()}</div><div class="flow-week-nav"><button onclick="ritmeOpenMenu(${offset-1})">Vorige week</button><strong>${formatShortDate(flowWeekDates(offset)[0])} – ${formatShortDate(flowWeekDates(offset)[6])}</strong><button onclick="ritmeOpenMenu(${offset+1})">Volgende week</button></div><div class="ritme-menu-list">${flowWeekDates(offset).map(date=>{const meals=Object.entries(flowDay(date).maaltijden||{}).flatMap(([slot,items])=>(items||[]).map(m=>({slot,m})));return `<section><h3>${formatShortDate(date)}</h3>${meals.length?meals.map(({slot,m})=>`<button class="ritme-menu-row" onclick="flowMealDetail('${date}','${slot}',${flowArg(m.id)})"><span>${slot} · ${m.gegeten?'gegeten':'gepland'}</span><strong>${escapeText(m.naam)}</strong></button>`).join(''):'<p class="muted">Nog open</p>'}</section>`;}).join('')}</div><button class="btn btn-primary btn-full" onclick="closeModal();flowGoChef('auto')">Nieuwe maaltijdideeën</button>`);}
 function ritmeCustomize(){ritmeDraftTiles=ritmeSelected();ritmeCustomizeView();}
 function ritmeCustomizeView(){showModal(`<div class="modal-header"><h2>Jouw Coach-tegels</h2>${flowClose()}</div><p class="muted">Kies de tegels die je wilt zien. Je kunt ze allemaal aanzetten en hieronder de volgorde aanpassen.</p><div class="ritme-tile-options">${Object.entries(RITME_TILES).map(([key,[title,desc]])=>`<button type="button" class="ritme-tile-choice" aria-pressed="${ritmeDraftTiles.includes(key)}" onclick="ritmeToggleTile('${key}',this)"><span><strong>${title}</strong><small>${desc}</small></span><b>${ritmeDraftTiles.includes(key)?'Gekozen':'Kiezen'}</b></button>`).join('')}</div><div id="ritme-tile-order">${ritmeOrderHTML()}</div><details class="flow-extra"><summary>Een activiteit uitlichten</summary><p class="muted">Kies een soort beweging en/of een woord dat je in de activiteitnaam of notitie gebruikt.</p><label class="flow-field">Soort activiteit<select id="ritme-highlight-type"><option value="">Alle soorten</option>${Object.entries(FLOW_TYPES).filter(([k])=>k!=='rest').map(([k,l])=>`<option value="${k}" ${settings.ritmeActivityType===k?'selected':''}>${l}</option>`).join('')}</select></label><label class="flow-field">Naam of woord <span>optioneel</span><input id="ritme-highlight-text" maxlength="60" placeholder="Bijvoorbeeld Otis of woon-werk" value="${escapeText(settings.ritmeActivityText||'')}"></label></details><p id="ritme-tile-error" class="flow-error" role="alert"></p><div class="flow-action-stack"><button class="btn btn-primary" onclick="ritmeSaveTiles()">Bewaar mijn indeling</button><button class="btn btn-ghost" onclick="ritmeDraftTiles=[...RITME_DEFAULT];ritmeCustomizeView()">Standaardindeling</button></div>`);}
 function ritmeOrderHTML(){return `<h3>Volgorde</h3>${ritmeDraftTiles.map((key,i)=>`<div class="ritme-order-row"><span>${i+1}. ${RITME_TILES[key][0]}</span><button ${i===0?'disabled':''} onclick="ritmeMoveTile('${key}',-1)" aria-label="${RITME_TILES[key][0]} omhoog">Omhoog</button><button ${i===ritmeDraftTiles.length-1?'disabled':''} onclick="ritmeMoveTile('${key}',1)" aria-label="${RITME_TILES[key][0]} omlaag">Omlaag</button></div>`).join('')}`;}
@@ -8987,18 +8318,6 @@ function ritmeRepeatDates(mode,value){if(!['week','werkdagen'].includes(mode))re
 function ritmeWeekDay(day,value){const i=['maandag','dinsdag','woensdag','donderdag','vrijdag','zaterdag','zondag'].indexOf(String(day).toLowerCase());if(i<0)throw Error('Welke dagen wil je herhalen?');return ritmeRepeatDates('week',value)[i];}
 function ritmeCorrectionDate(text){try{return _resolveDate(text.replace(/^(?:nee[, ]*|dat was |toch )/i,'').replace(/[.!]$/,''));}catch(_){return null;}}
 
-function pickRecipeForSlot(date,slot){
- window._ritmeRecipePick={date,slot};
- showModal(`<div class="modal-header"><h2>Kies een recept</h2>${flowClose()}</div><p class="muted">${escapeText(slot)} · ${formatShortDate(date)}. Je kunt elk recept kiezen.</p><label class="flow-field">Zoek in je recepten<input type="search" placeholder="Naam of ingrediënt" oninput="ritmeRecipeResults(this.value)"></label><div id="ritme-recipe-results"></div>`);
- ritmeRecipeResults('');
-}
-function ritmeRecipeResults(query){
- const {date,slot}=window._ritmeRecipePick,q=query.trim().toLowerCase();ensureRecepten();
- const all=(data.recepten||[]).filter(r=>!r.flowDeleted&&!r._chefTransient&&[r.naam,...(r.ingredienten||[])].join(' ').toLowerCase().includes(q));
- const card=r=>`<button class="ritme-recipe-choice" onclick="applyRecipeToSlot(${flowArg(r.id)},${flowArg(date)},${flowArg(slot)})"><strong>${escapeText(r.naam)}</strong><span>${escapeText(r.tijd||'Tijd onbekend')} · ${r.personen||2} porties</span></button>`;
- const own=all.filter(r=>!isLegacyStarter(r)),examples=all.filter(isLegacyStarter);
- document.getElementById('ritme-recipe-results').innerHTML=own.map(card).join('')+(own.length?'':'<p class="muted">Geen eigen recepten gevonden. Bewaar een recept bij Chef, of kies hieronder een voorbeeld.</p>')+(examples.length?`<details class="flow-extra" ${own.length?'':'open'}><summary>Voorbeeldrecepten (${examples.length})</summary>${examples.map(card).join('')}</details>`:'');
-}
 
 function _renderShopPicker(){
  const state=window._shopState,days=getWeekDates(currentWeekMenuKey());
