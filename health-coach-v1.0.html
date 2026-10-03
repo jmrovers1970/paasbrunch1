@@ -950,27 +950,6 @@ select.modal-input { appearance: auto; }
 }
 .partner-del-btn:active { background: var(--danger-soft); color: var(--danger); }
 
-/* ─── FLOATING COACH BUTTON ─── */
-.fab-coach {
-  position: fixed;
-  right: 18px;
-  bottom: calc(var(--tab-h) + env(safe-area-inset-bottom, 0px) + 14px);
-  z-index: 99;
-  width: 58px; height: 58px; border-radius: 50%;
-  background: var(--accent-move);
-  border: none; cursor: pointer;
-  display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 2px;
-  color: #fff;
-  box-shadow: 0 4px 16px rgba(234,90,12,.45), 0 1px 4px rgba(0,0,0,.15);
-  transition: transform .15s, opacity .15s, background .15s;
-}
-.fab-coach:active { transform: scale(.92); opacity: .9; }
-.fab-coach.listening {
-  background: #c2410c;
-  animation: micPulse 1s ease infinite;
-  box-shadow: 0 0 0 8px rgba(234,90,12,.2), 0 4px 16px rgba(234,90,12,.45);
-}
-
 /* ─── WEEKPLAN CARD ─── */
 
 /* ─── COACH FRONTPAGE ─── */
@@ -2211,7 +2190,7 @@ body input[type="checkbox"]:disabled{opacity:.4;cursor:default}
 'use strict';
 
 // ─── VERSION CHECK (forceert Safari herlading bij nieuwe versie) ──────────────
-const APP_VERSION = 'lime-20261003-23';
+const APP_VERSION = 'lime-20261003-24';
 // Eén plek voor de modellen: Sonnet voor gesprekken en recepten, Haiku voor snelle achtergrondtaken.
 const CC_MODEL_MAIN = 'claude-sonnet-4-6';
 const CC_MODEL_FAST = 'claude-haiku-4-5-20251001';
@@ -2237,42 +2216,7 @@ const CHECKIN_KEY = 'hc_checkin_today';
 
 
 
-const WEEK_TEMPLATE = [
-  { dag: 'ma', type: 'run',  naam: 'Easy run',         detail: '5–6 km · zone 2 · rustig' },
-  { dag: 'di', type: 'gym',  naam: 'Upper body',        detail: 'Dumbbell press · rows · curls · 3×12' },
-  { dag: 'wo', type: 'run',  naam: 'Intervaltraining',  detail: '5×1 km @ 5K-tempo · 4 min rust' },
-  { dag: 'do', type: 'gym',  naam: 'Lower body',        detail: 'Goblet squat · lunges · hip thrust · 3×12' },
-  { dag: 'vr', type: 'bike', naam: 'Fietstocht',        detail: '45–60 min · rustig · herstel' },
-  { dag: 'za', type: 'run',  naam: 'Lange duurloop',    detail: '10–12 km · zone 2' },
-  { dag: 'zo', type: 'rest', naam: 'Rustdag',           detail: '' }
-];
 
-const _TEMPLATE_NAMES = new Set(WEEK_TEMPLATE.map(t => t.naam));
-
-function migrateRemoveTemplateActivities() {
-  if (!data.weken) return;
-  let changed = false;
-  Object.values(data.weken).forEach(week => {
-    Object.values(week).forEach(day => {
-      if (!day.activiteiten) return;
-      const filtered = day.activiteiten.filter(a => !_TEMPLATE_NAMES.has(a.naam) || a.afgevinkt);
-      if (filtered.length !== day.activiteiten.length) {
-        day.activiteiten = filtered;
-        changed = true;
-      }
-    });
-  });
-  if (changed) saveLocal();
-}
-
-const DEFAULT_MEALS = {
-  ontbijt: { naam: 'Kwark/yoghurt met muesli & fruit', vezels: '~6g', eiwitten: '~20g' },
-  lunch:   { naam: 'Volkoren boterhammen met hummus & groente', vezels: '~8g', eiwitten: '~12g' },
-  diner:   { naam: 'Wisselend', vezels: '~10g', eiwitten: '~25g' },
-  snack:   { naam: 'Appel of peer + handjevol noten', vezels: '~4g', eiwitten: '~5g' }
-};
-
-const DEFAULT_DUUR = { run: 45, gym: 60, bike: 60, commute: 30, walk: 45, walkdog: 30, other: 30, rest: 0 };
 
 const OEFENINGEN = {
   'dumbbell press': {
@@ -2423,15 +2367,6 @@ const OEFENINGEN = {
     schema: '3 sets × 15 herhalingen · 45–60 sec rust'
   }
 };
-
-// These names indicate a meal has not been explicitly planned
-const DEFAULT_MEAL_NAMES = {
-  lunch: 'Volkoren boterhammen met hummus & groente',
-  diner: 'Wisselend',
-  snack: 'Appel of peer + handjevol noten'
-};
-
-
 
 const RECEPTEN = [
   {
@@ -2808,7 +2743,6 @@ function saveAndSync() {
 
 // ─── GIST SYNC ───────────────────────────────────────────────────────────────
 
-let gistRetryTimer = null;
 
 
 
@@ -3103,10 +3037,6 @@ function switchTab(name, btn) {
   document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
   document.getElementById('tab-' + name).classList.add('active');
   btn.classList.add('active');
-  const fab = document.getElementById('fab-coach');
-  if (fab) fab.style.display = name === 'vandaag' ? 'none' : 'flex';
-  const fabLabel = document.getElementById('fab-label');
-  if (fabLabel) fabLabel.style.display = name === 'vandaag' ? 'none' : 'block';
   document.querySelector('meta[name="theme-color"]')?.setAttribute('content', getComputedStyle(document.documentElement).getPropertyValue(name === 'recepten' ? '--cc-lime' : '--cc-coach').trim());
   if (name === 'vandaag') renderVandaag();
   if (name === 'recepten') renderFoodTab();
@@ -3291,7 +3221,6 @@ function renderWeekOvTab() {
 
 
 
-const INTRO_KEY = 'hc_intro_seen';
 
 
 // Opening: bij elke start, tot "Niet meer tonen" is aangevinkt. Terug te vinden via Instellingen › Uitleg over de app.
@@ -3506,153 +3435,10 @@ function navWeek(dir) {
   renderWeekOvTab(); // v2.0: weekschema-tab is vervallen; alleen weekoverzicht
 }
 
-function renderWeek() {
-  if (!document.getElementById('week-days')) return; // v2.0: weekschema-tab vervallen
-  const weekKey = currentWeekKey();
-  const days = getWeekDates(weekKey);
-  ensureWeek(weekKey);
 
-  const start = days[0];
-  const end = days[6];
-  document.getElementById('week-label').textContent =
-    `Ma ${formatShortDate(start)} – Zo ${formatShortDate(end)}`;
 
-  updateWeekProgress();
 
-  const container = document.getElementById('week-days');
-  const todayStr = today();
 
-  container.innerHTML = days.map((dateStr, i) => {
-    const dayData = data.weken[weekKey][dateStr];
-    const dagNamen = ['Ma','Di','Wo','Do','Vr','Za','Zo'];
-    const dagNaam = dagNamen[i];
-    const isToday = dateStr === todayStr;
-    const loggedActs = dayData.activiteiten || [];
-    const doneActs = loggedActs.filter(a => a.afgevinkt);
-    const allDone = loggedActs.length > 0 && doneActs.length === loggedActs.length;
-    const someDone = doneActs.length > 0;
-    const dayDuurMin = doneActs.reduce((s,a) => s+(a.duur||0), 0);
-    const dayDuurLabel = dayDuurMin > 0 ? fmtMin(dayDuurMin) : '';
-
-    const nameColor = isToday ? 'var(--accent-move)' : allDone ? 'var(--accent-food)' : 'var(--text)';
-    const dotBg = allDone ? 'var(--accent-food)' : someDone ? 'var(--accent-move)' : 'transparent';
-    const dotBorder = allDone ? 'var(--accent-food)' : someDone ? 'var(--accent-move)' : isToday ? 'var(--accent-move)' : 'var(--border)';
-
-    const sportLabel = loggedActs.length > 0
-      ? [...new Set(loggedActs.map(a => a.naam))].slice(0,2).join(' · ')
-      : '';
-
-    const actHTML = (dayData.activiteiten || []).map(a => {
-        const safeName = a.naam.replace(/'/g,"\\'");
-        const safeDetail = (a.detail||'').replace(/'/g,"\\'");
-        return `
-        <div class="activity-row">
-          <button class="check-circle ${a.afgevinkt ? 'checked' : ''}" onclick="toggleWeekActivity('${dateStr}','${a.id}',this)">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          </button>
-          <div class="type-icon ${a.type}">${iconSVG(a.type)}</div>
-          <div class="activity-info">
-            <div class="activity-name ${a.afgevinkt ? 'done' : ''}">${escapeText(a.naam)}</div>
-            <div class="activity-detail">${escapeText(a.detail)}</div>
-          </div>
-          <button class="activity-info-btn" onclick="showOefenuitleg('${safeName}','${safeDetail}','${a.type}')" title="Uitleg">
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-          </button>
-          <button class="activity-edit-btn" onclick="editActivity('${dateStr}','${a.id}')">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-          </button>
-          <button class="activity-delete-btn" onclick="deleteActivity('${dateStr}','${a.id}')" title="Verwijderen">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
-          </button>
-        </div>`;}).join('') + `<button class="add-activity-btn" onclick="addActivity('${dateStr}')">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        Activiteit toevoegen
-      </button>`;
-
-    const isOpen = isToday;
-
-    return `<div class="day-card ${isToday ? 'today' : ''}" id="daycard-${dateStr}">
-      <div class="day-card-header" onclick="toggleDayCard('${dateStr}')">
-        <div class="dchr-status"><span class="dch-dot" style="background:${dotBg};border-color:${dotBorder};"></span></div>
-        <div class="dchr-center">
-          <div class="dchr-dayname" style="color:${nameColor};">${dagNaam}</div>
-          <div class="dchr-date">${formatShortDate(dateStr)}${dayData.aangepast ? ' · <span style="color:var(--muted);font-size:10px;">aangepast</span>' : ''}</div>
-          ${sportLabel ? `<div class="dchr-sport">${sportLabel}</div>` : ''}
-        </div>
-        <div class="dchr-right">
-          ${dayDuurLabel ? `<span class="dchr-dur">${dayDuurLabel}</span>` : ''}
-          <svg class="chevron ${isOpen ? 'open' : ''}" id="chevron-${dateStr}" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-        </div>
-      </div>
-      <div class="day-card-body" id="daybody-${dateStr}" style="display:${isOpen ? 'block' : 'none'};">
-        ${actHTML}
-      </div>
-    </div>`;
-  }).join('');
-}
-
-function toggleDayCard(dateStr) {
-  const body = document.getElementById('daybody-' + dateStr);
-  const chev = document.getElementById('chevron-' + dateStr);
-  const isOpen = body.style.display !== 'none';
-  body.style.display = isOpen ? 'none' : 'block';
-  if (chev) chev.classList.toggle('open', !isOpen);
-}
-
-function toggleWeekActivity(dateStr, actId, circleEl) {
-  const weekKey = getISOWeek(new Date(dateStr + 'T12:00:00'));
-  const act = data.weken[weekKey][dateStr].activiteiten.find(a => a.id === actId);
-  if (!act) return;
-  act.afgevinkt = !act.afgevinkt;
-  circleEl.classList.toggle('checked', act.afgevinkt);
-  circleEl.classList.add('pop-anim');
-  setTimeout(() => circleEl.classList.remove('pop-anim'), 300);
-  const row = circleEl.closest('.activity-row');
-  const nameEl = row ? row.querySelector('.activity-name') : null;
-  if (nameEl) nameEl.classList.toggle('done', act.afgevinkt);
-  if (act.afgevinkt && row) {
-    const existing = row.querySelector('.gevoel-picker');
-    if (!existing) {
-      const picker = document.createElement('div');
-      picker.className = 'gevoel-picker';
-      picker.style.cssText = 'display:flex;gap:6px;align-items:center;padding:6px 0 2px 36px;';
-      picker.innerHTML = ['zwaar','goed','top'].map(label => {
-        return `<button onclick="slaGevoelOp('${dateStr}','${actId}','${label}',this.closest('.gevoel-picker'))" style="background:var(--card2);border:1.5px solid var(--border);border-radius:20px;padding:3px 10px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;color:var(--text-2);transition:background .15s;">${label}</button>`;
-      }).join('');
-      row.after(picker);
-    }
-  } else if (!act.afgevinkt && row) {
-    const picker = row.nextElementSibling;
-    if (picker && picker.classList.contains('gevoel-picker')) picker.remove();
-  }
-  updateStreak();
-  saveAndSync();
-  updateWeekProgress();
-  if (dateStr === today()) renderTodayActivities(dateStr);
-}
-
-function slaGevoelOp(dateStr, actId, gevoel, pickerEl) {
-  const weekKey = getISOWeek(new Date(dateStr + 'T12:00:00'));
-  const act = (data.weken[weekKey][dateStr].activiteiten || []).find(a => a.id === actId);
-  if (act) { act.gevoel = gevoel; saveAndSync(); }
-  if (pickerEl) pickerEl.remove();
-}
-
-function updateWeekProgress() {
-  const weekKey = currentWeekKey();
-  if (!data.weken || !data.weken[weekKey]) return;
-  let total = 0, done = 0;
-  Object.values(data.weken[weekKey]).forEach(day => {
-    if (day.activiteiten) {
-      day.activiteiten.forEach(a => { total++; if (a.afgevinkt) done++; });
-    }
-  });
-  const pct = total === 0 ? 0 : Math.round(done / total * 100);
-  const bar = document.getElementById('week-progress');
-  if (bar) bar.style.width = pct + '%';
-  const count = document.getElementById('week-progress-count');
-  if (count) count.textContent = total === 0 ? '' : done === total ? `${done} / ${total} ✓` : `${done} / ${total}`;
-}
 
 
 
@@ -3693,7 +3479,6 @@ function addActivity(date){return flowActivityForm(date);}
 
 // ─── RECEPTEN TAB ────────────────────────────────────────────────────────────
 
-let _foodRecFilter = 'alles';
 
 function renderRecepten() {
   ensureRecepten();
@@ -3712,7 +3497,6 @@ function switchFoodTab() {
   if (top) top.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-const _recSectionClosed = new Set(); // secties die dichtgeklapt zijn
 
 
 
@@ -4571,7 +4355,6 @@ async function callAIDeep(userMsg, maxTokens) { try { return await callAIPlain(u
 
 // ─── FOOD TAB ────────────────────────────────────────────────────────────────
 
-let _foodFilter = 'alle';
 
 
 
@@ -4908,7 +4691,6 @@ function safeParseJSON(raw) {
 
 
 
-let _pendingVoiceRecipe = null;
 
 
 
@@ -5274,11 +5056,6 @@ function findOefening(naam) {
   return entry || null;
 }
 
-function parseExercisesFromDetail(detail) {
-  return detail.split(/[·,\/&+]/)
-    .map(s => s.trim())
-    .filter(s => s.length > 2 && !/^\d/.test(s) && !/^(zone|min|sec|km|rust|@|x)/i.test(s));
-}
 
 function oefenMuscleHTML(spieren, kleuren) {
   return spieren.map((s, i) => `<span class="muscle-badge" style="background:${kleuren[i]}20;color:${kleuren[i]};">${s}</span>`).join('');
@@ -5346,48 +5123,9 @@ Kleuren: rood=#ef4444, blauw=#1d4ed8, groen=#16a34a, paars=#7c3aed, oranje=#f973
   }
 }
 
-function showOefenuitleg(naam, detail, type) {
-  const isCardio = ['run','bike','walk','walkdog','commute'].includes(type);
-  if (isCardio) {
-    const key = naam.toLowerCase();
-    showOefenKaart(key);
-    return;
-  }
-  const exercises = parseExercisesFromDetail(detail || '');
-  if (exercises.length <= 1) {
-    showOefenKaart(naam);
-    return;
-  }
-  const infoSvg = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>`;
-  showModal(`
-    <div class="modal-header">
-      <h2>Kies oefening</h2>
-      <button class="modal-close" onclick="closeModal()">✕</button>
-    </div>
-    <p style="font-size:14px;color:var(--muted);margin-bottom:14px;">Tik op een oefening voor de uitleg.</p>
-    ${exercises.map(ex => `
-      <button class="oefen-keuze-btn" onclick="showOefenKaart('${ex.replace(/'/g,"\\'")}')">
-        ${infoSvg}
-        ${ex}
-      </button>`).join('')}`);
-}
 
 // ─── ICONS ───────────────────────────────────────────────────────────────────
 
-function iconSVG(type, size = 22) {
-  const s = size;
-  const icons = {
-    run:     `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="#ea5a0c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="1.5"/><path d="M8 17l2-5 3 3 2-6"/><path d="M5 12l3-1 2 2"/><path d="M15 14l2 1 2 3"/></svg>`,
-    gym:     `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="#6d28d9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4v16M18 4v16M9 4h6M9 20h6M3 8h3M18 8h3M3 16h3M18 16h3"/></svg>`,
-    bike:    `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="#1d4ed8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="16" r="3"/><circle cx="18" cy="16" r="3"/><path d="M6 16l5-8h3l2 4"/><path d="M9 8h5l3 5"/></svg>`,
-    commute: `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="#0f766e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="16" r="3"/><circle cx="18" cy="16" r="3"/><path d="M6 16l5-8h3l2 4"/><path d="M9 8h5l3 5"/><path d="M12 2v3"/><path d="M10 2h4"/></svg>`,
-    walk:    `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="1.5"/><path d="M9 9l3 2 3-2"/><path d="M12 11v5"/><path d="M9 22l1.5-4"/><path d="M15 22l-1.5-4"/><path d="M8 12l-2 3"/><path d="M16 12l2 3"/></svg>`,
-    walkdog: `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="#b45309" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="14" r="3"/><ellipse cx="6.5" cy="10.5" rx="1.5" ry="2"/><ellipse cx="15.5" cy="10.5" rx="1.5" ry="2"/><ellipse cx="8.5" cy="7" rx="1" ry="1.5"/><ellipse cx="14" cy="7" rx="1" ry="1.5"/><path d="M14 14c1 1 3 1 4 0"/></svg>`,
-    rest:    `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="#67766d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`,
-    other:   `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>`
-  };
-  return icons[type] || icons.other;
-}
 
 // ─── NUTRITIEBALK (vezels + eiwitten) ────────────────────────────────────────
 
@@ -6192,6 +5930,20 @@ function _toArray(val) {
   return [];
 }
 
+// Activiteit uit spraak of tekst koppelen aan wat er die dag staat: eerst op type als er precies één van dat type is, anders op naam.
+const CC_ACT_WORDS={hardlopen:'run',hardgelopen:'run',gelopen:'run',duurloop:'run',fietsen:'bike',gefietst:'bike',wandelen:'walk',gewandeld:'walk',gym:'gym',kracht:'gym',zwemmen:'swim',gezwommen:'swim',rustdag:'rest'};
+function ccActivityType(q){const t=String(q?.type||'').toLowerCase();if(t&&t!=='other'&&t!=='geen')return t;const n=String(q?.naam||'').toLowerCase();return Object.entries(CC_ACT_WORDS).find(([w])=>n.includes(w))?.[1]||'';}
+function ccMatchActivity(list,q){
+ const acts=list.filter(Boolean),type=ccActivityType(q),zoek=String(q?.naam||'').toLowerCase().trim();
+ const sameType=type?acts.filter(a=>a.type===type||(type==='walk'&&a.type==='walkdog')):[];
+ if(sameType.length===1)return sameType[0];
+ if(!zoek)return null;
+ const exact=acts.filter(a=>String(a.naam||'').toLowerCase()===zoek);
+ if(exact.length===1)return exact[0];
+ const pool=sameType.length?sameType:acts,near=pool.filter(a=>{const n=String(a.naam||'').toLowerCase();return n&&(n.includes(zoek)||zoek.includes(n));});
+ return near.length===1?near[0]:null;
+}
+
 async function parseSmartInput(transcript) {
   const view=ccViewRevision;
   const privacyRevision=limePrivacyRevision;
@@ -6300,35 +6052,31 @@ Lege arrays [] voor activiteiten/maaltijden als geen van toepassing. Geen uitleg
       acties.push('Maaltijd verwijderd');
     }
 
-    // Activiteit verwijderen (nu met datum)
+    // Activiteit verwijderen (nu met datum): precies één, gekoppeld op type of naam
     if (parsed.verwijder_activiteit) {
       const va = typeof parsed.verwijder_activiteit === 'string'
         ? { naam: parsed.verwijder_activiteit, datum: 'vandaag' }
         : parsed.verwijder_activiteit;
-      const zoek = (va.naam || '').toLowerCase();
       const vaDate = _resolveDate(va.datum);
       const vaWk = getISOWeek(new Date(vaDate + 'T12:00:00'));
       ensureDay(vaDate);
       const vaDay = data.weken[vaWk][vaDate];
-      const voor = (vaDay.activiteiten || []).length;
-      vaDay.activiteiten = (vaDay.activiteiten || []).filter(a =>
-        !a.naam.toLowerCase().includes(zoek) && !a.type.toLowerCase().includes(zoek)
-      );
-      if ((vaDay.activiteiten || []).length < voor) acties.push(`Activiteit verwijderd`);
+      const weg = ccMatchActivity(vaDay.activiteiten || [], va);
+      if (weg) {
+        vaDay.activiteiten = vaDay.activiteiten.filter(a => a !== weg);
+        acties.push(`${weg.naam} verwijderd`);
+      }
     }
 
     // Activiteit afvinken (gebruiker meldt dat hij iets heeft gedaan)
     for (const afInput of (Array.isArray(parsed.afvinken_activiteit)?parsed.afvinken_activiteit:parsed.afvinken_activiteit?[parsed.afvinken_activiteit]:[])) {
       const af = typeof afInput === 'string' ? {naam:afInput,datum:'vandaag'} : afInput;
-      const zoek = (af.naam || '').toLowerCase();
       const afDate = _resolveDate(af.datum);
       const afWk = getISOWeek(new Date(afDate + 'T12:00:00'));
       ensureDay(afDate);
       const afDay = data.weken[afWk][afDate];
-      // Zoek eerste onafgevinkte activiteit die naam/type matcht
-      const match = (afDay.activiteiten || []).find(a =>
-        !a.afgevinkt && (a.naam.toLowerCase().includes(zoek) || a.type.toLowerCase().includes(zoek))
-      );
+      // Geplande activiteit van die dag die hierbij hoort (alleen open activiteiten)
+      const match = ccMatchActivity((afDay.activiteiten || []).filter(a => !a.afgevinkt), af);
       if (match) {
         match.afgevinkt = true;
         if (af.duur) match.duur = af.duur;
@@ -6336,8 +6084,7 @@ Lege arrays [] voor activiteiten/maaltijden als geen van toepassing. Geen uitleg
         acties.push(`✓ ${match.naam} afgevinkt`);
       } else {
         // Staat nog niet gepland — voeg toe én vink meteen af
-        const typeMap = { hardlopen:'run', fietsen:'bike', lopen:'walk', gym:'gym', wandelen:'walk', zwemmen:'swim', yoga:'other', tennis:'other' };
-        const type = af.type || Object.entries(typeMap).find(([k]) => zoek.includes(k))?.[1] || 'other';
+        const type = ccActivityType(af) || 'other';
         const detail = [af.detail, af.km ? af.km + 'km' : ''].filter(Boolean).join(' · ');
         const duur = af.duur || null;
         afDay.activiteiten = afDay.activiteiten || [];
@@ -6485,7 +6232,6 @@ Lege arrays [] voor activiteiten/maaltijden als geen van toepassing. Geen uitleg
       rollback = null;
       // Elke render apart afgeschermd: een schermfout mag een geslaagde log nooit maskeren
       try { renderVandaag(); } catch(err) { console.error('renderVandaag:', err); }
-      try { renderWeek(); } catch(err) { console.error('renderWeek:', err); }
       try { renderWeekOvTab(); } catch(err) { console.error('renderWeekOvTab:', err); }
       try { renderFoodTab(); } catch(err) { console.error('renderFoodTab:', err); }
     }
@@ -6530,7 +6276,6 @@ function renderAll() {
 // ─── INIT ────────────────────────────────────────────────────────────────────
 
 function initApp() {
-  migrateRemoveTemplateActivities();
   migreerProfielV2();
   renderAll();
   updateStreak();
@@ -6545,8 +6290,6 @@ function initApp() {
   const tabs = document.querySelectorAll('.tab-btn');
   tabs.forEach(t => t.classList.remove('active'));
   if (tabs[0]) tabs[0].classList.add('active');
-  const fab = document.getElementById('fab-coach');
-  if (fab) fab.style.display = 'none';
   _showWelcomeGreeting();
 }
 
@@ -7453,7 +7196,6 @@ function flowConfirmGeneratedMeal(id,eaten){
 // Mijn ritme: personal summaries from logged facts, not inferred health scores.
 const RITME_TILES={movement:['Beweging','Je activiteiten als weekbeeld'],meals:['Eten','Maaltijden en snacks van vandaag'],water:['Water','Tik een glas aan als je drinkt'],mood:['Gevoel','Hoe voel je je vandaag?'],nutrition:['Voeding vandaag','Vezels en eiwit in twee ringen'],fiber:['Vezels','Je gelogde vezels en een volgend idee'],protein:['Eiwit','Je gelogde eiwit en je eigen doel'],next:['Geplande beweging','Wat staat er als volgende klaar?'],menu:['Weekmenu','Je geplande maaltijden bij elkaar'],highlight:['Uitgelichte activiteit','Een sport of persoonlijke activiteit volgen']};
 const RITME_DEFAULT=['movement','meals','water','mood','nutrition'];
-const RITME_COLORS=['#b4cf42','#536cdf','#c49ce9','#60a99c','#db9c63','#93a6be'];
 let ritmeDraftTiles=[],ritmePeriod='week',ritmeAdviceRequest=0;
 function ritmeNum(value){if(value===null||value===undefined||String(value).trim()==='')return null;const n=Number(String(value).replace(',','.'));return Number.isFinite(n)&&n>0?n:null;}
 function ritmeN(value){return new Intl.NumberFormat('nl-NL',{maximumFractionDigits:1}).format(value);}
@@ -8294,7 +8036,7 @@ function startVoiceInput(inputId){
 
 
 
-for(const name of ['ccSetMood','setMealConsumed','flowToggleActivity','saveQuickMeal','deleteTodayMeal','flowSaveMealEdit','flowSaveActivity','flowSaveRecipeEditor','changeRecPersonen','saveMealRecipe','bewaarGenRecept','flowConfirmGeneratedMeal','setWater','saveVoorraad','removeVoorraad','clearVoorraad','saveSettings','deletePartner','savePartner','confirmResetActiviteiten','confirmResetMaaltijden']){
+for(const name of ['ccSetMood','setMealConsumed','flowToggleActivity','saveQuickMeal','deleteTodayMeal','flowSaveMealEdit','flowSaveActivity','flowSaveRecipeEditor','changeRecPersonen','saveMealRecipe','bewaarGenRecept','flowConfirmGeneratedMeal','setWater','saveVoorraad','removeVoorraad','clearVoorraad','saveSettings','deletePartner','confirmResetActiviteiten','confirmResetMaaltijden']){
  if(typeof window[name]==='function')window[name]=ccWithEdit(window[name]);
 }
 
