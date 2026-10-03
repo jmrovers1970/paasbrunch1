@@ -49,7 +49,7 @@ Gebruiker: Jim. Primair op iPhone (Safari), in het Nederlands. Loopt (hoofdsport
 
 ### Ontwerptokens (gebruik deze, verzin geen nieuwe kleuren of maten)
 ```
---cc-lime #d7f653      lime = "doe dit" (één hoofdactie per scherm) én "gelukt" (vinkjes, voortgang, actieve tab)
+--cc-lime #d7f653      lime = "doe dit" (één hoofdactie per scherm) én "gelukt" (vinkjes, voortgang)
 --cc-lime-soft #f1f8d2 zacht lime vlak (icoonrondjes, tikfeedback)
 --cc-coach #4ccbe2     turquoise zone bovenaan Coach (Chef-zone = --cc-lime)
 --cc-petrol #0e3b47    tekst in beide zones
@@ -64,7 +64,7 @@ Lettertype: -apple-system, 'SF Pro Text', system-ui, sans-serif.
 ```
 
 ### Zones bovenaan
-Kop + begroeting + invoer van Coach is turquoise, kop + invoer + knoppen van Chef is lime (`.brand-header` via `body:has(#tab-recepten.active)`). Een zone zet `--cc-zone` en herdefinieert `--cc-ink`, `--cc-green` en `--cc-muted` naar `--cc-petrol` (één tekstkleur voor beide zones); alles erin (ook tekst in witte knoppen, verzendknop, antwoord, links) volgt vanzelf. Gebruik in een zone dus altijd de tokens, nooit vaste grijzen. Op lime valt lime weg: een gekozen Chef-knop is gevuld met de inkt en heeft lime tekst; de "&" in de kop is bij Chef turquoise (spiegelt Coach: lime "&" op turquoise). De microfoon blijft lime (staat in de witte pil). Bovenin elke zone staat de paginanaam als label `.cc-page-tag` (petrol pil, lime hoofdletters, 24 px) in `.cc-eyebrow`: *Coach* met de datum ernaast, *Chef* alleen. `theme-color` volgt de tab (`switchTab`). Startscherm, opening en wizard (`#splash-overlay`, `#intro-overlay`, `#setup-overlay`) zijn hele Coach-zones: turquoise, petrol tekst, witte kaarten en knoppen, lime voor *Begin*/*Volgende* en gekozen chips. In de opening hebben de iconen van Coach en Chef hun eigen kleur (`.cc-intro-ic.is-coach`, `.is-chef`).
+Kop + begroeting + invoer van Coach is turquoise, kop + invoer + knoppen van Chef is lime (`.brand-header` via `body:has(#tab-recepten.active)`). Een zone zet `--cc-zone` en herdefinieert `--cc-ink`, `--cc-green` en `--cc-muted` naar `--cc-petrol` (één tekstkleur voor beide zones); alles erin (ook tekst in witte knoppen, verzendknop, antwoord, links) volgt vanzelf. Gebruik in een zone dus altijd de tokens, nooit vaste grijzen. Op lime valt lime weg: een gekozen Chef-knop is gevuld met de inkt en heeft lime tekst; de "&" in de kop is bij Chef turquoise (spiegelt Coach: lime "&" op turquoise). De microfoon blijft lime (staat in de witte pil). Bovenin elke zone staat de paginanaam als label `.cc-page-tag` (petrol pil, lime hoofdletters, 24 px) in `.cc-eyebrow`: *Coach* met de datum ernaast, *Chef* alleen. `theme-color` volgt de tab (`switchTab`). De actieve tab onderaan heeft de kleur van zijn zone (Coach turquoise, Chef lime) met petrol tekst. Startscherm, opening en wizard (`#splash-overlay`, `#intro-overlay`, `#setup-overlay`) zijn hele Coach-zones: turquoise, petrol tekst, witte kaarten en knoppen, lime voor *Begin*/*Volgende* en gekozen chips. In de opening hebben de iconen van Coach en Chef hun eigen kleur (`.cc-intro-ic.is-coach`, `.is-chef`).
 
 ### Vaste patronen (hergebruik, niet opnieuw uitvinden)
 - **Invoerbalk** (Coach en Chef): witte pil met lime ronde microfoon (52 px), tekstveld, camera-icoon (44 px), donkere ronde verzendknop. Zodra er tekst staat, neemt een ✕ (`.cc-clear`, `ccClearInput`) de plek van de camera over. Tijdens opname wordt de microfoon een pil "Stop opname" (`[aria-pressed="true"]`). Opnieuw inspreken vervangt de tekst; er wordt nooit automatisch verstuurd.
