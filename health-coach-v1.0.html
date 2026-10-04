@@ -2197,7 +2197,7 @@ body input[type="checkbox"]:disabled{opacity:.4;cursor:default}
 'use strict';
 
 // ─── VERSION CHECK (forceert Safari herlading bij nieuwe versie) ──────────────
-const APP_VERSION = 'lime-20261004-6';
+const APP_VERSION = 'lime-20261004-7';
 // Eén plek voor de modellen: Sonnet voor gesprekken en recepten, Haiku voor snelle achtergrondtaken.
 const CC_MODEL_MAIN = 'claude-sonnet-4-6';
 const CC_MODEL_FAST = 'claude-haiku-4-5-20251001';
@@ -2487,17 +2487,28 @@ let genMaaltijd = '';  // '' | ontbijt | lunch | diner | snack (per sessie)
 
 
 
+// Keuze bij Voor en Na: '' = geen keuze (mix), 'snack' of 'maaltijd'.
+let flowSportSoort = '';
+const CC_SNACK_LEUK = ' Vloeibaar mag (smoothie, shake, kefir- of yoghurtdrank). Maak het leuk en deelbaar voor een jonge doelgroep: kleurrijk, met een pakkende naam, iets crunchy of een topping, er goed uit zien op een foto. Geen kinderachtige namen.';
 function _modusRegel() {
   if (flowChefMode === 'makkelijk') return `
 - MAKKELIJK: weinig werk en weinig afwas — maximaal 8 ingrediënten, maximaal 6 bereidingsstappen, totaal maximaal 30 minuten, alleen gangbare technieken en gewone supermarkt-ingrediënten. Smaak blijft de harde eis: geen fantasieloze "gooi een blik leeg"-recepten, kies slimme shortcuts die écht lekker zijn.`;
   if (flowChefMode === 'comfort') return `
 - COMFORTFOOD: voor troost of om stoom af te blazen. Warm, vullend en een beetje verwennend, zoals een stoofpot, ovenschotel, romige curry of pasta uit de oven, met een frisse, gezonde draai. Wel voedzaam, maar smaak en troost staan voorop; wees minder streng over vezels en eiwit.`;
-  if (flowChefMode === 'voor') return `
-- VOOR HET SPORTEN, voor 1 persoon: geef een mix van een kleine snack om 30–60 minuten vooraf te eten (hooguit 5 minuten werk) en een lichte maaltijd of lunch om 2–3 uur vooraf te eten (hooguit 15 minuten werk). Voedingsdoel: licht verteerbaar, vooral koolhydraten, weinig vet en vezels. Zet in de naam tussen haakjes wanneer je het eet, bijvoorbeeld "(30–60 min vooraf)". Bij één recept: kies wat het best past bij het tijdstip en de training van vandaag. Vloeibaar mag (smoothie, shake, kefir- of yoghurtdrank). Maak het leuk en deelbaar voor een jonge doelgroep: kleurrijk, met een pakkende naam, iets crunchy of een topping, er goed uit zien op een foto. Geen kinderachtige namen.`;
-  if (flowChefMode === 'na') return `
-- NA HET SPORTEN, voor 1 persoon: geef een mix van een herstelsnack om binnen een uur te eten (hooguit 10 minuten werk) en een volwaardige herstelmaaltijd (hooguit 30 minuten werk). Voedingsdoel: 15–25 g eiwit plus koolhydraten, binnen een uur. Zet in de naam tussen haakjes wanneer je het eet, bijvoorbeeld "(binnen 1 uur)". Bij één recept: kies wat het best past bij het tijdstip en de training van vandaag. Vloeibaar mag (smoothie, shake, kefir- of yoghurtdrank). Maak het leuk en deelbaar voor een jonge doelgroep: kleurrijk, met een pakkende naam, iets crunchy of een topping, er goed uit zien op een foto. Geen kinderachtige namen.`;
+  if (flowChefMode === 'voor' || flowChefMode === 'na') {
+    const na = flowChefMode === 'na', snack = flowSportSoort === 'snack', maaltijd = flowSportSoort === 'maaltijd';
+    if (snack) return na
+      ? `\n- NA HET SPORTEN, voor 1 persoon: geef alleen herstelSNACKS om binnen een uur te eten (hooguit 10 minuten werk), geen maaltijden. Zet in de naam tussen haakjes "(binnen 1 uur)". Voedingsdoel: 15–25 g eiwit plus koolhydraten.${CC_SNACK_LEUK}`
+      : `\n- VOOR HET SPORTEN, voor 1 persoon: geef alleen SNACKS om 30–60 minuten vooraf te eten (hooguit 5 minuten werk), geen maaltijden. Zet in de naam tussen haakjes "(30–60 min vooraf)". Voedingsdoel: licht verteerbaar, vooral koolhydraten, weinig vet en vezels.${CC_SNACK_LEUK}`;
+    if (maaltijd) return na
+      ? `\n- NA HET SPORTEN, voor 1 persoon: geef alleen volwaardige herstelMAALTIJDEN (hooguit 30 minuten werk), geen snacks. Zet in de naam tussen haakjes "(binnen 1–2 uur)". Voedingsdoel: ruim eiwit plus koolhydraten.`
+      : `\n- VOOR HET SPORTEN, voor 1 persoon: geef alleen lichte MAALTIJDEN of lunches om 2–3 uur vooraf te eten (hooguit 15 minuten werk), geen snacks. Zet in de naam tussen haakjes "(2–3 uur vooraf)". Voedingsdoel: licht verteerbaar, vooral koolhydraten, weinig vet en vezels.`;
+    return na
+      ? `\n- NA HET SPORTEN, voor 1 persoon: geef een mix van een herstelsnack om binnen een uur te eten (hooguit 10 minuten werk) en een volwaardige herstelmaaltijd (hooguit 30 minuten werk). Voedingsdoel: 15–25 g eiwit plus koolhydraten, binnen een uur. Zet in de naam tussen haakjes wanneer je het eet, bijvoorbeeld "(binnen 1 uur)". Bij één recept: kies wat het best past bij het tijdstip en de training van vandaag.${CC_SNACK_LEUK}`
+      : `\n- VOOR HET SPORTEN, voor 1 persoon: geef een mix van een kleine snack om 30–60 minuten vooraf te eten (hooguit 5 minuten werk) en een lichte maaltijd of lunch om 2–3 uur vooraf te eten (hooguit 15 minuten werk). Voedingsdoel: licht verteerbaar, vooral koolhydraten, weinig vet en vezels. Zet in de naam tussen haakjes wanneer je het eet, bijvoorbeeld "(30–60 min vooraf)". Bij één recept: kies wat het best past bij het tijdstip en de training van vandaag.${CC_SNACK_LEUK}`;
+  }
   if (flowChefMode === 'tijdens' || flowChefMode === 'voorraadsnack') return `
-- SNACK: een klein tussendoortje voor 1 persoon, bescheiden portie, weinig of geen afwas.${flowChefMode === 'tijdens' ? ' Voedingsdoel: snelle koolhydraten, vocht en wat zout; meeneembaar, drinkbaar mag.' : ''} Vloeibaar mag (smoothie, shake, kefir- of yoghurtdrank). Maak het leuk en deelbaar voor een jonge doelgroep: kleurrijk, met een pakkende naam, iets crunchy of een topping, er goed uit zien op een foto. Geen kinderachtige namen.`;
+- SNACK: een klein tussendoortje voor 1 persoon, bescheiden portie, weinig of geen afwas.${flowChefMode === 'tijdens' ? ' Voedingsdoel: snelle koolhydraten, vocht en wat zout; meeneembaar, drinkbaar mag.' : ''}${CC_SNACK_LEUK}`;
   if (flowChefMode === 'uitgebreid') return `
 - GEMAK: uitgebreid — dit mag een kookproject zijn voor de serieuzere kok, groente-gedreven zoals Ottolenghi: gelaagde smaken, meerdere componenten, 45 tot 90 minuten. Kies technieken die het verschil maken (roosteren, marineren, zelf een saus maken) en leg in de bereidingsstappen kort uit waarom een stap belangrijk is.`;
   return '';
@@ -5616,15 +5627,15 @@ async function ccChefEvalJudge(c,recipes){
  return ccJudgeParse(await callAIFast('Je beoordeelt receptvoorstellen van een kook-app. Wees streng maar redelijk.\nVraag: '+JSON.stringify(c.vraag)+'\nCriteria: '+c.criteria+' '+CC_CHEF_EVAL_ALGEMEEN+'\nRecepten: '+JSON.stringify(kort)+'\nAntwoord met alleen dit JSON-object en niets anders, zonder aanhalingstekens in de reden: {"oordeel":"goed"|"matig"|"fout","reden":"max 20 woorden"}',400));
 }
 async function ccChefEvalRun(c){
- const keep={flowChefMode,genPersonen,genCount,genDieet,genFocus,genMaaltijd};
- flowChefMode=c.modus;genPersonen=2;genCount=2;genDieet='vlees';genFocus='combi';genMaaltijd='';
+ const keep={flowChefMode,flowSportSoort,genPersonen,genCount,genDieet,genFocus,genMaaltijd};
+ flowChefMode=c.modus;flowSportSoort='';genPersonen=2;genCount=2;genDieet='vlees';genFocus='combi';genMaaltijd='';
  const t0=performance.now();let eerste=null;
  try{
   const recipes=await requestChefRecipes(c.vraag,2,[],()=>{eerste??=performance.now()-t0;});
   const klaar=performance.now()-t0;
   return {klaar,eerste:eerste??klaar,recipes,...await ccChefEvalJudge(c,recipes)};
  }catch(e){return {klaar:performance.now()-t0,eerste:null,recipes:[],oordeel:'fout',reden:'Fout bij testen: '+(e.message||'onbekend')};}
- finally{({flowChefMode,genPersonen,genCount,genDieet,genFocus,genMaaltijd}=keep);}
+ finally{({flowChefMode,flowSportSoort,genPersonen,genCount,genDieet,genFocus,genMaaltijd}=keep);}
 }
 const ccSec=ms=>ms==null?'–':Math.round(ms/1000)+' s';
 function ccChefEvalSummary(r){return r.goed+' goed · '+r.matig+' matig · '+r.fout+' fout · eerste recept '+ccSec(r.eerste)+', klaar '+ccSec(r.klaar);}
@@ -6916,7 +6927,7 @@ function validateChefRecipe(r,persons){
   if(typeof r.tijd!=='string'||!/^\d+\s*min$/.test(r.tijd)||parseInt(r.tijd)<1)throw Error('De bereidingstijd ontbreekt. Probeer opnieuw.');
   for(const key of ['vezels','eiwitten','koolhydraten'])if(typeof r[key]!=='string'||!/^~?\d+(?:[.,]\d+)?\s*g$/.test(r[key]))throw Error('Voedingswaarden per portie ontbreken. Probeer opnieuw.');
   const sport=['voor','tijdens','na'].includes(flowChefMode);
-  return {...r,soort:sport?'sport':flowChefMode==='voorraadsnack'?'snack':'maaltijd',...(sport?{moment:flowChefMode}:{}),vet:typeof r.vet==='string'&&/^~?\d+(?:[.,]\d+)?\s*g$/.test(r.vet)?r.vet:'',tijd:ccRealisticTime(r),naam:r.naam.trim(),_basePersonen:persons,personen:persons,_type:(flowChefMode==='tijdens'||flowChefMode==='voorraadsnack'?'snack':genMaaltijd)||undefined};
+  return {...r,soort:sport?'sport':flowChefMode==='voorraadsnack'?'snack':'maaltijd',...(sport?{moment:flowChefMode}:{}),vet:typeof r.vet==='string'&&/^~?\d+(?:[.,]\d+)?\s*g$/.test(r.vet)?r.vet:'',tijd:ccRealisticTime(r),naam:r.naam.trim(),_basePersonen:persons,personen:persons,_type:(flowChefMode==='tijdens'||flowChefMode==='voorraadsnack'||(sport&&flowSportSoort==='snack')?'snack':genMaaltijd)||undefined};
 }
 // Vangnet tegen te optimistische tijden: de minuten uit de stappen plus 5 minuten voorbereiding zijn het minimum.
 function ccRealisticTime(r){
@@ -6943,7 +6954,8 @@ function ccCompleteObjects(text){
 function chefRecipePrompt(focus,n,previous,selfCheck){
   const mode=CC_CHEF_MODES[flowChefMode]||{},persons=mode.sport||mode.snack?1:genPersonen;
   const nutrition=genFocus==='eiwitten'?'Kies een eiwitrijke variant zonder smaak of praktische haalbaarheid op te offeren.':genFocus==='vezels'?'Kies een vezelrijke variant zonder smaak of praktische haalbaarheid op te offeren.':mode.sport||mode.snack||flowChefMode==='comfort'?'':'Lekker én gezond: veel groente, volkoren of peulvruchten, weinig bewerkt. Draag bij aan het vezeldoel van de dag zonder smaak op te offeren.';
-  const time=mode.tijd||'Doorgaans maximaal 35 minuten.';
+  const sportTijd=flowSportSoort&&{voor:{snack:'Hooguit 5 minuten.',maaltijd:'Hooguit 15 minuten.'},na:{snack:'Hooguit 10 minuten.',maaltijd:'Hooguit 30 minuten.'}}[flowChefMode]?.[flowSportSoort];
+  const time=sportTijd||mode.tijd||'Doorgaans maximaal 35 minuten.';
   const prompt=`Maak ${n} verschillende, goed maakbare recepten op basis van deze wens: ${focus||'Geef me inspiratie voor een lekkere maaltijd.'}
     ${CHEF_STIJL}
     ${_dieetRegel()} ${_maaltijdRegel()} ${_momentRegel()} ${_modusRegel()} ${_voorraadRegel()}
@@ -7137,18 +7149,26 @@ function ccOpenWeekMenu(offset=0){
  showModal(`<div class="modal-header"><h2>Weekmenu</h2>${flowClose()}</div><div class="cc-week-nav"><button type="button" aria-label="Vorige week" ${offset<=-2?'disabled':''} onclick="ccOpenWeekMenu(${offset-1})"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg></button><div aria-live="polite"><strong>${ccWeekTitle(offset)}</strong><span>${formatShortDate(dates[0])} – ${formatShortDate(dates[6])}</span></div><button type="button" aria-label="Volgende week" ${offset>=4?'disabled':''} onclick="ccOpenWeekMenu(${offset+1})">${CC_CHEVRON}</button></div>${filled?'':'<p class="cc-week-empty">Nog niets gepland deze week.</p>'}${days}${filled?'':`<button type="button" class="btn btn-primary btn-full cc-week-ask" onclick="closeModal();flowGoChef('auto')">Vraag Chef</button>`}`);
 }
 function ccWeekToggle(date,slot,id,offset){const y=document.querySelector('#modal-container .modal')?.scrollTop||0;setMealConsumed(date,slot,id);ccOpenWeekMenu(offset);const m=document.querySelector('#modal-container .modal');if(m)m.scrollTop=y;}
-function flowChefModeButton([v,l]){return `<button type="button" data-mode="${v}" aria-pressed="${flowChefMode===v}" onclick="flowSetChefMode('${v}')">${l}</button>`;}
+function flowChefModeButton([v,l]){return `<button type="button" data-mode="${v}" aria-pressed="${flowChefMode===v}"${v==='voor'||v==='na'?' aria-haspopup="dialog"':''} onclick="${v==='voor'||v==='na'?`flowSportAsk('${v}')`:`flowSetChefMode('${v}')`}">${l}</button>`;}
+// Voor en Na: eerst kiezen tussen snack en maaltijd. Nogmaals tikken op een actieve knop zet hem uit.
+function flowSportAsk(mode){
+ if(flowChefBusy||_chefGenerating)return;
+ if(flowChefMode===mode){flowSetChefMode(mode);return;}
+ const na=mode==='na';
+ showModal(`<div class="modal-header"><h2>${na?'Na':'Voor'} het sporten</h2>${flowClose()}</div><div class="cc-sheet-pair"><button type="button" class="btn btn-secondary" onclick="flowSportChoose('${mode}','snack')">Snack</button><button type="button" class="btn btn-secondary" onclick="flowSportChoose('${mode}','maaltijd')">Maaltijd</button></div><p class="cc-set-note">${na?'Snack: binnen 1 uur<br>Maaltijd: volwaardig herstel':'Snack: 30–60 min vooraf<br>Maaltijd: 2–3 uur vooraf'}</p>`);
+}
+function flowSportChoose(mode,soort){closeModal();flowSportSoort=soort;flowSetChefMode(mode,true);}
 function flowChefPressed(){document.querySelectorAll('.cc-chef-row button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mode===flowChefMode)));}
 function flowSetChefMode(mode,start){
  const input=document.getElementById('gen-focus-input');if(!input||!CC_CHEF_MODES[mode]||flowChefBusy||_chefGenerating)return;
  const typed=input.value.trim(),own=typed&&typed!==flowChefDefaultText;
- if(flowChefMode===mode&&!start){flowChefMode='auto';flowChefPressed();if(!own)input.value=flowChefDefaultText='';return;}
+ if(flowChefMode===mode&&!start){flowChefMode='auto';flowSportSoort='';flowChefPressed();if(!own)input.value=flowChefDefaultText='';return;}
  if(mode.startsWith('voorraad')&&!voorraadItems().length){showVoorraadModal();return;}
- flowChefTurns=[];flowChefAdvice=null;genFocus='combi';genMaaltijd='';document.getElementById('flow-chef-answer').innerHTML='';flowChefMode=mode;flowChefPressed();
+ flowChefTurns=[];flowChefAdvice=null;genFocus='combi';genMaaltijd='';document.getElementById('flow-chef-answer').innerHTML='';flowChefMode=mode;if(mode!=='voor'&&mode!=='na')flowSportSoort='';flowChefPressed();
  if(!own){input.value=flowChefDefaultText=CC_CHEF_MODES[mode].vraag;ccResizeComposer(input);}
  flowChefSubmit();
 }
-function flowGoChef(mode){flowChefTurns=[];flowChefAdvice=null;switchTab('recepten',document.querySelector('.tab-btn[onclick*="recepten"]'));flowChefMode=mode;flowRenderChef();document.getElementById('gen-focus-input').focus();}
+function flowGoChef(mode){flowSportSoort='';flowChefTurns=[];flowChefAdvice=null;switchTab('recepten',document.querySelector('.tab-btn[onclick*="recepten"]'));flowChefMode=mode;flowRenderChef();document.getElementById('gen-focus-input').focus();}
 function flowChefVoice(){return flowListen('chef','gen-focus-input','voice-recipe-btn','chef-mic-label',flowChefSubmit);}
 async function flowChefSubmit(){const view=ccViewRevision;if(flowChefBusy||_chefGenerating||flowSpeech?.key==='chef')return;const input=document.getElementById('gen-focus-input'),text=input.value.trim(),status=document.getElementById('chef-mic-label');if(!text){status.textContent='Spreek of typ eerst je vraag of wens.';return;}if(!settings.anthropicKey){status.textContent='Stel je AI-sleutel in bij Instellingen. Je tekst blijft staan.';return;}const explicitRecipe=/\b[a-z]*recept(?:en|idee|ideeën)?\b/i.test(text);const advice=flowChefMode==='auto'&&!explicitRecipe&&(flowChefTurns.length>0||/\b(wanneer|hardlop\w*|kracht\w*|train\w*|sportschool|sporten|marathon|herstel|voor.*sport|na.*sport)\b/i.test(text)||/wat eet ik.*(avond|ochtend|morgen)/i.test(text));if(!advice){status.textContent='Chef bedenkt ideeën…';await _doGenerateRecepten(text);status.textContent='Je wens blijft staan. Je kunt opnieuw inspreken of aanpassen.';return;}flowChefBusy=true;const btn=document.getElementById('gen-btn');btn.disabled=true;status.textContent='Chef denkt mee over je eetmomenten…';try{const context=[...flowWeekDates(),...flowWeekDates(1)].flatMap(d=>(flowDay(d).activiteiten||[]).map(a=>({datum:d,naam:a.naam,km:a.km,minuten:a.duur,tijd:a.tijd,gedaan:!!a.afgevinkt})));const prompt=`Je bent Chef in Coach & Chef. Help eerst met WAT en WANNEER eten; maak nog geen volledige recepten. Vandaag is ${today()}. Bekende beweging: ${JSON.stringify(context)}. Eetvoorkeur: ${_dieetRegel()}. Extra voorkeur: ${genFocus}. Recente dialoog: ${JSON.stringify(flowChefTurns.slice(-6))}. Nieuwe vraag: ${JSON.stringify(text)}.
 Geef maximaal 4 beknopte eetmomenten in tijdsvolgorde met concrete, haalbare voedingskeuzes. Bij een snelle snack is één simpel moment voldoende. Houd keuzes praktisch (wat men vaak in huis heeft), eigentijds en lekker; een snack mag ook vloeibaar zijn (smoothie, shake, kefir). Neem starttijd, duur, tijd om te koken, eetvoorkeuren en tolerantie mee waar bekend. Verzin geen starttijd, medische toestand of exacte persoonlijke behoefte. Vraag hoogstens één noodzakelijke verduidelijking als die de uitkomst wezenlijk verandert; anders geef praktische opties. Focus op eiwit of vezels is een voorkeur, geen verplicht minimum voor elk moment, en moet passen rond inspanning. Maak geen absolute gezondheidsbeloften. Alleen JSON: {"titel":"...","momenten":[{"wanneer":"...","advies":"max 2 korte zinnen"}],"vraag":"eventuele vraag of lege string","receptwens":"een korte opdracht om bijpassende recepten te maken"}.`;const r=safeParseJSON(await callAI(prompt,1100));if(view!==ccViewRevision||document.getElementById('gen-focus-input')!==input||input.value.trim()!==text)return;if(!r||typeof r.titel!=='string'||(r.vraag!=null&&typeof r.vraag!=='string')||(r.receptwens!=null&&typeof r.receptwens!=='string')||!Array.isArray(r.momenten)||r.momenten.length>4||!r.momenten.every(m=>typeof m.wanneer==='string'&&typeof m.advies==='string')||(!r.momenten.length&&!r.vraag))throw Error('Chef kon geen helder advies maken. Probeer opnieuw.');flowChefAdvice={...r,source:text};flowChefTurns.push({role:'user',content:text},{role:'assistant',content:JSON.stringify(r)});flowChefTurns=flowChefTurns.slice(-6);flowRenderAdvice();status.textContent=r.vraag?'Chef heeft één vraag. Spreek je antwoord in.':'Je advies staat hieronder. Niets is automatisch ingepland.';input.value='';}catch(e){status.textContent=e.message||'Chef is even niet bereikbaar. Je tekst blijft staan.';}finally{flowChefBusy=false;btn.disabled=false;}}
@@ -7167,7 +7187,7 @@ function flowCookGenerated(id){const r=(window._generatedRecepten||[]).find(x=>x
 function ccRecipeSoort(r){return r.soort||(r.type==='snack'?'snack':'maaltijd');}
 // Hoe vaak een recept is ingepland of gegeten, voor de volgorde "vaak gemaakt".
 function ccRecipeUses(){const n={};Object.values(data.weken||{}).forEach(w=>Object.values(w).forEach(d=>Object.values(d.maaltijden||{}).forEach(a=>(Array.isArray(a)?a:[]).forEach(m=>{if(m&&m.receptId)n[m.receptId]=(n[m.receptId]||0)+1;}))));return n;}
-const CC_RECIPE_FILTERS=[['alles','Alles',()=>true],['maaltijd','Maaltijd',r=>ccRecipeSoort(r)==='maaltijd'],['snack','Snack',r=>ccRecipeSoort(r)==='snack'],['sport','Sport',r=>ccRecipeSoort(r)==='sport'],['snel','Snel',r=>parseInt(r.tijd)>0&&parseInt(r.tijd)<=20]];
+const CC_RECIPE_FILTERS=[['alles','Alles',()=>true],['maaltijd','Maaltijd',r=>ccRecipeSoort(r)==='maaltijd'||(ccRecipeSoort(r)==='sport'&&r.type!=='snack')],['snack','Snack',r=>ccRecipeSoort(r)==='snack'||(ccRecipeSoort(r)==='sport'&&r.type==='snack')],['sport','Sport',r=>ccRecipeSoort(r)==='sport'],['snel','Snel',r=>parseInt(r.tijd)>0&&parseInt(r.tijd)<=20]];
 let ccRecipeFilter='alles',ccRecipeQuery='';
 function ccRecipeFilterSet(f){ccRecipeFilter=f;flowRecipeList();}
 function ccRecipeSearch(q){ccRecipeQuery=q;ccRecipeResults();}
