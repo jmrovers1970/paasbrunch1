@@ -1,114 +1,130 @@
-# TAKEN.md — Coach & Chef afmaken
+# TAKEN.md — Chef verbeteren (opdracht voor Sonnet 5.5)
 
-Basis: `health-coach-v1.0.html`, versie `lime-20261002-2`. Lees eerst `CLAUDE.md`.
+Basis: `health-coach-v1.0.html`, versie `lime-20261004-1`. De vorige takenlijst is af en staat in de git-geschiedenis.
 
-Bron: Jims test op de iPhone met echte API. Zijn woorden staan steeds tussen aanhalingstekens; daaronder wat het betekent en wanneer het af is.
-
-**Volgorde**: werk de fasen op volgorde af, één versie per fase. Begin elke fase met reproduceren op 390×844. Vind je de oorzaak niet of hangt het af van iOS, meld dat dan en vraag Jim om het op zijn telefoon te controleren. Fasen 3, 4 (onderdeel B) en 5 zijn wezenlijke aanpassingen: eerst een plan met schets voorleggen.
-
-Let op: Jim testte waarschijnlijk `lime-20261002-1`. Die was gebaseerd op een versie zónder de vinkjes-fix. In `lime-20261002-2` is die fix toegevoegd (globale regel voor `input[type=checkbox]`). Controleer daarom eerst wat in -2 al werkt; claim niets als opgelost wat je niet hebt geverifieerd.
+Bron: Jims test op de iPhone (4 okt). Zijn woorden staan tussen aanhalingstekens. Daaronder staat wat er moet gebeuren en wanneer het af is. Ontwerpkeuzes zijn al gemaakt; volg ze en verzin geen eigen variant.
 
 ---
 
-## Fase 1 — Wat kapot is (eerst)
+## 0. Zo werk je (lees dit eerst)
 
-### 1.1 Vinkjes werken niet
-"Kan aanvinkknoppen veelal niet aanvinken. Zoals bij boodschappen, in instellingen privacymodus, laat coach antwoorden voorlezen."
-- Oorzaak in de geteste versie: een oude regel zette `appearance:none` op vinkjes zonder vervangende stijl. Tikken werkte, maar je zag niets veranderen. `lime-20261002-2` heeft een globale regel voor `input[type=checkbox]` (rond, lime met vinkje). Controleer of tikken op de iPhone de toestand verandert én zichtbaar maakt, op álle plekken: Boodschappen (gerechten kiezen, afvinken), Instellingen (voorlezen, privacymodus) en overige.
-- Mogelijke oorzaken als het op iOS nog hapert: een overlay of modal die de tik onderschept, een `label` met eigen click-handler, opnieuw renderen bij `change` waardoor de toestand terugspringt, ontbrekende `-webkit-appearance`.
-- **Af als**: elk vinkje reageert bij één tik, overal dezelfde ronde stijl, de hele rij is aantikbaar.
+1. **Lees `CLAUDE.md` helemaal.** Vooral §2 (zeven regels), §3 (tokens, zones, vaste patronen, AI) en §5 (versies). Wat daar staat, geldt hier ook.
+2. **Eén taak tegelijk, in de volgorde hieronder.** Per taak: zoek de code met `grep -n`, lees de functie helemaal, verander zo weinig mogelijk, test, ga dan pas verder. Het bestand is groot (ongeveer 9.000 regels, veel code op één regel). Lees gericht met `sed -n 'a,bp'`, nooit het hele bestand.
+3. **Bewerk met exacte vervangingen.** Gebruik een klein Python-script met `assert s.count(old)==1` vóór elke `replace`, en lees en schrijf in bytes. Het bestand heeft CRLF-regeleinden; laat die heel (`.replace('\n','\r\n')` bij nieuwe tekst).
+4. **Verzin niets wat je niet hebt gecontroleerd.** Zeg alleen "werkt" als je het getest hebt. Wat je niet kunt testen (iPhone, echte API), noem je als controlepunt voor Jim.
+5. **Stoppunten.** Bij taak C1 en C9 bouw je niet voordat Jim akkoord is (zie daar). Samenvoegen met `main` alleen na Jims "voeg samen".
+6. **Niet aanraken**: de Coach-kant, spraak en geluid (`ccPrepareMic`, Web Audio), privacymodus, sync, `coachFrontSend` en `parseSmartInput`. Nooit een modelnaam hardcoden (gebruik `CC_MODEL_*`). Geen nieuwe externe afhankelijkheden. Alle tekst van gebruiker of AI die in `innerHTML` komt, gaat door `escapeText()`.
 
-### 1.2 Chef-knoppen doen niets
-"De knoppen bij de Chef-invoer (Rond sporten, Snel klaar e.d.) doen niks of geven een tekst (uitgegrijsd) in de tekstbalk maar kan je niet verzenden."
-- Oorzaak: `flowSetChefMode` zet alleen een placeholder; met een leeg veld blijft verzenden geblokkeerd.
-- Een tik op een knop moet direct iets opleveren. Is het veld leeg: start meteen met een standaardvraag voor die modus. Staat er tekst: combineer modus en tekst bij verzenden. Extra vezels/eiwit blijven aan/uit-schakelaars die meegaan met de volgende vraag.
-- **Af als**: elke knop zonder typen tot recepten leidt, en de gekozen modus zichtbaar actief is.
+### Versie en backup
+- Versie: `APP_VERSION = 'lime-YYYYMMDD-N'` (datum van vandaag, N doornummeren). Eén versie per batch.
+- Backup: een git-tag pushen lukt in deze omgeving niet (403). Maak vóór het samenvoegen een branch `backup/<huidige live versie>` vanaf `main` via de GitHub-tool `create_branch`.
+- Commitbericht: versie + wat er veranderd is, één regel.
 
-### 1.3 Mijn voorraad
-"De foto is ingelezen en in de 'wat heb ik in huis'-kaart staan de producten in de invoerbalk. De app geeft wel aan: Chef neemt ze mee. Maar ik zie geen overzicht."
-- Oorzaak: `analyseVoorraadFoto` zet de producten als tekst in `#voorraad-input`; er is geen blijvende lijst.
-- Maak één bewaarde voorraadlijst: producten als rijen of chips, met verwijderen (×) en een veld om toe te voegen. Foto, inspreken en typen vullen dezelfde lijst aan (zonder dubbelingen). "Uit voorraad" in Chef gebruikt deze lijst.
-- **Af als**: na een foto staat er een zichtbaar, bewerkbaar overzicht dat na herladen nog bestaat.
+### Testen (goedkoop, in deze volgorde)
+1. **Syntax**, altijd:
+   ```bash
+   node -e "const h=require('fs').readFileSync('health-coach-v1.0.html','utf8');const s=/<script>([\s\S]*?)<\/script>/.exec(h)[1];require('/opt/node-tools/node_modules/acorn').parse(s,{ecmaVersion:'latest'});console.log('ok')"
+   ```
+2. **Gedrag** met Playwright (Chromium staat klaar: `executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome'`, viewport 390×844). Blokkeer het netwerk (`page.route(/^https?:/, r=>r.abort())`). Zet vóór het laden in localStorage: `hc_settings` = `{"anthropicKey":"sk-test","naam":"Jim","setupDone":true,"_profielV2":true}` en `hc_intro_hide` = `1`. **Stub de AI altijd**: overschrijf `window.callAIStream` en `window.callAIPlain` met een functie die vaste JSON teruggeeft. Roep nooit de echte API aan.
+3. **Eén schermafbeelding** van het aangepaste scherm op 390×844. Kijk naar uitlijning, centrering, afbreking en gelijke knopbreedte.
+4. Aan het eind: open de belangrijkste schermen een keer en controleer dat er geen JavaScript-fouten zijn (`page.on('pageerror')`).
 
-### 1.4 Receptinstellingen reageren niet
-"Recepten instellingen reageert niet als ik de aantallen verander."
-- Betrokken: `flowSetPersons`, `flowSetCount`, `limeRecipeSummary`, `#chef-personen`. Controleer opslaan, de samenvattingsregel, en of het aantal echt meegaat bij genereren.
-- **Af als**: wijzigen direct zichtbaar is in de samenvatting en het volgende resultaat.
-
-### 1.5 Kookmodus: naar een stap springen
-"Volgende en vorige kan ik inspreken maar stap 3 bijvoorbeeld niet."
-- Breid `ccCookCommand` uit: "stap 3", "stap drie", "ga naar stap 3", "eerste stap", "laatste stap". Nederlandse telwoorden tot minstens twintig.
-- **Af als**: elk stapnummer werkt, met cijfer of woord, en een onbestaande stap een korte melding geeft.
-
-### 1.6 Boodschappenlijst
-"Kan niet aanvinken/afvinken. Maak van de grote knoppen subtielere rondjes (zoals bij Coach)."
-- Valt deels onder 1.1. Controleer ook de overige knoppen in het boodschappenscherm: groot en grof waar het subtiel kan.
-- **Af als**: afvinken werkt, ronde vinkjes zoals bij Coach, en de lijst rustig oogt.
+### Overdracht aan Jim (na elke batch)
+Kort, in het Nederlands: wat is veranderd, wat hij op de iPhone moet controleren, en de live link met `?v=<versie>` erachter.
 
 ---
 
-## Fase 2 — Chef: snelheid en kwaliteit (kritiek)
+## Batch 1 — Recepten beter (alleen prompt en kleine code; geen nieuwe schermen)
 
-"KRITIEK: recepten genereren duurt heel lang. Foto uitlezen kost veel tijd (na koelkastfoto, maar ook bij inspreken)." — "Kwaliteit recepten was eerder beter."
+Alle receptregels staan in `CHEF_STIJL` en `chefRecipePrompt` (zoek `const CHEF_STIJL` en `function chefRecipePrompt`). De regels per knop staan in `_modusRegel` en `CC_CHEF_MODES`. Houd de lijn van Jims document *Receptinspiratie* aan: wat er nu in `CHEF_STIJL` staat, blijft staan. Je vult aan, je schrapt niets.
 
-- **Meet eerst** waar de tijd zit (per stap: voorbereiden, AI-aanroep(en), verwerken). Verwijder de meetcode daarna.
-- `_doGenerateRecepten` werkt in twee stappen ("maken en controleren"). Onderzoek of dat terug kan naar één aanroep, of dat de controle met `CC_MODEL_FAST` kan.
-- Laat het eerste recept zo snel mogelijk zien (streaming of eerst één idee, daarna meer op verzoek). Toon direct een rustige laadtoestand.
-- Foto's: `ccPreparePhoto` verkleint naar 1600 px; voor voorraad volstaat waarschijnlijk 1024 px en `CC_MODEL_FAST`. Recepten van een foto mogen bij MAIN blijven als de kwaliteit dat vraagt.
-- Kwaliteit: vraag Jim om een voorbeeld van "beter". Maak daarna, naar het voorbeeld van *Coach testen*, een kleine vaste receptentest (5 vragen) om voor en na te vergelijken.
-- **Af als**: een receptvraag merkbaar sneller een eerste resultaat toont (noem de gemeten tijden voor en na) en de kwaliteit volgens de test niet achteruitgaat.
+### B1. Inspiratie: Ottolenghi, Laura's Bakery en foodcreators
+"Maak de chef een vazal van Ottolenghi, Veggilaine, Laura's Bakery en beroemde TikTokkers."
+- Breid de eerste regel van `CHEF_STIJL` uit met deze bronnen als stijlinspiratie: Ottolenghi (veel kruiden, zuur, granaatappel, tahin, za'atar), Laura's Bakery (gezond bakken en ontbijt, haalbaar), Veggilaine (spelling bij Jim nagaan, schrijf het tot dan zo) en bekende foodcreators op TikTok en Instagram (kleurrijk, één pan of bakplaat, makkelijk na te maken).
+- Schrijf erbij: "Gebruik ze als smaak en stijl, kopieer geen recepten en noem geen namen in het recept."
+- **Af als**: de regel in `CHEF_STIJL` staat en de prompt geldig blijft (syntaxcheck).
 
----
+### B2. Praktisch: wat mensen vaak in huis hebben
+"Hou rekening met wat men vaak in huis heeft. Kan niet altijd, maar hou het praktisch, wel lekker en eigentijds (TikTok/Insta)."
+- Voeg een regel toe aan `CHEF_STIJL`: bouw elk recept op basisvoorraad (eieren, yoghurt of kwark, havermout, rijst, pasta, wraps, bonen of kikkererwten uit blik, tomaten uit blik, ui, knoflook, citroen, diepvriesgroente, kaas, pindakaas, specerijen). Voeg hooguit 3 verse of bijzondere ingrediënten toe die het verschil maken. Liever een slimme twist op iets bekends dan een lijst exotische producten.
+- **Af als**: de regel staat in `CHEF_STIJL`.
 
-## Fase 3 — Chef eenvoudiger (plan eerst)
+### B3. Minder rijstcrackers, meer afwisseling
+"Er komen erg veel rice-crackers/rijstcrackers in voor."
+- Voeg toe aan `CHEF_STIJL`: "Rijstwafels en rijstcrackers alleen als de gebruiker erom vraagt. Wissel de basis af (brood, wrap, havermout, yoghurt, kwark, fruit, smoothie, ei, peulvruchten) en gebruik binnen één reeks voorstellen nooit twee keer dezelfde basis."
+- **Af als**: de regel staat er, en een gestubde test laat zien dat de prompttekst (uit `chefRecipePrompt('',2,[],true).prompt`) "Rijstwafels" en "nooit twee keer dezelfde basis" bevat.
 
-"De routing en functionaliteiten op Chef zitten niet goed in elkaar. Te ingewikkeld en wat verwarrend." — "Knoppen voegen weinig toe."
+### B4. Eerlijke bereidingstijden
+"Stel tijden niet te optimistisch voor. Zorg dat het realistisch is."
+- **Prompt**: vervang in `CHEF_STIJL` de regel "Snel waar het kan: de meeste recepten in 5–20 minuten." door: "Snel waar het kan, maar eerlijk: tel wassen, snijden, oven voorverwarmen, koken en rusten mee, en reken voor een thuiskok, niet voor een chef. Twijfel je, rond dan naar boven af. Een ovenrecept duurt minstens 25 minuten."
+- **Code** (vangnet): maak in `validateChefRecipe` een correctie, niet een fout. Tel alle minuten die in de bereidingsstappen staan (patroon `(\d+)\s*(?:–|-|tot)?\s*(\d+)?\s*min`; neem bij een bereik het hoogste getal). Is die som plus 5 minuten groter dan `parseInt(r.tijd)`, zet dan `r.tijd = (som + 5) + ' min'`. Zet de functie niet om naar een foutmelding; recepten moeten blijven doorkomen.
+- **Af als**: een test met een recept met `tijd:"10 min"` en stappen "Rooster 20 min op 220 °C" en "Laat 5 min rusten" uitkomt op `"30 min"`. Een recept zonder minuten in de stappen blijft ongewijzigd.
 
-- Breng eerst in kaart: welke wegen leiden naar recepten (typen, inspreken, knoppen, foto, voorraad, weekmenu), en welke schermen en modals daarbij openen.
-- Stel een eenvoudiger opbouw voor, bijvoorbeeld: (1) invoer met weinig, duidelijke keuzes, (2) resultaat direct eronder, (3) "Jouw keuken": recepten, weekmenu, boodschappen, voorraad.
-- **Rond sporten → Voor / Tijdens / Na.** "Let hier op design. Is een wezenlijke aanpassing." Bijvoorbeeld: een tik op Rond sporten toont drie gelijke segmenten (Voor · Tijdens · Na) op dezelfde plek, een tweede tik start. Geen extra scherm. Het moment gaat mee in de vraag aan Chef.
-- Schrap knoppen die weinig toevoegen. Hou over wat echt een ander resultaat geeft.
-- **Af als**: Jim het plan heeft goedgekeurd en elke weg naar een recept korter of duidelijker is dan nu.
+### B5. Snacks: sportdoel, ook vloeibaar, en leuk
+"De snacks moeten aan hun voedingsdoel voldoen, maar ook leuk zijn voor een jonge doelgroep. Een snack kan ook vloeibaar zijn als het maar het sportdoel voldoet."
+- Voeg in `_modusRegel` per sportmoment het voedingsdoel toe (kort, zonder medische claims):
+  - **voor**: licht verteerbaar, vooral koolhydraten, weinig vet en vezels; snack 30–60 min vooraf.
+  - **tijdens**: snelle koolhydraten, vocht en wat zout; meeneembaar, drinkbaar mag.
+  - **na**: eiwit 15–25 g plus koolhydraten, binnen een uur.
+- Voeg aan alle snackregels toe: "Vloeibaar mag (smoothie, shake, kefir- of yoghurtdrank). Maak het leuk en deelbaar voor een jonge doelgroep: kleurrijk, met een pakkende naam, iets crunchy of een topping, er goed uit zien op een foto. Geen kinderachtige namen."
+- **Af als**: de regels staan erin en `chefRecipePrompt` geldige tekst oplevert voor de modi `voor`, `tijdens`, `na` en `voorraadsnack`.
 
----
+### B6. Venstertitel "Zit hier iets tussen?"
+"De kaart die opkomt bij recepten 'Waar heb je zin in?': maak daarvan 'Zit hier iets tussen?'"
+- In `chefPreviewOpen`: verander de titel naar `Zit hier iets tussen?`. Laat de subregel staan. Zoek met `grep -n "Waar heb je zin in"` of de tekst nog ergens anders staat en trek die gelijk.
+- **Af als**: er nergens meer "Waar heb je zin in" staat en de schermafbeelding de nieuwe titel toont.
 
-## Fase 4 — Coach opschonen
+### B7. Na Bewaren kunnen doorklikken naar het recept
+"Als Chef er 2 geeft, kan ik die inplannen, gegeten aangeven of bewaren. Als ik op Bewaar heb gedrukt, kan ik niet doorklikken en het recept openen. Dat wil ik graag kunnen doen."
+- In `bewaarGenRecept`: nu wordt de knop "Bewaard" en uitgeschakeld. Maak er een werkende knop **"Open recept"** van, die het bewaarde recept opent met één niveau terug naar de voorstellen:
+  `ccOpenFrom(()=>chefPreviewOpen(false), ()=>flowRecipeDetail(savedId))`, waarbij `savedId` het `id` is dat `retainGeneratedRecipe(r,true)` teruggeeft.
+- Laat de melding "bewaard" (banner) staan. Ook als het voorstelvenster opnieuw wordt opgebouwd (`chefPreviewOpen(false)` gebruikt `recipeCardHTML`), moet een al bewaard recept de knop "Open recept" tonen: kijk in `recipeCardHTML` naar `r._savedRecipeId` en of dat recept `bewaard` is.
+- **Af als**: in een test met gestubde recepten (1) Bewaar → de knop heet "Open recept", (2) tikken opent `flowRecipeDetail` met de juiste naam, (3) de terugknop of het sluiten van dat venster brengt je terug in de voorstellen, met de knop nog steeds "Open recept".
 
-"Onderaan is te veel. Heel onduidelijk wordt het."
-
-### A. Kleine ingrepen
-1. **Inspreken in één keer.** "Ingesproken tekst wordt uitgeschreven en moet ik akkoord op geven. Als die fout is moet ik handmatig weghalen. Kan dat in één keer?" Een duidelijke ✕ in de invoerbalk wist de tekst met één tik, en opnieuw inspreken vervangt de tekst in plaats van eraan toe te voegen. Bespreek met Jim of automatisch versturen na inspreken gewenst is.
-2. **"Iets toevoegen" weg.** "Dat doe je al met de tegels Maaltijden en Bewegen."
-3. **"Inspiratie & training" weg bij Coach**, of verplaatsen naar waar het past. Leg kort voor wat je kiest.
-4. **Oefeningen.** "Weg, of heb je een suggestie?" Voorstel: geen apart oefeningenblok; de uitleg blijft bereikbaar via het ℹ-icoon bij een activiteit.
-5. **Vezels en eiwit visueler, lagere tegel.** Bijvoorbeeld twee kleine voortgangsringen naast elkaar met getal en doel.
-
-### B. Hoe voel je je (plan eerst)
-"Zeg hoe je je voelt staat onderaan ook niet goed. Wellicht subtiel in het coachvak?" — "Hoe je je voelt onder, en net zo groot als de watertegel. Zo visueel mogelijk."
-- Een tegel "Hoe voel je je" in dezelfde vorm en hoogte als de watertegel: één rij met vijf eenvoudige gezichtjes of symbolen, één tik slaat de check-in van vandaag op. De coach krijgt die mee (bestaat al als `checkIn` in de dag).
-- Haal de oude check-in onderaan weg. Eén plek, niet twee.
-
-### C. De knop "Plan vandaag"
-"De knop plan vandaag –" (Jim maakte de zin niet af.) Vraag Jim wat hem stoort. Bekijk daarbij de hele snelkeuzerij onder de invoer (Plan vandaag, Plan je week, Meer): voegt die genoeg toe, of kan plannen via praten ("plan mijn dag") en het weekoverzicht?
-
-**Af als**: onder de invoer staat alleen wat iets toevoegt, alles is visueel en even hoog waar het naast elkaar staat, en er staat niets dubbel.
-
----
-
-## Fase 5 — Opening en instellingen (plan eerst)
-
-1. **Opening.** "Standaard starten met de opening: wat doet de app en kan de app. Moet je wel kunnen uitzetten bij volgende keer opstarten, en makkelijk kunnen benaderen."
-   - Het openingsscherm bestaat al (`#intro-overlay`, `hc_flow_intro_seen`). Toon het standaard bij elke start, met een vinkje "Niet meer tonen". Altijd terug te vinden via één vaste plek (bijvoorbeeld het vraagteken of Instellingen › Uitleg).
-   - Gebruik de teksten uit `CLAUDE.md` §1 (tagline en hoofdfuncties), kort.
-2. **Instellingen eenvoudiger.** "Instellingen is wel veel als je dat opent. Schrikt mensen wat af."
-   - Bovenaan alleen het belangrijkste: naam, AI-sleutel, voorlezen, privacymodus. De rest (Gist en versleuteling, eigen woorden, patronen, coach testen, export en import) onder één inklapbaar blok "Meer instellingen".
-   - Korte uitlegregels, geen lappen tekst.
-   - **Af als**: wie Instellingen opent in één oogopslag ziet wat nodig is, en niets verloren is gegaan.
+Na batch 1: versie ophogen, testen, schermafbeelding van het voorstelvenster, overdracht. Niet samenvoegen voordat Jim akkoord is.
 
 ---
 
-## Na elke fase
+## Batch 2 — Snack of maaltijd kiezen (nieuwe stap in de bediening)
 
-- Versie ophogen, backup, commit (zie `CLAUDE.md` §5).
-- Korte lijst voor Jim: wat is veranderd, en wat hij op de iPhone moet controleren (vooral microfoon, geluid, vinkjes, uitlijning).
-- Loop het hele scherm na op de kleine dingen: centrering in knoppen, gelijke hoogtes, uitlijning, geen afgekapte tekst.
+### C1. Bij Voor en Na eerst kiezen: snack of maaltijd
+"Sport voor, tijdens, na geeft maaltijden en snacks. Maar als ik alleen een snack zoek, heb ik niks aan het gerecht, of andersom. Ergens moet ik kunnen kiezen tussen snack en maaltijd."
+
+**Ontwerp (vastgesteld; eerst deze schets en een schermafbeelding aan Jim laten zien, pas bouwen na akkoord):**
+```
+Tik op [Voor] of [Na]  →  venster (showModal), kop "Voor het sporten" / "Na het sporten"
+   ┌──────────────────────────────┐
+   │ Voor het sporten          ✕  │
+   │ [  Snack  ]   [ Maaltijd  ]  │   ← twee even brede knoppen, 44 px, één tik start Chef
+   │ 30–60 min vooraf · 2–3 uur   │   ← één korte subregel per knop, 14 px muted
+   └──────────────────────────────┘
+Tik op [Tijdens]  →  geen keuze, altijd snack (zoals nu)
+```
+- Techniek: voeg aan `CC_CHEF_MODES` geen nieuwe knoppen toe in de Chef-zone (die blijft zoals hij is). Bewaar de keuze in een variabele, bijvoorbeeld `flowSportSoort = 'snack' | 'maaltijd'`, zet die vóór `flowSetChefMode(mode, true)`, en gebruik hem in `_modusRegel` voor `voor` en `na`: bij `snack` alleen snacks (voedingsdoel uit B5), bij `maaltijd` alleen maaltijden. Haal de "mix" en het "Bij één recept: kies wat het best past"-stuk dan weg.
+- Zet `_type` van het recept op `snack` of `maaltijd` (zie `_type:` in de functie rond `retainGeneratedRecipe`/`validateChefRecipe`), zodat het later goed te filteren is (C9).
+- Knoppen in het venster: hergebruik bestaande knopstijlen (`.btn` of `cc-seg`). Geen nieuwe kleuren. Escape en ✕ sluiten zonder iets te starten.
+- **Af als**: Voor en Na vragen eerst Snack of Maaltijd; de gegenereerde prompt bevat alleen het gekozen soort; Tijdens start direct; schermafbeelding van het venster op 390 px; niets breekt af.
+
+---
+
+## Batch 3 — Recepten ordenen (eerst plan, dan bouwen)
+
+### C9. Mijn recepten slim ordenen
+"Is er een handige manier om de recepten ook slim te organiseren/categoriseren?"
+
+**Voorstel (bouwen pas na Jims akkoord; laat hem eerst deze schets en een mock-schermafbeelding zien):**
+- Geen mappen en geen handwerk: elk recept krijgt automatisch een soort bij het bewaren. De Chef-knop zegt al wat het is: `snack`, `maaltijd`, of `sport` (voor/tijdens/na). Sla dat op als `r.soort` en bij sport ook `r.moment`.
+- In *Mijn recepten* (`flowRecipeList`) vervangt één rij filters de huidige (`CC_RECIPE_FILTERS`: Alles/Snel/Eiwit/Vezels):
+  ```
+  [Alles] [Maaltijd] [Snack] [Sport] [Snel]
+  ```
+  Snel = 20 minuten of korter. Eiwit en vezels staan al als waarden bij elk recept; die filters vervallen.
+- Sorteer binnen een filter op "vaak gemaakt": tel hoe vaak een recept is ingepland of als gegeten gemarkeerd. Recepten die je nooit maakte, komen onderaan.
+- Bestaande recepten zonder soort: leid af uit `type` (`snack` → Snack, anders Maaltijd) zodat niets verdwijnt.
+- **Af als** (na akkoord): elk filter toont de juiste recepten, oude recepten vallen ergens onder, de rij past op 390 px zonder afbreken (alle knoppen even breed), en zoeken werkt nog.
+
+---
+
+## Na elke batch
+- CLAUDE.md bijwerken waar iets verandert (basisversie, `CHEF_STIJL`-regels, nieuwe functies of velden).
+- Geen achterblijvende oude code (regel 7). Controleer dat functies die je vervangt nergens meer worden aangeroepen.
