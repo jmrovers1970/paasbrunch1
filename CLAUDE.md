@@ -40,7 +40,7 @@ Gebruiker: Jim. Primair op iPhone (Safari), in het Nederlands. Loopt (hoofdsport
 
 **De repository is openbaar** (GitHub Pages op een gratis account vereist dat). Er mogen dus nooit sleutels, tokens of persoonsgegevens in code, commits of testbestanden staan.
 
-**Versie**: constante `APP_VERSION = 'lime-YYYYMMDD-N'` bovenin het script. Getoond in Instellingen. Elke nieuwe versie: datum van vandaag en N doornummeren. Huidige basis: `lime-20261004-4`.
+**Versie**: constante `APP_VERSION = 'lime-YYYYMMDD-N'` bovenin het script. Getoond in Instellingen. Elke nieuwe versie: datum van vandaag en N doornummeren. Huidige basis: `lime-20261004-5`.
 
 ### CSS — twee lagen
 - **Oude laag**: eerste `<style>` in `<head>`. Historisch gegroeid, veel `!important`. Ongebruikte regels zijn al verwijderd; de rest wordt deels overstemd. Niet uitbreiden.
@@ -69,7 +69,7 @@ Kop + begroeting + invoer van Coach is turquoise, kop + invoer + knoppen van Che
 ### Vaste patronen (hergebruik, niet opnieuw uitvinden)
 - **Invoerbalk** (Coach en Chef): witte pil met lime ronde microfoon (52 px), tekstveld, camera-icoon (44 px), donkere ronde verzendknop. Zodra er tekst staat, neemt een ✕ (`.cc-clear`, `ccClearInput`) de plek van de camera over. Tijdens opname wordt de microfoon een pil "Stop opname" (`[aria-pressed="true"]`). Opnieuw inspreken vervangt de tekst; er wordt nooit automatisch verstuurd.
 - **Brede ingang** `.cc-entry`: witte pil 36 px zonder rand (tikgebied 44 px via `::after`) met label en chevron, opent een venster. Chef *Uit je voorraad*. Coach heeft twee even brede halve ingangen naast elkaar (`.cc-entry-half`, `flex:1 1 0`, icoon + label, geen chevron): *Dagplan* en *Ideeën* (voorbeeldvragen); bij privacymodus erachter een ronde donkere slot-knop (`#cc-privacy-badge`, 36 px). Chef-knoppen (`.cc-chef-row`) hebben dezelfde stijl: 36 px, wit, geen rand. Onder de Chef-invoer drie compacte regels `.cc-chef-line` (labelkolom 64 px `.cc-chef-lab`, 13 px/600, + bediening): *Sport* (Voor/Tijdens/Na), *Maaltijd* (Snel/Weekend/Comfort; modi `makkelijk`/`uitgebreid`/`comfort`). Knoplabels kort houden: alle knoppen in een rij zijn even breed, *Voorraad* (brede ingang).
-- **Compacte tegel** (Water, Gevoel, Voeding): één rij van 44 px, links een labelkolom van 72 px (`.cc-water-label`: kop + waarde), rechts de bediening. Gevoel: vijf gezichtjes (`CC_MOODS`, `ccSetMood`, slaat `checkIn` van vandaag op, nog een tik wist). Voeding: twee ringen van 44 px (`renderNutriBar`), tik opent de details.
+- **Compacte tegel** (Water, Gevoel, Voeding): één rij van 44 px, links een labelkolom van 72 px (`.cc-water-label`: kop + waarde), rechts de bediening. Gevoel: vijf gezichtjes (`CC_MOODS`, `ccSetMood`, slaat `checkIn` van vandaag op, nog een tik wist). Voeding: twee ringen van 44 px (`renderNutriBar`; alleen vezels en eiwit), tik opent de details. Koolhydraten en vet staan alleen in dat venster (regel `.cc-nutri-extra` onder de ringen) en bij maaltijd of recept (`mealNutrients`); optionele doelen `koolhydraten_dag` en `vet_dag` in Instellingen › Doelen (leeg = geen doel, `nutritionGoals` geeft dan `null`). De coach krijgt de dagtotalen mee in het dagbriefje.
 - **Chips** `.cc-chip`: 36–40 px hoog, wit, rand `--cc-line`, tekst 14 px/600, gecentreerd, geen afbreking.
 - **Status**: rondje 28 px. Leeg = gepland. Lime met donker vinkje = gedaan/gegeten. Geldt voor beweging, eten, en alle `input[type=checkbox]` (globale regel in cc-design-v1).
 - **Kaart**: wit, 1 px rand, 18 px afronding, geen schaduw. Twee niveaus koppen: sectiekop `.cc-section-head` met `.cc-section-title` (20 px/700, gewone hoofdletters: *Jouw dag*, *Jouw week*, *Jouw keuken*) en optioneel rechts `.cc-section-meta` (Jouw dag: "3 van 4 gedaan", `ccRenderDayMeta`); kop in een kaart of groep: 13 px hoofdletters, `--cc-muted` (`vandaag-section-h`).
@@ -86,7 +86,7 @@ Kop + begroeting + invoer van Coach is turquoise, kop + invoer + knoppen van Che
 - Dag: `data.weken[ISO-week][YYYY-MM-DD] = {activiteiten[], maaltijden{ontbijt,lunch,diner,snack: []}, waterGlazen, checkIn}`.
 - `ensureDay(date)` maakt een dag aan en geeft hem terug (schrijven). `flowDay(date)` alleen lezen. `logRecords(data)` = platte lijst registraties.
 - Activiteit: `{id,type,naam,detail,duur,afgevinkt}`; types o.a. run, bike, gym, walk, walkdog, swim, other, rest.
-- Maaltijd: `{id,naam,vezels:'7g',eiwitten:'20g',gegeten,receptId?}`. Vezels/eiwit als string met `g`; lees met `parseGrams()`.
+- Maaltijd: `{id,naam,vezels:'7g',eiwitten:'20g',koolhydraten?,vet?,gegeten,receptId?}`. Alles als string met `g`; lees met `parseGrams()`. Koolhydraten en vet zijn schattingen en ontbreken bij oude maaltijden: telt alleen waar bekend (`dayNutrition`: `eatenWithoutExtra`). Alle schattingen lopen via `ccEstimateNutrition` (vier waarden); Chef-recepten leveren ze via `CHEF_SCHEMA` (vet is mild: ongeldig = leeg, geen fout).
 - Recepten: `data.recepten[]` (`myRecipes()` filtert verwijderde en voorbeeldrecepten).
 - Instellingen: `settings`, opslaan via `saveSettingsData()`. Velden uit het instellingenscherm via `RITME_SETTINGS` (id `set-<id>` → key).
 - **Sync**: Gist, optioneel versleuteld (`ccEncryptPayload`/`ccDecryptContent`, AES-GCM, PBKDF2). Conflictdetectie via `hc_sync_base_<gistId>` en `ccDataHash()`. Bij onleesbare opslag: `ccStorageBlocked` + herstelmelding, niets overschrijven.
