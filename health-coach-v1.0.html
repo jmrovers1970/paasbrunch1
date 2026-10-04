@@ -1381,12 +1381,6 @@ button:has(>.cc-icon):hover{color:#315346}
 .cc-copy-activity{display:flex;align-items:center;justify-content:center;gap:8px;min-height:42px;margin:0 0 14px;font-size:13px}
 
 #lime-forget-conversation{font:inherit;font-size:12px;color:var(--muted);background:none;border:0;min-height:36px;padding:6px 0;margin-right:14px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
-.cc-memory-note{display:flex;align-items:center;flex-wrap:wrap;gap:8px;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px;line-height:1.45}
-.cc-memory-note>span{flex:1 1 190px;overflow-wrap:anywhere}
-.cc-memory-note strong,.cc-memory-note small{display:block;color:var(--muted);font-size:12px}
-.cc-memory-note button{font:inherit;color:var(--text);background:transparent;border:1px solid var(--border);border-radius:8px;min-height:36px;padding:6px 9px;cursor:pointer}
-#cc-memory-notice{margin:8px 0;border-left:3px solid var(--cc-lime);padding-left:10px;color:var(--cc-ink)}
-#cc-memory-notice[hidden]{display:none}
 
 #ritme-next.ritme-custom-tile{background:#eff2e6!important;border:1px solid #dce2d4!important;color:var(--text)!important;box-shadow:none}
 #ritme-next .ritme-tile-top,#ritme-next .ritme-kicker,#ritme-next .cc-next-plan,#ritme-next .cc-next-plan strong,#ritme-next>.ritme-next-name{color:var(--text)!important}
@@ -1630,6 +1624,15 @@ body .vandaag-section-h{font-size:13px!important;font-weight:650!important;text-
 .coach-front-card .log-feedback{padding:16px;background:var(--cc-card);border:1px solid var(--cc-line);border-radius:18px;color:var(--cc-ink)}
 .log-feedback-actions button{all:unset;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;height:44px;padding:0 16px;border-radius:999px;background:var(--cc-card);border:1px solid var(--cc-line);color:var(--cc-ink);font:600 14px/1 -apple-system,'SF Pro Text',system-ui,sans-serif;cursor:pointer}
 .log-feedback-actions button:focus-visible{outline:2px solid var(--cc-green);outline-offset:2px}
+#cc-memory-notice{margin:8px 0;color:var(--cc-ink)}
+#cc-memory-notice[hidden]{display:none}
+.cc-memory-note{display:flex;align-items:center;gap:8px;border-left:3px solid var(--cc-lime);padding-left:12px;font:400 14px/1.4 -apple-system,'SF Pro Text',system-ui,sans-serif}
+.cc-memory-note+.cc-memory-note{margin-top:8px}
+.cc-memory-note>.cc-memory-text{all:unset;box-sizing:border-box;flex:1 1 auto;min-width:0;padding:8px 0;overflow-wrap:anywhere;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.cc-memory-note strong{margin-right:4px;font-weight:700}
+.cc-memory-note small{display:block;font-size:12px;opacity:.8}
+.cc-memory-note>button:not(.cc-memory-text){all:unset;box-sizing:border-box;flex:none;display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;padding:0 4px;font:600 14px/1 -apple-system,'SF Pro Text',system-ui,sans-serif;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.cc-memory-note>button:focus-visible{outline:2px solid var(--cc-green);outline-offset:2px}
 .cc-reply-tools{display:flex;align-items:center;gap:8px;margin-top:8px;flex-wrap:wrap}
 .cc-reply-btn{all:unset;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;gap:4px;height:32px;padding:0 12px;border-radius:999px;background:var(--cc-card);border:1px solid var(--cc-line);color:var(--cc-ink);font:600 12px/1 -apple-system,'SF Pro Text',system-ui,sans-serif;cursor:pointer}
 .cc-reply-btn.bubble-play-btn{width:32px;padding:0}
@@ -1807,10 +1810,14 @@ body .vandaag-section-h{font-size:13px!important;font-weight:650!important;text-
 .cc-move-goal>span:last-child{display:block;margin-top:8px;font:400 14px/1.3 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-muted)}
 .cc-move-note{margin:8px 0 0;font:400 12px/1.4 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-muted)}
 #modal-container .cc-move-h{margin:0 0 8px;padding:0;border:0}
+#modal-container .cc-move-h+.cc-move{margin-top:0}
+#modal-container .cc-list+.cc-move-h{margin-top:24px}
 .cc-fiber-line{position:absolute;left:0;right:0;height:0;border-top:2px dashed var(--cc-ink);opacity:.35}
-.cc-fiber-row{display:flex;justify-content:space-between;gap:8px;margin-top:16px;padding-top:16px;border-top:1px solid var(--cc-line);font:400 14px/1.3 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-muted)}
-.cc-fiber-row strong{font-weight:600;color:var(--cc-ink)}
 .cc-nutri-rings{display:flex;gap:16px}
+.cc-nutri-extra{display:flex;gap:16px;margin-top:16px;padding-top:16px;border-top:1px solid var(--cc-line)}
+.cc-nutri-extra p{flex:1;min-width:0;margin:0;display:flex;flex-direction:column;gap:2px;font:400 14px/1.3 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-muted)}
+.cc-nutri-extra strong{font:700 16px/1.2 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-ink)}
+.cc-nutri-extra small{font:400 14px/1.2 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-muted)}
 /* ── Instellingen: kaart met het belangrijkste, Meer instellingen inklapbaar, pagina's met terug ── */
 #settings-overlay{background:var(--cc-bg);padding:calc(8px + env(safe-area-inset-top,0px)) 16px 0}
 .cc-settings{max-width:560px;margin:0 auto}
@@ -2190,7 +2197,7 @@ body input[type="checkbox"]:disabled{opacity:.4;cursor:default}
 'use strict';
 
 // ─── VERSION CHECK (forceert Safari herlading bij nieuwe versie) ──────────────
-const APP_VERSION = 'lime-20261004-1';
+const APP_VERSION = 'lime-20261004-7';
 // Eén plek voor de modellen: Sonnet voor gesprekken en recepten, Haiku voor snelle achtergrondtaken.
 const CC_MODEL_MAIN = 'claude-sonnet-4-6';
 const CC_MODEL_FAST = 'claude-haiku-4-5-20251001';
@@ -2480,17 +2487,28 @@ let genMaaltijd = '';  // '' | ontbijt | lunch | diner | snack (per sessie)
 
 
 
+// Keuze bij Voor en Na: '' = geen keuze (mix), 'snack' of 'maaltijd'.
+let flowSportSoort = '';
+const CC_SNACK_LEUK = ' Vloeibaar mag (smoothie, shake, kefir- of yoghurtdrank). Maak het leuk en deelbaar voor een jonge doelgroep: kleurrijk, met een pakkende naam, iets crunchy of een topping, er goed uit zien op een foto. Geen kinderachtige namen.';
 function _modusRegel() {
   if (flowChefMode === 'makkelijk') return `
 - MAKKELIJK: weinig werk en weinig afwas — maximaal 8 ingrediënten, maximaal 6 bereidingsstappen, totaal maximaal 30 minuten, alleen gangbare technieken en gewone supermarkt-ingrediënten. Smaak blijft de harde eis: geen fantasieloze "gooi een blik leeg"-recepten, kies slimme shortcuts die écht lekker zijn.`;
   if (flowChefMode === 'comfort') return `
 - COMFORTFOOD: voor troost of om stoom af te blazen. Warm, vullend en een beetje verwennend, zoals een stoofpot, ovenschotel, romige curry of pasta uit de oven, met een frisse, gezonde draai. Wel voedzaam, maar smaak en troost staan voorop; wees minder streng over vezels en eiwit.`;
-  if (flowChefMode === 'voor') return `
-- VOOR HET SPORTEN, voor 1 persoon: geef een mix van een kleine snack om 30–60 minuten vooraf te eten (hooguit 5 minuten werk) en een lichte maaltijd of lunch om 2–3 uur vooraf te eten (hooguit 15 minuten werk). Zet in de naam tussen haakjes wanneer je het eet, bijvoorbeeld "(30–60 min vooraf)". Bij één recept: kies wat het best past bij het tijdstip en de training van vandaag.`;
-  if (flowChefMode === 'na') return `
-- NA HET SPORTEN, voor 1 persoon: geef een mix van een herstelsnack om binnen een uur te eten (hooguit 10 minuten werk) en een volwaardige herstelmaaltijd (hooguit 30 minuten werk). Zet in de naam tussen haakjes wanneer je het eet, bijvoorbeeld "(binnen 1 uur)". Bij één recept: kies wat het best past bij het tijdstip en de training van vandaag.`;
+  if (flowChefMode === 'voor' || flowChefMode === 'na') {
+    const na = flowChefMode === 'na', snack = flowSportSoort === 'snack', maaltijd = flowSportSoort === 'maaltijd';
+    if (snack) return na
+      ? `\n- NA HET SPORTEN, voor 1 persoon: geef alleen herstelSNACKS om binnen een uur te eten (hooguit 10 minuten werk), geen maaltijden. Zet in de naam tussen haakjes "(binnen 1 uur)". Voedingsdoel: 15–25 g eiwit plus koolhydraten.${CC_SNACK_LEUK}`
+      : `\n- VOOR HET SPORTEN, voor 1 persoon: geef alleen SNACKS om 30–60 minuten vooraf te eten (hooguit 5 minuten werk), geen maaltijden. Zet in de naam tussen haakjes "(30–60 min vooraf)". Voedingsdoel: licht verteerbaar, vooral koolhydraten, weinig vet en vezels.${CC_SNACK_LEUK}`;
+    if (maaltijd) return na
+      ? `\n- NA HET SPORTEN, voor 1 persoon: geef alleen volwaardige herstelMAALTIJDEN (hooguit 30 minuten werk), geen snacks. Zet in de naam tussen haakjes "(binnen 1–2 uur)". Voedingsdoel: ruim eiwit plus koolhydraten.`
+      : `\n- VOOR HET SPORTEN, voor 1 persoon: geef alleen lichte MAALTIJDEN of lunches om 2–3 uur vooraf te eten (hooguit 15 minuten werk), geen snacks. Zet in de naam tussen haakjes "(2–3 uur vooraf)". Voedingsdoel: licht verteerbaar, vooral koolhydraten, weinig vet en vezels.`;
+    return na
+      ? `\n- NA HET SPORTEN, voor 1 persoon: geef een mix van een herstelsnack om binnen een uur te eten (hooguit 10 minuten werk) en een volwaardige herstelmaaltijd (hooguit 30 minuten werk). Voedingsdoel: 15–25 g eiwit plus koolhydraten, binnen een uur. Zet in de naam tussen haakjes wanneer je het eet, bijvoorbeeld "(binnen 1 uur)". Bij één recept: kies wat het best past bij het tijdstip en de training van vandaag.${CC_SNACK_LEUK}`
+      : `\n- VOOR HET SPORTEN, voor 1 persoon: geef een mix van een kleine snack om 30–60 minuten vooraf te eten (hooguit 5 minuten werk) en een lichte maaltijd of lunch om 2–3 uur vooraf te eten (hooguit 15 minuten werk). Voedingsdoel: licht verteerbaar, vooral koolhydraten, weinig vet en vezels. Zet in de naam tussen haakjes wanneer je het eet, bijvoorbeeld "(30–60 min vooraf)". Bij één recept: kies wat het best past bij het tijdstip en de training van vandaag.${CC_SNACK_LEUK}`;
+  }
   if (flowChefMode === 'tijdens' || flowChefMode === 'voorraadsnack') return `
-- SNACK: een klein tussendoortje voor 1 persoon, bescheiden portie, weinig of geen afwas.`;
+- SNACK: een klein tussendoortje voor 1 persoon, bescheiden portie, weinig of geen afwas.${flowChefMode === 'tijdens' ? ' Voedingsdoel: snelle koolhydraten, vocht en wat zout; meeneembaar, drinkbaar mag.' : ''}${CC_SNACK_LEUK}`;
   if (flowChefMode === 'uitgebreid') return `
 - GEMAK: uitgebreid — dit mag een kookproject zijn voor de serieuzere kok, groente-gedreven zoals Ottolenghi: gelaagde smaken, meerdere componenten, 45 tot 90 minuten. Kies technieken die het verschil maken (roosteren, marineren, zelf een saus maken) en leg in de bereidingsstappen kort uit waarom een stap belangrijk is.`;
   return '';
@@ -3361,7 +3379,7 @@ function quickEditMeal(dateStr,slot){
     ${items.map(m=>`<div class="meal-entry"><strong>${escapeText(m.naam)}</strong><div class="meal-entry-nutrients">${mealNutrients(m)}</div><button class="btn btn-ghost" onclick="deleteTodayMeal('${dateStr}','${slot}',${escapeText(JSON.stringify(m.id))})"><svg class="cc-icon" data-cc-icon="delete" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M9 6V3h6v3M6 6l1 15h10l1-15M10 10v7m4-7v7"/></svg><span>Verwijderen</span></button></div>`).join('')}
     <label class="modal-label" for="quick-meal-input">Wat heb je gegeten of wat ga je eten?</label><input id="quick-meal-input" class="modal-input" placeholder="Bijvoorbeeld twee boterhammen met kaas">
     <label class="modal-label" for="quick-meal-status">Status</label><select id="quick-meal-status" class="modal-input"><option value="eaten">Al gegeten</option><option value="planned">Nog gepland</option></select>
-    <button id="btn-bereken-nutri" class="btn btn-ghost btn-full" onclick="berekenNutriVoorInput('${dateStr}','${slot}')">Schat eiwit en vezels</button><div id="nutri-preview" style="display:none" class="meal-entry-nutrients"></div>
+    <button id="btn-bereken-nutri" class="btn btn-ghost btn-full" onclick="berekenNutriVoorInput('${dateStr}','${slot}')">Schat voedingswaarden</button><div id="nutri-preview" style="display:none" class="meal-entry-nutrients"></div>
     <button class="btn btn-primary btn-full" onclick="saveQuickMeal('${dateStr}','${slot}')">Opslaan</button>
     <button class="btn btn-ghost btn-full" onclick="vraagChefVoorSlot('${slot}')">Nog geen idee? Vraag Chef</button>
     ${recipes.length?`<details class="legacy-recipes"><summary>Kies uit Mijn recepten</summary>${recipes.map(r=>`<button class="btn btn-secondary btn-full" onclick="addReceptToMeal('${dateStr}','${slot}','${r.id}')">${escapeText(r.naam)}</button>`).join('')}</details>`:''}`);
@@ -3388,7 +3406,7 @@ function addReceptToMeal(dateStr, slot, receptId) {
   ensureDay(dateStr);
   const arr = data.weken[weekKey][dateStr].maaltijden;
   if (!Array.isArray(arr[slot])) arr[slot] = [];
-  arr[slot].push({ id:'m'+Date.now()+Math.random().toString(36).slice(2,5), naam:recept.naam, vezels:recept.vezels||'', eiwitten:recept.eiwitten||'', kcal:'', gepland:true, gegeten:false, receptId:recept.id });
+  arr[slot].push({ id:'m'+Date.now()+Math.random().toString(36).slice(2,5), naam:recept.naam, vezels:recept.vezels||'', eiwitten:recept.eiwitten||'', koolhydraten:recept.koolhydraten||'', vet:recept.vet||'', kcal:'', gepland:true, gegeten:false, receptId:recept.id });
   saveAndSync();
   ccGoBack();
   renderTodayMeals(today());
@@ -3406,7 +3424,7 @@ function saveQuickMeal(dateStr, slot) {
     const nutri = window._berekenResult?.input===val ? window._berekenResult : {};
     window._berekenResult = null;
     const eaten=document.getElementById('quick-meal-status')?.value==='eaten';
-    arr[slot].push({ id:'m'+Date.now()+Math.random().toString(36).slice(2,5), naam:val, vezels:nutri.vezels||'', eiwitten:nutri.eiwitten||'', koolhydraten:nutri.koolhydraten||'', kcal:'', gepland:!eaten, gegeten:eaten });
+    arr[slot].push({ id:'m'+Date.now()+Math.random().toString(36).slice(2,5), naam:val, vezels:nutri.vezels||'', eiwitten:nutri.eiwitten||'', koolhydraten:nutri.koolhydraten||'', vet:nutri.vet||'', kcal:'', gepland:!eaten, gegeten:eaten });
     saveAndSync();
   }
   ccGoBack();
@@ -3713,13 +3731,15 @@ Regels:
 - Herbereken vezels en eiwitten realistisch op basis van de nieuwe ingrediënten.
 - Pas de bereidingsstappen aan waar de wijziging dat vraagt.
 - Pas de naam alleen aan als een hoofdingrediënt wijzigt.
+- Houd de stijl van Chef aan en maak geen exotische ingrediënten van een gewoon recept: ${CHEF_STIJL}
+- Tijd eerlijk: tel alle stappen mee en rond naar boven af.
 Antwoord ALLEEN met geldige JSON in exact dit formaat, zonder uitleg:
-{"naam":"...","personen":${recept.personen||2},"voedingsbasis":"per_portie","vezels":"~Xg","eiwitten":"~Xg","koolhydraten":"~Xg","tijd":"X min","ingredienten":["hoeveelheid ingredient","..."],"bereiding":["Stap 1...","..."]}`;
+{"naam":"...","personen":${recept.personen||2},"voedingsbasis":"per_portie","vezels":"~Xg","eiwitten":"~Xg","koolhydraten":"~Xg","vet":"~Xg","tijd":"X min","ingredienten":["hoeveelheid ingredient","..."],"bereiding":["Stap 1...","..."]}`;
     const raw = await callAI(prompt, 900);
     const nieuw = validateChefRecipes([safeParseJSON(raw)],recept.personen||2,1)[0];
     // A revised idea must not silently overwrite a previously planned or saved recipe.
     delete recept._savedRecipeId;
-    Object.assign(recept, nieuw, {_type:recept._type});
+    Object.assign(recept, nieuw, {_type:recept._type, soort:recept.soort, moment:recept.moment});
     const kaart = document.getElementById('gencard-' + tmpId);
     if (kaart) kaart.outerHTML = recipeCardHTML(recept);
     showBanner('green', `✓ Recept aangepast: ${recept.naam}`);
@@ -4470,7 +4490,7 @@ async function analyseFotoLog(inputEl) {
         max_tokens: 300,
         messages: [{ role: 'user', content: [
           { type: 'image', source: { type: 'base64', media_type: mediaType, data: base64 } },
-          { type: 'text', text: 'Dit is een foto van een maaltijd die de gebruiker eet of at. Geef een korte Nederlandse naam en schat vezels en eiwitten per portie realistisch. Antwoord ALLEEN met dit JSON-object: {"naam":"korte naam","vezels":"~Xg","eiwitten":"~Xg","koolhydraten":"~Xg"}' }
+          { type: 'text', text: 'Dit is een foto van een maaltijd die de gebruiker eet of at. Geef een korte Nederlandse naam en schat vezels, eiwitten, koolhydraten en vet per portie realistisch. Antwoord ALLEEN met dit JSON-object: {"naam":"korte naam","vezels":"~Xg","eiwitten":"~Xg","koolhydraten":"~Xg","vet":"~Xg"}' }
         ]}]
       })
     });
@@ -5144,16 +5164,19 @@ function nutritionGoals() {
     const value = parseGrams(item?.waarde);
     return value > 0 ? value : fallback;
   };
-  return {vezels:goal('vezels_dag',30), eiwitten:goal('eiwitten_dag',80)};
+  return {vezels:goal('vezels_dag',30), eiwitten:goal('eiwitten_dag',80), koolhydraten:goal('koolhydraten_dag',null), vet:goal('vet_dag',null)};
 }
 
 function dayNutrition(day) {
-  const totals = {eaten:{vezels:0,eiwitten:0},planned:{vezels:0,eiwitten:0},count:0};
+  const totals = {eaten:{vezels:0,eiwitten:0,koolhydraten:0,vet:0},planned:{vezels:0,eiwitten:0,koolhydraten:0,vet:0},count:0,eatenWithoutExtra:0};
   Object.values(day?.maaltijden || {}).flatMap(slot => Array.isArray(slot) ? slot : []).forEach(m => {
     if (!m.naam) return;
     const target = m.gegeten ? totals.eaten : totals.planned;
     target.vezels += parseGrams(m.vezels);
     target.eiwitten += parseGrams(m.eiwitten);
+    target.koolhydraten += parseGrams(m.koolhydraten);
+    target.vet += parseGrams(m.vet);
+    if (m.gegeten && !(/\d/.test(m.koolhydraten || '') && /\d/.test(m.vet || ''))) totals.eatenWithoutExtra++;
     totals.count++;
   });
   return totals;
@@ -5181,17 +5204,17 @@ function renderNutriBar(dateStr) {
 function ccDayFood(date){const eaten=Object.values(flowDay(date).maaltijden||{}).flat().filter(m=>m&&m.gegeten),known=k=>eaten.filter(m=>m[k]&&/\d/.test(m[k]));const sum=k=>known(k).reduce((n,m)=>n+parseGrams(m[k]),0);return {vezels:known('vezels').length?sum('vezels'):null,eiwitten:known('eiwitten').length?sum('eiwitten'):null};}
 function ccFoodAvg(dates,key){const v=dates.map(d=>ccDayFood(d)[key]).filter(x=>x!==null);return {avg:v.length?v.reduce((a,b)=>a+b,0)/v.length:null,days:v.length,hit:v.filter(x=>x>=nutritionGoals()[key]).length};}
 function ccLast7(){return Array.from({length:7},(_,i)=>ccDateOffset(today(),i-6));}
-function ccFiberHtml(units,back){
- const all=units.flatMap(u=>u.dates),f=ccFoodAvg(all,'vezels'),e=ccFoodAvg(all,'eiwitten'),goal=nutritionGoals().vezels,t=today();
- const vals=units.map(u=>({...u,v:u.dates.some(d=>d<=t)?ccFoodAvg(u.dates.filter(d=>d<=t),'vezels').avg:null}));
+function ccFoodHtml(units,back,key){
+ const all=units.flatMap(u=>u.dates),a=ccFoodAvg(all,key),goal=nutritionGoals()[key],t=today(),name=key==='vezels'?'vezels':'eiwit';
+ const vals=units.map(u=>({...u,v:u.dates.some(d=>d<=t)?ccFoodAvg(u.dates.filter(d=>d<=t),key).avg:null}));
  const max=Math.max(goal*1.25,...vals.map(u=>u.v||0)),line=Math.round(100*goal/max);
- const bar=u=>{const fill=`<span class="cc-move-col"><i style="height:${u.v?Math.max(4,Math.round(100*u.v/max)):0}%"></i><b class="cc-fiber-line" style="bottom:${line}%"></b></span><small>${escapeText(u.label)}</small>`,label=u.v===null?'niet gelogd':Math.round(u.v)+' g vezels';return u.date&&u.date<=t?`<button type="button" class="cc-move-bar${u.date===t?' is-today':''}" aria-label="${formatShortDate(u.date)}: ${label}" onclick="ccOpenFrom(${back},()=>flowOpenDay('${u.date}'))">${fill}</button>`:`<span class="cc-move-bar" ${u.date?'aria-hidden="true"':`aria-label="${escapeText(u.label)}: ${label}"`}>${fill}</span>`;};
- return `<section class="cc-move"><p class="cc-move-total"><strong>${f.avg===null?'–':Math.round(f.avg)+' g'}</strong> vezels per dag</p><p class="cc-move-diff">${f.days?`Gemiddeld over ${f.days} gelogde ${f.days===1?'dag':'dagen'} · doel ${goal} g gehaald op ${f.hit}`:'Nog geen gegeten maaltijden met vezels gelogd.'}</p><div class="cc-move-bars">${vals.map(bar).join('')}</div><div class="cc-fiber-row"><span>Eiwit gemiddeld</span><strong>${e.avg===null?'–':Math.round(e.avg)+' g per dag'}</strong></div></section>`;
+ const bar=u=>{const fill=`<span class="cc-move-col"><i style="height:${u.v?Math.max(4,Math.round(100*u.v/max)):0}%"></i><b class="cc-fiber-line" style="bottom:${line}%"></b></span><small>${escapeText(u.label)}</small>`,label=u.v===null?'niet gelogd':Math.round(u.v)+' g '+name;return u.date&&u.date<=t?`<button type="button" class="cc-move-bar${u.date===t?' is-today':''}" aria-label="${formatShortDate(u.date)}: ${label}" onclick="ccOpenFrom(${back},()=>flowOpenDay('${u.date}'))">${fill}</button>`:`<span class="cc-move-bar" ${u.date?'aria-hidden="true"':`aria-label="${escapeText(u.label)}: ${label}"`}>${fill}</span>`;};
+ return `<section class="cc-move"><p class="cc-move-total"><strong>${a.avg===null?'–':Math.round(a.avg)+' g'}</strong> ${name} per dag</p><p class="cc-move-diff">${a.days?`Gemiddeld over ${a.days} gelogde ${a.days===1?'dag':'dagen'}<br>Doel ${goal} g · ${a.hit} van ${a.days} ${a.days===1?'dag':'dagen'} gehaald`:`Nog geen gegeten maaltijden met ${name} gelogd.`}</p><div class="cc-move-bars">${vals.map(bar).join('')}</div></section>`;
 }
 function ccDayUnits(dates){return dates.map(d=>({date:d,dates:[d],label:CC_DAY[new Date(d+'T12:00:00').getDay()].toLowerCase()}));}
 function showNutritionDetails() {
   const totals=dayNutrition(flowDay(today())), goals=nutritionGoals(), plan=[totals.planned.vezels?formatGrams(totals.planned.vezels)+' g vezels':'',totals.planned.eiwitten?formatGrams(totals.planned.eiwitten)+' g eiwit':''].filter(Boolean).join(', ');
-  showModal(`<div class="modal-header"><h2>Voeding</h2>${flowClose()}</div><h3 class="vandaag-section-h cc-move-h">Vandaag</h3><section class="cc-move cc-nutri-today"><div class="cc-nutri-rings">${ccNutriRing('Vezels',totals.eaten.vezels,goals.vezels)}${ccNutriRing('Eiwit',totals.eaten.eiwitten,goals.eiwitten)}</div>${plan?`<p class="cc-move-note">Nog gepland: ${plan}</p>`:''}</section><h3 class="vandaag-section-h cc-move-h">Afgelopen 7 dagen</h3>${ccFiberHtml(ccDayUnits(ccLast7()),'()=>showNutritionDetails()')}<p class="cc-set-note">Schattingen. Alleen gegeten maaltijden tellen mee; een dag zonder log telt niet als 0.</p><button type="button" class="btn btn-secondary btn-full cc-week-ask" onclick="closeModal();openSettings();ccSetPage('doelen')">Doelen aanpassen</button>`);
+  showModal(`<div class="modal-header"><h2>Voeding</h2>${flowClose()}</div><h3 class="vandaag-section-h cc-move-h">Vandaag</h3><section class="cc-move cc-nutri-today"><div class="cc-nutri-rings">${ccNutriRing('Vezels',totals.eaten.vezels,goals.vezels)}${ccNutriRing('Eiwit',totals.eaten.eiwitten,goals.eiwitten)}</div><div class="cc-nutri-extra">${[['Koolhydraten',totals.eaten.koolhydraten,goals.koolhydraten],['Vet',totals.eaten.vet,goals.vet]].map(([l,v,g])=>`<p><span>${l}</span><strong>${formatGrams(v)} g${g?` <small>/ ${formatGrams(g)} g</small>`:''}</strong></p>`).join('')}</div>${totals.eatenWithoutExtra?`<p class="cc-move-note">Bij ${totals.eatenWithoutExtra} gegeten ${totals.eatenWithoutExtra===1?'maaltijd':'maaltijden'} zijn koolhydraten of vet niet bekend; die tellen daar niet in mee.</p>`:''}${plan?`<p class="cc-move-note">Nog gepland: ${plan}</p>`:''}</section>${[['vezels','Vezels'],['eiwitten','Eiwit']].map(([k,l])=>`<h3 class="vandaag-section-h cc-move-h">${l} · afgelopen 7 dagen</h3>${ccFoodHtml(ccDayUnits(ccLast7()),'()=>showNutritionDetails()',k)}`).join('')}<p class="cc-set-note">Schattingen. Alleen gegeten maaltijden tellen mee; een dag zonder log telt niet als 0.</p><button type="button" class="btn btn-secondary btn-full cc-week-ask" onclick="closeModal();openSettings();ccSetPage('doelen')">Doelen aanpassen</button>`);
 }
 
 
@@ -5598,21 +5621,21 @@ const CC_CHEF_EVAL=[
  {modus:'comfort',vraag:'Comfortfood',criteria:'Warm, vullend en troostend, met een frisse, gezonde draai. Voedzaam.'},
  {modus:'auto',vraag:'Iets met zalm en broccoli, binnen 20 minuten',criteria:'Gebruikt zalm en broccoli en is binnen 20 minuten klaar.'}
 ];
-const CC_CHEF_EVAL_ALGEMEEN='Voor iedereen: sportief en trendy, gezond zonder dieetgedoe; vormen als bowl, wrap, bakplaat of één pan; hoeveelheden in gram of ml; Nederlandse supermarkt; korte pakkende naam; korte concrete stappen; klopt en is haalbaar.';
+const CC_CHEF_EVAL_ALGEMEEN='Voor iedereen: sportief en trendy, gezond zonder dieetgedoe; vormen als bowl, wrap, bakplaat of één pan; hoeveelheden in gram of ml; Nederlandse supermarkt; korte pakkende naam; korte concrete stappen; praktisch met spullen die men vaak in huis heeft; eerlijke bereidingstijd; geen rijstwafels tenzij erom gevraagd; snacks leuk voor een jonge doelgroep; klopt en is haalbaar.';
 async function ccChefEvalJudge(c,recipes){
  const kort=recipes.map(r=>({naam:r.naam,tijd:r.tijd,personen:r.personen,eiwit:r.eiwitten,vezels:r.vezels,ingredienten:r.ingredienten,bereiding:r.bereiding}));
  return ccJudgeParse(await callAIFast('Je beoordeelt receptvoorstellen van een kook-app. Wees streng maar redelijk.\nVraag: '+JSON.stringify(c.vraag)+'\nCriteria: '+c.criteria+' '+CC_CHEF_EVAL_ALGEMEEN+'\nRecepten: '+JSON.stringify(kort)+'\nAntwoord met alleen dit JSON-object en niets anders, zonder aanhalingstekens in de reden: {"oordeel":"goed"|"matig"|"fout","reden":"max 20 woorden"}',400));
 }
 async function ccChefEvalRun(c){
- const keep={flowChefMode,genPersonen,genCount,genDieet,genFocus,genMaaltijd};
- flowChefMode=c.modus;genPersonen=2;genCount=2;genDieet='vlees';genFocus='combi';genMaaltijd='';
+ const keep={flowChefMode,flowSportSoort,genPersonen,genCount,genDieet,genFocus,genMaaltijd};
+ flowChefMode=c.modus;flowSportSoort='';genPersonen=2;genCount=2;genDieet='vlees';genFocus='combi';genMaaltijd='';
  const t0=performance.now();let eerste=null;
  try{
   const recipes=await requestChefRecipes(c.vraag,2,[],()=>{eerste??=performance.now()-t0;});
   const klaar=performance.now()-t0;
   return {klaar,eerste:eerste??klaar,recipes,...await ccChefEvalJudge(c,recipes)};
  }catch(e){return {klaar:performance.now()-t0,eerste:null,recipes:[],oordeel:'fout',reden:'Fout bij testen: '+(e.message||'onbekend')};}
- finally{({flowChefMode,genPersonen,genCount,genDieet,genFocus,genMaaltijd}=keep);}
+ finally{({flowChefMode,flowSportSoort,genPersonen,genCount,genDieet,genFocus,genMaaltijd}=keep);}
 }
 const ccSec=ms=>ms==null?'–':Math.round(ms/1000)+' s';
 function ccChefEvalSummary(r){return r.goed+' goed · '+r.matig+' matig · '+r.fout+' fout · eerste recept '+ccSec(r.eerste)+', klaar '+ccSec(r.klaar);}
@@ -5981,7 +6004,7 @@ Regels:
 - Herhaling is begrensd tot één expliciete week. Voor komende week: datum op de maandag van komende week zetten. Voor iedere dinsdag zonder einddatum: vraag welke periode; maak geen eindeloze reeks. Reeds gegeten/gedaan is geen toekomstplan.
 - Hypothesen en adviesvragen ("wat als ik morgen loop", "wat eet ik voor 17 km") zijn geen opdracht om sport of eten te loggen. Verwerk een expliciete registratie en een adviesvraag samen als beide worden gevraagd. Bij "hetzelfde als vorige keer" alleen kopiëren als de bron eenduidig in context staat, anders vragen. Een correctie is geen extra registratie.
 - activiteiten: ARRAY van sport/beweging-objecten. Meerdere activiteiten of dagen → meerdere APARTE objecten (nooit twee dagen in één datum-veld). Elk object: {"naam":"5km Hardlopen","type":"run","detail":"rustig tempo","km":5,"duur":30,"datum":"vandaag","herhaal":null,"herhaal_dagen":[]}. km = afstand als GETAL. duur = alleen expliciet genoemde minuten, anders null. Verzin geen afstand of tijd. datum: specifieke datum → "YYYY-MM-DD" (bijv. "16 mei" → "2026-05-16"). Weekdag in VERLEDEN tijd (bijv. "maandag hardgelopen") → "afgelopen_maandag". Weekdag in TOEKOMST → dag zelf (bijv. "woensdag"). herhaal = null|"week"|"werkdagen". Types: run, gym, bike, walk, commute, walkdog, other. ALLEEN bij PLANNEN/TOEVOEGEN, niet bij "ik heb gedaan".
-- maaltijden: ARRAY van maaltijd-objecten. Meerdere maaltijden of dagen → meerdere APARTE objecten (nooit twee dagen in één datum-veld). Hoeveelheden in de naam verwerken als één object (naam: "Twee bananen"). Elk object: {"naam":"Yoghurt","slot":"ontbijt","vezels":"~5g","eiwitten":"~12g","koolhydraten":"~30g","kcal":"~350kcal","datum":"vandaag","herhaal":null,"gegeten":false,"extra":false}. slot: bepaal op basis van tijdswoorden: "vanochtend"/"vanmorgen"/"'s ochtends" → "ontbijt", "vanmiddag"/"'s middags" → "lunch", "vanavond"/"'s avonds" → "diner", "tussendoor"/"als snack" → "snack". Geen tijdswoord → gebruik meest logische slot op basis van het gerecht. datum: specifieke datum → "YYYY-MM-DD". Weekdag in VERLEDEN → "afgelopen_[dag]". herhaal = null|"week"|"werkdagen". Schat ALTIJD vezels én eiwitten. gegeten=true bij heb gegeten, net gegeten of at; false bij plannen. extra=true bij nog een, extra of nogmaals: dit is een extra portie. Bij onbekende status: gegeten=null, niet gokken.
+- maaltijden: ARRAY van maaltijd-objecten. Meerdere maaltijden of dagen → meerdere APARTE objecten (nooit twee dagen in één datum-veld). Hoeveelheden in de naam verwerken als één object (naam: "Twee bananen"). Elk object: {"naam":"Yoghurt","slot":"ontbijt","vezels":"~5g","eiwitten":"~12g","koolhydraten":"~30g","vet":"~8g","kcal":"~350kcal","datum":"vandaag","herhaal":null,"gegeten":false,"extra":false}. slot: bepaal op basis van tijdswoorden: "vanochtend"/"vanmorgen"/"'s ochtends" → "ontbijt", "vanmiddag"/"'s middags" → "lunch", "vanavond"/"'s avonds" → "diner", "tussendoor"/"als snack" → "snack". Geen tijdswoord → gebruik meest logische slot op basis van het gerecht. datum: specifieke datum → "YYYY-MM-DD". Weekdag in VERLEDEN → "afgelopen_[dag]". herhaal = null|"week"|"werkdagen". Schat ALTIJD vezels én eiwitten. gegeten=true bij heb gegeten, net gegeten of at; false bij plannen. extra=true bij nog een, extra of nogmaals: dit is een extra portie. Bij onbekende status: gegeten=null, niet gokken.
 - water: glazen toe te VOEGEN (bij "nog X glazen" of "X glazen gedronken"). Liters omrekenen: 1 liter = 4 glazen, 1,5 liter = 6 glazen. 0 als niet van toepassing.
 - water_totaal: totaal aantal glazen INSTELLEN (bij "in totaal X glazen" of "ik heb X glazen gehad vandaag"). null als niet van toepassing; 0 is expliciet terugzetten naar nul.
 - wijzig_maaltijd: object {"slot":"ontbijt","nieuw_naam":"Havermout","datum":"vandaag","vezels":"~6g","eiwitten":"~8g","kcal":"~350kcal"} als gebruiker een maaltijd wil WIJZIGEN/AANPASSEN (bijv. "verander mijn ontbijt naar havermout", "maak van mijn lunch een wrap"). Pas alleen de bedoelde maaltijd aan, behoud andere maaltijden in dat slot. Voeg item_id toe uit de context. Bij meerdere mogelijke maaltijden: vraag welke via coaching_vraag en zet wijzig_maaltijd op null. null als niet van toepassing.
@@ -6139,7 +6162,7 @@ Lege arrays [] voor activiteiten/maaltijden als geen van toepassing. Geen uitleg
     _toArray(parsed.maaltijden).forEach(m => {
         if (!m || !m.naam) return;
         const slot = m.slot || tijdSlot;
-        const mItem = { id: 'm'+Date.now()+Math.random().toString(36).slice(2,5), naam: m.naam, vezels: m.vezels || '', eiwitten: m.eiwitten || '', koolhydraten: m.koolhydraten || '', kcal: m.kcal || '', gepland: !m.gegeten, gegeten: m.gegeten };
+        const mItem = { id: 'm'+Date.now()+Math.random().toString(36).slice(2,5), naam: m.naam, vezels: m.vezels || '', eiwitten: m.eiwitten || '', koolhydraten: m.koolhydraten || '', vet: m.vet || '', kcal: m.kcal || '', gepland: !m.gegeten, gegeten: m.gegeten };
         const herhaalDates = ritmeRepeatDates(m.herhaal,m.datum);
         const targetDates = herhaalDates || _resolveDatesMulti(m.datum);
         targetDates.forEach(dateStr => {
@@ -6476,14 +6499,14 @@ async function lookupAndUpdateVoedingPreview(naam) {
     if (!result || (result.fiber_100g === null && result.proteins_100g === null)) {
       // Geen productmatch (logisch bij gerechten) — Chef maakt een zorgvuldige portieschatting
       if (lookupBtn) lookupBtn.textContent = 'Chef rekent na…';
-      const raw = await callAIFast(`Geef een zorgvuldige voedingsschatting voor één portie van: "${naam.replace(/"/g, "'")}". Denk aan realistische portiegrootte. Antwoord ALLEEN met JSON: {"vezels":"~Xg","eiwitten":"~Xg","koolhydraten":"~Xg","kcal":"~X"}`, 200);
+      const raw = await callAIFast(`Geef een zorgvuldige voedingsschatting voor één portie van: "${naam.replace(/"/g, "'")}". Denk aan realistische portiegrootte. Antwoord ALLEEN met JSON: {"vezels":"~Xg","eiwitten":"~Xg","koolhydraten":"~Xg","vet":"~Xg","kcal":"~X"}`, 200);
       const ai = safeParseJSON(raw);
       if (!ai || (!ai.vezels && !ai.eiwitten)) { if (lookupBtn) { lookupBtn.textContent = 'Even niet gelukt — tik om opnieuw te proberen'; lookupBtn.disabled = false; } return; }
       viaAI = true;
       result = {
         name: naam,
         fiber_100g: null, proteins_100g: null, kcal_100g: null,
-        _vezels: ai.vezels || null, _eiwitten: ai.eiwitten || null, _koolhydraten: ai.koolhydraten || null, _kcal: ai.kcal || null
+        _vezels: ai.vezels || null, _eiwitten: ai.eiwitten || null, _koolhydraten: ai.koolhydraten || null, _vet: ai.vet || null, _kcal: ai.kcal || null
       };
     }
 
@@ -6500,6 +6523,7 @@ async function lookupAndUpdateVoedingPreview(naam) {
       if (pills[1]) pills[1].innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="vertical-align:-1px;opacity:.9"><path d="M12 2C8.5 2 5 7 5 11.8 5 17.4 8.1 22 12 22s7-4.6 7-10.2C19 7 15.5 2 12 2z"/></svg> ' + eiwitten;
       if (window._vpParsed) window._vpParsed.eiwitten = eiwitten;
     }
+    if (result._vet && window._vpParsed) window._vpParsed.vet = result._vet;
     const koolh = result._koolhydraten || null;
     if (koolh) {
       if (pills[2]) { const svgdeel = pills[2].querySelector('svg'); pills[2].innerHTML = (svgdeel ? svgdeel.outerHTML : '') + ' ' + koolh; }
@@ -6522,7 +6546,7 @@ function saveVoedingIntake(dateStr, slot, naam, vezels, eiwitten, kcal, source) 
     eiwitten = window._vpParsed.eiwitten || eiwitten;
     kcal = window._vpParsed.kcal || kcal;
   }
-  const koolhydraten = (window._vpParsed && window._vpParsed.koolhydraten) || '';
+  const koolhydraten = (window._vpParsed && window._vpParsed.koolhydraten) || '', vet = (window._vpParsed && window._vpParsed.vet) || '';
   const gegeten = document.getElementById('vp-status') ? document.getElementById('vp-status').value === 'gegeten' : window._vpParsed?.wanneer === 'gegeten';
   try { assertLogDate(dateStr); } catch(e) { showBanner('red', e.message); return; }
   const before = JSON.parse(JSON.stringify(data));
@@ -6531,7 +6555,7 @@ function saveVoedingIntake(dateStr, slot, naam, vezels, eiwitten, kcal, source) 
   ensureDay(dateStr);
   if (!data.weken[weekKey][dateStr].maaltijden) data.weken[weekKey][dateStr].maaltijden = { ontbijt:[], lunch:[], diner:[], snack:[] };
   if (!Array.isArray(data.weken[weekKey][dateStr].maaltijden[slot])) data.weken[weekKey][dateStr].maaltijden[slot] = [];
-  data.weken[weekKey][dateStr].maaltijden[slot].push({ id:'m'+Date.now()+Math.random().toString(36).slice(2,5), naam, vezels, koolhydraten, eiwitten, kcal, gegeten, gepland: !gegeten });
+  data.weken[weekKey][dateStr].maaltijden[slot].push({ id:'m'+Date.now()+Math.random().toString(36).slice(2,5), naam, vezels, koolhydraten, vet, eiwitten, kcal, gegeten, gepland: !gegeten });
   saveAndSync();
   closeModal();
   window._vpParsed = null;
@@ -6868,7 +6892,8 @@ function myRecipes(){return (data.recepten||[]).filter(r=>!r.flowDeleted&&!r._ch
 
 function mealNutrients(m){
   const amount=v=>escapeText(String(v||'onbekend').replace(/^~/,'≈').replace(/(\d)g\b/g,'$1 g'));
-  return `<span>Eiwit ${amount(m.eiwitten)}</span><span>Vezels ${amount(m.vezels)}</span>`;
+  const known=v=>v&&/\d/.test(v);
+  return `<span>Eiwit ${amount(m.eiwitten)}</span><span>Vezels ${amount(m.vezels)}</span>${known(m.koolhydraten)?`<span>Koolhydraten ${amount(m.koolhydraten)}</span>`:''}${known(m.vet)?`<span>Vet ${amount(m.vet)}</span>`:''}`;
 }
 function showAddMealOptions(){return flowAddMeal();}
 
@@ -6884,22 +6909,30 @@ let genPersonen = [1, 2, 3, 4, 5, 6].includes(Number(localStorage.getItem('hc_ge
 
 function saveMealRecipe(id){const r=(data.recepten||[]).find(x=>x.id===id);if(!r)return;r.bewaard=true;r._chefTransient=false;r.flowDeleted=false;saveAndSync();_renderFoodReceptenList();closeModal();showBanner('green','Bewaard in Mijn recepten.');}
 const CHEF_STIJL=`STIJL VAN CHEF:
-- Voor een sportieve, trendy eter: gezond zonder dieetgedoe, fris, veel smaak en een beetje hip, op het niveau van Chickslovefood, Leuke Recepten, OhMyFoodness, Mob, Eat the Gains en Ottolenghi.
+- Voor een sportieve, trendy eter: gezond zonder dieetgedoe, fris, veel smaak en een beetje hip, op het niveau van Chickslovefood, Leuke Recepten, OhMyFoodness, Mob, Eat the Gains en Ottolenghi. Extra inspiratie: Ottolenghi (veel kruiden, zuur, granaatappel, tahin, za'atar), Laura's Bakery (gezond bakken en ontbijt, haalbaar), Veggilaine en bekende foodcreators op TikTok en Instagram (kleurrijk, één pan of bakplaat, makkelijk na te maken). Gebruik ze als smaak en stijl, kopieer geen recepten en noem geen namen in het recept.
 - Vaste vormen die werken: bowl, wrap, bakplaat, één pan, overnight oats, yoghurt- of kwarkbowl. Varieer daarbinnen en wissel af.
 - Eiwit ruim en zichtbaar: een maaltijd 30–45 g eiwit per portie, een snack 5–20 g. Slimme bronnen: Griekse yoghurt, kwark, cottage cheese, eieren, peulvruchten, tofu, tempeh, edamame, en vis of vlees als het eetpatroon dat toestaat.
 - Groente voorop, met contrast: iets fris of zuurs, iets knapperigs, een saus of dip, verse kruiden.
-- Snel waar het kan: de meeste recepten in 5–20 minuten.
+- Snel waar het kan, maar eerlijk: tel wassen, snijden, oven voorverwarmen, koken en rusten mee, en reken voor een thuiskok, niet voor een chef. Twijfel je, rond dan naar boven af. Een ovenrecept duurt minstens 25 minuten.
 - Hoeveelheden in gram of ml waar het kan, ook bij groente, fruit en kaas (bijvoorbeeld "150 g avocado" in plaats van "1 avocado"); alleen eieren en kleine dingen zoals een teentje knoflook in stuks; zout, peper en verse kruiden mogen "naar smaak". Nooit cups of ounces. Ingrediënten uit een gewone Nederlandse supermarkt.
 - Naam: kort en pakkend, het gerecht plus de smaakmaker die het verschil maakt, bijvoorbeeld "Crispy tofu-bowl met sesam-limoen" of "Bakplaat-zalm met zoete aardappel en tahin". Gangbare foodwoorden als bowl, wrap en crispy mogen.
-- Stappen: kort, actief en concreet, bijvoorbeeld "Rooster 20 min op 220 °C". Geen lappen tekst.`;
-const CHEF_SCHEMA='[{"naam":"...","personen":2,"voedingsbasis":"per_portie","vezels":"~Xg","eiwitten":"~Xg","koolhydraten":"~Xg","tijd":"20 min","ingredienten":["200 g ingrediënt"],"bereiding":["Concrete stap met tijd en indien nodig temperatuur"]}]';
+- Stappen: kort, actief en concreet, bijvoorbeeld "Rooster 20 min op 220 °C". Geen lappen tekst.
+- Praktisch: bouw elk recept op basisvoorraad (eieren, yoghurt of kwark, havermout, rijst, pasta, wraps, bonen of kikkererwten uit blik, tomaten uit blik, ui, knoflook, citroen, diepvriesgroente, kaas, pindakaas, specerijen). Voeg hooguit 3 verse of bijzondere ingrediënten toe die het verschil maken. Liever een slimme twist op iets bekends dan een lijst exotische producten.
+- Afwisseling. Rijstwafels en rijstcrackers alleen als de gebruiker erom vraagt. Wissel de basis af (brood, wrap, havermout, yoghurt, kwark, fruit, smoothie, ei, peulvruchten) en gebruik binnen één reeks voorstellen nooit twee keer dezelfde basis.`;
+const CHEF_SCHEMA='[{"naam":"...","personen":2,"voedingsbasis":"per_portie","vezels":"~Xg","eiwitten":"~Xg","koolhydraten":"~Xg","vet":"~Xg","tijd":"20 min","ingredienten":["200 g ingrediënt"],"bereiding":["Concrete stap met tijd en indien nodig temperatuur"]}]';
 function validateChefRecipe(r,persons){
   if(!r||typeof r.naam!=='string'||!r.naam.trim()||r.naam.length>180||r.personen!==persons||r.voedingsbasis!=='per_portie')throw Error('Porties of voedingsbasis ontbreken. Probeer opnieuw.');
   for(const key of ['ingredienten','bereiding'])if(!Array.isArray(r[key])||!r[key].length||!r[key].every(x=>typeof x==='string'&&x.trim()))throw Error('Ingrediënten of bereidingsstappen ontbreken. Probeer opnieuw.');
   if(r.ingredienten.filter(x=>!/\d|[½¼¾⅓⅔]|snuf|naar smaak/i.test(x)).length>3)throw Error('Niet alle hoeveelheden zijn duidelijk. Probeer opnieuw.');
   if(typeof r.tijd!=='string'||!/^\d+\s*min$/.test(r.tijd)||parseInt(r.tijd)<1)throw Error('De bereidingstijd ontbreekt. Probeer opnieuw.');
   for(const key of ['vezels','eiwitten','koolhydraten'])if(typeof r[key]!=='string'||!/^~?\d+(?:[.,]\d+)?\s*g$/.test(r[key]))throw Error('Voedingswaarden per portie ontbreken. Probeer opnieuw.');
-  return {...r,naam:r.naam.trim(),_basePersonen:persons,personen:persons,_type:(flowChefMode==='tijdens'||flowChefMode==='voorraadsnack'?'snack':genMaaltijd)||undefined};
+  const sport=['voor','tijdens','na'].includes(flowChefMode);
+  return {...r,soort:sport?'sport':flowChefMode==='voorraadsnack'?'snack':'maaltijd',...(sport?{moment:flowChefMode}:{}),vet:typeof r.vet==='string'&&/^~?\d+(?:[.,]\d+)?\s*g$/.test(r.vet)?r.vet:'',tijd:ccRealisticTime(r),naam:r.naam.trim(),_basePersonen:persons,personen:persons,_type:(flowChefMode==='tijdens'||flowChefMode==='voorraadsnack'||(sport&&flowSportSoort==='snack')?'snack':genMaaltijd)||undefined};
+}
+// Vangnet tegen te optimistische tijden: de minuten uit de stappen plus 5 minuten voorbereiding zijn het minimum.
+function ccRealisticTime(r){
+  let sum=0;for(const step of r.bereiding)for(const m of step.matchAll(/(\d+)\s*(?:–|-|tot)?\s*(\d+)?\s*min/gi))sum+=Math.max(+m[1],+(m[2]||0));
+  return sum&&sum+5>parseInt(r.tijd)?(sum+5)+' min':r.tijd;
 }
 function validateChefRecipes(value,persons,expected){
   if(!Array.isArray(value)||value.length!==expected)throw Error('Chef gaf geen volledig voorstel. Probeer opnieuw.');
@@ -6921,7 +6954,8 @@ function ccCompleteObjects(text){
 function chefRecipePrompt(focus,n,previous,selfCheck){
   const mode=CC_CHEF_MODES[flowChefMode]||{},persons=mode.sport||mode.snack?1:genPersonen;
   const nutrition=genFocus==='eiwitten'?'Kies een eiwitrijke variant zonder smaak of praktische haalbaarheid op te offeren.':genFocus==='vezels'?'Kies een vezelrijke variant zonder smaak of praktische haalbaarheid op te offeren.':mode.sport||mode.snack||flowChefMode==='comfort'?'':'Lekker én gezond: veel groente, volkoren of peulvruchten, weinig bewerkt. Draag bij aan het vezeldoel van de dag zonder smaak op te offeren.';
-  const time=mode.tijd||'Doorgaans maximaal 35 minuten.';
+  const sportTijd=flowSportSoort&&{voor:{snack:'Hooguit 5 minuten.',maaltijd:'Hooguit 15 minuten.'},na:{snack:'Hooguit 10 minuten.',maaltijd:'Hooguit 30 minuten.'}}[flowChefMode]?.[flowSportSoort];
+  const time=sportTijd||mode.tijd||'Doorgaans maximaal 35 minuten.';
   const prompt=`Maak ${n} verschillende, goed maakbare recepten op basis van deze wens: ${focus||'Geef me inspiratie voor een lekkere maaltijd.'}
     ${CHEF_STIJL}
     ${_dieetRegel()} ${_maaltijdRegel()} ${_momentRegel()} ${_modusRegel()} ${_voorraadRegel()}
@@ -6953,7 +6987,7 @@ function generateRecepten(){return flowChefSubmit();}
 
 function chefPreviewOpen(fresh){
   if(fresh)window._generatedRecepten=[];
-  showModal(`<div class="modal-header"><h2>Waar heb je zin in?</h2>${flowClose()}</div><p class="muted">Kies een idee. Alleen wat je bewaart komt in Mijn recepten.</p><div id="gen-preview-list">${(window._generatedRecepten||[]).map(recipeCardHTML).join('')}</div><div id="gen-preview-wait" class="cc-chef-wait" role="status" hidden><span class="cc-chef-dot" aria-hidden="true"></span><span id="gen-preview-wait-text"></span></div><button id="gen-meer-btn" class="btn btn-secondary btn-full" onclick="generateMeer()">Andere ideeën</button>`);
+  showModal(`<div class="modal-header"><h2>Zit hier iets tussen?</h2>${flowClose()}</div><p class="muted">Kies een idee. Alleen wat je bewaart komt in Mijn recepten.</p><div id="gen-preview-list">${(window._generatedRecepten||[]).map(recipeCardHTML).join('')}</div><div id="gen-preview-wait" class="cc-chef-wait" role="status" hidden><span class="cc-chef-dot" aria-hidden="true"></span><span id="gen-preview-wait-text"></span></div><button id="gen-meer-btn" class="btn btn-secondary btn-full" onclick="generateMeer()">Andere ideeën</button>`);
 }
 function chefPreviewWait(text){
   const w=document.getElementById('gen-preview-wait'),b=document.getElementById('gen-meer-btn');if(!w)return;
@@ -6993,7 +7027,7 @@ function recipeCardHTML(r){
   <h3>${escapeText(r.naam)}</h3><div class="meal-entry-nutrients">${r.eiwitten||r.vezels?mealNutrients(r)+' <span>per portie · schatting</span>':'<span>Voedingswaarden onbekend</span>'}</div>
   <details><summary>Bekijk recept</summary><h4>Ingrediënten voor ${r.personen} ${r.personen===1?'persoon':'personen'}</h4><ul>${r.ingredienten.map(x=>`<li>${escapeText(x)}</li>`).join('')}</ul><h4>Bereiding</h4><ol>${r.bereiding.map(x=>`<li>${escapeText(x)}</li>`).join('')}</ol>
   <div class="chef-adjust"><label for="aanpas-${r._tmpId}">Maak het naar jouw smaak</label><input id="aanpas-${r._tmpId}" class="modal-input" placeholder="Bijvoorbeeld: meer eiwit of zonder feta"><button id="aanpas-btn-${r._tmpId}" class="btn btn-secondary" onclick="pasReceptAan('${r._tmpId}')">Pas recept aan</button></div></details>
-  <div class="chef-proposal-actions"><button class="btn btn-primary" onclick="openGeneratedMeal('${r._tmpId}',false)">Inplannen</button><button class="btn btn-secondary" onclick="openGeneratedMeal('${r._tmpId}',true)">Gegeten</button><button class="btn btn-ghost" id="bewaar-btn-${r._tmpId}" onclick="bewaarGenRecept('${r._tmpId}')">Bewaren</button></div></article>`;
+  <div class="chef-proposal-actions"><button class="btn btn-primary" onclick="openGeneratedMeal('${r._tmpId}',false)">Inplannen</button><button class="btn btn-secondary" onclick="openGeneratedMeal('${r._tmpId}',true)">Gegeten</button>${ccSavedGenerated(r)?`<button class="btn btn-ghost" id="bewaar-btn-${r._tmpId}" onclick="chefOpenSaved('${r._tmpId}')">Open recept</button>`:`<button class="btn btn-ghost" id="bewaar-btn-${r._tmpId}" onclick="bewaarGenRecept('${r._tmpId}')">Bewaren</button>`}</div></article>`;
 }
 function retainGeneratedRecipe(r,savedByUser=false){
   data.recepten ||= [];
@@ -7001,7 +7035,10 @@ function retainGeneratedRecipe(r,savedByUser=false){
   if(!saved){saved={...r,id:'r'+Date.now()+Math.random().toString(36).slice(2,7),type:r._type||'diner',_chefTransient:!savedByUser};delete saved._tmpId;data.recepten.push(saved);r._savedRecipeId=saved.id;}
   if(savedByUser){saved.bewaard=true;saved._chefTransient=false;saved.flowDeleted=false;}return saved;
 }
-function bewaarGenRecept(id){const r=(window._generatedRecepten||[]).find(x=>x._tmpId===id);if(!r)return;retainGeneratedRecipe(r,true);saveAndSync();_renderFoodReceptenList();const btn=document.getElementById('bewaar-btn-'+id);if(btn){btn.textContent='Bewaard';btn.disabled=true;}showBanner('green','Bewaard in Mijn recepten.');}
+// Een voorstel dat de gebruiker bewaarde: het opgeslagen recept, anders niets.
+function ccSavedGenerated(r){const saved=r._savedRecipeId&&(data.recepten||[]).find(x=>x.id===r._savedRecipeId);return saved&&saved.bewaard&&!saved.flowDeleted?saved:null;}
+function chefOpenSaved(id){const r=(window._generatedRecepten||[]).find(x=>x._tmpId===id),saved=r&&ccSavedGenerated(r);if(saved)ccOpenFrom(()=>chefPreviewOpen(false),()=>flowRecipeDetail(saved.id));}
+function bewaarGenRecept(id){const r=(window._generatedRecepten||[]).find(x=>x._tmpId===id);if(!r)return;retainGeneratedRecipe(r,true);saveAndSync();_renderFoodReceptenList();const btn=document.getElementById('bewaar-btn-'+id);if(btn){btn.textContent='Open recept';btn.setAttribute('onclick',`chefOpenSaved('${id}')`);}showBanner('green','Bewaard in Mijn recepten.');}
 function openGeneratedMeal(id,eaten){return flowOpenGeneratedMeal(id,eaten);}
 
 function confirmGeneratedMeal(id,eaten){return flowConfirmGeneratedMeal(id,eaten);}
@@ -7034,7 +7071,7 @@ function flowOpenWeek(offset=0){flowWeekOffset=offset;const dates=flowWeekDates(
 function flowOpenDay(date){const day=flowDay(date);showModal(`<div class="modal-header"><h2>${formatShortDate(date)}</h2>${flowClose()}</div><h3>Beweging</h3><div class="flow-week-list">${(day.activiteiten||[]).map(a=>`<button onclick="editActivity('${date}',${flowArg(a.id)})"><strong>${escapeText(a.naam)}</strong><span>${escapeText(flowActivityMeta(a))}<small>${a.afgevinkt?'Gedaan':'Gepland'}</small></span></button>`).join('')||'<p class="muted">Nog niets gepland.</p>'}</div><button class="btn btn-secondary" onclick="addActivity('${date}')">Activiteit toevoegen</button><h3 class="flow-subhead">Eten</h3>${Object.entries(day.maaltijden||{}).flatMap(([slot,items])=>(items||[]).map(m=>`<div class="flow-day-meal"><small>${slot} · ${m.gegeten?'gegeten':'gepland'}</small><strong>${escapeText(m.naam)}</strong></div>`)).join('')||'<p class="muted">Nog geen maaltijden.</p>'}<button class="btn btn-ghost btn-full" onclick="flowOpenWeek(flowWeekOffset)">Terug naar weekoverzicht</button>`);}
 
 
-function flowMealDetail(date,slot,id){const m=flowDay(date).maaltijden?.[slot]?.find(x=>x.id===id);if(!m)return;showModal(`<div class="modal-header"><h2>${escapeText(m.naam)}</h2>${flowClose()}</div><p>${slot} · ${m.gegeten?'Gegeten':'Gepland'}</p><div class="meal-entry-nutrients">${mealNutrients(m)}</div><button class="btn btn-secondary btn-full" onclick="ccMealNutrition('${date}','${slot}',${flowArg(id)})">Schat eiwit &amp; vezels</button><div class="flow-action-stack"><button class="btn btn-primary" onclick="setMealConsumed('${date}','${slot}',${flowArg(id)});ccGoBack()">${m.gegeten?'Terug naar gepland':'Markeer als gegeten'}</button>${m.receptId?`<button class="btn btn-secondary" onclick="flowRecipeDetail(${flowArg(m.receptId)})">Bekijk recept</button>`:''}<button class="btn btn-secondary" onclick="flowEditMeal('${date}','${slot}',${flowArg(id)})"><svg class="cc-icon" data-cc-icon="edit" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 16 11-11 4 4L8 20H4zM13 7l4 4"/></svg><span>Maaltijd aanpassen</span></button><button class="btn btn-ghost" onclick="deleteTodayMeal('${date}','${slot}',${flowArg(id)})"><svg class="cc-icon" data-cc-icon="delete" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M9 6V3h6v3M6 6l1 15h10l1-15M10 10v7m4-7v7"/></svg><span>Verwijderen</span></button></div>`);}
+function flowMealDetail(date,slot,id){const m=flowDay(date).maaltijden?.[slot]?.find(x=>x.id===id);if(!m)return;showModal(`<div class="modal-header"><h2>${escapeText(m.naam)}</h2>${flowClose()}</div><p>${slot} · ${m.gegeten?'Gegeten':'Gepland'}</p><div class="meal-entry-nutrients">${mealNutrients(m)}</div><button class="btn btn-secondary btn-full" onclick="ccMealNutrition('${date}','${slot}',${flowArg(id)})">Schat voedingswaarden</button><div class="flow-action-stack"><button class="btn btn-primary" onclick="setMealConsumed('${date}','${slot}',${flowArg(id)});ccGoBack()">${m.gegeten?'Terug naar gepland':'Markeer als gegeten'}</button>${m.receptId?`<button class="btn btn-secondary" onclick="flowRecipeDetail(${flowArg(m.receptId)})">Bekijk recept</button>`:''}<button class="btn btn-secondary" onclick="flowEditMeal('${date}','${slot}',${flowArg(id)})"><svg class="cc-icon" data-cc-icon="edit" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 16 11-11 4 4L8 20H4zM13 7l4 4"/></svg><span>Maaltijd aanpassen</span></button><button class="btn btn-ghost" onclick="deleteTodayMeal('${date}','${slot}',${flowArg(id)})"><svg class="cc-icon" data-cc-icon="delete" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M9 6V3h6v3M6 6l1 15h10l1-15M10 10v7m4-7v7"/></svg><span>Verwijderen</span></button></div>`);}
 function flowAddMeal(){showModal(`<div class="modal-header"><h2>Wat eet je?</h2>${flowClose()}</div><p class="muted">Vertel wat je hebt gegeten of wat je van plan bent.</p><div class="flow-action-stack"><button class="flow-speak" onclick="closeModal();document.getElementById('coach-front-input').scrollIntoView({block:'center'});bigPraatStart()">${flowVoiceGlyph()} Spreek je maaltijd in</button><button class="btn btn-secondary" onclick="showTypedMealSlot()">Typ je maaltijd</button><button class="btn btn-secondary" onclick="closeModal();document.getElementById('fotolog-input').click()">Foto van je maaltijd</button></div>`);}
 function flowActivityForm(date,id=null){const existing=id?flowDay(date).activiteiten?.find(a=>a.id===id):null;flowActivityEdit={date,id};const a=existing||{},type=a.type||'run';showModal(`<div class="modal-header"><h2>${id?'Activiteit aanpassen':'Wat ga je doen?'}</h2>${flowClose()}</div>${id?`<button class="btn btn-secondary btn-full cc-copy-activity" onclick="limeCopyActivity('${date}',${flowArg(id)},this)"><svg class="cc-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V3H3v13h5"/></svg><span>Kopieer naar morgen</span></button>`:''}<button id="flow-activity-voice" class="flow-speak" onclick="flowActivityVoice()">${flowVoiceGlyph()} Spreek je activiteit in</button><label class="sr-only" for="flow-act-draft">Je gesproken of getypte activiteit</label><textarea id="flow-act-draft" class="flow-draft" rows="2" placeholder="Morgen om 9 uur 8 km hardlopen, ongeveer 45 minuten"></textarea><button id="flow-activity-parse" class="flow-text-action" onclick="flowParseActivity()">Vul de velden in met deze tekst</button><p id="flow-act-status" class="flow-status" role="status">Of vul hieronder direct je activiteit in.</p><div class="flow-form-grid"><label class="flow-field">Activiteit<select id="flow-act-type" onchange="flowActivityType()">${Object.entries(FLOW_TYPES).map(([v,l])=>`<option value="${v}" ${v===type?'selected':''}>${l}</option>`).join('')}</select></label><label class="flow-field">Status<select id="flow-act-done"><option value="planned">Gepland</option><option value="done" ${a.afgevinkt?'selected':''}>Gedaan</option></select></label><label class="flow-field">Datum<input id="flow-act-date" type="date" value="${date}"></label><label class="flow-field">Tijdstip <span>optioneel</span><input id="flow-act-time" type="time" value="${escapeText(a.tijd||'')}"></label><label class="flow-field" id="flow-act-km-wrap">Afstand <span>km · optioneel</span><input id="flow-act-km" inputmode="decimal" placeholder="Bijv. 8,5" value="${a.km??''}"></label><label class="flow-field">Duur <span>min · optioneel</span><input id="flow-act-min" inputmode="decimal" placeholder="Bijv. 45" value="${a.duur??''}"></label></div><details class="flow-extra" ${a.detail?'open':''}><summary>Eigen titel of notitie</summary><label class="flow-field">Titel<input id="flow-act-name" placeholder="${FLOW_TYPES[type]||'Activiteit'}" value="${escapeText(a.naam===FLOW_TYPES[type]?'':a.naam||'')}"></label><label class="flow-field">Notitie<input id="flow-act-note" value="${escapeText(a.detail||'')}"></label></details><p id="flow-act-error" class="flow-error" role="alert"></p><button id="flow-activity-save" class="btn btn-primary btn-full" onclick="flowSaveActivity()">${id?'Wijzigingen opslaan':'Activiteit opslaan'}</button>${id?`<button class="btn btn-ghost btn-full" onclick="deleteActivity('${date}',${flowArg(id)});closeModal()"><svg class="cc-icon" data-cc-icon="delete" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M9 6V3h6v3M6 6l1 15h10l1-15M10 10v7m4-7v7"/></svg><span>Verwijderen</span></button>`:''}`);flowActivityType();}
 function flowActivityType(){const type=document.getElementById('flow-act-type').value;document.getElementById('flow-act-name').placeholder=type==='other'?'Bijvoorbeeld padel of yoga':FLOW_TYPES[type];if(type==='other')document.getElementById('flow-act-name').closest('details').open=true;document.getElementById('flow-act-km-wrap').hidden=!['run','bike','walk','walkdog','commute','swim','other'].includes(type);}
@@ -7112,21 +7149,29 @@ function ccOpenWeekMenu(offset=0){
  showModal(`<div class="modal-header"><h2>Weekmenu</h2>${flowClose()}</div><div class="cc-week-nav"><button type="button" aria-label="Vorige week" ${offset<=-2?'disabled':''} onclick="ccOpenWeekMenu(${offset-1})"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg></button><div aria-live="polite"><strong>${ccWeekTitle(offset)}</strong><span>${formatShortDate(dates[0])} – ${formatShortDate(dates[6])}</span></div><button type="button" aria-label="Volgende week" ${offset>=4?'disabled':''} onclick="ccOpenWeekMenu(${offset+1})">${CC_CHEVRON}</button></div>${filled?'':'<p class="cc-week-empty">Nog niets gepland deze week.</p>'}${days}${filled?'':`<button type="button" class="btn btn-primary btn-full cc-week-ask" onclick="closeModal();flowGoChef('auto')">Vraag Chef</button>`}`);
 }
 function ccWeekToggle(date,slot,id,offset){const y=document.querySelector('#modal-container .modal')?.scrollTop||0;setMealConsumed(date,slot,id);ccOpenWeekMenu(offset);const m=document.querySelector('#modal-container .modal');if(m)m.scrollTop=y;}
-function flowChefModeButton([v,l]){return `<button type="button" data-mode="${v}" aria-pressed="${flowChefMode===v}" onclick="flowSetChefMode('${v}')">${l}</button>`;}
+function flowChefModeButton([v,l]){return `<button type="button" data-mode="${v}" aria-pressed="${flowChefMode===v}"${v==='voor'||v==='na'?' aria-haspopup="dialog"':''} onclick="${v==='voor'||v==='na'?`flowSportAsk('${v}')`:`flowSetChefMode('${v}')`}">${l}</button>`;}
+// Voor en Na: eerst kiezen tussen snack en maaltijd. Nogmaals tikken op een actieve knop zet hem uit.
+function flowSportAsk(mode){
+ if(flowChefBusy||_chefGenerating)return;
+ if(flowChefMode===mode){flowSetChefMode(mode);return;}
+ const na=mode==='na';
+ showModal(`<div class="modal-header"><h2>${na?'Na':'Voor'} het sporten</h2>${flowClose()}</div><div class="cc-sheet-pair"><button type="button" class="btn btn-secondary" onclick="flowSportChoose('${mode}','snack')">Snack</button><button type="button" class="btn btn-secondary" onclick="flowSportChoose('${mode}','maaltijd')">Maaltijd</button></div><p class="cc-set-note">${na?'Snack: binnen 1 uur<br>Maaltijd: volwaardig herstel':'Snack: 30–60 min vooraf<br>Maaltijd: 2–3 uur vooraf'}</p>`);
+}
+function flowSportChoose(mode,soort){closeModal();flowSportSoort=soort;flowSetChefMode(mode,true);}
 function flowChefPressed(){document.querySelectorAll('.cc-chef-row button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mode===flowChefMode)));}
 function flowSetChefMode(mode,start){
  const input=document.getElementById('gen-focus-input');if(!input||!CC_CHEF_MODES[mode]||flowChefBusy||_chefGenerating)return;
  const typed=input.value.trim(),own=typed&&typed!==flowChefDefaultText;
- if(flowChefMode===mode&&!start){flowChefMode='auto';flowChefPressed();if(!own)input.value=flowChefDefaultText='';return;}
+ if(flowChefMode===mode&&!start){flowChefMode='auto';flowSportSoort='';flowChefPressed();if(!own)input.value=flowChefDefaultText='';return;}
  if(mode.startsWith('voorraad')&&!voorraadItems().length){showVoorraadModal();return;}
- flowChefTurns=[];flowChefAdvice=null;genFocus='combi';genMaaltijd='';document.getElementById('flow-chef-answer').innerHTML='';flowChefMode=mode;flowChefPressed();
+ flowChefTurns=[];flowChefAdvice=null;genFocus='combi';genMaaltijd='';document.getElementById('flow-chef-answer').innerHTML='';flowChefMode=mode;if(mode!=='voor'&&mode!=='na')flowSportSoort='';flowChefPressed();
  if(!own){input.value=flowChefDefaultText=CC_CHEF_MODES[mode].vraag;ccResizeComposer(input);}
  flowChefSubmit();
 }
-function flowGoChef(mode){flowChefTurns=[];flowChefAdvice=null;switchTab('recepten',document.querySelector('.tab-btn[onclick*="recepten"]'));flowChefMode=mode;flowRenderChef();document.getElementById('gen-focus-input').focus();}
+function flowGoChef(mode){flowSportSoort='';flowChefTurns=[];flowChefAdvice=null;switchTab('recepten',document.querySelector('.tab-btn[onclick*="recepten"]'));flowChefMode=mode;flowRenderChef();document.getElementById('gen-focus-input').focus();}
 function flowChefVoice(){return flowListen('chef','gen-focus-input','voice-recipe-btn','chef-mic-label',flowChefSubmit);}
 async function flowChefSubmit(){const view=ccViewRevision;if(flowChefBusy||_chefGenerating||flowSpeech?.key==='chef')return;const input=document.getElementById('gen-focus-input'),text=input.value.trim(),status=document.getElementById('chef-mic-label');if(!text){status.textContent='Spreek of typ eerst je vraag of wens.';return;}if(!settings.anthropicKey){status.textContent='Stel je AI-sleutel in bij Instellingen. Je tekst blijft staan.';return;}const explicitRecipe=/\b[a-z]*recept(?:en|idee|ideeën)?\b/i.test(text);const advice=flowChefMode==='auto'&&!explicitRecipe&&(flowChefTurns.length>0||/\b(wanneer|hardlop\w*|kracht\w*|train\w*|sportschool|sporten|marathon|herstel|voor.*sport|na.*sport)\b/i.test(text)||/wat eet ik.*(avond|ochtend|morgen)/i.test(text));if(!advice){status.textContent='Chef bedenkt ideeën…';await _doGenerateRecepten(text);status.textContent='Je wens blijft staan. Je kunt opnieuw inspreken of aanpassen.';return;}flowChefBusy=true;const btn=document.getElementById('gen-btn');btn.disabled=true;status.textContent='Chef denkt mee over je eetmomenten…';try{const context=[...flowWeekDates(),...flowWeekDates(1)].flatMap(d=>(flowDay(d).activiteiten||[]).map(a=>({datum:d,naam:a.naam,km:a.km,minuten:a.duur,tijd:a.tijd,gedaan:!!a.afgevinkt})));const prompt=`Je bent Chef in Coach & Chef. Help eerst met WAT en WANNEER eten; maak nog geen volledige recepten. Vandaag is ${today()}. Bekende beweging: ${JSON.stringify(context)}. Eetvoorkeur: ${_dieetRegel()}. Extra voorkeur: ${genFocus}. Recente dialoog: ${JSON.stringify(flowChefTurns.slice(-6))}. Nieuwe vraag: ${JSON.stringify(text)}.
-Geef maximaal 4 beknopte eetmomenten in tijdsvolgorde met concrete, haalbare voedingskeuzes. Bij een snelle snack is één simpel moment voldoende. Neem starttijd, duur, tijd om te koken, eetvoorkeuren en tolerantie mee waar bekend. Verzin geen starttijd, medische toestand of exacte persoonlijke behoefte. Vraag hoogstens één noodzakelijke verduidelijking als die de uitkomst wezenlijk verandert; anders geef praktische opties. Focus op eiwit of vezels is een voorkeur, geen verplicht minimum voor elk moment, en moet passen rond inspanning. Maak geen absolute gezondheidsbeloften. Alleen JSON: {"titel":"...","momenten":[{"wanneer":"...","advies":"max 2 korte zinnen"}],"vraag":"eventuele vraag of lege string","receptwens":"een korte opdracht om bijpassende recepten te maken"}.`;const r=safeParseJSON(await callAI(prompt,1100));if(view!==ccViewRevision||document.getElementById('gen-focus-input')!==input||input.value.trim()!==text)return;if(!r||typeof r.titel!=='string'||(r.vraag!=null&&typeof r.vraag!=='string')||(r.receptwens!=null&&typeof r.receptwens!=='string')||!Array.isArray(r.momenten)||r.momenten.length>4||!r.momenten.every(m=>typeof m.wanneer==='string'&&typeof m.advies==='string')||(!r.momenten.length&&!r.vraag))throw Error('Chef kon geen helder advies maken. Probeer opnieuw.');flowChefAdvice={...r,source:text};flowChefTurns.push({role:'user',content:text},{role:'assistant',content:JSON.stringify(r)});flowChefTurns=flowChefTurns.slice(-6);flowRenderAdvice();status.textContent=r.vraag?'Chef heeft één vraag. Spreek je antwoord in.':'Je advies staat hieronder. Niets is automatisch ingepland.';input.value='';}catch(e){status.textContent=e.message||'Chef is even niet bereikbaar. Je tekst blijft staan.';}finally{flowChefBusy=false;btn.disabled=false;}}
+Geef maximaal 4 beknopte eetmomenten in tijdsvolgorde met concrete, haalbare voedingskeuzes. Bij een snelle snack is één simpel moment voldoende. Houd keuzes praktisch (wat men vaak in huis heeft), eigentijds en lekker; een snack mag ook vloeibaar zijn (smoothie, shake, kefir). Neem starttijd, duur, tijd om te koken, eetvoorkeuren en tolerantie mee waar bekend. Verzin geen starttijd, medische toestand of exacte persoonlijke behoefte. Vraag hoogstens één noodzakelijke verduidelijking als die de uitkomst wezenlijk verandert; anders geef praktische opties. Focus op eiwit of vezels is een voorkeur, geen verplicht minimum voor elk moment, en moet passen rond inspanning. Maak geen absolute gezondheidsbeloften. Alleen JSON: {"titel":"...","momenten":[{"wanneer":"...","advies":"max 2 korte zinnen"}],"vraag":"eventuele vraag of lege string","receptwens":"een korte opdracht om bijpassende recepten te maken"}.`;const r=safeParseJSON(await callAI(prompt,1100));if(view!==ccViewRevision||document.getElementById('gen-focus-input')!==input||input.value.trim()!==text)return;if(!r||typeof r.titel!=='string'||(r.vraag!=null&&typeof r.vraag!=='string')||(r.receptwens!=null&&typeof r.receptwens!=='string')||!Array.isArray(r.momenten)||r.momenten.length>4||!r.momenten.every(m=>typeof m.wanneer==='string'&&typeof m.advies==='string')||(!r.momenten.length&&!r.vraag))throw Error('Chef kon geen helder advies maken. Probeer opnieuw.');flowChefAdvice={...r,source:text};flowChefTurns.push({role:'user',content:text},{role:'assistant',content:JSON.stringify(r)});flowChefTurns=flowChefTurns.slice(-6);flowRenderAdvice();status.textContent=r.vraag?'Chef heeft één vraag. Spreek je antwoord in.':'Je advies staat hieronder. Niets is automatisch ingepland.';input.value='';}catch(e){status.textContent=e.message||'Chef is even niet bereikbaar. Je tekst blijft staan.';}finally{flowChefBusy=false;btn.disabled=false;}}
 function flowRenderAdvice(){const r=flowChefAdvice,el=document.getElementById('flow-chef-answer');if(!r||!el)return;el.innerHTML=`<section class="flow-advice"><div class="flow-eyebrow">Jouw eetmomenten</div><h2>${escapeText(r.titel)}</h2><ol class="flow-timeline">${r.momenten.map(m=>`<li><strong>${escapeText(m.wanneer)}</strong><p>${escapeText(m.advies)}</p></li>`).join('')}</ol>${r.vraag?`<p class="flow-advice-question">${escapeText(r.vraag)}</p>`:''}<div class="flow-action-row">${r.receptwens?'<button class="btn btn-primary" onclick="flowAdviceRecipes()">Bijpassende ideeën</button>':''}<button class="btn btn-ghost" onclick="flowResetAdvice()">Nieuwe vraag</button></div></section>`;}
 function flowAdviceRecipes(){if(!flowChefAdvice)return;return _doGenerateRecepten(`${flowChefAdvice.receptwens}. Context en timing: ${JSON.stringify(flowChefAdvice.momenten)}`);}
 function flowResetAdvice(){flowChefAdvice=null;flowChefTurns=[];document.getElementById('flow-chef-answer').innerHTML='';document.getElementById('gen-focus-input').focus();}
@@ -7138,7 +7183,11 @@ function flowPhotoReview(){const r=flowRecipePhoto;if(!r)return;showModal(`<div 
 function flowConfirmPhoto(){const r=flowRecipePhoto;if(!r)return;try{const name=document.getElementById('flow-photo-name').value.trim(),persons=Number(document.getElementById('flow-photo-persons').value),ingredients=document.getElementById('flow-photo-ing').value.split('\n').map(x=>x.trim()).filter(Boolean),steps=document.getElementById('flow-photo-steps').value.split('\n').map(x=>x.trim()).filter(Boolean);if(!name||!Number.isInteger(persons)||persons<1||persons>30||!ingredients.length||!steps.length)throw Error('Vul titel, porties, ingrediënten en bereiding in.');if([...ingredients,...steps].some(x=>/\[onleesbaar\]/i.test(x)))throw Error('Vervang eerst de gemarkeerde onleesbare tekst.');if(r.onzeker.length&&!document.getElementById('flow-photo-confirm').checked)throw Error('Bevestig dat je de onduidelijke onderdelen hebt gecontroleerd.');const recipe={naam:name,personen:persons,_basePersonen:persons,tijd:document.getElementById('flow-photo-time').value.trim(),ingredienten:ingredients,bereiding:steps,vezels:'',eiwitten:'',koolhydraten:'',voedingsbasis:'per_portie',bron:r.source==='dish'?'Reconstructie van gerechtfoto':'Overgenomen van receptfoto',_tmpId:'photo'+Date.now()};window._generatedRecepten=[recipe];flowRecipePhoto=null;flowPhotoResume();flowPreviewPhoto(recipe);}catch(e){document.getElementById('flow-photo-error').textContent=e.message;}}
 function flowPreviewPhoto(r){showModal(`<div class="modal-header"><h2>Je recept staat klaar</h2>${flowClose()}</div><p class="muted">${escapeText(r.bron)} · voedingswaarden nog onbekend</p>${recipeCardHTML(r)}<button class="btn btn-secondary btn-full" onclick="flowCookGenerated(${flowArg(r._tmpId)})">Koken met dit recept</button>`);}
 function flowCookGenerated(id){const r=(window._generatedRecepten||[]).find(x=>x._tmpId===id);if(!r)return;const saved=retainGeneratedRecipe(r);saveAndSync();closeModal();enterKookmodus(saved.id);}
-const CC_RECIPE_FILTERS=[['alles','Alles',()=>true],['snel','Snel',r=>parseInt(r.tijd)>0&&parseInt(r.tijd)<=20],['eiwit','Eiwit',r=>parseGrams(r.eiwitten)>=25],['vezels','Vezels',r=>parseGrams(r.vezels)>=8]];
+// Soort van een recept: bij het maken door Chef bewaard; oudere en eigen recepten leiden we af uit `type`.
+function ccRecipeSoort(r){return r.soort||(r.type==='snack'?'snack':'maaltijd');}
+// Hoe vaak een recept is ingepland of gegeten, voor de volgorde "vaak gemaakt".
+function ccRecipeUses(){const n={};Object.values(data.weken||{}).forEach(w=>Object.values(w).forEach(d=>Object.values(d.maaltijden||{}).forEach(a=>(Array.isArray(a)?a:[]).forEach(m=>{if(m&&m.receptId)n[m.receptId]=(n[m.receptId]||0)+1;}))));return n;}
+const CC_RECIPE_FILTERS=[['alles','Alles',()=>true],['maaltijd','Maaltijd',r=>ccRecipeSoort(r)==='maaltijd'||(ccRecipeSoort(r)==='sport'&&r.type!=='snack')],['snack','Snack',r=>ccRecipeSoort(r)==='snack'||(ccRecipeSoort(r)==='sport'&&r.type==='snack')],['sport','Sport',r=>ccRecipeSoort(r)==='sport'],['snel','Snel',r=>parseInt(r.tijd)>0&&parseInt(r.tijd)<=20]];
 let ccRecipeFilter='alles',ccRecipeQuery='';
 function ccRecipeFilterSet(f){ccRecipeFilter=f;flowRecipeList();}
 function ccRecipeSearch(q){ccRecipeQuery=q;ccRecipeResults();}
@@ -7146,7 +7195,7 @@ function ccRecipeSearch(q){ccRecipeQuery=q;ccRecipeResults();}
 function ccRecipeResults(){
  const el=document.getElementById('cc-recipe-results');if(!el)return;
  const pass=CC_RECIPE_FILTERS.find(f=>f[0]===ccRecipeFilter)[2],q=ccRecipeQuery.trim().toLowerCase();
- const all=myRecipes().filter(r=>!r.flowDeleted),list=all.filter(r=>pass(r)&&(!q||r.naam.toLowerCase().includes(q)));
+ const all=myRecipes().filter(r=>!r.flowDeleted),uses=ccRecipeUses(),list=all.filter(r=>pass(r)&&(!q||r.naam.toLowerCase().includes(q))).map((r,i)=>({r,i})).sort((a,b)=>(uses[b.r.id]||0)-(uses[a.r.id]||0)||a.i-b.i).map(x=>x.r);
  const row=r=>{const on=flowRecipeSelected.has(r.id),time=/\d/.test(r.tijd||'')?`<span class="cc-row-meta">${escapeText(r.tijd)}</span>`:'';return flowRecipeSelecting?`<button type="button" class="cc-row cc-recipe-row" aria-pressed="${on}" onclick="flowSelectRecipe(${flowArg(r.id)},${!on});flowRecipeList()"><span class="cc-status${on?' is-done':''}" aria-hidden="true"></span><span class="cc-recipe-name">${escapeText(r.naam)}</span>${time}</button>`:`<button type="button" class="cc-row cc-recipe-row" aria-haspopup="dialog" onclick="ccOpenFrom(ccOpenRecipes,()=>flowRecipeDetail(${flowArg(r.id)}))"><span class="cc-recipe-name">${escapeText(r.naam)}</span>${time}${CC_CHEVRON}</button>`;};
  el.innerHTML=!all.length?'<p class="cc-empty">Nog geen recepten. Bewaar een idee van Chef of voeg je eigen recept toe.</p>':list.length?`<div class="cc-rows">${list.map(row).join('')}</div>`:'<p class="cc-empty">Geen recepten die hierbij passen.</p>';
 }
@@ -7166,7 +7215,7 @@ function flowSelectAllRecipes(){(data.recepten||[]).filter(r=>!r.flowDeleted&&!r
 function flowDeleteSelected(){if(!flowRecipeSelected.size)return;const ids=[...flowRecipeSelected];ids.forEach(id=>{const r=(data.recepten||[]).find(x=>x.id===id);if(r)r.flowDeleted=true;});flowRecipeSelected.clear();flowRecipeSelecting=false;saveAndSync();flowRecipeList();showBanner('green',`${ids.length} recepten verplaatst naar Verwijderd. Je kunt ze daar herstellen.`);}
 function flowRestoreRecipe(id){const r=(data.recepten||[]).find(x=>x.id===id);if(!r)return;r.flowDeleted=false;saveAndSync();flowRecipeList();}
 function flowDeleteOne(id){flowRecipeSelected=new Set([id]);flowDeleteSelected();ccGoBack();}
-function flowRecipeDetail(id){const r=(data.recepten||[]).find(x=>x.id===id);if(!r)return;ensureRecepten();const p=r.personen||2;showModal(`<div class="modal-header"><h2>${escapeText(r.naam)}</h2>${flowClose()}</div><p class="flow-recipe-meta">${escapeText(r.tijd||'Tijd onbekend')} · ${p} ${p===1?'portie':'porties'}</p><div class="meal-entry-nutrients">${mealNutrients(r)}</div><button id="cc-recipe-nutrition" class="btn btn-secondary btn-full" onclick="ccRecipeNutrition(${flowArg(id)})">Schat eiwit &amp; vezels per portie</button><p id="cc-recipe-nutrition-status" role="status"></p><div class="flow-recipe-actions"><button class="btn btn-primary" onclick="closeModal();enterKookmodus(${flowArg(id)})">Koken</button><button class="btn btn-secondary" onclick="flowPlanSavedRecipe(${flowArg(id)})">Inplannen</button></div><label class="flow-field flow-portions">Porties<select onchange="changeRecPersonen(${flowArg(id)},Number(this.value));flowRecipeDetail(${flowArg(id)})">${Array.from({length:Math.max(6,p)},(_,i)=>i+1).map(n=>`<option ${n===p?'selected':''}>${n}</option>`).join('')}</select></label><div class="flow-recipe-body"><h3>Ingrediënten</h3><ul>${r.ingredienten.map(x=>`<li>${escapeText(scaleIngredient(x,r._basePersonen||2,p))}</li>`).join('')}</ul><h3>Bereiding</h3><ol>${r.bereiding.map(x=>`<li>${escapeText(x)}</li>`).join('')}</ol></div><div class="flow-action-row"><button class="btn btn-ghost" onclick="flowOpenRecipeEditor(${flowArg(id)})">Bewerken</button>${!r.bewaard?`<button class="btn btn-ghost" onclick="saveMealRecipe(${flowArg(id)})">Bewaren</button>`:''}<button class="btn btn-ghost" onclick="flowDeleteOne(${flowArg(id)})"><svg class="cc-icon" data-cc-icon="delete" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M9 6V3h6v3M6 6l1 15h10l1-15M10 10v7m4-7v7"/></svg><span>Verwijderen</span></button></div>`);}
+function flowRecipeDetail(id){const r=(data.recepten||[]).find(x=>x.id===id);if(!r)return;ensureRecepten();const p=r.personen||2;showModal(`<div class="modal-header"><h2>${escapeText(r.naam)}</h2>${flowClose()}</div><p class="flow-recipe-meta">${escapeText(r.tijd||'Tijd onbekend')} · ${p} ${p===1?'portie':'porties'}</p><div class="meal-entry-nutrients">${mealNutrients(r)}</div><button id="cc-recipe-nutrition" class="btn btn-secondary btn-full" onclick="ccRecipeNutrition(${flowArg(id)})">Schat voedingswaarden per portie</button><p id="cc-recipe-nutrition-status" role="status"></p><div class="flow-recipe-actions"><button class="btn btn-primary" onclick="closeModal();enterKookmodus(${flowArg(id)})">Koken</button><button class="btn btn-secondary" onclick="flowPlanSavedRecipe(${flowArg(id)})">Inplannen</button></div><label class="flow-field flow-portions">Porties<select onchange="changeRecPersonen(${flowArg(id)},Number(this.value));flowRecipeDetail(${flowArg(id)})">${Array.from({length:Math.max(6,p)},(_,i)=>i+1).map(n=>`<option ${n===p?'selected':''}>${n}</option>`).join('')}</select></label><div class="flow-recipe-body"><h3>Ingrediënten</h3><ul>${r.ingredienten.map(x=>`<li>${escapeText(scaleIngredient(x,r._basePersonen||2,p))}</li>`).join('')}</ul><h3>Bereiding</h3><ol>${r.bereiding.map(x=>`<li>${escapeText(x)}</li>`).join('')}</ol></div><div class="flow-action-row"><button class="btn btn-ghost" onclick="flowOpenRecipeEditor(${flowArg(id)})">Bewerken</button>${!r.bewaard?`<button class="btn btn-ghost" onclick="saveMealRecipe(${flowArg(id)})">Bewaren</button>`:''}<button class="btn btn-ghost" onclick="flowDeleteOne(${flowArg(id)})"><svg class="cc-icon" data-cc-icon="delete" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M9 6V3h6v3M6 6l1 15h10l1-15M10 10v7m4-7v7"/></svg><span>Verwijderen</span></button></div>`);}
 function flowPlanSavedRecipe(id){const r=(data.recepten||[]).find(x=>x.id===id);if(!r)return;const temp={...r,ingredienten:r.ingredienten.map(x=>scaleIngredient(x,r._basePersonen||2,r.personen||2)),_basePersonen:r.personen||2,_fromLibrary:true,_tmpId:'saved-'+id,_savedRecipeId:id,_type:r.type||'diner'};window._generatedRecepten=[...(window._generatedRecepten||[]).filter(x=>x._tmpId!==temp._tmpId),temp];openGeneratedMeal(temp._tmpId,false);}
 function flowOpenRecipeEditor(id=null){const r=id?(data.recepten||[]).find(x=>x.id===id):null;if(id&&!r)return;showModal(`<div class="modal-header"><h2>${r?'Recept bewerken':'Eigen recept'}</h2>${flowClose()}</div><label class="flow-field">Naam<input id="flow-rec-name" value="${escapeText(r?.naam||'')}"></label><div class="flow-form-grid"><label class="flow-field">Porties<input id="flow-rec-persons" type="number" min="1" max="30" value="${r?._basePersonen||r?.personen||2}"></label><label class="flow-field">Tijd<input id="flow-rec-time" value="${escapeText(r?.tijd||'')}" placeholder="25 min"></label></div><label class="flow-field">Ingrediënten · één per regel<textarea id="flow-rec-ing" rows="5">${escapeText((r?.ingredienten||[]).join('\n'))}</textarea></label><label class="flow-field">Bereiding · één stap per regel<textarea id="flow-rec-steps" rows="5">${escapeText((r?.bereiding||[]).join('\n'))}</textarea></label><div class="flow-form-grid"><label class="flow-field">Eiwit per portie <span>optioneel</span><input id="flow-rec-protein" value="${escapeText(r?.eiwitten||'')}" placeholder="Bijv. ~20g"></label><label class="flow-field">Vezels per portie <span>optioneel</span><input id="flow-rec-fiber" value="${escapeText(r?.vezels||'')}" placeholder="Bijv. ~6g"></label></div><p class="flow-error" id="flow-rec-error" role="alert"></p><button class="btn btn-primary btn-full" onclick="flowSaveRecipeEditor(${flowArg(id)})">Opslaan</button>`);}
 function flowSaveRecipeEditor(id){try{const name=document.getElementById('flow-rec-name').value.trim(),persons=Number(document.getElementById('flow-rec-persons').value),ing=document.getElementById('flow-rec-ing').value.split('\n').map(x=>x.trim()).filter(Boolean),steps=document.getElementById('flow-rec-steps').value.split('\n').map(x=>x.trim()).filter(Boolean);if(!name||!Number.isInteger(persons)||persons<1||persons>30||!ing.length||!steps.length)throw Error('Vul een naam, porties, ingrediënten en stappen in.');let r=id?(data.recepten||[]).find(x=>x.id===id):null;if(!r){r={id:'r'+Date.now()+Math.random().toString(36).slice(2,6),type:'diner'};(data.recepten ||= []).push(r);}Object.assign(r,{naam:name,personen:persons,_basePersonen:persons,ingredienten:ing,bereiding:steps,tijd:document.getElementById('flow-rec-time').value.trim(),eiwitten:document.getElementById('flow-rec-protein').value.trim(),vezels:document.getElementById('flow-rec-fiber').value.trim(),bewaard:true,_chefTransient:false,flowDeleted:false});saveAndSync();flowRecipeList();flowRecipeDetail(r.id);}catch(e){document.getElementById('flow-rec-error').textContent=e.message;}}
@@ -7184,7 +7233,7 @@ function flowConfirmGeneratedMeal(id,eaten){
  const date=document.getElementById('gen-log-date').value,slot=document.getElementById('gen-log-slot').value;
  try{assertLogDate(date);if(!['ontbijt','lunch','diner','snack'].includes(slot))throw Error('Kies een maaltijdmoment.');}catch(e){showBanner('red',e.message);return;}
  const day=ensureDay(date);r._type=slot;const saved=retainGeneratedRecipe(r);
- (day.maaltijden[slot] ||= []).push({id:'m'+Date.now()+Math.random().toString(36).slice(2,6),naam:r.naam,vezels:r.vezels,eiwitten:r.eiwitten,koolhydraten:r.koolhydraten,gegeten:eaten,gepland:!eaten,receptId:saved.id});
+ (day.maaltijden[slot] ||= []).push({id:'m'+Date.now()+Math.random().toString(36).slice(2,6),naam:r.naam,vezels:r.vezels,eiwitten:r.eiwitten,koolhydraten:r.koolhydraten,vet:r.vet||'',gegeten:eaten,gepland:!eaten,receptId:saved.id});
  saveAndSync();renderVandaag();closeModal();showBanner('green',`${r.naam} ${eaten?'gegeten':'gepland'} op ${formatShortDate(date)}.`);
 }
 
@@ -7256,7 +7305,7 @@ function ccMoveHtml(period,range,s,prev){
  const meta=g=>[g.knownMinutes?ccMin(g.minutes):'',g.knownKm?ritmeN(g.km)+' km':''].filter(Boolean).join(' · ')||`${g.count} keer`;
  return `<section class="cc-move"><p class="cc-move-total"><strong>${ccMin(s.minutes)}</strong> bewogen</p><p class="cc-move-diff">${s.activeDays} ${s.activeDays===1?'dag':'dagen'} in beweging${s.minutes||prev.minutes?' · '+(diff?`${ccMin(Math.abs(diff))} ${diff>0?'meer':'minder'} dan ${cmp}`:`evenveel als ${cmp}`):''}</p><div class="cc-move-bars">${units.map(bar).join('')}</div><div class="cc-move-goal"><span class="cc-move-track"><i style="width:${Math.min(100,Math.round(100*s.minutes/goal))}%"></i></span><span>${s.minutes>=goal?'Doel gehaald':'Nog '+ccMin(goal-s.minutes)} · doel ${goal} min${weeks>1?' in 4 weken':' per week'}</span></div>${s.unknownDur?`<p class="cc-move-note">${s.unknownDur} ${s.unknownDur===1?'activiteit zonder duur telt':'activiteiten zonder duur tellen'} niet mee.</p>`:''}</section><h3 class="vandaag-section-h cc-move-h">Per sport</h3>${groups.length?`<div class="cc-list">${groups.map(g=>ccRow(escapeText(g.label),meta(g),`ccOpenFrom(${back},()=>ritmeActivityDetail(${flowArg(g.type)},'${period}'))`)).join('')}</div>`:'<p class="cc-week-empty">Nog geen afgeronde beweging gelogd. Je kunt klein beginnen.</p>'}`;
 }
-function ritmeOpenInsights(period='week'){ritmePeriod=period;ritmeAdviceRequest++;const range=ritmeRange(period),s=ritmeStats(range.dates),prev=ritmeStats(range.previous);showModal(`<div class="modal-header"><h2>Je week in beeld</h2>${flowClose()}</div><div class="ritme-periods">${[['week','Deze week'],['last','Vorige week'],['four','4 weken']].map(([p,l])=>`<button aria-pressed="${period===p}" onclick="ritmeOpenInsights('${p}')">${l}</button>`).join('')}</div><p class="ritme-period-note">${formatShortDate(range.dates[0])} – ${formatShortDate(range.dates.at(-1))} · ${period==='week'?'vergeleken met dezelfde weekdagen vorige week':'vergeleken met de periode ervoor'}</p>${ccMoveHtml(period,range,s,prev)}<h3 class="vandaag-section-h cc-move-h">Vezels</h3>${ccFiberHtml(period==='four'?[0,1,2,3].map(i=>{const ds=range.dates.slice(i*7,i*7+7);return {dates:ds,label:formatShortDate(ds[0])};}):ccDayUnits(period==='week'?flowWeekDates(0):range.dates),`()=>ritmeOpenInsights('${period}')`)}<button class="ritme-link" onclick="closeModal();ritmeFoodIdea('vezels')">Inspiratie voor je volgende maaltijd</button><div class="ritme-reflection"><span class="ritme-kicker">Eén volgende stap</span><p>${s.done?'Wat uit deze periode wil je vasthouden? Kies iets dat bij je agenda en energie past.':'Een kort beweegmoment in je agenda kan een fijn begin zijn.'}</p><button id="ritme-advice-button" class="ritme-link" onclick="ritmeAskAdvice()">Laat Coach meedenken over deze periode</button><p id="ritme-advice-status" role="status"></p><div id="ritme-advice-answer"></div></div>`);}
+function ritmeOpenInsights(period='week'){ritmePeriod=period;ritmeAdviceRequest++;const range=ritmeRange(period),s=ritmeStats(range.dates),prev=ritmeStats(range.previous);showModal(`<div class="modal-header"><h2>Je week in beeld</h2>${flowClose()}</div><div class="ritme-periods">${[['week','Deze week'],['last','Vorige week'],['four','4 weken']].map(([p,l])=>`<button aria-pressed="${period===p}" onclick="ritmeOpenInsights('${p}')">${l}</button>`).join('')}</div><p class="ritme-period-note">${formatShortDate(range.dates[0])} – ${formatShortDate(range.dates.at(-1))} · ${period==='week'?'vergeleken met dezelfde weekdagen vorige week':'vergeleken met de periode ervoor'}</p>${ccMoveHtml(period,range,s,prev)}${(units=>[['vezels','Vezels'],['eiwitten','Eiwit']].map(([k,l])=>`<h3 class="vandaag-section-h cc-move-h">${l}</h3>${ccFoodHtml(units,`()=>ritmeOpenInsights('${period}')`,k)}`).join(''))(period==='four'?[0,1,2,3].map(i=>{const ds=range.dates.slice(i*7,i*7+7);return {dates:ds,label:formatShortDate(ds[0])};}):ccDayUnits(period==='week'?flowWeekDates(0):range.dates))}<button class="ritme-link" onclick="closeModal();ritmeFoodIdea('vezels')">Inspiratie voor je volgende maaltijd</button><div class="ritme-reflection"><span class="ritme-kicker">Eén volgende stap</span><p>${s.done?'Wat uit deze periode wil je vasthouden? Kies iets dat bij je agenda en energie past.':'Een kort beweegmoment in je agenda kan een fijn begin zijn.'}</p><button id="ritme-advice-button" class="ritme-link" onclick="ritmeAskAdvice()">Laat Coach meedenken over deze periode</button><p id="ritme-advice-status" role="status"></p><div id="ritme-advice-answer"></div></div>`);}
 function ritmeActivityDetail(type,period='week'){const range=ritmeRange(period),acts=ritmeActivities(range.dates).filter(a=>ritmeType(a)===type&&a.afgevinkt),g=ritmeGroups(acts)[0];showModal(`<div class="modal-header"><h2>${escapeText(ritmeTypeLabel(type))}</h2>${flowClose()}</div><p>${formatShortDate(range.dates[0])} – ${formatShortDate(range.dates.at(-1))}</p>${g?`<div class="ritme-food-number">${ritmeGroupValue(g)}</div><p>${escapeText(ritmeGroupNote(g))}</p>`:''}<div class="flow-week-list">${acts.map(a=>`<button onclick="editActivity('${a.date}',${flowArg(a.id)})"><strong>${formatShortDate(a.date)}</strong><span>${escapeText(a.naam)}<small>${escapeText(flowActivityMeta(a)||'Afstand en duur niet ingevuld')}</small></span></button>`).join('')||'<p class="muted">Geen afgeronde activiteiten in deze periode.</p>'}</div>`);}
 async function ritmeAskAdvice(){const status=document.getElementById('ritme-advice-status'),target=document.getElementById('ritme-advice-answer'),btn=document.getElementById('ritme-advice-button');if(btn.disabled)return;if(!settings.anthropicKey){status.textContent='Je terugblik hierboven werkt zonder verbinding. Verbind je slimme Coach in Instellingen voor persoonlijk advies.';return;}const request=++ritmeAdviceRequest,range=ritmeRange(ritmePeriod);btn.disabled=true;status.textContent='Coach bekijkt je gelogde periode…';try{const current=ritmeStats(range.dates),previous=ritmeStats(range.previous);const r=safeParseJSON(await callAIDeep(`Geef een korte, vriendelijke terugblik op uitsluitend deze gelogde feiten. Huidig: ${JSON.stringify(current)}. Vorige vergelijkbare periode: ${JSON.stringify(previous)}. Doelen: ${JSON.stringify(nutritionGoals())}. Geen diagnose, geen oordeel gezond/ongezond, ontbrekende logs zijn geen inactiviteit. Meer sport is niet automatisch beter. Maximaal 2 zinnen per onderdeel, één haalbare volgende stap. Antwoord alleen JSON {"gelukt":"","opgevallen":"","volgende":""}.`,600));if(request!==ritmeAdviceRequest||document.getElementById('ritme-advice-answer')!==target)return;if(!r||!['gelukt','opgevallen','volgende'].every(k=>typeof r[k]==='string'&&r[k].trim()))throw Error('De terugblik was niet compleet. Probeer opnieuw.');target.innerHTML=[['gelukt','Om mee te nemen'],['opgevallen','Wat opvalt'],['volgende','Je volgende stap']].map(([k,l])=>`<section><h3>${l}</h3><p>${escapeText(r[k])}</p></section>`).join('');status.textContent='Gebaseerd op je logboek; ontbrekende gegevens blijven onbekend.';}catch(e){if(document.getElementById('ritme-advice-status')===status)status.textContent=e.message||'Kon geen terugblik maken. Je overzicht blijft beschikbaar.';}finally{btn.disabled=false;}}
 function ritmeExercises(){showModal(`<div class="modal-header"><h2>Hulp bij je training</h2>${flowClose()}</div><p class="muted">Zoek een oefening. Alleen kijken voegt niets toe aan je logboek.</p><label class="flow-field">Oefening of spiergroep<input id="ritme-exercise-query" type="search" placeholder="Bijvoorbeeld squat, rug of hardlopen" oninput="ritmeExerciseResults(this.value)"></label><div id="ritme-exercise-results"></div><button class="btn btn-secondary btn-full" onclick="flowActivityForm(today());document.getElementById('flow-act-type').value='gym';flowActivityType()">Een training plannen of loggen</button>`);ritmeExerciseResults('');}
@@ -7277,7 +7326,7 @@ function openSettings(){
  <p class="cc-set-note">De sleutel blijft op deze telefoon. Privacymodus aan: de AI krijgt alleen je bericht en wat je vandaag logde.</p>
  <div class="cc-list"><button type="button" class="cc-row" aria-expanded="false" aria-controls="cc-set-more" onclick="ccToggleSetMore(this)"><span class="cc-row-label">Meer instellingen</span><span class="cc-row-meta"></span>${CC_CHEVRON}</button><div id="cc-set-more" hidden>${row('Over jou','',"ccSetPage('over',this)")}${row('Doelen',ccMoveGoal()+' min · '+goals.vezels+' g',"ccSetPage('doelen',this)")}${row('Stem en spraak',voice[0].toUpperCase()+voice.slice(1),"ccSetPage('stem',this)")}${row('Wat Coach onthoudt',mem?String(mem):'',"ccSetPage('geheugen',this)")}${row('Coach-tegels','','ritmeCustomize()')}${row('Synchronisatie',settings.githubToken&&settings.gistId?'Aan':'Uit',"ccSetPage('sync',this)")}${row('Testen','',"ccSetPage('testen',this)")}${row('Kopie en opnieuw','',"ccSetPage('kopie',this)")}${row('Opnieuw instellen','',"ccWizStart('again')")}${row('Uitleg over de app','','showIntro()')}</div></div></section>
  ${page('over','Over jou',`${field('doel','Waar wil je naartoe?','Bijvoorbeeld meer energie of vaker bewegen')}${field('sporten','Wat doe je graag?','Bijvoorbeeld hardlopen, fietsen, wandelen')}${field('weekritme','Je weekritme','Welke dagen passen goed?')}${field('slaap','Slaap en routine','Alleen als je dit wilt meenemen')}${field('eten','Wat eet je graag of liever niet?','Voorkeuren, gewoontes of ingrediënten')}<h3 class="cc-set-sub">Optioneel</h3><div class="flow-form-grid">${field('leeftijd','Leeftijd','','number')}<label class="flow-field">Geslacht<select id="set-geslacht"><option value="">Niet opgegeven</option><option value="man">Man</option><option value="vrouw">Vrouw</option><option value="anders">Anders / liever niet zeggen</option></select></label>${field('gewicht','Gewicht · kg','','number')}${field('streefgewicht','Streefgewicht · kg','','number')}</div><p class="cc-set-note">Vul alleen in wat Coach mag meenemen.</p>`)}
- ${page('doelen','Doelen',`<label class="flow-field">Bewegen · min per week<input id="ritme-goal-move" inputmode="numeric" value="${ccMoveGoal()}"></label><div class="flow-form-grid"><label class="flow-field">Vezels · g per dag<input id="ritme-goal-fiber" inputmode="decimal" value="${goals.vezels}"></label><label class="flow-field">Eiwit · g per dag<input id="ritme-goal-protein" inputmode="decimal" value="${goals.eiwitten}"></label></div><p class="cc-set-note">Jouw eigen doelen voor het overzicht. De Beweegrichtlijn noemt 150 minuten per week.</p>`)}
+ ${page('doelen','Doelen',`<label class="flow-field">Bewegen · min per week<input id="ritme-goal-move" inputmode="numeric" value="${ccMoveGoal()}"></label><div class="flow-form-grid"><label class="flow-field">Vezels · g per dag<input id="ritme-goal-fiber" inputmode="decimal" value="${goals.vezels}"></label><label class="flow-field">Eiwit · g per dag<input id="ritme-goal-protein" inputmode="decimal" value="${goals.eiwitten}"></label><label class="flow-field">Koolhydraten · g per dag<input id="ritme-goal-carbs" inputmode="decimal" placeholder="Leeg = geen doel" value="${goals.koolhydraten||''}"></label><label class="flow-field">Vet · g per dag<input id="ritme-goal-fat" inputmode="decimal" placeholder="Leeg = geen doel" value="${goals.vet||''}"></label></div><p class="cc-set-note">Jouw eigen doelen voor het overzicht. De Beweegrichtlijn noemt 150 minuten per week. Koolhydraten en vet zijn optioneel.</p>`)}
  ${page('stem','Stem en spraak',`<label class="flow-field">Stem bij voorlezen<select id="set-tts-voice">${['nova','shimmer','echo','onyx','alloy','fable'].map(v=>`<option value="${v}">${v[0].toUpperCase()+v.slice(1)}</option>`).join('')}</select></label>${field('openai','OpenAI-sleutel · optioneel','Voor een natuurlijkere stem','password')}<p class="cc-set-note">Zonder OpenAI-sleutel leest de stem van je telefoon voor.</p>${field('woorden','Eigen woorden voor spraak','Namen, oefeningen of gerechten, met komma\'s')}`)}
  ${page('geheugen','Wat Coach onthoudt',`<div id="cc-memory-panel"></div><h3 class="cc-set-sub">Samen bewegen</h3><div id="partners-list"></div><button type="button" class="ritme-link" onclick="showAddPartnerModal()">Iemand toevoegen</button><h3 class="cc-set-sub">Patronen</h3><div id="cc-patterns-box">${ccPatternsHtml()}</div>`)}
  ${page('sync','Synchronisatie',`<p class="cc-set-note">Bewaart een kopie in je eigen GitHub Gist, zodat je op meer apparaten kunt werken.</p>${field('token','GitHub-toegangssleutel','Personal access token','password')}${field('gist','Gist-ID','ID van je eigen Gist')}${field('syncpass','Wachtwoord · optioneel','Versleutelt je cloudkopie','password')}<p class="cc-set-note">Vergeet je het wachtwoord, dan is de cloudkopie niet meer te openen; je gegevens op deze telefoon blijven wel bruikbaar. Begin bij voorkeur met een nieuwe, lege Gist.</p>`)}
@@ -7296,12 +7345,15 @@ function saveSettings(){
  const next={...settings};Object.entries(RITME_SETTINGS).forEach(([id,key])=>next[key]=document.getElementById('set-'+id).value.trim());
  const fiber=ritmeNum(document.getElementById('ritme-goal-fiber').value),protein=ritmeNum(document.getElementById('ritme-goal-protein').value),error=document.getElementById('ritme-settings-error');
  if(fiber===null||protein===null||fiber>1000||protein>1000){error.textContent='Vul voor je voedingsdoelen een getal groter dan 0 en maximaal 1000 in.';return;}
+ const optGoal=id=>{const v=document.getElementById(id).value;return String(v).trim()===''?'':ritmeNum(v);},carbs=optGoal('ritme-goal-carbs'),fat=optGoal('ritme-goal-fat');
+ if(carbs===null||fat===null||carbs>2000||fat>1000){error.textContent='Vul bij koolhydraten en vet een getal groter dan 0 in, of laat het leeg.';return;}
  const move=ritmeNum(document.getElementById('ritme-goal-move').value);
  if(move===null||move>3000){error.textContent='Vul voor bewegen een aantal minuten per week in, tot 3000.';return;}
  for(const key of ['leeftijd','gewicht','streefgewicht'])if(next[key]&&ritmeNum(next[key])===null){error.textContent='Controleer je persoonlijke gegevens of laat ze leeg.';return;}
  next.privacyModus=!!document.getElementById('ritme-privacy')?.checked;
  if((next.syncWachtwoord||'')!==(settings.syncWachtwoord||'')&&settings.syncWachtwoord)next._syncWachtwoordVorig=settings.syncWachtwoord;
  saveSettingsData(next);data.doelen ||= [];for(const [type,value,omschrijving] of [['vezels_dag',fiber,`${fiber} gram vezels per dag`],['eiwitten_dag',protein,`${protein} gram eiwit per dag`],['beweging_week',move,`${move} minuten bewegen per week`]]){const goal=data.doelen.find(g=>g.type===type);if(goal)Object.assign(goal,{waarde:value,omschrijving});else data.doelen.push({id:'goal-'+type,type,waarde:value,omschrijving,aangemaakt:today()});}
+ for(const [type,value,omschrijving] of [['koolhydraten_dag',carbs,`${carbs} gram koolhydraten per dag`],['vet_dag',fat,`${fat} gram vet per dag`]]){data.doelen=data.doelen.filter(g=>g.type!==type);if(value)data.doelen.push({id:'goal-'+type,type,waarde:value,omschrijving,aangemaakt:today()});}
  _ttsEnabled=!!document.getElementById('ritme-tts').checked;localStorage.setItem('hc_tts',_ttsEnabled?'on':'off');if(!_ttsEnabled)_stopCurrentAudio();saveAndSync();closeSettings();renderAll();showBanner('green',settings.privacyModus?'Bewaard. Privacymodus staat aan.':'Je instellingen zijn bewaard.');
 }
 
@@ -7720,7 +7772,7 @@ function ccDayBrief(includeWeek){
   let t='Nu: '+dag+' '+d+', '+tijd+' uur. ';
   t+='Beweging vandaag: '+(acts.length?acts.map(a=>a.naam+' ('+(a.afgevinkt?'gedaan':'gepland')+')').join(', '):'niets gepland of gelogd')+'. ';
   t+='Eten vandaag: '+(eaten.length?eaten.map(x=>x.slot+' '+x.m.naam).join(', ')+' (gegeten)':'nog niets als gegeten gelogd')+(planned.length?'; gepland: '+planned.map(x=>x.slot+' '+x.m.naam).join(', '):'')+'. ';
-  t+='Gelogd: vezels '+sum('vezels')+' van '+goals.vezels+' g, eiwit '+sum('eiwitten')+' van '+goals.eiwitten+' g, water '+ccWaterCount()+' van '+CC_WATER_GOAL+' glazen.';
+  t+='Gelogd: vezels '+sum('vezels')+' van '+goals.vezels+' g, eiwit '+sum('eiwitten')+' van '+goals.eiwitten+' g, koolhydraten '+sum('koolhydraten')+' g'+(goals.koolhydraten?' (doel '+goals.koolhydraten+' g)':'')+', vet '+sum('vet')+' g'+(goals.vet?' (doel '+goals.vet+' g)':'')+' (alleen maaltijden met bekende waarden), water '+ccWaterCount()+' van '+CC_WATER_GOAL+' glazen.';
   if(day.checkIn)t+=' Check-in vandaag: '+day.checkIn+'.';
   if(includeWeek){let p=0,g=0;flowWeekDates().forEach(x=>(flowDay(x).activiteiten||[]).filter(a=>a&&a.type!=='rest').forEach(a=>{p++;if(a.afgevinkt)g++;}));t+=' Deze week: '+g+' van '+p+' geplande activiteiten gedaan, '+flowWeekDates().reduce((n,x)=>n+(x<=d?ccDayMinutes(x):0),0)+' minuten bewogen (doel '+ccMoveGoal()+' minuten per week).';const f=ccFoodAvg(ccLast7(),'vezels');if(f.days)t+=' Vezels afgelopen 7 dagen: gemiddeld '+Math.round(f.avg)+' g per gelogde dag ('+f.days+' dagen gelogd, doel '+goals.vezels+' g).';}
   return t.slice(0,1500);
@@ -7781,11 +7833,14 @@ async function _updateCoachMemory(userMsg){
  }catch(_){/* A memory failure must never turn a successful log into a failed log. */}})();
  ccMemoryJobs.set(userMsg,job);try{await job;}finally{ccMemoryJobs.delete(userMsg);}
 }
+// Melding sluiten verwijdert niets: Coach onthoudt het nog steeds (zie Instellingen › Wat Coach onthoudt). Alleen op dit apparaat bewaard.
+function ccHiddenMemoryNotices(){try{const v=JSON.parse(localStorage.getItem('hc_mem_hidden')||'[]');return Array.isArray(v)?v:[];}catch(_){return [];}}
+function ccHideMemoryNotice(id){try{localStorage.setItem('hc_mem_hidden',JSON.stringify([...ccHiddenMemoryNotices(),id].slice(-50)));}catch(_){}ccRenderMemoryNotice();}
 function ccRenderMemoryNotice(){
  const el=document.getElementById('cc-memory-notice');if(!el)return;
- const facts=ccMemoryItems().filter(m=>m.conversationId===data.coachConversationId&&(!m.expires||m.expires>=today())).slice(0,2);
+ const hidden=ccHiddenMemoryNotices(),facts=ccMemoryItems().filter(m=>m.conversationId===data.coachConversationId&&(!m.expires||m.expires>=today())&&!hidden.includes(m.id)).slice(0,2);
  el.hidden=!facts.length;
- el.innerHTML=facts.map(m=>`<div class="cc-memory-note"><span><strong>${m.expires?'Tijdelijk onthouden':'Onthouden'}</strong> ${escapeText(m.text)}${m.expires?` <small>tot ${escapeText(m.expires)}</small>`:''}${m.replaced?` <small>vervangt: ${escapeText(m.replaced)}</small>`:''}</span><button onclick="ccEditMemory(${flowArg(m.id)})">Aanpassen</button><button onclick="ccForgetMemory(${flowArg(m.id)})">Vergeten</button></div>`).join('');
+ el.innerHTML=facts.map(m=>`<div class="cc-memory-note"><button type="button" class="cc-memory-text" aria-haspopup="dialog" aria-label="Onthouden: ${escapeText(m.text)}. Aanpassen" onclick="ccEditMemory(${flowArg(m.id)})"><strong>Onthouden</strong>${escapeText(m.text)}${m.replaced?`<small>vervangt: ${escapeText(m.replaced)}</small>`:''}</button><button type="button" onclick="ccForgetMemory(${flowArg(m.id)})">Vergeten</button><button type="button" aria-label="Melding sluiten, Coach blijft het onthouden" onclick="ccHideMemoryNotice(${flowArg(m.id)})">✕</button></div>`).join('');
 }
 function ccMemoryPanel(){
  const el=document.getElementById('cc-memory-panel');if(!el)return;
@@ -7853,20 +7908,21 @@ async function bigPraatStart(){
 }
 async function ccEstimateNutrition(description){
  if(!settings.anthropicKey)throw Error('Verbind je AI-sleutel bij Instellingen om te schatten.');
- const r=safeParseJSON(await callAIFast(`Schat eiwitten en vezels in gram voor deze maaltijd: ${JSON.stringify(description)}. Gebruik opgegeven hoeveelheden; zonder hoeveelheid één normale portie. Alleen JSON met twee numerieke waarden {"eiwitten":0,"vezels":0}. Dit zijn schattingen, geen exacte meting.`,250));
+ const r=safeParseJSON(await callAIFast(`Schat eiwitten, vezels, koolhydraten en vet in gram voor deze maaltijd: ${JSON.stringify(description)}. Gebruik opgegeven hoeveelheden; zonder hoeveelheid één normale portie. Alleen JSON met vier numerieke waarden {"eiwitten":0,"vezels":0,"koolhydraten":0,"vet":0}. Dit zijn schattingen, geen exacte meting.`,250));
  if(!r||!['eiwitten','vezels'].every(k=>typeof r[k]==='number'&&Number.isFinite(r[k])&&r[k]>=0&&r[k]<=500))throw Error('Geen bruikbare schatting ontvangen. Probeer opnieuw.');
- return {eiwitten:'~'+Math.round(r.eiwitten*10)/10+'g',vezels:'~'+Math.round(r.vezels*10)/10+'g'};
+ const grams=v=>typeof v==='number'&&Number.isFinite(v)&&v>=0&&v<=1000?'~'+Math.round(v*10)/10+'g':'';
+ return {eiwitten:grams(r.eiwitten),vezels:grams(r.vezels),koolhydraten:grams(r.koolhydraten),vet:grams(r.vet)};
 }
 async function berekenNutriVoorInput(){
  const input=document.getElementById('quick-meal-input'),name=input.value.trim(),btn=document.getElementById('btn-bereken-nutri'),preview=document.getElementById('nutri-preview');
  if(!name){showBanner('yellow','Vul je maaltijd in, liefst met hoeveelheden.');return;}
  if(btn.disabled)return;window._berekenResult=null;btn.disabled=true;btn.textContent='Even schatten…';preview.style.display='block';preview.textContent='';
  try{const result=await ccEstimateNutrition(name);if(document.getElementById('quick-meal-input')!==input||input.value.trim()!==name){preview.textContent='Je maaltijd is gewijzigd. Schat opnieuw.';return;}window._berekenResult={...result,input:name};preview.innerHTML=mealNutrients(result)+'<span>Schatting voor de ingevulde maaltijd</span>';}
- catch(e){preview.textContent=e.message;}finally{btn.disabled=false;btn.textContent='Schat eiwit en vezels';}
+ catch(e){preview.textContent=e.message;}finally{btn.disabled=false;btn.textContent='Schat voedingswaarden';}
 }
 function ccMealNutrition(date,slot,id){
  const m=flowDay(date).maaltijden?.[slot]?.find(x=>x.id===id);if(!m)return;
- showModal(`<div class="modal-header"><h2>Eiwit &amp; vezels</h2>${flowClose()}</div><label class="flow-field">Wat en hoeveel?<textarea id="cc-food-description">${escapeText(m.naam)}</textarea></label><p class="muted">Bijvoorbeeld: 200 g yoghurt, 40 g muesli en een banaan.</p><button id="cc-food-calculate" class="btn btn-primary btn-full" onclick="ccCalculateMeal(${flowArg(date)},${flowArg(slot)},${flowArg(id)})">Maak een schatting</button><div id="cc-food-result" role="status"></div>`);
+ showModal(`<div class="modal-header"><h2>Voedingswaarden</h2>${flowClose()}</div><label class="flow-field">Wat en hoeveel?<textarea id="cc-food-description">${escapeText(m.naam)}</textarea></label><p class="muted">Bijvoorbeeld: 200 g yoghurt, 40 g muesli en een banaan.</p><button id="cc-food-calculate" class="btn btn-primary btn-full" onclick="ccCalculateMeal(${flowArg(date)},${flowArg(slot)},${flowArg(id)})">Maak een schatting</button><div id="cc-food-result" role="status"></div>`);
 }
 async function ccCalculateMeal(date,slot,id){
  const btn=document.getElementById('cc-food-calculate'),input=document.getElementById('cc-food-description'),out=document.getElementById('cc-food-result'),text=input.value.trim();if(btn.disabled)return;if(!text){out.textContent='Vul je maaltijd en hoeveelheid in.';return;}
