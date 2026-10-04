@@ -12,7 +12,7 @@ Bron: Jims test op de iPhone (4 okt). Zijn woorden staan tussen aanhalingstekens
 2. **Eén taak tegelijk, in de volgorde hieronder.** Per taak: zoek de code met `grep -n`, lees de functie helemaal, verander zo weinig mogelijk, test, ga dan pas verder. Het bestand is groot (ongeveer 9.000 regels, veel code op één regel). Lees gericht met `sed -n 'a,bp'`, nooit het hele bestand.
 3. **Bewerk met exacte vervangingen.** Gebruik een klein Python-script met `assert s.count(old)==1` vóór elke `replace`, en lees en schrijf in bytes. Het bestand heeft CRLF-regeleinden; laat die heel (`.replace('\n','\r\n')` bij nieuwe tekst).
 4. **Verzin niets wat je niet hebt gecontroleerd.** Zeg alleen "werkt" als je het getest hebt. Wat je niet kunt testen (iPhone, echte API), noem je als controlepunt voor Jim.
-5. **Stoppunten.** Bij taak C1 en C9 bouw je niet voordat Jim akkoord is (zie daar). Samenvoegen met `main` alleen na Jims "voeg samen".
+5. **Stoppunten.** Bij taak C1 bouw je niet voordat Jim akkoord is (zie daar). C9 is al goedgekeurd. Samenvoegen met `main` alleen na Jims "voeg samen".
 6. **Niet aanraken**: de Coach-kant, spraak en geluid (`ccPrepareMic`, Web Audio), privacymodus, sync, `coachFrontSend` en `parseSmartInput`. Nooit een modelnaam hardcoden (gebruik `CC_MODEL_*`). Geen nieuwe externe afhankelijkheden. Alle tekst van gebruiker of AI die in `innerHTML` komt, gaat door `escapeText()`.
 
 ### Versie en backup
@@ -40,7 +40,7 @@ Alle receptregels staan in `CHEF_STIJL` en `chefRecipePrompt` (zoek `const CHEF_
 
 ### B1. Inspiratie: Ottolenghi, Laura's Bakery en foodcreators
 "Maak de chef een vazal van Ottolenghi, Veggilaine, Laura's Bakery en beroemde TikTokkers."
-- Breid de eerste regel van `CHEF_STIJL` uit met deze bronnen als stijlinspiratie: Ottolenghi (veel kruiden, zuur, granaatappel, tahin, za'atar), Laura's Bakery (gezond bakken en ontbijt, haalbaar), Veggilaine (spelling bij Jim nagaan, schrijf het tot dan zo) en bekende foodcreators op TikTok en Instagram (kleurrijk, één pan of bakplaat, makkelijk na te maken).
+- Breid de eerste regel van `CHEF_STIJL` uit met deze bronnen als stijlinspiratie: Ottolenghi (veel kruiden, zuur, granaatappel, tahin, za'atar), Laura's Bakery (gezond bakken en ontbijt, haalbaar), Veggilaine (zo gespeld, door Jim bevestigd) en bekende foodcreators op TikTok en Instagram (kleurrijk, één pan of bakplaat, makkelijk na te maken).
 - Schrijf erbij: "Gebruik ze als smaak en stijl, kopieer geen recepten en noem geen namen in het recept."
 - **Af als**: de regel in `CHEF_STIJL` staat en de prompt geldig blijft (syntaxcheck).
 
@@ -107,12 +107,12 @@ Tik op [Tijdens]  →  geen keuze, altijd snack (zoals nu)
 
 ---
 
-## Batch 3 — Recepten ordenen (eerst plan, dan bouwen)
+## Batch 3 — Recepten ordenen (door Jim goedgekeurd op 4 okt)
 
 ### C9. Mijn recepten slim ordenen
 "Is er een handige manier om de recepten ook slim te organiseren/categoriseren?"
 
-**Voorstel (bouwen pas na Jims akkoord; laat hem eerst deze schets en een mock-schermafbeelding zien):**
+**Ontwerp (goedgekeurd; bouw het zo, en laat Jim vóór het samenvoegen een schermafbeelding zien):**
 - Geen mappen en geen handwerk: elk recept krijgt automatisch een soort bij het bewaren. De Chef-knop zegt al wat het is: `snack`, `maaltijd`, of `sport` (voor/tijdens/na). Sla dat op als `r.soort` en bij sport ook `r.moment`.
 - In *Mijn recepten* (`flowRecipeList`) vervangt één rij filters de huidige (`CC_RECIPE_FILTERS`: Alles/Snel/Eiwit/Vezels):
   ```
@@ -121,7 +121,7 @@ Tik op [Tijdens]  →  geen keuze, altijd snack (zoals nu)
   Snel = 20 minuten of korter. Eiwit en vezels staan al als waarden bij elk recept; die filters vervallen.
 - Sorteer binnen een filter op "vaak gemaakt": tel hoe vaak een recept is ingepland of als gegeten gemarkeerd. Recepten die je nooit maakte, komen onderaan.
 - Bestaande recepten zonder soort: leid af uit `type` (`snack` → Snack, anders Maaltijd) zodat niets verdwijnt.
-- **Af als** (na akkoord): elk filter toont de juiste recepten, oude recepten vallen ergens onder, de rij past op 390 px zonder afbreken (alle knoppen even breed), en zoeken werkt nog.
+- **Af als**: elk filter toont de juiste recepten, oude recepten vallen ergens onder, de rij past op 390 px zonder afbreken (alle knoppen even breed), en zoeken werkt nog.
 
 ---
 
