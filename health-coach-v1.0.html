@@ -2197,7 +2197,7 @@ body input[type="checkbox"]:disabled{opacity:.4;cursor:default}
 'use strict';
 
 // ─── VERSION CHECK (forceert Safari herlading bij nieuwe versie) ──────────────
-const APP_VERSION = 'lime-20261004-9';
+const APP_VERSION = 'lime-20261004-10';
 // Eén plek voor de modellen: Sonnet voor gesprekken en recepten, Haiku voor snelle achtergrondtaken.
 const CC_MODEL_MAIN = 'claude-sonnet-4-6';
 const CC_MODEL_FAST = 'claude-haiku-4-5-20251001';
@@ -3694,11 +3694,11 @@ function scaleIngredient(text, fromP, toP) {
 function _categorizeIngredients(items) {
   const cats = { 'Groenten & fruit': [], 'Vlees, vis & eieren': [], 'Zuivel': [], 'Blikken & potten': [], 'Droog & granen': [], 'Overig': [] };
   const kw = {
-    'Groenten & fruit': ['courgette','zucchini','bell pepper','pepper','onion','carrot','celery','spinach','cabbage','lettuce','cucumber','tomato','leek','garlic','lemon','lime','apple','pear','banana','mushroom','herbs','basil','parsley','cilantro','ginger','berries','paprika','ui','wortel','selderij','spinazie','kool','avocado','koriander','rucola','knoflook','tomaat','prei','broccoli','bloemkool','sla','komkommer','citroen','limoen','appel','peer','banaan','mango','druif','aardbei','gember','biet','asperge','mais','champignon','paddenstoel'],
-    'Vlees, vis & eieren': ['chicken','beef','pork','mince','minced','bacon','fish','salmon','tuna','shrimp','prawns','egg','eggs','kip','vlees','gehakt','spek','ham','vis','zalm','tonijn','garnalen','ei','eieren','tofu','tempeh','seitan'],
+    'Groenten & fruit': ['courgette','zucchini','eggplant','aubergine','bell pepper','pepper','onion','carrot','celery','spinach','cabbage','lettuce','cucumber','tomato','leek','garlic','lemon','lime','apple','pear','banana','mushroom','herbs','basil','parsley','cilantro','ginger','berries','paprika','ui','wortel','selderij','spinazie','kool','avocado','koriander','rucola','knoflook','tomaat','prei','broccoli','bloemkool','sla','komkommer','citroen','limoen','appel','peer','banaan','mango','druif','aardbei','gember','biet','asperge','mais','champignon','paddenstoel'],
+    'Vlees, vis & eieren': ['pepperoni','salami','chicken','beef','pork','mince','minced','bacon','fish','salmon','tuna','shrimp','prawns','egg','eggs','kip','vlees','gehakt','spek','ham','vis','zalm','tonijn','garnalen','ei','eieren','tofu','tempeh','seitan'],
     'Zuivel': ['milk','yogurt','yoghurt','cheese','butter','cream','curd','cottage','melk','yoghurt','kwark','kaas','feta','mozzarella','parmezaan','ricotta','cottage cheese','skyr','roomkaas','crème fraîche','slagroom','boter','margarine','room'],
     'Blikken & potten': ['canned','chickpeas','beans','lentils','coconut milk','stock','tomato paste','tin','blik','kokosmelk','bouillon','bonen','kikkererwten','linzen','passata','tomatenpuree','pesto','mosterd','soja','sojasaus','ketjap'],
-    'Droog & granen': ['rice','oats','bread','flour','sugar','nuts','almonds','walnut','cereal','noodles','pasta','rijst','quinoa','brood','tortilla','wrap','meel','bloem','suiker','olie','olijfolie','azijn','noten','amandelen','cashew','walnoot','pijnboompit','rozijn','haver','havermout','muesli','crackers'],
+    'Droog & granen': ['black pepper','barley','rice','oats','bread','flour','sugar','nuts','almonds','walnut','cereal','noodles','pasta','rijst','quinoa','brood','tortilla','wrap','meel','bloem','suiker','olie','olijfolie','azijn','noten','amandelen','cashew','walnoot','pijnboompit','rozijn','haver','havermout','muesli','crackers'],
   };
   items.forEach(item => {
     const key = ritmeGroceryKey(item.name), parts = key.split(' ');
@@ -5978,7 +5978,7 @@ function _toArray(val) {
 }
 
 // Activiteit uit spraak of tekst koppelen aan wat er die dag staat: eerst op type als er precies één van dat type is, anders op naam.
-const CC_ACT_WORDS={hardlopen:'run',hardgelopen:'run',gelopen:'run',duurloop:'run',fietsen:'bike',gefietst:'bike',wandelen:'walk',gewandeld:'walk',gym:'gym',kracht:'gym',zwemmen:'swim',gezwommen:'swim',rustdag:'rest',running:'run',ran:'run',jog:'run',jogging:'run',cycling:'bike',cycled:'bike',walking:'walk',walked:'walk',swimming:'swim',strength:'gym',workout:'gym'};
+const CC_ACT_WORDS={hardlopen:'run',hardgelopen:'run',gelopen:'run',duurloop:'run',fietsen:'bike',gefietst:'bike',wandelen:'walk',gewandeld:'walk',gym:'gym',kracht:'gym',zwemmen:'swim',gezwommen:'swim',rustdag:'rest',running:'run',jog:'run',jogging:'run',cycling:'bike',cycled:'bike',walking:'walk',walked:'walk',swimming:'swim',strength:'gym',workout:'gym'};
 function ccActivityType(q){const t=String(q?.type||'').toLowerCase();if(t&&t!=='other'&&t!=='geen')return t;const n=String(q?.naam||'').toLowerCase();return Object.entries(CC_ACT_WORDS).find(([w])=>n.includes(w))?.[1]||'';}
 function ccMatchActivity(list,q){
  const acts=list.filter(Boolean),type=ccActivityType(q),zoek=String(q?.naam||'').toLowerCase().trim();
@@ -7935,7 +7935,8 @@ async function ccEstimateNutrition(description){
  const r=safeParseJSON(await callAIFast(`Schat eiwitten, vezels, koolhydraten en vet in gram voor deze maaltijd: ${JSON.stringify(description)}. Gebruik opgegeven hoeveelheden; zonder hoeveelheid één normale portie. Alleen JSON met vier numerieke waarden {"eiwitten":0,"vezels":0,"koolhydraten":0,"vet":0}. Dit zijn schattingen, geen exacte meting.`,250));
  if(!r||!['eiwitten','vezels'].every(k=>typeof r[k]==='number'&&Number.isFinite(r[k])&&r[k]>=0&&r[k]<=500))throw Error('Geen bruikbare schatting ontvangen. Probeer opnieuw.');
  const grams=v=>typeof v==='number'&&Number.isFinite(v)&&v>=0&&v<=1000?'~'+Math.round(v*10)/10+'g':'';
- return {eiwitten:grams(r.eiwitten),vezels:grams(r.vezels),koolhydraten:grams(r.koolhydraten),vet:grams(r.vet)};
+ const out={eiwitten:grams(r.eiwitten),vezels:grams(r.vezels)};for(const k of ['koolhydraten','vet'])if(grams(r[k]))out[k]=grams(r[k]);
+ return out;
 }
 async function berekenNutriVoorInput(){
  const input=document.getElementById('quick-meal-input'),name=input.value.trim(),btn=document.getElementById('btn-bereken-nutri'),preview=document.getElementById('nutri-preview');
