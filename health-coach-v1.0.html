@@ -2190,7 +2190,7 @@ body input[type="checkbox"]:disabled{opacity:.4;cursor:default}
 'use strict';
 
 // ─── VERSION CHECK (forceert Safari herlading bij nieuwe versie) ──────────────
-const APP_VERSION = 'lime-20261004-1';
+const APP_VERSION = 'lime-20261004-2';
 // Eén plek voor de modellen: Sonnet voor gesprekken en recepten, Haiku voor snelle achtergrondtaken.
 const CC_MODEL_MAIN = 'claude-sonnet-4-6';
 const CC_MODEL_FAST = 'claude-haiku-4-5-20251001';
@@ -2486,11 +2486,11 @@ function _modusRegel() {
   if (flowChefMode === 'comfort') return `
 - COMFORTFOOD: voor troost of om stoom af te blazen. Warm, vullend en een beetje verwennend, zoals een stoofpot, ovenschotel, romige curry of pasta uit de oven, met een frisse, gezonde draai. Wel voedzaam, maar smaak en troost staan voorop; wees minder streng over vezels en eiwit.`;
   if (flowChefMode === 'voor') return `
-- VOOR HET SPORTEN, voor 1 persoon: geef een mix van een kleine snack om 30–60 minuten vooraf te eten (hooguit 5 minuten werk) en een lichte maaltijd of lunch om 2–3 uur vooraf te eten (hooguit 15 minuten werk). Zet in de naam tussen haakjes wanneer je het eet, bijvoorbeeld "(30–60 min vooraf)". Bij één recept: kies wat het best past bij het tijdstip en de training van vandaag.`;
+- VOOR HET SPORTEN, voor 1 persoon: geef een mix van een kleine snack om 30–60 minuten vooraf te eten (hooguit 5 minuten werk) en een lichte maaltijd of lunch om 2–3 uur vooraf te eten (hooguit 15 minuten werk). Voedingsdoel: licht verteerbaar, vooral koolhydraten, weinig vet en vezels. Zet in de naam tussen haakjes wanneer je het eet, bijvoorbeeld "(30–60 min vooraf)". Bij één recept: kies wat het best past bij het tijdstip en de training van vandaag. Vloeibaar mag (smoothie, shake, kefir- of yoghurtdrank). Maak het leuk en deelbaar voor een jonge doelgroep: kleurrijk, met een pakkende naam, iets crunchy of een topping, er goed uit zien op een foto. Geen kinderachtige namen.`;
   if (flowChefMode === 'na') return `
-- NA HET SPORTEN, voor 1 persoon: geef een mix van een herstelsnack om binnen een uur te eten (hooguit 10 minuten werk) en een volwaardige herstelmaaltijd (hooguit 30 minuten werk). Zet in de naam tussen haakjes wanneer je het eet, bijvoorbeeld "(binnen 1 uur)". Bij één recept: kies wat het best past bij het tijdstip en de training van vandaag.`;
+- NA HET SPORTEN, voor 1 persoon: geef een mix van een herstelsnack om binnen een uur te eten (hooguit 10 minuten werk) en een volwaardige herstelmaaltijd (hooguit 30 minuten werk). Voedingsdoel: 15–25 g eiwit plus koolhydraten, binnen een uur. Zet in de naam tussen haakjes wanneer je het eet, bijvoorbeeld "(binnen 1 uur)". Bij één recept: kies wat het best past bij het tijdstip en de training van vandaag. Vloeibaar mag (smoothie, shake, kefir- of yoghurtdrank). Maak het leuk en deelbaar voor een jonge doelgroep: kleurrijk, met een pakkende naam, iets crunchy of een topping, er goed uit zien op een foto. Geen kinderachtige namen.`;
   if (flowChefMode === 'tijdens' || flowChefMode === 'voorraadsnack') return `
-- SNACK: een klein tussendoortje voor 1 persoon, bescheiden portie, weinig of geen afwas.`;
+- SNACK: een klein tussendoortje voor 1 persoon, bescheiden portie, weinig of geen afwas.${flowChefMode === 'tijdens' ? ' Voedingsdoel: snelle koolhydraten, vocht en wat zout; meeneembaar, drinkbaar mag.' : ''} Vloeibaar mag (smoothie, shake, kefir- of yoghurtdrank). Maak het leuk en deelbaar voor een jonge doelgroep: kleurrijk, met een pakkende naam, iets crunchy of een topping, er goed uit zien op een foto. Geen kinderachtige namen.`;
   if (flowChefMode === 'uitgebreid') return `
 - GEMAK: uitgebreid — dit mag een kookproject zijn voor de serieuzere kok, groente-gedreven zoals Ottolenghi: gelaagde smaken, meerdere componenten, 45 tot 90 minuten. Kies technieken die het verschil maken (roosteren, marineren, zelf een saus maken) en leg in de bereidingsstappen kort uit waarom een stap belangrijk is.`;
   return '';
@@ -6884,14 +6884,16 @@ let genPersonen = [1, 2, 3, 4, 5, 6].includes(Number(localStorage.getItem('hc_ge
 
 function saveMealRecipe(id){const r=(data.recepten||[]).find(x=>x.id===id);if(!r)return;r.bewaard=true;r._chefTransient=false;r.flowDeleted=false;saveAndSync();_renderFoodReceptenList();closeModal();showBanner('green','Bewaard in Mijn recepten.');}
 const CHEF_STIJL=`STIJL VAN CHEF:
-- Voor een sportieve, trendy eter: gezond zonder dieetgedoe, fris, veel smaak en een beetje hip, op het niveau van Chickslovefood, Leuke Recepten, OhMyFoodness, Mob, Eat the Gains en Ottolenghi.
+- Voor een sportieve, trendy eter: gezond zonder dieetgedoe, fris, veel smaak en een beetje hip, op het niveau van Chickslovefood, Leuke Recepten, OhMyFoodness, Mob, Eat the Gains en Ottolenghi. Extra inspiratie: Ottolenghi (veel kruiden, zuur, granaatappel, tahin, za'atar), Laura's Bakery (gezond bakken en ontbijt, haalbaar), Veggilaine en bekende foodcreators op TikTok en Instagram (kleurrijk, één pan of bakplaat, makkelijk na te maken). Gebruik ze als smaak en stijl, kopieer geen recepten en noem geen namen in het recept.
 - Vaste vormen die werken: bowl, wrap, bakplaat, één pan, overnight oats, yoghurt- of kwarkbowl. Varieer daarbinnen en wissel af.
 - Eiwit ruim en zichtbaar: een maaltijd 30–45 g eiwit per portie, een snack 5–20 g. Slimme bronnen: Griekse yoghurt, kwark, cottage cheese, eieren, peulvruchten, tofu, tempeh, edamame, en vis of vlees als het eetpatroon dat toestaat.
 - Groente voorop, met contrast: iets fris of zuurs, iets knapperigs, een saus of dip, verse kruiden.
-- Snel waar het kan: de meeste recepten in 5–20 minuten.
+- Snel waar het kan, maar eerlijk: tel wassen, snijden, oven voorverwarmen, koken en rusten mee, en reken voor een thuiskok, niet voor een chef. Twijfel je, rond dan naar boven af. Een ovenrecept duurt minstens 25 minuten.
 - Hoeveelheden in gram of ml waar het kan, ook bij groente, fruit en kaas (bijvoorbeeld "150 g avocado" in plaats van "1 avocado"); alleen eieren en kleine dingen zoals een teentje knoflook in stuks; zout, peper en verse kruiden mogen "naar smaak". Nooit cups of ounces. Ingrediënten uit een gewone Nederlandse supermarkt.
 - Naam: kort en pakkend, het gerecht plus de smaakmaker die het verschil maakt, bijvoorbeeld "Crispy tofu-bowl met sesam-limoen" of "Bakplaat-zalm met zoete aardappel en tahin". Gangbare foodwoorden als bowl, wrap en crispy mogen.
-- Stappen: kort, actief en concreet, bijvoorbeeld "Rooster 20 min op 220 °C". Geen lappen tekst.`;
+- Stappen: kort, actief en concreet, bijvoorbeeld "Rooster 20 min op 220 °C". Geen lappen tekst.
+- Praktisch: bouw elk recept op basisvoorraad (eieren, yoghurt of kwark, havermout, rijst, pasta, wraps, bonen of kikkererwten uit blik, tomaten uit blik, ui, knoflook, citroen, diepvriesgroente, kaas, pindakaas, specerijen). Voeg hooguit 3 verse of bijzondere ingrediënten toe die het verschil maken. Liever een slimme twist op iets bekends dan een lijst exotische producten.
+- Afwisseling. Rijstwafels en rijstcrackers alleen als de gebruiker erom vraagt. Wissel de basis af (brood, wrap, havermout, yoghurt, kwark, fruit, smoothie, ei, peulvruchten) en gebruik binnen één reeks voorstellen nooit twee keer dezelfde basis.`;
 const CHEF_SCHEMA='[{"naam":"...","personen":2,"voedingsbasis":"per_portie","vezels":"~Xg","eiwitten":"~Xg","koolhydraten":"~Xg","tijd":"20 min","ingredienten":["200 g ingrediënt"],"bereiding":["Concrete stap met tijd en indien nodig temperatuur"]}]';
 function validateChefRecipe(r,persons){
   if(!r||typeof r.naam!=='string'||!r.naam.trim()||r.naam.length>180||r.personen!==persons||r.voedingsbasis!=='per_portie')throw Error('Porties of voedingsbasis ontbreken. Probeer opnieuw.');
@@ -6899,7 +6901,12 @@ function validateChefRecipe(r,persons){
   if(r.ingredienten.filter(x=>!/\d|[½¼¾⅓⅔]|snuf|naar smaak/i.test(x)).length>3)throw Error('Niet alle hoeveelheden zijn duidelijk. Probeer opnieuw.');
   if(typeof r.tijd!=='string'||!/^\d+\s*min$/.test(r.tijd)||parseInt(r.tijd)<1)throw Error('De bereidingstijd ontbreekt. Probeer opnieuw.');
   for(const key of ['vezels','eiwitten','koolhydraten'])if(typeof r[key]!=='string'||!/^~?\d+(?:[.,]\d+)?\s*g$/.test(r[key]))throw Error('Voedingswaarden per portie ontbreken. Probeer opnieuw.');
-  return {...r,naam:r.naam.trim(),_basePersonen:persons,personen:persons,_type:(flowChefMode==='tijdens'||flowChefMode==='voorraadsnack'?'snack':genMaaltijd)||undefined};
+  return {...r,tijd:ccRealisticTime(r),naam:r.naam.trim(),_basePersonen:persons,personen:persons,_type:(flowChefMode==='tijdens'||flowChefMode==='voorraadsnack'?'snack':genMaaltijd)||undefined};
+}
+// Vangnet tegen te optimistische tijden: de minuten uit de stappen plus 5 minuten voorbereiding zijn het minimum.
+function ccRealisticTime(r){
+  let sum=0;for(const step of r.bereiding)for(const m of step.matchAll(/(\d+)\s*(?:–|-|tot)?\s*(\d+)?\s*min/gi))sum+=Math.max(+m[1],+(m[2]||0));
+  return sum&&sum+5>parseInt(r.tijd)?(sum+5)+' min':r.tijd;
 }
 function validateChefRecipes(value,persons,expected){
   if(!Array.isArray(value)||value.length!==expected)throw Error('Chef gaf geen volledig voorstel. Probeer opnieuw.');
@@ -6953,7 +6960,7 @@ function generateRecepten(){return flowChefSubmit();}
 
 function chefPreviewOpen(fresh){
   if(fresh)window._generatedRecepten=[];
-  showModal(`<div class="modal-header"><h2>Waar heb je zin in?</h2>${flowClose()}</div><p class="muted">Kies een idee. Alleen wat je bewaart komt in Mijn recepten.</p><div id="gen-preview-list">${(window._generatedRecepten||[]).map(recipeCardHTML).join('')}</div><div id="gen-preview-wait" class="cc-chef-wait" role="status" hidden><span class="cc-chef-dot" aria-hidden="true"></span><span id="gen-preview-wait-text"></span></div><button id="gen-meer-btn" class="btn btn-secondary btn-full" onclick="generateMeer()">Andere ideeën</button>`);
+  showModal(`<div class="modal-header"><h2>Zit hier iets tussen?</h2>${flowClose()}</div><p class="muted">Kies een idee. Alleen wat je bewaart komt in Mijn recepten.</p><div id="gen-preview-list">${(window._generatedRecepten||[]).map(recipeCardHTML).join('')}</div><div id="gen-preview-wait" class="cc-chef-wait" role="status" hidden><span class="cc-chef-dot" aria-hidden="true"></span><span id="gen-preview-wait-text"></span></div><button id="gen-meer-btn" class="btn btn-secondary btn-full" onclick="generateMeer()">Andere ideeën</button>`);
 }
 function chefPreviewWait(text){
   const w=document.getElementById('gen-preview-wait'),b=document.getElementById('gen-meer-btn');if(!w)return;
@@ -6993,7 +7000,7 @@ function recipeCardHTML(r){
   <h3>${escapeText(r.naam)}</h3><div class="meal-entry-nutrients">${r.eiwitten||r.vezels?mealNutrients(r)+' <span>per portie · schatting</span>':'<span>Voedingswaarden onbekend</span>'}</div>
   <details><summary>Bekijk recept</summary><h4>Ingrediënten voor ${r.personen} ${r.personen===1?'persoon':'personen'}</h4><ul>${r.ingredienten.map(x=>`<li>${escapeText(x)}</li>`).join('')}</ul><h4>Bereiding</h4><ol>${r.bereiding.map(x=>`<li>${escapeText(x)}</li>`).join('')}</ol>
   <div class="chef-adjust"><label for="aanpas-${r._tmpId}">Maak het naar jouw smaak</label><input id="aanpas-${r._tmpId}" class="modal-input" placeholder="Bijvoorbeeld: meer eiwit of zonder feta"><button id="aanpas-btn-${r._tmpId}" class="btn btn-secondary" onclick="pasReceptAan('${r._tmpId}')">Pas recept aan</button></div></details>
-  <div class="chef-proposal-actions"><button class="btn btn-primary" onclick="openGeneratedMeal('${r._tmpId}',false)">Inplannen</button><button class="btn btn-secondary" onclick="openGeneratedMeal('${r._tmpId}',true)">Gegeten</button><button class="btn btn-ghost" id="bewaar-btn-${r._tmpId}" onclick="bewaarGenRecept('${r._tmpId}')">Bewaren</button></div></article>`;
+  <div class="chef-proposal-actions"><button class="btn btn-primary" onclick="openGeneratedMeal('${r._tmpId}',false)">Inplannen</button><button class="btn btn-secondary" onclick="openGeneratedMeal('${r._tmpId}',true)">Gegeten</button>${ccSavedGenerated(r)?`<button class="btn btn-ghost" id="bewaar-btn-${r._tmpId}" onclick="chefOpenSaved('${r._tmpId}')">Open recept</button>`:`<button class="btn btn-ghost" id="bewaar-btn-${r._tmpId}" onclick="bewaarGenRecept('${r._tmpId}')">Bewaren</button>`}</div></article>`;
 }
 function retainGeneratedRecipe(r,savedByUser=false){
   data.recepten ||= [];
@@ -7001,7 +7008,10 @@ function retainGeneratedRecipe(r,savedByUser=false){
   if(!saved){saved={...r,id:'r'+Date.now()+Math.random().toString(36).slice(2,7),type:r._type||'diner',_chefTransient:!savedByUser};delete saved._tmpId;data.recepten.push(saved);r._savedRecipeId=saved.id;}
   if(savedByUser){saved.bewaard=true;saved._chefTransient=false;saved.flowDeleted=false;}return saved;
 }
-function bewaarGenRecept(id){const r=(window._generatedRecepten||[]).find(x=>x._tmpId===id);if(!r)return;retainGeneratedRecipe(r,true);saveAndSync();_renderFoodReceptenList();const btn=document.getElementById('bewaar-btn-'+id);if(btn){btn.textContent='Bewaard';btn.disabled=true;}showBanner('green','Bewaard in Mijn recepten.');}
+// Een voorstel dat de gebruiker bewaarde: het opgeslagen recept, anders niets.
+function ccSavedGenerated(r){const saved=r._savedRecipeId&&(data.recepten||[]).find(x=>x.id===r._savedRecipeId);return saved&&saved.bewaard&&!saved.flowDeleted?saved:null;}
+function chefOpenSaved(id){const r=(window._generatedRecepten||[]).find(x=>x._tmpId===id),saved=r&&ccSavedGenerated(r);if(saved)ccOpenFrom(()=>chefPreviewOpen(false),()=>flowRecipeDetail(saved.id));}
+function bewaarGenRecept(id){const r=(window._generatedRecepten||[]).find(x=>x._tmpId===id);if(!r)return;retainGeneratedRecipe(r,true);saveAndSync();_renderFoodReceptenList();const btn=document.getElementById('bewaar-btn-'+id);if(btn){btn.textContent='Open recept';btn.setAttribute('onclick',`chefOpenSaved('${id}')`);}showBanner('green','Bewaard in Mijn recepten.');}
 function openGeneratedMeal(id,eaten){return flowOpenGeneratedMeal(id,eaten);}
 
 function confirmGeneratedMeal(id,eaten){return flowConfirmGeneratedMeal(id,eaten);}
