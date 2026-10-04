@@ -2197,7 +2197,7 @@ body input[type="checkbox"]:disabled{opacity:.4;cursor:default}
 'use strict';
 
 // ─── VERSION CHECK (forceert Safari herlading bij nieuwe versie) ──────────────
-const APP_VERSION = 'lime-20261004-8';
+const APP_VERSION = 'lime-20261004-9';
 // Eén plek voor de modellen: Sonnet voor gesprekken en recepten, Haiku voor snelle achtergrondtaken.
 const CC_MODEL_MAIN = 'claude-sonnet-4-6';
 const CC_MODEL_FAST = 'claude-haiku-4-5-20251001';
@@ -4434,7 +4434,7 @@ function showVoorraadModal() {
     <div class="cc-pantry-tools"><button type="button" onclick="document.getElementById('voorraad-foto-input').click()">Foto</button><button type="button" id="voorraad-wis" onclick="clearVoorraadVraag()">Alles wissen</button></div>
     <div id="voorraad-foto-status" class="muted" role="status" style="display:none;"></div>
     <input type="file" id="voorraad-foto-input" accept="image/*" style="display:none;" onchange="analyseVoorraadFoto(this)">
-    <div id="voorraad-go" class="cc-pantry-go"><p id="voorraad-go-label"></p><div class="cc-pantry-actions"><button type="button" class="btn btn-secondary" onclick="voorraadMaak('snack')">Snack</button><button type="button" class="btn btn-primary" onclick="voorraadMaak('maaltijd')">Maaltijd</button></div></div>
+    <div id="voorraad-go" class="cc-pantry-go"><p id="voorraad-go-label"></p><div class="cc-pantry-actions"><button type="button" class="btn btn-secondary" onclick="voorraadMaak('snack')">Snack</button><button type="button" class="btn btn-secondary" onclick="voorraadMaak('maaltijd')">Maaltijd</button></div></div>
   `);
   renderVoorraadList();
   document.getElementById('voorraad-input').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();saveVoorraad();}});
