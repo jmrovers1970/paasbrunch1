@@ -40,7 +40,7 @@ Gebruiker: Jim. Primair op iPhone (Safari), in het Nederlands. Loopt (hoofdsport
 
 **De repository is openbaar** (GitHub Pages op een gratis account vereist dat). Er mogen dus nooit sleutels, tokens of persoonsgegevens in code, commits of testbestanden staan.
 
-**Versie**: constante `APP_VERSION = 'lime-YYYYMMDD-N'` bovenin het script. Getoond in Instellingen. Elke nieuwe versie: datum van vandaag en N doornummeren. Huidige basis: `lime-20261004-5`.
+**Versie**: constante `APP_VERSION = 'lime-YYYYMMDD-N'` bovenin het script. Getoond in Instellingen. Elke nieuwe versie: datum van vandaag en N doornummeren. Huidige basis: `lime-20261004-6`.
 
 ### CSS — twee lagen
 - **Oude laag**: eerste `<style>` in `<head>`. Historisch gegroeid, veel `!important`. Ongebruikte regels zijn al verwijderd; de rest wordt deels overstemd. Niet uitbreiden.
@@ -87,7 +87,7 @@ Kop + begroeting + invoer van Coach is turquoise, kop + invoer + knoppen van Che
 - `ensureDay(date)` maakt een dag aan en geeft hem terug (schrijven). `flowDay(date)` alleen lezen. `logRecords(data)` = platte lijst registraties.
 - Activiteit: `{id,type,naam,detail,duur,afgevinkt}`; types o.a. run, bike, gym, walk, walkdog, swim, other, rest.
 - Maaltijd: `{id,naam,vezels:'7g',eiwitten:'20g',koolhydraten?,vet?,gegeten,receptId?}`. Alles als string met `g`; lees met `parseGrams()`. Koolhydraten en vet zijn schattingen en ontbreken bij oude maaltijden: telt alleen waar bekend (`dayNutrition`: `eatenWithoutExtra`). Alle schattingen lopen via `ccEstimateNutrition` (vier waarden); Chef-recepten leveren ze via `CHEF_SCHEMA` (vet is mild: ongeldig = leeg, geen fout).
-- Recepten: `data.recepten[]` (`myRecipes()` filtert verwijderde en voorbeeldrecepten).
+- Recepten: `data.recepten[]` (`myRecipes()` filtert verwijderde en voorbeeldrecepten). Elk recept van Chef heeft `soort` (`maaltijd`, `snack` of `sport`) en bij sport `moment` (`voor`/`tijdens`/`na`), gezet in `validateChefRecipe`; oudere en eigen recepten: `ccRecipeSoort(r)` leidt af uit `type`. Mijn recepten (`flowRecipeList`): filters Alles · Maaltijd · Snack · Sport · Snel (`CC_RECIPE_FILTERS`), gesorteerd op vaak ingepland of gegeten (`ccRecipeUses`, via `receptId` bij maaltijden).
 - Instellingen: `settings`, opslaan via `saveSettingsData()`. Velden uit het instellingenscherm via `RITME_SETTINGS` (id `set-<id>` → key).
 - **Sync**: Gist, optioneel versleuteld (`ccEncryptPayload`/`ccDecryptContent`, AES-GCM, PBKDF2). Conflictdetectie via `hc_sync_base_<gistId>` en `ccDataHash()`. Bij onleesbare opslag: `ccStorageBlocked` + herstelmelding, niets overschrijven.
 - **Wijzigingen met rollback**: veel bewerkfuncties zijn via `ccWithEdit` (window[name]-wrappers) beschermd: bij een opslagfout wordt `data` teruggezet. Verander je zo'n functie, laat de naam staan.

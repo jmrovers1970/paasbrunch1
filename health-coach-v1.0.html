@@ -2197,7 +2197,7 @@ body input[type="checkbox"]:disabled{opacity:.4;cursor:default}
 'use strict';
 
 // ─── VERSION CHECK (forceert Safari herlading bij nieuwe versie) ──────────────
-const APP_VERSION = 'lime-20261004-5';
+const APP_VERSION = 'lime-20261004-6';
 // Eén plek voor de modellen: Sonnet voor gesprekken en recepten, Haiku voor snelle achtergrondtaken.
 const CC_MODEL_MAIN = 'claude-sonnet-4-6';
 const CC_MODEL_FAST = 'claude-haiku-4-5-20251001';
@@ -3728,7 +3728,7 @@ Antwoord ALLEEN met geldige JSON in exact dit formaat, zonder uitleg:
     const nieuw = validateChefRecipes([safeParseJSON(raw)],recept.personen||2,1)[0];
     // A revised idea must not silently overwrite a previously planned or saved recipe.
     delete recept._savedRecipeId;
-    Object.assign(recept, nieuw, {_type:recept._type});
+    Object.assign(recept, nieuw, {_type:recept._type, soort:recept.soort, moment:recept.moment});
     const kaart = document.getElementById('gencard-' + tmpId);
     if (kaart) kaart.outerHTML = recipeCardHTML(recept);
     showBanner('green', `✓ Recept aangepast: ${recept.naam}`);
@@ -6915,7 +6915,8 @@ function validateChefRecipe(r,persons){
   if(r.ingredienten.filter(x=>!/\d|[½¼¾⅓⅔]|snuf|naar smaak/i.test(x)).length>3)throw Error('Niet alle hoeveelheden zijn duidelijk. Probeer opnieuw.');
   if(typeof r.tijd!=='string'||!/^\d+\s*min$/.test(r.tijd)||parseInt(r.tijd)<1)throw Error('De bereidingstijd ontbreekt. Probeer opnieuw.');
   for(const key of ['vezels','eiwitten','koolhydraten'])if(typeof r[key]!=='string'||!/^~?\d+(?:[.,]\d+)?\s*g$/.test(r[key]))throw Error('Voedingswaarden per portie ontbreken. Probeer opnieuw.');
-  return {...r,vet:typeof r.vet==='string'&&/^~?\d+(?:[.,]\d+)?\s*g$/.test(r.vet)?r.vet:'',tijd:ccRealisticTime(r),naam:r.naam.trim(),_basePersonen:persons,personen:persons,_type:(flowChefMode==='tijdens'||flowChefMode==='voorraadsnack'?'snack':genMaaltijd)||undefined};
+  const sport=['voor','tijdens','na'].includes(flowChefMode);
+  return {...r,soort:sport?'sport':flowChefMode==='voorraadsnack'?'snack':'maaltijd',...(sport?{moment:flowChefMode}:{}),vet:typeof r.vet==='string'&&/^~?\d+(?:[.,]\d+)?\s*g$/.test(r.vet)?r.vet:'',tijd:ccRealisticTime(r),naam:r.naam.trim(),_basePersonen:persons,personen:persons,_type:(flowChefMode==='tijdens'||flowChefMode==='voorraadsnack'?'snack':genMaaltijd)||undefined};
 }
 // Vangnet tegen te optimistische tijden: de minuten uit de stappen plus 5 minuten voorbereiding zijn het minimum.
 function ccRealisticTime(r){
@@ -7162,7 +7163,11 @@ function flowPhotoReview(){const r=flowRecipePhoto;if(!r)return;showModal(`<div 
 function flowConfirmPhoto(){const r=flowRecipePhoto;if(!r)return;try{const name=document.getElementById('flow-photo-name').value.trim(),persons=Number(document.getElementById('flow-photo-persons').value),ingredients=document.getElementById('flow-photo-ing').value.split('\n').map(x=>x.trim()).filter(Boolean),steps=document.getElementById('flow-photo-steps').value.split('\n').map(x=>x.trim()).filter(Boolean);if(!name||!Number.isInteger(persons)||persons<1||persons>30||!ingredients.length||!steps.length)throw Error('Vul titel, porties, ingrediënten en bereiding in.');if([...ingredients,...steps].some(x=>/\[onleesbaar\]/i.test(x)))throw Error('Vervang eerst de gemarkeerde onleesbare tekst.');if(r.onzeker.length&&!document.getElementById('flow-photo-confirm').checked)throw Error('Bevestig dat je de onduidelijke onderdelen hebt gecontroleerd.');const recipe={naam:name,personen:persons,_basePersonen:persons,tijd:document.getElementById('flow-photo-time').value.trim(),ingredienten:ingredients,bereiding:steps,vezels:'',eiwitten:'',koolhydraten:'',voedingsbasis:'per_portie',bron:r.source==='dish'?'Reconstructie van gerechtfoto':'Overgenomen van receptfoto',_tmpId:'photo'+Date.now()};window._generatedRecepten=[recipe];flowRecipePhoto=null;flowPhotoResume();flowPreviewPhoto(recipe);}catch(e){document.getElementById('flow-photo-error').textContent=e.message;}}
 function flowPreviewPhoto(r){showModal(`<div class="modal-header"><h2>Je recept staat klaar</h2>${flowClose()}</div><p class="muted">${escapeText(r.bron)} · voedingswaarden nog onbekend</p>${recipeCardHTML(r)}<button class="btn btn-secondary btn-full" onclick="flowCookGenerated(${flowArg(r._tmpId)})">Koken met dit recept</button>`);}
 function flowCookGenerated(id){const r=(window._generatedRecepten||[]).find(x=>x._tmpId===id);if(!r)return;const saved=retainGeneratedRecipe(r);saveAndSync();closeModal();enterKookmodus(saved.id);}
-const CC_RECIPE_FILTERS=[['alles','Alles',()=>true],['snel','Snel',r=>parseInt(r.tijd)>0&&parseInt(r.tijd)<=20],['eiwit','Eiwit',r=>parseGrams(r.eiwitten)>=25],['vezels','Vezels',r=>parseGrams(r.vezels)>=8]];
+// Soort van een recept: bij het maken door Chef bewaard; oudere en eigen recepten leiden we af uit `type`.
+function ccRecipeSoort(r){return r.soort||(r.type==='snack'?'snack':'maaltijd');}
+// Hoe vaak een recept is ingepland of gegeten, voor de volgorde "vaak gemaakt".
+function ccRecipeUses(){const n={};Object.values(data.weken||{}).forEach(w=>Object.values(w).forEach(d=>Object.values(d.maaltijden||{}).forEach(a=>(Array.isArray(a)?a:[]).forEach(m=>{if(m&&m.receptId)n[m.receptId]=(n[m.receptId]||0)+1;}))));return n;}
+const CC_RECIPE_FILTERS=[['alles','Alles',()=>true],['maaltijd','Maaltijd',r=>ccRecipeSoort(r)==='maaltijd'],['snack','Snack',r=>ccRecipeSoort(r)==='snack'],['sport','Sport',r=>ccRecipeSoort(r)==='sport'],['snel','Snel',r=>parseInt(r.tijd)>0&&parseInt(r.tijd)<=20]];
 let ccRecipeFilter='alles',ccRecipeQuery='';
 function ccRecipeFilterSet(f){ccRecipeFilter=f;flowRecipeList();}
 function ccRecipeSearch(q){ccRecipeQuery=q;ccRecipeResults();}
@@ -7170,7 +7175,7 @@ function ccRecipeSearch(q){ccRecipeQuery=q;ccRecipeResults();}
 function ccRecipeResults(){
  const el=document.getElementById('cc-recipe-results');if(!el)return;
  const pass=CC_RECIPE_FILTERS.find(f=>f[0]===ccRecipeFilter)[2],q=ccRecipeQuery.trim().toLowerCase();
- const all=myRecipes().filter(r=>!r.flowDeleted),list=all.filter(r=>pass(r)&&(!q||r.naam.toLowerCase().includes(q)));
+ const all=myRecipes().filter(r=>!r.flowDeleted),uses=ccRecipeUses(),list=all.filter(r=>pass(r)&&(!q||r.naam.toLowerCase().includes(q))).map((r,i)=>({r,i})).sort((a,b)=>(uses[b.r.id]||0)-(uses[a.r.id]||0)||a.i-b.i).map(x=>x.r);
  const row=r=>{const on=flowRecipeSelected.has(r.id),time=/\d/.test(r.tijd||'')?`<span class="cc-row-meta">${escapeText(r.tijd)}</span>`:'';return flowRecipeSelecting?`<button type="button" class="cc-row cc-recipe-row" aria-pressed="${on}" onclick="flowSelectRecipe(${flowArg(r.id)},${!on});flowRecipeList()"><span class="cc-status${on?' is-done':''}" aria-hidden="true"></span><span class="cc-recipe-name">${escapeText(r.naam)}</span>${time}</button>`:`<button type="button" class="cc-row cc-recipe-row" aria-haspopup="dialog" onclick="ccOpenFrom(ccOpenRecipes,()=>flowRecipeDetail(${flowArg(r.id)}))"><span class="cc-recipe-name">${escapeText(r.naam)}</span>${time}${CC_CHEVRON}</button>`;};
  el.innerHTML=!all.length?'<p class="cc-empty">Nog geen recepten. Bewaar een idee van Chef of voeg je eigen recept toe.</p>':list.length?`<div class="cc-rows">${list.map(row).join('')}</div>`:'<p class="cc-empty">Geen recepten die hierbij passen.</p>';
 }
