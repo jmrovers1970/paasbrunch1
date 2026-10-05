@@ -1,6 +1,6 @@
 # TAKEN.md — Coach-gesprek en receptenoverzicht
 
-Basis: `health-coach-v1.0.html`, versie `lime-20261005-20` (branch `claude/practical-edison-cvl53y`, backup `backup/lime-20261004-12`). Vorige takenlijsten staan in de git-geschiedenis.
+Basis: `health-coach-v1.0.html`, versie `lime-20261005-21` (branch `claude/practical-edison-cvl53y`, backup `backup/lime-20261004-12`). Vorige takenlijsten staan in de git-geschiedenis.
 
 Bron: Jims test op de iPhone (5 okt) met vijf schermafbeeldingen. Zijn woorden staan tussen aanhalingstekens. Jims keuzes op het advies: 1 ja, 2 allebei, 3 "laat maar even", 4 "doe maar helemaal".
 
@@ -48,6 +48,10 @@ Bron: Jims test op de iPhone (5 okt) met vijf schermafbeeldingen. Zijn woorden s
 - *Coach testen* neemt de vervolgvragen nog niet mee in de beoordeling.
 
 ---
+
+## 5 okt — Engels, ronde 3 van 4 (Chef) — af op branch (`lime-20261005-21`)
+- ~225 Chef-teksten (Chef-scherm, recepten, kookmodus, foto's, voorraad, Sparren, boodschappen) plus patronen.
+- Boodschappen met Engelse eenheden; harde controle op wat er niet in mag ook voor Engelse ingrediënten; meer Engelse woorden voor afvinken.
 
 ## 5 okt — Engels, ronde 2 van 4 (Coach) — af op branch (`lime-20261005-20`)
 - ~250 Coach-teksten plus patronen (datums, "2 van 4 gedaan", "Gemiddeld over N gelogde dagen", spiergroepen per " · ").

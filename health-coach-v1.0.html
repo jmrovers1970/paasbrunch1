@@ -1751,7 +1751,7 @@ body .vandaag-section-h{font-size:13px!important;font-weight:650!important;text-
 #modal-container .cc-spar-persons{margin-top:8px}
 #modal-container .cc-spar-date{margin-top:16px}
 .cc-spar-gangen{display:flex;flex-direction:column;gap:2px;margin:4px 0;font:400 14px/1.4 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-ink)}
-.cc-spar-gangen b{display:inline-block;min-width:56px;margin-right:8px;font-weight:650}
+.cc-spar-gangen b{display:inline-block;min-width:56px;margin-right:8px;font-weight:650}html[lang="en"] .cc-spar-gangen b{min-width:68px}
 #modal-container .cc-spar-dir{all:unset;box-sizing:border-box;display:flex;flex-direction:column;gap:4px;width:100%;margin-bottom:12px;padding:16px;border:1px solid var(--cc-line);border-radius:18px;background:var(--cc-card);color:var(--cc-ink);cursor:pointer;overflow-wrap:anywhere;-webkit-tap-highlight-color:transparent}
 #modal-container .cc-spar-dir[aria-pressed="true"]{border-color:var(--cc-lime);background:var(--cc-lime-soft);box-shadow:inset 0 0 0 1px var(--cc-lime)}
 #modal-container .cc-spar-dir:focus-visible{outline:2px solid var(--cc-green);outline-offset:2px}
@@ -2267,7 +2267,7 @@ body input[type="checkbox"]:disabled{opacity:.4;cursor:default}
 'use strict';
 
 // ─── VERSION CHECK (forceert Safari herlading bij nieuwe versie) ──────────────
-const APP_VERSION = 'lime-20261005-20';
+const APP_VERSION = 'lime-20261005-21';
 // Eén plek voor de modellen: Sonnet voor gesprekken en recepten, Haiku voor snelle achtergrondtaken.
 const CC_MODEL_MAIN = 'claude-sonnet-5-5';
 const CC_MODEL_FAST = 'claude-haiku-4-5-20251001';
@@ -2875,7 +2875,234 @@ const CC_EN={
  "VOORSTEL":"PROPOSAL",
  "Pas aan":"Change",
  "Laat staan":"Leave it",
- "Aangepast.":"Changed."
+ "Aangepast.":"Changed.",
+ // Chef en boodschappen
+ "Spreek je eetwens in":"Speak your food wish",
+ "Je vraag of receptwens":"Your question or recipe wish",
+ "Foto toevoegen":"Add photo",
+ "Sport":"Sport",
+ "Voor":"Before",
+ "Tijdens":"During",
+ "Na":"After",
+ "Snel":"Quick",
+ "Meal prep":"Meal prep",
+ "Comfort":"Comfort",
+ "Voorraad":"Pantry",
+ "Sparren":"Ideas",
+ "Dinertje voor gasten":"Dinner for guests",
+ "Jouw keuken":"Your kitchen",
+ "Mijn recepten":"My recipes",
+ "Boodschappen":"Shopping",
+ "Receptinstellingen":"Recipe settings",
+ "Wat wil je eten?":"What to eat?",
+ "Foto toevoegen: recept, gerecht of voorraad":"Add photo: recipe, dish or pantry",
+ "Foto: recept, gerecht of voorraad":"Photo: recipe, dish or pantry",
+ "Voor het sporten":"Before exercise",
+ "Na het sporten":"After exercise",
+ "Tijdens het sporten":"During exercise",
+ "Snack: 30–60 min vooraf":"Snack: 30–60 min before",
+ "Meal: 2–3 uur vooraf":"Meal: 2–3 hours before",
+ "Maaltijd: 2–3 uur vooraf":"Meal: 2–3 hours before",
+ "Je voorraad":"Your pantry",
+ "Uit je voorraad":"From your pantry",
+ "Tik aan wat je wilt gebruiken.":"Tap what you want to use.",
+ "Voeg toe":"Add",
+ "Foto":"Photo",
+ "Alles wissen":"Clear all",
+ "paprika, 200 g feta…":"pepper, 200 g feta…",
+ "Spreek in":"Speak",
+ "Eigen recept":"Own recipe",
+ "Selecteer":"Select",
+ "Wrap":"Wrap",
+ "Bakplaat":"Tray bake",
+ "Zoet":"Sweet",
+ "Weekend":"Weekend",
+ "Bowl":"Bowl",
+ "Soep":"Soup",
+ "Salade":"Salad",
+ "Recepten":"Recipes",
+ "Labels opruimen":"Tidy up labels",
+ "Wanneer eet je het":"When do you eat it",
+ "Soort recept":"Type of recipe",
+ "Schat voedingswaarden per portie":"Estimate nutrition per serving",
+ "Koken":"Cook",
+ "Inplannen":"Plan",
+ "Porties":"Servings",
+ "Ingrediënten":"Ingredients",
+ "Bereiding":"Method",
+ "Bewerken":"Edit",
+ "Bewaren":"Save",
+ "Bewaard":"Saved",
+ "Personen":"People",
+ "Ideeën":"Ideas",
+ "Chef onthoudt dit voor je volgende recepten.":"Chef remembers this for your next recipes.",
+ "Minder personen":"Fewer people",
+ "Meer personen":"More people",
+ "Aantal ideeën":"Number of ideas",
+ "Eetvoorkeur":"Diet",
+ "Kies je gerechten. Daarna vink je af wat je al hebt.":"Choose your dishes. Then tick off what you already have.",
+ "Personen per gerecht":"People per dish",
+ "Ingrediënten ontbreken":"Ingredients missing",
+ "Bekijk mijn lijst":"View my list",
+ "Mijn boodschappen":"My shopping",
+ "Gerechten en personen aanpassen":"Change dishes and people",
+ "Vink af wat je hebt. Hoeveelheden uit je recepten worden omgerekend; controleer de verpakkingen.":"Tick off what you have. Amounts from your recipes are converted; check the packaging.",
+ "Groenten & fruit":"Fruit & veg",
+ "Vlees, vis & eieren":"Meat, fish & eggs",
+ "Zuivel":"Dairy",
+ "Blikken & potten":"Tins & jars",
+ "Droog & granen":"Dry goods & grains",
+ "Losse boodschap":"Extra item",
+ "Kopieer lijst":"Copy list",
+ "Gekopieerd ✓":"Copied ✓",
+ "Je hebt alles al":"You have everything",
+ "Kopiëren lukt niet":"Copying failed",
+ "Bijvoorbeeld 2 appels":"For example 2 apples",
+ "Losse boodschappen wissen":"Clear extra items",
+ "Je lijst is nog leeg. Voeg hieronder iets toe.":"Your list is empty. Add something below.",
+ "Nog zelf aanvullen":"Add yourself",
+ "geen ingrediënten bekend.":"no ingredients known.",
+ "Zit hier iets tussen?":"Anything you like?",
+ "Kies een idee. Alleen wat je bewaart komt in Mijn recepten.":"Pick an idea. Only what you save goes into My recipes.",
+ "per portie":"per serving",
+ "schatting":"estimate",
+ "Lichter":"Lighter",
+ "Sneller":"Quicker",
+ "Meer eiwit":"More protein",
+ "Meer vezels":"More fibre",
+ "Anders…":"Other…",
+ "Bekijk recept":"View recipe",
+ "Open recept":"Open recipe",
+ "Maak het naar jouw smaak":"Make it your way",
+ "Pas recept aan":"Adjust recipe",
+ "Chef bedenkt nog een idee…":"Chef is thinking of another idea…",
+ "Chef bedenkt ideeën…":"Chef is coming up with ideas…",
+ "Chef past het aan…":"Chef is adjusting it…",
+ "Chef kijkt je recepten na…":"Chef is checking your recipes…",
+ "Chef denkt mee…":"Chef is thinking…",
+ "Chef denkt mee over je eetmomenten…":"Chef is thinking about your meal times…",
+ "Chef schrijft je menu…":"Chef is writing your menu…",
+ "Chef schrijft je recept…":"Chef is writing your recipe…",
+ "Chef stuurt bij…":"Chef is adjusting…",
+ "Stuur dit recept bij":"Adjust this recipe",
+ "Bijvoorbeeld: meer eiwit of zonder feta":"For example: more protein or no feta",
+ "‹ Vorige":"‹ Previous",
+ "Volgende ›":"Next ›",
+ "Handsfree":"Hands-free",
+ "Lees voor":"Read aloud",
+ "Kookmodus":"Cook mode",
+ "Kookmodus verlaten":"Leave cook mode",
+ "Vorige stap":"Previous step",
+ "Volgende stap":"Next step",
+ "Wat staat er op je foto?":"What's in your photo?",
+ "De foto wordt door de ingestelde AI gelezen. Alleen de gecontroleerde recepttekst of ingrediënten worden bewaard, niet de foto.":"The photo is read by the AI you set up. Only the checked recipe text or ingredients are saved, not the photo.",
+ "Geschreven recept of screenshot":"Written recipe or screenshot",
+ "Een gerecht · laat Chef een voorstel maken":"A dish · let Chef make a suggestion",
+ "Koelkast of ingrediënten":"Fridge or ingredients",
+ "Opruimen":"Tidy up",
+ "Recept bewerken":"Edit recipe",
+ "Naam":"Name",
+ "Tijd":"Time",
+ "Ingrediënten · één per regel":"Ingredients · one per line",
+ "Bereiding · één stap per regel":"Method · one step per line",
+ "Eiwit per portie":"Protein per serving",
+ "Vezels per portie":"Fibre per serving",
+ "Labels":"Labels",
+ "Bijv. ~20g":"E.g. ~20g",
+ "Bijv. ~6g":"E.g. ~6g",
+ "Voor wie kook je?":"Who are you cooking for?",
+ "Met z'n tweeën":"Just the two of us",
+ "Vrienden":"Friends",
+ "Familie met kinderen":"Family with kids",
+ "Groot gezelschap":"Big group",
+ "Aantal personen":"Number of people",
+ "Eet iemand iets niet?":"Anything someone doesn't eat?",
+ "Geen vis":"No fish",
+ "Alcohol":"Alcohol",
+ "Wat voor avond wordt het?":"What kind of evening will it be?",
+ "Relaxed aanschuiven":"Relaxed dinner",
+ "Uitpakken":"Go all out",
+ "Samen koken":"Cook together",
+ "Buiten, vuur aan":"Outdoors, fire on",
+ "Welke gangen?":"Which courses?",
+ "Alleen hoofdgerecht":"Main course only",
+ "Voor + hoofd":"Starter + main",
+ "Hoofd + na":"Main + dessert",
+ "Drie gangen":"Three courses",
+ "Hoeveel wil je erin steken?":"How much effort do you want to put in?",
+ "Een uurtje":"About an hour",
+ "Een middag":"An afternoon",
+ "Dag van tevoren beginnen":"Start the day before",
+ "Klaar om te sparren":"Ready to plan",
+ "Dinertje":"Dinner party",
+ "Geef drie richtingen":"Give three directions",
+ "Drie richtingen":"Three directions",
+ "Vertrouwd":"Familiar",
+ "Met een draai":"With a twist",
+ "Gok":"Gamble",
+ "Kies een richting.":"Choose a direction.",
+ "Maak het menu":"Make the menu",
+ "Maak het recept":"Make the recipe",
+ "Bekijk je menu":"View your menu",
+ "Je menu":"Your menu",
+ "Je menu staat in Mijn recepten.":"Your menu is in My recipes.",
+ "Zet op het weekmenu":"Add to week menu",
+ "Naar de boodschappen":"To shopping",
+ "Stuur bij":"Adjust",
+ "Makkelijker":"Easier",
+ "Vegetarisch":"Vegetarian",
+ "Goedkoper":"Cheaper",
+ "Meer wow":"More wow",
+ "Iets heel anders":"Something completely different",
+ "Terug naar de richtingen":"Back to the directions",
+ "Opnieuw":"Try again",
+ "Maaltijd inplannen":"Plan a meal",
+ "Maaltijdmoment":"Meal moment",
+ "Je registreert één portie. Het recept blijft bij de maaltijd beschikbaar.":"You log one serving. The recipe stays available with the meal.",
+ "Terug naar recept":"Back to recipe",
+ "Uit je gesprek met Coach":"From your chat with Coach",
+ "Gesprek met Coach niet meenemen":"Don't use the chat with Coach",
+ "Gebruik dit recept":"Use this recipe",
+ "Zoek recept":"Search recipe",
+ "Vaak gemaakt":"Often made",
+ "Verwijderd":"Deleted",
+ "Herstellen":"Restore",
+ "Labels terugzetten":"Restore labels",
+ "Lijken dubbel":"Look like duplicates",
+ "Verwijder gekozen":"Delete selected",
+ "Aanpassen lukte niet. Probeer het opnieuw.":"Adjusting failed. Please try again.",
+ "Alles stond al in je lijst.":"Everything was already on your list.",
+ "Chef gaf geen volledig voorstel. Probeer opnieuw.":"Chef didn't give a complete suggestion. Try again.",
+ "Chef gaf niet voor elke gang een recept.":"Chef didn't give a recipe for every course.",
+ "Chef heeft één vraag. Spreek je antwoord in.":"Chef has one question. Speak your answer.",
+ "Chef kon geen helder advies maken. Probeer opnieuw.":"Chef couldn't make clear advice. Try again.",
+ "Chef veranderde de soort richting.":"Chef changed the type of direction.",
+ "Chef gaf geen drie richtingen.":"Chef didn't give three directions.",
+ "Chef is even niet bereikbaar.":"Chef can't be reached right now.",
+ "Deze foto is te groot. Kies een afbeelding onder 5 MB.":"This photo is too big. Choose an image under 5 MB.",
+ "Deze foto kan ik niet openen. Probeer een andere foto of een schermafbeelding.":"I can't open this photo. Try another photo or a screenshot.",
+ "Er is intussen iets aan je recepten veranderd. Pas de labels daarom zelf aan bij Bewerken.":"Your recipes changed in the meantime. Please adjust the labels yourself under Edit.",
+ "Gebruik een JPG-, PNG-, WebP- of GIF-afbeelding.":"Use a JPG, PNG, WebP or GIF image.",
+ "Geen API-sleutel — voeg je Anthropic sleutel in via Instellingen.":"No API key — add your Anthropic key in Settings.",
+ "Handsfree staat uit. Je kunt de knoppen gebruiken.":"Hands-free is off. You can use the buttons.",
+ "Inplannen lukte niet.":"Planning failed.",
+ "Je advies staat hieronder. Niets is automatisch ingepland.":"Your advice is below. Nothing has been planned automatically.",
+ "Je recepten zijn intussen gewijzigd. Probeer het opnieuw.":"Your recipes changed in the meantime. Please try again.",
+ "Kies een maaltijdmoment.":"Choose a meal moment.",
+ "Opruimen lukte niet. Probeer het opnieuw.":"Tidying up failed. Please try again.",
+ "Overgenomen van receptfoto":"Taken from recipe photo",
+ "Pas de tekst aan voordat je verdergaat. De foto zelf wordt niet opgeslagen.":"Edit the text before you continue. The photo itself is not saved.",
+ "Recept lezen… je controleert straks de tekst.":"Reading recipe… you'll check the text in a moment.",
+ "Reconstructie van gerechtfoto":"Reconstructed from dish photo",
+ "Spreek of typ eerst je vraag of wens.":"Speak or type your question or wish first.",
+ "Stel eerst je AI-sleutel in bij Instellingen en kies daarna je foto opnieuw.":"Set your AI key in Settings first, then choose your photo again.",
+ "Stel je AI-sleutel in bij Instellingen om nieuwe ideeën te maken. Je eigen recepten blijven beschikbaar.":"Set your AI key in Settings to make new ideas. Your own recipes stay available.",
+ "Stel je AI-sleutel in bij Instellingen. Je tekst blijft staan.":"Set your AI key in Settings. Your text is kept.",
+ "Stel je AI-sleutel in bij Instellingen om met Chef te sparren.":"Set your AI key in Settings to plan with Chef.",
+ "Terugzetten lukte niet.":"Restoring failed.",
+ "Typ of spreek eerst je aanpassing in.":"Type or speak your change first.",
+ "Voorlezen is in deze browser niet beschikbaar.":"Reading aloud isn't available in this browser.",
+ "Kies een richting":"Choose a direction"
 };
 const CC_EN_RE=[[/^Stap (\d+) van (\d+)$/,'Step $1 of $2'],
  [/^(\d+) van (\d+) gedaan$/,"$1 of $2 done"],
@@ -2914,6 +3141,28 @@ const CC_EN_RE=[[/^Stap (\d+) van (\d+)$/,'Step $1 of $2'],
  [/^(\d+) u (\d+) min$/,"$1 h $2 min"],
  [/^(\d+) u$/,"$1 h"],
  [/^Nog (.+)$/,(...g)=>ccT(g[1])+" to go"],
+ [/^(\d+) producten? in huis$/,"$1 item(s) in stock"],
+ [/^(\d+)p$/,"$1p"],
+ [/^(\d+) porties?$/,"$1 serving(s)"],
+ [/^(\d+) personen$/,"$1 people"],
+ [/^1 persoon$/,"1 person"],
+ [/^voor (\d+) personen$/,"for $1 people"],
+ [/^Ingrediënten voor (\d+) personen$/,"Ingredients for $1 people"],
+ [/^(\d+) van (\d+)$/,"$1 of $2"],
+ [/^Alle (\d+)$/,"All $1"],
+ [/^≈ ?(.+)$/,(...g)=>"≈ "+ccT(g[1])],
+ [/^(\d+) kcal per portie \(hoofdgerecht\)$/,"$1 kcal per serving (main course)"],
+ [/^(.+) per portie$/,(...g)=>ccT(g[1])+" per serving"],
+ [/^Staat op (.+) als diner, voor (\d+) personen\.$/,(...g)=>"On "+ccT(g[1])+" as dinner, for "+g[2]+" people."],
+ [/^Chef bekijkt je (\d+) recepten\. .+$/,"Chef checks your $1 recipes. Each recipe gets the meal times it fits (a breakfast that also works as lunch gets both) and the same kind of labels as similar recipes. Chef points out near-duplicates; you choose what goes."],
+ [/^Tik op Handsfree en bedien met je stem: .+$/,"Tap Hands-free and control it with your voice: \"next\", \"previous\", \"step 3\", \"repeat\", \"ingredients\", \"how much onion?\" or \"stop\"."],
+ [/^Bijgestuurd: (.+)$/,(...g)=>"Adjusted: "+ccT(g[1])],
+ [/^(\d+) bijgewerkt$/,"$1 updated"],
+ [/^Chef noemde (.+), en dat past niet bij je wensen\.$/,"Chef mentioned $1, which doesn't fit your wishes."],
+ [/^Kookmodus: (.+)$/,"Cook mode: $1"],
+ [/^Stap (\d+)$/,"Step $1"],
+ [/^Koolhydraten (\d+(?:[.,]\d+)?) g$/,"Carbs $1 g"],
+ [/^Vet (\d+(?:[.,]\d+)?) g$/,"Fat $1 g"],
  [/^· (.+)$/,(...g)=>'· '+ccT(g[1])],[/^Klaar, (.+)!$/,'Done, $1!'],[/^Welkom terug, (.+)$/,'Welcome back, $1'],[/^(.+) (minder|meer)$/,(m,a,b)=>CC_EN[a]?`${b==='meer'?'More':'Less'} ${CC_EN[a].toLowerCase()}`:m]];
 const CC_EN_DAYS={maandag:'Monday',dinsdag:'Tuesday',woensdag:'Wednesday',donderdag:'Thursday',vrijdag:'Friday',zaterdag:'Saturday',zondag:'Sunday',ma:'Mon',di:'Tue',wo:'Wed',do:'Thu',vr:'Fri',za:'Sat',zo:'Sun'};
 const CC_EN_MONTHS={januari:'January',februari:'February',maart:'March',april:'April',mei:'May',juni:'June',juli:'July',augustus:'August',september:'September',oktober:'October',november:'November',december:'December',jan:'Jan',feb:'Feb',mrt:'Mar',apr:'Apr',jun:'Jun',jul:'Jul',aug:'Aug',sep:'Sep',okt:'Oct',nov:'Nov',dec:'Dec'};
@@ -3004,20 +3253,20 @@ function _afwisselRegel() {
 }
 // Harde controle op wat er niet in mag: liever niet (Instellingen), vega/vis, en later de wensen van gasten. Per ingrediëntregel, op woordbegin of woordeinde.
 const CC_AVOID_WORDS={
- vlees:['kip','rund','varken','gehakt','spek','=ham','hamburger','bacon','worst','chorizo','salami','pancetta','=lam','lams','kalkoen','biefstuk','vlees','eend','chicken','beef','pork','=lamb','turkey','sausage'],
- vis:['vis','zalm','tonijn','kabeljauw','garnal','makreel','ansjovis','mossel','forel','haring','kibbeling','scampi','inktvis','sardine','sardien','tilapia','pangasius','koolvis','zeevrucht','krab','kreeft','fish','salmon','tuna','shrimp','prawn','=cod'],
- noten:['noot','noten','amandel','cashew','walnoot','hazelnoot','pecan','pistache','pinda','macadamia','almond','peanut','walnut','=nuts','=nut'],
- gluten:['tarwe','bloem','pasta','spaghetti','penne','macaroni','lasagne','brood','couscous','bulgur','spelt','rogge','gerst','wrap','tortilla','panko','paneermeel','sojasaus','wheat','flour','bread'],
- alcohol:['wijn','bier','=rum','cognac','sherry','likeur','wodka','=gin','whisky','wine','beer'],
- lactose:['melk','room','boter','kaas','yoghurt','kwark','feta','mozzarella','parmezaan','ricotta','mascarpone','skyr','milk','cream','butter','cheese'],
- pittig:['chili','sambal','cayenne','sriracha','harissa','jalape','gochujang','rawit','pepertje','chipotle']};
-const CC_AVOID_OK={vlees:['kippenei'],noten:['nootmuskaat','kokos'],gluten:['bloemkool','maisbloem','maïsbloem','rijstbloem','kikkererwtenbloem','currypasta','misopasta','glutenvrij'],alcohol:['wijnazijn','wijnsteen','alcoholvrij'],lactose:['lactosevrij','kokosmelk','amandelmelk','havermelk','sojamelk','pindakaas','notenboter','kokosroom','haverroom','sojaroom','cacaoboter'],pittig:['milde']};
+ vlees:['kip','rund','varken','gehakt','spek','=ham','hamburger','bacon','worst','chorizo','salami','pancetta','=lam','lams','kalkoen','biefstuk','vlees','eend','chicken','beef','pork','=lamb','turkey','sausage','steak','mince','veal','duck','prosciutto','pepperoni','meatball','=meat','gelatin'],
+ vis:['vis','zalm','tonijn','kabeljauw','garnal','makreel','ansjovis','mossel','forel','haring','kibbeling','scampi','inktvis','sardine','sardien','tilapia','pangasius','koolvis','zeevrucht','krab','kreeft','fish','salmon','tuna','shrimp','prawn','=cod','anchovy','anchovies','mackerel','mussel','trout','sardine','crab','lobster','squid','seafood','scallop','=clam','haddock','=hake','fish sauce'],
+ noten:['noot','noten','amandel','cashew','walnoot','hazelnoot','pecan','pistache','pinda','macadamia','almond','peanut','walnut','hazelnut','pistachio','=pine nut','=pine nuts'],
+ gluten:['tarwe','bloem','pasta','spaghetti','penne','macaroni','lasagne','brood','couscous','bulgur','spelt','rogge','gerst','wrap','tortilla','panko','paneermeel','sojasaus','wheat','flour','bread','noodle','couscous','bulgur','barley','=rye','soy sauce','breadcrumb','=pita','bagel'],
+ alcohol:['wijn','bier','=rum','cognac','sherry','likeur','wodka','=gin','whisky','wine','beer','vodka','liqueur','brandy','=sake','mirin'],
+ lactose:['melk','room','boter','kaas','yoghurt','kwark','feta','mozzarella','parmezaan','ricotta','mascarpone','skyr','milk','cream','butter','cheese','yogurt','yoghurt','parmesan','=ghee','cottage'],
+ pittig:['chili','sambal','cayenne','sriracha','harissa','jalape','gochujang','rawit','pepertje','chipotle','chilli','hot sauce','jalapeño']};
+const CC_AVOID_OK={vlees:['kippenei','chickpea','vegan','meat-free','plant-based'],noten:['nootmuskaat','kokos','nutmeg','coconut','butternut'],gluten:['bloemkool','maisbloem','maïsbloem','rijstbloem','kikkererwtenbloem','currypasta','misopasta','glutenvrij','buckwheat','gluten-free','rice flour','corn flour','cornflour','chickpea flour','almond flour','rice noodle','buckwheat flour','rice noodles'],alcohol:['wijnazijn','wijnsteen','alcoholvrij','wine vinegar','alcohol-free'],lactose:['lactosevrij','kokosmelk','amandelmelk','havermelk','sojamelk','pindakaas','notenboter','kokosroom','haverroom','sojaroom','cacaoboter','lactose-free','dairy-free','coconut milk','almond milk','oat milk','soy milk','peanut butter','nut butter','coconut cream','cocoa butter','coconut yogurt','coconut yoghurt','butternut'],pittig:['milde','mild']};
 function ccAvoidHit(lines,cats=[],free=[]){
  cats=[...new Set([...cats,...free.map(x=>String(x).toLowerCase().trim()).filter(x=>CC_AVOID_WORDS[x])])];free=free.filter(x=>!CC_AVOID_WORDS[String(x).toLowerCase().trim()]);
  const stems=w=>w.startsWith('=')?{x:w.slice(1),exact:true}:{x:w,exact:false};
  for(const line of lines){
-  const low=String(line||'').toLowerCase(),words=low.split(/[^a-zà-ÿ]+/).filter(Boolean),veg=/vega|plantaardig|vegetarisch/.test(low);
-  for(const c of cats){if(veg&&(c==='vlees'||c==='vis'))continue;const ok=CC_AVOID_OK[c]||[];for(const s of (CC_AVOID_WORDS[c]||[]).map(stems)){const hit=words.find(w=>!ok.some(o=>w.startsWith(o))&&(s.exact?w===s.x:w.startsWith(s.x)||w.endsWith(s.x)));if(hit)return hit;}}
+  const low=String(line||'').toLowerCase(),words=low.split(/[^a-zà-ÿ]+/).filter(Boolean),veg=/vega|plantaardig|vegetarisch|vegan|plant-based|meat-free/.test(low);
+  for(const c of cats){if(veg&&(c==='vlees'||c==='vis'))continue;const ok=CC_AVOID_OK[c]||[],text=ok.filter(o=>o.includes(' ')).reduce((t,o)=>t.split(o).join(' '),low),tw=text.split(/[^a-zà-ÿ]+/).filter(Boolean);for(const s of (CC_AVOID_WORDS[c]||[]).map(stems)){if(s.x.includes(' ')){if(text.includes(s.x))return s.x;continue;}const hit=tw.find(w=>!ok.some(o=>w.startsWith(o))&&(s.exact?w===s.x:w.startsWith(s.x)||w.endsWith(s.x)));if(hit)return hit;}}
   for(const raw of free){const f=String(raw||'').toLowerCase().trim().replace(/(en|s)$/,'');if(f.length<3)continue;if(f.includes(' ')?low.includes(f):words.some(w=>w.startsWith(f)||w.endsWith(f)))return raw;}
  }
  return '';
@@ -6456,7 +6705,7 @@ function _toArray(val) {
 }
 
 // Activiteit uit spraak of tekst koppelen aan wat er die dag staat: eerst op type als er precies één van dat type is, anders op naam.
-const CC_ACT_WORDS={hardlopen:'run',hardgelopen:'run',gelopen:'run',duurloop:'run',fietsen:'bike',gefietst:'bike',wandelen:'walk',gewandeld:'walk',gym:'gym',kracht:'gym',zwemmen:'swim',gezwommen:'swim',rustdag:'rest',running:'run',jog:'run',jogging:'run',cycling:'bike',cycled:'bike',walking:'walk',walked:'walk',swimming:'swim',strength:'gym',workout:'gym'};
+const CC_ACT_WORDS={hardlopen:'run',hardgelopen:'run',gelopen:'run',duurloop:'run',fietsen:'bike',gefietst:'bike',wandelen:'walk',gewandeld:'walk',gym:'gym',kracht:'gym',zwemmen:'swim',gezwommen:'swim',rustdag:'rest',running:'run',jog:'run',jogging:'run',cycling:'bike',cycled:'bike',walking:'walk',walked:'walk',swimming:'swim',strength:'gym',workout:'gym',ran:'run','run ':'run',biked:'bike',bike:'bike',ride:'bike',swam:'swim',swim:'swim',walk:'walk',hike:'walk',weights:'gym',lifting:'gym','rest day':'rest'};
 function ccActivityType(q){const t=String(q?.type||'').toLowerCase();if(t&&t!=='other'&&t!=='geen')return t;const n=String(q?.naam||'').toLowerCase();return Object.entries(CC_ACT_WORDS).find(([w])=>n.includes(w))?.[1]||'';}
 function ccMatchActivity(list,q){
  const acts=list.filter(Boolean),type=ccActivityType(q),zoek=String(q?.naam||'').toLowerCase().trim();
@@ -7641,6 +7890,7 @@ const CC_SPAR_Q=[
  {key:'tijd',vraag:'Hoeveel wil je erin steken?',opties:[['uur','Een uurtje'],['middag','Een middag'],['dag','Dag van tevoren beginnen']]}];
 const CC_SPAR_NIET=[['vega','Vega'],['vis','Geen vis'],['noten','Noten'],['gluten','Gluten'],['alcohol','Alcohol']];
 const CC_SPAR_GANG={voor:'Voor',hoofd:'Hoofd',na:'Na'};
+function ccSparGang(g){return ccUiLang()==='en'?{voor:'Starter',hoofd:'Main',na:'Dessert'}[g]:CC_SPAR_GANG[g];}
 const CC_SPAR_GANG_REGEL={voor:'Voorgerecht: een klein, fris bordje dat trek maakt.',hoofd:'Hoofdgerecht: het hart van de avond.',na:'Nagerecht: klein en mag zoet; de eiwitrichtlijn geldt hier niet.'};
 let ccSpar=null;
 function ccSparStart(){ccSpar={wie:'',avond:'',gangen:'',tijd:'',personen:0,niet:new Set()};ccSparShow(0);}
@@ -7763,7 +8013,7 @@ function ccSparOpenMenu(){ccOpenFrom(ccSparDirections,ccSparMenu);}
 // Je menu: de recepten per gang; elk opent zijn eigen recept met ‹ terug naar het menu.
 function ccSparMenu(){
  const rs=(ccSpar?.recepten||[]).map(id=>(data.recepten||[]).find(r=>r.id===id&&!r.flowDeleted)).filter(Boolean);
- showModal(`<div class="modal-header"><h2>Je menu</h2>${flowClose()}</div><p class="cc-spar-kicker">Dinertje · ${ccSparPersons()} personen</p><div class="cc-list">${rs.map(r=>`<button type="button" class="cc-row cc-recipe-row" aria-haspopup="dialog" onclick="ccOpenFrom(ccSparOpenMenu,()=>flowRecipeDetail(${flowArg(r.id)}))"><span class="cc-recipe-text"><span class="cc-spar-type">${CC_SPAR_GANG[r.gang]||''}</span><span class="cc-recipe-name">${escapeText(r.naam)}</span><span class="cc-recipe-sub">${escapeText(r.tijd||'')}</span></span>${CC_CHEVRON}</button>`).join('')}</div>${rs.find(r=>r.opzet)?`<p class="cc-sheet-note">${escapeText(rs.find(r=>r.opzet).opzet)}</p>`:''}<div id="cc-spar-plan">${ccSpar.gepland?ccSparPlannedHtml():`<label class="flow-field cc-spar-date">Welke dag?<input id="cc-spar-date" type="date" value="${ccSpar.datum||today()}"></label><button type="button" class="btn btn-primary btn-full" onclick="ccSparPlanMenu()">Zet op het weekmenu</button>`}</div>`);
+ showModal(`<div class="modal-header"><h2>Je menu</h2>${flowClose()}</div><p class="cc-spar-kicker">Dinertje · ${ccSparPersons()} personen</p><div class="cc-list">${rs.map(r=>`<button type="button" class="cc-row cc-recipe-row" aria-haspopup="dialog" onclick="ccOpenFrom(ccSparOpenMenu,()=>flowRecipeDetail(${flowArg(r.id)}))"><span class="cc-recipe-text"><span class="cc-spar-type">${ccSparGang(r.gang)||''}</span><span class="cc-recipe-name">${escapeText(r.naam)}</span><span class="cc-recipe-sub">${escapeText(r.tijd||'')}</span></span>${CC_CHEVRON}</button>`).join('')}</div>${rs.find(r=>r.opzet)?`<p class="cc-sheet-note">${escapeText(rs.find(r=>r.opzet).opzet)}</p>`:''}<div id="cc-spar-plan">${ccSpar.gepland?ccSparPlannedHtml():`<label class="flow-field cc-spar-date">Welke dag?<input id="cc-spar-date" type="date" value="${ccSpar.datum||today()}"></label><button type="button" class="btn btn-primary btn-full" onclick="ccSparPlanMenu()">Zet op het weekmenu</button>`}</div>`);
 }
 // Het hele menu in één tik als diner op één dag, met het eigen aantal personen (de boodschappenlijst rekent daarmee).
 function ccSparPlanMenu(){
@@ -7781,7 +8031,7 @@ function ccSparRenderDirs(){
  const el=document.getElementById('cc-spar-dirs');if(!el||!ccSpar?.richtingen)return;
  const k=ccSpar.keuze,chosen=k!==null&&k!==undefined,done=(ccSpar.recepten||[]).some(id=>(data.recepten||[]).some(r=>r.id===id&&!r.flowDeleted)),multi=ccSparCourses().length>1;
  el.innerHTML=ccSpar.richtingen.map((d,i)=>{const on=k===i,meta=[d.tijd_min?d.tijd_min+' min':'',multi?'':d.hoofdingredienten.join(', ')].filter(Boolean).join(' · '),macro=[d.eiwit_g?'≈ '+d.eiwit_g+' g eiwit':'',d.kcal?'≈ '+d.kcal+' kcal':''].filter(Boolean).join(' · ');
-  return `<button type="button" class="cc-spar-dir" aria-pressed="${on}" onclick="ccSparChoose(${i})"><span class="cc-spar-type">${CC_SPAR_TYPES[d.type]}</span><strong>${escapeText(d.titel)}</strong><span class="cc-spar-why">${escapeText(d.waarom)}</span>${multi?`<span class="cc-spar-gangen">${Object.entries(d.gangen).map(([g,t])=>`<span><b>${CC_SPAR_GANG[g]}</b>${escapeText(t)}</span>`).join('')}</span>`:''}${meta?`<span class="cc-spar-meta">${escapeText(meta)}</span>`:''}${d.opzet?`<span class="cc-spar-why">${escapeText(d.opzet)}</span>`:''}${macro?`<small>${escapeText(macro)} per portie${multi?' (hoofdgerecht)':''}</small>`:''}</button>`;}).join('')
+  return `<button type="button" class="cc-spar-dir" aria-pressed="${on}" onclick="ccSparChoose(${i})"><span class="cc-spar-type">${CC_SPAR_TYPES[d.type]}</span><strong>${escapeText(d.titel)}</strong><span class="cc-spar-why">${escapeText(d.waarom)}</span>${multi?`<span class="cc-spar-gangen">${Object.entries(d.gangen).map(([g,t])=>`<span><b>${ccSparGang(g)}</b>${escapeText(t)}</span>`).join('')}</span>`:''}${meta?`<span class="cc-spar-meta">${escapeText(meta)}</span>`:''}${d.opzet?`<span class="cc-spar-why">${escapeText(d.opzet)}</span>`:''}${macro?`<small>${escapeText(macro)} per portie${multi?' (hoofdgerecht)':''}</small>`:''}</button>`;}).join('')
   +(done?'':!chosen?'<p class="cc-sheet-note">Kies een richting.</p>':ccSpar.bijgestuurd?`<p class="cc-sheet-note">Bijgestuurd: ${escapeText(ccSpar.bijgestuurd.toLowerCase())}.</p>`:`<h3 class="cc-rec-head">Stuur bij</h3><div class="cc-tweaks" role="group" aria-label="Stuur de gekozen richting bij">${CC_SPAR_TWEAKS.filter(t=>!(t[0]==='vega'&&ccSpar.niet.has('vega'))).map(([key,l])=>`<button type="button" onclick="ccSparTweak('${key}')">${l}</button>`).join('')}</div>`)
   +(done?`<button type="button" class="btn btn-primary btn-full cc-spar-next" onclick="ccSparOpenResult()">${multi?'Bekijk je menu':'Open recept'}</button>`:`<button type="button" class="btn btn-primary btn-full cc-spar-next" ${chosen?'':'disabled'} onclick="ccSparRecipe()">${multi?'Maak het menu':'Maak het recept'}</button>`);
 }
@@ -8153,23 +8403,23 @@ function _buildAndShowShopList(){
 function ritmeCheckShopping(text,checked,input){const s=window._shopState;if(checked)s.inHuis.add(text);else s.inHuis.delete(text);input?.closest('label')?.classList.toggle('in-huis',checked);}
 function ritmeShopText(){
  const s=window._shopState;let text='';
- for(const [cat,entries] of Object.entries(window._shopCats||{})){const todo=entries.filter(i=>!s.inHuis.has(i.display));if(todo.length)text+=`${cat}\n${todo.map(i=>'• '+i.display).join('\n')}\n\n`;}
- if(window._shopMissing?.length)text+=`Nog zelf aanvullen\n${window._shopMissing.map(x=>'• '+x).join('\n')}\n`;
+ for(const [cat,entries] of Object.entries(window._shopCats||{})){const todo=entries.filter(i=>!s.inHuis.has(i.display));if(todo.length)text+=`${ccT(cat)}\n${todo.map(i=>'• '+i.display).join('\n')}\n\n`;}
+ if(window._shopMissing?.length)text+=`${ccT('Nog zelf aanvullen')}\n${window._shopMissing.map(x=>'• '+x).join('\n')}\n`;
  return text.trim();
 }
 function ritmeCopyShopping(btn){
  const text=ritmeShopText(),show=label=>{btn.textContent=label;setTimeout(()=>{if(btn.isConnected)btn.textContent='Kopieer lijst';},2500);};
  if(!text){show('Je hebt alles al');return;}
  if(!navigator.clipboard){show('Kopiëren lukt niet');return;}
- navigator.clipboard.writeText('Boodschappen\n\n'+text).then(()=>show('Gekopieerd ✓'),()=>show('Kopiëren lukt niet'));
+ navigator.clipboard.writeText(ccT('Boodschappen')+'\n\n'+text).then(()=>show('Gekopieerd ✓'),()=>show('Kopiëren lukt niet'));
 }
 function ritmeGroceryKey(name){
  return String(name).toLowerCase().replace(/\([^)]*\)/g,' ').replace(/,.*$/,'').replace(/\s(om|voor|naar smaak|\+)\s.*$|\s(naar smaak|extra vierge|extra)$/,'').replace(/^(een\s)?(scheutje|snufje|beetje|handje|wat|klein)\s+/,'').replace(/\b(rijpe?|verse?|grote?|kleine?|halve?|biologische?|ongezouten)\b/g,' ').replace(/['’]s\b/g,'').trim().split(/\s+/).map(w=>w.replace(/(eren|en|s)$/,'').replace(/en$/,'').replace(/([aeou])\1/g,'$1')).join(' ');
 }
 // Eén regel per product: alle hoeveelheden van hetzelfde product tellen op, per soort eenheid (kg → g, l → ml; el en tl worden ml als er ook ml is).
-const CC_SHOP_UNITS={g:['g',1],gr:['g',1],gram:['g',1],kg:['g',1000],ml:['ml',1],l:['ml',1000],liter:['ml',1000],el:['el',1],eetlepel:['el',1],eetlepels:['el',1],tbsp:['el',1],tl:['tl',1],theelepel:['tl',1],theelepels:['tl',1],tsp:['tl',1],teen:['teentje',1],teentje:['teentje',1],teentjes:['teentje',1],blik:['blik',1],blikje:['blik',1],blikjes:['blik',1],stuk:['stuk',1],stuks:['stuk',1]};
+const CC_SHOP_UNITS={g:['g',1],gr:['g',1],gram:['g',1],kg:['g',1000],ml:['ml',1],l:['ml',1000],liter:['ml',1000],el:['el',1],eetlepel:['el',1],eetlepels:['el',1],tbsp:['el',1],tl:['tl',1],theelepel:['tl',1],theelepels:['tl',1],tsp:['tl',1],teen:['teentje',1],teentje:['teentje',1],teentjes:['teentje',1],blik:['blik',1],blikje:['blik',1],blikjes:['blik',1],stuk:['stuk',1],stuks:['stuk',1],clove:['teentje',1],cloves:['teentje',1],can:['blik',1],cans:['blik',1],piece:['stuk',1],pieces:['stuk',1]};
 function ritmeMergeGroceries(items){
- const merged=new Map(),fmt=(n,d)=>new Intl.NumberFormat('nl-NL',{maximumFractionDigits:d}).format(n);
+ const en=ccUiLang()==='en',merged=new Map(),fmt=(n,d)=>new Intl.NumberFormat(en?'en-GB':'nl-NL',{maximumFractionDigits:d}).format(n),uName=(u,many)=>en?({el:'tbsp',tl:'tsp',teentje:many?'cloves':'clove',blik:many?'cans':'can',stuk:many?'pieces':'piece'}[u]||u):u+(many&&/je$|^stuk$|^clove$|^can$|^piece$/.test(u)?'s':'');
  for(const item of items){
   const text=String(item.text||'').trim();if(!text)continue;
   const m=text.match(/^(\d+\s+\d+\/\d+|\d+\/\d+|\d*[½¼¾]|\d+(?:[.,]\d+)?)\s*(g|gr|gram|kg|ml|l|liter|el|eetlepels?|tl|theelepels?|tbsp|tsp|cloves?|bunch(?:es)?|cans?|pieces?|stuks?|blikjes?|blik|bosjes?|bos|takjes?|teentjes?|teen|plakjes?|x)?\.?\s+(.+)$/i);
@@ -8183,7 +8433,7 @@ function ritmeMergeGroceries(items){
  return [...merged.values()].map(g=>{
   const q={...g.qty};if(q.ml&&(q.el||q.tl)){q.ml+=(q.el||0)*15+(q.tl||0)*5;delete q.el;delete q.tl;}
   const units=Object.keys(q);if(!units.length)return {name:g.loose,display:g.loose,recepten:[...g.recepten]};
-  const order=['g','ml','el','tl',''],part=u=>{const n=q[u];if(u==='g'||u==='ml'){const big=n>=1000;return `${fmt(big?n/1000:Math.round(n),big?2:0)} ${big?(u==='g'?'kg':'l'):u}`;}const many=n>1&&/je$|^stuk$|^clove$|^can$|^piece$/.test(u);return fmt(n,2)+(u?' '+u+(many?'s':''):'');};
+  const order=['g','ml','el','tl',''],part=u=>{const n=q[u];if(u==='g'||u==='ml'){const big=n>=1000;return `${fmt(big?n/1000:Math.round(n),big?2:0)} ${big?(u==='g'?'kg':'l'):u}`;}return fmt(n,2)+(u?' '+uName(u,n>1):'');};
   const rank=u=>{const i=order.indexOf(u);return i<0?9:i;};units.sort((a,b)=>rank(a)-rank(b));
   return {name:g.name,qty:units.length===1?q[units[0]]:null,display:`${units.map(part).join(' + ')} ${g.name}`,recepten:[...g.recepten]};
  });
