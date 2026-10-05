@@ -2207,7 +2207,7 @@ body input[type="checkbox"]:disabled{opacity:.4;cursor:default}
 'use strict';
 
 // ─── VERSION CHECK (forceert Safari herlading bij nieuwe versie) ──────────────
-const APP_VERSION = 'lime-20261005-28';
+const APP_VERSION = 'lime-20261005-29';
 // Eén plek voor de modellen: Sonnet voor gesprekken en recepten, Haiku voor snelle achtergrondtaken.
 const CC_MODEL_MAIN = 'claude-sonnet-5-5';
 const CC_MODEL_FAST = 'claude-haiku-4-5-20251001';
@@ -2226,6 +2226,19 @@ function ccAIRequest() {
   return settings.anthropicKey
     ? { url: 'https://api.anthropic.com/v1/messages', headers: { 'Content-Type': 'application/json', 'x-api-key': settings.anthropicKey, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' } }
     : { url: CC_AI_PROXY, headers: { 'Content-Type': 'application/json', 'x-cc-code': settings.aiCode } };
+}
+// Voorlezen met de OpenAI-stem: eigen sleutel rechtstreeks, anders via het tussenstation met de code.
+// Weigert het tussenstation (geen stem ingesteld, code of limiet), dan leest deze sessie stil voor met de stem van de telefoon.
+let ccTTSProxyOff = false;
+function ccHasTTS() { return !!(settings.openaiKey || (settings.aiCode && !ccTTSProxyOff)); }
+function ccTTSRequest() {
+  return settings.openaiKey
+    ? { url: 'https://api.openai.com/v1/audio/speech', headers: { 'Authorization': `Bearer ${settings.openaiKey}`, 'Content-Type': 'application/json' } }
+    : { url: CC_AI_PROXY.replace('/v1/messages', '/v1/audio/speech'), headers: { 'Content-Type': 'application/json', 'x-cc-code': settings.aiCode } };
+}
+function ccTTSFail(status) {
+  if (!settings.openaiKey) ccTTSProxyOff = true;
+  return new Error('OpenAI TTS ' + status);
 }
 function ccAIStatusError(status) {
   if (status === 401) return settings.anthropicKey ? 'API-sleutel niet geldig — check instellingen.' : 'Je uitnodigingscode werkt niet. Check Instellingen › Sleutels.';
@@ -3095,7 +3108,7 @@ const CC_EN={
  "Leeg = geen doel":"Empty = no goal",
  "Stem bij voorlezen":"Voice for reading aloud",
  "OpenAI-sleutel":"OpenAI key",
- "Zonder OpenAI-sleutel leest de stem van je telefoon voor.":"Without an OpenAI key, your phone's voice reads aloud.",
+ "Niet nodig als je een code hebt; anders leest de stem van je telefoon voor.":"Not needed if you have a code; otherwise your phone's voice reads aloud.",
  "Eigen woorden voor spraak":"Own words for speech",
  "Voor een natuurlijkere stem":"For a more natural voice",
  "Namen, oefeningen of gerechten, met komma's":"Names, exercises, dishes",
@@ -5723,7 +5736,7 @@ async function ccPlayBlob(blob, alive) {
 function unlockTTS() {
   const webAudio = ccUnlockAudioCtx();
   // De lege browser-uiting is alleen nodig als de browserstem ook echt gaat voorlezen
-  if (window.speechSynthesis && !(webAudio && settings.openaiKey)) {
+  if (window.speechSynthesis && !(webAudio && ccHasTTS())) {
     const utt = new SpeechSynthesisUtterance('');
     utt.volume = 0;
     window.speechSynthesis.speak(utt);
@@ -5890,11 +5903,11 @@ async function speakCoach(text, forcePlay = false) {
     .replace(/#+\s/g, '').replace(/📌[^\n]*/g, '')
     .replace(/[\u{1F300}-\u{1FAFF}]/gu, '').replace(/\n{2,}/g, '. ').trim();
   const myToken = _speakToken;
-  if (settings.openaiKey) {
-    try { await _speakOpenAI(clean, settings.openaiKey, settings.ttsVoice || 'nova', myToken); return; }
+  if (ccHasTTS()) {
+    try { await _speakOpenAI(clean, settings.ttsVoice || 'nova', myToken); return; }
     catch(e) {
       if (myToken !== _speakToken || (e && e.name === 'AbortError')) return; // vervangen door nieuwere opdracht
-      showBanner('yellow', `Voorlezen via OpenAI lukt niet. De browserstem wordt geprobeerd.`);
+      if (settings.openaiKey) showBanner('yellow', `Voorlezen via OpenAI lukt niet. De browserstem wordt geprobeerd.`);
     }
   }
   if (myToken !== _speakToken) return;
@@ -5902,22 +5915,23 @@ async function speakCoach(text, forcePlay = false) {
   _speakBrowser(clean, myToken);
 }
 
-async function _speakOpenAI(text, apiKey, voice, token) {
+async function _speakOpenAI(text, voice, token) {
   // Audio-element aanmaken vóór await — iOS vereist user-gesture context voor play()
   const audio = new Audio();
   _currentAudio = audio;
   _ttsAbort = new AbortController();
 
-  const resp = await ccFetch('https://api.openai.com/v1/audio/speech', {
+  const tts = ccTTSRequest();
+  const resp = await ccFetch(tts.url, {
     method: 'POST',
-    headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+    headers: tts.headers,
     body: JSON.stringify({ model: 'tts-1', input: text.slice(0, 4096), voice, speed: 1.0 }),
     signal: _ttsAbort.signal
   });
   if (token !== _speakToken) { if (_currentAudio === audio) _currentAudio = null; return; } // vervallen
   if (!resp.ok) {
     _currentAudio = null;
-    throw new Error(`OpenAI TTS ${resp.status}`);
+    throw ccTTSFail(resp.status);
   }
   const blob = await resp.blob();
   if (token !== _speakToken) { if (_currentAudio === audio) _currentAudio = null; return; } // vervallen
@@ -6714,17 +6728,17 @@ function ccCreateSentenceSpeaker() {
  if (!_ttsEnabled || _ttsQuiet) return null;
  try { _stopAllVoiceInput(); } catch(_) {}
  _stopCurrentAudio();
- const token = _speakToken, ctrl = new AbortController(), useOpenAI = !!settings.openaiKey;
+ const token = _speakToken, ctrl = new AbortController(), useOpenAI = ccHasTTS();
  _ttsAbort = ctrl;
  const alive = () => token === _speakToken;
  const queue = []; let buffer = '', playing = false, done = false, openAIFailed = false;
  const clean = t => t.replace(/\*\*(.+?)\*\*/g,'$1').replace(/\*(.+?)\*/g,'$1').replace(/#+\s/g,'')
   .replace(/📌[^\n]*/g,'').replace(/[\u{1F300}-\u{1FAFF}]/gu,'').replace(/^\s*(?:[-•]|\d+\.)\s+/gm,'').replace(/\s+/g,' ').trim();
  const fetchClip = async (text) => {
-  const resp = await ccFetch('https://api.openai.com/v1/audio/speech', {method: 'POST', signal: ctrl.signal,
-   headers: {'Authorization': `Bearer ${settings.openaiKey}`, 'Content-Type': 'application/json'},
+  const tts = ccTTSRequest();
+  const resp = await ccFetch(tts.url, {method: 'POST', signal: ctrl.signal, headers: tts.headers,
    body: JSON.stringify({model: 'tts-1', input: text.slice(0, 4096), voice: settings.ttsVoice || 'nova', speed: 1.0})});
-  if (!resp.ok) throw new Error('OpenAI TTS ' + resp.status);
+  if (!resp.ok) throw ccTTSFail(resp.status);
   return await resp.blob();
  };
  const playUrl = (url) => new Promise(res => {
@@ -6752,7 +6766,7 @@ function ccCreateSentenceSpeaker() {
     let clip = null;
     try { clip = await item.clip; } catch(e) {
      if (!alive() || e?.name === 'AbortError') break;
-     openAIFailed = true; showBanner('yellow', 'Voorlezen via OpenAI lukt niet. De browserstem wordt geprobeerd.');
+     openAIFailed = true; if (settings.openaiKey) showBanner('yellow', 'Voorlezen via OpenAI lukt niet. De browserstem wordt geprobeerd.');
     }
     if (clip) { if (!(await ccPlayBlob(clip, alive)) && alive()) await playUrl(URL.createObjectURL(clip)); continue; }
    }
@@ -8522,7 +8536,7 @@ function openSettings(){
  ${page('doelen','Doelen',`<label class="flow-field">Bewegen · min per week<input id="ritme-goal-move" inputmode="numeric" value="${ccMoveGoal()}"></label><div class="flow-form-grid"><label class="flow-field">Vezels · g per dag<input id="ritme-goal-fiber" inputmode="decimal" value="${goals.vezels}"></label><label class="flow-field">Eiwit · g per dag<input id="ritme-goal-protein" inputmode="decimal" value="${goals.eiwitten}"></label><label class="flow-field">Koolhydraten · g per dag<input id="ritme-goal-carbs" inputmode="decimal" placeholder="Leeg = geen doel" value="${goals.koolhydraten||''}"></label><label class="flow-field">Vet · g per dag<input id="ritme-goal-fat" inputmode="decimal" placeholder="Leeg = geen doel" value="${goals.vet||''}"></label></div><p class="cc-set-note">Jouw eigen doelen voor het overzicht. De Beweegrichtlijn noemt 150 minuten per week. Koolhydraten en vet zijn optioneel.</p>`)}
  ${page('stem','Stem en spraak',`<label class="flow-field">Stem bij voorlezen<select id="set-tts-voice">${['nova','shimmer','echo','onyx','alloy','fable'].map(v=>`<option value="${v}">${v[0].toUpperCase()+v.slice(1)}</option>`).join('')}</select></label>${field('woorden','Eigen woorden voor spraak','Namen, oefeningen of gerechten, met komma\'s')}`)}
  ${page('geheugen','Wat Coach onthoudt',`<div id="cc-memory-panel"></div><h3 class="cc-set-sub">Samen bewegen</h3><div id="partners-list"></div><button type="button" class="ritme-link" onclick="showAddPartnerModal()">Iemand toevoegen</button><h3 class="cc-set-sub">Patronen</h3><div id="cc-patterns-box">${ccPatternsHtml()}</div>`)}
- ${page('sleutels','Sleutels',`<label class="flow-field">Uitnodigingscode<input id="set-aicode" placeholder="Code die je kreeg" autocomplete="off" autocapitalize="characters" spellcheck="false"></label><p class="cc-set-note">Kreeg je een code? Dan heb je geen eigen sleutel nodig.</p><label class="flow-field">Of je eigen AI-sleutel (Anthropic)<input id="set-anthropic" type="password" placeholder="Plak je sleutel" autocomplete="off" spellcheck="false"></label><p class="cc-set-note">Nodig voor Coach en Chef. Je sleutels blijven op deze telefoon.</p>${field('openai','OpenAI-sleutel · optioneel','Voor een natuurlijkere stem','password')}<p class="cc-set-note">Zonder OpenAI-sleutel leest de stem van je telefoon voor.</p><h3 class="cc-set-sub">Cloudkopie (optioneel)</h3><p class="cc-set-note">Bewaart een kopie in je eigen GitHub Gist, zodat je op meer apparaten kunt werken.</p>${field('token','GitHub-toegangssleutel','Personal access token','password')}${field('gist','Gist-ID','ID van je eigen Gist')}${field('syncpass','Wachtwoord · optioneel','Versleutelt je cloudkopie','password')}<p class="cc-set-note">Deel deze nooit met iemand anders: dan mengen je gegevens met die van een ander. Vergeet je het wachtwoord, dan is de cloudkopie niet meer te openen; je gegevens op deze telefoon blijven wel bruikbaar.</p>`)}
+ ${page('sleutels','Sleutels',`<label class="flow-field">Uitnodigingscode<input id="set-aicode" placeholder="Code die je kreeg" autocomplete="off" autocapitalize="characters" spellcheck="false"></label><p class="cc-set-note">Kreeg je een code? Dan heb je geen eigen sleutel nodig.</p><label class="flow-field">Of je eigen AI-sleutel (Anthropic)<input id="set-anthropic" type="password" placeholder="Plak je sleutel" autocomplete="off" spellcheck="false"></label><p class="cc-set-note">Nodig voor Coach en Chef. Je sleutels blijven op deze telefoon.</p>${field('openai','OpenAI-sleutel · optioneel','Voor een natuurlijkere stem','password')}<p class="cc-set-note">Niet nodig als je een code hebt; anders leest de stem van je telefoon voor.</p><h3 class="cc-set-sub">Cloudkopie (optioneel)</h3><p class="cc-set-note">Bewaart een kopie in je eigen GitHub Gist, zodat je op meer apparaten kunt werken.</p>${field('token','GitHub-toegangssleutel','Personal access token','password')}${field('gist','Gist-ID','ID van je eigen Gist')}${field('syncpass','Wachtwoord · optioneel','Versleutelt je cloudkopie','password')}<p class="cc-set-note">Deel deze nooit met iemand anders: dan mengen je gegevens met die van een ander. Vergeet je het wachtwoord, dan is de cloudkopie niet meer te openen; je gegevens op deze telefoon blijven wel bruikbaar.</p>`)}
  ${page('testen','Testen',`<div class="cc-list">${row('Coach testen','14 vragen','ccOpenEval()')}${row('Chef testen','5 vragen','ccOpenChefEval()')}</div><p class="cc-set-note">Vaste vragen met nepdata; een tweede AI beoordeelt de antwoorden. Je eigen gegevens blijven onaangeroerd. Kost een paar cent.</p>`)}
  ${page('kopie','Kopie en opnieuw',`<div class="flow-action-stack"><button class="btn btn-secondary" onclick="exportData()">Download een kopie</button><label class="btn btn-ghost ritme-file-label">Een kopie terugzetten<input type="file" accept=".json" onchange="importData(this)"></label></div><h3 class="cc-set-sub">Opnieuw beginnen</h3><p class="cc-set-note">Maak eerst een kopie. Je krijgt nog een bevestiging.</p><div class="flow-action-stack"><button class="btn btn-ghost" onclick="openResetActiviteitenModal()">Activiteiten wissen</button><button class="btn btn-ghost" onclick="openResetMaaltijdenModal()">Eten wissen</button><button class="btn btn-ghost" onclick="resetApp()">Hele app opnieuw beginnen</button></div>`)}
  <div class="cc-set-save"><p id="ritme-settings-error" class="flow-error" role="alert"></p><button type="button" class="btn btn-primary btn-full" onclick="saveSettings()">Bewaar</button></div><p class="cc-set-version">${APP_VERSION}</p></div>`;

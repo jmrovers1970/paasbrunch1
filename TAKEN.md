@@ -1,6 +1,6 @@
 # TAKEN.md — Coach-gesprek en receptenoverzicht
 
-Basis: `health-coach-v1.0.html`, versie `lime-20261005-28` (branch `claude/practical-edison-cvl53y`, backup `backup/lime-20261004-12`). Vorige takenlijsten staan in de git-geschiedenis.
+Basis: `health-coach-v1.0.html`, versie `lime-20261005-29` (branch `claude/practical-edison-cvl53y`, backup `backup/lime-20261004-12`). Vorige takenlijsten staan in de git-geschiedenis.
 
 Bron: Jims test op de iPhone (5 okt) met vijf schermafbeeldingen. Zijn woorden staan tussen aanhalingstekens. Jims keuzes op het advies: 1 ja, 2 allebei, 3 "laat maar even", 4 "doe maar helemaal".
 
@@ -49,12 +49,18 @@ Bron: Jims test op de iPhone (5 okt) met vijf schermafbeeldingen. Zijn woorden s
 
 ---
 
-## 5 okt — Uitnodigingscodes via Cloudflare — gebouwd, wacht op test (`lime-20261005-28`)
+## 5 okt — Voorleesstem via het tussenstation — gebouwd, wacht op test (`lime-20261005-29`)
+Jim: "die stem wel fijn!" → wie een code heeft, krijgt ook de OpenAI-stem.
+- Worker: route `/v1/audio/speech` (alleen `tts-1` en de vaste stemmen, code moet geldig zijn), geheim `OPENAI_KEY`. Telt niet mee voor de maandlimiet: bestedingslimiet in OpenAI zelf. Zonder `OPENAI_KEY` antwoordt hij 503 en leest de app stil voor met de telefoonstem.
+- App: `ccHasTTS`, `ccTTSRequest`, `ccTTSFail`. Eigen OpenAI-sleutel gaat voor. Weigert het tussenstation, dan de rest van de sessie de telefoonstem, zonder melding.
+- Beheer: nieuwe code staat meteen bovenaan (index-sleutel naast de KV-lijst, die achterloopt).
+- **Jim**: geheim `OPENAI_KEY` in Cloudflare, nieuwe Worker-code plakken + Deploy, limiet zetten op platform.openai.com; testen met code en zonder eigen OpenAI-sleutel.
+
+## 5 okt — Uitnodigingscodes via Cloudflare — af (`lime-20261005-28`)
 Jim: grotere groepen zonder gedoe met sleutels → optie 1 (eigen tussenstation).
 - Worker `worker/coach-chef-ai.js` (Cloudflare `cool-leaf-2dc3.jmrovers1970.workers.dev`): code + maandlimiet (standaard 300 aanvragen), beheerpagina `/admin`.
 - App: veld *Uitnodigingscode* in Sleutels, wizard accepteert sleutel of code; alle AI-aanvragen via `ccAIRequest`.
 - **Jim**: code in de Worker plakken, KV `CODES` koppelen, geheimen `ANTHROPIC_KEY` en `ADMIN_PASSWORD`, code aanmaken op /admin, daarna in de app testen (zonder eigen sleutel).
-- Later: OpenAI-voorlezen via hetzelfde tussenstation.
 
 ## 5 okt — Grondige controle van vier gevoelige onderdelen — af op branch (`lime-20261005-27`)
 Jim: "Heeft het zin om met zwaardere AI alles te doorlopen?" → gerichte controle op samenvoegen, vertaling, harde controle en spraak.

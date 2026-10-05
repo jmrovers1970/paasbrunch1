@@ -4,6 +4,7 @@
 // Nodig in Cloudflare (Settings › Variables and Secrets / Bindings):
 //   geheim ANTHROPIC_KEY   = je Anthropic-sleutel
 //   geheim ADMIN_PASSWORD  = wachtwoord voor de beheerpagina (/admin, inlogpagina)
+//   geheim OPENAI_KEY      = optioneel: OpenAI-sleutel voor de voorleesstem (zonder: de app leest voor met de stem van de telefoon)
 //   KV-binding CODES       = opslag voor codes en gebruik
 // Er staan geen sleutels in dit bestand.
 
@@ -11,6 +12,7 @@ const ORIGINS = ['https://jmrovers1970.github.io'];
 const MODELS = /^claude-(sonnet|haiku|opus)-/;
 const MAX_TOKENS = 16000;
 const DEFAULT_LIMIT = 300; // aanvragen per code per maand
+const VOICES = ['nova', 'shimmer', 'echo', 'onyx', 'alloy', 'fable'];
 
 export default {
   async fetch(req, env) {
@@ -25,12 +27,14 @@ export default {
       'Vary': 'Origin'
     };
     if (req.method === 'OPTIONS') return new Response(null, { status: 204, headers: cors });
-    if (url.pathname !== '/v1/messages' || req.method !== 'POST') return fail('Niet gevonden', 404, cors);
+    const speech = url.pathname === '/v1/audio/speech';
+    if ((url.pathname !== '/v1/messages' && !speech) || req.method !== 'POST') return fail('Niet gevonden', 404, cors);
     if (!ORIGINS.includes(origin)) return fail('Niet toegestaan', 403, cors);
 
     const code = (req.headers.get('x-cc-code') || '').trim().toUpperCase();
     const rec = code ? await env.CODES.get('code:' + code, 'json') : null;
     if (!rec || !rec.actief) return fail('Ongeldige uitnodigingscode', 401, cors);
+    if (speech) return voice(req, env, cors);
     const useKey = `use:${code}:${new Date().toISOString().slice(0, 7)}`;
     const used = Number(await env.CODES.get(useKey)) || 0;
     if (used >= (rec.limiet || DEFAULT_LIMIT)) return fail('Maandlimiet bereikt', 429, cors);
@@ -39,7 +43,7 @@ export default {
     try { body = await req.json(); } catch { return fail('Ongeldig verzoek', 400, cors); }
     if (!MODELS.test(String(body.model || ''))) return fail('Model niet toegestaan', 400, cors);
     body.max_tokens = Math.min(Number(body.max_tokens) || 1000, MAX_TOKENS);
-    await env.CODES.put(useKey, String(used + 1), { expirationTtl: 60 * 60 * 24 * 70 });
+    try { await env.CODES.put(useKey, String(used + 1), { expirationTtl: 60 * 60 * 24 * 70 }); } catch {} // tellen mag de vraag niet tegenhouden
 
     const up = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
@@ -51,6 +55,23 @@ export default {
     return new Response(up.body, { status: up.status, headers });
   }
 };
+
+// Voorlezen: alleen tts-1 en de vaste stemmen. Telt niet mee voor de maandlimiet; zet de bestedingslimiet in OpenAI zelf.
+async function voice(req, env, cors) {
+  if (!env.OPENAI_KEY) return fail('Geen stem ingesteld', 503, cors);
+  let body;
+  try { body = await req.json(); } catch { return fail('Ongeldig verzoek', 400, cors); }
+  const input = String(body.input || '').slice(0, 4096);
+  if (!input.trim()) return fail('Geen tekst', 400, cors);
+  const up = await fetch('https://api.openai.com/v1/audio/speech', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', 'authorization': 'Bearer ' + env.OPENAI_KEY },
+    body: JSON.stringify({ model: 'tts-1', input, voice: VOICES.includes(body.voice) ? body.voice : 'nova', speed: 1.0 })
+  });
+  const headers = new Headers(cors);
+  headers.set('content-type', up.headers.get('content-type') || 'audio/mpeg');
+  return new Response(up.body, { status: up.status, headers });
+}
 
 function fail(message, status, cors) {
   return new Response(JSON.stringify({ type: 'error', error: { message } }), { status, headers: { ...cors, 'content-type': 'application/json' } });
