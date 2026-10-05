@@ -1,6 +1,6 @@
 # TAKEN.md — Coach-gesprek en receptenoverzicht
 
-Basis: `health-coach-v1.0.html`, versie `lime-20261005-12` (branch `claude/practical-edison-cvl53y`, backup `backup/lime-20261004-12`). Vorige takenlijsten staan in de git-geschiedenis.
+Basis: `health-coach-v1.0.html`, versie `lime-20261005-11` (branch `claude/practical-edison-cvl53y`, backup `backup/lime-20261004-12`). Vorige takenlijsten staan in de git-geschiedenis.
 
 Bron: Jims test op de iPhone (5 okt) met vijf schermafbeeldingen. Zijn woorden staan tussen aanhalingstekens. Jims keuzes op het advies: 1 ja, 2 allebei, 3 "laat maar even", 4 "doe maar helemaal".
 
@@ -48,12 +48,6 @@ Bron: Jims test op de iPhone (5 okt) met vijf schermafbeeldingen. Zijn woorden s
 - *Coach testen* neemt de vervolgvragen nog niet mee in de beoordeling.
 
 ---
-
-## 5 okt — recepten trager, kefir — `lime-20261005-12`
-Jim: "Recepten genereren gaat veel langzamer dan gisteren. Kwaliteit is goed (al is kefir wel heel specifiek)."
-- Trager komt door hetzelfde als de hotfix hieronder: Sonnet 5.5 dacht eerst na. Met `between_tools` (sinds `-11`) is dat denken uit; verwacht weer ongeveer de snelheid van gisteren.
-- Kefir, skyr, tempeh, miso en gochujang tellen nu als bijzonder ingrediënt (hooguit 3 per recept); anders de gewone variant.
-- **Controle voor Jim**: tik *Snel* en kijk hoe snel het eerste recept er staat (gisteren ongeveer 13 s). Is het nog steeds traag, dan zet ik het receptmodel terug op Sonnet 4.6 (één regel).
 
 ## Hotfix 5 okt — "Geen bruikbaar antwoord ontvangen" — af (`lime-20261005-11`)
 Jim (live, iPhone): Coach gaf bij "Ik wil beginnen met intervaltraining" en "Maak een opbouw naar 10 km" alleen "Geen bruikbaar antwoord ontvangen".

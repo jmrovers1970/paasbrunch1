@@ -2268,7 +2268,7 @@ body input[type="checkbox"]:disabled{opacity:.4;cursor:default}
 'use strict';
 
 // ─── VERSION CHECK (forceert Safari herlading bij nieuwe versie) ──────────────
-const APP_VERSION = 'lime-20261005-12';
+const APP_VERSION = 'lime-20261005-11';
 // Eén plek voor de modellen: Sonnet voor gesprekken en recepten, Haiku voor snelle achtergrondtaken.
 const CC_MODEL_MAIN = 'claude-sonnet-5-5';
 const CC_MODEL_FAST = 'claude-haiku-4-5-20251001';
@@ -7082,7 +7082,7 @@ const CHEF_STIJL=`STIJL VAN CHEF:
 - Hoeveelheden in gram of ml waar het kan, ook bij groente, fruit en kaas (bijvoorbeeld "150 g avocado" in plaats van "1 avocado"); alleen eieren en kleine dingen zoals een teentje knoflook in stuks; zout, peper en verse kruiden mogen "naar smaak". Nooit cups of ounces. Ingrediënten uit een gewone supermarkt.
 - Naam: kort en pakkend, het gerecht plus de smaakmaker die het verschil maakt, bijvoorbeeld "Crispy tofu-bowl met sesam-limoen" of "Bakplaat-zalm met zoete aardappel en tahin". Gangbare foodwoorden als bowl, wrap en crispy mogen.
 - Stappen: kort, actief en concreet, bijvoorbeeld "Rooster 20 min op 220 °C". Geen lappen tekst.
-- Praktisch: bouw elk recept op basisvoorraad (eieren, yoghurt of kwark, havermout, rijst, pasta, wraps, bonen of kikkererwten uit blik, tomaten uit blik, ui, knoflook, citroen, diepvriesgroente, kaas, pindakaas, specerijen). Voeg hooguit 3 verse of bijzondere ingrediënten toe die het verschil maken. Ook kefir, skyr, tempeh, miso en gochujang tellen als bijzonder: kies anders de gewone variant (yoghurt, kwark, tofu, sojasaus). Liever een slimme twist op iets bekends dan een lijst exotische producten.
+- Praktisch: bouw elk recept op basisvoorraad (eieren, yoghurt of kwark, havermout, rijst, pasta, wraps, bonen of kikkererwten uit blik, tomaten uit blik, ui, knoflook, citroen, diepvriesgroente, kaas, pindakaas, specerijen). Voeg hooguit 3 verse of bijzondere ingrediënten toe die het verschil maken. Liever een slimme twist op iets bekends dan een lijst exotische producten.
 - Afwisseling. Rijstwafels en rijstcrackers alleen als de gebruiker erom vraagt. Wissel de basis af (brood, wrap, havermout, yoghurt, kwark, fruit, smoothie, ei, peulvruchten) en gebruik binnen één reeks voorstellen nooit twee keer dezelfde basis.`;
 const CHEF_SCHEMA='[{"naam":"...","personen":2,"voedingsbasis":"per_portie","vezels":"~Xg","eiwitten":"~Xg","koolhydraten":"~Xg","vet":"~Xg","kcal":"~X kcal","tags":["bowl","snel"],"tijd":"20 min","ingredienten":["200 g ingrediënt"],"bereiding":["Concrete stap met tijd en indien nodig temperatuur"]}]';
 function validateChefRecipe(r,persons){
