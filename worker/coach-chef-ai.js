@@ -76,25 +76,30 @@ async function admin(req, env, url) {
     if (action === 'nieuw') {
       const code = makeCode();
       await env.CODES.put('code:' + code, JSON.stringify({ naam: String(form.get('naam') || '').slice(0, 60), limiet: Math.max(1, Number(form.get('limiet')) || DEFAULT_LIMIT), actief: true, gemaakt: new Date().toISOString().slice(0, 10) }));
+      await env.CODES.put('index', JSON.stringify([...new Set([...(await env.CODES.get('index', 'json') || []), code])]));
+      return new Response(null, { status: 303, headers: { Location: '/admin?nieuw=' + code } });
     } else {
       const code = String(form.get('code') || '').toUpperCase(), rec = await env.CODES.get('code:' + code, 'json');
       if (rec && action === 'aan') { rec.actief = !rec.actief; await env.CODES.put('code:' + code, JSON.stringify(rec)); }
       if (rec && action === 'limiet') { rec.limiet = Math.max(1, Number(form.get('limiet')) || rec.limiet); await env.CODES.put('code:' + code, JSON.stringify(rec)); }
-      if (rec && action === 'weg') await env.CODES.delete('code:' + code);
+      if (rec && action === 'weg') { await env.CODES.delete('code:' + code); await env.CODES.put('index', JSON.stringify((await env.CODES.get('index', 'json') || []).filter(c => c !== code))); }
     }
     return new Response(null, { status: 303, headers: { Location: '/admin' } });
   }
-  const list = await env.CODES.list({ prefix: 'code:' });
-  const rows = [];
-  for (const k of list.keys) {
-    const code = k.name.slice(5), rec = await env.CODES.get(k.name, 'json') || {}, used = Number(await env.CODES.get(`use:${code}:${month}`)) || 0;
+  // De lijst van KV loopt soms een minuut achter; de index (één sleutel) is direct bij.
+  const listed = (await env.CODES.list({ prefix: 'code:' })).keys.map(k => k.name.slice(5));
+  const codes = [...new Set([...(await env.CODES.get('index', 'json') || []), ...listed])];
+  const rows = [], nieuw = (url.searchParams.get('nieuw') || '').toUpperCase();
+  for (const code of codes) {
+    const rec = await env.CODES.get('code:' + code, 'json'), used = Number(await env.CODES.get(`use:${code}:${month}`)) || 0;
+    if (!rec) continue;
     rows.push(`<tr><td><b>${esc(code)}</b><br><small>${esc(rec.naam || '')}</small></td><td>${used} / ${rec.limiet}</td><td>${rec.actief ? 'Actief' : 'Uit'}</td><td>
       <form method="post"><input type="hidden" name="code" value="${esc(code)}"><input name="limiet" type="number" min="1" value="${rec.limiet}"><button name="action" value="limiet">Limiet</button>
       <button name="action" value="aan">${rec.actief ? 'Zet uit' : 'Zet aan'}</button><button name="action" value="weg" onclick="return confirm('Code ${esc(code)} verwijderen?')">Verwijder</button></form></td></tr>`);
   }
   const html = `<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Coach & Chef · codes</title>
 <style>body{font:16px -apple-system,system-ui,sans-serif;margin:16px;color:#22312a;background:#f6f6f1}table{border-collapse:collapse;width:100%;background:#fffffd}td,th{border-bottom:1px solid #e3e8df;padding:8px;text-align:left;vertical-align:top}input{font:inherit;padding:6px;width:110px}button{font:inherit;padding:6px 10px;margin:2px;border-radius:999px;border:1px solid #e3e8df;background:#fff}form.new{margin:16px 0;display:flex;gap:8px;flex-wrap:wrap}form.new button{background:#d7f653}</style>
-<h1>Uitnodigingscodes</h1><p>Gebruik deze maand (${month}): aantal AI-aanvragen per code. Elke vraag aan Coach of Chef telt als één of enkele aanvragen.</p>
+<h1>Uitnodigingscodes</h1>${nieuw ? `<p style="background:#f1f8d2;padding:12px;border-radius:12px">Nieuwe code: <b style="font-size:20px">${esc(nieuw)}</b></p>` : ''}<p>Gebruik deze maand (${month}): aantal AI-aanvragen per code. Elke vraag aan Coach of Chef telt als één of enkele aanvragen.</p>
 <form method="post" class="new"><input name="naam" placeholder="Voor wie?" style="width:180px"><input name="limiet" type="number" min="1" value="${DEFAULT_LIMIT}"><button name="action" value="nieuw">Nieuwe code</button></form>
 <table><tr><th>Code</th><th>Gebruik</th><th>Status</th><th></th></tr>${rows.join('') || '<tr><td colspan="4">Nog geen codes.</td></tr>'}</table>`;
   return new Response(html, { headers: { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-store' } });
