@@ -1,6 +1,6 @@
 # TAKEN.md — Coach-gesprek en receptenoverzicht
 
-Basis: `health-coach-v1.0.html`, versie `lime-20261005-11` (branch `claude/practical-edison-cvl53y`, backup `backup/lime-20261004-12`). Vorige takenlijsten staan in de git-geschiedenis.
+Basis: `health-coach-v1.0.html`, versie `lime-20261005-12` (branch `claude/practical-edison-cvl53y`, backup `backup/lime-20261004-12`). Vorige takenlijsten staan in de git-geschiedenis.
 
 Bron: Jims test op de iPhone (5 okt) met vijf schermafbeeldingen. Zijn woorden staan tussen aanhalingstekens. Jims keuzes op het advies: 1 ja, 2 allebei, 3 "laat maar even", 4 "doe maar helemaal".
 
@@ -48,6 +48,11 @@ Bron: Jims test op de iPhone (5 okt) met vijf schermafbeeldingen. Zijn woorden s
 - *Coach testen* neemt de vervolgvragen nog niet mee in de beoordeling.
 
 ---
+
+## 5 okt — Voorbeelden — af (`lime-20261005-12`)
+Jim: "Coach heeft nu 2 knoppen (hoe sta ik ervoor met vezels, ik ben moe). Dat is dubbel met Ideeën. Zou Ideeën ook niet beter iets van voorbeeldvragen kunnen zijn?" → "Doe beide."
+- Voorbeeldpillen onder de invoer weggehaald (`#cc-try`, `ccRenderTry`).
+- *Ideeën* heet nu *Voorbeelden* (venster ongewijzigd). Past ook op 320 px.
 
 ## Hotfix 5 okt — "Geen bruikbaar antwoord ontvangen" — af (`lime-20261005-11`)
 Jim (live, iPhone): Coach gaf bij "Ik wil beginnen met intervaltraining" en "Maak een opbouw naar 10 km" alleen "Geen bruikbaar antwoord ontvangen".
