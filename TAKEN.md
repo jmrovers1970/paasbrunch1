@@ -1,6 +1,6 @@
 # TAKEN.md — Coach-gesprek en receptenoverzicht
 
-Basis: `health-coach-v1.0.html`, versie `lime-20261005-23` (branch `claude/practical-edison-cvl53y`, backup `backup/lime-20261004-12`). Vorige takenlijsten staan in de git-geschiedenis.
+Basis: `health-coach-v1.0.html`, versie `lime-20261005-24` (branch `claude/practical-edison-cvl53y`, backup `backup/lime-20261004-12`). Vorige takenlijsten staan in de git-geschiedenis.
 
 Bron: Jims test op de iPhone (5 okt) met vijf schermafbeeldingen. Zijn woorden staan tussen aanhalingstekens. Jims keuzes op het advies: 1 ja, 2 allebei, 3 "laat maar even", 4 "doe maar helemaal".
 
@@ -48,6 +48,11 @@ Bron: Jims test op de iPhone (5 okt) met vijf schermafbeeldingen. Zijn woorden s
 - *Coach testen* neemt de vervolgvragen nog niet mee in de beoordeling.
 
 ---
+
+## 5 okt — Tegels zonder dubbelingen — af op branch (`lime-20261005-24`)
+Jim: "Geplande en Beweging dubbel? En twee keer vezels en eiwit?" → advies akkoord; knop "idee" mag vervallen, Omhoog/Omlaag blijven.
+- Weg: Geplande beweging, Vezels, Eiwit, Weekmenu en Uitgelichte activiteit (met code en opmaak). Blijven: Beweging, Eten, Water, Gevoel, Voeding.
+- **Controle voor Jim**: Coach › Tegels aanpassen. Vijf tegels, volgorde aan te passen.
 
 ## 5 okt — Instellingen: Sleutels bij elkaar — af op branch (`lime-20261005-23`)
 Jim: "Tegels aanpassen in Instellingen, is dat nog actueel? Kunnen de sleutels niet bij elkaar?" → plan akkoord.
