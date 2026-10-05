@@ -2265,7 +2265,7 @@ body input[type="checkbox"]:disabled{opacity:.4;cursor:default}
 'use strict';
 
 // ─── VERSION CHECK (forceert Safari herlading bij nieuwe versie) ──────────────
-const APP_VERSION = 'lime-20261005-14';
+const APP_VERSION = 'lime-20261005-15';
 // Eén plek voor de modellen: Sonnet voor gesprekken en recepten, Haiku voor snelle achtergrondtaken.
 const CC_MODEL_MAIN = 'claude-sonnet-5-5';
 const CC_MODEL_FAST = 'claude-haiku-4-5-20251001';
@@ -7307,9 +7307,9 @@ function ccSparShow(step){
 }
 // Drie richtingen (vertrouwd, draai, gok) in één aanroep; elke richting is een menu met de gekozen gangen. Fout, ongeldige JSON of iets wat niet mag = één keer vanzelf opnieuw.
 const CC_SPAR_TYPES={vertrouwd:'Vertrouwd',draai:'Met een draai',gok:'Gok'};
-const CC_SPAR_HARD={vega:['Vegetarisch: geen vlees en geen vis.',['vlees','vis']],vis:['Geen vis of zeevruchten.',['vis']],noten:['Geen noten of pinda, ook niet in saus of garnering.',['noten']],gluten:['Glutenvrij: geen tarwe, pasta, brood, couscous of gewone sojasaus.',['gluten']],alcohol:['Geen alcohol, ook niet om mee te koken.',['alcohol']]};
+const CC_SPAR_HARD={vega:['Vegetarisch: geen vlees en geen vis, ook geen kip, gevogelte of vleesbouillon.',['vlees','vis']],vis:['Geen vis of zeevruchten.',['vis']],noten:['Geen noten of pinda, ook niet in saus of garnering.',['noten']],gluten:['Glutenvrij: geen tarwe, pasta, brood, couscous of gewone sojasaus.',['gluten']],alcohol:['Geen alcohol, ook niet om mee te koken.',['alcohol']]};
 function ccSparCats(){return [...ccSpar.niet].flatMap(k=>CC_SPAR_HARD[k][1]);}
-function ccSparHardText(){const hard=[...ccSpar.niet].map(k=>CC_SPAR_HARD[k][0]);return hard.length?'HARD, voor elke gang, ook in sauzen en garnering: '+hard.join(' '):'';}
+function ccSparHardText(){const hard=[...ccSpar.niet].map(k=>CC_SPAR_HARD[k][0]);return hard.length?'HARD, voor elke gang, ook in sauzen en garnering: '+hard.join(' ')+' Elk gerecht voldoet zelf aan deze wensen; noem nooit iets wat niet mag, ook niet als variant of keuze ("kip of vega" mag niet).':'';}
 function ccSparMenuText(){const c=ccSparCourses();return c.length>1?`Het menu heeft deze gangen: ${c.map(g=>CC_SPAR_GANG_REGEL[g]).join(' ')}`:'Alleen een hoofdgerecht.';}
 function ccSparShape(type){return `{"type":"${type}","titel":"","waarom":"","gangen":{${ccSparCourses().map(g=>`"${g}":""`).join(',')}},"tijd_min":0,"eiwit_g":0,"kcal":0,"hoofdingredienten":["","",""],"opzet":""}`;}
 function ccSparPrompt(){
@@ -7326,7 +7326,7 @@ function ccSparDir(d){
  if(!CC_SPAR_TYPES[d?.type]||typeof d.titel!=='string'||!d.titel.trim()||typeof d.waarom!=='string'||ing.length<2)throw Error('Een richting was niet compleet.');
  const gangen={};for(const g of ccSparCourses()){const t=typeof d.gangen?.[g]==='string'?d.gangen[g].trim():'';if(!t&&g!=='hoofd')throw Error('Een gang ontbrak in een richting.');gangen[g]=(t||d.titel.trim()).slice(0,90);}
  const r={type:d.type,titel:d.titel.trim().slice(0,90),waarom:d.waarom.trim().slice(0,220),gangen,tijd_min:num(d.tijd_min),eiwit_g:num(d.eiwit_g),kcal:num(d.kcal),hoofdingredienten:ing,opzet:typeof d.opzet==='string'?d.opzet.trim().slice(0,220):''};
- const hit=ccAvoidHit([r.titel,...Object.values(gangen),...ing,r.opzet],ccSparCats(),settings.lieverNiet||[]);if(hit)throw Error(`Er zat ${hit} in, en dat mag niet.`);
+ const hit=ccAvoidHit([r.titel,...Object.values(gangen),...ing,r.opzet],ccSparCats(),settings.lieverNiet||[]);if(hit)throw Error(`Chef noemde ${hit}, en dat past niet bij je wensen.`);
  return r;
 }
 function ccSparValid(raw){
@@ -7340,7 +7340,7 @@ async function ccSparCall(build,check,waitText){
  const req=ccSpar.req=(ccSpar.req||0)+1,view=ccViewRevision,el=document.getElementById('cc-spar-dirs'),live=()=>ccSpar&&ccSpar.req===req&&view===ccViewRevision&&document.getElementById('cc-spar-dirs')===el;
  if(el)el.innerHTML=`<div class="cc-chef-wait" role="status"><span class="cc-chef-dot" aria-hidden="true"></span><span id="cc-spar-wait">${waitText}</span></div>`;
  let err=null;
- for(let i=0;i<2;i++){try{const raw=build.stream?await callAIStream([{role:'user',content:build.prompt}],build.tokens,{system:CC_TASK_STYLE+ccVocabNote(),onText:(_,all)=>{if(live())build.onText(all);}}):await callAIPlain(build.prompt,build.tokens);const out=check(raw);return live()?{out}:null;}catch(e){err=e;if(!live())return null;}}
+ for(let i=0;i<2;i++){const prompt=err?`${build.prompt}\nLET OP: je vorige antwoord werd afgekeurd: ${err.message.replace(/\.$/,'')}. Los dat op en houd je overal aan de harde wensen.`:build.prompt;try{const raw=build.stream?await callAIStream([{role:'user',content:prompt}],build.tokens,{system:CC_TASK_STYLE+ccVocabNote(),onText:(_,all)=>{if(live())build.onText(all);}}):await callAIPlain(prompt,build.tokens);const out=check(raw);return live()?{out}:null;}catch(e){err=e;if(!live())return null;}}
  return {err};
 }
 function ccSparDirections(){
@@ -7365,7 +7365,7 @@ async function ccSparTweak(key){
  const d=ccSpar.richtingen[ccSpar.keuze];if(!d)return;
  const cats=key==='vega'?['vlees','vis']:[];
  const res=await ccSparCall({prompt:`Je spart als Chef over een dinertje. Pas deze richting aan, voor het hele menu: ${JSON.stringify(d)}.\nAanpassing: ${t[2]}\nSituatie: ${ccSparLabel('wie')} (${ccSparPersons()} personen), ${ccSparLabel('avond')}, ${ccSparLabel('tijd')}. ${ccSparMenuText()} ${ccSparHardText()} ${_dieetRegel()} ${_landRegel()}\nHoud het type "${d.type}". Antwoord alleen met JSON in hetzelfde formaat: ${ccSparShape(d.type)}`,tokens:600+300*ccSparCourses().length},
-  raw=>{const r=ccSparDir(safeParseJSON(raw));if(r.type!==d.type)throw Error('Chef veranderde de soort richting.');const hit=cats.length&&ccAvoidHit([r.titel,...Object.values(r.gangen),...r.hoofdingredienten],cats);if(hit)throw Error(`Er zat nog ${hit} in.`);return r;},'Chef stuurt bij…');
+  raw=>{const r=ccSparDir(safeParseJSON(raw));if(r.type!==d.type)throw Error('Chef veranderde de soort richting.');const hit=cats.length&&ccAvoidHit([r.titel,...Object.values(r.gangen),...r.hoofdingredienten],cats);if(hit)throw Error(`Chef noemde nog ${hit}.`);return r;},'Chef stuurt bij…');
  if(!res)return;
  if(res.err){ccSparFail(res.err,`ccSparTweak('${key}')`);return;}
  ccSpar.richtingen[ccSpar.keuze]=res.out;ccSpar.bijgestuurd=t[1];ccSparRenderDirs();
@@ -7389,7 +7389,7 @@ async function ccSparRecipe(){
   const arr=multi?ccCompleteObjects(raw).map(o=>{try{return JSON.parse(o);}catch(_){return null;}}):[(a=>Array.isArray(a)?a[0]:a)(safeParseJSON(raw))];
   if(arr.length<courses.length)throw Error('Chef gaf niet voor elke gang een recept.');
   const keep={mode:flowChefMode,meal:genMaaltijd,soort:flowSportSoort};
-  try{flowChefMode='';genMaaltijd='';flowSportSoort='';return courses.map((g,i)=>{const r=validateChefRecipe(arr[i],persons);const hit=ccAvoidHit([r.naam,...r.ingredienten],ccSparCats());if(hit)throw Error(`Er zat ${hit} in, en dat mag niet.`);return {...r,gang:g};});}
+  try{flowChefMode='';genMaaltijd='';flowSportSoort='';return courses.map((g,i)=>{const r=validateChefRecipe(arr[i],persons);const hit=ccAvoidHit([r.naam,...r.ingredienten],ccSparCats());if(hit)throw Error(`Chef noemde ${hit}, en dat past niet bij je wensen.`);return {...r,gang:g};});}
   finally{flowChefMode=keep.mode;genMaaltijd=keep.meal;flowSportSoort=keep.soort;}
  };
  const onText=all=>{const w=document.getElementById('cc-spar-wait');if(!w)return;const done=ccCompleteObjects(all).map(o=>{try{return JSON.parse(o).naam;}catch(_){return '';}}).filter(Boolean);w.textContent=done.length?`Chef schrijft je menu… ${done.length} van ${courses.length} klaar: ${done.join(', ')}`:'Chef schrijft je menu…';};

@@ -1,6 +1,6 @@
 # TAKEN.md — Coach-gesprek en receptenoverzicht
 
-Basis: `health-coach-v1.0.html`, versie `lime-20261005-14` (branch `claude/practical-edison-cvl53y`, backup `backup/lime-20261004-12`). Vorige takenlijsten staan in de git-geschiedenis.
+Basis: `health-coach-v1.0.html`, versie `lime-20261005-15` (branch `claude/practical-edison-cvl53y`, backup `backup/lime-20261004-12`). Vorige takenlijsten staan in de git-geschiedenis.
 
 Bron: Jims test op de iPhone (5 okt) met vijf schermafbeeldingen. Zijn woorden staan tussen aanhalingstekens. Jims keuzes op het advies: 1 ja, 2 allebei, 3 "laat maar even", 4 "doe maar helemaal".
 
@@ -48,6 +48,12 @@ Bron: Jims test op de iPhone (5 okt) met vijf schermafbeeldingen. Zijn woorden s
 - *Coach testen* neemt de vervolgvragen nog niet mee in de beoordeling.
 
 ---
+
+## Hotfix 5 okt — Dinertje vega stopte — af (`lime-20261005-15`)
+Jim (live): bij een dinertje met vega stopte Chef met "Er zat citroenkip in (vega optie), en dat mag niet."
+- Oorzaak: Chef noemde kip met een vega-variant; de harde controle keurde terecht af, maar de herhaling kreeg niet te horen waarom en deed hetzelfde.
+- Oplossing: de wensen zeggen nu expliciet "geen kip, ook niet als variant of keuze", en de automatische herhaling krijgt de reden van de afkeuring mee. Geldt voor richtingen, bijsturen en het menu.
+- **Controle voor Jim**: dinertje met *Vega*, drie gangen. Komen er drie richtingen zonder vlees of vis?
 
 ## 5 okt — Dinertje op het weekmenu — af (`lime-20261005-14`)
 Jim: "Is dat dan ook gekoppeld aan de boodschappenlijst? Werkt dat allemaal langs dezelfde lijn?" → "Alles in één keer."
