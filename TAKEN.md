@@ -1,6 +1,6 @@
 # TAKEN.md — Coach-gesprek en receptenoverzicht
 
-Basis: `health-coach-v1.0.html`, versie `lime-20261005-27` (branch `claude/practical-edison-cvl53y`, backup `backup/lime-20261004-12`). Vorige takenlijsten staan in de git-geschiedenis.
+Basis: `health-coach-v1.0.html`, versie `lime-20261005-28` (branch `claude/practical-edison-cvl53y`, backup `backup/lime-20261004-12`). Vorige takenlijsten staan in de git-geschiedenis.
 
 Bron: Jims test op de iPhone (5 okt) met vijf schermafbeeldingen. Zijn woorden staan tussen aanhalingstekens. Jims keuzes op het advies: 1 ja, 2 allebei, 3 "laat maar even", 4 "doe maar helemaal".
 
@@ -48,6 +48,13 @@ Bron: Jims test op de iPhone (5 okt) met vijf schermafbeeldingen. Zijn woorden s
 - *Coach testen* neemt de vervolgvragen nog niet mee in de beoordeling.
 
 ---
+
+## 5 okt — Uitnodigingscodes via Cloudflare — gebouwd, wacht op test (`lime-20261005-28`)
+Jim: grotere groepen zonder gedoe met sleutels → optie 1 (eigen tussenstation).
+- Worker `worker/coach-chef-ai.js` (Cloudflare `cool-leaf-2dc3.jmrovers1970.workers.dev`): code + maandlimiet (standaard 300 aanvragen), beheerpagina `/admin`.
+- App: veld *Uitnodigingscode* in Sleutels, wizard accepteert sleutel of code; alle AI-aanvragen via `ccAIRequest`.
+- **Jim**: code in de Worker plakken, KV `CODES` koppelen, geheimen `ANTHROPIC_KEY` en `ADMIN_PASSWORD`, code aanmaken op /admin, daarna in de app testen (zonder eigen sleutel).
+- Later: OpenAI-voorlezen via hetzelfde tussenstation.
 
 ## 5 okt — Grondige controle van vier gevoelige onderdelen — af op branch (`lime-20261005-27`)
 Jim: "Heeft het zin om met zwaardere AI alles te doorlopen?" → gerichte controle op samenvoegen, vertaling, harde controle en spraak.
