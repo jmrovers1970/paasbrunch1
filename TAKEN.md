@@ -1,8 +1,111 @@
-# TAKEN.md — Chef verbeteren (opdracht voor Sonnet 5.5)
+# TAKEN.md — Coach-gesprek en receptenoverzicht
 
-Basis: `health-coach-v1.0.html`, versie `lime-20261004-1`. De vorige takenlijst is af en staat in de git-geschiedenis.
+Basis: `health-coach-v1.0.html`, versie `lime-20261005-10` (branch `claude/practical-edison-cvl53y`, backup `backup/lime-20261004-12`). Vorige takenlijsten staan in de git-geschiedenis.
 
-Bron: Jims test op de iPhone (4 okt). Zijn woorden staan tussen aanhalingstekens. Daaronder staat wat er moet gebeuren en wanneer het af is. Ontwerpkeuzes zijn al gemaakt; volg ze en verzin geen eigen variant.
+Bron: Jims test op de iPhone (5 okt) met vijf schermafbeeldingen. Zijn woorden staan tussen aanhalingstekens. Jims keuzes op het advies: 1 ja, 2 allebei, 3 "laat maar even", 4 "doe maar helemaal".
+
+---
+
+## Batch 5 okt — af (wacht op Jims controle op de iPhone, daarna samenvoegen)
+
+### K1. Antwoord sprekender — af
+"Dat is nu kleine zware tekst op de blauwe achtergrond. Kan dat wat sprekender?"
+- Het antwoord staat in een witte kaart (`.cc-reply`), 18 px normaal gewicht. Je eigen vraag staat er klein boven ("Jij: …").
+- Eén ✕, rechtsboven in de kaart. De losse grote ✕ en de ✕ bij de geheugenmelding zijn weg.
+- Geheugenmelding onderin de kaart, alleen voor de laatste vraag (bleef eerst hangen: "interval" boven een antwoord over wandelen).
+- Opslaan en voorlezen zijn ronde icoonknoppen, zodat de knoppen en de duimpjes op één regel passen.
+
+### K2. Meer dialoog en voorbeelden — af
+"Hoe kan je meer uitnodigen tot dialoog. Ik zou ook wat meer voorbeeldvragen willen: Ik wil beginnen met een intervaltraining. Hoe doe ik dat?"
+- Onder elk antwoord twee vervolgvragen van de coach (tool `vervolgvragen` in dezelfde aanroep, geen extra kosten). Tik = versturen. *Naar Chef* staat als pil in dezelfde rij.
+- Zolang er geen gesprek is: drie korte voorbeeldvragen onder de invoer (tik = in de invoer, niet versturen).
+- *Ideeën*: nieuwe groep *Trainen* (intervaltraining, opbouw naar 10 km, dumbbells en bankje, warming-up) en extra voorbeelden in de andere groepen (17 in totaal).
+
+### K3. Ingesproken training wijzigen — af
+"Als ik een ingesproken training wil wijzigen kan ik niet de andere gegevens (tijd, afstand, met wie)."
+- *Wijzigen* opent nu het volledige activiteitformulier (tijdstip, afstand, duur, notitie), hetzelfde als in *Jouw dag*. Na opslaan staat de kaart *Opgeslagen* er opnieuw, met *Ongedaan maken*.
+- "Met wie": geen eigen veld (Jim: "laat maar even"). Kan in de notitie.
+- Kaart *Opgeslagen*: niet meer dubbel, ✕ in plaats van *Sluiten*, leesbare datum ("6 okt"), duidelijkere melding als ongedaan maken niet meer kan.
+
+### R1. Recepten strakker en overzichtelijker — af
+"De recepten database moet strakker en professioneler. Zie nu ontbijtgerechten die ook lunch kunnen zijn. Vooral een lange lijst."
+- Twee niveaus: eerst *wanneer* (Alles/Ontbijt/Lunch/Diner/Snack), dan *wat/hoe* (Snel, Vega, Bowl …).
+- Bij Alles: *Vaak gemaakt* en per moment de drie meest gemaakte met *Alle N*. Een recept dat bij ontbijt én lunch past, staat bij allebei.
+- Elke rij toont tijd, eiwit en vezels.
+- Chef zet bij nieuwe recepten voortaan elk moment waarop het past.
+- *Labels opruimen*: Chef zet alle bestaande recepten in één keer goed en wijst bijna dubbele recepten aan; terugzetten kan, verwijderen alleen na eigen keuze (herstelbaar).
+
+### Controlepunten voor Jim (iPhone)
+1. Coach: vraag iets. Staat het antwoord in een witte kaart met je vraag erboven? Twee vervolgvragen eronder? Tik er een: gaat die als jouw vraag?
+2. Spreek een vraag in: leest de coach alleen het antwoord voor, niet de vervolgvragen?
+3. Zonder gesprek: drie voorbeeldpillen onder *Plan je dag* / *Ideeën*, schuiven ze netjes?
+4. Spreek een training in, tik *Wijzigen*: zie je tijdstip, afstand en duur? Opslaan en daarna *Ongedaan maken*.
+5. Chef › Mijn recepten: kies Ontbijt en Lunch, tik een label. Daarna *Labels opruimen* (kost één Haiku-aanroep) en kijk of de indeling klopt.
+6. Live link met `?v=lime-20261005-1` erachter.
+
+### Nog open (niet gevraagd of later)
+- Veld "Met wie" bij activiteiten (Jim: laat maar even).
+- *Coach testen* neemt de vervolgvragen nog niet mee in de beoordeling.
+
+---
+
+## Batch 5 okt (8) — Brede test en testlijst — af (`lime-20261005-10`)
+Jim: "Kan je alles testen wat we vanmorgen hebben gebouwd? En een testlijst maken die ik kan volgen? En checken of layout en vormgeving klopt?"
+- Brede test (Playwright, nep-AI, 390 en 360 px): 54 van 54 controles goed, geen JavaScript-fouten. Vormgevingscontrole per scherm (horizontaal scrollen, afgekapte tekst, ongelijke rijen, centrering, tikgebied) op 23 schermen: netjes.
+- Opgelost: *Meal prep* raakte op smalle schermen de knoprand (13 px onder 375 px), de datum in de Coach-kop brak af op 360 px, en *Schat voedingswaarden* plakte tegen de voedingsregel.
+- Testlijst voor de iPhone: `docs/testlijst-20261005.md`.
+- Opgemerkt, niet aangepast: vrije *liever niet*-woorden kun je alleen in de wizard kiezen (vier chips); de oude receptknoppen (*Inplannen/Gegeten/Bewaren*, *Andere ideeën*) hebben nog de oude vorm (hoekig in plaats van pil).
+
+## Batch 5 okt (7) — Meal prep als knop — af (`lime-20261005-9`)
+Jim: "Hoe zou meal prep mooi een knop kunnen worden zonder dat het druk wordt?" → optie 2 gekozen ("past meer in het concept"): *Weekend* wordt *Meal prep*.
+- Rij Maaltijd: *Snel / Meal prep / Comfort*. Meal prep = één keer koken voor meerdere dagen, minstens 4 porties (of personen × 2), 3–4 dagen houdbaar, saus apart, laatste stap over bakjes en opwarmen. Label *Meal prep* in Mijn recepten. *Chef testen* heeft er een zesde vraag voor.
+- Uitgebreid koken voor één avond kan via Sparren.
+- **Controle voor Jim**: tik *Meal prep*. Klopt het aantal porties, blijft het echt een paar dagen goed, en staat de bewaartip in de laatste stap? Past "Meal prep" netjes in de knop op je iPhone?
+
+## Batch 5 okt (6) — Receptinspiratie verwerkt — af (`lime-20261005-8`)
+Jim stuurde het document *Receptinspiratie*. Keuzes: A (stijl aanvullen) ja, B (kcal als informatie) ja, C meal prep alleen in de stijl, samenvatting in de repository ja.
+- `CHEF_STIJL` aangevuld (meal prep, cottage cheese/yoghurt-dips, echte eiwitsnack, eiwit per stuk, geen poeder of merken, geen kipgehakt, bronnen, ijkpuntlijst). Tijden korter (Snel 10–20 min).
+- Kcal per portie als schatting bij elk nieuw recept.
+- Samenvatting: `docs/receptinspiratie.md`.
+- **Controle voor Jim**: maak een paar Snel-recepten en een snack. Kloppen tijd, kcal en eiwit ongeveer? Draai *Chef testen* en vergelijk.
+
+## Batch 5 okt (5) — Bijstuurpillen bij Chef — af (`lime-20261005-5`)
+Jim: "Moeten we de dialoogwijze bij Chef gelijktrekken naar Coach?" → advies: geen open chat, wel kiezen en bijsturen met tikken. "Ja, bouw de bijstuurpillen eerst."
+- Onder elk voorstel: *Lichter*, *Sneller*, *Meer eiwit*, *Meer vezels*, *Vega*, *Anders…*. Eén tik = Chef past dat recept aan (één aanroep).
+- **Controle voor Jim**: maak recepten, tik *Meer vezels* en *Vega*. Klopt de aanpassing, blijft de stijl van Chef, en kloppen de nieuwe eiwit- en vezelwaarden ongeveer?
+
+## Batch 5 okt (4) — Naar Chef preciezer — af (`lime-20261005-4`)
+Jim: "Elk gesprek? Ook als het over hamstring gaat?" → *Naar Chef* alleen bij hele eetwoorden (niet bij "lunchpauze" of "bereid je voor"); Chef gebruikt uit het gesprek alleen wat over eten, voeding of herstel gaat.
+
+## Batch 5 okt (3) — Coach en Chef weten meer van elkaar — af (`lime-20261005-3`)
+Jim: "weten chef en coach zo genoeg van elkaars kennis?" → advies akkoord ("ja, bouw maar").
+- *Naar Chef* neemt het gesprek mee: label "Uit je gesprek met Coach" (✕ = niet meenemen), gaat mee met de volgende reeks recepten.
+- Coach kent je keuken: voorraad en eiwit/vezels van bewaarde recepten bij eetvragen; meer eetwoorden herkend ("wat zal ik vanavond maken?").
+- Chef kent je week: training van vandaag en vezelgemiddelde van de week, ook bij een gewone maaltijd.
+- **Controle voor Jim**: vraag Coach iets over eten, tik *Naar Chef*, kies Snel. Sluit het recept aan bij wat Coach zei? Vraag Coach "wat zal ik vanavond maken?" met iets in je voorraad.
+
+## Batch 5 okt (2) — Chef slimmer en Sparren fase 1 — af (`lime-20261005-2`)
+
+Jim: "alles akkoord" op het advies: Sparren alleen Dinertje, sturen op eiwit en vezels (kcal bestaat niet in de app), eerst een kleine batch Chef-verbeteringen.
+
+### S1. Chef slimmer — af
+- Wat Coach over eten onthoudt, gaat nu mee naar Chef (niet in privacymodus).
+- Chef krijgt de cijfers van vandaag mee: hoeveel eiwit en vezels er nog open staan.
+- Afwisseling over dagen: de maaltijden van de afgelopen week en de laatst bewaarde recepten gaan mee.
+- Harde controle: een recept met iets wat je liever niet eet (of vlees bij vega) komt niet meer in beeld.
+- Model voor gesprek en recepten: Sonnet 5.5 (was Sonnet 4.6). **Controle voor Jim: draai Instellingen › Testen › Coach testen en Chef testen en vergelijk met de vorige uitslag.**
+
+### S2. Sparren fase 1 — af (wacht op Jims test)
+- Chef › regel *Sparren* › *Dinertje voor gasten*: voor wie (met "Eet iemand iets niet?"), wat voor avond, hoeveel tijd. Daarna een samenvatting. Terug kan op elk scherm. Niets wordt bewaard.
+- Afwijking van de eerste schets: geen halve knop naast *Uit je voorraad*, maar een eigen regel *Sparren* onder *Voorraad*, omdat Chef al met regels werkt (Sport, Maaltijd, Voorraad).
+
+### S3. Sparren fase 2 — af (`lime-20261005-6`, wacht op Jims test)
+Drie richtingen als kaartjes (vertrouwd, draai, gok) in één aanroep: titel, waarom, tijd, eiwit, hoofdingrediënten, opzet; macro's klein onderaan. Laadstatus; bij fout of ongeldige JSON één keer automatisch opnieuw, daarna *Opnieuw*. Wensen van gasten hard gecontroleerd met `ccAvoidHit`.
+- **Controle voor Jim**: kies bijvoorbeeld Vrienden + Noten + Vega. Verschillen de drie richtingen duidelijk? Zit er nergens vlees, vis of noten in? Klopt de tijd bij "Een uurtje"? Test ook zonder internet (melding + *Opnieuw*).
+
+### S4. Sparren fase 3 — af (`lime-20261005-7`, wacht op Jims test)
+Eén bijstuurronde (Lichter / Makkelijker / Vegetarisch / Goedkoper / Meer wow / Iets heel anders), dan *Maak het recept*: bestaand receptformaat, `validateChefRecipe`, bestaande opslag, extra velden `bron:'sparren'` en `stand:'dinertje'`, opzet als notitie. Max. 3 aanroepen per sessie (plus hooguit één automatische herhaling). Daarna Gist-sync testen.
+- **Controle voor Jim**: van knop tot opgeslagen recept op iPhone Safari, voor beide richtingen *Lichter* en *Iets heel anders*. Staat het recept in Mijn recepten (Diner) en op een tweede apparaat na sync? Werkt een bestaand recept nog als voorheen? Zit een wens van gasten (bijv. noten) nergens in het recept?
 
 ---
 
@@ -12,8 +115,8 @@ Bron: Jims test op de iPhone (4 okt). Zijn woorden staan tussen aanhalingstekens
 2. **Eén taak tegelijk, in de volgorde hieronder.** Per taak: zoek de code met `grep -n`, lees de functie helemaal, verander zo weinig mogelijk, test, ga dan pas verder. Het bestand is groot (ongeveer 9.000 regels, veel code op één regel). Lees gericht met `sed -n 'a,bp'`, nooit het hele bestand.
 3. **Bewerk met exacte vervangingen.** Gebruik een klein Python-script met `assert s.count(old)==1` vóór elke `replace`, en lees en schrijf in bytes. Het bestand heeft CRLF-regeleinden; laat die heel (`.replace('\n','\r\n')` bij nieuwe tekst).
 4. **Verzin niets wat je niet hebt gecontroleerd.** Zeg alleen "werkt" als je het getest hebt. Wat je niet kunt testen (iPhone, echte API), noem je als controlepunt voor Jim.
-5. **Stoppunten.** Bij taak C1 bouw je niet voordat Jim akkoord is (zie daar). C9 is al goedgekeurd. Samenvoegen met `main` alleen na Jims "voeg samen".
-6. **Niet aanraken**: de Coach-kant, spraak en geluid (`ccPrepareMic`, Web Audio), privacymodus, sync, `coachFrontSend` en `parseSmartInput`. Nooit een modelnaam hardcoden (gebruik `CC_MODEL_*`). Geen nieuwe externe afhankelijkheden. Alle tekst van gebruiker of AI die in `innerHTML` komt, gaat door `escapeText()`.
+5. **Stoppunten.** Wezenlijke aanpassingen eerst als plan met schets aan Jim (CLAUDE.md §2). Samenvoegen met `main` alleen na Jims "voeg samen".
+6. **Niet aanraken** (tenzij de opdracht erom vraagt): spraak en geluid (`ccPrepareMic`, Web Audio), privacymodus, sync, `coachFrontSend` en `parseSmartInput`. Nooit een modelnaam hardcoden (gebruik `CC_MODEL_*`). Geen nieuwe externe afhankelijkheden. Alle tekst van gebruiker of AI die in `innerHTML` komt, gaat door `escapeText()`.
 
 ### Versie en backup
 - Versie: `APP_VERSION = 'lime-YYYYMMDD-N'` (datum van vandaag, N doornummeren). Eén versie per batch.
@@ -31,97 +134,6 @@ Bron: Jims test op de iPhone (4 okt). Zijn woorden staan tussen aanhalingstekens
 
 ### Overdracht aan Jim (na elke batch)
 Kort, in het Nederlands: wat is veranderd, wat hij op de iPhone moet controleren, en de live link met `?v=<versie>` erachter.
-
----
-
-## Batch 1 — Recepten beter (alleen prompt en kleine code; geen nieuwe schermen)
-
-Alle receptregels staan in `CHEF_STIJL` en `chefRecipePrompt` (zoek `const CHEF_STIJL` en `function chefRecipePrompt`). De regels per knop staan in `_modusRegel` en `CC_CHEF_MODES`. Houd de lijn van Jims document *Receptinspiratie* aan: wat er nu in `CHEF_STIJL` staat, blijft staan. Je vult aan, je schrapt niets.
-
-### B1. Inspiratie: Ottolenghi, Laura's Bakery en foodcreators
-"Maak de chef een vazal van Ottolenghi, Veggilaine, Laura's Bakery en beroemde TikTokkers."
-- Breid de eerste regel van `CHEF_STIJL` uit met deze bronnen als stijlinspiratie: Ottolenghi (veel kruiden, zuur, granaatappel, tahin, za'atar), Laura's Bakery (gezond bakken en ontbijt, haalbaar), Veggilaine (zo gespeld, door Jim bevestigd) en bekende foodcreators op TikTok en Instagram (kleurrijk, één pan of bakplaat, makkelijk na te maken).
-- Schrijf erbij: "Gebruik ze als smaak en stijl, kopieer geen recepten en noem geen namen in het recept."
-- **Af als**: de regel in `CHEF_STIJL` staat en de prompt geldig blijft (syntaxcheck).
-
-### B2. Praktisch: wat mensen vaak in huis hebben
-"Hou rekening met wat men vaak in huis heeft. Kan niet altijd, maar hou het praktisch, wel lekker en eigentijds (TikTok/Insta)."
-- Voeg een regel toe aan `CHEF_STIJL`: bouw elk recept op basisvoorraad (eieren, yoghurt of kwark, havermout, rijst, pasta, wraps, bonen of kikkererwten uit blik, tomaten uit blik, ui, knoflook, citroen, diepvriesgroente, kaas, pindakaas, specerijen). Voeg hooguit 3 verse of bijzondere ingrediënten toe die het verschil maken. Liever een slimme twist op iets bekends dan een lijst exotische producten.
-- **Af als**: de regel staat in `CHEF_STIJL`.
-
-### B3. Minder rijstcrackers, meer afwisseling
-"Er komen erg veel rice-crackers/rijstcrackers in voor."
-- Voeg toe aan `CHEF_STIJL`: "Rijstwafels en rijstcrackers alleen als de gebruiker erom vraagt. Wissel de basis af (brood, wrap, havermout, yoghurt, kwark, fruit, smoothie, ei, peulvruchten) en gebruik binnen één reeks voorstellen nooit twee keer dezelfde basis."
-- **Af als**: de regel staat er, en een gestubde test laat zien dat de prompttekst (uit `chefRecipePrompt('',2,[],true).prompt`) "Rijstwafels" en "nooit twee keer dezelfde basis" bevat.
-
-### B4. Eerlijke bereidingstijden
-"Stel tijden niet te optimistisch voor. Zorg dat het realistisch is."
-- **Prompt**: vervang in `CHEF_STIJL` de regel "Snel waar het kan: de meeste recepten in 5–20 minuten." door: "Snel waar het kan, maar eerlijk: tel wassen, snijden, oven voorverwarmen, koken en rusten mee, en reken voor een thuiskok, niet voor een chef. Twijfel je, rond dan naar boven af. Een ovenrecept duurt minstens 25 minuten."
-- **Code** (vangnet): maak in `validateChefRecipe` een correctie, niet een fout. Tel alle minuten die in de bereidingsstappen staan (patroon `(\d+)\s*(?:–|-|tot)?\s*(\d+)?\s*min`; neem bij een bereik het hoogste getal). Is die som plus 5 minuten groter dan `parseInt(r.tijd)`, zet dan `r.tijd = (som + 5) + ' min'`. Zet de functie niet om naar een foutmelding; recepten moeten blijven doorkomen.
-- **Af als**: een test met een recept met `tijd:"10 min"` en stappen "Rooster 20 min op 220 °C" en "Laat 5 min rusten" uitkomt op `"30 min"`. Een recept zonder minuten in de stappen blijft ongewijzigd.
-
-### B5. Snacks: sportdoel, ook vloeibaar, en leuk
-"De snacks moeten aan hun voedingsdoel voldoen, maar ook leuk zijn voor een jonge doelgroep. Een snack kan ook vloeibaar zijn als het maar het sportdoel voldoet."
-- Voeg in `_modusRegel` per sportmoment het voedingsdoel toe (kort, zonder medische claims):
-  - **voor**: licht verteerbaar, vooral koolhydraten, weinig vet en vezels; snack 30–60 min vooraf.
-  - **tijdens**: snelle koolhydraten, vocht en wat zout; meeneembaar, drinkbaar mag.
-  - **na**: eiwit 15–25 g plus koolhydraten, binnen een uur.
-- Voeg aan alle snackregels toe: "Vloeibaar mag (smoothie, shake, kefir- of yoghurtdrank). Maak het leuk en deelbaar voor een jonge doelgroep: kleurrijk, met een pakkende naam, iets crunchy of een topping, er goed uit zien op een foto. Geen kinderachtige namen."
-- **Af als**: de regels staan erin en `chefRecipePrompt` geldige tekst oplevert voor de modi `voor`, `tijdens`, `na` en `voorraadsnack`.
-
-### B6. Venstertitel "Zit hier iets tussen?"
-"De kaart die opkomt bij recepten 'Waar heb je zin in?': maak daarvan 'Zit hier iets tussen?'"
-- In `chefPreviewOpen`: verander de titel naar `Zit hier iets tussen?`. Laat de subregel staan. Zoek met `grep -n "Waar heb je zin in"` of de tekst nog ergens anders staat en trek die gelijk.
-- **Af als**: er nergens meer "Waar heb je zin in" staat en de schermafbeelding de nieuwe titel toont.
-
-### B7. Na Bewaren kunnen doorklikken naar het recept
-"Als Chef er 2 geeft, kan ik die inplannen, gegeten aangeven of bewaren. Als ik op Bewaar heb gedrukt, kan ik niet doorklikken en het recept openen. Dat wil ik graag kunnen doen."
-- In `bewaarGenRecept`: nu wordt de knop "Bewaard" en uitgeschakeld. Maak er een werkende knop **"Open recept"** van, die het bewaarde recept opent met één niveau terug naar de voorstellen:
-  `ccOpenFrom(()=>chefPreviewOpen(false), ()=>flowRecipeDetail(savedId))`, waarbij `savedId` het `id` is dat `retainGeneratedRecipe(r,true)` teruggeeft.
-- Laat de melding "bewaard" (banner) staan. Ook als het voorstelvenster opnieuw wordt opgebouwd (`chefPreviewOpen(false)` gebruikt `recipeCardHTML`), moet een al bewaard recept de knop "Open recept" tonen: kijk in `recipeCardHTML` naar `r._savedRecipeId` en of dat recept `bewaard` is.
-- **Af als**: in een test met gestubde recepten (1) Bewaar → de knop heet "Open recept", (2) tikken opent `flowRecipeDetail` met de juiste naam, (3) de terugknop of het sluiten van dat venster brengt je terug in de voorstellen, met de knop nog steeds "Open recept".
-
-Na batch 1: versie ophogen, testen, schermafbeelding van het voorstelvenster, overdracht. Niet samenvoegen voordat Jim akkoord is.
-
----
-
-## Batch 2 — Snack of maaltijd kiezen (nieuwe stap in de bediening)
-
-### C1. Bij Voor en Na eerst kiezen: snack of maaltijd
-"Sport voor, tijdens, na geeft maaltijden en snacks. Maar als ik alleen een snack zoek, heb ik niks aan het gerecht, of andersom. Ergens moet ik kunnen kiezen tussen snack en maaltijd."
-
-**Ontwerp (vastgesteld; eerst deze schets en een schermafbeelding aan Jim laten zien, pas bouwen na akkoord):**
-```
-Tik op [Voor] of [Na]  →  venster (showModal), kop "Voor het sporten" / "Na het sporten"
-   ┌──────────────────────────────┐
-   │ Voor het sporten          ✕  │
-   │ [  Snack  ]   [ Maaltijd  ]  │   ← twee even brede knoppen, 44 px, één tik start Chef
-   │ 30–60 min vooraf · 2–3 uur   │   ← één korte subregel per knop, 14 px muted
-   └──────────────────────────────┘
-Tik op [Tijdens]  →  geen keuze, altijd snack (zoals nu)
-```
-- Techniek: voeg aan `CC_CHEF_MODES` geen nieuwe knoppen toe in de Chef-zone (die blijft zoals hij is). Bewaar de keuze in een variabele, bijvoorbeeld `flowSportSoort = 'snack' | 'maaltijd'`, zet die vóór `flowSetChefMode(mode, true)`, en gebruik hem in `_modusRegel` voor `voor` en `na`: bij `snack` alleen snacks (voedingsdoel uit B5), bij `maaltijd` alleen maaltijden. Haal de "mix" en het "Bij één recept: kies wat het best past"-stuk dan weg.
-- Zet `_type` van het recept op `snack` of `maaltijd` (zie `_type:` in de functie rond `retainGeneratedRecipe`/`validateChefRecipe`), zodat het later goed te filteren is (C9).
-- Knoppen in het venster: hergebruik bestaande knopstijlen (`.btn` of `cc-seg`). Geen nieuwe kleuren. Escape en ✕ sluiten zonder iets te starten.
-- **Af als**: Voor en Na vragen eerst Snack of Maaltijd; de gegenereerde prompt bevat alleen het gekozen soort; Tijdens start direct; schermafbeelding van het venster op 390 px; niets breekt af.
-
----
-
-## Batch 3 — Recepten ordenen (door Jim goedgekeurd op 4 okt)
-
-### C9. Mijn recepten slim ordenen
-"Is er een handige manier om de recepten ook slim te organiseren/categoriseren?"
-
-**Ontwerp (goedgekeurd; bouw het zo, en laat Jim vóór het samenvoegen een schermafbeelding zien):**
-- Geen mappen en geen handwerk: elk recept krijgt automatisch een soort bij het bewaren. De Chef-knop zegt al wat het is: `snack`, `maaltijd`, of `sport` (voor/tijdens/na). Sla dat op als `r.soort` en bij sport ook `r.moment`.
-- In *Mijn recepten* (`flowRecipeList`) vervangt één rij filters de huidige (`CC_RECIPE_FILTERS`: Alles/Snel/Eiwit/Vezels):
-  ```
-  [Alles] [Maaltijd] [Snack] [Sport] [Snel]
-  ```
-  Snel = 20 minuten of korter. Eiwit en vezels staan al als waarden bij elk recept; die filters vervallen.
-- Sorteer binnen een filter op "vaak gemaakt": tel hoe vaak een recept is ingepland of als gegeten gemarkeerd. Recepten die je nooit maakte, komen onderaan.
-- Bestaande recepten zonder soort: leid af uit `type` (`snack` → Snack, anders Maaltijd) zodat niets verdwijnt.
-- **Af als**: elk filter toont de juiste recepten, oude recepten vallen ergens onder, de rij past op 390 px zonder afbreken (alle knoppen even breed), en zoeken werkt nog.
 
 ---
 

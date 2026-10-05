@@ -1431,7 +1431,7 @@ body:has(#tab-recepten.active) .brand-header .brand-amp{background:var(--cc-coac
 #tab-vandaag#tab-vandaag .day-heading,#tab-vandaag#tab-vandaag .coach-front-card,
 #tab-recepten#tab-recepten .flow-chef-card{background:var(--cc-zone)!important;box-shadow:0 0 0 100vmax var(--cc-zone)!important;clip-path:inset(0 -100vmax)!important}
 #tab-vandaag#tab-vandaag .day-heading{display:flex!important;flex-direction:column-reverse;gap:4px;margin:0!important;padding:4px 0 8px!important;border:0!important}
-#today-day{font-size:12px!important;font-weight:600!important;letter-spacing:.08em!important;text-transform:uppercase!important;color:var(--cc-muted)!important}
+#today-day{font-size:12px!important;font-weight:600!important;letter-spacing:.08em!important;text-transform:uppercase!important;color:var(--cc-muted)!important;white-space:nowrap;text-align:left!important}
 #today-date-h1{font-size:28px!important;line-height:1.15!important;font-weight:750!important;letter-spacing:-.02em!important;color:var(--cc-ink)!important;margin:0!important}
 /* Invoer: geen kaart-in-kaart */
 #tab-vandaag#tab-vandaag .coach-front-card{border:0!important;border-radius:0!important;padding:8px 0 24px!important;margin:0 0 24px!important;position:relative}
@@ -1455,10 +1455,34 @@ body:has(#tab-recepten.active) .brand-header .brand-amp{background:var(--cc-coac
 #tab-vandaag#tab-vandaag .lime-plan-choices button{height:36px;padding:0 12px!important;border-radius:var(--cc-r-pill)!important;background:var(--cc-tint)!important;border:0!important;box-shadow:none!important;font-size:14px!important;font-weight:600!important;color:var(--cc-ink)!important;display:inline-flex;align-items:center}
 #tab-vandaag#tab-vandaag .lime-plan-choices button strong{font-weight:600!important;font-size:14px!important}
 /* Gesprek: coach als gewone tekst, jij als witte pil */
-#coach-front-chat{background:transparent!important;border:0!important;box-shadow:none!important;padding:0!important;margin-top:16px!important}
-#coach-front-chat .coach-bubble-ai{max-width:none!important;background:transparent!important;border:0!important;box-shadow:none!important;padding:0!important;font-size:16px!important;line-height:1.45!important;color:var(--cc-ink)!important}
-#coach-front-chat .coach-bubble-user,#coach-front-chat .coach-bubble-me{background:var(--cc-card)!important;border:1px solid var(--cc-line)!important;border-radius:var(--cc-r-card)!important;box-shadow:none!important}
-#lime-close-reply{border-radius:var(--cc-r-pill)!important;background:transparent!important;border:1px solid var(--cc-line)!important;width:36px;height:36px}
+/* Gesprek: het antwoord staat in een witte kaart, jouw vraag klein erboven, ✕ rechtsboven in de kaart */
+.cc-reply{display:flow-root;margin-top:16px;padding:16px;background:var(--cc-card);border:1px solid var(--cc-line);border-radius:var(--cc-r-card)}
+.cc-reply:has(#coach-front-chat:empty){display:none}
+#tab-vandaag#tab-vandaag .cc-reply .lime-reply-actions{display:flex!important;float:right;gap:4px;margin:-8px -8px 4px 8px!important}
+#tab-vandaag#tab-vandaag .cc-reply .lime-reply-actions button{all:unset;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;gap:4px;min-width:44px;height:44px;padding:0 10px;border-radius:999px;color:var(--cc-ink);font:600 14px/1 -apple-system,'SF Pro Text',system-ui,sans-serif;cursor:pointer}
+#tab-vandaag#tab-vandaag .cc-reply .lime-reply-actions button[hidden]{display:none}
+#tab-vandaag#tab-vandaag .cc-reply .lime-reply-actions button:focus-visible{outline:2px solid var(--cc-green);outline-offset:-2px}
+#coach-front-chat#coach-front-chat{display:block;max-height:none;overflow:visible;background:transparent;border:0;box-shadow:none;padding:0;margin:0}
+#coach-front-chat>:not([hidden])~:not([hidden]){margin-top:12px}
+#coach-front-chat .coach-bubble-user,#coach-front-chat .coach-bubble-me{all:unset;display:block;font:400 14px/1.4 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-ink);opacity:.72;overflow-wrap:anywhere;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+#coach-front-chat .coach-bubble-user::before{content:'Jij: ';font-weight:600}
+#coach-front-chat .coach-bubble-ai{all:unset;display:block;font:400 18px/1.5 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-ink);overflow-wrap:anywhere}
+#coach-front-chat .coach-bubble-ai.thinking{opacity:.6}
+#coach-front-chat .coach-bubble-ai .cc-reply-tools{margin-top:16px}
+.cc-reply .cc-proposal{background:var(--cc-tint);border-color:transparent}
+#cc-memory-notice{margin:16px 0 0;padding-top:8px;border-top:1px solid var(--cc-line);color:var(--cc-ink)}
+.cc-followups{display:flex;flex-wrap:wrap;gap:8px}
+#coach-front-chat .cc-followup{all:unset;box-sizing:border-box;display:inline-flex;align-items:center;gap:6px;max-width:100%;min-height:40px;padding:8px 14px;border-radius:999px;background:var(--cc-tint);color:var(--cc-ink);font:600 14px/1.25 -apple-system,'SF Pro Text',system-ui,sans-serif;cursor:pointer;-webkit-tap-highlight-color:transparent}
+#coach-front-chat .cc-followup:active{background:var(--cc-lime-soft)}
+#coach-front-chat .cc-followup:focus-visible{outline:2px solid var(--cc-green);outline-offset:2px}
+/* Voorbeeldvragen zolang er geen gesprek is */
+.cc-try{display:flex;gap:8px;overflow-x:auto;margin-top:12px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.cc-try::-webkit-scrollbar{display:none}
+.cc-try:empty,.coach-front-card:has(#coach-front-chat:not(:empty)) .cc-try,.coach-front-card:has(#log-feedback:not([hidden])) .cc-try{display:none}
+#tab-vandaag#tab-vandaag .cc-try button{all:unset;box-sizing:border-box;flex:none;display:inline-flex;align-items:center;height:36px;padding:0 14px;border-radius:999px;border:1px solid var(--cc-ink);color:var(--cc-ink);font:500 14px/1 -apple-system,'SF Pro Text',system-ui,sans-serif;white-space:nowrap;cursor:pointer;position:relative;-webkit-tap-highlight-color:transparent}
+#tab-vandaag#tab-vandaag .cc-try button::after{content:'';position:absolute;inset:-4px 0}
+#tab-vandaag#tab-vandaag .cc-try button:active{background:var(--cc-card)}
+#tab-vandaag#tab-vandaag .cc-try button:focus-visible{outline:2px solid var(--cc-green);outline-offset:2px}
 /* Jouw dag */
 #tab-vandaag#tab-vandaag .card.day-section,.collapse-card{background:var(--cc-card)!important;border:1px solid var(--cc-line)!important;border-radius:var(--cc-r-card)!important;box-shadow:none!important}
 #tab-vandaag#tab-vandaag .card.day-section{padding:8px 16px!important}
@@ -1490,6 +1514,7 @@ body .vandaag-section-h{font-size:13px!important;font-weight:650!important;text-
 .cc-chef-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
 #tab-recepten#tab-recepten .cc-chef-row button{all:unset;box-sizing:border-box;position:relative;display:flex;align-items:center;justify-content:center;height:36px;padding:0 4px;border-radius:999px;border:1px solid transparent;background:var(--cc-card);color:var(--cc-ink);font:600 14px/1 -apple-system,'SF Pro Text',system-ui,sans-serif;white-space:nowrap;cursor:pointer}
 #tab-recepten#tab-recepten .cc-chef-row button[aria-pressed="true"]{background:var(--cc-ink);border-color:var(--cc-ink);color:var(--cc-lime);font-weight:700}
+@media(max-width:374px){#tab-recepten#tab-recepten .cc-chef-row button{font-size:13px}}
 #tab-recepten#tab-recepten .cc-chef-row button::after,#tab-vandaag#tab-vandaag .cc-chip-privacy::after,#tab-vandaag#tab-vandaag .cc-entry::after,#tab-recepten#tab-recepten .cc-entry::after{content:'';position:absolute;inset:-4px 0}
 #tab-recepten#tab-recepten .cc-chef-row button:focus-visible{outline:2px solid var(--cc-green);outline-offset:2px}
 .collapse-card>.cc-body{padding:0 16px 16px!important}
@@ -1500,8 +1525,6 @@ body .vandaag-section-h{font-size:13px!important;font-weight:650!important;text-
 #tab-vandaag #big-praat-btn#big-praat-btn .flow-voice-glyph{position:static!important;margin:0!important}
 #tab-vandaag#tab-vandaag .composer-photo>span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 #tab-vandaag#tab-vandaag .composer-photo{background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%2322312a' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 8h3l2-3h6l2 3h3v11H4z'/%3E%3Ccircle cx='12' cy='13' r='3.5'/%3E%3C/svg%3E") center/20px no-repeat!important}
-#tab-vandaag#tab-vandaag .lime-reply-actions{display:none!important}
-#tab-vandaag#tab-vandaag .coach-front-card:has(.coach-bubble-user) .lime-reply-actions{display:flex!important;justify-content:flex-end;margin-top:8px}
 #tab-vandaag#tab-vandaag .lime-plan-choices button,#tab-vandaag#tab-vandaag .lime-plan-choices button strong{font-size:14px!important;height:36px!important;min-height:36px!important}
 
 #tab-vandaag#tab-vandaag .cc-composer-bottom{padding:0 4px 4px!important;gap:6px!important}
@@ -1624,7 +1647,9 @@ body .vandaag-section-h{font-size:13px!important;font-weight:650!important;text-
 .coach-front-card .log-feedback{padding:16px;background:var(--cc-card);border:1px solid var(--cc-line);border-radius:18px;color:var(--cc-ink)}
 .log-feedback-actions button{all:unset;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;height:44px;padding:0 16px;border-radius:999px;background:var(--cc-card);border:1px solid var(--cc-line);color:var(--cc-ink);font:600 14px/1 -apple-system,'SF Pro Text',system-ui,sans-serif;cursor:pointer}
 .log-feedback-actions button:focus-visible{outline:2px solid var(--cc-green);outline-offset:2px}
-#cc-memory-notice{margin:8px 0;color:var(--cc-ink)}
+.log-feedback-head{display:flex;align-items:center;justify-content:space-between;margin:-8px -8px 0 0}
+.log-feedback-close{all:unset;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:999px;color:var(--cc-ink);cursor:pointer}
+.log-feedback-close:focus-visible{outline:2px solid var(--cc-green);outline-offset:-2px}
 #cc-memory-notice[hidden]{display:none}
 .cc-memory-note{display:flex;align-items:center;gap:8px;border-left:3px solid var(--cc-lime);padding-left:12px;font:400 14px/1.4 -apple-system,'SF Pro Text',system-ui,sans-serif}
 .cc-memory-note+.cc-memory-note{margin-top:8px}
@@ -1635,7 +1660,7 @@ body .vandaag-section-h{font-size:13px!important;font-weight:650!important;text-
 .cc-memory-note>button:focus-visible{outline:2px solid var(--cc-green);outline-offset:2px}
 .cc-reply-tools{display:flex;align-items:center;gap:8px;margin-top:8px;flex-wrap:wrap}
 .cc-reply-btn{all:unset;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;gap:4px;height:32px;padding:0 12px;border-radius:999px;background:var(--cc-card);border:1px solid var(--cc-line);color:var(--cc-ink);font:600 12px/1 -apple-system,'SF Pro Text',system-ui,sans-serif;cursor:pointer}
-.cc-reply-btn.bubble-play-btn{width:32px;padding:0}
+.cc-reply-btn.is-icon{width:32px;padding:0}
 .cc-reply-btn:disabled{cursor:default;opacity:.6}
 .cc-reply-btn:focus-visible{outline:2px solid var(--cc-green);outline-offset:2px}
 .cc-fb-group{display:inline-flex;gap:4px;margin-left:auto}
@@ -1698,7 +1723,46 @@ body .vandaag-section-h{font-size:13px!important;font-weight:650!important;text-
 #modal-container .cc-rows .cc-row{padding:0}
 #modal-container .cc-rows .cc-row+.cc-row::before{left:0}
 .cc-recipe-name{flex:1;min-width:0;font:600 16px/1.3 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.cc-recipe-row .cc-row-meta{flex:none}
+.cc-recipe-text{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;padding:8px 0}
+.cc-recipe-sub{font:400 14px/1.3 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums}
+.cc-rec-head{display:flex;align-items:baseline;justify-content:space-between;margin:24px 0 4px;font:650 13px/1.2 -apple-system,'SF Pro Text',system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--cc-muted)}
+#cc-recipe-results>.cc-rec-head:first-child{margin-top:8px}
+.cc-rec-head>span{font-weight:400;letter-spacing:0}
+#modal-container .cc-rec-all,#modal-container .cc-rec-tidy{all:unset;box-sizing:border-box;display:flex;align-items:center;gap:4px;min-height:44px;color:var(--cc-green);font:600 14px/1 -apple-system,'SF Pro Text',system-ui,sans-serif;cursor:pointer}
+#modal-container .cc-rec-tidy{margin-top:16px}
+#modal-container .cc-rec-all:focus-visible,#modal-container .cc-rec-tidy:focus-visible{outline:2px solid var(--cc-green);outline-offset:2px}
+#modal-container .cc-rec-seg{width:100%;margin:0 0 8px}
+#modal-container .cc-rec-seg button{min-width:0;padding:0 4px}
+.cc-tidy-note{margin:0 0 16px}
+.cc-tidy-group{margin-bottom:16px;border:1px solid var(--cc-line);border-radius:18px;padding:0 16px}
+#modal-container .cc-tidy-done{margin-top:16px}
+#modal-container .cc-tweaks{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+#modal-container .cc-tweaks button{all:unset;box-sizing:border-box;position:relative;display:inline-flex;align-items:center;height:36px;padding:0 14px;border-radius:999px;background:var(--cc-tint);color:var(--cc-ink);font:600 14px/1 -apple-system,'SF Pro Text',system-ui,sans-serif;white-space:nowrap;cursor:pointer;-webkit-tap-highlight-color:transparent}
+#modal-container .cc-tweaks button::after{content:'';position:absolute;inset:-4px 0}
+#modal-container .cc-tweaks button:active{background:var(--cc-lime-soft)}
+#modal-container .cc-tweaks button:disabled{opacity:.5;cursor:default}
+#modal-container .cc-tweaks button:focus-visible{outline:2px solid var(--cc-green);outline-offset:2px}
+.cc-tweak-status{margin:8px 0 0;font:400 14px/1.4 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-muted)}
+.cc-tweak-status:empty{display:none}
+#modal-container .cc-recipe-opzet{margin:0 0 16px}
+#modal-container #cc-recipe-nutrition{margin-top:12px}
+#tab-recepten#tab-recepten .cc-from-coach{display:inline-flex;align-items:center;gap:4px;height:36px;margin-top:8px;padding:0 0 0 14px;border-radius:999px;background:var(--cc-card);color:var(--cc-ink);font:600 14px/1 -apple-system,'SF Pro Text',system-ui,sans-serif}
+#tab-recepten#tab-recepten .cc-from-coach button{all:unset;box-sizing:border-box;position:relative;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:999px;color:var(--cc-ink);cursor:pointer}
+#tab-recepten#tab-recepten .cc-from-coach button::after{content:'';position:absolute;inset:-4px}
+#tab-recepten#tab-recepten .cc-from-coach button:focus-visible{outline:2px solid var(--cc-green);outline-offset:-2px}
+.cc-spar-kicker{margin:-8px 0 16px;font:650 13px/1.2 -apple-system,'SF Pro Text',system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--cc-muted)}
+#modal-container .cc-spar-opts .cc-row{justify-content:space-between}
+#modal-container .cc-spar-opts .cc-row[aria-pressed="true"]{background:var(--cc-lime-soft)}
+#modal-container .cc-spar-sum{cursor:default}
+#modal-container .cc-spar-next{margin-top:24px}
+#modal-container .cc-spar-dir{all:unset;box-sizing:border-box;display:flex;flex-direction:column;gap:4px;width:100%;margin-bottom:12px;padding:16px;border:1px solid var(--cc-line);border-radius:18px;background:var(--cc-card);color:var(--cc-ink);cursor:pointer;overflow-wrap:anywhere;-webkit-tap-highlight-color:transparent}
+#modal-container .cc-spar-dir[aria-pressed="true"]{border-color:var(--cc-lime);background:var(--cc-lime-soft);box-shadow:inset 0 0 0 1px var(--cc-lime)}
+#modal-container .cc-spar-dir:focus-visible{outline:2px solid var(--cc-green);outline-offset:2px}
+.cc-spar-type{font:650 12px/1.2 -apple-system,'SF Pro Text',system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--cc-muted)}
+.cc-spar-dir strong{font:700 18px/1.3 -apple-system,'SF Pro Text',system-ui,sans-serif}
+.cc-spar-why,.cc-spar-meta{font:400 14px/1.4 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-muted)}
+.cc-spar-meta{color:var(--cc-ink)}
+.cc-spar-dir small{margin-top:4px;font:400 12px/1.3 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-muted);font-variant-numeric:tabular-nums}
 #modal-container .cc-tag-row{display:flex;gap:8px;overflow-x:auto;margin:0 -16px 8px;padding:2px 16px 6px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
 #modal-container .cc-tag-row::-webkit-scrollbar{display:none}
 #modal-container .cc-tag-field{font-weight:600}
@@ -1997,7 +2061,7 @@ body input[type="checkbox"]:disabled{opacity:.4;cursor:default}
       <p class="flow-helper">Eten, bewegen, plannen. Of gewoon een vraag.</p>
       <div class="lime-input-group"><button id="big-praat-btn" class="flow-speak" onclick="bigPraatStart()" aria-label="Spreek je bericht in en controleer de tekst" aria-pressed="false"><svg class="flow-voice-glyph" width="25" height="24" viewBox="0 0 25 24" aria-hidden="true"><path d="M2 10v4m5-8v12m5-16v20m5-17v14m5-10v6" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>Vertel het Coach</button>
       <div class="unified-composer"><label class="sr-only" for="coach-front-input">Je bericht aan Coach</label><textarea id="coach-front-input" rows="1" oninput="ccResizeComposer(this)" placeholder="Typ of spreek in…" onkeydown="if(event.key==='Enter'&&!event.shiftKey&&!event.isComposing){event.preventDefault();submitSmartInput()}"></textarea><button type="button" class="cc-clear" onclick="ccClearInput('coach-front-input','big-praat-status')" aria-label="Tekst wissen"><svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="14" fill="currentColor" opacity=".14"/><path d="m10 10 8 8m0-8-8 8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button><div class="composer-actions"><button class="composer-photo" onclick="document.getElementById('fotolog-input').click()" title="Maak of kies een foto van je eten. Controleer de herkende maaltijd en geschatte voedingswaarden vóór het opslaan."><svg class="cc-icon" data-cc-icon="camera" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6 10 3h4l2 3h4v14H4V6z"/><circle cx="12" cy="13" r="4"/></svg><span>Foto van je eten</span></button><button id="smart-send-btn" class="composer-send" onclick="submitSmartInput()" aria-label="Verstuur" title="Verstuur"><span class="cc-send-arrow" aria-hidden="true">↑</span></button></div></div>
-            </div><div class="cc-chip-row"><button type="button" class="cc-entry cc-entry-half" aria-haspopup="dialog" onclick="limePlanDay()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4m6-4v4"/></svg><span>Plan je dag</span></button><button type="button" class="cc-entry cc-entry-half" aria-haspopup="dialog" aria-label="Ideeën: wat kan ik vragen?" onclick="ccOpenExamples()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.4 1 1.1 1 1.8V16h5v-.3c0-.7.4-1.4 1-1.8A6 6 0 0 0 12 3z"/></svg><span>Ideeën</span></button><button type="button" id="cc-privacy-badge" class="cc-chip cc-chip-privacy" onclick="openSettings()" hidden aria-label="Privacymodus staat aan. Open instellingen"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></button></div><div id="smart-input-status" class="composer-status" role="status"></div><div id="big-praat-status" class="speech-transcript" role="status"></div><div id="log-feedback" class="log-feedback" role="status" hidden></div><div class="lime-reply-actions"><button id="lime-stop-reply" onclick="limeStopReply()" aria-label="Antwoord stoppen" title="Antwoord stoppen" hidden><svg class="cc-icon" data-cc-icon="stop" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2"/></svg><span>Stop</span></button><button id="lime-close-reply" onclick="limeCloseReply()" aria-label="Antwoord sluiten" title="Antwoord sluiten; teruglezen via Bekijk gesprek" hidden><svg class="cc-icon" data-cc-icon="close" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div><div id="cc-memory-notice" hidden aria-live="polite"></div><div id="coach-front-chat" class="coach-chat-window" aria-live="polite"></div><button id="lime-forget-conversation" class="conversation-link" onclick="limeAskForget()" hidden>Vergeet dit gesprek</button><button id="conversation-history-btn" class="conversation-link" onclick="showConversationHistory()" hidden>Bekijk gesprek</button>
+            </div><div class="cc-chip-row"><button type="button" class="cc-entry cc-entry-half" aria-haspopup="dialog" onclick="limePlanDay()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4m6-4v4"/></svg><span>Plan je dag</span></button><button type="button" class="cc-entry cc-entry-half" aria-haspopup="dialog" aria-label="Ideeën: wat kan ik vragen?" onclick="ccOpenExamples()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.4 1 1.1 1 1.8V16h5v-.3c0-.7.4-1.4 1-1.8A6 6 0 0 0 12 3z"/></svg><span>Ideeën</span></button><button type="button" id="cc-privacy-badge" class="cc-chip cc-chip-privacy" onclick="openSettings()" hidden aria-label="Privacymodus staat aan. Open instellingen"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></button></div><div id="cc-try" class="cc-try" role="group" aria-label="Probeer bijvoorbeeld"></div><div id="smart-input-status" class="composer-status" role="status"></div><div id="big-praat-status" class="speech-transcript" role="status"></div><div id="log-feedback" class="log-feedback" role="status" hidden></div><div id="cc-reply" class="cc-reply"><div class="lime-reply-actions"><button id="lime-stop-reply" onclick="limeStopReply()" aria-label="Antwoord stoppen" title="Antwoord stoppen" hidden><svg class="cc-icon" data-cc-icon="stop" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2"/></svg><span>Stop</span></button><button id="lime-close-reply" onclick="limeCloseReply()" aria-label="Antwoord sluiten" title="Antwoord sluiten; teruglezen via Bekijk gesprek" hidden><svg class="cc-icon" data-cc-icon="close" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div><div id="coach-front-chat" class="coach-chat-window" aria-live="polite"></div><div id="cc-memory-notice" hidden aria-live="polite"></div></div><button id="lime-forget-conversation" class="conversation-link" onclick="limeAskForget()" hidden>Vergeet dit gesprek</button><button id="conversation-history-btn" class="conversation-link" onclick="showConversationHistory()" hidden>Bekijk gesprek</button>
     </section>
     <div class="cc-section-head is-day"><h2 class="cc-section-title">Jouw dag</h2><span id="cc-day-meta" class="cc-section-meta" aria-live="polite"></span></div>
     <div id="ritme-tile-host">    <section id="today-nutri-bar" data-ritme-tile="nutrition" aria-label="Voeding vandaag"></section>
@@ -2204,9 +2268,9 @@ body input[type="checkbox"]:disabled{opacity:.4;cursor:default}
 'use strict';
 
 // ─── VERSION CHECK (forceert Safari herlading bij nieuwe versie) ──────────────
-const APP_VERSION = 'lime-20261004-12';
+const APP_VERSION = 'lime-20261005-10';
 // Eén plek voor de modellen: Sonnet voor gesprekken en recepten, Haiku voor snelle achtergrondtaken.
-const CC_MODEL_MAIN = 'claude-sonnet-4-6';
+const CC_MODEL_MAIN = 'claude-sonnet-5-5';
 const CC_MODEL_FAST = 'claude-haiku-4-5-20251001';
 const CC_MODEL_DEEP = 'claude-opus-5-5'; // zware, zeldzame taken: weekterugblik en patronen
 (function() {
@@ -2499,7 +2563,7 @@ let flowSportSoort = '';
 const CC_SNACK_LEUK = ' Vloeibaar mag (smoothie, shake, kefir- of yoghurtdrank). Maak het leuk en deelbaar voor een jonge doelgroep: kleurrijk, met een pakkende naam, iets crunchy of een topping, er goed uit zien op een foto. Geen kinderachtige namen.';
 function _modusRegel() {
   if (flowChefMode === 'makkelijk') return `
-- MAKKELIJK: weinig werk en weinig afwas — maximaal 8 ingrediënten, maximaal 6 bereidingsstappen, totaal maximaal 30 minuten, alleen gangbare technieken en gewone supermarkt-ingrediënten. Smaak blijft de harde eis: geen fantasieloze "gooi een blik leeg"-recepten, kies slimme shortcuts die écht lekker zijn.`;
+- MAKKELIJK: weinig werk en weinig afwas — maximaal 8 ingrediënten, maximaal 6 bereidingsstappen, totaal liefst hooguit 20 minuten en nooit meer dan 25, alleen gangbare technieken en gewone supermarkt-ingrediënten. Smaak blijft de harde eis: geen fantasieloze "gooi een blik leeg"-recepten, kies slimme shortcuts die écht lekker zijn.`;
   if (flowChefMode === 'comfort') return `
 - COMFORTFOOD: voor troost of om stoom af te blazen. Warm, vullend en een beetje verwennend, zoals een stoofpot, ovenschotel, romige curry of pasta uit de oven, met een frisse, gezonde draai. Wel voedzaam, maar smaak en troost staan voorop; wees minder streng over vezels en eiwit.`;
   if (flowChefMode === 'voor' || flowChefMode === 'na') {
@@ -2516,8 +2580,8 @@ function _modusRegel() {
   }
   if (flowChefMode === 'tijdens' || flowChefMode === 'voorraadsnack') return `
 - SNACK: een klein tussendoortje voor 1 persoon, bescheiden portie, weinig of geen afwas.${flowChefMode === 'tijdens' ? ' Voedingsdoel: snelle koolhydraten, vocht en wat zout; meeneembaar, drinkbaar mag.' : ''}${CC_SNACK_LEUK}`;
-  if (flowChefMode === 'uitgebreid') return `
-- GEMAK: uitgebreid — dit mag een kookproject zijn voor de serieuzere kok, groente-gedreven zoals Ottolenghi: gelaagde smaken, meerdere componenten, 45 tot 90 minuten. Kies technieken die het verschil maken (roosteren, marineren, zelf een saus maken) en leg in de bereidingsstappen kort uit waarom een stap belangrijk is.`;
+  if (flowChefMode === 'mealprep') return `
+- MEAL PREP: één keer koken voor meerdere dagen lunch of diner. Kies wat 3 tot 4 dagen goed blijft in de koelkast en koud of opgewarmd lekker is (bowls, curry's, bakplaat, granen, peulvruchten, stevige groente). Houd saus, dressing en krokante topping apart. Laatste stap: hoe je het over bakjes verdeelt, hoe lang het goed blijft en hoe je het opwarmt. 30–45 g eiwit per portie.`;
   return '';
 }
 
@@ -2562,6 +2626,48 @@ function _dieetRegel() {
        : 'Vlees en vis zijn toegestaan; kies wat het beste past bij het gerecht en de voedingsdoelen.');
 }
 
+// Chef weet wat Coach over je eten onthield, wat er vandaag nog open staat en wat er de laatste dagen al op tafel stond. Privacymodus: alleen vandaag.
+function _geheugenRegel() {
+  if (settings.privacyModus) return '';
+  const m = ccActiveMemory('eten recept maaltijd koken').filter(m => ['voorkeuren','medisch'].includes(m.category) || /eet|eten|lust|recept|kook|vezel|eiwit|allerg|vega|vlees|vis/i.test(m.text)).slice(0, 6);
+  return m.length ? 'Wat de gebruiker zelf over eten zei, houd je eraan: ' + m.map(m => m.text).join(' | ') + '.' : '';
+}
+function _dagRegel() {
+  const d = dayNutrition(flowDay(today())).eaten, g = nutritionGoals(), act = _vandaagTraining(), week = settings.privacyModus ? null : ccFoodAvg(ccLast7(), 'vezels');
+  const parts = [];
+  if (d.eiwitten + d.vezels > 0) parts.push(`Vandaag gegeten: ${Math.round(d.eiwitten)} g eiwit en ${Math.round(d.vezels)} g vezels. Nog open tot het dagdoel: ${Math.max(0, Math.round(g.eiwitten - d.eiwitten))} g eiwit en ${Math.max(0, Math.round(g.vezels - d.vezels))} g vezels. Laat dit recept daar zichtbaar aan bijdragen, binnen de stijlregels.`);
+  if (week && week.days >= 3 && week.avg < g.vezels) parts.push(`De afgelopen week gemiddeld ${Math.round(week.avg)} g vezels per gelogde dag (doel ${g.vezels} g): kies een vezelrijke variant.`);
+  if (act) parts.push(`Training vandaag: ${act}. Houd daar rekening mee met portie en herstel.`);
+  return parts.join(' ');
+}
+function _afwisselRegel() {
+  if (settings.privacyModus) return '';
+  const names = new Set();
+  for (let i = 0; i <= 6; i++) Object.values(flowDay(ccDateOffset(today(), -i)).maaltijden || {}).forEach(a => (Array.isArray(a) ? a : []).forEach(m => m?.naam && names.add(m.naam)));
+  myRecipes().slice(-6).forEach(r => names.add(r.naam));
+  const list = [...names].slice(0, 12);
+  return list.length ? 'Afwisseling: dit stond de laatste dagen al op tafel of is net bewaard. Kies iets duidelijk anders: ' + list.join(', ') + '.' : '';
+}
+// Harde controle op wat er niet in mag: liever niet (Instellingen), vega/vis, en later de wensen van gasten. Per ingrediëntregel, op woordbegin of woordeinde.
+const CC_AVOID_WORDS={
+ vlees:['kip','rund','varken','gehakt','spek','=ham','hamburger','bacon','worst','chorizo','salami','pancetta','=lam','lams','kalkoen','biefstuk','vlees','eend','chicken','beef','pork','=lamb','turkey','sausage'],
+ vis:['vis','zalm','tonijn','kabeljauw','garnal','makreel','ansjovis','mossel','forel','haring','kibbeling','scampi','inktvis','sardine','sardien','tilapia','pangasius','koolvis','zeevrucht','krab','kreeft','fish','salmon','tuna','shrimp','prawn','=cod'],
+ noten:['noot','noten','amandel','cashew','walnoot','hazelnoot','pecan','pistache','pinda','macadamia','almond','peanut','walnut','=nuts','=nut'],
+ gluten:['tarwe','bloem','pasta','spaghetti','penne','macaroni','lasagne','brood','couscous','bulgur','spelt','rogge','gerst','wrap','tortilla','panko','paneermeel','sojasaus','wheat','flour','bread'],
+ alcohol:['wijn','bier','=rum','cognac','sherry','likeur','wodka','=gin','whisky','wine','beer'],
+ lactose:['melk','room','boter','kaas','yoghurt','kwark','feta','mozzarella','parmezaan','ricotta','mascarpone','skyr','milk','cream','butter','cheese'],
+ pittig:['chili','sambal','cayenne','sriracha','harissa','jalape','gochujang','rawit','pepertje','chipotle']};
+const CC_AVOID_OK={vlees:['kippenei'],noten:['nootmuskaat','kokos'],gluten:['bloemkool','maisbloem','maïsbloem','rijstbloem','kikkererwtenbloem','currypasta','misopasta','glutenvrij'],alcohol:['wijnazijn','wijnsteen','alcoholvrij'],lactose:['lactosevrij','kokosmelk','amandelmelk','havermelk','sojamelk','pindakaas','notenboter','kokosroom','haverroom','sojaroom','cacaoboter'],pittig:['milde']};
+function ccAvoidHit(lines,cats=[],free=[]){
+ cats=[...new Set([...cats,...free.map(x=>String(x).toLowerCase().trim()).filter(x=>CC_AVOID_WORDS[x])])];free=free.filter(x=>!CC_AVOID_WORDS[String(x).toLowerCase().trim()]);
+ const stems=w=>w.startsWith('=')?{x:w.slice(1),exact:true}:{x:w,exact:false};
+ for(const line of lines){
+  const low=String(line||'').toLowerCase(),words=low.split(/[^a-zà-ÿ]+/).filter(Boolean),veg=/vega|plantaardig|vegetarisch/.test(low);
+  for(const c of cats){if(veg&&(c==='vlees'||c==='vis'))continue;const ok=CC_AVOID_OK[c]||[];for(const s of (CC_AVOID_WORDS[c]||[]).map(stems)){const hit=words.find(w=>!ok.some(o=>w.startsWith(o))&&(s.exact?w===s.x:w.startsWith(s.x)||w.endsWith(s.x)));if(hit)return hit;}}
+  for(const raw of free){const f=String(raw||'').toLowerCase().trim().replace(/(en|s)$/,'');if(f.length<3)continue;if(f.includes(' ')?low.includes(f):words.some(w=>w.startsWith(f)||w.endsWith(f)))return raw;}
+ }
+ return '';
+}
 function _vandaagTraining() {
   try {
     const t = today();
@@ -3374,6 +3480,7 @@ function renderVandaag() {
   renderPartners();
   _syncTTSButtons();
   restoreConversationPreview();
+  ccRenderTry();
   renderPatroonGrid();
   ritmeRender();
   ccApplyPrivacyBadge();
@@ -3735,14 +3842,17 @@ function getActiveGenCount(){return genCount;}
 
 
 
-async function pasReceptAan(tmpId) {
-  const input = document.getElementById('aanpas-' + tmpId);
-  const instructie = input ? input.value.trim() : '';
+async function pasReceptAan(tmpId, tweak) {
+  const input = document.getElementById('aanpas-' + tmpId), pill = CC_TWEAKS.find(t => t[0] === tweak);
+  const instructie = pill ? pill[2] : input ? input.value.trim() : '';
   if (!instructie) { showBanner('yellow', 'Typ of spreek eerst je aanpassing in.'); return; }
   const recept = (window._generatedRecepten || []).find(r => r._tmpId === tmpId);
   if (!recept) return;
-  const btn = document.getElementById('aanpas-btn-' + tmpId);
-  if (btn) { btn.disabled = true; btn.textContent = 'Bezig…'; }
+  const card = document.getElementById('gencard-' + tmpId), busy = on => card?.querySelectorAll('.cc-tweaks button, #aanpas-btn-' + tmpId).forEach(b => { b.disabled = on; });
+  if (card?.dataset.busy) return;
+  if (card) card.dataset.busy = '1';
+  busy(true);
+  const status = document.getElementById('tweak-status-' + tmpId); if (status) status.textContent = 'Chef past het aan…';
   try {
     const prompt = `Pas dit recept aan volgens de instructie van de gebruiker. Behoud exact ${recept.personen||2} porties. Geef personen:${recept.personen||2} en voedingsbasis:"per_portie" terug; voedingswaarden zijn per portie en ingrediënten voor het hele recept. Controleer hoeveelheden, bereidingstijden, temperaturen en of alle ingrediënten in de stappen terugkomen.
 Recept (JSON): ${JSON.stringify({ naam: recept.naam, vezels: recept.vezels, eiwitten: recept.eiwitten, tijd: recept.tijd, ingredienten: recept.ingredienten, bereiding: recept.bereiding })}
@@ -3757,19 +3867,21 @@ Regels:
 - Houd de stijl van Chef aan en maak geen exotische ingrediënten van een gewoon recept: ${CHEF_STIJL}
 - Tijd eerlijk: tel alle stappen mee en rond naar boven af.
 Antwoord ALLEEN met geldige JSON in exact dit formaat, zonder uitleg:
-{"naam":"...","personen":${recept.personen||2},"voedingsbasis":"per_portie","vezels":"~Xg","eiwitten":"~Xg","koolhydraten":"~Xg","vet":"~Xg","tijd":"X min","ingredienten":["hoeveelheid ingredient","..."],"bereiding":["Stap 1...","..."]}`;
+{"naam":"...","personen":${recept.personen||2},"voedingsbasis":"per_portie","vezels":"~Xg","eiwitten":"~Xg","koolhydraten":"~Xg","vet":"~Xg","kcal":"~X kcal","tijd":"X min","ingredienten":["hoeveelheid ingredient","..."],"bereiding":["Stap 1...","..."]}`;
     const raw = await callAI(prompt, 900);
     const nieuw = validateChefRecipes([safeParseJSON(raw)],recept.personen||2,1)[0];
+    if (tweak === 'vega') { const hit = ccAvoidHit([nieuw.naam, ...nieuw.ingredienten], ['vlees','vis']); if (hit) throw Error(`Er zat nog ${hit} in. Probeer het opnieuw.`); }
     // A revised idea must not silently overwrite a previously planned or saved recipe.
     delete recept._savedRecipeId;
-    Object.assign(recept, nieuw, {_type:recept._type, soort:recept.soort, moment:recept.moment, tags:recept.tags});
+    Object.assign(recept, nieuw, {_type:recept._type, soort:recept.soort, moment:recept.moment, tags:tweak === 'vega' ? CC_TAGS.filter(t => t === 'vega' || (recept.tags || []).includes(t)) : recept.tags});
     const kaart = document.getElementById('gencard-' + tmpId);
     if (kaart) kaart.outerHTML = recipeCardHTML(recept);
     showBanner('green', `✓ Recept aangepast: ${recept.naam}`);
   } catch(e) {
-    showBanner('red', e.message || 'Aanpassen mislukt.');
-    const b = document.getElementById('aanpas-btn-' + tmpId);
-    if (b) { b.disabled = false; b.textContent = 'Pas recept aan'; }
+    const s = document.getElementById('tweak-status-' + tmpId); if (s) s.textContent = e.message || 'Aanpassen lukte niet. Probeer het opnieuw.';
+  } finally {
+    const c = document.getElementById('gencard-' + tmpId);
+    if (c) { delete c.dataset.busy; c.querySelectorAll('.cc-tweaks button, #aanpas-btn-' + tmpId).forEach(b => { b.disabled = false; }); }
   }
 }
 
@@ -4628,9 +4740,11 @@ function ccRenderMood(){
  el.innerHTML=`<div class="cc-water-row"><div class="cc-water-label"><h2 class="vandaag-section-h">Gevoel</h2><span class="cc-water-count" aria-live="polite">${label?`<strong>${label}</strong>`:'Hoe is het?'}</span></div><div class="cc-moods" role="group" aria-label="Hoe voel je je vandaag?">${CC_MOODS.map(([k,l,mouth])=>`<button type="button" class="cc-mood" aria-pressed="${mood===k}" aria-label="${l}" onclick="ccSetMood('${k}')"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9.2"/><circle cx="9" cy="10" r=".9" fill="currentColor" stroke="none"/><circle cx="15" cy="10" r=".9" fill="currentColor" stroke="none"/><path d="${mouth}"/></svg></button>`).join('')}</div></div>`;
 }
 // Wat kan ik vragen? Eén lijst voorbeelden voor Coach (venster), de opening en het einde van de wizard.
-const CC_EXAMPLES=[{kop:'Loggen',sub:'Zeg wat je deed of at',icon:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>',items:['Vanochtend 8 km gelopen','Havermout met banaan als ontbijt']},{kop:'Advies',sub:'Vraag wat past bij je dag',icon:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 0 1-11.6 7.1L4 20l1-4.2A8 8 0 1 1 20 12z"/></svg>',items:['Wat eet ik na mijn training?','Ik ben moe, wat nu?']},{kop:'Inzicht',sub:'Zie hoe je week gaat',icon:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>',items:['Hoeveel heb ik deze week bewogen?','Hoe sta ik ervoor met vezels?']},{kop:'Plannen',sub:'Zet iets klaar of schuif het op',icon:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4m6-4v4"/></svg>',items:['Zet morgen een wandeling op de planning','Schuif mijn run naar donderdag']}];
+const CC_EXAMPLES=[{kop:'Loggen',sub:'Zeg wat je deed of at',icon:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>',items:['Vanochtend 8 km gelopen','40 minuten gewandeld met Otis','Havermout met banaan als ontbijt']},{kop:'Trainen',sub:'Leer het en bouw het op',icon:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M9 2h6"/></svg>',items:['Ik wil beginnen met intervaltraining. Hoe doe ik dat?','Maak een opbouw naar 10 km','Krachttraining met dumbbells en een bankje','Hoe warm ik goed op voor een run?']},{kop:'Advies',sub:'Vraag wat past bij je dag',icon:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 0 1-11.6 7.1L4 20l1-4.2A8 8 0 1 1 20 12z"/></svg>',items:['Wat eet ik na mijn training?','Wat eet ik voor een lange duurloop?','Mijn kuit is stijf: lopen of rusten?','Ik ben moe, wat nu?']},{kop:'Inzicht',sub:'Zie hoe je week gaat',icon:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>',items:['Hoeveel heb ik deze week bewogen?','Hoe sta ik ervoor met vezels?','Wat ging goed deze week?']},{kop:'Plannen',sub:'Zet iets klaar of schuif het op',icon:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4m6-4v4"/></svg>',items:['Zet morgen een wandeling op de planning','Plan drie runs deze week, met rust ertussen','Schuif mijn run naar donderdag']}];
+// Zolang er geen gesprek is: drie korte voorbeeldvragen onder de invoer (willekeurig, één keer per start). Tik = in de invoer, niet versturen.
+function ccRenderTry(){const el=document.getElementById('cc-try');if(!el||el.childElementCount)return;const pool=[];CC_EXAMPLES.forEach((g,i)=>{if(g.kop!=='Loggen')g.items.forEach((t,j)=>{if(t.length<=36)pool.push([i,j]);});});for(let k=pool.length-1;k>0;k--){const m=Math.floor(Math.random()*(k+1));[pool[k],pool[m]]=[pool[m],pool[k]];}el.innerHTML=pool.slice(0,3).map(([i,j])=>`<button type="button" onclick="ccUseExample(${i},${j})">${CC_EXAMPLES[i].items[j]}</button>`).join('');}
 function ccOpenExamples(){showModal(`<div class="modal-header"><h2>Wat kan ik vragen?</h2>${flowClose()}</div><p class="cc-sheet-note cc-ex-note">Tik op een voorbeeld; het komt klaar te staan in je invoer.</p>${CC_EXAMPLES.map((g,i)=>`<section class="cc-ex-card"><div class="cc-ex-head"><span class="cc-intro-ic">${g.icon}</span><span><strong>${g.kop}</strong><small>${g.sub}</small></span></div><div class="cc-ex-bubbles">${g.items.map((t,j)=>`<button type="button" class="cc-ex-bubble" onclick="ccUseExample(${i},${j})">${t}</button>`).join('')}</div></section>`).join('')}`);}
-function ccUseExample(i,j){const input=document.getElementById('coach-front-input'),t=CC_EXAMPLES[i]?.items[j];if(!input||!t)return;closeModal();input.value=t;ccResizeComposer(input);input.focus();}
+function ccUseExample(i,j){const input=document.getElementById('coach-front-input'),t=CC_EXAMPLES[i]?.items[j];if(!input||!t)return;if(document.getElementById('modal-container')?.innerHTML)closeModal();input.value=t;ccResizeComposer(input);input.focus();}
 
 // Eerste keer instellen: één vraag per scherm, tikken in plaats van typen. Ook later te starten via Instellingen › Opnieuw instellen.
 const CC_SPORTS=['Hardlopen','Fietsen','Krachttraining','Wandelen','Zwemmen','Yoga'];
@@ -5472,9 +5586,9 @@ function addFrontBubble(role, text) {
     const safeText = text.replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/\n/g,' ');
     div.innerHTML = formatCoachText(text) +
       `<div class="cc-reply-tools">
-        <button class="bubble-play-btn cc-reply-btn" data-playing="false" onclick="toggleBubblePlay(this,${flowArg(text)})" title="Antwoord voorlezen" aria-label="Antwoord voorlezen">${_iconPlay()}</button>
+        <button class="bubble-play-btn cc-reply-btn is-icon" data-playing="false" onclick="toggleBubblePlay(this,${flowArg(text)})" title="Antwoord voorlezen" aria-label="Antwoord voorlezen">${_iconPlay()}</button>
         <button class="cc-reply-btn" onclick="askUitgebreider(this)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Meer detail</button>
-        <button class="cc-reply-btn" onclick="pinFrontTip('${tipId}',this)"><svg class="cc-icon" data-cc-icon="bookmark" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4z"/></svg>Opslaan</button>
+        <button class="cc-reply-btn is-icon" onclick="pinFrontTip('${tipId}',this)" aria-label="Opslaan bij Bewaarde tips" title="Opslaan"><svg class="cc-icon" data-cc-icon="bookmark" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4z"/></svg></button>
       </div>`;
     const fb = document.createElement('span'); fb.className = 'cc-fb-group';
     fb.innerHTML = `<button type="button" class="cc-fb" aria-pressed="false" aria-label="Goed antwoord" onclick="ccFeedback(this,'up')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 10v11H4V10zM7 10l4-7a2 2 0 0 1 3 2l-1 5h6a2 2 0 0 1 2 2.3l-1.3 7A2 2 0 0 1 17.7 21H7"/></svg></button><button type="button" class="cc-fb" aria-pressed="false" aria-label="Niet goed antwoord" onclick="ccFeedback(this,'down')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="transform:rotate(180deg)"><path d="M7 10v11H4V10zM7 10l4-7a2 2 0 0 1 3 2l-1 5h6a2 2 0 0 1 2 2.3l-1.3 7A2 2 0 0 1 17.7 21H7"/></svg></button>`;
@@ -5506,27 +5620,16 @@ function pinFrontTip(id, btn) {
   if (data.savedTips.find(t => t.id === id)) { showBanner('green', 'Al opgeslagen.'); return; }
   data.savedTips.unshift({ id, date: today(), content: text, createdAt: Date.now(), conversationId: limeConversationId() });
   saveAndSync();
-  btn.textContent = '✓ Opgeslagen';
+  if (btn.classList.contains('is-icon')) { btn.querySelector('svg')?.setAttribute('fill','currentColor'); btn.setAttribute('aria-label','Opgeslagen'); btn.title='Opgeslagen'; }
+  else btn.textContent = '✓ Opgeslagen';
   btn.disabled = true;
   showBanner('green', 'Tip opgeslagen onder Coach → Opgeslagen tips.');
 }
 
-function _maybeAppendChefLink(userMsg, aiReply) {
-  const foodWords = /recept|maaltijd|ontbijt|lunch|diner|snack|ingredi|koken|bereid|voeding|vezels|eiwit|calorie|groente|fruit|pasta|rijst|soep|salade|eten na|herstel.*eet|eet.*herstel/i;
-  if (!foodWords.test(aiReply) && !foodWords.test(userMsg)) return;
-  const win = document.getElementById('coach-front-chat');
-  if (!win) return;
-  const bubbles = win.querySelectorAll('.coach-bubble-ai');
-  const last = bubbles[bubbles.length - 1];
-  if (!last) return;
-  const btn = document.createElement('button');
-  btn.style.cssText = 'display:inline-flex;align-items:center;gap:5px;margin-top:8px;background:var(--card2);border:1.5px solid var(--border);border-radius:8px;padding:5px 10px;font-size:12px;font-weight:600;color:var(--accent-food);cursor:pointer;font-family:inherit;';
-  btn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v12"/><path d="M18 9a3 3 0 0 0-3-3H6"/><path d="M6 15a6 6 0 0 0 12 0"/></svg> Naar Chef';
-  btn.onclick = () => {
-    const foodBtn = document.querySelector('.tab-btn[onclick*="recepten"]');
-    if (foodBtn) { switchTab('recepten', foodBtn); try { switchFoodTab('chef'); } catch(_) {} }
-  };
-  last.appendChild(btn);
+// Ging het over eten? Dan krijgt het antwoord een vervolgknop Naar Chef.
+function ccWantsChef(userMsg, aiReply) {
+  const foodWords = /\b(recept\w*|maaltijd\w*|ontbijt|lunch|diner|avondeten|snacks?|ingrediënt\w*|koken|kook\w*|bereiding|voeding\w*|vezels?|eiwit\w*|calorie\w*|groente\w*|fruit|pasta|rijst|soep|salade|eten|eet)\b/i;
+  return foodWords.test(aiReply) || foodWords.test(userMsg);
 }
 
 // ─── Streaming antwoorden ─────────────────────────────────────────────────
@@ -5548,9 +5651,26 @@ function ccCalendar(){return Array.from({length:8},(_,i)=>{const d=ccDateOffset(
 function ccProposalDate(v){if(typeof v!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(v))return null;const min=ccDateOffset(today(),-1),max=ccDateOffset(today(),28);return v>=min&&v<=max?v:null;}
 function ccFindActivity(date,id){return (flowDay(date).activiteiten||[]).find(a=>a&&a.id===id)||null;}
 function ccDayLabel(d){if(d===today())return 'vandaag';if(d===ccDateOffset(today(),1))return 'morgen';if(d===ccDateOffset(today(),-1))return 'gisteren';try{return ['zo','ma','di','wo','do','vr','za'][new Date(d+'T12:00:00').getDay()]+' '+formatShortDate(d);}catch(_){return d;}}
+// Vervolgvragen: komen mee in dezelfde aanroep als tool, worden nooit getoond of voorgelezen als tekst. Tik = die vraag als jouw bericht versturen.
+const CC_FOLLOWUP_TOOL={name:'vervolgvragen',description:'Twee korte vervolgvragen die de gebruiker hierna aan jou kan stellen.',input_schema:{type:'object',properties:{vragen:{type:'array',items:{type:'string'},description:'Twee vragen of verzoeken in de ik-vorm van de gebruiker, elk hooguit 6 woorden, bijvoorbeeld "Hoe bouw ik dit op?" of "Plan het voor donderdag".'}},required:['vragen']}};
+const CC_COACH_TOOLS=[...CC_PROPOSAL_TOOLS,CC_FOLLOWUP_TOOL];
+const CC_FOLLOWUP_RULES='\nVERVOLGVRAGEN: roep na je tekst altijd de tool vervolgvragen aan met twee korte vragen die de gebruiker jou hierna kan stellen. Schrijf ze als de gebruiker zelf (ik-vorm, nooit je of jij), passend bij dit gesprek en zijn dag, en niet wat je net al hebt beantwoord. Noem ze niet in je tekst.';
+function ccValidFollowups(calls){const c=(calls||[]).find(c=>c&&c.name==='vervolgvragen'),v=Array.isArray(c?.input?.vragen)?c.input.vragen:[];return [...new Set(v.map(q=>String(q||'').replace(/\s+/g,' ').trim()))].filter(q=>q.length>=4&&q.length<=40&&!/\b(je|jij|jouw|jullie|you|your)\b/i.test(q)&&!/^(zal ik|shall i)\b/i.test(q)).slice(0,2);}
+// Naar Chef: de laatste vraag en het antwoord van Coach gaan één keer mee naar Chef (alleen in het geheugen). Zichtbaar als label in Chef, met ✕.
+let ccFromCoach=null;
+function ccFromCoachClear(){ccFromCoach=null;flowRenderChef();}
+function _coachRegel(){return ccFromCoach?`Context uit het gesprek met Coach: de gebruiker vroeg ${JSON.stringify(ccFromCoach.vraag)} en Coach antwoordde ${JSON.stringify(ccFromCoach.antwoord)}. Gebruik hieruit alleen wat over eten, voeding of herstel gaat en negeer de rest.`:'';}
+function ccRenderFollowups(list,chef){
+ const win=document.getElementById('coach-front-chat');if(!win||(!list.length&&!chef))return;
+ const row=document.createElement('div');row.className='cc-followups';row.setAttribute('role','group');row.setAttribute('aria-label','Vraag verder');
+ const add=(html,go)=>{const b=document.createElement('button');b.type='button';b.className='cc-followup';b.innerHTML=html;b.onclick=go;row.appendChild(b);};
+ list.forEach(q=>add(escapeText(q),()=>{if(limeReplyController)return;row.remove();coachFrontSend(q);}));
+ if(chef)add('<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3v12"/><path d="M18 9a3 3 0 0 0-3-3H6"/><path d="M6 15a6 6 0 0 0 12 0"/></svg>Naar Chef',()=>{ccFromCoach={vraag:String(chef.vraag).slice(0,300),antwoord:String(chef.antwoord).slice(0,900)};const btn=document.querySelector('.tab-btn[onclick*="recepten"]');if(btn){switchTab('recepten',btn);try{switchFoodTab('chef');}catch(_){}}flowRenderChef();});
+ win.appendChild(row);
+}
 function ccValidProposals(calls){
  const out=[];
- for(const c of (calls||[]).slice(0,2)){
+ for(const c of (calls||[]).filter(c=>c&&c.name!=='vervolgvragen').slice(0,2)){
   const i=c&&c.input||{},reden=String(i.reden||'').slice(0,140);
   if(c.name==='verplaats_activiteit'){const van=ccProposalDate(i.van_datum),naar=ccProposalDate(i.naar_datum);const a=van&&ccFindActivity(van,i.activiteit_id);if(!a||!naar||naar===van||a.afgevinkt)continue;out.push({...c,input:i,titel:a.naam+' naar '+ccDayLabel(naar),sub:ccDayLabel(van)+' → '+ccDayLabel(naar),reden});}
   else if(c.name==='wijzig_activiteit'){const d=ccProposalDate(i.datum);const a=d&&ccFindActivity(d,i.activiteit_id);const naam=typeof i.nieuwe_naam==='string'?i.nieuwe_naam.trim().slice(0,80):'',detail=typeof i.nieuw_detail==='string'?i.nieuw_detail.trim().slice(0,160):'',duur=Number(i.nieuwe_duur_minuten);if(!a||a.afgevinkt||(!naam&&!detail&&!(duur>0&&duur<=600)))continue;out.push({...c,input:{...i,nieuwe_naam:naam,nieuw_detail:detail,nieuwe_duur_minuten:duur>0&&duur<=600?Math.round(duur):null},titel:(naam||a.naam)+(duur>0&&duur<=600?' · '+Math.round(duur)+' min':''),sub:'In plaats van '+a.naam+(a.duur?' ('+a.duur+' min)':'')+' · '+ccDayLabel(d),reden});}
@@ -5648,11 +5768,12 @@ async function ccEvalJudge(c,ans){
 const CC_CHEF_EVAL=[
  {modus:'voor',vraag:'Eten voor het sporten',criteria:'Koolhydraatrijk, weinig vezels en vet. Een snack voor 30–60 min vooraf en een lichte maaltijd voor 2–3 uur vooraf, met het moment in de naam. 1 portie.'},
  {modus:'na',vraag:'Eten na het sporten',criteria:'Herstel: 20–30 g eiwit plus koolhydraten. Een snack en een echte maaltijd. 1 portie.'},
- {modus:'makkelijk',vraag:'Makkelijke maaltijd',criteria:'Hooguit 30 minuten en 8 ingrediënten, toch echt lekker. 30–45 g eiwit per portie.'},
+ {modus:'makkelijk',vraag:'Makkelijke maaltijd',criteria:'Liefst hooguit 20 minuten (nooit meer dan 25) en 8 ingrediënten, toch echt lekker. 30–45 g eiwit per portie.'},
+ {modus:'mealprep',vraag:'Meal prep voor meerdere dagen',criteria:'Blijft 3 tot 4 dagen goed, koud of opgewarmd lekker; saus of topping apart; laatste stap over verdelen, bewaren en opwarmen; minstens 4 porties; 30–45 g eiwit per portie.'},
  {modus:'comfort',vraag:'Comfortfood',criteria:'Warm, vullend en troostend, met een frisse, gezonde draai. Voedzaam.'},
  {modus:'auto',vraag:'Iets met zalm en broccoli, binnen 20 minuten',criteria:'Gebruikt zalm en broccoli en is binnen 20 minuten klaar.'}
 ];
-const CC_CHEF_EVAL_ALGEMEEN='Voor iedereen: sportief en trendy, gezond zonder dieetgedoe; vormen als bowl, wrap, bakplaat of één pan; hoeveelheden in gram of ml; gewone supermarkt; korte pakkende naam; korte concrete stappen; praktisch met spullen die men vaak in huis heeft; eerlijke bereidingstijd; geen rijstwafels tenzij erom gevraagd; snacks leuk voor een jonge doelgroep; klopt en is haalbaar.';
+const CC_CHEF_EVAL_ALGEMEEN='Voor iedereen: sportief en trendy, gezond zonder dieetgedoe; vormen als bowl, wrap, bakplaat of één pan; hoeveelheden in gram of ml; gewone supermarkt; korte pakkende naam; korte concrete stappen; praktisch met spullen die men vaak in huis heeft; eerlijke bereidingstijd; geen rijstwafels tenzij erom gevraagd; snacks leuk voor een jonge doelgroep; een eiwitsnack heeft echt minstens 5 g eiwit; geen eiwitpoeder of merkproducten tenzij gevraagd; snel = liefst hooguit 20 minuten; klopt en is haalbaar.';
 async function ccChefEvalJudge(c,recipes){
  const kort=recipes.map(r=>({naam:r.naam,tijd:r.tijd,personen:r.personen,eiwit:r.eiwitten,vezels:r.vezels,ingredienten:r.ingredienten,bereiding:r.bereiding}));
  return ccJudgeParse(await callAIFast('Je beoordeelt receptvoorstellen van een kook-app. Wees streng maar redelijk.\nVraag: '+JSON.stringify(c.vraag)+'\nCriteria: '+c.criteria+' '+CC_CHEF_EVAL_ALGEMEEN+'\nRecepten: '+JSON.stringify(kort)+'\nAntwoord met alleen dit JSON-object en niets anders, zonder aanhalingstekens in de reden: {"oordeel":"goed"|"matig"|"fout","reden":"max 20 woorden"}',400));
@@ -5732,7 +5853,7 @@ async function callAIStream(messages, maxTokens, options = {}) {
   method: 'POST', signal,
   headers: {'Content-Type': 'application/json','x-api-key': settings.anthropicKey,'anthropic-version': '2023-06-01','anthropic-dangerous-direct-browser-access': 'true'},
   body: JSON.stringify(Object.assign({model: options.model || CC_MODEL_MAIN, max_tokens: maxTokens, stream: true,
-   system: options.system || (buildSystemPrompt([...messages].reverse().find(m=>m.role==='user')?.content||'') + (options.tools ? CC_PROPOSAL_RULES : '')), messages}, options.tools ? {tools: options.tools, tool_choice: {type: 'auto'}} : {}))
+   system: options.system || (buildSystemPrompt([...messages].reverse().find(m=>m.role==='user')?.content||'') + (options.tools ? CC_PROPOSAL_RULES + (options.tools.includes(CC_FOLLOWUP_TOOL) ? CC_FOLLOWUP_RULES : '') : '')), messages}, options.tools ? {tools: options.tools, tool_choice: {type: 'auto'}} : {}))
  });
  if (resp.status === 401) throw new Error('API-sleutel niet geldig — check instellingen.');
  if (resp.status === 429) throw new Error('Wacht even en probeer het opnieuw.');
@@ -5896,6 +6017,7 @@ async function coachFrontSend(msgOverride, displayMsg) {
   data.chatHistorie.push({ role: 'user', content: msg, createdAt: Date.now(), conversationId: limeConversationId() });
   if (data.chatHistorie.length > 20) data.chatHistorie.shift();
   try { renderChatHistory(); } catch(_) {}
+  ccRenderMemoryNotice();
 
   // Thinking-bubble
   const win = document.getElementById('coach-front-chat');
@@ -5912,7 +6034,7 @@ async function coachFrontSend(msgOverride, displayMsg) {
     const detailed = /uitgebreid|meer detail|toelichten/i.test(msg);
     const spoken = ccSpokenTurn || (!!ccSpokenDraft && ccSpokenDraft === msg.trim()); ccSpokenTurn = false; if (spoken) ccSpokenDraft = '';
     speaker = spoken ? ccCreateSentenceSpeaker() : null;
-    const result = await callAIStream(messages, detailed ? 900 : 450, {signal: request.signal, tools: CC_PROPOSAL_TOOLS, onText: (delta, full) => {
+    const result = await callAIStream(messages, detailed ? 950 : 500, {signal: request.signal, tools: CC_COACH_TOOLS, onText: (delta, full) => {
       if (request.signal.aborted) return;
       thinking.classList.remove('thinking'); thinking.textContent = full;
       if (win) win.scrollTop = win.scrollHeight;
@@ -5929,7 +6051,7 @@ async function coachFrontSend(msgOverride, displayMsg) {
     saveAndSync();
     addFrontBubble('ai', reply);
     if (proposals.length) ccRenderProposals(proposals, historyEntry);
-    _maybeAppendChefLink(msg, reply);
+    ccRenderFollowups(ccValidFollowups(result.toolCalls), ccWantsChef(msg, reply) ? {vraag: displayMsg || msg, antwoord: reply} : null);
     try { renderChatHistory(); } catch(_) {}
     // Voorlezen is beschikbaar bij dit antwoord.
     _updateCoachMemory(msg, reply).catch(() => {});
@@ -6169,7 +6291,7 @@ Lege arrays [] voor activiteiten/maaltijden als geen van toepassing. Geen uitleg
         herhaaltxt = act.herhaal === 'week' ? ' · hele week' : ' · ma–vr';
       } else {
         targetDates = _resolveDatesMulti(act.datum);
-        herhaaltxt = targetDates.length > 1 ? ` · ${act.datum || ''}` : (targetDates[0] !== todayStr ? ` · ${act.datum || ''}` : '');
+        herhaaltxt = targetDates.length > 1 || targetDates[0] !== todayStr ? ` · ${targetDates.map(formatShortDate).join(', ')}` : '';
       }
 
       targetDates.forEach(actDate => {
@@ -6212,7 +6334,7 @@ Lege arrays [] voor activiteiten/maaltijden als geen van toepassing. Geen uitleg
             data.weken[wk][dateStr].maaltijden[slot].push({ ...mItem, id:mItem.id+'-'+dateStr });
           }
         });
-        const herhaaltxt = m.herhaal === 'week' ? ' · hele week' : m.herhaal === 'werkdagen' ? ' · ma–vr' : (m.datum && m.datum !== 'vandaag') ? ` · ${m.datum}` : '';
+        const herhaaltxt = m.herhaal === 'week' ? ' · hele week' : m.herhaal === 'werkdagen' ? ' · ma–vr' : (m.datum && m.datum !== 'vandaag') ? ` · ${/^\d{4}-\d\d-\d\d$/.test(m.datum) ? formatShortDate(m.datum) : m.datum}` : '';
         acties.push(`✓ ${m.naam} · ${m.gegeten ? 'gegeten' : 'gepland'} als ${slot}${herhaaltxt}`);
     });
 
@@ -6820,15 +6942,14 @@ function rememberLogChange(before, label) {
   _lastLogChange = {before,after:logFingerprint(data),records,label};
   const el = document.getElementById('log-feedback');
   if (!el) return;
-  const status=document.getElementById('smart-input-status'); if(status)status.textContent='Opgeslagen.';
   el.hidden = false;
-  el.innerHTML = `<strong>Opgeslagen</strong><div>${escapeText(label)}</div><div class="log-feedback-actions">${records.length ? '<button onclick="showLastLogEdit()">Wijzigen</button>' : ''}<button onclick="undoLastLog()">Ongedaan maken</button><button onclick="document.getElementById('log-feedback').hidden=true" aria-label="Bevestiging sluiten">Sluiten</button></div>`;
+  el.innerHTML = `<div class="log-feedback-head"><strong>Opgeslagen</strong><button type="button" class="log-feedback-close" onclick="document.getElementById('log-feedback').hidden=true" aria-label="Bevestiging sluiten"><svg class="cc-icon" data-cc-icon="close" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div><div>${escapeText(label)}</div><div class="log-feedback-actions">${records.length ? '<button onclick="showLastLogEdit()">Wijzigen</button>' : ''}<button onclick="undoLastLog()">Ongedaan maken</button></div>`;
 }
 
 function undoLastLog() {
   if (!_lastLogChange) return;
   if (logFingerprint(data) !== _lastLogChange.after) {
-    showBanner('yellow','Je hebt hierna nog iets aangepast. Wijzig de registratie zelf om latere wijzigingen te behouden.');
+    showBanner('yellow','Dit kan niet meer ongedaan worden gemaakt, want er is daarna iets veranderd. Pas het aan in Jouw dag.');
     return;
   }
   data = JSON.parse(JSON.stringify(_lastLogChange.before));
@@ -6849,13 +6970,18 @@ function openLogEdit(index) {
   const ref = _lastLogChange?.records[index];
   const record = ref && logRecords(data).find(r => r.item.id === ref.item.id && r.date === ref.date && r.slot === ref.slot);
   if (!record) { showBanner('yellow','Deze registratie is inmiddels gewijzigd. Open hem in je dagoverzicht.'); return; }
+  if (record.slot === 'activiteiten') {
+    flowActivityForm(record.date, record.item.id); flowActivityEdit.fromLog = true;
+    if (window._logEditDate) document.getElementById('flow-act-date').value = window._logEditDate;
+    return;
+  }
   window._editingLog = record;
-  const item=record.item, activity=record.slot==='activiteiten';
+  const item=record.item;
   showModal(`<h2 style="margin-bottom:16px">Registratie wijzigen</h2>
     <label class="modal-label" for="log-edit-name">Naam</label><input id="log-edit-name" class="modal-input" value="${escapeText(item.naam)}">
     <label class="modal-label" for="log-edit-date">Datum</label><input id="log-edit-date" type="date" class="modal-input" value="${window._logEditDate || record.date}">
-    <label class="modal-label" for="log-edit-status">Status</label><select id="log-edit-status" class="modal-input"><option value="done" ${(activity ? item.afgevinkt : item.gegeten) ? 'selected' : ''}>${activity ? 'Gedaan' : 'Gegeten'}</option><option value="planned" ${!(activity ? item.afgevinkt : item.gegeten) ? 'selected' : ''}>Gepland</option></select>
-    ${activity ? '' : `<label class="modal-label" for="log-edit-slot">Maaltijdmoment</label><select id="log-edit-slot" class="modal-input">${['ontbijt','lunch','diner','snack'].map(slot => `<option ${slot===record.slot ? 'selected' : ''}>${slot}</option>`).join('')}</select><label class="modal-label" for="log-edit-protein">Proteïne (gram, schatting)</label><input id="log-edit-protein" class="modal-input" value="${escapeText(item.eiwitten)}"><label class="modal-label" for="log-edit-fiber">Vezels (gram, schatting)</label><input id="log-edit-fiber" class="modal-input" value="${escapeText(item.vezels)}">`}
+    <label class="modal-label" for="log-edit-status">Status</label><select id="log-edit-status" class="modal-input"><option value="done" ${item.gegeten ? 'selected' : ''}>Gegeten</option><option value="planned" ${!item.gegeten ? 'selected' : ''}>Gepland</option></select>
+    <label class="modal-label" for="log-edit-slot">Maaltijdmoment</label><select id="log-edit-slot" class="modal-input">${['ontbijt','lunch','diner','snack'].map(slot => `<option ${slot===record.slot ? 'selected' : ''}>${slot}</option>`).join('')}</select><label class="modal-label" for="log-edit-protein">Proteïne (gram, schatting)</label><input id="log-edit-protein" class="modal-input" value="${escapeText(item.eiwitten)}"><label class="modal-label" for="log-edit-fiber">Vezels (gram, schatting)</label><input id="log-edit-fiber" class="modal-input" value="${escapeText(item.vezels)}">
     <button class="btn btn-primary btn-full" onclick="saveLogEdit()">Wijziging opslaan</button><button class="btn btn-ghost btn-full" onclick="closeModal()">Annuleren</button>`);
 }
 
@@ -6866,20 +6992,19 @@ function saveLogEdit() {
   const date=document.getElementById('log-edit-date').value;
   try { assertLogDate(date); if (!name) throw new Error('Vul een naam in.'); } catch(e) { showBanner('red',e.message); return; }
   const before=JSON.parse(JSON.stringify(data));
-  const activity=ref.slot==='activiteiten', done=document.getElementById('log-edit-status').value==='done';
-  const slot=activity ? 'activiteiten' : document.getElementById('log-edit-slot').value;
+  const done=document.getElementById('log-edit-status').value==='done';
+  const slot=document.getElementById('log-edit-slot').value;
   const oldDay=ensureDay(ref.date), targetDay=ensureDay(date);
-  const oldList=activity ? oldDay.activiteiten : oldDay.maaltijden[ref.slot];
+  const oldList=oldDay.maaltijden[ref.slot];
   const index=oldList.findIndex(m=>m.id===ref.item.id);
   if (index<0) return;
   const item={...oldList[index],naam:name};
-  if (activity) item.afgevinkt=done;
-  else { item.gegeten=done; item.gepland=!done; item.eiwitten=document.getElementById('log-edit-protein').value.trim(); item.vezels=document.getElementById('log-edit-fiber').value.trim(); }
+  item.gegeten=done; item.gepland=!done; item.eiwitten=document.getElementById('log-edit-protein').value.trim(); item.vezels=document.getElementById('log-edit-fiber').value.trim();
   oldList.splice(index,1);
-  const target=activity ? (targetDay.activiteiten ||= []) : (targetDay.maaltijden[slot] ||= []);
+  const target=(targetDay.maaltijden[slot] ||= []);
   target.push(item);
   saveAndSync(); closeModal(); renderAll();
-  rememberLogChange(before,`${name} · ${formatShortDate(date)} · ${done ? (activity ? 'gedaan' : 'gegeten') : 'gepland'}`);
+  rememberLogChange(before,`${name} · ${formatShortDate(date)} · ${done ? 'gegeten' : 'gepland'}`);
 }
 
 
@@ -6892,8 +7017,9 @@ function saveLogEdit() {
 function compactConversation() {
   const win=document.getElementById('coach-front-chat');if(!win)return;
   const children=Array.from(win.children);
-  const latest=children.filter(el=>el.classList.contains('coach-bubble-ai')).pop();
-  children.forEach(el=>{el.hidden=el!==latest;});
+  // Toon je laatste vraag en alles daarna: het antwoord, voorstellen en vervolgvragen.
+  const user=children.map(el=>el.classList.contains('coach-bubble-user')).lastIndexOf(true),from=user>=0?user:Math.max(0,children.map(el=>el.classList.contains('coach-bubble-ai')).lastIndexOf(true));
+  children.forEach((el,i)=>{el.hidden=i<from;});
   const btn=document.getElementById('conversation-history-btn');
   if(btn)btn.hidden=!(data.chatHistorie||[]).length && children.length<2;
   const forget=document.getElementById('lime-forget-conversation');if(forget)forget.hidden=!(data.chatHistorie||[]).length && !limeReplyController;
@@ -6922,9 +7048,9 @@ function isLegacyStarter(r) {
 function myRecipes(){return (data.recepten||[]).filter(r=>!r.flowDeleted&&!r._chefTransient&&!isLegacyStarter(r));}
 
 function mealNutrients(m){
-  const amount=v=>escapeText(String(v||'onbekend').replace(/^~/,'≈').replace(/(\d)g\b/g,'$1 g'));
+  const amount=v=>escapeText(String(v||'onbekend').replace(/^~/,'≈').replace(/(\d)g\b/g,'$1 g').replace(/(\d)kcal\b/gi,'$1 kcal'));
   const known=v=>v&&/\d/.test(v);
-  return `<span>Eiwit ${amount(m.eiwitten)}</span><span>Vezels ${amount(m.vezels)}</span>${known(m.koolhydraten)?`<span>Koolhydraten ${amount(m.koolhydraten)}</span>`:''}${known(m.vet)?`<span>Vet ${amount(m.vet)}</span>`:''}`;
+  return `<span>Eiwit ${amount(m.eiwitten)}</span><span>Vezels ${amount(m.vezels)}</span>${known(m.koolhydraten)?`<span>Koolhydraten ${amount(m.koolhydraten)}</span>`:''}${known(m.vet)?`<span>Vet ${amount(m.vet)}</span>`:''}${known(m.kcal)?`<span>${amount(m.kcal)}</span>`:''}`;
 }
 function showAddMealOptions(){return flowAddMeal();}
 
@@ -6940,9 +7066,13 @@ let genPersonen = [1, 2, 3, 4, 5, 6].includes(Number(localStorage.getItem('hc_ge
 
 function saveMealRecipe(id){const r=(data.recepten||[]).find(x=>x.id===id);if(!r)return;r.bewaard=true;r._chefTransient=false;r.flowDeleted=false;saveAndSync();_renderFoodReceptenList();closeModal();showBanner('green','Bewaard in Mijn recepten.');}
 const CHEF_STIJL=`STIJL VAN CHEF:
-- Voor een sportieve, trendy eter: gezond zonder dieetgedoe, fris, veel smaak en een beetje hip, op het niveau van Chickslovefood, Leuke Recepten, OhMyFoodness, Mob, Eat the Gains en Ottolenghi. Extra inspiratie: Ottolenghi (veel kruiden, zuur, granaatappel, tahin, za'atar), Laura's Bakery (gezond bakken en ontbijt, haalbaar), Veggilaine en bekende foodcreators op TikTok en Instagram (kleurrijk, één pan of bakplaat, makkelijk na te maken). Gebruik ze als smaak en stijl, kopieer geen recepten en noem geen namen in het recept.
+- Voor een sportieve, trendy eter: gezond zonder dieetgedoe, fris, veel smaak en een beetje hip, op het niveau van Chickslovefood, Leuke Recepten, OhMyFoodness, Mob, Eat the Gains en Ottolenghi. Extra inspiratie: Ottolenghi (veel kruiden, zuur, granaatappel, tahin, za'atar), Laura's Bakery (gezond bakken en ontbijt, haalbaar), Veggilaine, Mason Fit (eiwitrijk comfortfood), Joy to the Food (eiwitrijke snacks zonder poeder), Pick Up Limes, Minimalist Baker, Beaufood en bekende foodcreators op TikTok en Instagram (kleurrijk, één pan of bakplaat, makkelijk na te maken). Gebruik ze als smaak en stijl, kopieer geen recepten en noem geen namen in het recept.
 - Vaste vormen die werken: bowl, wrap, bakplaat, één pan, overnight oats, yoghurt- of kwarkbowl. Varieer daarbinnen en wissel af.
 - Eiwit ruim en zichtbaar: een maaltijd 30–45 g eiwit per portie, een snack 5–20 g. Slimme bronnen: Griekse yoghurt, kwark, cottage cheese, eieren, peulvruchten, tofu, tempeh, edamame, en vis of vlees als het eetpatroon dat toestaat.
+- Cottage cheese en Griekse yoghurt zijn ook de basis voor hartige snacks en dips (queso, ranch, yoghurt-hummus). Een eiwitsnack levert echt minstens 5 g eiwit; energieballetjes zonder eiwitbron tellen niet. Snack in stuks (balletjes, muffins, repen): zet in de laatste stap hoeveel stuks één portie is en hoeveel eiwit één stuk ongeveer heeft.
+- Eiwit uit gewone producten: geen eiwitpoeder, eiwitrepen of merkproducten, tenzij de gebruiker erom vraagt. Geen kip- of kalkoengehakt als standaard (in Nederland minder gangbaar); kies kipdij of kipfilet, rundergehakt, linzen of tofu.
+- Meal-prep-vriendelijk waar het past: lunch en diner liefst zo dat het 3 tot 4 dagen goed blijft in de koelkast en koud of opgewarmd lekker is; zeg in een stap wat je vooruit kunt maken.
+- Ijkpunt voor niveau en toon (niet kopiëren): eiwitrijke overnight oats, omelet-wrap, sushi bowl, crispy chicken wrap, taco bowl, burrito bowl, Griekse kipballetjes met krieltjes van de bakplaat, zalm met zoete aardappel van één bakplaat, butter paneer curry, linzen-kokoscurry; snacks als cottage cheese queso, geroosterde kikkererwten, gevulde eieren met avocado, komkommerrolletjes met zalm, loaded appel-nacho's en mango-kwarkrepen.
 - Groente voorop, met contrast: iets fris of zuurs, iets knapperigs, een saus of dip, verse kruiden.
 - Snel waar het kan, maar eerlijk: tel wassen, snijden, oven voorverwarmen, koken en rusten mee, en reken voor een thuiskok, niet voor een chef. Twijfel je, rond dan naar boven af. Een ovenrecept duurt minstens 25 minuten.
 - Hoeveelheden in gram of ml waar het kan, ook bij groente, fruit en kaas (bijvoorbeeld "150 g avocado" in plaats van "1 avocado"); alleen eieren en kleine dingen zoals een teentje knoflook in stuks; zout, peper en verse kruiden mogen "naar smaak". Nooit cups of ounces. Ingrediënten uit een gewone supermarkt.
@@ -6950,18 +7080,19 @@ const CHEF_STIJL=`STIJL VAN CHEF:
 - Stappen: kort, actief en concreet, bijvoorbeeld "Rooster 20 min op 220 °C". Geen lappen tekst.
 - Praktisch: bouw elk recept op basisvoorraad (eieren, yoghurt of kwark, havermout, rijst, pasta, wraps, bonen of kikkererwten uit blik, tomaten uit blik, ui, knoflook, citroen, diepvriesgroente, kaas, pindakaas, specerijen). Voeg hooguit 3 verse of bijzondere ingrediënten toe die het verschil maken. Liever een slimme twist op iets bekends dan een lijst exotische producten.
 - Afwisseling. Rijstwafels en rijstcrackers alleen als de gebruiker erom vraagt. Wissel de basis af (brood, wrap, havermout, yoghurt, kwark, fruit, smoothie, ei, peulvruchten) en gebruik binnen één reeks voorstellen nooit twee keer dezelfde basis.`;
-const CHEF_SCHEMA='[{"naam":"...","personen":2,"voedingsbasis":"per_portie","vezels":"~Xg","eiwitten":"~Xg","koolhydraten":"~Xg","vet":"~Xg","tags":["bowl","snel"],"tijd":"20 min","ingredienten":["200 g ingrediënt"],"bereiding":["Concrete stap met tijd en indien nodig temperatuur"]}]';
+const CHEF_SCHEMA='[{"naam":"...","personen":2,"voedingsbasis":"per_portie","vezels":"~Xg","eiwitten":"~Xg","koolhydraten":"~Xg","vet":"~Xg","kcal":"~X kcal","tags":["bowl","snel"],"tijd":"20 min","ingredienten":["200 g ingrediënt"],"bereiding":["Concrete stap met tijd en indien nodig temperatuur"]}]';
 function validateChefRecipe(r,persons){
   if(!r||typeof r.naam!=='string'||!r.naam.trim()||r.naam.length>180||r.personen!==persons||r.voedingsbasis!=='per_portie')throw Error('Porties of voedingsbasis ontbreken. Probeer opnieuw.');
   for(const key of ['ingredienten','bereiding'])if(!Array.isArray(r[key])||!r[key].length||!r[key].every(x=>typeof x==='string'&&x.trim()))throw Error('Ingrediënten of bereidingsstappen ontbreken. Probeer opnieuw.');
   if(r.ingredienten.filter(x=>!/\d|[½¼¾⅓⅔]|snuf|naar smaak|pinch|to taste|handful/i.test(x)).length>3)throw Error('Niet alle hoeveelheden zijn duidelijk. Probeer opnieuw.');
   if(typeof r.tijd!=='string'||!/^\d+\s*min$/.test(r.tijd)||parseInt(r.tijd)<1)throw Error('De bereidingstijd ontbreekt. Probeer opnieuw.');
   for(const key of ['vezels','eiwitten','koolhydraten'])if(typeof r[key]!=='string'||!/^~?\d+(?:[.,]\d+)?\s*g$/.test(r[key]))throw Error('Voedingswaarden per portie ontbreken. Probeer opnieuw.');
+  const avoid=ccAvoidHit([r.naam,...r.ingredienten],genDieet==='vega'?['vlees','vis']:genDieet==='vis'?['vlees']:[],settings.lieverNiet||[]);if(avoid)throw Error(`Er zat ${avoid} in, en dat eet je liever niet. Probeer opnieuw.`);
   const sport=['voor','tijdens','na'].includes(flowChefMode),snack=flowChefMode==='tijdens'||flowChefMode==='voorraadsnack'||(sport&&flowSportSoort==='snack'),tijd=ccRealisticTime(r);
   const tags=new Set((Array.isArray(r.tags)?r.tags:[]).map(t=>String(t).toLowerCase().trim()).filter(t=>CC_TAGS.includes(t)));
-  if(sport)tags.add('sport');if(snack)tags.add('snack');const modeTag={makkelijk:'snel',uitgebreid:'weekend',comfort:'comfort'}[flowChefMode];if(modeTag)tags.add(modeTag);
-  if(CC_TAGS.includes(genMaaltijd))tags.add(genMaaltijd);if(genDieet==='vega')tags.add('vega');if(parseInt(tijd)<=20)tags.add('snel');
-  return {...r,tags:CC_TAGS.filter(t=>tags.has(t)),soort:sport?'sport':flowChefMode==='voorraadsnack'?'snack':'maaltijd',...(sport?{moment:flowChefMode}:{}),vet:typeof r.vet==='string'&&/^~?\d+(?:[.,]\d+)?\s*g$/.test(r.vet)?r.vet:'',tijd,naam:r.naam.trim(),_basePersonen:persons,personen:persons,_type:(snack?'snack':genMaaltijd)||undefined};
+  if(sport)tags.add('sport');if(snack)tags.add('snack');const modeTag={makkelijk:'snel',mealprep:'mealprep',comfort:'comfort'}[flowChefMode];if(modeTag)tags.add(modeTag);
+  if(CC_TAGS.includes(genMaaltijd))tags.add(genMaaltijd);if(genDieet==='vega')tags.add('vega');if(parseInt(tijd)<=20)tags.add('snel');if(!CC_MOMENTS.some(m=>tags.has(m)))tags.add('diner');
+  return {...r,tags:CC_TAGS.filter(t=>tags.has(t)),soort:sport?'sport':flowChefMode==='voorraadsnack'?'snack':'maaltijd',...(sport?{moment:flowChefMode}:{}),vet:typeof r.vet==='string'&&/^~?\d+(?:[.,]\d+)?\s*g$/.test(r.vet)?r.vet:'',kcal:typeof r.kcal==='string'&&/^~?\d{2,4}\s*kcal$/i.test(r.kcal.trim())?r.kcal.trim():'',tijd,naam:r.naam.trim(),_basePersonen:persons,personen:persons,_type:(snack?'snack':genMaaltijd)||undefined};
 }
 // Vangnet tegen te optimistische tijden: de minuten uit de stappen plus 5 minuten voorbereiding zijn het minimum.
 function ccRealisticTime(r){
@@ -6986,18 +7117,18 @@ function ccCompleteObjects(text){
   return out;
 }
 function chefRecipePrompt(focus,n,previous,selfCheck){
-  const mode=CC_CHEF_MODES[flowChefMode]||{},persons=mode.sport||mode.snack?1:genPersonen;
+  const mode=CC_CHEF_MODES[flowChefMode]||{},persons=mode.sport||mode.snack?1:flowChefMode==='mealprep'?Math.max(4,genPersonen*2):genPersonen;
   const nutrition=genFocus==='eiwitten'?'Kies een eiwitrijke variant zonder smaak of praktische haalbaarheid op te offeren.':genFocus==='vezels'?'Kies een vezelrijke variant zonder smaak of praktische haalbaarheid op te offeren.':mode.sport||mode.snack||flowChefMode==='comfort'?'':'Lekker én gezond: veel groente, volkoren of peulvruchten, weinig bewerkt. Draag bij aan het vezeldoel van de dag zonder smaak op te offeren.';
   const sportTijd=flowSportSoort&&{voor:{snack:'Hooguit 5 minuten.',maaltijd:'Hooguit 15 minuten.'},na:{snack:'Hooguit 10 minuten.',maaltijd:'Hooguit 30 minuten.'}}[flowChefMode]?.[flowSportSoort];
-  const time=sportTijd||mode.tijd||'Doorgaans maximaal 35 minuten.';
+  const time=sportTijd||mode.tijd||'Liefst 15 tot 25 minuten, hooguit 35.';
   const prompt=`Maak ${n} verschillende, goed maakbare recepten op basis van deze wens: ${focus||'Geef me inspiratie voor een lekkere maaltijd.'}
     ${CHEF_STIJL}
-    ${_dieetRegel()} ${_landRegel()} ${_maaltijdRegel()} ${_momentRegel()} ${_modusRegel()} ${_voorraadRegel()}
+    ${_dieetRegel()} ${_geheugenRegel()} ${_landRegel()} ${_maaltijdRegel()} ${_momentRegel()} ${_modusRegel()} ${_voorraadRegel()} ${mode.sport||mode.snack?'':_dagRegel()} ${_afwisselRegel()} ${_coachRegel()}
     ${nutrition} ${time} Gebruik gewone supermarktingrediënten, concrete hoeveelheden (ook uitlekgewicht waar relevant), smaakmakers en duidelijke stappen met tijden/temperaturen waar nodig.
     Elk recept is voor EXACT ${persons} personen. Alle ingrediënten gelden voor dit hele recept. Voedingswaarden zijn schattingen PER PORTIE, dus gedeeld door ${persons}. Neem personen:${persons} en voedingsbasis:"per_portie" op.
     ${previous.length?'Bied iets anders dan deze zojuist getoonde voorstellen: '+previous.join(', '):''}
     ${selfCheck?'Controleer elk recept zelf voordat je het opschrijft: kloppen hoeveelheden en porties, komen alle ingrediënten in de stappen voor, is de kookvolgorde logisch, kloppen tijd en temperatuur, en zijn de voedingswaarden per portie realistisch?':''}
-    Geef bij tags 2 tot 4 labels die passen, alleen uit deze lijst en exact zo geschreven (ook als je in een andere taal antwoordt): ${CC_TAGS.join(', ')}.
+    Geef bij tags 2 tot 5 labels die passen, alleen uit deze lijst en exact zo geschreven (ook als je in een andere taal antwoordt): ${CC_TAGS.join(', ')}. Zet er altijd elk eetmoment bij waarop het gerecht goed past (ontbijt, lunch, diner, snack; een ontbijt dat ook als lunch werkt krijgt beide), plus 1 tot 3 labels voor soort en stijl.
     Geef alleen JSON volgens ${CHEF_SCHEMA}. Geen lege waarden, tijd als "X min".`;
   return {prompt,persons};
 }
@@ -7042,7 +7173,7 @@ function chefPreviewFail(message){
 async function chefStream(focus,previous){
   const view=ccViewRevision,ctrl=new AbortController();
   chefPreviewWait(previous.length?'Chef bedenkt nieuwe ideeën…':'Chef bedenkt je eerste idee…');
-  try{await requestChefRecipes(focus,getActiveGenCount(),previous,r=>{if(view!==ccViewRevision){ctrl.abort();return;}chefPreviewAdd(r);},ctrl.signal);if(view===ccViewRevision)chefPreviewWait('');}
+  try{await requestChefRecipes(focus,getActiveGenCount(),previous,r=>{if(view!==ccViewRevision){ctrl.abort();return;}chefPreviewAdd(r);},ctrl.signal);if(ccFromCoach){ccFromCoach=null;document.querySelector('.cc-from-coach')?.remove();}if(view===ccViewRevision)chefPreviewWait('');}
   catch(e){if(e.name!=='AbortError'&&view===ccViewRevision)chefPreviewFail(e.message||'Chef is even niet bereikbaar. Probeer het zo opnieuw.');}
 }
 async function _doGenerateRecepten(focus){
@@ -7057,9 +7188,13 @@ async function generateMeer(){
   try{await chefStream(document.getElementById('gen-focus-input')?.value.trim()||'',(window._generatedRecepten||[]).map(r=>r.naam));}
   finally{_chefGenerating=false;}
 }
+// Bijsturen met één tik: elke pil is een vaste instructie voor Pas recept aan. "Anders…" opent het vrije veld.
+const CC_TWEAKS=[['lichter','Lichter','Maak het lichter: minder vet en minder zetmeel, wel net zo vullend door extra groente en eiwit.'],['sneller','Sneller','Maak het sneller en makkelijker: minder stappen en ingrediënten, totaal hooguit 20 minuten.'],['eiwit','Meer eiwit','Meer eiwit: minstens 10 g extra per portie met een slimme, passende bron.'],['vezels','Meer vezels','Meer vezels: minstens 5 g extra per portie met peulvruchten, volkoren, groente of zaden.'],['vega','Vega','Maak het vegetarisch: geen vlees en geen vis, met een volwaardige eiwitbron.']];
+function ccTweakOther(id){const card=document.getElementById('gencard-'+id),d=card?.querySelector('details');if(!d)return;d.open=true;const i=document.getElementById('aanpas-'+id);i?.focus();i?.scrollIntoView({block:'center',behavior:'smooth'});}
 function recipeCardHTML(r){
   return `<article class="chef-proposal" id="gencard-${r._tmpId}"><div class="chef-proposal-meta">${escapeText(r.tijd)} · ${r.personen} ${r.personen===1?'portie':'porties'}</div>
   <h3>${escapeText(r.naam)}</h3><div class="meal-entry-nutrients">${r.eiwitten||r.vezels?mealNutrients(r)+' <span>per portie · schatting</span>':'<span>Voedingswaarden onbekend</span>'}</div>
+  <div class="cc-tweaks" role="group" aria-label="Stuur dit recept bij">${CC_TWEAKS.filter(t=>!(t[0]==='vega'&&(genDieet==='vega'||(r.tags||[]).includes('vega')))).map(([k,l])=>`<button type="button" onclick="pasReceptAan('${r._tmpId}','${k}')">${l}</button>`).join('')}<button type="button" onclick="ccTweakOther('${r._tmpId}')">Anders…</button></div><p class="cc-tweak-status" id="tweak-status-${r._tmpId}" role="status"></p>
   <details><summary>Bekijk recept</summary><h4>Ingrediënten voor ${r.personen} ${r.personen===1?'persoon':'personen'}</h4><ul>${r.ingredienten.map(x=>`<li>${escapeText(x)}</li>`).join('')}</ul><h4>Bereiding</h4><ol>${r.bereiding.map(x=>`<li>${escapeText(x)}</li>`).join('')}</ol>
   <div class="chef-adjust"><label for="aanpas-${r._tmpId}">Maak het naar jouw smaak</label><input id="aanpas-${r._tmpId}" class="modal-input" placeholder="Bijvoorbeeld: meer eiwit of zonder feta"><button id="aanpas-btn-${r._tmpId}" class="btn btn-secondary" onclick="pasReceptAan('${r._tmpId}')">Pas recept aan</button></div></details>
   <div class="chef-proposal-actions"><button class="btn btn-primary" onclick="openGeneratedMeal('${r._tmpId}',false)">Inplannen</button><button class="btn btn-secondary" onclick="openGeneratedMeal('${r._tmpId}',true)">Gegeten</button>${ccSavedGenerated(r)?`<button class="btn btn-ghost" id="bewaar-btn-${r._tmpId}" onclick="chefOpenSaved('${r._tmpId}')">Open recept</button>`:`<button class="btn btn-ghost" id="bewaar-btn-${r._tmpId}" onclick="bewaarGenRecept('${r._tmpId}')">Bewaren</button>`}</div></article>`;
@@ -7111,7 +7246,7 @@ function flowAddMeal(){showModal(`<div class="modal-header"><h2>Wat eet je?</h2>
 function flowActivityForm(date,id=null){const existing=id?flowDay(date).activiteiten?.find(a=>a.id===id):null;flowActivityEdit={date,id};const a=existing||{},type=a.type||'run';showModal(`<div class="modal-header"><h2>${id?'Activiteit aanpassen':'Wat ga je doen?'}</h2>${flowClose()}</div>${id?`<button class="btn btn-secondary btn-full cc-copy-activity" onclick="limeCopyActivity('${date}',${flowArg(id)},this)"><svg class="cc-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 8V3H3v13h5"/></svg><span>Kopieer naar morgen</span></button>`:''}<button id="flow-activity-voice" class="flow-speak" onclick="flowActivityVoice()">${flowVoiceGlyph()} Spreek je activiteit in</button><label class="sr-only" for="flow-act-draft">Je gesproken of getypte activiteit</label><textarea id="flow-act-draft" class="flow-draft" rows="2" placeholder="Morgen om 9 uur 8 km hardlopen, ongeveer 45 minuten"></textarea><button id="flow-activity-parse" class="flow-text-action" onclick="flowParseActivity()">Vul de velden in met deze tekst</button><p id="flow-act-status" class="flow-status" role="status">Of vul hieronder direct je activiteit in.</p><div class="flow-form-grid"><label class="flow-field">Activiteit<select id="flow-act-type" onchange="flowActivityType()">${Object.entries(FLOW_TYPES).map(([v,l])=>`<option value="${v}" ${v===type?'selected':''}>${l}</option>`).join('')}</select></label><label class="flow-field">Status<select id="flow-act-done"><option value="planned">Gepland</option><option value="done" ${a.afgevinkt?'selected':''}>Gedaan</option></select></label><label class="flow-field">Datum<input id="flow-act-date" type="date" value="${date}"></label><label class="flow-field">Tijdstip <span>optioneel</span><input id="flow-act-time" type="time" value="${escapeText(a.tijd||'')}"></label><label class="flow-field" id="flow-act-km-wrap">Afstand <span>km · optioneel</span><input id="flow-act-km" inputmode="decimal" placeholder="Bijv. 8,5" value="${a.km??''}"></label><label class="flow-field">Duur <span>min · optioneel</span><input id="flow-act-min" inputmode="decimal" placeholder="Bijv. 45" value="${a.duur??''}"></label></div><details class="flow-extra" ${a.detail?'open':''}><summary>Eigen titel of notitie</summary><label class="flow-field">Titel<input id="flow-act-name" placeholder="${FLOW_TYPES[type]||'Activiteit'}" value="${escapeText(a.naam===FLOW_TYPES[type]?'':a.naam||'')}"></label><label class="flow-field">Notitie<input id="flow-act-note" value="${escapeText(a.detail||'')}"></label></details><p id="flow-act-error" class="flow-error" role="alert"></p><button id="flow-activity-save" class="btn btn-primary btn-full" onclick="flowSaveActivity()">${id?'Wijzigingen opslaan':'Activiteit opslaan'}</button>${id?`<button class="btn btn-ghost btn-full" onclick="deleteActivity('${date}',${flowArg(id)});closeModal()"><svg class="cc-icon" data-cc-icon="delete" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M9 6V3h6v3M6 6l1 15h10l1-15M10 10v7m4-7v7"/></svg><span>Verwijderen</span></button>`:''}`);flowActivityType();}
 function flowActivityType(){const type=document.getElementById('flow-act-type').value;document.getElementById('flow-act-name').placeholder=type==='other'?'Bijvoorbeeld padel of yoga':FLOW_TYPES[type];if(type==='other')document.getElementById('flow-act-name').closest('details').open=true;document.getElementById('flow-act-km-wrap').hidden=!['run','bike','walk','walkdog','commute','swim','other'].includes(type);}
 function flowOptionalNumber(value,label,max){const str=String(value||'').trim().replace(',','.');if(!str)return null;if(!/^\d+(\.\d+)?$/.test(str)||Number(str)<=0||Number(str)>max)throw Error(`Vul voor ${label} een geldig getal groter dan 0 in, of laat het leeg.`);return Number(str);}
-function flowSaveActivity(){if(flowSpeech?.key==='activity')return;const err=document.getElementById('flow-act-error');try{const type=document.getElementById('flow-act-type').value,date=document.getElementById('flow-act-date').value,time=document.getElementById('flow-act-time').value;assertLogDate(date);if(!FLOW_TYPES[type])throw Error('Kies een activiteit.');if(type==='other'&&!document.getElementById('flow-act-name').value.trim())throw Error('Geef deze activiteit een naam, bijvoorbeeld padel of yoga.');if(time&&!/^([01]\d|2[0-3]):[0-5]\d$/.test(time))throw Error('Kies een geldig tijdstip.');const km=document.getElementById('flow-act-km-wrap').hidden?null:flowOptionalNumber(document.getElementById('flow-act-km').value,'afstand',2000),duur=flowOptionalNumber(document.getElementById('flow-act-min').value,'duur',10080);const edit=flowActivityEdit||{},old=edit.id?flowDay(edit.date).activiteiten.find(x=>x.id===edit.id):null;if(edit.id&&!old)throw Error('Deze activiteit is inmiddels gewijzigd. Open haar opnieuw.');const act={...old,id:old?.id||'a'+Date.now()+Math.random().toString(36).slice(2,6),type,naam:document.getElementById('flow-act-name').value.trim()||FLOW_TYPES[type],tijd:time,detail:document.getElementById('flow-act-note').value.trim(),afgevinkt:document.getElementById('flow-act-done').value==='done'};delete act.km;delete act.duur;if(km!==null)act.km=km;if(duur!==null)act.duur=duur;if(old){const list=flowDay(edit.date).activiteiten;list.splice(list.findIndex(x=>x.id===old.id),1);}ensureDay(date).activiteiten.push(act);updateStreak();saveAndSync();closeModal();renderVandaag();renderWeekOvTab();showBanner('green',`${act.naam} ${act.afgevinkt?'gedaan':'gepland'} op ${formatShortDate(date)}.`);}catch(e){err.textContent=e.message;}}
+function flowSaveActivity(){if(flowSpeech?.key==='activity')return;const err=document.getElementById('flow-act-error');try{const type=document.getElementById('flow-act-type').value,date=document.getElementById('flow-act-date').value,time=document.getElementById('flow-act-time').value;assertLogDate(date);if(!FLOW_TYPES[type])throw Error('Kies een activiteit.');if(type==='other'&&!document.getElementById('flow-act-name').value.trim())throw Error('Geef deze activiteit een naam, bijvoorbeeld padel of yoga.');if(time&&!/^([01]\d|2[0-3]):[0-5]\d$/.test(time))throw Error('Kies een geldig tijdstip.');const km=document.getElementById('flow-act-km-wrap').hidden?null:flowOptionalNumber(document.getElementById('flow-act-km').value,'afstand',2000),duur=flowOptionalNumber(document.getElementById('flow-act-min').value,'duur',10080);const edit=flowActivityEdit||{},old=edit.id?flowDay(edit.date).activiteiten.find(x=>x.id===edit.id):null;if(edit.id&&!old)throw Error('Deze activiteit is inmiddels gewijzigd. Open haar opnieuw.');const before=edit.fromLog?JSON.parse(JSON.stringify(data)):null;const act={...old,id:old?.id||'a'+Date.now()+Math.random().toString(36).slice(2,6),type,naam:document.getElementById('flow-act-name').value.trim()||FLOW_TYPES[type],tijd:time,detail:document.getElementById('flow-act-note').value.trim(),afgevinkt:document.getElementById('flow-act-done').value==='done'};delete act.km;delete act.duur;if(km!==null)act.km=km;if(duur!==null)act.duur=duur;if(old){const list=flowDay(edit.date).activiteiten;list.splice(list.findIndex(x=>x.id===old.id),1);}ensureDay(date).activiteiten.push(act);updateStreak();saveAndSync();closeModal();renderVandaag();renderWeekOvTab();if(before)rememberLogChange(before,`${act.naam} · ${formatShortDate(date)} · ${act.afgevinkt?'gedaan':'gepland'}`);else showBanner('green',`${act.naam} ${act.afgevinkt?'gedaan':'gepland'} op ${formatShortDate(date)}.`);}catch(e){err.textContent=e.message;}}
 
 function flowActivityVoice(){return flowListen('activity','flow-act-draft','flow-activity-voice','flow-act-status',flowParseActivity);}
 let flowActivityRequest=0;
@@ -7149,11 +7284,134 @@ function flowWeekPlanVoice(){return flowListen('weekplan','weekplan-draft','flow
 
 // Flow: speech-first food advice, recipe capture and a compact personal library.
 let flowChefMode='auto',flowChefBusy=false,flowChefTurns=[],flowChefAdvice=null,flowPhotoKind='recipe',flowRecipePhoto=null,flowRecipeSelected=new Set(),flowRecipeSelecting=false;
-function flowRenderChef(){const container=document.getElementById('food-chef-content');if(!container)return;const draft=document.getElementById('gen-focus-input')?.value||'';container.innerHTML=`<section class="flow-chef-card"><div class="cc-eyebrow"><span class="cc-page-tag">Chef</span></div><h1>Wat eet je?</h1><div class="cc-chef-bar"><button id="voice-recipe-btn" class="flow-speak" onclick="smartVoiceRecipe()">${flowVoiceGlyph()} Spreek je eetwens in</button><label class="sr-only" for="gen-focus-input">Je vraag of receptwens</label><textarea id="gen-focus-input" rows="1" oninput="ccResizeComposer(this)" placeholder="Wat wil je eten?">${escapeText(draft)}</textarea><button type="button" class="cc-clear" onclick="ccClearInput('gen-focus-input','chef-mic-label')" aria-label="Tekst wissen"><svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="14" fill="currentColor" opacity=".14"/><path d="m10 10 8 8m0-8-8 8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button><button id="chef-foto-btn" onclick="flowPhotoMenu()" aria-label="Foto toevoegen: recept, gerecht of voorraad" title="Foto: recept, gerecht of voorraad"><svg class="cc-icon" data-cc-icon="camera" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6 10 3h4l2 3h4v14H4V6z"/><circle cx="12" cy="13" r="4"/></svg><span>Foto toevoegen</span></button><button id="gen-btn" class="flow-send" onclick="generateRecepten()" aria-label="Verstuur" title="Verstuur"><svg class="cc-icon" data-cc-icon="send" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5m-6 6 6-6 6 6"/></svg></button></div><p id="chef-mic-label" class="flow-status" role="status"></p><input id="chef-foto-input" type="file" accept="image/*" style="display:none" onchange="analyseChefFoto(this)"><div class="cc-chef-modes"><div class="cc-chef-line"><h2 class="cc-chef-lab">Sport</h2><div class="cc-chef-row">${[['voor','Voor'],['tijdens','Tijdens'],['na','Na']].map(flowChefModeButton).join('')}</div></div><div class="cc-chef-line"><h2 class="cc-chef-lab">Maaltijd</h2><div class="cc-chef-row">${[['makkelijk','Snel'],['uitgebreid','Weekend'],['comfort','Comfort']].map(flowChefModeButton).join('')}</div></div><div class="cc-chef-line"><h2 class="cc-chef-lab">Voorraad</h2><button type="button" class="cc-entry" aria-haspopup="dialog" onclick="showVoorraadModal()"><span id="cc-voorraad-label">${ccVoorraadText()}</span>${CC_CHEVRON}</button></div></div></section><div id="flow-photo-resume"></div><div id="flow-chef-answer" aria-live="polite"></div>`;if(draft)ccResizeComposer(document.getElementById('gen-focus-input'));if(flowChefAdvice)flowRenderAdvice();flowPhotoResume();}
+// ─── Sparren: Dinertje voor gasten. Drie tikvragen → (fase 2) drie richtingen → (fase 3) bijsturen en recept. De sessie leeft alleen in het geheugen. ───
+const CC_SPAR_Q=[
+ {key:'wie',vraag:'Voor wie kook je?',opties:[['twee','Met z\'n tweeën',2],['vrienden','Vrienden',4],['familie','Familie met kinderen',5],['groot','Groot gezelschap',8]]},
+ {key:'avond',vraag:'Wat voor avond wordt het?',opties:[['relaxed','Relaxed aanschuiven'],['uitpakken','Uitpakken'],['samen','Samen koken'],['buiten','Buiten, vuur aan']]},
+ {key:'tijd',vraag:'Hoeveel wil je erin steken?',opties:[['uur','Een uurtje'],['middag','Een middag'],['dag','Dag van tevoren beginnen']]}];
+const CC_SPAR_NIET=[['vega','Vega'],['vis','Geen vis'],['noten','Noten'],['gluten','Gluten'],['alcohol','Alcohol']];
+let ccSpar=null;
+function ccSparStart(){ccSpar={wie:'',avond:'',tijd:'',niet:new Set()};ccSparShow(0);}
+function ccSparShow(step){
+ if(!ccSpar)return;const done=step>=CC_SPAR_Q.length,q=CC_SPAR_Q[step];
+ const opts=q?`<div class="cc-list cc-spar-opts">${q.opties.map(([v,l])=>`<button type="button" class="cc-row" aria-pressed="${ccSpar[q.key]===v}" onclick="ccSparPick('${q.key}','${v}',${step})"><span class="cc-row-label">${l}</span><span class="cc-status${ccSpar[q.key]===v?' is-done':''}" aria-hidden="true"></span></button>`).join('')}</div>`:'';
+ const niet=step===0?`<h3 class="cc-rec-head">Eet iemand iets niet?</h3><div class="cc-tag-wrap" role="group" aria-label="Eet iemand iets niet?">${CC_SPAR_NIET.map(([v,l])=>`<button type="button" class="cc-tag" aria-pressed="${ccSpar.niet.has(v)}" onclick="ccSparNiet('${v}')">${l}</button>`).join('')}</div><button type="button" class="btn btn-primary btn-full cc-spar-next" ${ccSpar.wie?'':'disabled'} onclick="ccSparShow(1)">Volgende</button>`:'';
+ const summary=done?`<div class="cc-list">${['wie','avond','tijd'].map(k=>`<div class="cc-row cc-spar-sum"><span class="cc-row-label">${ccSparLabel(k)}</span></div>`).join('')}${ccSpar.niet.size?`<div class="cc-row cc-spar-sum"><span class="cc-row-label">Let op: ${CC_SPAR_NIET.filter(([v])=>ccSpar.niet.has(v)).map(([,l])=>l.toLowerCase()).join(', ')}</span></div>`:''}</div><button type="button" class="btn btn-primary btn-full cc-spar-next" onclick="ccSparDirections()">Geef drie richtingen</button>`:'';
+ const html=`<div class="modal-header"><h2>${done?'Klaar om te sparren':q.vraag}</h2>${flowClose()}</div><p class="cc-spar-kicker">Dinertje${done?'':` · ${step+1} van ${CC_SPAR_Q.length}`}</p>${opts}${niet}${summary}`;
+ if(step>0)ccOpenFrom(()=>ccSparShow(step-1),()=>showModal(html));else showModal(html);
+}
+// Fase 2: drie richtingen (vertrouwd, draai, gok) in één aanroep; bij een fout, ongeldige JSON of iets wat niet mag één keer vanzelf opnieuw.
+const CC_SPAR_TYPES={vertrouwd:'Vertrouwd',draai:'Met een draai',gok:'Gok'};
+const CC_SPAR_HARD={vega:['Vegetarisch: geen vlees en geen vis.',['vlees','vis']],vis:['Geen vis of zeevruchten.',['vis']],noten:['Geen noten of pinda, ook niet in saus of garnering.',['noten']],gluten:['Glutenvrij: geen tarwe, pasta, brood, couscous of gewone sojasaus.',['gluten']],alcohol:['Geen alcohol, ook niet om mee te koken.',['alcohol']]};
+function ccSparLabel(k){const v=ccSpar?.[k];return CC_SPAR_Q.find(x=>x.key===k).opties.find(o=>o[0]===v)?.[1]||'';}
+function ccSparPersons(){return CC_SPAR_Q[0].opties.find(o=>o[0]===ccSpar?.wie)?.[2]||4;}
+function ccSparPrompt(){
+ const hard=[...ccSpar.niet].map(k=>CC_SPAR_HARD[k][0]);
+ return `Je spart als Chef met de gebruiker over een dinertje voor gasten. Bedenk precies drie richtingen, nog geen volledige recepten.
+Situatie: ${ccSparLabel('wie')} (${ccSparPersons()} personen). Avond: ${ccSparLabel('avond')}. Tijd: ${ccSparLabel('tijd')}.
+${hard.length?'HARD, voor alle drie de richtingen, ook in sauzen en garnering: '+hard.join(' '):''} ${_dieetRegel()} ${_geheugenRegel()} ${_landRegel()}
+De drie richtingen verschillen duidelijk: "vertrouwd" doet precies wat gevraagd is en is een zeker succes; "draai" is dezelfde basis als vertrouwd met één onverwachte keuze; "gok" is iets wat de gebruiker zelf niet had bedacht maar wel past bij deze avond.
+Smaak en sfeer sturen, voedingswaarden zijn alleen informatie. Houd de smaakstijl van Chef aan (vers, veel kruiden, iets fris of zuurs, iets knapperigs, gewone supermarkt), maar het mag feestelijker. Tijd eerlijk en passend bij de gekozen tijd.
+Per richting: titel (kort en pakkend), waarom (één zin: waarom dit past bij deze avond), tijd_min (totaal, als getal), eiwit_g en kcal (per portie, schatting, als getal), hoofdingredienten (3 tot 5), opzet (één zin over hoe de avond loopt: wat vooraf klaar kan, of een idee voor vooraf of toe).
+Antwoord alleen met JSON: {"richtingen":[{"type":"vertrouwd","titel":"","waarom":"","tijd_min":0,"eiwit_g":0,"kcal":0,"hoofdingredienten":["","",""],"opzet":""},{"type":"draai",...},{"type":"gok",...}]}`;
+}
+function ccSparCats(){return [...ccSpar.niet].flatMap(k=>CC_SPAR_HARD[k][1]);}
+function ccSparHardText(){const hard=[...ccSpar.niet].map(k=>CC_SPAR_HARD[k][0]);return hard.length?'HARD, ook in sauzen en garnering: '+hard.join(' '):'';}
+function ccSparDir(d){
+ const ing=Array.isArray(d?.hoofdingredienten)?d.hoofdingredienten.map(x=>String(x).trim()).filter(Boolean).slice(0,5):[],num=v=>{const n=Math.round(Number(v));return n>0&&n<5000?n:null;};
+ if(!CC_SPAR_TYPES[d?.type]||typeof d.titel!=='string'||!d.titel.trim()||typeof d.waarom!=='string'||ing.length<2)throw Error('Een richting was niet compleet.');
+ const r={type:d.type,titel:d.titel.trim().slice(0,90),waarom:d.waarom.trim().slice(0,220),tijd_min:num(d.tijd_min),eiwit_g:num(d.eiwit_g),kcal:num(d.kcal),hoofdingredienten:ing,opzet:typeof d.opzet==='string'?d.opzet.trim().slice(0,220):''};
+ const hit=ccAvoidHit([r.titel,...ing,r.opzet],ccSparCats(),settings.lieverNiet||[]);if(hit)throw Error(`Er zat ${hit} in, en dat mag niet.`);
+ return r;
+}
+function ccSparValid(raw){
+ const list=safeParseJSON(raw)?.richtingen;if(!Array.isArray(list)||list.length!==3)throw Error('Chef gaf geen drie richtingen.');
+ const out=list.map(ccSparDir);
+ if(new Set(out.map(d=>d.type)).size!==3)throw Error('De drie richtingen leken te veel op elkaar.');
+ return Object.keys(CC_SPAR_TYPES).map(t=>out.find(d=>d.type===t));
+}
+// Eén aanroep met hooguit één automatische herhaling; een laat antwoord na terug of sluiten telt niet.
+async function ccSparCall(build,check,waitText){
+ const req=ccSpar.req=(ccSpar.req||0)+1,view=ccViewRevision,el=document.getElementById('cc-spar-dirs'),live=()=>ccSpar&&ccSpar.req===req&&view===ccViewRevision&&document.getElementById('cc-spar-dirs')===el;
+ if(el)el.innerHTML=`<div class="cc-chef-wait" role="status"><span class="cc-chef-dot" aria-hidden="true"></span><span>${waitText}</span></div>`;
+ let err=null;
+ for(let i=0;i<2;i++){try{const out=check(await callAIPlain(build.prompt,build.tokens));return live()?{out}:null;}catch(e){err=e;if(!live())return null;}}
+ return {err};
+}
+function ccSparDirections(){
+ if(!ccSpar)return;
+ if(!settings.anthropicKey){showBanner('yellow','Stel je AI-sleutel in bij Instellingen om met Chef te sparren.');return;}
+ ccOpenFrom(()=>ccSparShow(CC_SPAR_Q.length),()=>showModal(`<div class="modal-header"><h2>Drie richtingen</h2>${flowClose()}</div><p class="cc-spar-kicker">Dinertje · ${escapeText(ccSparLabel('wie'))}</p><div id="cc-spar-dirs"></div>`));
+ if(ccSpar.richtingen)ccSparRenderDirs();else ccSparFetch();
+}
+async function ccSparFetch(anders){
+ const prev=anders?ccSpar.richtingen.map(d=>d.titel):[];
+ const res=await ccSparCall({prompt:ccSparPrompt()+(prev.length?`\nDe gebruiker wil iets heel anders dan: ${prev.join('; ')}. Kies een andere keuken, techniek of opzet.`:''),tokens:1400},ccSparValid,'Chef denkt mee…');
+ if(!res)return;
+ if(res.err){ccSparFail(res.err,anders?'ccSparTweak(\'anders\')':'ccSparFetch()');return;}
+ ccSpar.richtingen=res.out;ccSpar.keuze=null;if(anders){ccSpar.bijgestuurd='Iets heel anders';}ccSparRenderDirs();
+}
+function ccSparFail(e,retry){const el=document.getElementById('cc-spar-dirs');if(el)el.innerHTML=`<div class="cc-chef-wait is-error" role="status"><span>${escapeText(e?.message||'Chef is even niet bereikbaar.')}</span></div><button type="button" class="btn btn-secondary btn-full" onclick="${retry}">Opnieuw</button>`+(ccSpar.richtingen?'<button type="button" class="btn btn-ghost btn-full" onclick="ccSparRenderDirs()">Terug naar de richtingen</button>':'');}
+// Fase 3: één bijstuurronde, dan het recept. Max. drie aanroepen per sessie (richtingen, bijsturen, recept), plus hooguit één automatische herhaling per stap.
+const CC_SPAR_TWEAKS=[CC_TWEAKS.find(t=>t[0]==='lichter'),['makkelijker','Makkelijker','Maak het makkelijker: minder onderdelen en stappen, meer dat vooraf klaar kan.'],['vega','Vegetarisch','Maak het vegetarisch: geen vlees en geen vis, met een volwaardige eiwitbron.'],['goedkoper','Goedkoper','Maak het goedkoper: gewone, betaalbare supermarktproducten zonder dat het minder feestelijk wordt.'],['wow','Meer wow','Meer wow: één opvallend element in smaak of presentatie dat gasten verrast, zonder veel extra werk.'],['anders','Iets heel anders','']];
+async function ccSparTweak(key){
+ const t=CC_SPAR_TWEAKS.find(x=>x[0]===key);if(!t||!ccSpar?.richtingen)return;
+ if(key==='anders'){await ccSparFetch(true);return;}
+ const d=ccSpar.richtingen[ccSpar.keuze];if(!d)return;
+ const cats=key==='vega'?['vlees','vis']:[];
+ const res=await ccSparCall({prompt:`Je spart als Chef over een dinertje. Pas deze richting aan: ${JSON.stringify(d)}.\nAanpassing: ${t[2]}\nSituatie: ${ccSparLabel('wie')} (${ccSparPersons()} personen), ${ccSparLabel('avond')}, ${ccSparLabel('tijd')}. ${ccSparHardText()} ${_dieetRegel()} ${_landRegel()}\nHoud het type "${d.type}". Antwoord alleen met JSON in hetzelfde formaat: {"type":"${d.type}","titel":"","waarom":"","tijd_min":0,"eiwit_g":0,"kcal":0,"hoofdingredienten":["","",""],"opzet":""}`,tokens:600},
+  raw=>{const r=ccSparDir(safeParseJSON(raw));if(r.type!==d.type)throw Error('Chef veranderde de soort richting.');const hit=cats.length&&ccAvoidHit([r.titel,...r.hoofdingredienten],cats);if(hit)throw Error(`Er zat nog ${hit} in.`);return r;},'Chef stuurt bij…');
+ if(!res)return;
+ if(res.err){ccSparFail(res.err,`ccSparTweak('${key}')`);return;}
+ ccSpar.richtingen[ccSpar.keuze]=res.out;ccSpar.bijgestuurd=t[1];ccSparRenderDirs();
+}
+function ccSparRecipePrompt(d,persons){
+ return `Werk deze richting voor een dinertje uit tot één goed maakbaar hoofdgerecht: ${JSON.stringify(d)}.
+Situatie: ${ccSparLabel('wie')}, ${ccSparLabel('avond')}, ${ccSparLabel('tijd')}. ${ccSparHardText()} ${_dieetRegel()} ${_landRegel()}
+${CHEF_STIJL}
+Dit is een dinertje voor gasten: smaak en sfeer gaan voor, de eiwitrichtlijn is hier geen eis en de tijd mag passen bij "${ccSparLabel('tijd')}". Wat vooraf klaar kan, staat als eerste stappen.
+Het recept is voor EXACT ${persons} personen. Ingrediënten gelden voor het hele recept, voedingswaarden zijn schattingen PER PORTIE. Neem personen:${persons} en voedingsbasis:"per_portie" op. Controleer zelf hoeveelheden, of alle ingrediënten in de stappen terugkomen, en tijden en temperaturen.
+Geef bij tags 2 tot 5 labels uit deze lijst, exact zo geschreven: ${CC_TAGS.join(', ')}.
+Geef alleen JSON volgens ${CHEF_SCHEMA}, met precies één recept. Geen lege waarden, tijd als "X min".`;
+}
+async function ccSparRecipe(){
+ const d=ccSpar?.richtingen?.[ccSpar.keuze];if(!d)return;
+ if(ccStorageBlocked){ccRecoveryMessage();return;}
+ const persons=ccSparPersons();
+ const res=await ccSparCall({prompt:ccSparRecipePrompt(d,persons),tokens:2600},raw=>{
+  const arr=safeParseJSON(raw),one=Array.isArray(arr)?arr[0]:arr;
+  const keep={mode:flowChefMode,meal:genMaaltijd,soort:flowSportSoort};let r;
+  try{flowChefMode='';genMaaltijd='';flowSportSoort='';r=validateChefRecipe(one,persons);}finally{flowChefMode=keep.mode;genMaaltijd=keep.meal;flowSportSoort=keep.soort;}
+  const hit=ccAvoidHit([r.naam,...r.ingredienten],ccSparCats());if(hit)throw Error(`Er zat ${hit} in, en dat mag niet.`);
+  return r;},'Chef schrijft je recept…');
+ if(!res)return;
+ if(res.err){ccSparFail(res.err,'ccSparRecipe()');return;}
+ const r=res.out,before=JSON.stringify(data.recepten||[]);
+ r.tags=CC_TAGS.filter(t=>t==='diner'||t==='weekend'||(r.tags||[]).includes(t)&&t!=='snel');
+ let saved;
+ try{saved=retainGeneratedRecipe({...r,_type:'diner',soort:'maaltijd',bron:'sparren',stand:'dinertje',opzet:d.opzet||''},true);saveAndSync();}
+ catch(e){data.recepten=JSON.parse(before);try{saveLocal();}catch(_){}ccSparFail(e,'ccSparRecipe()');return;}
+ try{_renderFoodReceptenList();}catch(_){}
+ ccSpar.recept=saved.id;showBanner('green','Bewaard in Mijn recepten.');
+ ccOpenFrom(ccSparDirections,()=>flowRecipeDetail(saved.id));
+}
+function ccSparRenderDirs(){
+ const el=document.getElementById('cc-spar-dirs');if(!el||!ccSpar?.richtingen)return;
+ const k=ccSpar.keuze,chosen=k!==null&&k!==undefined,done=ccSpar.recept&&(data.recepten||[]).some(r=>r.id===ccSpar.recept&&!r.flowDeleted);
+ el.innerHTML=ccSpar.richtingen.map((d,i)=>{const on=k===i,meta=[d.tijd_min?d.tijd_min+' min':'',d.hoofdingredienten.join(', ')].filter(Boolean).join(' · '),macro=[d.eiwit_g?'≈ '+d.eiwit_g+' g eiwit':'',d.kcal?'≈ '+d.kcal+' kcal':''].filter(Boolean).join(' · ');
+  return `<button type="button" class="cc-spar-dir" aria-pressed="${on}" onclick="ccSparChoose(${i})"><span class="cc-spar-type">${CC_SPAR_TYPES[d.type]}</span><strong>${escapeText(d.titel)}</strong><span class="cc-spar-why">${escapeText(d.waarom)}</span><span class="cc-spar-meta">${escapeText(meta)}</span>${d.opzet?`<span class="cc-spar-why">${escapeText(d.opzet)}</span>`:''}${macro?`<small>${escapeText(macro)} per portie</small>`:''}</button>`;}).join('')
+  +(done?'':!chosen?'<p class="cc-sheet-note">Kies een richting.</p>':ccSpar.bijgestuurd?`<p class="cc-sheet-note">Bijgestuurd: ${escapeText(ccSpar.bijgestuurd.toLowerCase())}.</p>`:`<h3 class="cc-rec-head">Stuur bij</h3><div class="cc-tweaks" role="group" aria-label="Stuur de gekozen richting bij">${CC_SPAR_TWEAKS.filter(t=>!(t[0]==='vega'&&ccSpar.niet.has('vega'))).map(([key,l])=>`<button type="button" onclick="ccSparTweak('${key}')">${l}</button>`).join('')}</div>`)
+  +(done?`<button type="button" class="btn btn-primary btn-full cc-spar-next" onclick="ccOpenFrom(ccSparDirections,()=>flowRecipeDetail(${flowArg(ccSpar.recept)}))">Open recept</button>`:`<button type="button" class="btn btn-primary btn-full cc-spar-next" ${chosen?'':'disabled'} onclick="ccSparRecipe()">Maak het recept</button>`);
+}
+function ccSparChoose(i){if(!ccSpar?.richtingen?.[i]||ccSpar.recept)return;ccSpar.keuze=ccSpar.keuze===i?null:i;ccSparRenderDirs();}
+function ccSparReset(){Object.assign(ccSpar,{richtingen:null,keuze:null,bijgestuurd:'',recept:null});}
+function ccSparPick(key,v,step){if(!ccSpar)return;if(ccSpar[key]!==v)ccSparReset();ccSpar[key]=v;ccSparShow(step===0?0:step+1);}
+function ccSparNiet(v){if(!ccSpar)return;ccSparReset();if(ccSpar.niet.has(v))ccSpar.niet.delete(v);else ccSpar.niet.add(v);ccSparShow(0);}
+function flowRenderChef(){const container=document.getElementById('food-chef-content');if(!container)return;const draft=document.getElementById('gen-focus-input')?.value||'';container.innerHTML=`<section class="flow-chef-card"><div class="cc-eyebrow"><span class="cc-page-tag">Chef</span></div><h1>Wat eet je?</h1><div class="cc-chef-bar"><button id="voice-recipe-btn" class="flow-speak" onclick="smartVoiceRecipe()">${flowVoiceGlyph()} Spreek je eetwens in</button><label class="sr-only" for="gen-focus-input">Je vraag of receptwens</label><textarea id="gen-focus-input" rows="1" oninput="ccResizeComposer(this)" placeholder="Wat wil je eten?">${escapeText(draft)}</textarea><button type="button" class="cc-clear" onclick="ccClearInput('gen-focus-input','chef-mic-label')" aria-label="Tekst wissen"><svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="14" fill="currentColor" opacity=".14"/><path d="m10 10 8 8m0-8-8 8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button><button id="chef-foto-btn" onclick="flowPhotoMenu()" aria-label="Foto toevoegen: recept, gerecht of voorraad" title="Foto: recept, gerecht of voorraad"><svg class="cc-icon" data-cc-icon="camera" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6 10 3h4l2 3h4v14H4V6z"/><circle cx="12" cy="13" r="4"/></svg><span>Foto toevoegen</span></button><button id="gen-btn" class="flow-send" onclick="generateRecepten()" aria-label="Verstuur" title="Verstuur"><svg class="cc-icon" data-cc-icon="send" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5m-6 6 6-6 6 6"/></svg></button></div><p id="chef-mic-label" class="flow-status" role="status"></p>${ccFromCoach?`<div class="cc-from-coach"><span>Uit je gesprek met Coach</span><button type="button" aria-label="Gesprek met Coach niet meenemen" onclick="ccFromCoachClear()"><svg class="cc-icon" data-cc-icon="close" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div>`:''}<input id="chef-foto-input" type="file" accept="image/*" style="display:none" onchange="analyseChefFoto(this)"><div class="cc-chef-modes"><div class="cc-chef-line"><h2 class="cc-chef-lab">Sport</h2><div class="cc-chef-row">${[['voor','Voor'],['tijdens','Tijdens'],['na','Na']].map(flowChefModeButton).join('')}</div></div><div class="cc-chef-line"><h2 class="cc-chef-lab">Maaltijd</h2><div class="cc-chef-row">${[['makkelijk','Snel'],['mealprep','Meal prep'],['comfort','Comfort']].map(flowChefModeButton).join('')}</div></div><div class="cc-chef-line"><h2 class="cc-chef-lab">Voorraad</h2><button type="button" class="cc-entry" aria-haspopup="dialog" onclick="showVoorraadModal()"><span id="cc-voorraad-label">${ccVoorraadText()}</span>${CC_CHEVRON}</button></div><div class="cc-chef-line"><h2 class="cc-chef-lab">Sparren</h2><button type="button" class="cc-entry" aria-haspopup="dialog" onclick="ccSparStart()"><span>Dinertje voor gasten</span>${CC_CHEVRON}</button></div></div></section><div id="flow-photo-resume"></div><div id="flow-chef-answer" aria-live="polite"></div>`;if(draft)ccResizeComposer(document.getElementById('gen-focus-input'));if(flowChefAdvice)flowRenderAdvice();flowPhotoResume();}
 function flowSetPersons(value){const n=Number(value);if(!Number.isInteger(n)||n<1||n>6)return;genPersonen=n;localStorage.setItem('hc_gen_personen',String(n));const el=document.getElementById('chef-personen');if(el)el.textContent=n;const min=document.getElementById('chef-personen-min'),plus=document.getElementById('chef-personen-plus');if(min)min.disabled=n<=1;if(plus)plus.disabled=n>=6;ccRenderKitchen();}
 function flowSetCount(n){if(![1,2,3].includes(n))return;genCount=n;localStorage.setItem('hc_gen_count',String(n));document.querySelectorAll('.gen-count-pill').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.textContent)===n)));ccRenderKitchen();}
 function flowSetDieet(v){if(!['vlees','vis','vega'].includes(v))return;genDieet=v;localStorage.setItem('hc_dieet',v);document.querySelectorAll('.gen-diet-pill').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.dieet===v)));ccRenderKitchen();}
-const CC_CHEF_MODES={voor:{vraag:'Eten voor het sporten',sport:true,tijd:'Snack hooguit 5 minuten, lichte maaltijd hooguit 15 minuten.'},tijdens:{vraag:'Snack tijdens het sporten',sport:true,tijd:'Geen bereiding nodig: meeneembaar of vooraf klaar te maken. Gebruik "1 min" als tijd als er niets te bereiden is.'},na:{vraag:'Eten na het sporten',sport:true,tijd:'Snack hooguit 10 minuten, maaltijd hooguit 30 minuten.'},makkelijk:{vraag:'Makkelijke maaltijd',tijd:'Hooguit 30 minuten.'},uitgebreid:{vraag:'Uitgebreid koken',tijd:'45 tot 90 minuten mag.'},comfort:{vraag:'Comfortfood',tijd:'Doorgaans maximaal 60 minuten; ovenwerk mag.'},voorraadsnack:{vraag:'Snack uit voorraad',snack:true,tijd:'Hooguit 10 minuten.'},voorraad:{vraag:'Maaltijd uit voorraad',tijd:'Doorgaans maximaal 35 minuten.'}};
+const CC_CHEF_MODES={voor:{vraag:'Eten voor het sporten',sport:true,tijd:'Snack hooguit 5 minuten, lichte maaltijd hooguit 15 minuten.'},tijdens:{vraag:'Snack tijdens het sporten',sport:true,tijd:'Geen bereiding nodig: meeneembaar of vooraf klaar te maken. Gebruik "1 min" als tijd als er niets te bereiden is.'},na:{vraag:'Eten na het sporten',sport:true,tijd:'Snack hooguit 10 minuten, maaltijd hooguit 30 minuten.'},makkelijk:{vraag:'Makkelijke maaltijd',tijd:'Liefst 10 tot 20 minuten, hooguit 25.'},mealprep:{vraag:'Meal prep voor meerdere dagen',tijd:'Liefst hooguit 45 minuten in totaal; één keer koken voor meerdere dagen.'},comfort:{vraag:'Comfortfood',tijd:'Doorgaans maximaal 60 minuten; ovenwerk mag.'},voorraadsnack:{vraag:'Snack uit voorraad',snack:true,tijd:'Hooguit 10 minuten.'},voorraad:{vraag:'Maaltijd uit voorraad',tijd:'Liefst 15 tot 25 minuten, hooguit 35.'}};
 let flowChefDefaultText='';
 const CC_CHEVRON='<svg class="cc-chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>';
 const CC_PLUS='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>';
@@ -7219,43 +7477,110 @@ function flowConfirmPhoto(){const r=flowRecipePhoto;if(!r)return;try{const name=
 function flowPreviewPhoto(r){showModal(`<div class="modal-header"><h2>Je recept staat klaar</h2>${flowClose()}</div><p class="muted">${escapeText(r.bron)} · voedingswaarden nog onbekend</p>${recipeCardHTML(r)}<button class="btn btn-secondary btn-full" onclick="flowCookGenerated(${flowArg(r._tmpId)})">Koken met dit recept</button>`);}
 function flowCookGenerated(id){const r=(window._generatedRecepten||[]).find(x=>x._tmpId===id);if(!r)return;const saved=retainGeneratedRecipe(r);saveAndSync();closeModal();enterKookmodus(saved.id);}
 // Labels van een recept (vaste lijst). Chef geeft ze mee; oudere en eigen recepten zonder labels krijgen ze uit soort, type en tijd.
-const CC_TAGS=['ontbijt','lunch','diner','snack','sport','snel','weekend','comfort','vega','vis','bowl','wrap','bakplaat','soep','salade','zoet'];
+const CC_TAGS=['ontbijt','lunch','diner','snack','sport','snel','mealprep','weekend','comfort','vega','vis','bowl','wrap','bakplaat','soep','salade','zoet'];
 function ccRecipeTags(r){
  if(Array.isArray(r.tags))return CC_TAGS.filter(t=>r.tags.includes(t));
  const t=new Set();if(r.soort==='sport'||r.moment)t.add('sport');if(r.soort==='snack')t.add('snack');if(CC_TAGS.includes(r.type)&&r.type!=='diner')t.add(r.type);
  const min=parseInt(r.tijd);if(min>0&&min<=20)t.add('snel');return CC_TAGS.filter(x=>t.has(x));
 }
-function ccTagLabel(t){return t[0].toUpperCase()+t.slice(1);}
+function ccTagLabel(t){return t==='mealprep'?'Meal prep':t[0].toUpperCase()+t.slice(1);}
 // Hoe vaak een recept is ingepland of gegeten, voor de volgorde "vaak gemaakt".
 function ccRecipeUses(){const n={};Object.values(data.weken||{}).forEach(w=>Object.values(w).forEach(d=>Object.values(d.maaltijden||{}).forEach(a=>(Array.isArray(a)?a:[]).forEach(m=>{if(m&&m.receptId)n[m.receptId]=(n[m.receptId]||0)+1;}))));return n;}
-let ccRecipeFilter='alles',ccRecipeQuery='';
-function ccRecipeFilterSet(f){ccRecipeFilter=f;flowRecipeList();}
+// Mijn recepten: eerst wanneer (moment), dan wat/hoe (één label, nog een tik = uit).
+const CC_MOMENTS=['ontbijt','lunch','diner','snack'];
+function ccRecipeMoments(r){const t=ccRecipeTags(r),m=CC_MOMENTS.filter(x=>t.includes(x));return m.length?m:[r.soort==='snack'||(r.soort==='sport'&&r.moment==='tijdens')?'snack':'diner'];}
+let ccRecipeMoment='alles',ccRecipeTag='',ccRecipeQuery='';
+function ccRecipeFilterSet(kind,v){if(kind==='moment')ccRecipeMoment=v;else ccRecipeTag=ccRecipeTag===v?'':v;flowRecipeList();}
 function ccRecipeSearch(q){ccRecipeQuery=q;ccRecipeResults();}
 // The list part only, so typing in the search field keeps focus.
 function ccRecipeResults(){
  const el=document.getElementById('cc-recipe-results');if(!el)return;
- const q=ccRecipeQuery.trim().toLowerCase(),pass=r=>ccRecipeFilter==='alles'||ccRecipeTags(r).includes(ccRecipeFilter),hay=r=>[r.naam,...ccRecipeTags(r),...(r.ingredienten||[])].join(' ').toLowerCase();
- const all=myRecipes().filter(r=>!r.flowDeleted),uses=ccRecipeUses(),list=all.filter(r=>pass(r)&&(!q||hay(r).includes(q))).map((r,i)=>({r,i})).sort((a,b)=>(uses[b.r.id]||0)-(uses[a.r.id]||0)||a.i-b.i).map(x=>x.r);
- const row=r=>{const on=flowRecipeSelected.has(r.id),time=/\d/.test(r.tijd||'')?`<span class="cc-row-meta">${escapeText(r.tijd)}</span>`:'';return flowRecipeSelecting?`<button type="button" class="cc-row cc-recipe-row" aria-pressed="${on}" onclick="flowSelectRecipe(${flowArg(r.id)},${!on});flowRecipeList()"><span class="cc-status${on?' is-done':''}" aria-hidden="true"></span><span class="cc-recipe-name">${escapeText(r.naam)}</span>${time}</button>`:`<button type="button" class="cc-row cc-recipe-row" aria-haspopup="dialog" onclick="ccOpenFrom(ccOpenRecipes,()=>flowRecipeDetail(${flowArg(r.id)}))"><span class="cc-recipe-name">${escapeText(r.naam)}</span>${time}${CC_CHEVRON}</button>`;};
- el.innerHTML=!all.length?'<p class="cc-empty">Nog geen recepten. Bewaar een idee van Chef of voeg je eigen recept toe.</p>':list.length?`<div class="cc-rows">${list.map(row).join('')}</div>`:'<p class="cc-empty">Geen recepten die hierbij passen.</p>';
+ const q=ccRecipeQuery.trim().toLowerCase(),hay=r=>[r.naam,...ccRecipeTags(r),...(r.ingredienten||[])].join(' ').toLowerCase();
+ const all=myRecipes().filter(r=>!r.flowDeleted),uses=ccRecipeUses();
+ const list=all.filter(r=>(ccRecipeMoment==='alles'||ccRecipeMoments(r).includes(ccRecipeMoment))&&(!ccRecipeTag||ccRecipeTags(r).includes(ccRecipeTag))&&(!q||hay(r).includes(q))).map((r,i)=>({r,i})).sort((a,b)=>(uses[b.r.id]||0)-(uses[a.r.id]||0)||a.i-b.i).map(x=>x.r);
+ const sub=r=>{const e=parseGrams(r.eiwitten),v=parseGrams(r.vezels);return [/\d/.test(r.tijd||'')?r.tijd:'',e?Math.round(e)+' g eiwit':'',v?Math.round(v)+' g vezels':''].filter(Boolean).join(' · ');};
+ const text=r=>{const s=sub(r);return `<span class="cc-recipe-text"><span class="cc-recipe-name">${escapeText(r.naam)}</span>${s?`<span class="cc-recipe-sub">${escapeText(s)}</span>`:''}</span>`;};
+ const row=r=>{const on=flowRecipeSelected.has(r.id);return flowRecipeSelecting?`<button type="button" class="cc-row cc-recipe-row" aria-pressed="${on}" onclick="flowSelectRecipe(${flowArg(r.id)},${!on});flowRecipeList()"><span class="cc-status${on?' is-done':''}" aria-hidden="true"></span>${text(r)}</button>`:`<button type="button" class="cc-row cc-recipe-row" aria-haspopup="dialog" onclick="ccOpenFrom(ccOpenRecipes,()=>flowRecipeDetail(${flowArg(r.id)}))">${text(r)}${CC_CHEVRON}</button>`;};
+ const rows=l=>`<div class="cc-rows">${l.map(row).join('')}</div>`,head=(t,n)=>`<h3 class="cc-rec-head">${t}${n?`<span>${n}</span>`:''}</h3>`;
+ if(!all.length){el.innerHTML='<p class="cc-empty">Nog geen recepten. Bewaar een idee van Chef of voeg je eigen recept toe.</p>';return;}
+ if(!list.length){el.innerHTML='<p class="cc-empty">Geen recepten die hierbij passen.</p>';return;}
+ // Overzicht: per moment de drie meest gemaakte, met "Alle N". Een recept dat bij twee momenten past, staat in beide.
+ if(ccRecipeMoment==='alles'&&!ccRecipeTag&&!q&&!flowRecipeSelecting&&all.length>=8){
+  const top=list.filter(r=>uses[r.id]).slice(0,3);
+  el.innerHTML=(top.length?head('Vaak gemaakt')+rows(top):'')+CC_MOMENTS.map(m=>{const g=list.filter(r=>ccRecipeMoments(r).includes(m));return g.length?head(ccTagLabel(m),g.length)+rows(g.slice(0,3))+(g.length>3?`<button type="button" class="cc-rec-all" onclick="ccRecipeFilterSet('moment','${m}')">Alle ${g.length}${CC_CHEVRON}</button>`:''):'';}).join('');
+  return;
+ }
+ el.innerHTML=head(ccRecipeMoment==='alles'?'Recepten':ccTagLabel(ccRecipeMoment),list.length)+rows(list);
 }
 function flowRecipeList(){const el=document.getElementById('food-rec-content');if(!el)return;ensureRecepten();const recipes=myRecipes().filter(r=>!r.flowDeleted),deleted=(data.recepten||[]).filter(r=>r.flowDeleted),starters=(data.recepten||[]).filter(r=>!r.flowDeleted&&isLegacyStarter(r)),n=flowRecipeSelected.size;
  const starterRow=r=>`<button type="button" class="cc-row cc-recipe-row" aria-haspopup="dialog" onclick="ccOpenFrom(ccOpenRecipes,()=>flowRecipeDetail(${flowArg(r.id)}))"><span class="cc-recipe-name">${escapeText(r.naam)}</span>${CC_CHEVRON}</button>`;
  el.innerHTML=(flowRecipeSelecting?`<div class="cc-sheet-actions"><span>${n} gekozen</span><button type="button" onclick="flowToggleRecipeSelection()">Klaar</button></div>`:`<div class="cc-sheet-actions"><button type="button" onclick="ccOpenFrom(ccOpenRecipes,()=>flowOpenRecipeEditor())">${CC_PLUS}<span>Eigen recept</span></button>${recipes.length||starters.length?'<button type="button" onclick="flowToggleRecipeSelection()">Selecteer</button>':''}</div>`)
   +(recipes.length>=10?`<label class="sr-only" for="cc-recipe-search">Zoek recept</label><input id="cc-recipe-search" class="cc-search" type="search" placeholder="Zoek recept, label of ingrediënt" value="${escapeText(ccRecipeQuery)}" oninput="ccRecipeSearch(this.value)" autocomplete="off">`:'')
-  +(()=>{const n={};recipes.forEach(r=>ccRecipeTags(r).forEach(t=>n[t]=(n[t]||0)+1));const tags=CC_TAGS.filter(t=>n[t]).sort((a,b)=>n[b]-n[a]);if(ccRecipeFilter!=='alles'&&!n[ccRecipeFilter])ccRecipeFilter='alles';return recipes.length>=4&&tags.length>=2?`<div class="cc-tag-row" role="group" aria-label="Filter recepten">${['alles',...tags].map(t=>`<button type="button" class="cc-tag" aria-pressed="${ccRecipeFilter===t}" onclick="ccRecipeFilterSet('${t}')">${t==='alles'?'Alles':ccTagLabel(t)}</button>`).join('')}</div>`:'';})()
+  +(()=>{if(recipes.length<4)return '';const ms=CC_MOMENTS.filter(m=>recipes.some(r=>ccRecipeMoments(r).includes(m)));if(!ms.includes(ccRecipeMoment))ccRecipeMoment='alles';
+   const pool=ccRecipeMoment==='alles'?recipes:recipes.filter(r=>ccRecipeMoments(r).includes(ccRecipeMoment)),n={};pool.forEach(r=>ccRecipeTags(r).forEach(t=>{if(!CC_MOMENTS.includes(t))n[t]=(n[t]||0)+1;}));const tags=CC_TAGS.filter(t=>n[t]).sort((a,b)=>n[b]-n[a]);if(ccRecipeTag&&!n[ccRecipeTag])ccRecipeTag='';
+   return (ms.length>=2?`<div class="cc-seg cc-rec-seg" role="group" aria-label="Wanneer eet je het">${['alles',...ms].map(m=>`<button type="button" aria-pressed="${ccRecipeMoment===m}" onclick="ccRecipeFilterSet('moment','${m}')">${m==='alles'?'Alles':ccTagLabel(m)}</button>`).join('')}</div>`:'')+(tags.length>=2?`<div class="cc-tag-row" role="group" aria-label="Soort recept">${tags.map(t=>`<button type="button" class="cc-tag" aria-pressed="${ccRecipeTag===t}" onclick="ccRecipeFilterSet('tag','${t}')">${ccTagLabel(t)}</button>`).join('')}</div>`:'');})()
   +'<div id="cc-recipe-results"></div>'
   +(starters.length&&!flowRecipeSelecting?`<details class="cc-more"><summary>Eerdere voorbeelden (${starters.length})${CC_CHEVRON}</summary><div class="cc-rows">${starters.map(starterRow).join('')}</div></details>`:'')
   +(deleted.length&&!flowRecipeSelecting?`<details class="cc-more"><summary>Verwijderd (${deleted.length})${CC_CHEVRON}</summary>${deleted.map(r=>`<div class="cc-restore"><span>${escapeText(r.naam)}</span><button type="button" onclick="flowRestoreRecipe(${flowArg(r.id)})">Herstellen</button></div>`).join('')}</details>`:'')
+  +(recipes.length>=4&&!flowRecipeSelecting?'<button type="button" class="cc-rec-tidy" onclick="ccOpenFrom(ccOpenRecipes,ccTidyOpen)">Labels opruimen</button>':'')
   +(flowRecipeSelecting?`<div class="cc-sheet-pair"><button type="button" class="btn btn-secondary" onclick="flowSelectAllRecipes()">Alles kiezen</button><button type="button" class="btn btn-secondary" ${n?'':'disabled'} onclick="flowDeleteSelected()">Verwijder (${n})</button></div>`:'');
  ccRecipeResults();}
+// Labels opruimen: Haiku zet alle recepten consequent op moment en soort en wijst bijna dubbele recepten aan. Terug te zetten; verwijderen alleen na eigen keuze (en dan herstelbaar).
+let ccTidyLast=null,ccTidyPick=new Set();
+function ccTidyOpen(){const n=myRecipes().filter(r=>!r.flowDeleted).length;showModal(`<div class="modal-header"><h2>Labels opruimen</h2>${flowClose()}</div><div id="cc-tidy"><p class="cc-sheet-note cc-tidy-note">Chef bekijkt je ${n} recepten. Elk recept krijgt de momenten waarop het past (een ontbijt dat ook als lunch kan, krijgt allebei) en dezelfde soort labels als vergelijkbare recepten. Bijna dubbele recepten wijst Chef aan; jij kiest wat weg mag.</p><p id="cc-tidy-status" class="cc-sheet-note" role="status"></p><button id="cc-tidy-go" class="btn btn-primary btn-full" onclick="ccTidyRun()">Opruimen</button></div>`);}
+const CC_TIDY_PROMPT=`Je ordent een receptenverzameling. Geef elk recept labels uit deze vaste lijst, exact zo geschreven: ${CC_TAGS.join(', ')}.
+- Momenten (ontbijt, lunch, diner, snack): zet elk moment waarop het gerecht echt goed past, minstens één. Een ontbijt dat ook prima als lunch werkt (zoals een omelet of overnight oats) krijgt ontbijt én lunch. Een warme hoofdmaaltijd is diner. Een tussendoortje of kleine portie is snack.
+- Daarnaast 1 tot 3 labels voor soort en stijl. snel = hooguit 20 minuten. vega = geen vlees en geen vis. vis = met vis of zeevruchten. sport alleen als het recept dat label nu al heeft.
+- Wees consequent: vergelijkbare recepten krijgen dezelfde labels.
+- dubbel: groepjes recepten die vrijwel hetzelfde gerecht zijn (zelfde basis en hoofdingrediënten, kleine variaties). Twee verschillende bowls zijn niet dubbel. Bij twijfel niet noemen.
+Antwoord alleen met JSON: {"recepten":[{"nr":1,"labels":["ontbijt","lunch","snel"]}],"dubbel":[[3,7]]}
+Recepten: `;
+async function ccTidyRun(){
+ const btn=document.getElementById('cc-tidy-go'),status=document.getElementById('cc-tidy-status');if(!btn||btn.disabled)return;
+ if(ccStorageBlocked){ccRecoveryMessage();return;}
+ const view=ccViewRevision,list=myRecipes().filter(r=>!r.flowDeleted),before=JSON.stringify(data.recepten||[]),labels=new Map(),dubbel=[];
+ btn.disabled=true;status.textContent='Chef kijkt je recepten na…';
+ try{
+  for(let i=0;i<list.length;i+=60){
+   const part=list.slice(i,i+60).map((r,k)=>({nr:k+1,naam:r.naam,tijd:r.tijd||'',ingredienten:(r.ingredienten||[]).slice(0,10).map(x=>String(x).slice(0,60)),labels:ccRecipeTags(r)}));
+   const j=safeParseJSON(await callAIFast(CC_TIDY_PROMPT+JSON.stringify(part),Math.min(4000,400+part.length*40)))||{};
+   if(view!==ccViewRevision)return;
+   for(const x of Array.isArray(j.recepten)?j.recepten:[]){const r=list[i+Number(x?.nr)-1];if(!r||Number(x.nr)<1||Number(x.nr)>part.length)continue;const t=new Set((Array.isArray(x.labels)?x.labels:[]).map(t=>String(t).toLowerCase().trim()).filter(t=>CC_TAGS.includes(t)&&t!=='sport'));if(ccRecipeTags(r).includes('sport'))t.add('sport');if(CC_MOMENTS.some(m=>t.has(m)))labels.set(r,CC_TAGS.filter(x=>t.has(x)));}
+   for(const g of Array.isArray(j.dubbel)?j.dubbel:[]){const rs=[...new Set((Array.isArray(g)?g:[]).map(n=>Number(n)).filter(n=>n>=1&&n<=part.length))].map(n=>list[i+n-1]);if(rs.length>=2)dubbel.push(rs.slice(0,4));}
+  }
+  if(JSON.stringify(data.recepten||[])!==before){status.textContent='Je recepten zijn intussen gewijzigd. Probeer het opnieuw.';return;}
+  let n=0;labels.forEach((t,r)=>{if(JSON.stringify(ccRecipeTags(r))!==JSON.stringify(t)||!Array.isArray(r.tags))n++;r.tags=t;});
+  try{saveAndSync();}catch(e){data.recepten=JSON.parse(before);try{saveLocal();}catch(_){}throw e;}
+  ccTidyLast={before,after:JSON.stringify(data.recepten)};ccTidyPick=new Set();
+  ccTidyResult(n,dubbel);
+ }catch(e){if(document.getElementById('cc-tidy-status')===status)status.textContent=e.message||'Opruimen lukte niet. Probeer het opnieuw.';}
+ finally{if(btn.isConnected)btn.disabled=false;}
+}
+function ccTidyResult(n,dubbel){
+ const el=document.getElementById('cc-tidy');if(!el)return;window._ccTidyDubbel=dubbel;
+ const row=r=>{const on=ccTidyPick.has(r.id);return `<button type="button" class="cc-row cc-recipe-row" aria-pressed="${on}" onclick="ccTidyToggle(${flowArg(r.id)})"><span class="cc-status${on?' is-done':''}" aria-hidden="true"></span><span class="cc-recipe-text"><span class="cc-recipe-name">${escapeText(r.naam)}</span></span></button>`;};
+ const groups=dubbel.map(g=>g.filter(r=>!r.flowDeleted)).filter(g=>g.length>=2);
+ el.innerHTML=`<p class="cc-sheet-note cc-tidy-note">${n?`Labels bijgewerkt bij ${n} ${n===1?'recept':'recepten'}.`:'Je labels waren al op orde.'}</p>${n?'<button type="button" class="cc-rec-tidy" onclick="ccTidyUndo()">Labels terugzetten</button>':''}`
+  +(groups.length?`<h3 class="cc-rec-head">Lijken dubbel</h3><p class="cc-sheet-note cc-tidy-note">Kies wat weg mag. Je kunt het later herstellen bij Verwijderd.</p>${groups.map(g=>`<div class="cc-rows cc-tidy-group">${g.map(row).join('')}</div>`).join('')}<button type="button" class="btn btn-secondary btn-full" ${ccTidyPick.size?'':'disabled'} onclick="ccTidyDelete()">Verwijder gekozen (${ccTidyPick.size})</button>`:'<p class="cc-sheet-note cc-tidy-note">Geen dubbele recepten gevonden.</p>')
+  +'<button type="button" class="btn btn-primary btn-full cc-tidy-done" onclick="ccGoBack()">Klaar</button>';
+ window._ccTidyN=n;
+}
+function ccTidyToggle(id){if(ccTidyPick.has(id))ccTidyPick.delete(id);else ccTidyPick.add(id);ccTidyResult(window._ccTidyN||0,window._ccTidyDubbel||[]);}
+function ccTidyDelete(){if(!ccTidyPick.size)return;flowRecipeSelected=new Set(ccTidyPick);ccTidyPick=new Set();flowDeleteSelected();ccTidyLast=null;ccGoBack();}
+function ccTidyUndo(){
+ if(!ccTidyLast)return;
+ if(JSON.stringify(data.recepten||[])!==ccTidyLast.after){showBanner('yellow','Er is intussen iets aan je recepten veranderd. Pas de labels daarom zelf aan bij Bewerken.');return;}
+ const now=data.recepten;data.recepten=JSON.parse(ccTidyLast.before);
+ try{saveAndSync();}catch(e){data.recepten=now;showBanner('red','Terugzetten lukte niet. '+(e.message||''));return;}
+ ccTidyLast=null;showBanner('green','Labels teruggezet.');ccGoBack();
+}
 function flowSelectRecipe(id,checked){if(checked)flowRecipeSelected.add(id);else flowRecipeSelected.delete(id);}
 function flowToggleRecipeSelection(){flowRecipeSelecting=!flowRecipeSelecting;flowRecipeSelected.clear();flowRecipeList();}
 function flowSelectAllRecipes(){(data.recepten||[]).filter(r=>!r.flowDeleted&&!r._chefTransient).forEach(r=>flowRecipeSelected.add(r.id));flowRecipeList();}
 function flowDeleteSelected(){if(!flowRecipeSelected.size)return;const ids=[...flowRecipeSelected];ids.forEach(id=>{const r=(data.recepten||[]).find(x=>x.id===id);if(r)r.flowDeleted=true;});flowRecipeSelected.clear();flowRecipeSelecting=false;saveAndSync();flowRecipeList();showBanner('green',`${ids.length} recepten verplaatst naar Verwijderd. Je kunt ze daar herstellen.`);}
 function flowRestoreRecipe(id){const r=(data.recepten||[]).find(x=>x.id===id);if(!r)return;r.flowDeleted=false;saveAndSync();flowRecipeList();}
 function flowDeleteOne(id){flowRecipeSelected=new Set([id]);flowDeleteSelected();ccGoBack();}
-function flowRecipeDetail(id){const r=(data.recepten||[]).find(x=>x.id===id);if(!r)return;ensureRecepten();const p=r.personen||2;showModal(`<div class="modal-header"><h2>${escapeText(r.naam)}</h2>${flowClose()}</div><p class="flow-recipe-meta">${escapeText(r.tijd||'Tijd onbekend')} · ${p} ${p===1?'portie':'porties'}</p><div class="meal-entry-nutrients">${mealNutrients(r)}</div><button id="cc-recipe-nutrition" class="btn btn-secondary btn-full" onclick="ccRecipeNutrition(${flowArg(id)})">Schat voedingswaarden per portie</button><p id="cc-recipe-nutrition-status" role="status"></p><div class="flow-recipe-actions"><button class="btn btn-primary" onclick="closeModal();enterKookmodus(${flowArg(id)})">Koken</button><button class="btn btn-secondary" onclick="flowPlanSavedRecipe(${flowArg(id)})">Inplannen</button></div><label class="flow-field flow-portions">Porties<select onchange="changeRecPersonen(${flowArg(id)},Number(this.value));flowRecipeDetail(${flowArg(id)})">${Array.from({length:Math.max(6,p)},(_,i)=>i+1).map(n=>`<option ${n===p?'selected':''}>${n}</option>`).join('')}</select></label><div class="flow-recipe-body"><h3>Ingrediënten</h3><ul>${r.ingredienten.map(x=>`<li>${escapeText(scaleIngredient(x,r._basePersonen||2,p))}</li>`).join('')}</ul><h3>Bereiding</h3><ol>${r.bereiding.map(x=>`<li>${escapeText(x)}</li>`).join('')}</ol></div><div class="flow-action-row"><button class="btn btn-ghost" onclick="flowOpenRecipeEditor(${flowArg(id)})">Bewerken</button>${!r.bewaard?`<button class="btn btn-ghost" onclick="saveMealRecipe(${flowArg(id)})">Bewaren</button>`:''}<button class="btn btn-ghost" onclick="flowDeleteOne(${flowArg(id)})"><svg class="cc-icon" data-cc-icon="delete" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M9 6V3h6v3M6 6l1 15h10l1-15M10 10v7m4-7v7"/></svg><span>Verwijderen</span></button></div>`);}
+function flowRecipeDetail(id){const r=(data.recepten||[]).find(x=>x.id===id);if(!r)return;ensureRecepten();const p=r.personen||2;showModal(`<div class="modal-header"><h2>${escapeText(r.naam)}</h2>${flowClose()}</div><p class="flow-recipe-meta">${escapeText(r.tijd||'Tijd onbekend')} · ${p} ${p===1?'portie':'porties'}</p>${r.opzet?`<p class="cc-sheet-note cc-recipe-opzet">${escapeText(r.opzet)}</p>`:''}<div class="meal-entry-nutrients">${mealNutrients(r)}</div><button id="cc-recipe-nutrition" class="btn btn-secondary btn-full" onclick="ccRecipeNutrition(${flowArg(id)})">Schat voedingswaarden per portie</button><p id="cc-recipe-nutrition-status" role="status"></p><div class="flow-recipe-actions"><button class="btn btn-primary" onclick="closeModal();enterKookmodus(${flowArg(id)})">Koken</button><button class="btn btn-secondary" onclick="flowPlanSavedRecipe(${flowArg(id)})">Inplannen</button></div><label class="flow-field flow-portions">Porties<select onchange="changeRecPersonen(${flowArg(id)},Number(this.value));flowRecipeDetail(${flowArg(id)})">${Array.from({length:Math.max(6,p)},(_,i)=>i+1).map(n=>`<option ${n===p?'selected':''}>${n}</option>`).join('')}</select></label><div class="flow-recipe-body"><h3>Ingrediënten</h3><ul>${r.ingredienten.map(x=>`<li>${escapeText(scaleIngredient(x,r._basePersonen||2,p))}</li>`).join('')}</ul><h3>Bereiding</h3><ol>${r.bereiding.map(x=>`<li>${escapeText(x)}</li>`).join('')}</ol></div><div class="flow-action-row"><button class="btn btn-ghost" onclick="flowOpenRecipeEditor(${flowArg(id)})">Bewerken</button>${!r.bewaard?`<button class="btn btn-ghost" onclick="saveMealRecipe(${flowArg(id)})">Bewaren</button>`:''}<button class="btn btn-ghost" onclick="flowDeleteOne(${flowArg(id)})"><svg class="cc-icon" data-cc-icon="delete" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M9 6V3h6v3M6 6l1 15h10l1-15M10 10v7m4-7v7"/></svg><span>Verwijderen</span></button></div>`);}
 function flowPlanSavedRecipe(id){const r=(data.recepten||[]).find(x=>x.id===id);if(!r)return;const temp={...r,ingredienten:r.ingredienten.map(x=>scaleIngredient(x,r._basePersonen||2,r.personen||2)),_basePersonen:r.personen||2,_fromLibrary:true,_tmpId:'saved-'+id,_savedRecipeId:id,_type:r.type||'diner'};window._generatedRecepten=[...(window._generatedRecepten||[]).filter(x=>x._tmpId!==temp._tmpId),temp];openGeneratedMeal(temp._tmpId,false);}
 function flowOpenRecipeEditor(id=null){const r=id?(data.recepten||[]).find(x=>x.id===id):null;if(id&&!r)return;showModal(`<div class="modal-header"><h2>${r?'Recept bewerken':'Eigen recept'}</h2>${flowClose()}</div><label class="flow-field">Naam<input id="flow-rec-name" value="${escapeText(r?.naam||'')}"></label><div class="flow-form-grid"><label class="flow-field">Porties<input id="flow-rec-persons" type="number" min="1" max="30" value="${r?._basePersonen||r?.personen||2}"></label><label class="flow-field">Tijd<input id="flow-rec-time" value="${escapeText(r?.tijd||'')}" placeholder="25 min"></label></div><label class="flow-field">Ingrediënten · één per regel<textarea id="flow-rec-ing" rows="5">${escapeText((r?.ingredienten||[]).join('\n'))}</textarea></label><label class="flow-field">Bereiding · één stap per regel<textarea id="flow-rec-steps" rows="5">${escapeText((r?.bereiding||[]).join('\n'))}</textarea></label><div class="flow-form-grid"><label class="flow-field">Eiwit per portie <span>optioneel</span><input id="flow-rec-protein" value="${escapeText(r?.eiwitten||'')}" placeholder="Bijv. ~20g"></label><label class="flow-field">Vezels per portie <span>optioneel</span><input id="flow-rec-fiber" value="${escapeText(r?.vezels||'')}" placeholder="Bijv. ~6g"></label></div><div class="flow-field cc-tag-field" role="group" aria-label="Labels">Labels<div id="flow-rec-tags" class="cc-tag-wrap">${(t=>CC_TAGS.map(x=>`<button type="button" class="cc-tag" data-tag="${x}" aria-pressed="${t.includes(x)}" onclick="this.setAttribute('aria-pressed',String(this.getAttribute('aria-pressed')!=='true'))">${ccTagLabel(x)}</button>`).join(''))(r?ccRecipeTags(r):[])}</div></div><p class="flow-error" id="flow-rec-error" role="alert"></p><button class="btn btn-primary btn-full" onclick="flowSaveRecipeEditor(${flowArg(id)})">Opslaan</button>`);}
 function flowSaveRecipeEditor(id){try{const name=document.getElementById('flow-rec-name').value.trim(),persons=Number(document.getElementById('flow-rec-persons').value),ing=document.getElementById('flow-rec-ing').value.split('\n').map(x=>x.trim()).filter(Boolean),steps=document.getElementById('flow-rec-steps').value.split('\n').map(x=>x.trim()).filter(Boolean);if(!name||!Number.isInteger(persons)||persons<1||persons>30||!ing.length||!steps.length)throw Error('Vul een naam, porties, ingrediënten en stappen in.');let r=id?(data.recepten||[]).find(x=>x.id===id):null;if(!r){r={id:'r'+Date.now()+Math.random().toString(36).slice(2,6),type:'diner'};(data.recepten ||= []).push(r);}Object.assign(r,{naam:name,personen:persons,_basePersonen:persons,ingredienten:ing,bereiding:steps,tijd:document.getElementById('flow-rec-time').value.trim(),eiwitten:document.getElementById('flow-rec-protein').value.trim(),vezels:document.getElementById('flow-rec-fiber').value.trim(),tags:[...document.querySelectorAll('#flow-rec-tags .cc-tag[aria-pressed="true"]')].map(b=>b.dataset.tag),bewaard:true,_chefTransient:false,flowDeleted:false});saveAndSync();flowRecipeList();flowRecipeDetail(r.id);}catch(e){document.getElementById('flow-rec-error').textContent=e.message;}}
@@ -7823,7 +8148,7 @@ function buildSystemPrompt(query=''){
   const vandaag=logRecords(data).filter(r=>r.date===today()).slice(0,24).map(r=>({soort:r.slot,naam:r.item.naam,status:r.slot==='activiteiten'?(r.item.afgevinkt?'gedaan':'gepland'):(r.item.gegeten?'gegeten':'gepland'),minuten:r.item.duur,km:r.item.km}));
   return CC_SOUL+ccVocabNote()+'\nPRIVACYMODUS: de gebruiker deelt bewust geen profiel, geschiedenis of herinneringen. Werk alleen met dit bericht en de registraties van vandaag. Vraag niet naar persoonlijke gegevens en doe geen uitspraken over eerdere dagen.\nGESELECTEERDE CONTEXT:\n'+JSON.stringify({dagbriefje:ccDayBrief(false),kalender:ccCalendar(),planningMetIds:ccPlanForTools(false),registratiesVandaag:vandaag});
  }
- const food=/eten|eet|voed|recept|maaltijd|eiwit|vezel|ontbijt|lunch|diner|kook/i.test(query),sport=/sport|loop|fiets|train|beweeg|wand|otis|activiteit|herstel/i.test(query),planning=/plan|morgen|gisteren|vandaag|week|maandag|dinsdag|woensdag|donderdag|vrijdag|zaterdag|zondag/i.test(query),reflection=/terugblik|overzicht|patroon|week.*ging/i.test(query);
+ const food=/eten|eet|voed|recept|maaltijd|eiwit|vezel|ontbijt|lunch|diner|kook|koken|maken|honger|trek|snack|avondeten|boodschap|voorraad|in huis/i.test(query),sport=/sport|loop|fiets|train|beweeg|wand|otis|activiteit|herstel/i.test(query),planning=/plan|morgen|gisteren|vandaag|week|maandag|dinsdag|woensdag|donderdag|vrijdag|zaterdag|zondag/i.test(query),reflection=/terugblik|overzicht|patroon|week.*ging/i.test(query);
  const profile={};for(const key of ['naam','doel'])if(settings[key])profile[key]=settings[key];
  if(food&&settings.eten)profile.eten=settings.eten;if(food&&settings.lieverNiet?.length)profile.lieverNiet=settings.lieverNiet;if(sport&&settings.sporten)profile.sporten=settings.sporten;if(planning&&settings.weekritme)profile.weekritme=settings.weekritme;
  const context={dagbriefje:ccDayBrief(true),planningMetIds:ccPlanForTools(true),datum:today(),profiel:profile};if(data.coachPatterns?.lines?.length)context.patronen=data.coachPatterns.lines;
@@ -7837,7 +8162,8 @@ function buildSystemPrompt(query=''){
   context.registraties=filtered.slice(0,24).map(r=>({datum:r.date,soort:r.slot,naam:r.item.naam,status:r.slot==='activiteiten'?(r.item.afgevinkt?'gedaan':'gepland'):(r.item.gegeten?'gegeten':'gepland'),km:r.item.km,minuten:r.item.duur,tijd:r.item.tijd,notitie:r.item.detail,eiwitten:r.item.eiwitten,vezels:r.item.vezels}));
   context.selectie='Maximaal 24 relevante registraties binnen 14 dagen vóór/na vandaag; geen volledig archief.';
  }
- if(/recept|gerecht|maaltijdidee|wat.*(?:eten|koken)/i.test(query))context.bewaardeRecepten=myRecipes().map(r=>({naam:r.naam,score:ccRelevant(r.naam+' '+(r.ingredienten||[]).join(' '),query)})).sort((a,b)=>b.score-a.score).slice(0,5).map(r=>r.naam);
+ if(/recept|gerecht|maaltijdidee|wat.*(?:eten|koken)/i.test(query))context.bewaardeRecepten=myRecipes().map(r=>({naam:r.naam,tijd:r.tijd||'',eiwit:r.eiwitten||'',vezels:r.vezels||'',score:ccRelevant(r.naam+' '+(r.ingredienten||[]).join(' '),query)})).sort((a,b)=>b.score-a.score).slice(0,5).map(({score,...r})=>r);
+ if(food&&voorraadItems().length)context.voorraadInHuis=voorraadItems().slice(0,25);
  return CC_SOUL+ccVocabNote()+'\nGESELECTEERDE CONTEXT:\n'+JSON.stringify(context);
 }
 
@@ -7873,14 +8199,13 @@ async function _updateCoachMemory(userMsg){
  }catch(_){/* A memory failure must never turn a successful log into a failed log. */}})();
  ccMemoryJobs.set(userMsg,job);try{await job;}finally{ccMemoryJobs.delete(userMsg);}
 }
-// Melding sluiten verwijdert niets: Coach onthoudt het nog steeds (zie Instellingen › Wat Coach onthoudt). Alleen op dit apparaat bewaard.
-function ccHiddenMemoryNotices(){try{const v=JSON.parse(localStorage.getItem('hc_mem_hidden')||'[]');return Array.isArray(v)?v:[];}catch(_){return [];}}
-function ccHideMemoryNotice(id){try{localStorage.setItem('hc_mem_hidden',JSON.stringify([...ccHiddenMemoryNotices(),id].slice(-50)));}catch(_){}ccRenderMemoryNotice();}
+// Toont alleen wat Coach uit je laatste vraag onthield; de melding gaat mee weg met het antwoord.
 function ccRenderMemoryNotice(){
  const el=document.getElementById('cc-memory-notice');if(!el)return;
- const hidden=ccHiddenMemoryNotices(),facts=ccMemoryItems().filter(m=>m.conversationId===data.coachConversationId&&(!m.expires||m.expires>=today())&&!hidden.includes(m.id)).slice(0,2);
+ const asked=[...(data.chatHistorie||[])].reverse().find(m=>m.role==='user'&&m.conversationId===data.coachConversationId)?.createdAt||Infinity;
+ const facts=ccMemoryItems().filter(m=>m.conversationId===data.coachConversationId&&m.createdAt>=asked&&(!m.expires||m.expires>=today())).slice(0,2);
  el.hidden=!facts.length;
- el.innerHTML=facts.map(m=>`<div class="cc-memory-note"><button type="button" class="cc-memory-text" aria-haspopup="dialog" aria-label="Onthouden: ${escapeText(m.text)}. Aanpassen" onclick="ccEditMemory(${flowArg(m.id)})"><strong>Onthouden</strong>${escapeText(m.text)}${m.replaced?`<small>vervangt: ${escapeText(m.replaced)}</small>`:''}</button><button type="button" onclick="ccForgetMemory(${flowArg(m.id)})">Vergeten</button><button type="button" aria-label="Melding sluiten, Coach blijft het onthouden" onclick="ccHideMemoryNotice(${flowArg(m.id)})">✕</button></div>`).join('');
+ el.innerHTML=facts.map(m=>`<div class="cc-memory-note"><button type="button" class="cc-memory-text" aria-haspopup="dialog" aria-label="Onthouden: ${escapeText(m.text)}. Aanpassen" onclick="ccEditMemory(${flowArg(m.id)})"><strong>Onthouden</strong>${escapeText(m.text)}${m.replaced?`<small>vervangt: ${escapeText(m.replaced)}</small>`:''}</button><button type="button" onclick="ccForgetMemory(${flowArg(m.id)})">Vergeten</button></div>`).join('');
 }
 function ccMemoryPanel(){
  const el=document.getElementById('cc-memory-panel');if(!el)return;
