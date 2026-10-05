@@ -1431,7 +1431,7 @@ body:has(#tab-recepten.active) .brand-header .brand-amp{background:var(--cc-coac
 #tab-vandaag#tab-vandaag .day-heading,#tab-vandaag#tab-vandaag .coach-front-card,
 #tab-recepten#tab-recepten .flow-chef-card{background:var(--cc-zone)!important;box-shadow:0 0 0 100vmax var(--cc-zone)!important;clip-path:inset(0 -100vmax)!important}
 #tab-vandaag#tab-vandaag .day-heading{display:flex!important;flex-direction:column-reverse;gap:4px;margin:0!important;padding:4px 0 8px!important;border:0!important}
-#today-day{font-size:12px!important;font-weight:600!important;letter-spacing:.08em!important;text-transform:uppercase!important;color:var(--cc-muted)!important}
+#today-day{font-size:12px!important;font-weight:600!important;letter-spacing:.08em!important;text-transform:uppercase!important;color:var(--cc-muted)!important;white-space:nowrap;text-align:left!important}
 #today-date-h1{font-size:28px!important;line-height:1.15!important;font-weight:750!important;letter-spacing:-.02em!important;color:var(--cc-ink)!important;margin:0!important}
 /* Invoer: geen kaart-in-kaart */
 #tab-vandaag#tab-vandaag .coach-front-card{border:0!important;border-radius:0!important;padding:8px 0 24px!important;margin:0 0 24px!important;position:relative}
@@ -1514,6 +1514,7 @@ body .vandaag-section-h{font-size:13px!important;font-weight:650!important;text-
 .cc-chef-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
 #tab-recepten#tab-recepten .cc-chef-row button{all:unset;box-sizing:border-box;position:relative;display:flex;align-items:center;justify-content:center;height:36px;padding:0 4px;border-radius:999px;border:1px solid transparent;background:var(--cc-card);color:var(--cc-ink);font:600 14px/1 -apple-system,'SF Pro Text',system-ui,sans-serif;white-space:nowrap;cursor:pointer}
 #tab-recepten#tab-recepten .cc-chef-row button[aria-pressed="true"]{background:var(--cc-ink);border-color:var(--cc-ink);color:var(--cc-lime);font-weight:700}
+@media(max-width:374px){#tab-recepten#tab-recepten .cc-chef-row button{font-size:13px}}
 #tab-recepten#tab-recepten .cc-chef-row button::after,#tab-vandaag#tab-vandaag .cc-chip-privacy::after,#tab-vandaag#tab-vandaag .cc-entry::after,#tab-recepten#tab-recepten .cc-entry::after{content:'';position:absolute;inset:-4px 0}
 #tab-recepten#tab-recepten .cc-chef-row button:focus-visible{outline:2px solid var(--cc-green);outline-offset:2px}
 .collapse-card>.cc-body{padding:0 16px 16px!important}
@@ -1744,6 +1745,7 @@ body .vandaag-section-h{font-size:13px!important;font-weight:650!important;text-
 .cc-tweak-status{margin:8px 0 0;font:400 14px/1.4 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-muted)}
 .cc-tweak-status:empty{display:none}
 #modal-container .cc-recipe-opzet{margin:0 0 16px}
+#modal-container #cc-recipe-nutrition{margin-top:12px}
 #tab-recepten#tab-recepten .cc-from-coach{display:inline-flex;align-items:center;gap:4px;height:36px;margin-top:8px;padding:0 0 0 14px;border-radius:999px;background:var(--cc-card);color:var(--cc-ink);font:600 14px/1 -apple-system,'SF Pro Text',system-ui,sans-serif}
 #tab-recepten#tab-recepten .cc-from-coach button{all:unset;box-sizing:border-box;position:relative;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:999px;color:var(--cc-ink);cursor:pointer}
 #tab-recepten#tab-recepten .cc-from-coach button::after{content:'';position:absolute;inset:-4px}
@@ -2266,7 +2268,7 @@ body input[type="checkbox"]:disabled{opacity:.4;cursor:default}
 'use strict';
 
 // ─── VERSION CHECK (forceert Safari herlading bij nieuwe versie) ──────────────
-const APP_VERSION = 'lime-20261005-9';
+const APP_VERSION = 'lime-20261005-10';
 // Eén plek voor de modellen: Sonnet voor gesprekken en recepten, Haiku voor snelle achtergrondtaken.
 const CC_MODEL_MAIN = 'claude-sonnet-5-5';
 const CC_MODEL_FAST = 'claude-haiku-4-5-20251001';

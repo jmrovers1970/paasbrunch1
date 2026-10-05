@@ -1,6 +1,6 @@
 # TAKEN.md — Coach-gesprek en receptenoverzicht
 
-Basis: `health-coach-v1.0.html`, versie `lime-20261005-9` (branch `claude/practical-edison-cvl53y`, backup `backup/lime-20261004-12`). Vorige takenlijsten staan in de git-geschiedenis.
+Basis: `health-coach-v1.0.html`, versie `lime-20261005-10` (branch `claude/practical-edison-cvl53y`, backup `backup/lime-20261004-12`). Vorige takenlijsten staan in de git-geschiedenis.
 
 Bron: Jims test op de iPhone (5 okt) met vijf schermafbeeldingen. Zijn woorden staan tussen aanhalingstekens. Jims keuzes op het advies: 1 ja, 2 allebei, 3 "laat maar even", 4 "doe maar helemaal".
 
@@ -48,6 +48,13 @@ Bron: Jims test op de iPhone (5 okt) met vijf schermafbeeldingen. Zijn woorden s
 - *Coach testen* neemt de vervolgvragen nog niet mee in de beoordeling.
 
 ---
+
+## Batch 5 okt (8) — Brede test en testlijst — af (`lime-20261005-10`)
+Jim: "Kan je alles testen wat we vanmorgen hebben gebouwd? En een testlijst maken die ik kan volgen? En checken of layout en vormgeving klopt?"
+- Brede test (Playwright, nep-AI, 390 en 360 px): 54 van 54 controles goed, geen JavaScript-fouten. Vormgevingscontrole per scherm (horizontaal scrollen, afgekapte tekst, ongelijke rijen, centrering, tikgebied) op 23 schermen: netjes.
+- Opgelost: *Meal prep* raakte op smalle schermen de knoprand (13 px onder 375 px), de datum in de Coach-kop brak af op 360 px, en *Schat voedingswaarden* plakte tegen de voedingsregel.
+- Testlijst voor de iPhone: `docs/testlijst-20261005.md`.
+- Opgemerkt, niet aangepast: vrije *liever niet*-woorden kun je alleen in de wizard kiezen (vier chips); de oude receptknoppen (*Inplannen/Gegeten/Bewaren*, *Andere ideeën*) hebben nog de oude vorm (hoekig in plaats van pil).
 
 ## Batch 5 okt (7) — Meal prep als knop — af (`lime-20261005-9`)
 Jim: "Hoe zou meal prep mooi een knop kunnen worden zonder dat het druk wordt?" → optie 2 gekozen ("past meer in het concept"): *Weekend* wordt *Meal prep*.
