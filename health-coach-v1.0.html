@@ -2268,11 +2268,18 @@ body input[type="checkbox"]:disabled{opacity:.4;cursor:default}
 'use strict';
 
 // ─── VERSION CHECK (forceert Safari herlading bij nieuwe versie) ──────────────
-const APP_VERSION = 'lime-20261005-10';
+const APP_VERSION = 'lime-20261005-11';
 // Eén plek voor de modellen: Sonnet voor gesprekken en recepten, Haiku voor snelle achtergrondtaken.
 const CC_MODEL_MAIN = 'claude-sonnet-5-5';
 const CC_MODEL_FAST = 'claude-haiku-4-5-20251001';
 const CC_MODEL_DEEP = 'claude-opus-5-5'; // zware, zeldzame taken: weekterugblik en patronen
+// Sonnet 5.5 en Opus 5.5 denken standaard eerst na, en dat telt mee in max_tokens: bij korte app-antwoorden bleef er dan geen tekst over.
+// MAIN: denken uit met between_tools (alleen geldig op Sonnet 5.5; bij een ander MAIN-model aanpassen). DEEP denkt altijd: lage effort en eigen ruimte.
+function ccModelBody(model, maxTokens) {
+  if (model === CC_MODEL_MAIN) return {model, max_tokens: maxTokens, thinking: {type: 'between_tools'}};
+  if (model === CC_MODEL_DEEP) return {model, max_tokens: maxTokens + 4000, output_config: {effort: 'low'}};
+  return {model, max_tokens: maxTokens};
+}
 (function() {
   try {
     const stored = localStorage.getItem('hc_app_version');
@@ -4463,8 +4470,7 @@ async function callAIMessages(messages, maxTokens, options = {}) {
       'anthropic-dangerous-direct-browser-access': 'true'
     },
     body: JSON.stringify({
-      model: CC_MODEL_MAIN,
-      max_tokens: maxTokens,
+      ...ccModelBody(CC_MODEL_MAIN, maxTokens),
       system: buildSystemPrompt([...messages].reverse().find(m=>m.role==='user')?.content||''),
       messages
     })
@@ -4490,8 +4496,7 @@ async function callAIPlain(userMsg, maxTokens, model = CC_MODEL_MAIN) {
       'anthropic-dangerous-direct-browser-access': 'true'
     },
     body: JSON.stringify({
-      model,
-      max_tokens: maxTokens,
+      ...ccModelBody(model, maxTokens),
       system: CC_TASK_STYLE + ccVocabNote(),
       messages: [{ role: 'user', content: userMsg }]
     })
@@ -4621,8 +4626,7 @@ async function analyseFotoLog(inputEl) {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'x-api-key': settings.anthropicKey, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
       body: JSON.stringify({
-        model: CC_MODEL_MAIN,
-        max_tokens: 300,
+        ...ccModelBody(CC_MODEL_MAIN, 300),
         messages: [{ role: 'user', content: [
           { type: 'image', source: { type: 'base64', media_type: mediaType, data: base64 } },
           { type: 'text', text: 'Dit is een foto van een maaltijd die de gebruiker eet of at. Geef een korte ' + (ccTaal()==='en'?'Engelse':'Nederlandse') + ' naam en schat vezels, eiwitten, koolhydraten en vet per portie realistisch. Antwoord ALLEEN met dit JSON-object: {"naam":"korte naam","vezels":"~Xg","eiwitten":"~Xg","koolhydraten":"~Xg","vet":"~Xg"}' }
@@ -4631,7 +4635,7 @@ async function analyseFotoLog(inputEl) {
     });
     if (!resp.ok) throw new Error(`API ${resp.status}`);
     const json = await resp.json();if(view!==ccViewRevision)return;
-    const r = safeParseJSON(json.content[0].text);
+    const r = safeParseJSON(json.content?.find(c => c.type === 'text')?.text);
     if (!r || !r.naam) throw new Error('Kon de maaltijd niet herkennen.');
     const uur = new Date().getHours();
     const slot = uur < 11 ? 'ontbijt' : uur < 15 ? 'lunch' : uur < 17 ? 'snack' : 'diner';
@@ -4674,7 +4678,7 @@ async function analyseVoorraadFoto(inputEl) {
     });
     if (!resp.ok) throw new Error();
     const json = await resp.json();if(view!==ccViewRevision)return;
-    const result = safeParseJSON(json.content[0].text);
+    const result = safeParseJSON(json.content?.find(c => c.type === 'text')?.text);
     if (!result || !Array.isArray(result.items) || result.items.length === 0) throw new Error();
     const nieuw = voorraadAdd(result.items);
     saveAndSync();
@@ -5751,7 +5755,7 @@ async function ccEvalAsk(c){
  data=fx;ccNowOverride=c.uur;
  let brief;try{system=buildSystemPrompt(c.vraag)+CC_PROPOSAL_RULES;brief=ccDayBrief(false);}finally{data=saved;ccNowOverride=savedNow;}
  const resp=await ccFetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':settings.anthropicKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-  body:JSON.stringify({model:CC_MODEL_MAIN,max_tokens:450,system,tools:CC_PROPOSAL_TOOLS,tool_choice:{type:'auto'},messages:[{role:'user',content:c.vraag}]})});
+  body:JSON.stringify({...ccModelBody(CC_MODEL_MAIN,450),system,tools:CC_PROPOSAL_TOOLS,tool_choice:{type:'auto'},messages:[{role:'user',content:c.vraag}]})});
  if(resp.status===401)throw new Error('API-sleutel niet geldig — check instellingen.');
  if(!resp.ok)throw new Error('API fout: '+resp.status);
  const j=await resp.json();const parts=j.content||[];
@@ -5852,7 +5856,7 @@ async function callAIStream(messages, maxTokens, options = {}) {
  const resp = await ccFetch('https://api.anthropic.com/v1/messages', {
   method: 'POST', signal,
   headers: {'Content-Type': 'application/json','x-api-key': settings.anthropicKey,'anthropic-version': '2023-06-01','anthropic-dangerous-direct-browser-access': 'true'},
-  body: JSON.stringify(Object.assign({model: options.model || CC_MODEL_MAIN, max_tokens: maxTokens, stream: true,
+  body: JSON.stringify(Object.assign(ccModelBody(options.model || CC_MODEL_MAIN, maxTokens), {stream: true,
    system: options.system || (buildSystemPrompt([...messages].reverse().find(m=>m.role==='user')?.content||'') + (options.tools ? CC_PROPOSAL_RULES + (options.tools.includes(CC_FOLLOWUP_TOOL) ? CC_FOLLOWUP_RULES : '') : '')), messages}, options.tools ? {tools: options.tools, tool_choice: {type: 'auto'}} : {}))
  });
  if (resp.status === 401) throw new Error('API-sleutel niet geldig — check instellingen.');
@@ -7470,7 +7474,7 @@ function flowAdviceRecipes(){if(!flowChefAdvice)return;return _doGenerateRecepte
 function flowResetAdvice(){flowChefAdvice=null;flowChefTurns=[];document.getElementById('flow-chef-answer').innerHTML='';document.getElementById('gen-focus-input').focus();}
 function flowPhotoMenu(){showModal(`<div class="modal-header"><h2>Wat staat er op je foto?</h2>${flowClose()}</div><p class="muted">De foto wordt door de ingestelde AI gelezen. Alleen de gecontroleerde recepttekst of ingrediënten worden bewaard, niet de foto.</p><div class="flow-action-stack"><button class="btn btn-primary" onclick="flowChoosePhoto('recipe')">Geschreven recept of screenshot</button><button class="btn btn-secondary" onclick="flowChoosePhoto('dish')">Een gerecht · laat Chef een voorstel maken</button><button class="btn btn-secondary" onclick="closeModal();showVoorraadModal();document.getElementById('voorraad-foto-input').click()">Koelkast of ingrediënten</button></div>`);}
 function flowChoosePhoto(kind){flowPhotoKind=kind;closeModal();document.getElementById('chef-foto-input').click();}
-async function flowAnalyseRecipePhoto(input){const view=ccViewRevision;let file=input.files?.[0];input.value='';if(!file)return;file=await ccPreparePhoto(file);if(!file){showBanner('yellow','Deze foto kan ik niet openen. Probeer een andere foto of een schermafbeelding.');return;}const status=document.getElementById('chef-mic-label');if(!settings.anthropicKey){status.textContent='Stel eerst je AI-sleutel in bij Instellingen en kies daarna je foto opnieuw.';return;}if(!['image/jpeg','image/png','image/webp','image/gif'].includes(file.type)){status.textContent='Gebruik een JPG-, PNG-, WebP- of GIF-afbeelding.';return;}if(file.size>5*1024*1024){status.textContent='Deze foto is te groot. Kies een afbeelding onder 5 MB.';return;}const kind=flowPhotoKind,btn=document.getElementById('chef-foto-btn');btn.disabled=true;status.textContent='Recept lezen… je controleert straks de tekst.';try{const base64=await new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(String(r.result).split(',')[1]);r.onerror=reject;r.readAsDataURL(file);});const prompt=kind==='recipe'?'Lees dit geschreven recept letterlijk uit. Verzin GEEN ontbrekende hoeveelheden, porties, tijden of stappen. Neem leesbare tekst over en gebruik [onleesbaar] waar nodig. Porties onbekend: null. Noem alle onduidelijkheden in onzeker.':'Dit is een foto van een gerecht, NIET van een recept. Maak een plausibele reconstructie, duidelijk als schatting. Exacte ingrediënten, hoeveelheden en bereiding zijn onbekend. Zet dit expliciet in onzeker.';const response=await ccFetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':settings.anthropicKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:CC_MODEL_MAIN,max_tokens:3500,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:file.type,data:base64}},{type:'text',text:prompt+' Alleen JSON: {"naam":"","personen":null,"tijd":"","ingredienten":[""],"bereiding":[""],"onzeker":[""],"soort":"recipe of dish"}. Geen voedingswaarden verzinnen.'}]}]})});if(!response.ok)throw Error('De foto kon niet worden gelezen. Probeer opnieuw.');const json=await response.json();if(view!==ccViewRevision)return;const r=safeParseJSON(json.content?.find(c=>c.type==='text')?.text||'');flowAcceptPhotoResult(r,kind);status.textContent='Controleer de herkende tekst en vul onduidelijkheden aan.';}catch(e){status.textContent=e.message||'De foto kon niet worden gelezen. Probeer een scherpere foto.';}finally{btn.disabled=false;}}
+async function flowAnalyseRecipePhoto(input){const view=ccViewRevision;let file=input.files?.[0];input.value='';if(!file)return;file=await ccPreparePhoto(file);if(!file){showBanner('yellow','Deze foto kan ik niet openen. Probeer een andere foto of een schermafbeelding.');return;}const status=document.getElementById('chef-mic-label');if(!settings.anthropicKey){status.textContent='Stel eerst je AI-sleutel in bij Instellingen en kies daarna je foto opnieuw.';return;}if(!['image/jpeg','image/png','image/webp','image/gif'].includes(file.type)){status.textContent='Gebruik een JPG-, PNG-, WebP- of GIF-afbeelding.';return;}if(file.size>5*1024*1024){status.textContent='Deze foto is te groot. Kies een afbeelding onder 5 MB.';return;}const kind=flowPhotoKind,btn=document.getElementById('chef-foto-btn');btn.disabled=true;status.textContent='Recept lezen… je controleert straks de tekst.';try{const base64=await new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(String(r.result).split(',')[1]);r.onerror=reject;r.readAsDataURL(file);});const prompt=kind==='recipe'?'Lees dit geschreven recept letterlijk uit. Verzin GEEN ontbrekende hoeveelheden, porties, tijden of stappen. Neem leesbare tekst over en gebruik [onleesbaar] waar nodig. Porties onbekend: null. Noem alle onduidelijkheden in onzeker.':'Dit is een foto van een gerecht, NIET van een recept. Maak een plausibele reconstructie, duidelijk als schatting. Exacte ingrediënten, hoeveelheden en bereiding zijn onbekend. Zet dit expliciet in onzeker.';const response=await ccFetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':settings.anthropicKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({...ccModelBody(CC_MODEL_MAIN,3500),messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:file.type,data:base64}},{type:'text',text:prompt+' Alleen JSON: {"naam":"","personen":null,"tijd":"","ingredienten":[""],"bereiding":[""],"onzeker":[""],"soort":"recipe of dish"}. Geen voedingswaarden verzinnen.'}]}]})});if(!response.ok)throw Error('De foto kon niet worden gelezen. Probeer opnieuw.');const json=await response.json();if(view!==ccViewRevision)return;const r=safeParseJSON(json.content?.find(c=>c.type==='text')?.text||'');flowAcceptPhotoResult(r,kind);status.textContent='Controleer de herkende tekst en vul onduidelijkheden aan.';}catch(e){status.textContent=e.message||'De foto kon niet worden gelezen. Probeer een scherpere foto.';}finally{btn.disabled=false;}}
 function flowAcceptPhotoResult(r,kind){if(!r||typeof r.naam!=='string'||!Array.isArray(r.ingredienten)||!r.ingredienten.every(x=>typeof x==='string')||!Array.isArray(r.bereiding)||!r.bereiding.every(x=>typeof x==='string'))throw Error('Geen bruikbare recepttekst gevonden.');flowRecipePhoto={naam:r.naam,personen:Number.isInteger(r.personen)&&r.personen>0?r.personen:null,tijd:typeof r.tijd==='string'?r.tijd:'',ingredienten:r.ingredienten,bereiding:r.bereiding,onzeker:Array.isArray(r.onzeker)?r.onzeker.filter(x=>typeof x==='string'):[],source:kind};if(!flowRecipePhoto.personen)flowRecipePhoto.onzeker.push('Het aantal porties is niet bekend.');if(kind==='dish')flowRecipePhoto.onzeker.unshift('Dit is een reconstructie op basis van het uiterlijk, geen uitgelezen recept.');flowPhotoResume();flowPhotoReview();}
 function flowPhotoReview(){const r=flowRecipePhoto;if(!r)return;showModal(`<div class="modal-header"><h2>${r.source==='dish'?'Controleer het voorstel':'Controleer je recept'}</h2>${flowClose()}</div><p class="muted">Pas de tekst aan voordat je verdergaat. De foto zelf wordt niet opgeslagen.</p>${r.onzeker.length?`<div class="flow-review-note"><strong>Nog controleren</strong><ul>${r.onzeker.map(x=>`<li>${escapeText(x)}</li>`).join('')}</ul></div>`:''}<div oninput="flowKeepPhotoDraft()"><label class="flow-field">Titel<input id="flow-photo-name" value="${escapeText(r.naam)}"></label><div class="flow-form-grid"><label class="flow-field">Porties<input id="flow-photo-persons" type="number" min="1" max="30" value="${r.personen||''}" placeholder="Vul het aantal in"></label><label class="flow-field">Bereidingstijd <span>optioneel</span><input id="flow-photo-time" value="${escapeText(r.tijd)}" placeholder="Bijv. 25 min"></label></div><label class="flow-field">Ingrediënten · één per regel<textarea id="flow-photo-ing" rows="6">${escapeText(r.ingredienten.join('\n'))}</textarea></label><label class="flow-field">Bereiding · één stap per regel<textarea id="flow-photo-steps" rows="6">${escapeText(r.bereiding.join('\n'))}</textarea></label>${r.onzeker.length?`<label class="flow-check"><input type="checkbox" id="flow-photo-confirm" ${r.checked?'checked':''}>Ik heb de onduidelijke onderdelen gecontroleerd en waar nodig aangevuld.</label>`:''}</div><p class="flow-error" id="flow-photo-error" role="alert"></p><button class="btn btn-primary btn-full" onclick="flowConfirmPhoto()">Gebruik dit recept</button>`);}
 function flowConfirmPhoto(){const r=flowRecipePhoto;if(!r)return;try{const name=document.getElementById('flow-photo-name').value.trim(),persons=Number(document.getElementById('flow-photo-persons').value),ingredients=document.getElementById('flow-photo-ing').value.split('\n').map(x=>x.trim()).filter(Boolean),steps=document.getElementById('flow-photo-steps').value.split('\n').map(x=>x.trim()).filter(Boolean);if(!name||!Number.isInteger(persons)||persons<1||persons>30||!ingredients.length||!steps.length)throw Error('Vul titel, porties, ingrediënten en bereiding in.');if([...ingredients,...steps].some(x=>/\[onleesbaar\]/i.test(x)))throw Error('Vervang eerst de gemarkeerde onleesbare tekst.');if(r.onzeker.length&&!document.getElementById('flow-photo-confirm').checked)throw Error('Bevestig dat je de onduidelijke onderdelen hebt gecontroleerd.');const recipe={naam:name,personen:persons,_basePersonen:persons,tijd:document.getElementById('flow-photo-time').value.trim(),ingredienten:ingredients,bereiding:steps,vezels:'',eiwitten:'',koolhydraten:'',voedingsbasis:'per_portie',bron:r.source==='dish'?'Reconstructie van gerechtfoto':'Overgenomen van receptfoto',_tmpId:'photo'+Date.now()};window._generatedRecepten=[recipe];flowRecipePhoto=null;flowPhotoResume();flowPreviewPhoto(recipe);}catch(e){document.getElementById('flow-photo-error').textContent=e.message;}}
