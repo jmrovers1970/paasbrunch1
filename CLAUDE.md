@@ -40,7 +40,7 @@ Gebruiker: Jim. Primair op iPhone (Safari), in het Nederlands. Loopt (hoofdsport
 
 **De repository is openbaar** (GitHub Pages op een gratis account vereist dat). Er mogen dus nooit sleutels, tokens of persoonsgegevens in code, commits of testbestanden staan.
 
-**Versie**: constante `APP_VERSION = 'lime-YYYYMMDD-N'` bovenin het script. Getoond in Instellingen. Elke nieuwe versie: datum van vandaag en N doornummeren. Huidige basis: `lime-20261005-25`.
+**Versie**: constante `APP_VERSION = 'lime-YYYYMMDD-N'` bovenin het script. Getoond in Instellingen. Elke nieuwe versie: datum van vandaag en N doornummeren. Huidige basis: `lime-20261005-26`.
 
 ### CSS — twee lagen
 - **Oude laag**: eerste `<style>` in `<head>`. Historisch gegroeid, veel `!important`. Ongebruikte regels zijn al verwijderd; de rest wordt deels overstemd. Niet uitbreiden.
@@ -138,7 +138,7 @@ Kop + begroeting + invoer van Coach is turquoise, kop + invoer + knoppen van Che
 ## 5. Versies en backup
 
 Per opdracht of samenhangende batch:
-1. **Backup vóór je begint**: tag de huidige stand (`git tag lime-20261002-2` of de actuele versie) en push de tag. Dat is het terugvalpunt. Lukt het pushen van een tag niet (in de cloudomgeving wordt dat geweigerd), maak dan via de GitHub-tool `create_branch` een branch `backup/<huidige live versie>` vanaf `main`. Laatste: `backup/lime-20261005-22`.
+1. **Backup vóór je begint**: tag de huidige stand (`git tag lime-20261002-2` of de actuele versie) en push de tag. Dat is het terugvalpunt. Lukt het pushen van een tag niet (in de cloudomgeving wordt dat geweigerd), maak dan via de GitHub-tool `create_branch` een branch `backup/<huidige live versie>` vanaf `main`. Laatste: `backup/lime-20261005-24`.
 2. Werk op een **branch** (bijv. `fase-1`). Pas samenvoegen met `main` als Jim akkoord is, want `main` is meteen live.
 3. Bestandsnaam blijft `health-coach-v1.0.html`; alleen `APP_VERSION` ophogen.
 4. Commitbericht: versie + wat er veranderd is in één regel.
