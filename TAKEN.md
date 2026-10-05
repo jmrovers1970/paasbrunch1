@@ -1,6 +1,6 @@
 # TAKEN.md — Coach-gesprek en receptenoverzicht
 
-Basis: `health-coach-v1.0.html`, versie `lime-20261005-13` (branch `claude/practical-edison-cvl53y`, backup `backup/lime-20261004-12`). Vorige takenlijsten staan in de git-geschiedenis.
+Basis: `health-coach-v1.0.html`, versie `lime-20261005-14` (branch `claude/practical-edison-cvl53y`, backup `backup/lime-20261004-12`). Vorige takenlijsten staan in de git-geschiedenis.
 
 Bron: Jims test op de iPhone (5 okt) met vijf schermafbeeldingen. Zijn woorden staan tussen aanhalingstekens. Jims keuzes op het advies: 1 ja, 2 allebei, 3 "laat maar even", 4 "doe maar helemaal".
 
@@ -48,6 +48,12 @@ Bron: Jims test op de iPhone (5 okt) met vijf schermafbeeldingen. Zijn woorden s
 - *Coach testen* neemt de vervolgvragen nog niet mee in de beoordeling.
 
 ---
+
+## 5 okt — Dinertje op het weekmenu — af (`lime-20261005-14`)
+Jim: "Is dat dan ook gekoppeld aan de boodschappenlijst? Werkt dat allemaal langs dezelfde lijn?" → "Alles in één keer."
+- *Je menu* heeft *Zet op het weekmenu* met een datum: alle gangen komen als diner op die dag, met het aantal personen van het dinertje.
+- Boodschappenlijst rekent per maaltijd met het eigen aantal personen (dinertje voor 6, gewone maaltijden met de teller). *Naar de boodschappen* opent de lijst van die week.
+- **Controle voor Jim**: zet een menu voor 6 op zaterdag, open *Naar de boodschappen* en kijk of de hoeveelheden kloppen.
 
 ## 5 okt — Dinertje: gangen en meer personen — af (`lime-20261005-13`)
 Jim: "Kan bij dinertje voor gasten ook meer gangen (voor, hoofd, na)? En kiezen voor meer personen?" → plan akkoord.

@@ -1748,6 +1748,7 @@ body .vandaag-section-h{font-size:13px!important;font-weight:650!important;text-
 #modal-container .cc-spar-sum{cursor:default}
 #modal-container .cc-spar-next{margin-top:24px}
 #modal-container .cc-spar-persons{margin-top:8px}
+#modal-container .cc-spar-date{margin-top:16px}
 .cc-spar-gangen{display:flex;flex-direction:column;gap:2px;margin:4px 0;font:400 14px/1.4 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-ink)}
 .cc-spar-gangen b{display:inline-block;min-width:56px;margin-right:8px;font-weight:650}
 #modal-container .cc-spar-dir{all:unset;box-sizing:border-box;display:flex;flex-direction:column;gap:4px;width:100%;margin-bottom:12px;padding:16px;border:1px solid var(--cc-line);border-radius:18px;background:var(--cc-card);color:var(--cc-ink);cursor:pointer;overflow-wrap:anywhere;-webkit-tap-highlight-color:transparent}
@@ -2264,7 +2265,7 @@ body input[type="checkbox"]:disabled{opacity:.4;cursor:default}
 'use strict';
 
 // ─── VERSION CHECK (forceert Safari herlading bij nieuwe versie) ──────────────
-const APP_VERSION = 'lime-20261005-13';
+const APP_VERSION = 'lime-20261005-14';
 // Eén plek voor de modellen: Sonnet voor gesprekken en recepten, Haiku voor snelle achtergrondtaken.
 const CC_MODEL_MAIN = 'claude-sonnet-5-5';
 const CC_MODEL_FAST = 'claude-haiku-4-5-20251001';
@@ -3658,8 +3659,7 @@ function switchFoodTab() {
 
 
 
-function showShoppingList() {
-  const weekKey = currentWeekMenuKey();
+function showShoppingList(weekKey = currentWeekMenuKey()) {
   ensureWeek(weekKey);
   const weekDays = data.weken[weekKey];
   const slots = ['ontbijt','lunch','diner','snack'];
@@ -3675,10 +3675,10 @@ function showShoppingList() {
       const items = Array.isArray(slotVal) ? slotVal : (slotVal && slotVal.naam ? [slotVal] : []);
       items.forEach((m, idx) => {
         if (!m || !m.naam || m.naam.trim() === '') return;
-        let ingredienten = [];
+        let ingredienten = [], basis = 2;
         if (m.receptId) {
           const rec = (data.recepten || []).find(r => r.id === m.receptId);
-          if (rec && Array.isArray(rec.ingredienten)) ingredienten = rec.ingredienten.map(i => scaleIngredient(i, rec._basePersonen || rec.personen || 2, 2));
+          if (rec && Array.isArray(rec.ingredienten)) { ingredienten = rec.ingredienten; basis = rec._basePersonen || rec.personen || 2; }
         }
         allMeals.push({
           id: d + '-' + slot + (idx > 0 ? '-' + idx : ''),
@@ -3686,6 +3686,7 @@ function showShoppingList() {
           naam: m.naam,
           ingredienten,
           hasRecept: ingredienten.length > 0,
+          basis, personen: Number(m.personen) || 0,
           _mealId: m.id, _mealSlot: slot, _mealDate: d,
         });
       });
@@ -3693,7 +3694,7 @@ function showShoppingList() {
   });
 
   const coachExtra = [...(data.boodschappenExtra || [])];
-  window._shopState = { allMeals, selected: new Set(allMeals.filter(m => m.hasRecept).map(m => m.id)), inHuis: new Set(), extraItems: coachExtra, persons: 2 };
+  window._shopState = { allMeals, selected: new Set(allMeals.filter(m => m.hasRecept).map(m => m.id)), inHuis: new Set(), extraItems: coachExtra, persons: 2, week: weekKey };
   if (window._shopState.selected.size === 0) window._shopState.selected = new Set(allMeals.map(m => m.id));
   _renderShopPicker();
 }
@@ -7411,8 +7412,20 @@ function ccSparOpenMenu(){ccOpenFrom(ccSparDirections,ccSparMenu);}
 // Je menu: de recepten per gang; elk opent zijn eigen recept met ‹ terug naar het menu.
 function ccSparMenu(){
  const rs=(ccSpar?.recepten||[]).map(id=>(data.recepten||[]).find(r=>r.id===id&&!r.flowDeleted)).filter(Boolean);
- showModal(`<div class="modal-header"><h2>Je menu</h2>${flowClose()}</div><p class="cc-spar-kicker">Dinertje · ${ccSparPersons()} personen</p><div class="cc-list">${rs.map(r=>`<button type="button" class="cc-row cc-recipe-row" aria-haspopup="dialog" onclick="ccOpenFrom(ccSparOpenMenu,()=>flowRecipeDetail(${flowArg(r.id)}))"><span class="cc-recipe-text"><span class="cc-spar-type">${CC_SPAR_GANG[r.gang]||''}</span><span class="cc-recipe-name">${escapeText(r.naam)}</span><span class="cc-recipe-sub">${escapeText(r.tijd||'')}</span></span>${CC_CHEVRON}</button>`).join('')}</div>${rs.find(r=>r.opzet)?`<p class="cc-sheet-note">${escapeText(rs.find(r=>r.opzet).opzet)}</p>`:''}`);
+ showModal(`<div class="modal-header"><h2>Je menu</h2>${flowClose()}</div><p class="cc-spar-kicker">Dinertje · ${ccSparPersons()} personen</p><div class="cc-list">${rs.map(r=>`<button type="button" class="cc-row cc-recipe-row" aria-haspopup="dialog" onclick="ccOpenFrom(ccSparOpenMenu,()=>flowRecipeDetail(${flowArg(r.id)}))"><span class="cc-recipe-text"><span class="cc-spar-type">${CC_SPAR_GANG[r.gang]||''}</span><span class="cc-recipe-name">${escapeText(r.naam)}</span><span class="cc-recipe-sub">${escapeText(r.tijd||'')}</span></span>${CC_CHEVRON}</button>`).join('')}</div>${rs.find(r=>r.opzet)?`<p class="cc-sheet-note">${escapeText(rs.find(r=>r.opzet).opzet)}</p>`:''}<div id="cc-spar-plan">${ccSpar.gepland?ccSparPlannedHtml():`<label class="flow-field cc-spar-date">Welke dag?<input id="cc-spar-date" type="date" value="${ccSpar.datum||today()}"></label><button type="button" class="btn btn-primary btn-full" onclick="ccSparPlanMenu()">Zet op het weekmenu</button>`}</div>`);
 }
+// Het hele menu in één tik als diner op één dag, met het eigen aantal personen (de boodschappenlijst rekent daarmee).
+function ccSparPlanMenu(){
+ const date=document.getElementById('cc-spar-date')?.value,rs=(ccSpar?.recepten||[]).map(id=>(data.recepten||[]).find(r=>r.id===id&&!r.flowDeleted)).filter(Boolean);
+ try{assertLogDate(date);}catch(e){showBanner('red',e.message);return;}
+ if(!rs.length||ccStorageBlocked){if(ccStorageBlocked)ccRecoveryMessage();return;}
+ const before=JSON.stringify(data);
+ try{const day=ensureDay(date);for(const r of rs)(day.maaltijden.diner ||= []).push({id:'m'+Date.now()+Math.random().toString(36).slice(2,6),naam:r.naam,vezels:r.vezels||'',eiwitten:r.eiwitten||'',koolhydraten:r.koolhydraten||'',vet:r.vet||'',gegeten:false,gepland:true,receptId:r.id,personen:r.personen||ccSparPersons()});saveAndSync();}
+ catch(e){data=JSON.parse(before);try{saveLocal();}catch(_){}showBanner('red','Inplannen lukte niet. '+(e.message||''));return;}
+ ccSpar.gepland=true;ccSpar.datum=date;try{renderVandaag();}catch(_){}
+ const el=document.getElementById('cc-spar-plan');if(el)el.innerHTML=ccSparPlannedHtml();
+}
+function ccSparPlannedHtml(){return `<p class="cc-sheet-note">Staat op ${formatShortDate(ccSpar.datum)} als diner, voor ${ccSparPersons()} personen.</p><button type="button" class="btn btn-primary btn-full" onclick="ccOpenFrom(ccSparOpenMenu,()=>showShoppingList(getISOWeek(new Date(${flowArg(ccSpar.datum)}+'T12:00:00'))))">Naar de boodschappen</button>`;}
 function ccSparRenderDirs(){
  const el=document.getElementById('cc-spar-dirs');if(!el||!ccSpar?.richtingen)return;
  const k=ccSpar.keuze,chosen=k!==null&&k!==undefined,done=(ccSpar.recepten||[]).some(id=>(data.recepten||[]).some(r=>r.id===id&&!r.flowDeleted)),multi=ccSparCourses().length>1;
@@ -7422,7 +7435,7 @@ function ccSparRenderDirs(){
   +(done?`<button type="button" class="btn btn-primary btn-full cc-spar-next" onclick="ccSparOpenResult()">${multi?'Bekijk je menu':'Open recept'}</button>`:`<button type="button" class="btn btn-primary btn-full cc-spar-next" ${chosen?'':'disabled'} onclick="ccSparRecipe()">${multi?'Maak het menu':'Maak het recept'}</button>`);
 }
 function ccSparChoose(i){if(!ccSpar?.richtingen?.[i]||(ccSpar.recepten||[]).length)return;ccSpar.keuze=ccSpar.keuze===i?null:i;ccSparRenderDirs();}
-function ccSparReset(){Object.assign(ccSpar,{richtingen:null,keuze:null,bijgestuurd:'',recepten:null});}
+function ccSparReset(){Object.assign(ccSpar,{richtingen:null,keuze:null,bijgestuurd:'',recepten:null,gepland:false,datum:''});}
 function ccSparPick(key,v,step){if(!ccSpar)return;if(ccSpar[key]!==v)ccSparReset();ccSpar[key]=v;ccSparShow(step===0?0:step+1);}
 function ccSparNiet(v){if(!ccSpar)return;ccSparReset();if(ccSpar.niet.has(v))ccSpar.niet.delete(v);else ccSpar.niet.add(v);ccSparShow(0);}
 function flowRenderChef(){const container=document.getElementById('food-chef-content');if(!container)return;const draft=document.getElementById('gen-focus-input')?.value||'';container.innerHTML=`<section class="flow-chef-card"><div class="cc-eyebrow"><span class="cc-page-tag">Chef</span></div><h1>Wat eet je?</h1><div class="cc-chef-bar"><button id="voice-recipe-btn" class="flow-speak" onclick="smartVoiceRecipe()">${flowVoiceGlyph()} Spreek je eetwens in</button><label class="sr-only" for="gen-focus-input">Je vraag of receptwens</label><textarea id="gen-focus-input" rows="1" oninput="ccResizeComposer(this)" placeholder="Wat wil je eten?">${escapeText(draft)}</textarea><button type="button" class="cc-clear" onclick="ccClearInput('gen-focus-input','chef-mic-label')" aria-label="Tekst wissen"><svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="14" fill="currentColor" opacity=".14"/><path d="m10 10 8 8m0-8-8 8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button><button id="chef-foto-btn" onclick="flowPhotoMenu()" aria-label="Foto toevoegen: recept, gerecht of voorraad" title="Foto: recept, gerecht of voorraad"><svg class="cc-icon" data-cc-icon="camera" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6 10 3h4l2 3h4v14H4V6z"/><circle cx="12" cy="13" r="4"/></svg><span>Foto toevoegen</span></button><button id="gen-btn" class="flow-send" onclick="generateRecepten()" aria-label="Verstuur" title="Verstuur"><svg class="cc-icon" data-cc-icon="send" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5m-6 6 6-6 6 6"/></svg></button></div><p id="chef-mic-label" class="flow-status" role="status"></p>${ccFromCoach?`<div class="cc-from-coach"><span>Uit je gesprek met Coach</span><button type="button" aria-label="Gesprek met Coach niet meenemen" onclick="ccFromCoachClear()"><svg class="cc-icon" data-cc-icon="close" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div>`:''}<input id="chef-foto-input" type="file" accept="image/*" style="display:none" onchange="analyseChefFoto(this)"><div class="cc-chef-modes"><div class="cc-chef-line"><h2 class="cc-chef-lab">Sport</h2><div class="cc-chef-row">${[['voor','Voor'],['tijdens','Tijdens'],['na','Na']].map(flowChefModeButton).join('')}</div></div><div class="cc-chef-line"><h2 class="cc-chef-lab">Maaltijd</h2><div class="cc-chef-row">${[['makkelijk','Snel'],['mealprep','Meal prep'],['comfort','Comfort']].map(flowChefModeButton).join('')}</div></div><div class="cc-chef-line"><h2 class="cc-chef-lab">Voorraad</h2><button type="button" class="cc-entry" aria-haspopup="dialog" onclick="showVoorraadModal()"><span id="cc-voorraad-label">${ccVoorraadText()}</span>${CC_CHEVRON}</button></div><div class="cc-chef-line"><h2 class="cc-chef-lab">Sparren</h2><button type="button" class="cc-entry" aria-haspopup="dialog" onclick="ccSparStart()"><span>Dinertje voor gasten</span>${CC_CHEVRON}</button></div></div></section><div id="flow-photo-resume"></div><div id="flow-chef-answer" aria-live="polite"></div>`;if(draft)ccResizeComposer(document.getElementById('gen-focus-input'));if(flowChefAdvice)flowRenderAdvice();flowPhotoResume();}
@@ -7616,7 +7629,7 @@ function flowConfirmGeneratedMeal(id,eaten){
  const date=document.getElementById('gen-log-date').value,slot=document.getElementById('gen-log-slot').value;
  try{assertLogDate(date);if(!['ontbijt','lunch','diner','snack'].includes(slot))throw Error('Kies een maaltijdmoment.');}catch(e){showBanner('red',e.message);return;}
  const day=ensureDay(date);r._type=slot;const saved=retainGeneratedRecipe(r);
- (day.maaltijden[slot] ||= []).push({id:'m'+Date.now()+Math.random().toString(36).slice(2,6),naam:r.naam,vezels:r.vezels,eiwitten:r.eiwitten,koolhydraten:r.koolhydraten,vet:r.vet||'',gegeten:eaten,gepland:!eaten,receptId:saved.id});
+ (day.maaltijden[slot] ||= []).push({id:'m'+Date.now()+Math.random().toString(36).slice(2,6),naam:r.naam,vezels:r.vezels,eiwitten:r.eiwitten,koolhydraten:r.koolhydraten,vet:r.vet||'',gegeten:eaten,gepland:!eaten,receptId:saved.id,...(r.bron==='sparren'?{personen:r.personen}:{})});
  saveAndSync();renderVandaag();closeModal();showBanner('green',`${r.naam} ${eaten?'gegeten':'gepland'} op ${formatShortDate(date)}.`);
 }
 
@@ -7771,13 +7784,13 @@ function ritmeCorrectionDate(text){try{return _resolveDate(text.replace(/^(?:nee
 
 
 function _renderShopPicker(){
- const state=window._shopState,days=getWeekDates(currentWeekMenuKey());
- showModal(`<div class="modal-header"><h2>Boodschappen</h2>${flowClose()}</div><div class="ritme-shop-intro"><span class="ritme-kicker">${formatShortDate(days[0])} – ${formatShortDate(days[6])}</span><p>Kies je gerechten. Daarna vink je af wat je al hebt.</p></div><label class="flow-field">Personen per gerecht<select onchange="_setShopPersons(Number(this.value))">${[1,2,3,4,5,6,7,8].map(n=>`<option value="${n}" ${state.persons===n?'selected':''}>${n} ${n===1?'persoon':'personen'}</option>`).join('')}</select></label><div class="ritme-shop-picks">${state.allMeals.map(m=>`<div class="ritme-shop-pick"><label><input type="checkbox" ${state.selected.has(m.id)?'checked':''} onchange="_toggleShopMeal(${flowArg(m.id)},this.checked)"><span><small>${escapeText(m.label)}</small><strong>${escapeText(m.naam)}</strong></span></label>${m.hasRecept?'':`<span class="muted">Ingrediënten ontbreken</span>`}</div>`).join('')||'<p class="muted">Nog geen gerechten in deze week. Losse boodschappen kun je wel toevoegen.</p>'}</div><button class="btn btn-primary btn-full" onclick="_buildAndShowShopList()">Bekijk mijn lijst</button>`);
+ const state=window._shopState,days=getWeekDates(state.week||currentWeekMenuKey());
+ showModal(`<div class="modal-header"><h2>Boodschappen</h2>${flowClose()}</div><div class="ritme-shop-intro"><span class="ritme-kicker">${formatShortDate(days[0])} – ${formatShortDate(days[6])}</span><p>Kies je gerechten. Daarna vink je af wat je al hebt.</p></div><label class="flow-field">Personen per gerecht<select onchange="_setShopPersons(Number(this.value))">${[1,2,3,4,5,6,7,8].map(n=>`<option value="${n}" ${state.persons===n?'selected':''}>${n} ${n===1?'persoon':'personen'}</option>`).join('')}</select></label><div class="ritme-shop-picks">${state.allMeals.map(m=>`<div class="ritme-shop-pick"><label><input type="checkbox" ${state.selected.has(m.id)?'checked':''} onchange="_toggleShopMeal(${flowArg(m.id)},this.checked)"><span><small>${escapeText(m.label)}</small><strong>${escapeText(m.naam)}</strong>${m.personen?`<small>${m.personen} personen</small>`:''}</span></label>${m.hasRecept?'':`<span class="muted">Ingrediënten ontbreken</span>`}</div>`).join('')||'<p class="muted">Nog geen gerechten in deze week. Losse boodschappen kun je wel toevoegen.</p>'}</div><button class="btn btn-primary btn-full" onclick="_buildAndShowShopList()">Bekijk mijn lijst</button>`);
 }
 // Local, deterministic scaling: extra groceries are never multiplied by party size.
 function _buildAndShowShopList(){
  const s=window._shopState,items=[],missing=[];
- for(const m of s.allMeals){if(!s.selected.has(m.id))continue;if(!m.hasRecept){missing.push(m.naam);continue;}for(const ingredient of m.ingredienten||[])items.push({text:scaleIngredient(ingredient,2,s.persons||2),recept:m.naam});}
+ for(const m of s.allMeals){if(!s.selected.has(m.id))continue;if(!m.hasRecept){missing.push(m.naam);continue;}for(const ingredient of m.ingredienten||[])items.push({text:scaleIngredient(ingredient,m.basis||2,m.personen||s.persons||2),recept:m.naam});}
  for(const text of s.extraItems)items.push({text,recept:null});
  const cats=_categorizeIngredients(ritmeMergeGroceries(items));
  let markup='';
