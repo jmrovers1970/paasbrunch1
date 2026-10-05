@@ -1900,7 +1900,7 @@ body .vandaag-section-h{font-size:13px!important;font-weight:650!important;text-
 #settings-overlay .cc-set-icon:focus-visible{outline:2px solid var(--cc-green);outline-offset:-2px}
 #settings-overlay .cc-list+.cc-list,#settings-overlay .cc-set-note+.cc-list{margin-top:24px}
 .cc-set-row{position:relative;display:flex;align-items:center;gap:16px;min-height:56px;padding:0 16px;cursor:pointer}
-.cc-set-row+.cc-set-row::before,#cc-set-more>.cc-row::before{content:'';position:absolute;left:16px;right:0;top:0;height:1px;background:var(--cc-line)}
+.cc-set-row+.cc-set-row::before,.cc-set-row+.cc-row::before,.cc-row+.cc-set-row::before,#cc-set-more>.cc-row::before{content:'';position:absolute;left:16px;right:0;top:0;height:1px;background:var(--cc-line)}
 .cc-set-row>span{flex:none;font:600 16px/1.25 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-ink)}
 #settings-overlay .cc-set-row input:not([type=checkbox]),#setup-overlay .cc-set-row input:not([type=checkbox]){all:unset;flex:1;min-width:0;text-align:right;font:400 16px/1.3 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-muted);-webkit-text-fill-color:currentColor}
 #settings-overlay .cc-set-row input:not([type=checkbox])::placeholder{color:var(--cc-muted);opacity:.7}
@@ -2267,7 +2267,7 @@ body input[type="checkbox"]:disabled{opacity:.4;cursor:default}
 'use strict';
 
 // ─── VERSION CHECK (forceert Safari herlading bij nieuwe versie) ──────────────
-const APP_VERSION = 'lime-20261005-22';
+const APP_VERSION = 'lime-20261005-23';
 // Eén plek voor de modellen: Sonnet voor gesprekken en recepten, Haiku voor snelle achtergrondtaken.
 const CC_MODEL_MAIN = 'claude-sonnet-5-5';
 const CC_MODEL_FAST = 'claude-haiku-4-5-20251001';
@@ -3104,17 +3104,14 @@ const CC_EN={
  "Voorlezen is in deze browser niet beschikbaar.":"Reading aloud isn't available in this browser.",
  "Kies een richting":"Choose a direction",
  // Instellingen, vensters en meldingen
- "De sleutel blijft op deze telefoon. Privacymodus aan: de AI krijgt alleen je bericht en wat je vandaag logde.":"The key stays on this phone. Privacy mode on: the AI only gets your message and what you logged today.",
- "Meer instellingen":"More settings",
+  "Meer instellingen":"More settings",
  "Bewaar":"Save",
  "Sluiten zonder opslaan":"Close without saving",
  "Over jou":"About you",
  "Doelen":"Goals",
  "Stem en spraak":"Voice and speech",
  "Wat Coach onthoudt":"What Coach remembers",
- "Coach-tegels":"Coach tiles",
- "Synchronisatie":"Sync",
- "Uit":"Off",
+  "Uit":"Off",
  "Aan":"On",
  "Testen":"Testing",
  "Kopie en opnieuw":"Backup and reset",
@@ -3148,7 +3145,7 @@ const CC_EN={
  "Zonder OpenAI-sleutel leest de stem van je telefoon voor.":"Without an OpenAI key, your phone's voice reads aloud.",
  "Eigen woorden voor spraak":"Own words for speech",
  "Voor een natuurlijkere stem":"For a more natural voice",
- "Namen, oefeningen of gerechten, met komma's":"Names, exercises or dishes, separated by commas",
+ "Namen, oefeningen of gerechten, met komma's":"Names, exercises, dishes",
  "Blijvend":"Lasting",
  "Tik op een herinnering om hem aan te passen of te vergeten. Coach onthoudt alleen wat je zelf zegt.":"Tap a memory to edit or forget it. Coach only remembers what you say yourself.",
  "Alles vergeten":"Forget everything",
@@ -3162,8 +3159,7 @@ const CC_EN={
  "GitHub-toegangssleutel":"GitHub access token",
  "Gist-ID":"Gist ID",
  "Wachtwoord":"Password",
- "Vergeet je het wachtwoord, dan is de cloudkopie niet meer te openen; je gegevens op deze telefoon blijven wel bruikbaar. Begin bij voorkeur met een nieuwe, lege Gist.":"If you forget the password, the cloud copy can't be opened; your data on this phone stays usable. Preferably start with a new, empty Gist.",
- "Personal access token":"Personal access token",
+  "Personal access token":"Personal access token",
  "ID van je eigen Gist":"ID of your own Gist",
  "Versleutelt je cloudkopie":"Encrypts your cloud copy",
  "Coach testen":"Test Coach",
@@ -3281,6 +3277,8 @@ const CC_EN={
  "Niet aangepast.":"Not changed.",
  "Kopiëren niet gelukt.":"Copying failed.",
  "Vergeten niet volledig opgeslagen.":"Forgetting not fully saved.",
+ // Sleutels
+ "Sleutels":"Keys","Nog invullen":"Not set","AI-sleutel (Anthropic)":"AI key (Anthropic)","Nodig voor Coach en Chef. Je sleutels blijven op deze telefoon.":"Needed for Coach and Chef. Your keys stay on this phone.","Cloudkopie (optioneel)":"Cloud copy (optional)","Deel deze nooit met iemand anders: dan mengen je gegevens met die van een ander. Vergeet je het wachtwoord, dan is de cloudkopie niet meer te openen; je gegevens op deze telefoon blijven wel bruikbaar.":"Never share these with anyone: your data would mix with theirs. If you forget the password, the cloud copy can't be opened; your data on this phone stays usable.","Privacymodus aan: de AI krijgt alleen je bericht en wat je vandaag logde.":"Privacy mode on: the AI only gets your message and what you logged today.",
  // foutmeldingen
  "API fout:":"API error:",
  "API-sleutel niet geldig — check instellingen.":"API key not valid — check settings.",
@@ -8574,14 +8572,14 @@ function openSettings(){
  const row=(label,meta,action)=>`<button type="button" class="cc-row" onclick="${action}"><span class="cc-row-label">${label}</span><span class="cc-row-meta">${escapeText(meta)}</span>${CC_CHEVRON}</button>`;
  const voice=settings.ttsVoice||'nova',mem=ccMemoryItems().length;
  el.innerHTML=`<div class="cc-settings"><section class="cc-set-page" data-page=""><div class="cc-set-head"><h1 tabindex="-1">Instellingen</h1><button type="button" class="cc-set-icon" onclick="closeSettings()" aria-label="Sluiten zonder opslaan"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div>
- <div class="cc-list"><label class="cc-set-row"><span>Naam</span><input id="set-naam" placeholder="Je naam" autocomplete="given-name"></label><label class="cc-set-row"><span>AI-sleutel</span><input id="set-anthropic" type="password" placeholder="Plak je sleutel" autocomplete="off" spellcheck="false"></label><label class="cc-set-row"><span>Voorlezen</span><input id="ritme-tts" type="checkbox" ${_ttsEnabled?'checked':''}></label><label class="cc-set-row"><span>Privacymodus</span><input id="ritme-privacy" type="checkbox" ${settings.privacyModus?'checked':''}></label></div>
- <p class="cc-set-note">De sleutel blijft op deze telefoon. Privacymodus aan: de AI krijgt alleen je bericht en wat je vandaag logde.</p>
- <div class="cc-list"><button type="button" class="cc-row" aria-expanded="false" aria-controls="cc-set-more" onclick="ccToggleSetMore(this)"><span class="cc-row-label">Meer instellingen</span><span class="cc-row-meta"></span>${CC_CHEVRON}</button><div id="cc-set-more" hidden>${row('Over jou','',"ccSetPage('over',this)")}${row('Doelen',ccMoveGoal()+' min · '+goals.vezels+' g',"ccSetPage('doelen',this)")}${row('Stem en spraak',voice[0].toUpperCase()+voice.slice(1),"ccSetPage('stem',this)")}${row('Wat Coach onthoudt',mem?String(mem):'',"ccSetPage('geheugen',this)")}${row('Coach-tegels','','ritmeCustomize()')}${row('Synchronisatie',settings.githubToken&&settings.gistId?'Aan':'Uit',"ccSetPage('sync',this)")}${row('Testen','',"ccSetPage('testen',this)")}${row('Kopie en opnieuw','',"ccSetPage('kopie',this)")}${row('Opnieuw instellen','',"ccWizStart('again')")}${row('Uitleg over de app','','showIntro()')}</div></div></section>
+ <div class="cc-list"><label class="cc-set-row"><span>Naam</span><input id="set-naam" placeholder="Je naam" autocomplete="given-name"></label>${row('Sleutels',settings.anthropicKey?'AI ✓':'Nog invullen',"ccSetPage('sleutels',this)")}<label class="cc-set-row"><span>Voorlezen</span><input id="ritme-tts" type="checkbox" ${_ttsEnabled?'checked':''}></label><label class="cc-set-row"><span>Privacymodus</span><input id="ritme-privacy" type="checkbox" ${settings.privacyModus?'checked':''}></label></div>
+ <p class="cc-set-note">Privacymodus aan: de AI krijgt alleen je bericht en wat je vandaag logde.</p>
+ <div class="cc-list"><button type="button" class="cc-row" aria-expanded="false" aria-controls="cc-set-more" onclick="ccToggleSetMore(this)"><span class="cc-row-label">Meer instellingen</span><span class="cc-row-meta"></span>${CC_CHEVRON}</button><div id="cc-set-more" hidden>${row('Over jou','',"ccSetPage('over',this)")}${row('Doelen',ccMoveGoal()+' min · '+goals.vezels+' g',"ccSetPage('doelen',this)")}${row('Stem en spraak',voice[0].toUpperCase()+voice.slice(1),"ccSetPage('stem',this)")}${row('Wat Coach onthoudt',mem?String(mem):'',"ccSetPage('geheugen',this)")}${row('Testen','',"ccSetPage('testen',this)")}${row('Kopie en opnieuw','',"ccSetPage('kopie',this)")}${row('Opnieuw instellen','',"ccWizStart('again')")}${row('Uitleg over de app','','showIntro()')}</div></div></section>
  ${page('over','Over jou',`<div class="flow-form-grid"><label class="flow-field">Taal van de antwoorden<select id="set-taal"><option value="">Nederlands</option><option value="en">English</option></select></label><label class="flow-field">Land<select id="set-land">${CC_COUNTRIES.map(([c,n])=>`<option value="${c==='NL'?'':c}">${n}</option>`).join('')}</select></label></div>${field('landnaam','Naam van het land','Alleen bij Ander land')}${field('doel','Waar wil je naartoe?','Bijvoorbeeld meer energie of vaker bewegen')}${field('sporten','Wat doe je graag?','Bijvoorbeeld hardlopen, fietsen, wandelen')}${field('weekritme','Je weekritme','Welke dagen passen goed?')}${field('slaap','Slaap en routine','Alleen als je dit wilt meenemen')}${field('eten','Wat eet je graag of liever niet?','Voorkeuren, gewoontes of ingrediënten')}<h3 class="cc-set-sub">Optioneel</h3><div class="flow-form-grid">${field('leeftijd','Leeftijd','','number')}<label class="flow-field">Geslacht<select id="set-geslacht"><option value="">Niet opgegeven</option><option value="man">Man</option><option value="vrouw">Vrouw</option><option value="anders">Anders / liever niet zeggen</option></select></label>${field('gewicht','Gewicht · kg','','number')}${field('streefgewicht','Streefgewicht · kg','','number')}</div><p class="cc-set-note">Vul alleen in wat Coach mag meenemen.</p>`)}
  ${page('doelen','Doelen',`<label class="flow-field">Bewegen · min per week<input id="ritme-goal-move" inputmode="numeric" value="${ccMoveGoal()}"></label><div class="flow-form-grid"><label class="flow-field">Vezels · g per dag<input id="ritme-goal-fiber" inputmode="decimal" value="${goals.vezels}"></label><label class="flow-field">Eiwit · g per dag<input id="ritme-goal-protein" inputmode="decimal" value="${goals.eiwitten}"></label><label class="flow-field">Koolhydraten · g per dag<input id="ritme-goal-carbs" inputmode="decimal" placeholder="Leeg = geen doel" value="${goals.koolhydraten||''}"></label><label class="flow-field">Vet · g per dag<input id="ritme-goal-fat" inputmode="decimal" placeholder="Leeg = geen doel" value="${goals.vet||''}"></label></div><p class="cc-set-note">Jouw eigen doelen voor het overzicht. De Beweegrichtlijn noemt 150 minuten per week. Koolhydraten en vet zijn optioneel.</p>`)}
- ${page('stem','Stem en spraak',`<label class="flow-field">Stem bij voorlezen<select id="set-tts-voice">${['nova','shimmer','echo','onyx','alloy','fable'].map(v=>`<option value="${v}">${v[0].toUpperCase()+v.slice(1)}</option>`).join('')}</select></label>${field('openai','OpenAI-sleutel · optioneel','Voor een natuurlijkere stem','password')}<p class="cc-set-note">Zonder OpenAI-sleutel leest de stem van je telefoon voor.</p>${field('woorden','Eigen woorden voor spraak','Namen, oefeningen of gerechten, met komma\'s')}`)}
+ ${page('stem','Stem en spraak',`<label class="flow-field">Stem bij voorlezen<select id="set-tts-voice">${['nova','shimmer','echo','onyx','alloy','fable'].map(v=>`<option value="${v}">${v[0].toUpperCase()+v.slice(1)}</option>`).join('')}</select></label>${field('woorden','Eigen woorden voor spraak','Namen, oefeningen of gerechten, met komma\'s')}`)}
  ${page('geheugen','Wat Coach onthoudt',`<div id="cc-memory-panel"></div><h3 class="cc-set-sub">Samen bewegen</h3><div id="partners-list"></div><button type="button" class="ritme-link" onclick="showAddPartnerModal()">Iemand toevoegen</button><h3 class="cc-set-sub">Patronen</h3><div id="cc-patterns-box">${ccPatternsHtml()}</div>`)}
- ${page('sync','Synchronisatie',`<p class="cc-set-note">Bewaart een kopie in je eigen GitHub Gist, zodat je op meer apparaten kunt werken.</p>${field('token','GitHub-toegangssleutel','Personal access token','password')}${field('gist','Gist-ID','ID van je eigen Gist')}${field('syncpass','Wachtwoord · optioneel','Versleutelt je cloudkopie','password')}<p class="cc-set-note">Vergeet je het wachtwoord, dan is de cloudkopie niet meer te openen; je gegevens op deze telefoon blijven wel bruikbaar. Begin bij voorkeur met een nieuwe, lege Gist.</p>`)}
+ ${page('sleutels','Sleutels',`<label class="flow-field">AI-sleutel (Anthropic)<input id="set-anthropic" type="password" placeholder="Plak je sleutel" autocomplete="off" spellcheck="false"></label><p class="cc-set-note">Nodig voor Coach en Chef. Je sleutels blijven op deze telefoon.</p>${field('openai','OpenAI-sleutel · optioneel','Voor een natuurlijkere stem','password')}<p class="cc-set-note">Zonder OpenAI-sleutel leest de stem van je telefoon voor.</p><h3 class="cc-set-sub">Cloudkopie (optioneel)</h3><p class="cc-set-note">Bewaart een kopie in je eigen GitHub Gist, zodat je op meer apparaten kunt werken.</p>${field('token','GitHub-toegangssleutel','Personal access token','password')}${field('gist','Gist-ID','ID van je eigen Gist')}${field('syncpass','Wachtwoord · optioneel','Versleutelt je cloudkopie','password')}<p class="cc-set-note">Deel deze nooit met iemand anders: dan mengen je gegevens met die van een ander. Vergeet je het wachtwoord, dan is de cloudkopie niet meer te openen; je gegevens op deze telefoon blijven wel bruikbaar.</p>`)}
  ${page('testen','Testen',`<div class="cc-list">${row('Coach testen','14 vragen','ccOpenEval()')}${row('Chef testen','5 vragen','ccOpenChefEval()')}</div><p class="cc-set-note">Vaste vragen met nepdata; een tweede AI beoordeelt de antwoorden. Je eigen gegevens blijven onaangeroerd. Kost een paar cent.</p>`)}
  ${page('kopie','Kopie en opnieuw',`<div class="flow-action-stack"><button class="btn btn-secondary" onclick="exportData()">Download een kopie</button><label class="btn btn-ghost ritme-file-label">Een kopie terugzetten<input type="file" accept=".json" onchange="importData(this)"></label></div><h3 class="cc-set-sub">Opnieuw beginnen</h3><p class="cc-set-note">Maak eerst een kopie. Je krijgt nog een bevestiging.</p><div class="flow-action-stack"><button class="btn btn-ghost" onclick="openResetActiviteitenModal()">Activiteiten wissen</button><button class="btn btn-ghost" onclick="openResetMaaltijdenModal()">Eten wissen</button><button class="btn btn-ghost" onclick="resetApp()">Hele app opnieuw beginnen</button></div>`)}
  <div class="cc-set-save"><p id="ritme-settings-error" class="flow-error" role="alert"></p><button type="button" class="btn btn-primary btn-full" onclick="saveSettings()">Bewaar</button></div><p class="cc-set-version">${APP_VERSION}</p></div>`;

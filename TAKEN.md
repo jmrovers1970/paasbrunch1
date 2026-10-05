@@ -1,6 +1,6 @@
 # TAKEN.md — Coach-gesprek en receptenoverzicht
 
-Basis: `health-coach-v1.0.html`, versie `lime-20261005-22` (branch `claude/practical-edison-cvl53y`, backup `backup/lime-20261004-12`). Vorige takenlijsten staan in de git-geschiedenis.
+Basis: `health-coach-v1.0.html`, versie `lime-20261005-23` (branch `claude/practical-edison-cvl53y`, backup `backup/lime-20261004-12`). Vorige takenlijsten staan in de git-geschiedenis.
 
 Bron: Jims test op de iPhone (5 okt) met vijf schermafbeeldingen. Zijn woorden staan tussen aanhalingstekens. Jims keuzes op het advies: 1 ja, 2 allebei, 3 "laat maar even", 4 "doe maar helemaal".
 
@@ -48,6 +48,11 @@ Bron: Jims test op de iPhone (5 okt) met vijf schermafbeeldingen. Zijn woorden s
 - *Coach testen* neemt de vervolgvragen nog niet mee in de beoordeling.
 
 ---
+
+## 5 okt — Instellingen: Sleutels bij elkaar — af op branch (`lime-20261005-23`)
+Jim: "Tegels aanpassen in Instellingen, is dat nog actueel? Kunnen de sleutels niet bij elkaar?" → plan akkoord.
+- Nieuwe pagina *Sleutels* (AI, OpenAI, cloudkopie) via de rij *Sleutels* bovenaan; *Synchronisatie* en *Coach-tegels* weg uit Instellingen (tegels staan op het Coach-scherm).
+- **Controle voor Jim**: open Instellingen › Sleutels. Staan je sleutels er nog? Werkt de cloudkopie nog (geen melding)?
 
 ## 5 okt — Engels, ronde 4 van 4 (Instellingen, vensters, meldingen) — af op branch (`lime-20261005-22`)
 - ~230 teksten: Instellingen en alle pagina's, bevestigingen, meldingen en foutmeldingen; taal wisselen in Instellingen werkt direct.
