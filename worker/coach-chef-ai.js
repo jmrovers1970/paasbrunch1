@@ -4,6 +4,7 @@
 // Nodig in Cloudflare (Settings › Variables and Secrets / Bindings):
 //   geheim ANTHROPIC_KEY   = je Anthropic-sleutel
 //   geheim ADMIN_PASSWORD  = wachtwoord voor de beheerpagina (/admin, inlogpagina)
+//   geheim OPENAI_KEY      = optioneel: OpenAI-sleutel voor de voorleesstem (zonder: de app leest voor met de stem van de telefoon)
 //   KV-binding CODES       = opslag voor codes en gebruik
 // Er staan geen sleutels in dit bestand.
 
@@ -11,6 +12,7 @@ const ORIGINS = ['https://jmrovers1970.github.io'];
 const MODELS = /^claude-(sonnet|haiku|opus)-/;
 const MAX_TOKENS = 16000;
 const DEFAULT_LIMIT = 300; // aanvragen per code per maand
+const VOICES = ['nova', 'shimmer', 'echo', 'onyx', 'alloy', 'fable'];
 
 export default {
   async fetch(req, env) {
@@ -25,12 +27,14 @@ export default {
       'Vary': 'Origin'
     };
     if (req.method === 'OPTIONS') return new Response(null, { status: 204, headers: cors });
-    if (url.pathname !== '/v1/messages' || req.method !== 'POST') return fail('Niet gevonden', 404, cors);
+    const speech = url.pathname === '/v1/audio/speech';
+    if ((url.pathname !== '/v1/messages' && !speech) || req.method !== 'POST') return fail('Niet gevonden', 404, cors);
     if (!ORIGINS.includes(origin)) return fail('Niet toegestaan', 403, cors);
 
     const code = (req.headers.get('x-cc-code') || '').trim().toUpperCase();
     const rec = code ? await env.CODES.get('code:' + code, 'json') : null;
     if (!rec || !rec.actief) return fail('Ongeldige uitnodigingscode', 401, cors);
+    if (speech) return voice(req, env, cors);
     const useKey = `use:${code}:${new Date().toISOString().slice(0, 7)}`;
     const used = Number(await env.CODES.get(useKey)) || 0;
     if (used >= (rec.limiet || DEFAULT_LIMIT)) return fail('Maandlimiet bereikt', 429, cors);
@@ -39,7 +43,7 @@ export default {
     try { body = await req.json(); } catch { return fail('Ongeldig verzoek', 400, cors); }
     if (!MODELS.test(String(body.model || ''))) return fail('Model niet toegestaan', 400, cors);
     body.max_tokens = Math.min(Number(body.max_tokens) || 1000, MAX_TOKENS);
-    await env.CODES.put(useKey, String(used + 1), { expirationTtl: 60 * 60 * 24 * 70 });
+    try { await env.CODES.put(useKey, String(used + 1), { expirationTtl: 60 * 60 * 24 * 70 }); } catch {} // tellen mag de vraag niet tegenhouden
 
     const up = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
@@ -51,6 +55,23 @@ export default {
     return new Response(up.body, { status: up.status, headers });
   }
 };
+
+// Voorlezen: alleen tts-1 en de vaste stemmen. Telt niet mee voor de maandlimiet; zet de bestedingslimiet in OpenAI zelf.
+async function voice(req, env, cors) {
+  if (!env.OPENAI_KEY) return fail('Geen stem ingesteld', 503, cors);
+  let body;
+  try { body = await req.json(); } catch { return fail('Ongeldig verzoek', 400, cors); }
+  const input = String(body.input || '').slice(0, 4096);
+  if (!input.trim()) return fail('Geen tekst', 400, cors);
+  const up = await fetch('https://api.openai.com/v1/audio/speech', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', 'authorization': 'Bearer ' + env.OPENAI_KEY },
+    body: JSON.stringify({ model: 'tts-1', input, voice: VOICES.includes(body.voice) ? body.voice : 'nova', speed: 1.0 })
+  });
+  const headers = new Headers(cors);
+  headers.set('content-type', up.headers.get('content-type') || 'audio/mpeg');
+  return new Response(up.body, { status: up.status, headers });
+}
 
 function fail(message, status, cors) {
   return new Response(JSON.stringify({ type: 'error', error: { message } }), { status, headers: { ...cors, 'content-type': 'application/json' } });
@@ -76,25 +97,30 @@ async function admin(req, env, url) {
     if (action === 'nieuw') {
       const code = makeCode();
       await env.CODES.put('code:' + code, JSON.stringify({ naam: String(form.get('naam') || '').slice(0, 60), limiet: Math.max(1, Number(form.get('limiet')) || DEFAULT_LIMIT), actief: true, gemaakt: new Date().toISOString().slice(0, 10) }));
+      await env.CODES.put('index', JSON.stringify([...new Set([...(await env.CODES.get('index', 'json') || []), code])]));
+      return new Response(null, { status: 303, headers: { Location: '/admin?nieuw=' + code } });
     } else {
       const code = String(form.get('code') || '').toUpperCase(), rec = await env.CODES.get('code:' + code, 'json');
       if (rec && action === 'aan') { rec.actief = !rec.actief; await env.CODES.put('code:' + code, JSON.stringify(rec)); }
       if (rec && action === 'limiet') { rec.limiet = Math.max(1, Number(form.get('limiet')) || rec.limiet); await env.CODES.put('code:' + code, JSON.stringify(rec)); }
-      if (rec && action === 'weg') await env.CODES.delete('code:' + code);
+      if (rec && action === 'weg') { await env.CODES.delete('code:' + code); await env.CODES.put('index', JSON.stringify((await env.CODES.get('index', 'json') || []).filter(c => c !== code))); }
     }
     return new Response(null, { status: 303, headers: { Location: '/admin' } });
   }
-  const list = await env.CODES.list({ prefix: 'code:' });
-  const rows = [];
-  for (const k of list.keys) {
-    const code = k.name.slice(5), rec = await env.CODES.get(k.name, 'json') || {}, used = Number(await env.CODES.get(`use:${code}:${month}`)) || 0;
+  // De lijst van KV loopt soms een minuut achter; de index (één sleutel) is direct bij.
+  const listed = (await env.CODES.list({ prefix: 'code:' })).keys.map(k => k.name.slice(5));
+  const codes = [...new Set([...(await env.CODES.get('index', 'json') || []), ...listed])];
+  const rows = [], nieuw = (url.searchParams.get('nieuw') || '').toUpperCase();
+  for (const code of codes) {
+    const rec = await env.CODES.get('code:' + code, 'json'), used = Number(await env.CODES.get(`use:${code}:${month}`)) || 0;
+    if (!rec) continue;
     rows.push(`<tr><td><b>${esc(code)}</b><br><small>${esc(rec.naam || '')}</small></td><td>${used} / ${rec.limiet}</td><td>${rec.actief ? 'Actief' : 'Uit'}</td><td>
       <form method="post"><input type="hidden" name="code" value="${esc(code)}"><input name="limiet" type="number" min="1" value="${rec.limiet}"><button name="action" value="limiet">Limiet</button>
       <button name="action" value="aan">${rec.actief ? 'Zet uit' : 'Zet aan'}</button><button name="action" value="weg" onclick="return confirm('Code ${esc(code)} verwijderen?')">Verwijder</button></form></td></tr>`);
   }
   const html = `<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Coach & Chef · codes</title>
 <style>body{font:16px -apple-system,system-ui,sans-serif;margin:16px;color:#22312a;background:#f6f6f1}table{border-collapse:collapse;width:100%;background:#fffffd}td,th{border-bottom:1px solid #e3e8df;padding:8px;text-align:left;vertical-align:top}input{font:inherit;padding:6px;width:110px}button{font:inherit;padding:6px 10px;margin:2px;border-radius:999px;border:1px solid #e3e8df;background:#fff}form.new{margin:16px 0;display:flex;gap:8px;flex-wrap:wrap}form.new button{background:#d7f653}</style>
-<h1>Uitnodigingscodes</h1><p>Gebruik deze maand (${month}): aantal AI-aanvragen per code. Elke vraag aan Coach of Chef telt als één of enkele aanvragen.</p>
+<h1>Uitnodigingscodes</h1>${nieuw ? `<p style="background:#f1f8d2;padding:12px;border-radius:12px">Nieuwe code: <b style="font-size:20px">${esc(nieuw)}</b></p>` : ''}<p>Gebruik deze maand (${month}): aantal AI-aanvragen per code. Elke vraag aan Coach of Chef telt als één of enkele aanvragen.</p>
 <form method="post" class="new"><input name="naam" placeholder="Voor wie?" style="width:180px"><input name="limiet" type="number" min="1" value="${DEFAULT_LIMIT}"><button name="action" value="nieuw">Nieuwe code</button></form>
 <table><tr><th>Code</th><th>Gebruik</th><th>Status</th><th></th></tr>${rows.join('') || '<tr><td colspan="4">Nog geen codes.</td></tr>'}</table>`;
   return new Response(html, { headers: { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-store' } });
