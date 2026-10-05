@@ -40,7 +40,7 @@ Gebruiker: Jim. Primair op iPhone (Safari), in het Nederlands. Loopt (hoofdsport
 
 **De repository is openbaar** (GitHub Pages op een gratis account vereist dat). Er mogen dus nooit sleutels, tokens of persoonsgegevens in code, commits of testbestanden staan.
 
-**Versie**: constante `APP_VERSION = 'lime-YYYYMMDD-N'` bovenin het script. Getoond in Instellingen. Elke nieuwe versie: datum van vandaag en N doornummeren. Huidige basis: `lime-20261005-4`.
+**Versie**: constante `APP_VERSION = 'lime-YYYYMMDD-N'` bovenin het script. Getoond in Instellingen. Elke nieuwe versie: datum van vandaag en N doornummeren. Huidige basis: `lime-20261005-5`.
 
 ### CSS — twee lagen
 - **Oude laag**: eerste `<style>` in `<head>`. Historisch gegroeid, veel `!important`. Ongebruikte regels zijn al verwijderd; de rest wordt deels overstemd. Niet uitbreiden.
@@ -82,6 +82,7 @@ Kop + begroeting + invoer van Coach is turquoise, kop + invoer + knoppen van Che
 - **Voorbeeldvragen onder de invoer** `#cc-try` (`ccRenderTry`): zolang er geen antwoord of opgeslagen-kaart staat, drie korte voorbeelden (≤ 36 tekens, niet uit *Loggen*) in een schuivende rij omlijnde pillen; willekeurig, één keer per start. Tik = tekst in de invoer (`ccUseExample`), nooit versturen.
 - **Na loggen** `.log-feedback`: witte kaart met kop *Opgeslagen* en ✕ rechtsboven (`.log-feedback-head`, `.log-feedback-close`), daaronder wat er is opgeslagen (datums leesbaar via `formatShortDate`, nooit `2026-10-06`) en pillen *Wijzigen* / *Ongedaan maken*. *Wijzigen* van een activiteit opent het volledige formulier `flowActivityForm` (tijdstip, afstand, duur, notitie; `flowActivityEdit.fromLog`); opslaan zet de kaart opnieuw neer met *Ongedaan maken* (`rememberLogChange`). Maaltijden houden het korte formulier (`openLogEdit`/`saveLogEdit`).
 - **Geheugenmelding** (`#cc-memory-notice`, `ccRenderMemoryNotice`): onderin de antwoordkaart, gescheiden door een lijn. Lime lijntje links, "Onthouden" + tekst (tik = aanpassen) en *Vergeten*; geen eigen ✕. Toont alleen wat Coach uit je **laatste** vraag onthield (`createdAt` ≥ die vraag) en verdwijnt bij de volgende vraag of als je de kaart sluit. Nooit "tijdelijk" tonen.
+- **Bijstuurpillen** onder elk receptvoorstel in *Zit hier iets tussen?* (`.cc-tweaks` in `recipeCardHTML`): getinte pillen 36 px uit `CC_TWEAKS` ([sleutel, label, instructie]: Lichter, Sneller, Meer eiwit, Meer vezels, Vega) plus *Anders…* (`ccTweakOther`: opent *Bekijk recept* en zet de focus in het vrije veld). Tik = `pasReceptAan(tmpId, sleutel)` met de vaste instructie; zonder sleutel leest hij het vrije veld. Tijdens het aanpassen staan alle pillen van die kaart uit (`data-busy`) en meldt `.cc-tweak-status` "Chef past het aan…"; een fout blijft daar staan. *Vega* verdwijnt als het recept al vega is of als het dieet vega is; na *Vega* volgt een harde controle op vlees en vis (`ccAvoidHit`) en krijgt het recept het label vega. Sparren fase 3 hergebruikt deze pillen.
 - **Voorstelkaart** `.cc-proposal`: kop "VOORSTEL", titel, subregel, reden; knoppen *Pas aan* (lime) en *Laat staan* (omlijnd); daarna status + *Ongedaan maken*.
 
 ### Data en opslag

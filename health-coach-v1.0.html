@@ -1735,6 +1735,14 @@ body .vandaag-section-h{font-size:13px!important;font-weight:650!important;text-
 .cc-tidy-note{margin:0 0 16px}
 .cc-tidy-group{margin-bottom:16px;border:1px solid var(--cc-line);border-radius:18px;padding:0 16px}
 #modal-container .cc-tidy-done{margin-top:16px}
+#modal-container .cc-tweaks{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+#modal-container .cc-tweaks button{all:unset;box-sizing:border-box;position:relative;display:inline-flex;align-items:center;height:36px;padding:0 14px;border-radius:999px;background:var(--cc-tint);color:var(--cc-ink);font:600 14px/1 -apple-system,'SF Pro Text',system-ui,sans-serif;white-space:nowrap;cursor:pointer;-webkit-tap-highlight-color:transparent}
+#modal-container .cc-tweaks button::after{content:'';position:absolute;inset:-4px 0}
+#modal-container .cc-tweaks button:active{background:var(--cc-lime-soft)}
+#modal-container .cc-tweaks button:disabled{opacity:.5;cursor:default}
+#modal-container .cc-tweaks button:focus-visible{outline:2px solid var(--cc-green);outline-offset:2px}
+.cc-tweak-status{margin:8px 0 0;font:400 14px/1.4 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-muted)}
+.cc-tweak-status:empty{display:none}
 #tab-recepten#tab-recepten .cc-from-coach{display:inline-flex;align-items:center;gap:4px;height:36px;margin-top:8px;padding:0 0 0 14px;border-radius:999px;background:var(--cc-card);color:var(--cc-ink);font:600 14px/1 -apple-system,'SF Pro Text',system-ui,sans-serif}
 #tab-recepten#tab-recepten .cc-from-coach button{all:unset;box-sizing:border-box;position:relative;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:999px;color:var(--cc-ink);cursor:pointer}
 #tab-recepten#tab-recepten .cc-from-coach button::after{content:'';position:absolute;inset:-4px}
@@ -2249,7 +2257,7 @@ body input[type="checkbox"]:disabled{opacity:.4;cursor:default}
 'use strict';
 
 // ─── VERSION CHECK (forceert Safari herlading bij nieuwe versie) ──────────────
-const APP_VERSION = 'lime-20261005-4';
+const APP_VERSION = 'lime-20261005-5';
 // Eén plek voor de modellen: Sonnet voor gesprekken en recepten, Haiku voor snelle achtergrondtaken.
 const CC_MODEL_MAIN = 'claude-sonnet-5-5';
 const CC_MODEL_FAST = 'claude-haiku-4-5-20251001';
@@ -3823,14 +3831,17 @@ function getActiveGenCount(){return genCount;}
 
 
 
-async function pasReceptAan(tmpId) {
-  const input = document.getElementById('aanpas-' + tmpId);
-  const instructie = input ? input.value.trim() : '';
+async function pasReceptAan(tmpId, tweak) {
+  const input = document.getElementById('aanpas-' + tmpId), pill = CC_TWEAKS.find(t => t[0] === tweak);
+  const instructie = pill ? pill[2] : input ? input.value.trim() : '';
   if (!instructie) { showBanner('yellow', 'Typ of spreek eerst je aanpassing in.'); return; }
   const recept = (window._generatedRecepten || []).find(r => r._tmpId === tmpId);
   if (!recept) return;
-  const btn = document.getElementById('aanpas-btn-' + tmpId);
-  if (btn) { btn.disabled = true; btn.textContent = 'Bezig…'; }
+  const card = document.getElementById('gencard-' + tmpId), busy = on => card?.querySelectorAll('.cc-tweaks button, #aanpas-btn-' + tmpId).forEach(b => { b.disabled = on; });
+  if (card?.dataset.busy) return;
+  if (card) card.dataset.busy = '1';
+  busy(true);
+  const status = document.getElementById('tweak-status-' + tmpId); if (status) status.textContent = 'Chef past het aan…';
   try {
     const prompt = `Pas dit recept aan volgens de instructie van de gebruiker. Behoud exact ${recept.personen||2} porties. Geef personen:${recept.personen||2} en voedingsbasis:"per_portie" terug; voedingswaarden zijn per portie en ingrediënten voor het hele recept. Controleer hoeveelheden, bereidingstijden, temperaturen en of alle ingrediënten in de stappen terugkomen.
 Recept (JSON): ${JSON.stringify({ naam: recept.naam, vezels: recept.vezels, eiwitten: recept.eiwitten, tijd: recept.tijd, ingredienten: recept.ingredienten, bereiding: recept.bereiding })}
@@ -3848,16 +3859,18 @@ Antwoord ALLEEN met geldige JSON in exact dit formaat, zonder uitleg:
 {"naam":"...","personen":${recept.personen||2},"voedingsbasis":"per_portie","vezels":"~Xg","eiwitten":"~Xg","koolhydraten":"~Xg","vet":"~Xg","tijd":"X min","ingredienten":["hoeveelheid ingredient","..."],"bereiding":["Stap 1...","..."]}`;
     const raw = await callAI(prompt, 900);
     const nieuw = validateChefRecipes([safeParseJSON(raw)],recept.personen||2,1)[0];
+    if (tweak === 'vega') { const hit = ccAvoidHit([nieuw.naam, ...nieuw.ingredienten], ['vlees','vis']); if (hit) throw Error(`Er zat nog ${hit} in. Probeer het opnieuw.`); }
     // A revised idea must not silently overwrite a previously planned or saved recipe.
     delete recept._savedRecipeId;
-    Object.assign(recept, nieuw, {_type:recept._type, soort:recept.soort, moment:recept.moment, tags:recept.tags});
+    Object.assign(recept, nieuw, {_type:recept._type, soort:recept.soort, moment:recept.moment, tags:tweak === 'vega' ? CC_TAGS.filter(t => t === 'vega' || (recept.tags || []).includes(t)) : recept.tags});
     const kaart = document.getElementById('gencard-' + tmpId);
     if (kaart) kaart.outerHTML = recipeCardHTML(recept);
     showBanner('green', `✓ Recept aangepast: ${recept.naam}`);
   } catch(e) {
-    showBanner('red', e.message || 'Aanpassen mislukt.');
-    const b = document.getElementById('aanpas-btn-' + tmpId);
-    if (b) { b.disabled = false; b.textContent = 'Pas recept aan'; }
+    const s = document.getElementById('tweak-status-' + tmpId); if (s) s.textContent = e.message || 'Aanpassen lukte niet. Probeer het opnieuw.';
+  } finally {
+    const c = document.getElementById('gencard-' + tmpId);
+    if (c) { delete c.dataset.busy; c.querySelectorAll('.cc-tweaks button, #aanpas-btn-' + tmpId).forEach(b => { b.disabled = false; }); }
   }
 }
 
@@ -7159,9 +7172,13 @@ async function generateMeer(){
   try{await chefStream(document.getElementById('gen-focus-input')?.value.trim()||'',(window._generatedRecepten||[]).map(r=>r.naam));}
   finally{_chefGenerating=false;}
 }
+// Bijsturen met één tik: elke pil is een vaste instructie voor Pas recept aan. "Anders…" opent het vrije veld.
+const CC_TWEAKS=[['lichter','Lichter','Maak het lichter: minder vet en minder zetmeel, wel net zo vullend door extra groente en eiwit.'],['sneller','Sneller','Maak het sneller en makkelijker: minder stappen en ingrediënten, totaal hooguit 20 minuten.'],['eiwit','Meer eiwit','Meer eiwit: minstens 10 g extra per portie met een slimme, passende bron.'],['vezels','Meer vezels','Meer vezels: minstens 5 g extra per portie met peulvruchten, volkoren, groente of zaden.'],['vega','Vega','Maak het vegetarisch: geen vlees en geen vis, met een volwaardige eiwitbron.']];
+function ccTweakOther(id){const card=document.getElementById('gencard-'+id),d=card?.querySelector('details');if(!d)return;d.open=true;const i=document.getElementById('aanpas-'+id);i?.focus();i?.scrollIntoView({block:'center',behavior:'smooth'});}
 function recipeCardHTML(r){
   return `<article class="chef-proposal" id="gencard-${r._tmpId}"><div class="chef-proposal-meta">${escapeText(r.tijd)} · ${r.personen} ${r.personen===1?'portie':'porties'}</div>
   <h3>${escapeText(r.naam)}</h3><div class="meal-entry-nutrients">${r.eiwitten||r.vezels?mealNutrients(r)+' <span>per portie · schatting</span>':'<span>Voedingswaarden onbekend</span>'}</div>
+  <div class="cc-tweaks" role="group" aria-label="Stuur dit recept bij">${CC_TWEAKS.filter(t=>!(t[0]==='vega'&&(genDieet==='vega'||(r.tags||[]).includes('vega')))).map(([k,l])=>`<button type="button" onclick="pasReceptAan('${r._tmpId}','${k}')">${l}</button>`).join('')}<button type="button" onclick="ccTweakOther('${r._tmpId}')">Anders…</button></div><p class="cc-tweak-status" id="tweak-status-${r._tmpId}" role="status"></p>
   <details><summary>Bekijk recept</summary><h4>Ingrediënten voor ${r.personen} ${r.personen===1?'persoon':'personen'}</h4><ul>${r.ingredienten.map(x=>`<li>${escapeText(x)}</li>`).join('')}</ul><h4>Bereiding</h4><ol>${r.bereiding.map(x=>`<li>${escapeText(x)}</li>`).join('')}</ol>
   <div class="chef-adjust"><label for="aanpas-${r._tmpId}">Maak het naar jouw smaak</label><input id="aanpas-${r._tmpId}" class="modal-input" placeholder="Bijvoorbeeld: meer eiwit of zonder feta"><button id="aanpas-btn-${r._tmpId}" class="btn btn-secondary" onclick="pasReceptAan('${r._tmpId}')">Pas recept aan</button></div></details>
   <div class="chef-proposal-actions"><button class="btn btn-primary" onclick="openGeneratedMeal('${r._tmpId}',false)">Inplannen</button><button class="btn btn-secondary" onclick="openGeneratedMeal('${r._tmpId}',true)">Gegeten</button>${ccSavedGenerated(r)?`<button class="btn btn-ghost" id="bewaar-btn-${r._tmpId}" onclick="chefOpenSaved('${r._tmpId}')">Open recept</button>`:`<button class="btn btn-ghost" id="bewaar-btn-${r._tmpId}" onclick="bewaarGenRecept('${r._tmpId}')">Bewaren</button>`}</div></article>`;
