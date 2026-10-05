@@ -1,6 +1,6 @@
 # TAKEN.md — Coach-gesprek en receptenoverzicht
 
-Basis: `health-coach-v1.0.html`, versie `lime-20261005-21` (branch `claude/practical-edison-cvl53y`, backup `backup/lime-20261004-12`). Vorige takenlijsten staan in de git-geschiedenis.
+Basis: `health-coach-v1.0.html`, versie `lime-20261005-22` (branch `claude/practical-edison-cvl53y`, backup `backup/lime-20261004-12`). Vorige takenlijsten staan in de git-geschiedenis.
 
 Bron: Jims test op de iPhone (5 okt) met vijf schermafbeeldingen. Zijn woorden staan tussen aanhalingstekens. Jims keuzes op het advies: 1 ja, 2 allebei, 3 "laat maar even", 4 "doe maar helemaal".
 
@@ -48,6 +48,11 @@ Bron: Jims test op de iPhone (5 okt) met vijf schermafbeeldingen. Zijn woorden s
 - *Coach testen* neemt de vervolgvragen nog niet mee in de beoordeling.
 
 ---
+
+## 5 okt — Engels, ronde 4 van 4 (Instellingen, vensters, meldingen) — af op branch (`lime-20261005-22`)
+- ~230 teksten: Instellingen en alle pagina's, bevestigingen, meldingen en foutmeldingen; taal wisselen in Instellingen werkt direct.
+- **Controle voor Jim (alle rondes samen)**: zet in Instellingen › Over jou de taal op English. Loop Coach, Chef, een recept, de boodschappen en Instellingen door. Zie je nog Nederlands (behalve je eigen invoer)? Stuur een schermafbeelding. Terug naar Nederlands op dezelfde plek.
+- Nog open, apart: vertellen in de wizard (plan staat klaar, Jim: "wacht maar even") en sleutels voor de groep.
 
 ## 5 okt — Engels, ronde 3 van 4 (Chef) — af op branch (`lime-20261005-21`)
 - ~225 Chef-teksten (Chef-scherm, recepten, kookmodus, foto's, voorraad, Sparren, boodschappen) plus patronen.
