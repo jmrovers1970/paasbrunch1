@@ -32,8 +32,8 @@ Bron: Jims document *Receptinspiratie voor Coach & Chef* (3 okt 2026): 42 recept
 - Energieballetjes en kwarktaartrepen zijn eerder een energie- dan een eiwitsnack.
 - Alleen links, geen recepten: Chef gebruikt dit als stijl en niveau, kopieert niets en noemt geen namen in recepten.
 
-## Hoe het in de app zit (`lime-20261005-8`)
+## Hoe het in de app zit (`lime-20261005-9`)
 - `CHEF_STIJL`: bronnen, vaste vormen, eiwitschalen, cottage cheese en yoghurt voor hartige snacks en dips, een eiwitsnack levert echt ≥ 5 g, eiwit per stuk bij snacks in stuks, geen eiwitpoeder of merkproducten tenzij gevraagd, geen kipgehakt als standaard, meal-prep-vriendelijk waar het past, ijkpuntlijst.
 - Tijd: *Snel* liefst 10–20 minuten (hooguit 25), een gewone maaltijd liefst 15–25 minuten (hooguit 35).
 - Kcal: Chef geeft een schatting per portie (`kcal` in `CHEF_SCHEMA`), alleen als informatie bij het recept; de app telt er niet mee.
-- Meal prep zit alleen in de stijl, niet als aparte knop (keuze Jim, 5 okt).
+- Meal prep: in de stijl (waar het past) én als knop *Meal prep* in de rij Maaltijd, in plaats van *Weekend* (keuze Jim, 5 okt). Eén keer koken voor meerdere dagen: minstens 4 porties, 3–4 dagen houdbaar, saus en topping apart, laatste stap over verdelen, bewaren en opwarmen.

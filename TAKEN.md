@@ -1,6 +1,6 @@
 # TAKEN.md — Coach-gesprek en receptenoverzicht
 
-Basis: `health-coach-v1.0.html`, versie `lime-20261005-8` (branch `claude/practical-edison-cvl53y`, backup `backup/lime-20261004-12`). Vorige takenlijsten staan in de git-geschiedenis.
+Basis: `health-coach-v1.0.html`, versie `lime-20261005-9` (branch `claude/practical-edison-cvl53y`, backup `backup/lime-20261004-12`). Vorige takenlijsten staan in de git-geschiedenis.
 
 Bron: Jims test op de iPhone (5 okt) met vijf schermafbeeldingen. Zijn woorden staan tussen aanhalingstekens. Jims keuzes op het advies: 1 ja, 2 allebei, 3 "laat maar even", 4 "doe maar helemaal".
 
@@ -48,6 +48,12 @@ Bron: Jims test op de iPhone (5 okt) met vijf schermafbeeldingen. Zijn woorden s
 - *Coach testen* neemt de vervolgvragen nog niet mee in de beoordeling.
 
 ---
+
+## Batch 5 okt (7) — Meal prep als knop — af (`lime-20261005-9`)
+Jim: "Hoe zou meal prep mooi een knop kunnen worden zonder dat het druk wordt?" → optie 2 gekozen ("past meer in het concept"): *Weekend* wordt *Meal prep*.
+- Rij Maaltijd: *Snel / Meal prep / Comfort*. Meal prep = één keer koken voor meerdere dagen, minstens 4 porties (of personen × 2), 3–4 dagen houdbaar, saus apart, laatste stap over bakjes en opwarmen. Label *Meal prep* in Mijn recepten. *Chef testen* heeft er een zesde vraag voor.
+- Uitgebreid koken voor één avond kan via Sparren.
+- **Controle voor Jim**: tik *Meal prep*. Klopt het aantal porties, blijft het echt een paar dagen goed, en staat de bewaartip in de laatste stap? Past "Meal prep" netjes in de knop op je iPhone?
 
 ## Batch 5 okt (6) — Receptinspiratie verwerkt — af (`lime-20261005-8`)
 Jim stuurde het document *Receptinspiratie*. Keuzes: A (stijl aanvullen) ja, B (kcal als informatie) ja, C meal prep alleen in de stijl, samenvatting in de repository ja.
