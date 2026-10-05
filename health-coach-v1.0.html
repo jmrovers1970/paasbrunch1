@@ -2265,7 +2265,7 @@ body input[type="checkbox"]:disabled{opacity:.4;cursor:default}
 'use strict';
 
 // ─── VERSION CHECK (forceert Safari herlading bij nieuwe versie) ──────────────
-const APP_VERSION = 'lime-20261005-15';
+const APP_VERSION = 'lime-20261005-16';
 // Eén plek voor de modellen: Sonnet voor gesprekken en recepten, Haiku voor snelle achtergrondtaken.
 const CC_MODEL_MAIN = 'claude-sonnet-5-5';
 const CC_MODEL_FAST = 'claude-haiku-4-5-20251001';
@@ -7813,22 +7813,31 @@ function ritmeCopyShopping(btn){
  navigator.clipboard.writeText('Boodschappen\n\n'+text).then(()=>show('Gekopieerd ✓'),()=>show('Kopiëren lukt niet'));
 }
 function ritmeGroceryKey(name){
- return String(name).toLowerCase().replace(/\([^)]*\)/g,' ').replace(/,.*$/,'').replace(/\b(rijpe?|verse?|grote?|kleine?|halve?|biologische?|ongezouten)\b/g,' ').replace(/['’]s\b/g,'').trim().split(/\s+/).map(w=>w.replace(/(eren|en|s)$/,'').replace(/([aeou])\1/g,'$1')).join(' ');
+ return String(name).toLowerCase().replace(/\([^)]*\)/g,' ').replace(/,.*$/,'').replace(/\s(om|voor|naar smaak|\+)\s.*$|\s(naar smaak|extra vierge|extra)$/,'').replace(/^(een\s)?(scheutje|snufje|beetje|handje|wat|klein)\s+/,'').replace(/\b(rijpe?|verse?|grote?|kleine?|halve?|biologische?|ongezouten)\b/g,' ').replace(/['’]s\b/g,'').trim().split(/\s+/).map(w=>w.replace(/(eren|en|s)$/,'').replace(/en$/,'').replace(/([aeou])\1/g,'$1')).join(' ');
 }
+// Eén regel per product: alle hoeveelheden van hetzelfde product tellen op, per soort eenheid (kg → g, l → ml; el en tl worden ml als er ook ml is).
+const CC_SHOP_UNITS={g:['g',1],gr:['g',1],gram:['g',1],kg:['g',1000],ml:['ml',1],l:['ml',1000],liter:['ml',1000],el:['el',1],eetlepel:['el',1],eetlepels:['el',1],tbsp:['el',1],tl:['tl',1],theelepel:['tl',1],theelepels:['tl',1],tsp:['tl',1],teen:['teentje',1],teentje:['teentje',1],teentjes:['teentje',1],blik:['blik',1],blikje:['blik',1],blikjes:['blik',1],stuk:['stuk',1],stuks:['stuk',1]};
 function ritmeMergeGroceries(items){
- const merged=new Map();
+ const merged=new Map(),fmt=(n,d)=>new Intl.NumberFormat('nl-NL',{maximumFractionDigits:d}).format(n);
  for(const item of items){
   const text=String(item.text||'').trim();if(!text)continue;
-  const m=text.match(/^(\d+\s+\d+\/\d+|\d+\/\d+|\d*[½¼¾]|\d+(?:[.,]\d+)?)\s*(g|kg|ml|l|el|tl|tbsp|tsp|cloves?|bunch(?:es)?|cans?|pieces?|stuks?|blikjes?|blik|bosjes?|bos|takjes?|teentjes?|teen|x)?\s+(.+)$/i);
-  let qty=null,unit='',name=text.toLowerCase();
-  if(m){const raw=m[1];if(/[½¼¾]/.test(raw))qty=Number(raw.slice(0,-1)||0)+({'½':.5,'¼':.25,'¾':.75})[raw.slice(-1)];else if(raw.includes('/')){const f=raw.match(/^(?:(\d+)\s+)?(\d+)\/(\d+)$/);qty=Number(f[1]||0)+Number(f[2])/Number(f[3]);}else qty=Number(raw.replace(',','.'));unit=(m[2]||'').toLowerCase();name=m[3].toLowerCase();if(!Number.isFinite(qty)){qty=null;name=text.toLowerCase();unit='';}}
-  const unitKey=unit.replace(/s$/,''),key=ritmeGroceryKey(name)+'|'+unitKey+'|'+(qty===null?'unknown':'number'),prior=merged.get(key),recepten=[...new Set([...(prior?.recepten||[]),...(item.recept?[item.recept]:[])])];
-  if(qty===null){merged.set(key,{name:prior?.name||name,display:prior?.display||text,recepten});continue;}
-  const total=(prior?.qty||0)+qty,shown=prior&&!(qty>1&&total>1&&!(prior.qty>1))?prior.name:name,shownUnit=total>1&&/je$|^stuk$|^clove$|^can$|^piece$/.test(unitKey)?unitKey+'s':unitKey;
-  merged.set(key,{name:shown,qty:total,display:`${new Intl.NumberFormat('nl-NL',{maximumFractionDigits:3}).format(total)}${shownUnit?' '+shownUnit:''} ${shown}`,recepten});
+  const m=text.match(/^(\d+\s+\d+\/\d+|\d+\/\d+|\d*[½¼¾]|\d+(?:[.,]\d+)?)\s*(g|gr|gram|kg|ml|l|liter|el|eetlepels?|tl|theelepels?|tbsp|tsp|cloves?|bunch(?:es)?|cans?|pieces?|stuks?|blikjes?|blik|bosjes?|bos|takjes?|teentjes?|teen|plakjes?|x)?\.?\s+(.+)$/i);
+  let qty=null,unit='',name=text;
+  if(m){const raw=m[1];if(/[½¼¾]/.test(raw))qty=Number(raw.slice(0,-1)||0)+({'½':.5,'¼':.25,'¾':.75})[raw.slice(-1)];else if(raw.includes('/')){const f=raw.match(/^(?:(\d+)\s+)?(\d+)\/(\d+)$/);qty=Number(f[1]||0)+Number(f[2])/Number(f[3]);}else qty=Number(raw.replace(',','.'));name=m[3];if(Number.isFinite(qty)){const u=(m[2]||'').toLowerCase(),c=CC_SHOP_UNITS[u];unit=c?c[0]:u.replace(/(je)?s$/,'$1').replace(/^x$/,'');if(c)qty*=c[1];}else{qty=null;name=text;}}
+  const key=ritmeGroceryKey(name)||text.toLowerCase(),g=merged.get(key)||{name:'',qty:{},loose:'',recepten:new Set()};
+  if(item.recept)g.recepten.add(item.recept);
+  if(qty===null){g.loose||=text;}else{g.qty[unit]=(g.qty[unit]||0)+qty;if(!g.name||(unit===''&&qty>1))g.name=name.replace(/,.*$/,'').trim();}
+  merged.set(key,g);
  }
- return [...merged.values()];
+ return [...merged.values()].map(g=>{
+  const q={...g.qty};if(q.ml&&(q.el||q.tl)){q.ml+=(q.el||0)*15+(q.tl||0)*5;delete q.el;delete q.tl;}
+  const units=Object.keys(q);if(!units.length)return {name:g.loose,display:g.loose,recepten:[...g.recepten]};
+  const order=['g','ml','el','tl',''],part=u=>{const n=q[u];if(u==='g'||u==='ml'){const big=n>=1000;return `${fmt(big?n/1000:Math.round(n),big?2:0)} ${big?(u==='g'?'kg':'l'):u}`;}const many=n>1&&/je$|^stuk$|^clove$|^can$|^piece$/.test(u);return fmt(n,2)+(u?' '+u+(many?'s':''):'');};
+  const rank=u=>{const i=order.indexOf(u);return i<0?9:i;};units.sort((a,b)=>rank(a)-rank(b));
+  return {name:g.name,qty:units.length===1?q[units[0]]:null,display:`${units.map(part).join(' + ')} ${g.name}`,recepten:[...g.recepten]};
+ });
 }
+
 
 // Keep literal user evidence, never a coach-generated assertion. Legacy facts remain manageable.
 async function _consolideerGeheugen(){
