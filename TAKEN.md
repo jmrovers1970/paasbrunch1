@@ -1,6 +1,6 @@
 # TAKEN.md — Coach-gesprek en receptenoverzicht
 
-Basis: `health-coach-v1.0.html`, versie `lime-20261005-2` (branch `claude/practical-edison-cvl53y`, backup `backup/lime-20261004-12`). Vorige takenlijsten staan in de git-geschiedenis.
+Basis: `health-coach-v1.0.html`, versie `lime-20261005-3` (branch `claude/practical-edison-cvl53y`, backup `backup/lime-20261004-12`). Vorige takenlijsten staan in de git-geschiedenis.
 
 Bron: Jims test op de iPhone (5 okt) met vijf schermafbeeldingen. Zijn woorden staan tussen aanhalingstekens. Jims keuzes op het advies: 1 ja, 2 allebei, 3 "laat maar even", 4 "doe maar helemaal".
 
@@ -48,6 +48,13 @@ Bron: Jims test op de iPhone (5 okt) met vijf schermafbeeldingen. Zijn woorden s
 - *Coach testen* neemt de vervolgvragen nog niet mee in de beoordeling.
 
 ---
+
+## Batch 5 okt (3) — Coach en Chef weten meer van elkaar — af (`lime-20261005-3`)
+Jim: "weten chef en coach zo genoeg van elkaars kennis?" → advies akkoord ("ja, bouw maar").
+- *Naar Chef* neemt het gesprek mee: label "Uit je gesprek met Coach" (✕ = niet meenemen), gaat mee met de volgende reeks recepten.
+- Coach kent je keuken: voorraad en eiwit/vezels van bewaarde recepten bij eetvragen; meer eetwoorden herkend ("wat zal ik vanavond maken?").
+- Chef kent je week: training van vandaag en vezelgemiddelde van de week, ook bij een gewone maaltijd.
+- **Controle voor Jim**: vraag Coach iets over eten, tik *Naar Chef*, kies Snel. Sluit het recept aan bij wat Coach zei? Vraag Coach "wat zal ik vanavond maken?" met iets in je voorraad.
 
 ## Batch 5 okt (2) — Chef slimmer en Sparren fase 1 — af (`lime-20261005-2`)
 
