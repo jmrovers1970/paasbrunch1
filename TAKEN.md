@@ -1,6 +1,6 @@
 # TAKEN.md — Coach-gesprek en receptenoverzicht
 
-Basis: `health-coach-v1.0.html`, versie `lime-20261005-15` (branch `claude/practical-edison-cvl53y`, backup `backup/lime-20261004-12`). Vorige takenlijsten staan in de git-geschiedenis.
+Basis: `health-coach-v1.0.html`, versie `lime-20261005-17` (branch `claude/practical-edison-cvl53y`, backup `backup/lime-20261004-12`). Vorige takenlijsten staan in de git-geschiedenis.
 
 Bron: Jims test op de iPhone (5 okt) met vijf schermafbeeldingen. Zijn woorden staan tussen aanhalingstekens. Jims keuzes op het advies: 1 ja, 2 allebei, 3 "laat maar even", 4 "doe maar helemaal".
 
@@ -48,6 +48,19 @@ Bron: Jims test op de iPhone (5 okt) met vijf schermafbeeldingen. Zijn woorden s
 - *Coach testen* neemt de vervolgvragen nog niet mee in de beoordeling.
 
 ---
+
+## 5 okt — Kopieën voegen zichzelf samen — af (`lime-20261005-17`)
+Jim: melding "Lokale en cloudgegevens verschillen". "Wat het meest eenvoudig is voor de gebruiker, die wil ik hier niet mee lastigvallen."
+- Oorzaak: op iOS hebben de app op het beginscherm en Safari elk een eigen opslag; beide synchroniseren met dezelfde cloud.
+- Nu: automatisch samenvoegen tegen de stand van de vorige sync, zonder melding of keuze. Het venster *Twee verschillende kopieën* is weg.
+- Eerste keer na de update is er nog geen opgeslagen stand: dan wordt alles bij elkaar gevoegd en niets weggehaald (iets wat eerder op één kopie verwijderd was, kan één keer terugkomen).
+- **Controle voor Jim**: open de app; de melding is weg en je logs van beide kopieën staan erin.
+
+## 5 okt — Boodschappen samenvoegen — af (`lime-20261005-16`)
+Jim: "De boodschappenlijst voegt nog niet samen (2 × olijfolie)."
+- Oorzaak: alleen regels met precies dezelfde eenheid werden opgeteld; "2 el olijfolie", "scheutje olijfolie" en "100 ml olijfolie" bleven los, net als "citroen" en "citroenen".
+- Nu één regel per product, met omrekenen waar dat kan (kg/g, l/ml, el/tl naar ml) en anders "400 g + 1 blik".
+- **Controle voor Jim**: zet twee recepten met olijfolie en knoflook in het weekmenu en open de boodschappen.
 
 ## Hotfix 5 okt — Dinertje vega stopte — af (`lime-20261005-15`)
 Jim (live): bij een dinertje met vega stopte Chef met "Er zat citroenkip in (vega optie), en dat mag niet."

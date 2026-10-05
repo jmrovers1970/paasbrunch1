@@ -2265,7 +2265,7 @@ body input[type="checkbox"]:disabled{opacity:.4;cursor:default}
 'use strict';
 
 // ─── VERSION CHECK (forceert Safari herlading bij nieuwe versie) ──────────────
-const APP_VERSION = 'lime-20261005-15';
+const APP_VERSION = 'lime-20261005-17';
 // Eén plek voor de modellen: Sonnet voor gesprekken en recepten, Haiku voor snelle achtergrondtaken.
 const CC_MODEL_MAIN = 'claude-sonnet-5-5';
 const CC_MODEL_FAST = 'claude-haiku-4-5-20251001';
@@ -7813,22 +7813,31 @@ function ritmeCopyShopping(btn){
  navigator.clipboard.writeText('Boodschappen\n\n'+text).then(()=>show('Gekopieerd ✓'),()=>show('Kopiëren lukt niet'));
 }
 function ritmeGroceryKey(name){
- return String(name).toLowerCase().replace(/\([^)]*\)/g,' ').replace(/,.*$/,'').replace(/\b(rijpe?|verse?|grote?|kleine?|halve?|biologische?|ongezouten)\b/g,' ').replace(/['’]s\b/g,'').trim().split(/\s+/).map(w=>w.replace(/(eren|en|s)$/,'').replace(/([aeou])\1/g,'$1')).join(' ');
+ return String(name).toLowerCase().replace(/\([^)]*\)/g,' ').replace(/,.*$/,'').replace(/\s(om|voor|naar smaak|\+)\s.*$|\s(naar smaak|extra vierge|extra)$/,'').replace(/^(een\s)?(scheutje|snufje|beetje|handje|wat|klein)\s+/,'').replace(/\b(rijpe?|verse?|grote?|kleine?|halve?|biologische?|ongezouten)\b/g,' ').replace(/['’]s\b/g,'').trim().split(/\s+/).map(w=>w.replace(/(eren|en|s)$/,'').replace(/en$/,'').replace(/([aeou])\1/g,'$1')).join(' ');
 }
+// Eén regel per product: alle hoeveelheden van hetzelfde product tellen op, per soort eenheid (kg → g, l → ml; el en tl worden ml als er ook ml is).
+const CC_SHOP_UNITS={g:['g',1],gr:['g',1],gram:['g',1],kg:['g',1000],ml:['ml',1],l:['ml',1000],liter:['ml',1000],el:['el',1],eetlepel:['el',1],eetlepels:['el',1],tbsp:['el',1],tl:['tl',1],theelepel:['tl',1],theelepels:['tl',1],tsp:['tl',1],teen:['teentje',1],teentje:['teentje',1],teentjes:['teentje',1],blik:['blik',1],blikje:['blik',1],blikjes:['blik',1],stuk:['stuk',1],stuks:['stuk',1]};
 function ritmeMergeGroceries(items){
- const merged=new Map();
+ const merged=new Map(),fmt=(n,d)=>new Intl.NumberFormat('nl-NL',{maximumFractionDigits:d}).format(n);
  for(const item of items){
   const text=String(item.text||'').trim();if(!text)continue;
-  const m=text.match(/^(\d+\s+\d+\/\d+|\d+\/\d+|\d*[½¼¾]|\d+(?:[.,]\d+)?)\s*(g|kg|ml|l|el|tl|tbsp|tsp|cloves?|bunch(?:es)?|cans?|pieces?|stuks?|blikjes?|blik|bosjes?|bos|takjes?|teentjes?|teen|x)?\s+(.+)$/i);
-  let qty=null,unit='',name=text.toLowerCase();
-  if(m){const raw=m[1];if(/[½¼¾]/.test(raw))qty=Number(raw.slice(0,-1)||0)+({'½':.5,'¼':.25,'¾':.75})[raw.slice(-1)];else if(raw.includes('/')){const f=raw.match(/^(?:(\d+)\s+)?(\d+)\/(\d+)$/);qty=Number(f[1]||0)+Number(f[2])/Number(f[3]);}else qty=Number(raw.replace(',','.'));unit=(m[2]||'').toLowerCase();name=m[3].toLowerCase();if(!Number.isFinite(qty)){qty=null;name=text.toLowerCase();unit='';}}
-  const unitKey=unit.replace(/s$/,''),key=ritmeGroceryKey(name)+'|'+unitKey+'|'+(qty===null?'unknown':'number'),prior=merged.get(key),recepten=[...new Set([...(prior?.recepten||[]),...(item.recept?[item.recept]:[])])];
-  if(qty===null){merged.set(key,{name:prior?.name||name,display:prior?.display||text,recepten});continue;}
-  const total=(prior?.qty||0)+qty,shown=prior&&!(qty>1&&total>1&&!(prior.qty>1))?prior.name:name,shownUnit=total>1&&/je$|^stuk$|^clove$|^can$|^piece$/.test(unitKey)?unitKey+'s':unitKey;
-  merged.set(key,{name:shown,qty:total,display:`${new Intl.NumberFormat('nl-NL',{maximumFractionDigits:3}).format(total)}${shownUnit?' '+shownUnit:''} ${shown}`,recepten});
+  const m=text.match(/^(\d+\s+\d+\/\d+|\d+\/\d+|\d*[½¼¾]|\d+(?:[.,]\d+)?)\s*(g|gr|gram|kg|ml|l|liter|el|eetlepels?|tl|theelepels?|tbsp|tsp|cloves?|bunch(?:es)?|cans?|pieces?|stuks?|blikjes?|blik|bosjes?|bos|takjes?|teentjes?|teen|plakjes?|x)?\.?\s+(.+)$/i);
+  let qty=null,unit='',name=text;
+  if(m){const raw=m[1];if(/[½¼¾]/.test(raw))qty=Number(raw.slice(0,-1)||0)+({'½':.5,'¼':.25,'¾':.75})[raw.slice(-1)];else if(raw.includes('/')){const f=raw.match(/^(?:(\d+)\s+)?(\d+)\/(\d+)$/);qty=Number(f[1]||0)+Number(f[2])/Number(f[3]);}else qty=Number(raw.replace(',','.'));name=m[3];if(Number.isFinite(qty)){const u=(m[2]||'').toLowerCase(),c=CC_SHOP_UNITS[u];unit=c?c[0]:u.replace(/(je)?s$/,'$1').replace(/^x$/,'');if(c)qty*=c[1];}else{qty=null;name=text;}}
+  const key=ritmeGroceryKey(name)||text.toLowerCase(),g=merged.get(key)||{name:'',qty:{},loose:'',recepten:new Set()};
+  if(item.recept)g.recepten.add(item.recept);
+  if(qty===null){g.loose||=text;}else{g.qty[unit]=(g.qty[unit]||0)+qty;if(!g.name||(unit===''&&qty>1))g.name=name.replace(/,.*$/,'').trim();}
+  merged.set(key,g);
  }
- return [...merged.values()];
+ return [...merged.values()].map(g=>{
+  const q={...g.qty};if(q.ml&&(q.el||q.tl)){q.ml+=(q.el||0)*15+(q.tl||0)*5;delete q.el;delete q.tl;}
+  const units=Object.keys(q);if(!units.length)return {name:g.loose,display:g.loose,recepten:[...g.recepten]};
+  const order=['g','ml','el','tl',''],part=u=>{const n=q[u];if(u==='g'||u==='ml'){const big=n>=1000;return `${fmt(big?n/1000:Math.round(n),big?2:0)} ${big?(u==='g'?'kg':'l'):u}`;}const many=n>1&&/je$|^stuk$|^clove$|^can$|^piece$/.test(u);return fmt(n,2)+(u?' '+u+(many?'s':''):'');};
+  const rank=u=>{const i=order.indexOf(u);return i<0?9:i;};units.sort((a,b)=>rank(a)-rank(b));
+  return {name:g.name,qty:units.length===1?q[units[0]]:null,display:`${units.map(part).join(' + ')} ${g.name}`,recepten:[...g.recepten]};
+ });
 }
+
 
 // Keep literal user evidence, never a coach-generated assertion. Legacy facts remain manageable.
 async function _consolideerGeheugen(){
@@ -8410,52 +8419,58 @@ function ccCanonical(v){if(Array.isArray(v))return v.map(ccCanonical);if(v&&type
 function ccDataHash(v){const copy=JSON.parse(JSON.stringify(v));if(copy.meta)delete copy.meta.lastModified;delete copy.ccDeletions;return ccFingerprint(JSON.stringify(ccCanonical(copy)));}
 function ccBaseKey(id){return 'hc_sync_base_'+id;}
 function ccReadBase(id){return localStorage.getItem(ccBaseKey(id));}
-function ccConflict(){showBanner('yellow','Lokale en cloudgegevens verschillen. Er is niets overschreven. Bewaar je lokale kopie voordat je de cloudkopie kiest.',true,'gist-error',ccReviewCloud,null,'Kopieën bekijken');}
-async function ccReviewCloud(){
- if(ccStorageBlocked){ccRecoveryMessage();return;}
- showModal(`<div class="modal-header"><h2>Twee verschillende kopieën</h2>${flowClose()}</div><p>Automatisch samenvoegen is nog niet beschikbaar. Bewaar je lokale logboek voordat je de cloudkopie laadt.</p><button class="btn btn-secondary btn-full" onclick="exportData()">Exporteer lokale kopie</button><button class="btn btn-primary btn-full" onclick="ccChooseCloud()">Kies de cloudkopie</button><p id="cc-cloud-error" role="status"></p>`);
+// Twee kopieën (beginscherm, Safari, ander toestel) voegen zichzelf samen tegen de stand van de vorige sync: nieuw = erbij, weggehaald = weg, op beide plekken gewijzigd = de nieuwste wint. Zonder bewaarde stand (eerste keer) wordt niets weggehaald.
+const CC_SET_ARRAYS=/^(boodschappenExtra|coachMemory|coachMemoryV2\.\w+|chefVoorraad\.items)$/;
+function ccMerge3(b,l,r,localWins,path=''){
+ const same=(x,y)=>x===y||JSON.stringify(ccCanonical(x))===JSON.stringify(ccCanonical(y)),obj=v=>v&&typeof v==='object'&&!Array.isArray(v);
+ if(same(l,r))return l;if(same(b,l))return r;if(same(b,r))return l;
+ if(obj(l)&&obj(r)){const bo=obj(b)?b:{},out={};for(const k of new Set([...Object.keys(l),...Object.keys(r)])){const v=ccMerge3(bo[k],l[k],r[k],localWins,path?path+'.'+k:k);if(v!==undefined)out[k]=v;}return out;}
+ if(Array.isArray(l)&&Array.isArray(r)&&(CC_SET_ARRAYS.test(path)||[...l,...r].every(obj))){
+  const key=x=>obj(x)&&x.id!=null?'id:'+x.id:'v:'+JSON.stringify(ccCanonical(x)),map=a=>new Map((Array.isArray(a)?a:[]).map(x=>[key(x),x])),bm=map(b),lm=map(l),rm=map(r),out=[];
+  for(const k of new Set([...lm.keys(),...rm.keys()])){const v=ccMerge3(bm.get(k),lm.get(k),rm.get(k),localWins,path+'[]');if(v!==undefined)out.push(v);}
+  if(path==='chatHistorie')out.sort((x,y)=>(x.createdAt||0)-(y.createdAt||0));
+  return out;
+ }
+ return localWins?l:r;
 }
-async function ccChooseCloud(){
- if(!(await vraagBevestiging('De lokale kopie vervangen door de cloudkopie? Zorg dat je je lokale wijzigingen hebt geëxporteerd.')))return;
- await loadGist(true);
+function ccBaseData(id){try{const v=JSON.parse(localStorage.getItem('hc_sync_basedata_'+id)||'null');return v&&ccDataHash(v)===ccReadBase(id)?v:undefined;}catch(_){return undefined;}}
+function ccWriteBase(id,value){
+ localStorage.setItem(ccBaseKey(id),ccDataHash(value));localStorage.removeItem('hc_sync_recovery_'+id);
+ try{localStorage.setItem('hc_sync_basedata_'+id,JSON.stringify(value));}catch(_){localStorage.removeItem('hc_sync_basedata_'+id);}
+}
+function ccMergeRemote(id,remote,ledger){
+ const merged=limeValidateData(ccMerge3(ccBaseData(id),data,remote,(data.meta?.lastModified||0)>=(remote.meta?.lastModified||0)));
+ const previous=data;try{data=ccApplyPrivacy(merged,ledger);_migrateMaaltijdenToArrays();ensureRecepten();ensureStats();localStorage.setItem(STORAGE_KEY,JSON.stringify(data));}catch(e){data=previous;throw e;}
+ renderAll();ccRenderMemoryNotice();
 }
 async function limeSendGist(){
  if(ccStorageBlocked||!settings.githubToken||!settings.gistId)return;
  const token=settings.githubToken,id=settings.gistId;
  try{
   const {remote,markers}=await ccFetchGist(token,id);if(token!==settings.githubToken||id!==settings.gistId||ccStorageBlocked)return;
-  const remoteHash=remote?ccDataHash(remote):null,base=ccReadBase(id),localHash=ccDataHash(data);
-  const conflict=!!remote&&remoteHash!==localHash&&remoteHash!==base;
-  const ledger=ccLedgerMerge(markers,remote?.ccDeletions,ccLocalLedger(),data.ccDeletions);ccApplyPrivacy(data,ledger);
-  localStorage.setItem(STORAGE_KEY,JSON.stringify(data));
+  const remoteHash=remote?ccDataHash(remote):null,ledger=ccLedgerMerge(markers,remote?.ccDeletions,ccLocalLedger(),data.ccDeletions);
+  if(remote&&remoteHash!==ccDataHash(data)&&remoteHash!==ccReadBase(id))ccMergeRemote(id,remote,ledger);
+  ccApplyPrivacy(data,ledger);localStorage.setItem(STORAGE_KEY,JSON.stringify(data));
   const files={};for(const event of ledger)files['cc-'+event.id+'.json']={content:JSON.stringify(event)};
   const payload=JSON.stringify(data);
-  if(!conflict)files['data.json']={content:settings.syncWachtwoord?await ccEncryptPayload(payload):payload};
-  if(Object.keys(files).length){
-   // Retain the preflight cloud snapshot locally before changing the remote document.
-   if(remote&&!conflict)localStorage.setItem('hc_sync_recovery_'+id,JSON.stringify(ccApplyPrivacy(JSON.parse(JSON.stringify(remote)),ledger)));
-   const response=await ccFetch(`https://api.github.com/gists/${id}`,{method:'PATCH',headers:{Authorization:`Bearer ${token}`,'Content-Type':'application/json'},body:JSON.stringify({files})});
-   if(!response.ok)throw Error('Cloud opslaan mislukt ('+response.status+').');
-   if(!conflict)localStorage.setItem(ccBaseKey(id),ccDataHash(JSON.parse(payload)));
-   if(!conflict&&settings._syncWachtwoordVorig){const s2={...settings};delete s2._syncWachtwoordVorig;saveSettingsData(s2);}
-  }
-  if(conflict)ccConflict();else removeBanner('gist-error');
+  files['data.json']={content:settings.syncWachtwoord?await ccEncryptPayload(payload):payload};
+  const response=await ccFetch(`https://api.github.com/gists/${id}`,{method:'PATCH',headers:{Authorization:`Bearer ${token}`,'Content-Type':'application/json'},body:JSON.stringify({files})});
+  if(!response.ok)throw Error('Cloud opslaan mislukt ('+response.status+').');
+  ccWriteBase(id,JSON.parse(payload));
+  if(settings._syncWachtwoordVorig){const s2={...settings};delete s2._syncWachtwoordVorig;saveSettingsData(s2);}
+  removeBanner('gist-error');
  }catch(e){showBanner('yellow','Je lokale gegevens blijven beschikbaar. Cloud niet bijgewerkt: '+e.message,true,'gist-error');}
 }
-async function loadGist(force=false){
+async function loadGist(){
  if(ccStorageBlocked||!settings.githubToken||!settings.gistId)return;
  const token=settings.githubToken,id=settings.gistId,revision=limePrivacyRevision,start=JSON.stringify(data);
  try{
   const {remote,markers}=await ccFetchGist(token,id);if(token!==settings.githubToken||id!==settings.gistId||revision!==limePrivacyRevision||ccStorageBlocked)return;
   const ledger=ccLedgerMerge(markers,remote?.ccDeletions,ccLocalLedger(),data.ccDeletions);
-  const base=ccReadBase(id),localHash=ccDataHash(data),remoteHash=remote?ccDataHash(remote):null;
-  const fresh=!localStorage.getItem(STORAGE_KEY);
-  const canReplace=start===JSON.stringify(data)&&(force||fresh||localHash===base||localHash===remoteHash);
-  const conflict=remote&&remoteHash!==localHash&&!canReplace;
-  const chosen=remote&&canReplace?remote:data;
-  const candidate=ccApplyPrivacy(JSON.parse(JSON.stringify(chosen)),ledger);
-  const previous=data;try{data=candidate;_migrateMaaltijdenToArrays();ensureRecepten();ensureStats();localStorage.setItem(STORAGE_KEY,JSON.stringify(data));if(remote&&!conflict)localStorage.setItem(ccBaseKey(id),remoteHash);}catch(e){data=previous;throw e;}
-  renderAll();ccRenderMemoryNotice();if(conflict)ccConflict();else{removeBanner('gist-warn');removeBanner('gist-error');}
+  const localHash=ccDataHash(data),remoteHash=remote?ccDataHash(remote):null;
+  if(remote&&remoteHash!==localHash&&!(start===JSON.stringify(data)&&(!localStorage.getItem(STORAGE_KEY)||localHash===ccReadBase(id)))){ccMergeRemote(id,remote,ledger);removeBanner('gist-warn');syncGist();return;}
+  const previous=data;try{data=ccApplyPrivacy(JSON.parse(JSON.stringify(remote||data)),ledger);_migrateMaaltijdenToArrays();ensureRecepten();ensureStats();localStorage.setItem(STORAGE_KEY,JSON.stringify(data));if(remote)ccWriteBase(id,remote);}catch(e){data=previous;throw e;}
+  renderAll();ccRenderMemoryNotice();removeBanner('gist-warn');removeBanner('gist-error');
  }catch(e){showBanner('yellow','Cloud niet geladen. Je lokale gegevens blijven behouden. '+e.message,true,'gist-warn');}
 }
 // Every recording leaves a draft. Its callbacks only own their original session.
