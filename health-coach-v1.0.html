@@ -1516,9 +1516,9 @@ body .vandaag-section-h{font-size:13px!important;font-weight:650!important;text-
 .cc-water-row .cc-water-count strong{font-size:16px;margin:0}
 .cc-water-check{color:var(--cc-green);font-weight:800}
 .cc-water-row .cc-glasses{flex:1;display:flex;justify-content:space-between;gap:4px;padding:0;grid-template-columns:none}
-.cc-water-row .cc-glass{flex:1;max-width:22px;height:28px;border-radius:3px 3px 7px 7px;border-width:1.5px;position:relative}
+.cc-water-row .cc-glass{flex:1;max-width:22px;height:28px;border-radius:3px 3px 7px 7px;border-width:1.5px;position:relative;overflow:visible}
 .cc-water-row .cc-glass::after{content:"";position:absolute;inset:-8px -2px}
-.cc-water-row .cc-glass.is-full .cc-glass-fill{height:76%}
+.cc-water-row .cc-glass-fill{border-radius:0 0 5px 5px}.cc-water-row .cc-glass.is-full .cc-glass-fill{height:76%}
 .cc-water-row .cc-water-add{flex:none;width:36px;height:36px;border-radius:999px;background:var(--cc-lime);font-size:20px;font-weight:600;padding:0}
 .cc-water-row.is-done .cc-water-add{background:var(--cc-tint)}
 /* ── Gevoel: vijf gezichtjes, zelfde vorm als water ── */
@@ -1665,7 +1665,7 @@ body .vandaag-section-h{font-size:13px!important;font-weight:650!important;text-
 #modal-container .cc-rec-tidy{margin-top:16px}
 #modal-container .cc-rec-all:focus-visible,#modal-container .cc-rec-tidy:focus-visible{outline:2px solid var(--cc-green);outline-offset:2px}
 #modal-container .cc-rec-seg{width:100%;margin:0 0 8px}
-#modal-container .cc-rec-seg button{min-width:0;padding:0 4px}
+#modal-container .cc-seg.cc-rec-seg button{flex:1 1 auto;min-width:44px;padding:0 4px}
 .cc-tidy-note{margin:0 0 16px}
 .cc-tidy-group{margin-bottom:16px;border:1px solid var(--cc-line);border-radius:18px;padding:0 16px}
 #modal-container .cc-tidy-done{margin-top:16px}
@@ -2207,7 +2207,7 @@ body input[type="checkbox"]:disabled{opacity:.4;cursor:default}
 'use strict';
 
 // ─── VERSION CHECK (forceert Safari herlading bij nieuwe versie) ──────────────
-const APP_VERSION = 'lime-20261005-25';
+const APP_VERSION = 'lime-20261005-26';
 // Eén plek voor de modellen: Sonnet voor gesprekken en recepten, Haiku voor snelle achtergrondtaken.
 const CC_MODEL_MAIN = 'claude-sonnet-5-5';
 const CC_MODEL_FAST = 'claude-haiku-4-5-20251001';
@@ -3090,6 +3090,7 @@ const CC_EN={
  "Tik op een herinnering om hem aan te passen of te vergeten. Coach onthoudt alleen wat je zelf zegt.":"Tap a memory to edit or forget it. Coach only remembers what you say yourself.",
  "Alles vergeten":"Forget everything",
  "Samen bewegen":"Exercise together",
+ "Nog niets onthouden. Vertel Coach bijvoorbeeld wat je liever niet eet of wanneer je het liefst traint.":"Nothing remembered yet. Tell Coach, for example, what you'd rather not eat or when you like to train.",
  "Nog geen trainingspartners herkend. Spreek je weekplan in en vermeld namen.":"No training partners recognised yet. Speak your week plan and mention names.",
  "Iemand toevoegen":"Add someone",
  "Patronen":"Patterns",
@@ -6276,7 +6277,7 @@ async function enterKookmodus(id) {
   overlay.className = 'kookmodus-overlay cc-cook';
   overlay.setAttribute('role','dialog');overlay.setAttribute('aria-label','Kookmodus: '+recept.naam);
   overlay.innerHTML = '<div class="cc-cook-head"><div class="cc-cook-title">'+escapeText(recept.naam)+'</div><button type="button" class="cc-cook-exit" onclick="exitKookmodus()" aria-label="Kookmodus verlaten">✕</button></div>'
-   +'<details class="cc-cook-ingr"><summary>Ingrediënten · '+escapeText(String(ccCook.personen))+' portie(s)</summary><ul>'+ccCook.ingr.map(x=>'<li>'+escapeText(x)+'</li>').join('')+'</ul></details>'
+   +'<details class="cc-cook-ingr"><summary>Ingrediënten · '+(Number(ccCook.personen)||2)+' '+(Number(ccCook.personen)===1?'portie':'porties')+'</summary><ul>'+ccCook.ingr.map(x=>'<li>'+escapeText(x)+'</li>').join('')+'</ul></details>'
    +'<div class="cc-cook-step" aria-live="polite"><div class="cc-cook-kicker" id="cc-cook-kicker"></div><div class="cc-cook-text" id="cc-cook-text"></div><div class="cc-cook-dots" id="cc-cook-dots" aria-hidden="true"></div></div>'
    +'<div class="cc-cook-nav"><button type="button" class="cc-cook-prev" onclick="ccCookGo(-1)" aria-label="Vorige stap">‹ Vorige</button><button type="button" class="cc-cook-next" onclick="ccCookGo(1)" aria-label="Volgende stap">Volgende ›</button></div>'
    +'<div class="cc-cook-tools"><button type="button" class="cc-cook-hands" id="cc-cook-hands" aria-pressed="false" onclick="ccCookToggleHands()">'+flowVoiceGlyph()+'<span>Handsfree</span></button><button type="button" class="cc-cook-read" onclick="ccCookSpeak(ccCookStepText())">Lees voor</button></div>'

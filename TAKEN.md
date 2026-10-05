@@ -1,6 +1,6 @@
 # TAKEN.md — Coach-gesprek en receptenoverzicht
 
-Basis: `health-coach-v1.0.html`, versie `lime-20261005-25` (branch `claude/practical-edison-cvl53y`, backup `backup/lime-20261004-12`). Vorige takenlijsten staan in de git-geschiedenis.
+Basis: `health-coach-v1.0.html`, versie `lime-20261005-26` (branch `claude/practical-edison-cvl53y`, backup `backup/lime-20261004-12`). Vorige takenlijsten staan in de git-geschiedenis.
 
 Bron: Jims test op de iPhone (5 okt) met vijf schermafbeeldingen. Zijn woorden staan tussen aanhalingstekens. Jims keuzes op het advies: 1 ja, 2 allebei, 3 "laat maar even", 4 "doe maar helemaal".
 
@@ -48,6 +48,12 @@ Bron: Jims test op de iPhone (5 okt) met vijf schermafbeeldingen. Zijn woorden s
 - *Coach testen* neemt de vervolgvragen nog niet mee in de beoordeling.
 
 ---
+
+## 5 okt — Brede test NL + EN — af op branch (`lime-20261005-26`)
+Jim: "Kan je een goede test uitvoeren en checken? Ook visueel?"
+- Nederlands op 390 en 360 px: 53 functionele controles goed. Engels: 28 schermen op 390 en 360 px gecontroleerd op afgekapte tekst, knophoogtes, centrering en achtergebleven Nederlands.
+- Gevonden en opgelost: tikgebied van de waterglaasjes werd afgeknipt (`overflow:hidden`, nu 44 px hoog); *Breakfast* paste niet in Mijn recepten op 360 px (segment rekt nu mee met het label, min. 44 px); kookmodus toonde "portie(s)" (nu enkelvoud/meervoud, ook in het Engels); lege geheugenlijst was nog Nederlands.
+- Bewust zo gelaten: waterglaasjes zijn 24 px breed (acht passen niet op 44 px), wel 44 px hoog tikbaar.
 
 ## 5 okt — Recept delen — af op branch (`lime-20261005-25`)
 Jim: recepten naar Kookschrift (app van zijn vader, eigen server) sturen. Gekozen: optie 1, delen via het deelmenu.
