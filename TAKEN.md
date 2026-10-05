@@ -1,6 +1,6 @@
 # TAKEN.md — Coach-gesprek en receptenoverzicht
 
-Basis: `health-coach-v1.0.html`, versie `lime-20261005-3` (branch `claude/practical-edison-cvl53y`, backup `backup/lime-20261004-12`). Vorige takenlijsten staan in de git-geschiedenis.
+Basis: `health-coach-v1.0.html`, versie `lime-20261005-4` (branch `claude/practical-edison-cvl53y`, backup `backup/lime-20261004-12`). Vorige takenlijsten staan in de git-geschiedenis.
 
 Bron: Jims test op de iPhone (5 okt) met vijf schermafbeeldingen. Zijn woorden staan tussen aanhalingstekens. Jims keuzes op het advies: 1 ja, 2 allebei, 3 "laat maar even", 4 "doe maar helemaal".
 
@@ -48,6 +48,9 @@ Bron: Jims test op de iPhone (5 okt) met vijf schermafbeeldingen. Zijn woorden s
 - *Coach testen* neemt de vervolgvragen nog niet mee in de beoordeling.
 
 ---
+
+## Batch 5 okt (4) — Naar Chef preciezer — af (`lime-20261005-4`)
+Jim: "Elk gesprek? Ook als het over hamstring gaat?" → *Naar Chef* alleen bij hele eetwoorden (niet bij "lunchpauze" of "bereid je voor"); Chef gebruikt uit het gesprek alleen wat over eten, voeding of herstel gaat.
 
 ## Batch 5 okt (3) — Coach en Chef weten meer van elkaar — af (`lime-20261005-3`)
 Jim: "weten chef en coach zo genoeg van elkaars kennis?" → advies akkoord ("ja, bouw maar").

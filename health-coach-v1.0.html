@@ -2249,7 +2249,7 @@ body input[type="checkbox"]:disabled{opacity:.4;cursor:default}
 'use strict';
 
 // ─── VERSION CHECK (forceert Safari herlading bij nieuwe versie) ──────────────
-const APP_VERSION = 'lime-20261005-3';
+const APP_VERSION = 'lime-20261005-4';
 // Eén plek voor de modellen: Sonnet voor gesprekken en recepten, Haiku voor snelle achtergrondtaken.
 const CC_MODEL_MAIN = 'claude-sonnet-5-5';
 const CC_MODEL_FAST = 'claude-haiku-4-5-20251001';
@@ -5604,7 +5604,7 @@ function pinFrontTip(id, btn) {
 
 // Ging het over eten? Dan krijgt het antwoord een vervolgknop Naar Chef.
 function ccWantsChef(userMsg, aiReply) {
-  const foodWords = /recept|maaltijd|ontbijt|lunch|diner|snack|ingredi|koken|bereid|voeding|vezels|eiwit|calorie|groente|fruit|pasta|rijst|soep|salade|eten na|herstel.*eet|eet.*herstel/i;
+  const foodWords = /\b(recept\w*|maaltijd\w*|ontbijt|lunch|diner|avondeten|snacks?|ingrediënt\w*|koken|kook\w*|bereiding|voeding\w*|vezels?|eiwit\w*|calorie\w*|groente\w*|fruit|pasta|rijst|soep|salade|eten|eet)\b/i;
   return foodWords.test(aiReply) || foodWords.test(userMsg);
 }
 
@@ -5635,7 +5635,7 @@ function ccValidFollowups(calls){const c=(calls||[]).find(c=>c&&c.name==='vervol
 // Naar Chef: de laatste vraag en het antwoord van Coach gaan één keer mee naar Chef (alleen in het geheugen). Zichtbaar als label in Chef, met ✕.
 let ccFromCoach=null;
 function ccFromCoachClear(){ccFromCoach=null;flowRenderChef();}
-function _coachRegel(){return ccFromCoach?`Context uit het gesprek met Coach, houd hier rekening mee: de gebruiker vroeg ${JSON.stringify(ccFromCoach.vraag)} en Coach antwoordde ${JSON.stringify(ccFromCoach.antwoord)}.`:'';}
+function _coachRegel(){return ccFromCoach?`Context uit het gesprek met Coach: de gebruiker vroeg ${JSON.stringify(ccFromCoach.vraag)} en Coach antwoordde ${JSON.stringify(ccFromCoach.antwoord)}. Gebruik hieruit alleen wat over eten, voeding of herstel gaat en negeer de rest.`:'';}
 function ccRenderFollowups(list,chef){
  const win=document.getElementById('coach-front-chat');if(!win||(!list.length&&!chef))return;
  const row=document.createElement('div');row.className='cc-followups';row.setAttribute('role','group');row.setAttribute('aria-label','Vraag verder');
