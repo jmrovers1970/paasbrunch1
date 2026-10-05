@@ -1,6 +1,6 @@
 # TAKEN.md — Coach-gesprek en receptenoverzicht
 
-Basis: `health-coach-v1.0.html`, versie `lime-20261005-17` (branch `claude/practical-edison-cvl53y`, backup `backup/lime-20261004-12`). Vorige takenlijsten staan in de git-geschiedenis.
+Basis: `health-coach-v1.0.html`, versie `lime-20261005-18` (branch `claude/practical-edison-cvl53y`, backup `backup/lime-20261004-12`). Vorige takenlijsten staan in de git-geschiedenis.
 
 Bron: Jims test op de iPhone (5 okt) met vijf schermafbeeldingen. Zijn woorden staan tussen aanhalingstekens. Jims keuzes op het advies: 1 ja, 2 allebei, 3 "laat maar even", 4 "doe maar helemaal".
 
@@ -48,6 +48,10 @@ Bron: Jims test op de iPhone (5 okt) met vijf schermafbeeldingen. Zijn woorden s
 - *Coach testen* neemt de vervolgvragen nog niet mee in de beoordeling.
 
 ---
+
+## 5 okt — Recept bij elk product — af (`lime-20261005-18`)
+Jim: "Kan er achter het product in de boodschappenlijst bij elk recept staan waar het bij hoort (subtiel)?"
+- Onder elk product in klein grijs de recepten (hooguit 3, daarna "+N"). De gekopieerde lijst blijft kaal.
 
 ## 5 okt — Kopieën voegen zichzelf samen — af (`lime-20261005-17`)
 Jim: melding "Lokale en cloudgegevens verschillen". "Wat het meest eenvoudig is voor de gebruiker, die wil ik hier niet mee lastigvallen."
