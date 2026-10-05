@@ -1,6 +1,6 @@
 # TAKEN.md — Coach-gesprek en receptenoverzicht
 
-Basis: `health-coach-v1.0.html`, versie `lime-20261005-5` (branch `claude/practical-edison-cvl53y`, backup `backup/lime-20261004-12`). Vorige takenlijsten staan in de git-geschiedenis.
+Basis: `health-coach-v1.0.html`, versie `lime-20261005-6` (branch `claude/practical-edison-cvl53y`, backup `backup/lime-20261004-12`). Vorige takenlijsten staan in de git-geschiedenis.
 
 Bron: Jims test op de iPhone (5 okt) met vijf schermafbeeldingen. Zijn woorden staan tussen aanhalingstekens. Jims keuzes op het advies: 1 ja, 2 allebei, 3 "laat maar even", 4 "doe maar helemaal".
 
@@ -79,8 +79,9 @@ Jim: "alles akkoord" op het advies: Sparren alleen Dinertje, sturen op eiwit en 
 - Chef › regel *Sparren* › *Dinertje voor gasten*: voor wie (met "Eet iemand iets niet?"), wat voor avond, hoeveel tijd. Daarna een samenvatting. Terug kan op elk scherm. Niets wordt bewaard.
 - Afwijking van de eerste schets: geen halve knop naast *Uit je voorraad*, maar een eigen regel *Sparren* onder *Voorraad*, omdat Chef al met regels werkt (Sport, Maaltijd, Voorraad).
 
-### S3. Sparren fase 2 — wacht op akkoord
+### S3. Sparren fase 2 — af (`lime-20261005-6`, wacht op Jims test)
 Drie richtingen als kaartjes (vertrouwd, draai, gok) in één aanroep: titel, waarom, tijd, eiwit, hoofdingrediënten, opzet; macro's klein onderaan. Laadstatus; bij fout of ongeldige JSON één keer automatisch opnieuw, daarna *Opnieuw*. Wensen van gasten hard gecontroleerd met `ccAvoidHit`.
+- **Controle voor Jim**: kies bijvoorbeeld Vrienden + Noten + Vega. Verschillen de drie richtingen duidelijk? Zit er nergens vlees, vis of noten in? Klopt de tijd bij "Een uurtje"? Test ook zonder internet (melding + *Opnieuw*).
 
 ### S4. Sparren fase 3 — wacht op akkoord
 Eén bijstuurronde (Lichter / Makkelijker / Vegetarisch / Goedkoper / Meer wow / Iets heel anders), dan *Maak het recept*: bestaand receptformaat, `validateChefRecipe`, bestaande opslag, extra velden `bron:'sparren'` en `stand:'dinertje'`, opzet als notitie. Max. 3 aanroepen per sessie (plus hooguit één automatische herhaling). Daarna Gist-sync testen.

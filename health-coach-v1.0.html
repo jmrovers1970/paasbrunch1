@@ -1752,6 +1752,14 @@ body .vandaag-section-h{font-size:13px!important;font-weight:650!important;text-
 #modal-container .cc-spar-opts .cc-row[aria-pressed="true"]{background:var(--cc-lime-soft)}
 #modal-container .cc-spar-sum{cursor:default}
 #modal-container .cc-spar-next{margin-top:24px}
+#modal-container .cc-spar-dir{all:unset;box-sizing:border-box;display:flex;flex-direction:column;gap:4px;width:100%;margin-bottom:12px;padding:16px;border:1px solid var(--cc-line);border-radius:18px;background:var(--cc-card);color:var(--cc-ink);cursor:pointer;overflow-wrap:anywhere;-webkit-tap-highlight-color:transparent}
+#modal-container .cc-spar-dir[aria-pressed="true"]{border-color:var(--cc-lime);background:var(--cc-lime-soft);box-shadow:inset 0 0 0 1px var(--cc-lime)}
+#modal-container .cc-spar-dir:focus-visible{outline:2px solid var(--cc-green);outline-offset:2px}
+.cc-spar-type{font:650 12px/1.2 -apple-system,'SF Pro Text',system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--cc-muted)}
+.cc-spar-dir strong{font:700 18px/1.3 -apple-system,'SF Pro Text',system-ui,sans-serif}
+.cc-spar-why,.cc-spar-meta{font:400 14px/1.4 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-muted)}
+.cc-spar-meta{color:var(--cc-ink)}
+.cc-spar-dir small{margin-top:4px;font:400 12px/1.3 -apple-system,'SF Pro Text',system-ui,sans-serif;color:var(--cc-muted);font-variant-numeric:tabular-nums}
 #modal-container .cc-tag-row{display:flex;gap:8px;overflow-x:auto;margin:0 -16px 8px;padding:2px 16px 6px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
 #modal-container .cc-tag-row::-webkit-scrollbar{display:none}
 #modal-container .cc-tag-field{font-weight:600}
@@ -2257,7 +2265,7 @@ body input[type="checkbox"]:disabled{opacity:.4;cursor:default}
 'use strict';
 
 // ─── VERSION CHECK (forceert Safari herlading bij nieuwe versie) ──────────────
-const APP_VERSION = 'lime-20261005-5';
+const APP_VERSION = 'lime-20261005-6';
 // Eén plek voor de modellen: Sonnet voor gesprekken en recepten, Haiku voor snelle achtergrondtaken.
 const CC_MODEL_MAIN = 'claude-sonnet-5-5';
 const CC_MODEL_FAST = 'claude-haiku-4-5-20251001';
@@ -7278,13 +7286,58 @@ let ccSpar=null;
 function ccSparStart(){ccSpar={wie:'',avond:'',tijd:'',niet:new Set()};ccSparShow(0);}
 function ccSparShow(step){
  if(!ccSpar)return;const done=step>=CC_SPAR_Q.length,q=CC_SPAR_Q[step];
- const label=(k,v)=>CC_SPAR_Q.find(x=>x.key===k).opties.find(o=>o[0]===v)?.[1]||'';
  const opts=q?`<div class="cc-list cc-spar-opts">${q.opties.map(([v,l])=>`<button type="button" class="cc-row" aria-pressed="${ccSpar[q.key]===v}" onclick="ccSparPick('${q.key}','${v}',${step})"><span class="cc-row-label">${l}</span><span class="cc-status${ccSpar[q.key]===v?' is-done':''}" aria-hidden="true"></span></button>`).join('')}</div>`:'';
  const niet=step===0?`<h3 class="cc-rec-head">Eet iemand iets niet?</h3><div class="cc-tag-wrap" role="group" aria-label="Eet iemand iets niet?">${CC_SPAR_NIET.map(([v,l])=>`<button type="button" class="cc-tag" aria-pressed="${ccSpar.niet.has(v)}" onclick="ccSparNiet('${v}')">${l}</button>`).join('')}</div><button type="button" class="btn btn-primary btn-full cc-spar-next" ${ccSpar.wie?'':'disabled'} onclick="ccSparShow(1)">Volgende</button>`:'';
- const summary=done?`<div class="cc-list">${['wie','avond','tijd'].map(k=>`<div class="cc-row cc-spar-sum"><span class="cc-row-label">${label(k,ccSpar[k])}</span></div>`).join('')}${ccSpar.niet.size?`<div class="cc-row cc-spar-sum"><span class="cc-row-label">Let op: ${CC_SPAR_NIET.filter(([v])=>ccSpar.niet.has(v)).map(([,l])=>l.toLowerCase()).join(', ')}</span></div>`:''}</div><button type="button" class="btn btn-primary btn-full cc-spar-next" disabled>Geef drie richtingen</button><p class="cc-sheet-note">De richtingen van Chef komen in de volgende stap.</p>`:'';
+ const summary=done?`<div class="cc-list">${['wie','avond','tijd'].map(k=>`<div class="cc-row cc-spar-sum"><span class="cc-row-label">${ccSparLabel(k)}</span></div>`).join('')}${ccSpar.niet.size?`<div class="cc-row cc-spar-sum"><span class="cc-row-label">Let op: ${CC_SPAR_NIET.filter(([v])=>ccSpar.niet.has(v)).map(([,l])=>l.toLowerCase()).join(', ')}</span></div>`:''}</div><button type="button" class="btn btn-primary btn-full cc-spar-next" onclick="ccSparDirections()">Geef drie richtingen</button>`:'';
  const html=`<div class="modal-header"><h2>${done?'Klaar om te sparren':q.vraag}</h2>${flowClose()}</div><p class="cc-spar-kicker">Dinertje${done?'':` · ${step+1} van ${CC_SPAR_Q.length}`}</p>${opts}${niet}${summary}`;
  if(step>0)ccOpenFrom(()=>ccSparShow(step-1),()=>showModal(html));else showModal(html);
 }
+// Fase 2: drie richtingen (vertrouwd, draai, gok) in één aanroep; bij een fout, ongeldige JSON of iets wat niet mag één keer vanzelf opnieuw.
+const CC_SPAR_TYPES={vertrouwd:'Vertrouwd',draai:'Met een draai',gok:'Gok'};
+const CC_SPAR_HARD={vega:['Vegetarisch: geen vlees en geen vis.',['vlees','vis']],vis:['Geen vis of zeevruchten.',['vis']],noten:['Geen noten of pinda, ook niet in saus of garnering.',['noten']],gluten:['Glutenvrij: geen tarwe, pasta, brood, couscous of gewone sojasaus.',['gluten']],alcohol:['Geen alcohol, ook niet om mee te koken.',['alcohol']]};
+function ccSparLabel(k){const v=ccSpar?.[k];return CC_SPAR_Q.find(x=>x.key===k).opties.find(o=>o[0]===v)?.[1]||'';}
+function ccSparPersons(){return CC_SPAR_Q[0].opties.find(o=>o[0]===ccSpar?.wie)?.[2]||4;}
+function ccSparPrompt(){
+ const hard=[...ccSpar.niet].map(k=>CC_SPAR_HARD[k][0]);
+ return `Je spart als Chef met de gebruiker over een dinertje voor gasten. Bedenk precies drie richtingen, nog geen volledige recepten.
+Situatie: ${ccSparLabel('wie')} (${ccSparPersons()} personen). Avond: ${ccSparLabel('avond')}. Tijd: ${ccSparLabel('tijd')}.
+${hard.length?'HARD, voor alle drie de richtingen, ook in sauzen en garnering: '+hard.join(' '):''} ${_dieetRegel()} ${_geheugenRegel()} ${_landRegel()}
+De drie richtingen verschillen duidelijk: "vertrouwd" doet precies wat gevraagd is en is een zeker succes; "draai" is dezelfde basis als vertrouwd met één onverwachte keuze; "gok" is iets wat de gebruiker zelf niet had bedacht maar wel past bij deze avond.
+Smaak en sfeer sturen, voedingswaarden zijn alleen informatie. Houd de smaakstijl van Chef aan (vers, veel kruiden, iets fris of zuurs, iets knapperigs, gewone supermarkt), maar het mag feestelijker. Tijd eerlijk en passend bij de gekozen tijd.
+Per richting: titel (kort en pakkend), waarom (één zin: waarom dit past bij deze avond), tijd_min (totaal, als getal), eiwit_g en kcal (per portie, schatting, als getal), hoofdingredienten (3 tot 5), opzet (één zin over hoe de avond loopt: wat vooraf klaar kan, of een idee voor vooraf of toe).
+Antwoord alleen met JSON: {"richtingen":[{"type":"vertrouwd","titel":"","waarom":"","tijd_min":0,"eiwit_g":0,"kcal":0,"hoofdingredienten":["","",""],"opzet":""},{"type":"draai",...},{"type":"gok",...}]}`;
+}
+function ccSparValid(raw){
+ const list=safeParseJSON(raw)?.richtingen;if(!Array.isArray(list)||list.length!==3)throw Error('Chef gaf geen drie richtingen.');
+ const cats=[...ccSpar.niet].flatMap(k=>CC_SPAR_HARD[k][1]),out=list.map(d=>{
+  const ing=Array.isArray(d?.hoofdingredienten)?d.hoofdingredienten.map(x=>String(x).trim()).filter(Boolean).slice(0,5):[],num=v=>{const n=Math.round(Number(v));return n>0&&n<5000?n:null;};
+  if(!CC_SPAR_TYPES[d?.type]||typeof d.titel!=='string'||!d.titel.trim()||typeof d.waarom!=='string'||ing.length<2)throw Error('Een richting was niet compleet.');
+  const r={type:d.type,titel:d.titel.trim().slice(0,90),waarom:d.waarom.trim().slice(0,220),tijd_min:num(d.tijd_min),eiwit_g:num(d.eiwit_g),kcal:num(d.kcal),hoofdingredienten:ing,opzet:typeof d.opzet==='string'?d.opzet.trim().slice(0,220):''};
+  const hit=ccAvoidHit([r.titel,...ing,r.opzet],cats,settings.lieverNiet||[]);if(hit)throw Error(`Er zat ${hit} in, en dat mag niet.`);
+  return r;});
+ if(new Set(out.map(d=>d.type)).size!==3)throw Error('De drie richtingen leken te veel op elkaar.');
+ return Object.keys(CC_SPAR_TYPES).map(t=>out.find(d=>d.type===t));
+}
+async function ccSparDirections(){
+ if(!ccSpar)return;
+ if(!settings.anthropicKey){showBanner('yellow','Stel je AI-sleutel in bij Instellingen om met Chef te sparren.');return;}
+ const req=ccSpar.req=(ccSpar.req||0)+1;ccSpar.richtingen=null;ccSpar.keuze=null;
+ ccOpenFrom(()=>ccSparShow(CC_SPAR_Q.length),()=>showModal(`<div class="modal-header"><h2>Drie richtingen</h2>${flowClose()}</div><p class="cc-spar-kicker">Dinertje · ${escapeText(ccSparLabel('wie'))}</p><div id="cc-spar-dirs"><div class="cc-chef-wait" role="status"><span class="cc-chef-dot" aria-hidden="true"></span><span>Chef denkt mee…</span></div></div>`));
+ const view=ccViewRevision,live=()=>ccSpar&&ccSpar.req===req&&view===ccViewRevision&&document.getElementById('cc-spar-dirs');
+ let err=null;
+ for(let i=0;i<2;i++){
+  try{ccSpar.calls=(ccSpar.calls||0)+1;const list=ccSparValid(await callAIPlain(ccSparPrompt(),1400));if(!live())return;ccSpar.richtingen=list;ccSparRenderDirs();return;}
+  catch(e){err=e;if(!live())return;}
+ }
+ document.getElementById('cc-spar-dirs').innerHTML=`<div class="cc-chef-wait is-error" role="status"><span>${escapeText(err?.message||'Chef is even niet bereikbaar.')}</span></div><button type="button" class="btn btn-secondary btn-full" onclick="ccSparDirections()">Opnieuw</button>`;
+}
+function ccSparRenderDirs(){
+ const el=document.getElementById('cc-spar-dirs');if(!el||!ccSpar?.richtingen)return;
+ el.innerHTML=ccSpar.richtingen.map((d,i)=>{const on=ccSpar.keuze===i,meta=[d.tijd_min?d.tijd_min+' min':'',d.hoofdingredienten.join(', ')].filter(Boolean).join(' · '),macro=[d.eiwit_g?'≈ '+d.eiwit_g+' g eiwit':'',d.kcal?'≈ '+d.kcal+' kcal':''].filter(Boolean).join(' · ');
+  return `<button type="button" class="cc-spar-dir" aria-pressed="${on}" onclick="ccSparChoose(${i})"><span class="cc-spar-type">${CC_SPAR_TYPES[d.type]}</span><strong>${escapeText(d.titel)}</strong><span class="cc-spar-why">${escapeText(d.waarom)}</span><span class="cc-spar-meta">${escapeText(meta)}</span>${d.opzet?`<span class="cc-spar-why">${escapeText(d.opzet)}</span>`:''}${macro?`<small>${escapeText(macro)} per portie</small>`:''}</button>`;}).join('')
+  +`<button type="button" class="btn btn-primary btn-full cc-spar-next" disabled>Maak het recept</button><p class="cc-sheet-note">${ccSpar.keuze===null?'Kies een richting.':'Bijsturen en het recept volgen in de volgende stap.'}</p>`;
+}
+function ccSparChoose(i){if(!ccSpar?.richtingen?.[i])return;ccSpar.keuze=ccSpar.keuze===i?null:i;ccSparRenderDirs();}
 function ccSparPick(key,v,step){if(!ccSpar)return;ccSpar[key]=v;ccSparShow(step===0?0:step+1);}
 function ccSparNiet(v){if(!ccSpar)return;if(ccSpar.niet.has(v))ccSpar.niet.delete(v);else ccSpar.niet.add(v);ccSparShow(0);}
 function flowRenderChef(){const container=document.getElementById('food-chef-content');if(!container)return;const draft=document.getElementById('gen-focus-input')?.value||'';container.innerHTML=`<section class="flow-chef-card"><div class="cc-eyebrow"><span class="cc-page-tag">Chef</span></div><h1>Wat eet je?</h1><div class="cc-chef-bar"><button id="voice-recipe-btn" class="flow-speak" onclick="smartVoiceRecipe()">${flowVoiceGlyph()} Spreek je eetwens in</button><label class="sr-only" for="gen-focus-input">Je vraag of receptwens</label><textarea id="gen-focus-input" rows="1" oninput="ccResizeComposer(this)" placeholder="Wat wil je eten?">${escapeText(draft)}</textarea><button type="button" class="cc-clear" onclick="ccClearInput('gen-focus-input','chef-mic-label')" aria-label="Tekst wissen"><svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="14" fill="currentColor" opacity=".14"/><path d="m10 10 8 8m0-8-8 8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button><button id="chef-foto-btn" onclick="flowPhotoMenu()" aria-label="Foto toevoegen: recept, gerecht of voorraad" title="Foto: recept, gerecht of voorraad"><svg class="cc-icon" data-cc-icon="camera" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6 10 3h4l2 3h4v14H4V6z"/><circle cx="12" cy="13" r="4"/></svg><span>Foto toevoegen</span></button><button id="gen-btn" class="flow-send" onclick="generateRecepten()" aria-label="Verstuur" title="Verstuur"><svg class="cc-icon" data-cc-icon="send" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5m-6 6 6-6 6 6"/></svg></button></div><p id="chef-mic-label" class="flow-status" role="status"></p>${ccFromCoach?`<div class="cc-from-coach"><span>Uit je gesprek met Coach</span><button type="button" aria-label="Gesprek met Coach niet meenemen" onclick="ccFromCoachClear()"><svg class="cc-icon" data-cc-icon="close" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div>`:''}<input id="chef-foto-input" type="file" accept="image/*" style="display:none" onchange="analyseChefFoto(this)"><div class="cc-chef-modes"><div class="cc-chef-line"><h2 class="cc-chef-lab">Sport</h2><div class="cc-chef-row">${[['voor','Voor'],['tijdens','Tijdens'],['na','Na']].map(flowChefModeButton).join('')}</div></div><div class="cc-chef-line"><h2 class="cc-chef-lab">Maaltijd</h2><div class="cc-chef-row">${[['makkelijk','Snel'],['uitgebreid','Weekend'],['comfort','Comfort']].map(flowChefModeButton).join('')}</div></div><div class="cc-chef-line"><h2 class="cc-chef-lab">Voorraad</h2><button type="button" class="cc-entry" aria-haspopup="dialog" onclick="showVoorraadModal()"><span id="cc-voorraad-label">${ccVoorraadText()}</span>${CC_CHEVRON}</button></div><div class="cc-chef-line"><h2 class="cc-chef-lab">Sparren</h2><button type="button" class="cc-entry" aria-haspopup="dialog" onclick="ccSparStart()"><span>Dinertje voor gasten</span>${CC_CHEVRON}</button></div></div></section><div id="flow-photo-resume"></div><div id="flow-chef-answer" aria-live="polite"></div>`;if(draft)ccResizeComposer(document.getElementById('gen-focus-input'));if(flowChefAdvice)flowRenderAdvice();flowPhotoResume();}
