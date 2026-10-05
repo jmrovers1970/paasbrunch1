@@ -1,6 +1,6 @@
 # TAKEN.md — Coach-gesprek en receptenoverzicht
 
-Basis: `health-coach-v1.0.html`, versie `lime-20261005-10` (branch `claude/practical-edison-cvl53y`, backup `backup/lime-20261004-12`). Vorige takenlijsten staan in de git-geschiedenis.
+Basis: `health-coach-v1.0.html`, versie `lime-20261005-11` (branch `claude/practical-edison-cvl53y`, backup `backup/lime-20261004-12`). Vorige takenlijsten staan in de git-geschiedenis.
 
 Bron: Jims test op de iPhone (5 okt) met vijf schermafbeeldingen. Zijn woorden staan tussen aanhalingstekens. Jims keuzes op het advies: 1 ja, 2 allebei, 3 "laat maar even", 4 "doe maar helemaal".
 
@@ -48,6 +48,12 @@ Bron: Jims test op de iPhone (5 okt) met vijf schermafbeeldingen. Zijn woorden s
 - *Coach testen* neemt de vervolgvragen nog niet mee in de beoordeling.
 
 ---
+
+## Hotfix 5 okt — "Geen bruikbaar antwoord ontvangen" — af (`lime-20261005-11`)
+Jim (live, iPhone): Coach gaf bij "Ik wil beginnen met intervaltraining" en "Maak een opbouw naar 10 km" alleen "Geen bruikbaar antwoord ontvangen".
+- Oorzaak: Sonnet 5.5 (sinds `-2` het MAIN-model) denkt standaard na; dat denken telt mee in `max_tokens` (500 bij het gesprek), dus bij moeilijkere vragen bleef er geen tekst over.
+- Oplossing: `ccModelBody` op alle zeven aanvragen. MAIN zonder denken (`between_tools`), DEEP (Opus 5.5, denkt altijd) met lage effort en extra ruimte. Foto-uitlezen leest nu op bloktype.
+- **Controle voor Jim**: stel dezelfde twee vragen opnieuw; ook een recept maken en een foto van een maaltijd.
 
 ## Batch 5 okt (8) — Brede test en testlijst — af (`lime-20261005-10`)
 Jim: "Kan je alles testen wat we vanmorgen hebben gebouwd? En een testlijst maken die ik kan volgen? En checken of layout en vormgeving klopt?"
