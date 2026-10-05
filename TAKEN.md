@@ -1,6 +1,6 @@
 # TAKEN.md — Coach-gesprek en receptenoverzicht
 
-Basis: `health-coach-v1.0.html`, versie `lime-20261005-6` (branch `claude/practical-edison-cvl53y`, backup `backup/lime-20261004-12`). Vorige takenlijsten staan in de git-geschiedenis.
+Basis: `health-coach-v1.0.html`, versie `lime-20261005-7` (branch `claude/practical-edison-cvl53y`, backup `backup/lime-20261004-12`). Vorige takenlijsten staan in de git-geschiedenis.
 
 Bron: Jims test op de iPhone (5 okt) met vijf schermafbeeldingen. Zijn woorden staan tussen aanhalingstekens. Jims keuzes op het advies: 1 ja, 2 allebei, 3 "laat maar even", 4 "doe maar helemaal".
 
@@ -83,8 +83,9 @@ Jim: "alles akkoord" op het advies: Sparren alleen Dinertje, sturen op eiwit en 
 Drie richtingen als kaartjes (vertrouwd, draai, gok) in één aanroep: titel, waarom, tijd, eiwit, hoofdingrediënten, opzet; macro's klein onderaan. Laadstatus; bij fout of ongeldige JSON één keer automatisch opnieuw, daarna *Opnieuw*. Wensen van gasten hard gecontroleerd met `ccAvoidHit`.
 - **Controle voor Jim**: kies bijvoorbeeld Vrienden + Noten + Vega. Verschillen de drie richtingen duidelijk? Zit er nergens vlees, vis of noten in? Klopt de tijd bij "Een uurtje"? Test ook zonder internet (melding + *Opnieuw*).
 
-### S4. Sparren fase 3 — wacht op akkoord
+### S4. Sparren fase 3 — af (`lime-20261005-7`, wacht op Jims test)
 Eén bijstuurronde (Lichter / Makkelijker / Vegetarisch / Goedkoper / Meer wow / Iets heel anders), dan *Maak het recept*: bestaand receptformaat, `validateChefRecipe`, bestaande opslag, extra velden `bron:'sparren'` en `stand:'dinertje'`, opzet als notitie. Max. 3 aanroepen per sessie (plus hooguit één automatische herhaling). Daarna Gist-sync testen.
+- **Controle voor Jim**: van knop tot opgeslagen recept op iPhone Safari, voor beide richtingen *Lichter* en *Iets heel anders*. Staat het recept in Mijn recepten (Diner) en op een tweede apparaat na sync? Werkt een bestaand recept nog als voorheen? Zit een wens van gasten (bijv. noten) nergens in het recept?
 
 ---
 
