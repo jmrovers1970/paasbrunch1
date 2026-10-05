@@ -2207,7 +2207,7 @@ body input[type="checkbox"]:disabled{opacity:.4;cursor:default}
 'use strict';
 
 // ─── VERSION CHECK (forceert Safari herlading bij nieuwe versie) ──────────────
-const APP_VERSION = 'lime-20261005-26';
+const APP_VERSION = 'lime-20261005-27';
 // Eén plek voor de modellen: Sonnet voor gesprekken en recepten, Haiku voor snelle achtergrondtaken.
 const CC_MODEL_MAIN = 'claude-sonnet-5-5';
 const CC_MODEL_FAST = 'claude-haiku-4-5-20251001';
@@ -3221,6 +3221,7 @@ const CC_EN={
  // Sleutels
  "Sleutels":"Keys","Nog invullen":"Not set","AI-sleutel (Anthropic)":"AI key (Anthropic)","Nodig voor Coach en Chef. Je sleutels blijven op deze telefoon.":"Needed for Coach and Chef. Your keys stay on this phone.","Cloudkopie (optioneel)":"Cloud copy (optional)","Deel deze nooit met iemand anders: dan mengen je gegevens met die van een ander. Vergeet je het wachtwoord, dan is de cloudkopie niet meer te openen; je gegevens op deze telefoon blijven wel bruikbaar.":"Never share these with anyone: your data would mix with theirs. If you forget the password, the cloud copy can't be opened; your data on this phone stays usable.","Privacymodus aan: de AI krijgt alleen je bericht en wat je vandaag logde.":"Privacy mode on: the AI only gets your message and what you logged today.",
  "Delen":"Share","Delen lukte niet. Probeer het opnieuw.":"Sharing failed. Please try again.","portie":"serving","porties":"servings",
+ "Stap":"Step","Klaar! Eet smakelijk.":"Done! Enjoy your meal.","Dat was de laatste stap. Eet smakelijk!":"That was the last step. Enjoy your meal!","Handsfree staat uit.":"Hands-free is off.","Dat staat niet in de ingrediënten.":"That's not in the ingredients.","Je hebt nodig:":"You need:","Spraakbediening is in deze browser niet beschikbaar. Gebruik de knoppen.":"Voice control isn't available in this browser. Use the buttons.",
  // foutmeldingen
  "API fout:":"API error:",
  "API-sleutel niet geldig — check instellingen.":"API key not valid — check settings.",
@@ -3354,6 +3355,7 @@ const CC_EN_RE=[[/^Stap (\d+) van (\d+)$/,'Step $1 of $2'],
  [/^Nog (\d.*)$/,(...g)=>ccT(g[1])+" to go"],
  [/^Gist lezen mislukt \((\d+)\)\.?$/,"Reading the Gist failed ($1)."],
  [/^Cloud opslaan mislukt \((\d+)\)\.?$/,"Saving to the cloud failed ($1)."],
+ [/^Niet verstaan: "(.*)"\. Zeg .+$/,'Didn\'t catch: "$1". Say "next", "previous", "step 3", "repeat", "ingredients", "how much …" or "stop".'],
  [/^· (.+)$/,(...g)=>'· '+ccT(g[1])],[/^Klaar, (.+)!$/,'Done, $1!'],[/^Welkom terug, (.+)$/,'Welcome back, $1'],[/^(.+) (minder|meer)$/,(m,a,b)=>CC_EN[a]?`${b==='meer'?'More':'Less'} ${CC_EN[a].toLowerCase()}`:m]];
 const CC_EN_DAYS={maandag:'Monday',dinsdag:'Tuesday',woensdag:'Wednesday',donderdag:'Thursday',vrijdag:'Friday',zaterdag:'Saturday',zondag:'Sunday',ma:'Mon',di:'Tue',wo:'Wed',do:'Thu',vr:'Fri',za:'Sat',zo:'Sun'};
 const CC_EN_MONTHS={januari:'January',februari:'February',maart:'March',april:'April',mei:'May',juni:'June',juli:'July',augustus:'August',september:'September',oktober:'October',november:'November',december:'December',jan:'Jan',feb:'Feb',mrt:'Mar',apr:'Apr',jun:'Jun',jul:'Jul',aug:'Aug',sep:'Sep',okt:'Oct',nov:'Nov',dec:'Dec'};
@@ -3391,10 +3393,11 @@ function ccTEl(el){
 }
 function ccTranslate(root){
  if(!root)return;
- if(root.nodeType===3){if(!root.parentElement?.closest('[translate="no"],script,style'))ccTNode(root);return;}
+ if(root.nodeType===3){if(!root.parentElement?.closest('[translate="no"],script,style,textarea'))ccTNode(root);return;}
  if(root.nodeType!==1||root.closest('[translate="no"],script,style'))return;
+ if(root.tagName==='TEXTAREA'){ccTEl(root);return;}
  ccTEl(root);
- const w=document.createTreeWalker(root,NodeFilter.SHOW_ELEMENT|NodeFilter.SHOW_TEXT,{acceptNode:n=>n.nodeType===1&&(n.getAttribute('translate')==='no'||n.tagName==='SCRIPT'||n.tagName==='STYLE')?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT});
+ const w=document.createTreeWalker(root,NodeFilter.SHOW_ELEMENT|NodeFilter.SHOW_TEXT,{acceptNode:n=>n.nodeType!==1?NodeFilter.FILTER_ACCEPT:n.getAttribute('translate')==='no'||n.tagName==='SCRIPT'||n.tagName==='STYLE'?NodeFilter.FILTER_REJECT:n.tagName==='TEXTAREA'?(ccTEl(n),NodeFilter.FILTER_REJECT):NodeFilter.FILTER_ACCEPT});
  for(let n=w.nextNode();n;n=w.nextNode())n.nodeType===3?ccTNode(n):ccTEl(n);
 }
 let ccTObserver=null;
@@ -3446,14 +3449,14 @@ function _afwisselRegel() {
 }
 // Harde controle op wat er niet in mag: liever niet (Instellingen), vega/vis, en later de wensen van gasten. Per ingrediëntregel, op woordbegin of woordeinde.
 const CC_AVOID_WORDS={
- vlees:['kip','rund','varken','gehakt','spek','=ham','hamburger','bacon','worst','chorizo','salami','pancetta','=lam','lams','kalkoen','biefstuk','vlees','eend','chicken','beef','pork','=lamb','turkey','sausage','steak','mince','veal','duck','prosciutto','pepperoni','meatball','=meat','gelatin'],
- vis:['vis','zalm','tonijn','kabeljauw','garnal','makreel','ansjovis','mossel','forel','haring','kibbeling','scampi','inktvis','sardine','sardien','tilapia','pangasius','koolvis','zeevrucht','krab','kreeft','fish','salmon','tuna','shrimp','prawn','=cod','anchovy','anchovies','mackerel','mussel','trout','sardine','crab','lobster','squid','seafood','scallop','=clam','haddock','=hake','fish sauce'],
- noten:['noot','noten','amandel','cashew','walnoot','hazelnoot','pecan','pistache','pinda','macadamia','almond','peanut','walnut','hazelnut','pistachio','=pine nut','=pine nuts'],
- gluten:['tarwe','bloem','pasta','spaghetti','penne','macaroni','lasagne','brood','couscous','bulgur','spelt','rogge','gerst','wrap','tortilla','panko','paneermeel','sojasaus','wheat','flour','bread','noodle','couscous','bulgur','barley','=rye','soy sauce','breadcrumb','=pita','bagel'],
+ vlees:['kip','rund','varken','gehakt','spek','=ham','hamburger','bacon','worst','chorizo','salami','pancetta','=lam','lams','kalkoen','biefstuk','vlees','eend','chicken','beef','pork','=lamb','turkey','sausage','steak','mince','veal','duck','prosciutto','pepperoni','meatball','=meat','gelatin','=lard','venison','gammon'],
+ vis:['vis','zalm','tonijn','kabeljauw','garnal','makreel','ansjovis','mossel','forel','haring','kibbeling','scampi','inktvis','sardine','sardien','tilapia','pangasius','koolvis','zeevrucht','krab','kreeft','fish','salmon','tuna','shrimp','prawn','=cod','anchovy','anchovies','mackerel','mussel','trout','sardine','crab','lobster','squid','seafood','scallop','=clam','haddock','=hake','fish sauce','worcester'],
+ noten:['noot','noten','amandel','cashew','walnoot','hazelnoot','pecan','pistache','pinda','macadamia','almond','peanut','walnut','hazelnut','pistachio','=nut','=nuts','=pine nut','=pine nuts'],
+ gluten:['tarwe','bloem','pasta','spaghetti','penne','macaroni','lasagne','brood','couscous','bulgur','spelt','rogge','gerst','wrap','tortilla','panko','paneermeel','sojasaus','wheat','flour','bread','noodle','couscous','bulgur','barley','=rye','soy sauce','breadcrumb','=pita','bagel','seitan'],
  alcohol:['wijn','bier','=rum','cognac','sherry','likeur','wodka','=gin','whisky','wine','beer','vodka','liqueur','brandy','=sake','mirin'],
  lactose:['melk','room','boter','kaas','yoghurt','kwark','feta','mozzarella','parmezaan','ricotta','mascarpone','skyr','milk','cream','butter','cheese','yogurt','yoghurt','parmesan','=ghee','cottage'],
  pittig:['chili','sambal','cayenne','sriracha','harissa','jalape','gochujang','rawit','pepertje','chipotle','chilli','hot sauce','jalapeño']};
-const CC_AVOID_OK={vlees:['kippenei','chickpea','vegan','meat-free','plant-based'],noten:['nootmuskaat','kokos','nutmeg','coconut','butternut'],gluten:['bloemkool','maisbloem','maïsbloem','rijstbloem','kikkererwtenbloem','currypasta','misopasta','glutenvrij','buckwheat','gluten-free','rice flour','corn flour','cornflour','chickpea flour','almond flour','rice noodle','buckwheat flour','rice noodles'],alcohol:['wijnazijn','wijnsteen','alcoholvrij','wine vinegar','alcohol-free'],lactose:['lactosevrij','kokosmelk','amandelmelk','havermelk','sojamelk','pindakaas','notenboter','kokosroom','haverroom','sojaroom','cacaoboter','lactose-free','dairy-free','coconut milk','almond milk','oat milk','soy milk','peanut butter','nut butter','coconut cream','cocoa butter','coconut yogurt','coconut yoghurt','butternut'],pittig:['milde','mild']};
+const CC_AVOID_OK={vlees:['kippenei','chickpea','vegan','meat-free','plant-based'],noten:['nootmuskaat','kokos','nutmeg','coconut','butternut'],gluten:['bloemkool','maisbloem','maïsbloem','rijstbloem','kikkererwtenbloem','currypasta','misopasta','glutenvrij','buckwheat','gluten-free','rice flour','corn flour','cornflour','chickpea flour','almond flour','rice noodle','buckwheat flour','rice noodles'],alcohol:['wijnazijn','wijnsteen','alcoholvrij','wine vinegar','alcohol-free'],lactose:['lactosevrij','kokosmelk','amandelmelk','havermelk','sojamelk','pindakaas','notenboter','kokosroom','haverroom','sojaroom','cacaoboter','lactose-free','dairy-free','coconut milk','almond milk','oat milk','soy milk','peanut butter','nut butter','coconut cream','cocoa butter','coconut yogurt','coconut yoghurt','butternut','butter bean','soy yogurt','soy yoghurt','oat yogurt','oat yoghurt','sojayoghurt','sojayogurt','kokosyoghurt','haveryoghurt'],pittig:['milde','mild']};
 function ccAvoidHit(lines,cats=[],free=[]){
  cats=[...new Set([...cats,...free.map(x=>String(x).toLowerCase().trim()).filter(x=>CC_AVOID_WORDS[x])])];free=free.filter(x=>!CC_AVOID_WORDS[String(x).toLowerCase().trim()]);
  const stems=w=>w.startsWith('=')?{x:w.slice(1),exact:true}:{x:w,exact:false};
@@ -4701,7 +4704,7 @@ function changeRecPersonen(recId, n) {
   saveAndSync();
   // Update ingredient list in-place
   const ul = document.getElementById('rec-ing-' + recId);
-  if (ul) ul.innerHTML = rec.ingredienten.map(i => `<li>${scaleIngredient(i, baseP, n)}</li>`).join('');
+  if (ul) ul.innerHTML = rec.ingredienten.map(i => `<li>${escapeText(scaleIngredient(i, baseP, n))}</li>`).join('');
   // Update pill buttons
   const body = document.getElementById('recbody-' + recId);
   if (body) body.querySelectorAll('.gen-pill').forEach((btn, i) => {
@@ -6170,7 +6173,7 @@ let _wakeLock = null;
 
 // ─── Kookmodus: stap voor stap, ook handsfree ─────────────────────────────
 let ccCook=null;
-function ccCookStepText(){if(!ccCook||!ccCook.stappen.length)return '';return 'Stap '+(ccCook.i+1)+'. '+ccCook.stappen[ccCook.i];}
+function ccCookStepText(){if(!ccCook||!ccCook.stappen.length)return '';return ccT('Stap')+' '+(ccCook.i+1)+'. '+ccCook.stappen[ccCook.i];}
 function ccCookRender(){
  if(!ccCook)return;const n=ccCook.stappen.length;
  const k=document.getElementById('cc-cook-kicker'),t=document.getElementById('cc-cook-text'),d=document.getElementById('cc-cook-dots');
@@ -6183,7 +6186,7 @@ function ccCookRender(){
 function ccCookStatus(msg){const el=document.getElementById('cc-cook-status');if(el)el.textContent=msg;}
 function ccCookGo(delta){
  if(!ccCook)return;const n=ccCook.stappen.length;
- if(delta>0&&ccCook.i>=n-1){ccCookStatus('Klaar! Eet smakelijk.');if(ccCook.hands)ccCookSpeak('Dat was de laatste stap. Eet smakelijk!');return;}
+ if(delta>0&&ccCook.i>=n-1){ccCookStatus('Klaar! Eet smakelijk.');if(ccCook.hands)ccCookSpeak(ccT('Dat was de laatste stap. Eet smakelijk!'));return;}
  ccCook.i=Math.max(0,Math.min(n-1,ccCook.i+delta));ccCookRender();
  if(ccCook.hands)ccCookSpeak(ccCookStepText());
 }
@@ -6205,7 +6208,8 @@ function ccNlNumber(word){
  return m?CC_NL_ONES[m[1]]+CC_NL_TENS[m[2]]:null;
 }
 function ccCookStepRequest(t){
- if(/\blaatste stap\b/.test(t))return ccCook.stappen.length;
+ if(/\b(laatste stap|last step)\b/.test(t))return ccCook.stappen.length;
+ const en=t.match(/\bstep\s+(\d+|one|two|three|four|five|six|seven|eight|nine|ten)\b/);if(en){const k=/\d/.test(en[1])?Number(en[1]):['one','two','three','four','five','six','seven','eight','nine','ten'].indexOf(en[1])+1;if(k>0)return k;}
  const ord=t.match(/\b([a-z]+) stap\b/);if(ord&&CC_NL_ORDINALS[ord[1]])return CC_NL_ORDINALS[ord[1]];
  const num=t.match(/\bstap\s+([a-zà-ÿ0-9]+)/);if(num){const k=ccNlNumber(num[1]);if(k!==null)return k;}
  return null;
@@ -6223,18 +6227,18 @@ function ccCookSpeak(text){
 }
 function ccCookCommand(raw){
  const t=String(raw||'').toLowerCase().trim();if(!t||!ccCook)return;
- if(/\b(stop|klaar met luisteren|handsfree uit|uit)\b/.test(t)){ccCookStopHands();ccCookSpeak('Handsfree staat uit.');return;}
+ if(/\b(stop|klaar met luisteren|handsfree uit|uit|stop listening|hands-free off)\b/.test(t)){ccCookStopHands();ccCookSpeak(ccT('Handsfree staat uit.'));return;}
  const stepNo=ccCookStepRequest(t);if(stepNo!==null)return ccCookGoTo(stepNo);
  if(/\b(volgende|verder|door|next|ga door)\b/.test(t))return ccCookGo(1);
- if(/\b(vorige|terug|ga terug)\b/.test(t))return ccCookGo(-1);
- if(/\b(herhaal|nog een keer|nog eens|opnieuw|wat was)\b/.test(t))return ccCookSpeak(ccCookStepText());
- if(/hoe ?veel|hoeveel/.test(t)){
-  const stop=new Set(['hoeveel','hoe','veel','heb','ik','nodig','moet','er','in','de','het','een','van','aan','gram','is','zit']);
+ if(/\b(vorige|terug|ga terug|previous|back|go back)\b/.test(t))return ccCookGo(-1);
+ if(/\b(herhaal|nog een keer|nog eens|opnieuw|wat was|repeat|again|say that again)\b/.test(t))return ccCookSpeak(ccCookStepText());
+ if(/hoe ?veel|hoeveel|how (much|many)/.test(t)){
+  const stop=new Set(['hoeveel','hoe','veel','heb','ik','nodig','moet','er','in','de','het','een','van','aan','gram','is','zit','how','much','many','do','need','of','the','a','an','there','grams']);
   const words=t.replace(/[^a-zà-ÿ\s]/g,' ').split(/\s+/).filter(w=>w.length>1&&!stop.has(w));
   const hit=ccCook.ingr.find(x=>words.some(w=>x.toLowerCase().includes(w)||x.toLowerCase().includes(w.replace(/s$|en$/,''))));
-  return ccCookSpeak(hit?hit:'Dat staat niet in de ingrediënten.');
+  return ccCookSpeak(hit?hit:ccT('Dat staat niet in de ingrediënten.'));
  }
- if(/ingredi/.test(t))return ccCookSpeak('Je hebt nodig: '+ccCook.ingr.join(', ')+'.');
+ if(/ingredi/.test(t))return ccCookSpeak(ccT('Je hebt nodig:')+' '+ccCook.ingr.join(', ')+'.');
  ccCookStatus('Niet verstaan: "'+raw+'". Zeg "volgende", "vorige", "stap 3", "herhaal", "ingrediënten", "hoeveel …" of "stop".');
 }
 function ccCookListen(){
@@ -6277,7 +6281,7 @@ async function enterKookmodus(id) {
   overlay.className = 'kookmodus-overlay cc-cook';
   overlay.setAttribute('role','dialog');overlay.setAttribute('aria-label','Kookmodus: '+recept.naam);
   overlay.innerHTML = '<div class="cc-cook-head"><div class="cc-cook-title">'+escapeText(recept.naam)+'</div><button type="button" class="cc-cook-exit" onclick="exitKookmodus()" aria-label="Kookmodus verlaten">✕</button></div>'
-   +'<details class="cc-cook-ingr"><summary>Ingrediënten · '+(Number(ccCook.personen)||2)+' '+(Number(ccCook.personen)===1?'portie':'porties')+'</summary><ul>'+ccCook.ingr.map(x=>'<li>'+escapeText(x)+'</li>').join('')+'</ul></details>'
+   +'<details class="cc-cook-ingr"><summary>Ingrediënten · '+(Number(ccCook.personen)||2)+' '+(Number(ccCook.personen)===1?'portie':'porties')+'</summary><ul translate="no">'+ccCook.ingr.map(x=>'<li>'+escapeText(x)+'</li>').join('')+'</ul></details>'
    +'<div class="cc-cook-step" aria-live="polite"><div class="cc-cook-kicker" id="cc-cook-kicker"></div><div class="cc-cook-text" id="cc-cook-text"></div><div class="cc-cook-dots" id="cc-cook-dots" aria-hidden="true"></div></div>'
    +'<div class="cc-cook-nav"><button type="button" class="cc-cook-prev" onclick="ccCookGo(-1)" aria-label="Vorige stap">‹ Vorige</button><button type="button" class="cc-cook-next" onclick="ccCookGo(1)" aria-label="Volgende stap">Volgende ›</button></div>'
    +'<div class="cc-cook-tools"><button type="button" class="cc-cook-hands" id="cc-cook-hands" aria-pressed="false" onclick="ccCookToggleHands()">'+flowVoiceGlyph()+'<span>Handsfree</span></button><button type="button" class="cc-cook-read" onclick="ccCookSpeak(ccCookStepText())">Lees voor</button></div>'
@@ -7681,7 +7685,7 @@ async function submitSmartInput(textOverride) {
     if(outcome?.cancelled){if(status)status.textContent='Gestopt. Je tekst blijft staan.';return;}
     if(outcome?.replyFailed){if(status)status.textContent=outcome.saved?'Je gegevens zijn opgeslagen, maar het antwoord is niet gelukt.':'Antwoord niet gelukt. Je tekst blijft staan; probeer opnieuw.';if(!outcome.saved)return;}
     if (status && window._pendingMealInput) status.textContent = 'Nog één vraag om goed op te slaan.';
-    else if (status && status.textContent === 'Even verwerken…') status.textContent = '';
+    else if (status && [ 'Even verwerken…', ccT('Even verwerken…') ].includes(status.textContent)) status.textContent = '';
     if (input && !textOverride && input.value.trim() === text) {input.value = '';ccResizeComposer(input);}
   } catch(e) {
     if (input && textOverride && !input.value.trim()) input.value = text;
@@ -7691,7 +7695,7 @@ async function submitSmartInput(textOverride) {
     ccSpokenTurn = false;
     _smartBusy = false;
     if (button) button.disabled = false;
-    if (status && status.textContent === 'Even verwerken…') status.textContent = 'Klaar. Je kunt verder.';
+    if (status && [ 'Even verwerken…', ccT('Even verwerken…') ].includes(status.textContent)) status.textContent = 'Klaar. Je kunt verder.';
   }
 }
 
@@ -7988,7 +7992,7 @@ function recipeCardHTML(r){
   return `<article class="chef-proposal" id="gencard-${r._tmpId}"><div class="chef-proposal-meta">${escapeText(r.tijd)} · ${r.personen} ${r.personen===1?'portie':'porties'}</div>
   <h3>${escapeText(r.naam)}</h3><div class="meal-entry-nutrients">${r.eiwitten||r.vezels?mealNutrients(r)+' <span>per portie · schatting</span>':'<span>Voedingswaarden onbekend</span>'}</div>
   <div class="cc-tweaks" role="group" aria-label="Stuur dit recept bij">${CC_TWEAKS.filter(t=>!(t[0]==='vega'&&(genDieet==='vega'||(r.tags||[]).includes('vega')))).map(([k,l])=>`<button type="button" onclick="pasReceptAan('${r._tmpId}','${k}')">${l}</button>`).join('')}<button type="button" onclick="ccTweakOther('${r._tmpId}')">Anders…</button></div><p class="cc-tweak-status" id="tweak-status-${r._tmpId}" role="status"></p>
-  <details><summary>Bekijk recept</summary><h4>Ingrediënten voor ${r.personen} ${r.personen===1?'persoon':'personen'}</h4><ul>${r.ingredienten.map(x=>`<li>${escapeText(x)}</li>`).join('')}</ul><h4>Bereiding</h4><ol>${r.bereiding.map(x=>`<li>${escapeText(x)}</li>`).join('')}</ol>
+  <details><summary>Bekijk recept</summary><h4>Ingrediënten voor ${r.personen} ${r.personen===1?'persoon':'personen'}</h4><ul translate="no">${r.ingredienten.map(x=>`<li>${escapeText(x)}</li>`).join('')}</ul><h4>Bereiding</h4><ol translate="no">${r.bereiding.map(x=>`<li>${escapeText(x)}</li>`).join('')}</ol>
   <div class="chef-adjust"><label for="aanpas-${r._tmpId}">Maak het naar jouw smaak</label><input id="aanpas-${r._tmpId}" class="modal-input" placeholder="Bijvoorbeeld: meer eiwit of zonder feta"><button id="aanpas-btn-${r._tmpId}" class="btn btn-secondary" onclick="pasReceptAan('${r._tmpId}')">Pas recept aan</button></div></details>
   <div class="chef-proposal-actions"><button class="btn btn-primary" onclick="openGeneratedMeal('${r._tmpId}',false)">Inplannen</button><button class="btn btn-secondary" onclick="openGeneratedMeal('${r._tmpId}',true)">Gegeten</button>${ccSavedGenerated(r)?`<button class="btn btn-ghost" id="bewaar-btn-${r._tmpId}" onclick="chefOpenSaved('${r._tmpId}')">Open recept</button>`:`<button class="btn btn-ghost" id="bewaar-btn-${r._tmpId}" onclick="bewaarGenRecept('${r._tmpId}')">Bewaren</button>`}</div></article>`;
 }
@@ -8414,7 +8418,7 @@ async function ccShareRecipe(id,btn){
  if(navigator.share){try{await navigator.share({title:r.naam,text});}catch(e){if(e?.name!=='AbortError')showBanner('yellow','Delen lukte niet. Probeer het opnieuw.');}return;}
  try{await navigator.clipboard.writeText(text);btn.textContent=ccT('Gekopieerd ✓');setTimeout(()=>{if(btn.isConnected)btn.textContent=ccT('Delen');},2500);}catch(_){showBanner('yellow','Kopiëren lukt niet');}
 }
-function flowRecipeDetail(id){const r=(data.recepten||[]).find(x=>x.id===id);if(!r)return;ensureRecepten();const p=r.personen||2;showModal(`<div class="modal-header"><h2>${escapeText(r.naam)}</h2>${flowClose()}</div><p class="flow-recipe-meta">${escapeText(r.tijd||'Tijd onbekend')} · ${p} ${p===1?'portie':'porties'}</p>${r.opzet?`<p class="cc-sheet-note cc-recipe-opzet">${escapeText(r.opzet)}</p>`:''}<div class="meal-entry-nutrients">${mealNutrients(r)}</div><button id="cc-recipe-nutrition" class="btn btn-secondary btn-full" onclick="ccRecipeNutrition(${flowArg(id)})">Schat voedingswaarden per portie</button><p id="cc-recipe-nutrition-status" role="status"></p><div class="flow-recipe-actions"><button class="btn btn-primary" onclick="closeModal();enterKookmodus(${flowArg(id)})">Koken</button><button class="btn btn-secondary" onclick="flowPlanSavedRecipe(${flowArg(id)})">Inplannen</button></div><label class="flow-field flow-portions">Porties<select onchange="changeRecPersonen(${flowArg(id)},Number(this.value));flowRecipeDetail(${flowArg(id)})">${Array.from({length:Math.max(6,p)},(_,i)=>i+1).map(n=>`<option ${n===p?'selected':''}>${n}</option>`).join('')}</select></label><div class="flow-recipe-body"><h3>Ingrediënten</h3><ul>${r.ingredienten.map(x=>`<li>${escapeText(scaleIngredient(x,r._basePersonen||2,p))}</li>`).join('')}</ul><h3>Bereiding</h3><ol>${r.bereiding.map(x=>`<li>${escapeText(x)}</li>`).join('')}</ol></div><div class="flow-action-row"><button class="btn btn-ghost" onclick="flowOpenRecipeEditor(${flowArg(id)})">Bewerken</button><button class="btn btn-ghost" onclick="ccShareRecipe(${flowArg(id)},this)">Delen</button>${!r.bewaard?`<button class="btn btn-ghost" onclick="saveMealRecipe(${flowArg(id)})">Bewaren</button>`:''}<button class="btn btn-ghost" onclick="flowDeleteOne(${flowArg(id)})"><svg class="cc-icon" data-cc-icon="delete" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M9 6V3h6v3M6 6l1 15h10l1-15M10 10v7m4-7v7"/></svg><span>Verwijderen</span></button></div>`);}
+function flowRecipeDetail(id){const r=(data.recepten||[]).find(x=>x.id===id);if(!r)return;ensureRecepten();const p=r.personen||2;showModal(`<div class="modal-header"><h2>${escapeText(r.naam)}</h2>${flowClose()}</div><p class="flow-recipe-meta">${escapeText(r.tijd||'Tijd onbekend')} · ${p} ${p===1?'portie':'porties'}</p>${r.opzet?`<p class="cc-sheet-note cc-recipe-opzet">${escapeText(r.opzet)}</p>`:''}<div class="meal-entry-nutrients">${mealNutrients(r)}</div><button id="cc-recipe-nutrition" class="btn btn-secondary btn-full" onclick="ccRecipeNutrition(${flowArg(id)})">Schat voedingswaarden per portie</button><p id="cc-recipe-nutrition-status" role="status"></p><div class="flow-recipe-actions"><button class="btn btn-primary" onclick="closeModal();enterKookmodus(${flowArg(id)})">Koken</button><button class="btn btn-secondary" onclick="flowPlanSavedRecipe(${flowArg(id)})">Inplannen</button></div><label class="flow-field flow-portions">Porties<select onchange="changeRecPersonen(${flowArg(id)},Number(this.value));flowRecipeDetail(${flowArg(id)})">${Array.from({length:Math.max(6,p)},(_,i)=>i+1).map(n=>`<option ${n===p?'selected':''}>${n}</option>`).join('')}</select></label><div class="flow-recipe-body"><h3>Ingrediënten</h3><ul translate="no">${r.ingredienten.map(x=>`<li>${escapeText(scaleIngredient(x,r._basePersonen||2,p))}</li>`).join('')}</ul><h3>Bereiding</h3><ol translate="no">${r.bereiding.map(x=>`<li>${escapeText(x)}</li>`).join('')}</ol></div><div class="flow-action-row"><button class="btn btn-ghost" onclick="flowOpenRecipeEditor(${flowArg(id)})">Bewerken</button><button class="btn btn-ghost" onclick="ccShareRecipe(${flowArg(id)},this)">Delen</button>${!r.bewaard?`<button class="btn btn-ghost" onclick="saveMealRecipe(${flowArg(id)})">Bewaren</button>`:''}<button class="btn btn-ghost" onclick="flowDeleteOne(${flowArg(id)})"><svg class="cc-icon" data-cc-icon="delete" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M9 6V3h6v3M6 6l1 15h10l1-15M10 10v7m4-7v7"/></svg><span>Verwijderen</span></button></div>`);}
 function flowPlanSavedRecipe(id){const r=(data.recepten||[]).find(x=>x.id===id);if(!r)return;const temp={...r,ingredienten:r.ingredienten.map(x=>scaleIngredient(x,r._basePersonen||2,r.personen||2)),_basePersonen:r.personen||2,_fromLibrary:true,_tmpId:'saved-'+id,_savedRecipeId:id,_type:r.type||'diner'};window._generatedRecepten=[...(window._generatedRecepten||[]).filter(x=>x._tmpId!==temp._tmpId),temp];openGeneratedMeal(temp._tmpId,false);}
 function flowOpenRecipeEditor(id=null){const r=id?(data.recepten||[]).find(x=>x.id===id):null;if(id&&!r)return;showModal(`<div class="modal-header"><h2>${r?'Recept bewerken':'Eigen recept'}</h2>${flowClose()}</div><label class="flow-field">Naam<input id="flow-rec-name" value="${escapeText(r?.naam||'')}"></label><div class="flow-form-grid"><label class="flow-field">Porties<input id="flow-rec-persons" type="number" min="1" max="30" value="${r?._basePersonen||r?.personen||2}"></label><label class="flow-field">Tijd<input id="flow-rec-time" value="${escapeText(r?.tijd||'')}" placeholder="25 min"></label></div><label class="flow-field">Ingrediënten · één per regel<textarea id="flow-rec-ing" rows="5">${escapeText((r?.ingredienten||[]).join('\n'))}</textarea></label><label class="flow-field">Bereiding · één stap per regel<textarea id="flow-rec-steps" rows="5">${escapeText((r?.bereiding||[]).join('\n'))}</textarea></label><div class="flow-form-grid"><label class="flow-field">Eiwit per portie <span>optioneel</span><input id="flow-rec-protein" value="${escapeText(r?.eiwitten||'')}" placeholder="Bijv. ~20g"></label><label class="flow-field">Vezels per portie <span>optioneel</span><input id="flow-rec-fiber" value="${escapeText(r?.vezels||'')}" placeholder="Bijv. ~6g"></label></div><div class="flow-field cc-tag-field" role="group" aria-label="Labels">Labels<div id="flow-rec-tags" class="cc-tag-wrap">${(t=>CC_TAGS.map(x=>`<button type="button" class="cc-tag" data-tag="${x}" aria-pressed="${t.includes(x)}" onclick="this.setAttribute('aria-pressed',String(this.getAttribute('aria-pressed')!=='true'))">${ccTagLabel(x)}</button>`).join(''))(r?ccRecipeTags(r):[])}</div></div><p class="flow-error" id="flow-rec-error" role="alert"></p><button class="btn btn-primary btn-full" onclick="flowSaveRecipeEditor(${flowArg(id)})">Opslaan</button>`);}
 function flowSaveRecipeEditor(id){try{const name=document.getElementById('flow-rec-name').value.trim(),persons=Number(document.getElementById('flow-rec-persons').value),ing=document.getElementById('flow-rec-ing').value.split('\n').map(x=>x.trim()).filter(Boolean),steps=document.getElementById('flow-rec-steps').value.split('\n').map(x=>x.trim()).filter(Boolean);if(!name||!Number.isInteger(persons)||persons<1||persons>30||!ing.length||!steps.length)throw Error('Vul een naam, porties, ingrediënten en stappen in.');let r=id?(data.recepten||[]).find(x=>x.id===id):null;if(!r){r={id:'r'+Date.now()+Math.random().toString(36).slice(2,6),type:'diner'};(data.recepten ||= []).push(r);}Object.assign(r,{naam:name,personen:persons,_basePersonen:persons,ingredienten:ing,bereiding:steps,tijd:document.getElementById('flow-rec-time').value.trim(),eiwitten:document.getElementById('flow-rec-protein').value.trim(),vezels:document.getElementById('flow-rec-fiber').value.trim(),tags:[...document.querySelectorAll('#flow-rec-tags .cc-tag[aria-pressed="true"]')].map(b=>b.dataset.tag),bewaard:true,_chefTransient:false,flowDeleted:false});saveAndSync();flowRecipeList();flowRecipeDetail(r.id);}catch(e){document.getElementById('flow-rec-error').textContent=e.message;}}

@@ -1,6 +1,6 @@
 # TAKEN.md — Coach-gesprek en receptenoverzicht
 
-Basis: `health-coach-v1.0.html`, versie `lime-20261005-26` (branch `claude/practical-edison-cvl53y`, backup `backup/lime-20261004-12`). Vorige takenlijsten staan in de git-geschiedenis.
+Basis: `health-coach-v1.0.html`, versie `lime-20261005-27` (branch `claude/practical-edison-cvl53y`, backup `backup/lime-20261004-12`). Vorige takenlijsten staan in de git-geschiedenis.
 
 Bron: Jims test op de iPhone (5 okt) met vijf schermafbeeldingen. Zijn woorden staan tussen aanhalingstekens. Jims keuzes op het advies: 1 ja, 2 allebei, 3 "laat maar even", 4 "doe maar helemaal".
 
@@ -48,6 +48,14 @@ Bron: Jims test op de iPhone (5 okt) met vijf schermafbeeldingen. Zijn woorden s
 - *Coach testen* neemt de vervolgvragen nog niet mee in de beoordeling.
 
 ---
+
+## 5 okt — Grondige controle van vier gevoelige onderdelen — af op branch (`lime-20261005-27`)
+Jim: "Heeft het zin om met zwaardere AI alles te doorlopen?" → gerichte controle op samenvoegen, vertaling, harde controle en spraak.
+- Samenvoegen: 1000 willekeurige gevallen, niets kwijt of onterecht terug; gelijktijdig opslaan herstelt zich bij de volgende sync.
+- Harde controle: "nut"/"nuts" waren sinds `-21` per ongeluk uit de notenlijst gevallen (Engels) — hersteld; erbij: lard, venison, gammon, worcester(shire), seitan; uitzonderingen voor butter beans en soja-/haver-/kokosyoghurt. 34 lastige gevallen goed.
+- Vertaling: receptinhoud wordt niet meer vertaald; tekst in invoervelden ook niet; "Even verwerken…" bleef in het Engels hangen (vergeleek met Nederlandse schermtekst) — hersteld.
+- Kookmodus in het Engels: voorlezen en spraakopdrachten. Eén ingrediënt ging zonder `escapeText` naar het scherm — hersteld.
+- **Controle voor Jim**: kookmodus met Handsfree (Nederlands): "volgende", "herhaal", "hoeveel ui".
 
 ## 5 okt — Brede test NL + EN — af op branch (`lime-20261005-26`)
 Jim: "Kan je een goede test uitvoeren en checken? Ook visueel?"
