@@ -1,6 +1,6 @@
 # TAKEN.md — Coach-gesprek en receptenoverzicht
 
-Basis: `health-coach-v1.0.html`, versie `lime-20261005-1` (branch `claude/practical-edison-cvl53y`, backup `backup/lime-20261004-12`). Vorige takenlijsten staan in de git-geschiedenis.
+Basis: `health-coach-v1.0.html`, versie `lime-20261005-2` (branch `claude/practical-edison-cvl53y`, backup `backup/lime-20261004-12`). Vorige takenlijsten staan in de git-geschiedenis.
 
 Bron: Jims test op de iPhone (5 okt) met vijf schermafbeeldingen. Zijn woorden staan tussen aanhalingstekens. Jims keuzes op het advies: 1 ja, 2 allebei, 3 "laat maar even", 4 "doe maar helemaal".
 
@@ -46,6 +46,29 @@ Bron: Jims test op de iPhone (5 okt) met vijf schermafbeeldingen. Zijn woorden s
 ### Nog open (niet gevraagd of later)
 - Veld "Met wie" bij activiteiten (Jim: laat maar even).
 - *Coach testen* neemt de vervolgvragen nog niet mee in de beoordeling.
+
+---
+
+## Batch 5 okt (2) — Chef slimmer en Sparren fase 1 — af (`lime-20261005-2`)
+
+Jim: "alles akkoord" op het advies: Sparren alleen Dinertje, sturen op eiwit en vezels (kcal bestaat niet in de app), eerst een kleine batch Chef-verbeteringen.
+
+### S1. Chef slimmer — af
+- Wat Coach over eten onthoudt, gaat nu mee naar Chef (niet in privacymodus).
+- Chef krijgt de cijfers van vandaag mee: hoeveel eiwit en vezels er nog open staan.
+- Afwisseling over dagen: de maaltijden van de afgelopen week en de laatst bewaarde recepten gaan mee.
+- Harde controle: een recept met iets wat je liever niet eet (of vlees bij vega) komt niet meer in beeld.
+- Model voor gesprek en recepten: Sonnet 5.5 (was Sonnet 4.6). **Controle voor Jim: draai Instellingen › Testen › Coach testen en Chef testen en vergelijk met de vorige uitslag.**
+
+### S2. Sparren fase 1 — af (wacht op Jims test)
+- Chef › regel *Sparren* › *Dinertje voor gasten*: voor wie (met "Eet iemand iets niet?"), wat voor avond, hoeveel tijd. Daarna een samenvatting. Terug kan op elk scherm. Niets wordt bewaard.
+- Afwijking van de eerste schets: geen halve knop naast *Uit je voorraad*, maar een eigen regel *Sparren* onder *Voorraad*, omdat Chef al met regels werkt (Sport, Maaltijd, Voorraad).
+
+### S3. Sparren fase 2 — wacht op akkoord
+Drie richtingen als kaartjes (vertrouwd, draai, gok) in één aanroep: titel, waarom, tijd, eiwit, hoofdingrediënten, opzet; macro's klein onderaan. Laadstatus; bij fout of ongeldige JSON één keer automatisch opnieuw, daarna *Opnieuw*. Wensen van gasten hard gecontroleerd met `ccAvoidHit`.
+
+### S4. Sparren fase 3 — wacht op akkoord
+Eén bijstuurronde (Lichter / Makkelijker / Vegetarisch / Goedkoper / Meer wow / Iets heel anders), dan *Maak het recept*: bestaand receptformaat, `validateChefRecipe`, bestaande opslag, extra velden `bron:'sparren'` en `stand:'dinertje'`, opzet als notitie. Max. 3 aanroepen per sessie (plus hooguit één automatische herhaling). Daarna Gist-sync testen.
 
 ---
 

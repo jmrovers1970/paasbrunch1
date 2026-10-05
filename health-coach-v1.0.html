@@ -1735,6 +1735,11 @@ body .vandaag-section-h{font-size:13px!important;font-weight:650!important;text-
 .cc-tidy-note{margin:0 0 16px}
 .cc-tidy-group{margin-bottom:16px;border:1px solid var(--cc-line);border-radius:18px;padding:0 16px}
 #modal-container .cc-tidy-done{margin-top:16px}
+.cc-spar-kicker{margin:-8px 0 16px;font:650 13px/1.2 -apple-system,'SF Pro Text',system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--cc-muted)}
+#modal-container .cc-spar-opts .cc-row{justify-content:space-between}
+#modal-container .cc-spar-opts .cc-row[aria-pressed="true"]{background:var(--cc-lime-soft)}
+#modal-container .cc-spar-sum{cursor:default}
+#modal-container .cc-spar-next{margin-top:24px}
 #modal-container .cc-tag-row{display:flex;gap:8px;overflow-x:auto;margin:0 -16px 8px;padding:2px 16px 6px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
 #modal-container .cc-tag-row::-webkit-scrollbar{display:none}
 #modal-container .cc-tag-field{font-weight:600}
@@ -2240,9 +2245,9 @@ body input[type="checkbox"]:disabled{opacity:.4;cursor:default}
 'use strict';
 
 // ─── VERSION CHECK (forceert Safari herlading bij nieuwe versie) ──────────────
-const APP_VERSION = 'lime-20261005-1';
+const APP_VERSION = 'lime-20261005-2';
 // Eén plek voor de modellen: Sonnet voor gesprekken en recepten, Haiku voor snelle achtergrondtaken.
-const CC_MODEL_MAIN = 'claude-sonnet-4-6';
+const CC_MODEL_MAIN = 'claude-sonnet-5-5';
 const CC_MODEL_FAST = 'claude-haiku-4-5-20251001';
 const CC_MODEL_DEEP = 'claude-opus-5-5'; // zware, zeldzame taken: weekterugblik en patronen
 (function() {
@@ -2598,6 +2603,46 @@ function _dieetRegel() {
        : 'Vlees en vis zijn toegestaan; kies wat het beste past bij het gerecht en de voedingsdoelen.');
 }
 
+// Chef weet wat Coach over je eten onthield, wat er vandaag nog open staat en wat er de laatste dagen al op tafel stond. Privacymodus: alleen vandaag.
+function _geheugenRegel() {
+  if (settings.privacyModus) return '';
+  const m = ccActiveMemory('eten recept maaltijd koken').filter(m => ['voorkeuren','medisch'].includes(m.category) || /eet|eten|lust|recept|kook|vezel|eiwit|allerg|vega|vlees|vis/i.test(m.text)).slice(0, 6);
+  return m.length ? 'Wat de gebruiker zelf over eten zei, houd je eraan: ' + m.map(m => m.text).join(' | ') + '.' : '';
+}
+function _dagRegel() {
+  const d = dayNutrition(flowDay(today())).eaten;
+  if (!(d.eiwitten + d.vezels > 0)) return '';
+  const g = nutritionGoals(), e = Math.max(0, Math.round(g.eiwitten - d.eiwitten)), v = Math.max(0, Math.round(g.vezels - d.vezels));
+  return `Vandaag gegeten: ${Math.round(d.eiwitten)} g eiwit en ${Math.round(d.vezels)} g vezels. Nog open tot het dagdoel: ${e} g eiwit en ${v} g vezels. Laat dit recept daar zichtbaar aan bijdragen, binnen de stijlregels.`;
+}
+function _afwisselRegel() {
+  if (settings.privacyModus) return '';
+  const names = new Set();
+  for (let i = 0; i <= 6; i++) Object.values(flowDay(ccDateOffset(today(), -i)).maaltijden || {}).forEach(a => (Array.isArray(a) ? a : []).forEach(m => m?.naam && names.add(m.naam)));
+  myRecipes().slice(-6).forEach(r => names.add(r.naam));
+  const list = [...names].slice(0, 12);
+  return list.length ? 'Afwisseling: dit stond de laatste dagen al op tafel of is net bewaard. Kies iets duidelijk anders: ' + list.join(', ') + '.' : '';
+}
+// Harde controle op wat er niet in mag: liever niet (Instellingen), vega/vis, en later de wensen van gasten. Per ingrediëntregel, op woordbegin of woordeinde.
+const CC_AVOID_WORDS={
+ vlees:['kip','rund','varken','gehakt','spek','=ham','hamburger','bacon','worst','chorizo','salami','pancetta','=lam','lams','kalkoen','biefstuk','vlees','eend','chicken','beef','pork','=lamb','turkey','sausage'],
+ vis:['vis','zalm','tonijn','kabeljauw','garnal','makreel','ansjovis','mossel','forel','haring','kibbeling','scampi','inktvis','sardine','sardien','tilapia','pangasius','koolvis','zeevrucht','krab','kreeft','fish','salmon','tuna','shrimp','prawn','=cod'],
+ noten:['noot','noten','amandel','cashew','walnoot','hazelnoot','pecan','pistache','pinda','macadamia','almond','peanut','walnut','=nuts','=nut'],
+ gluten:['tarwe','bloem','pasta','spaghetti','penne','macaroni','lasagne','brood','couscous','bulgur','spelt','rogge','gerst','wrap','tortilla','panko','paneermeel','sojasaus','wheat','flour','bread'],
+ alcohol:['wijn','bier','=rum','cognac','sherry','likeur','wodka','=gin','whisky','wine','beer'],
+ lactose:['melk','room','boter','kaas','yoghurt','kwark','feta','mozzarella','parmezaan','ricotta','mascarpone','skyr','milk','cream','butter','cheese'],
+ pittig:['chili','sambal','cayenne','sriracha','harissa','jalape','gochujang','rawit','pepertje','chipotle']};
+const CC_AVOID_OK={vlees:['kippenei'],noten:['nootmuskaat','kokos'],gluten:['bloemkool','maisbloem','maïsbloem','rijstbloem','kikkererwtenbloem','currypasta','misopasta','glutenvrij'],alcohol:['wijnazijn','wijnsteen','alcoholvrij'],lactose:['lactosevrij','kokosmelk','amandelmelk','havermelk','sojamelk','pindakaas','notenboter','kokosroom','haverroom','sojaroom','cacaoboter'],pittig:['milde']};
+function ccAvoidHit(lines,cats=[],free=[]){
+ cats=[...new Set([...cats,...free.map(x=>String(x).toLowerCase().trim()).filter(x=>CC_AVOID_WORDS[x])])];free=free.filter(x=>!CC_AVOID_WORDS[String(x).toLowerCase().trim()]);
+ const stems=w=>w.startsWith('=')?{x:w.slice(1),exact:true}:{x:w,exact:false};
+ for(const line of lines){
+  const low=String(line||'').toLowerCase(),words=low.split(/[^a-zà-ÿ]+/).filter(Boolean),veg=/vega|plantaardig|vegetarisch/.test(low);
+  for(const c of cats){if(veg&&(c==='vlees'||c==='vis'))continue;const ok=CC_AVOID_OK[c]||[];for(const s of (CC_AVOID_WORDS[c]||[]).map(stems)){const hit=words.find(w=>!ok.some(o=>w.startsWith(o))&&(s.exact?w===s.x:w.startsWith(s.x)||w.endsWith(s.x)));if(hit)return hit;}}
+  for(const raw of free){const f=String(raw||'').toLowerCase().trim().replace(/(en|s)$/,'');if(f.length<3)continue;if(f.includes(' ')?low.includes(f):words.some(w=>w.startsWith(f)||w.endsWith(f)))return raw;}
+ }
+ return '';
+}
 function _vandaagTraining() {
   try {
     const t = today();
@@ -7003,6 +7048,7 @@ function validateChefRecipe(r,persons){
   if(r.ingredienten.filter(x=>!/\d|[½¼¾⅓⅔]|snuf|naar smaak|pinch|to taste|handful/i.test(x)).length>3)throw Error('Niet alle hoeveelheden zijn duidelijk. Probeer opnieuw.');
   if(typeof r.tijd!=='string'||!/^\d+\s*min$/.test(r.tijd)||parseInt(r.tijd)<1)throw Error('De bereidingstijd ontbreekt. Probeer opnieuw.');
   for(const key of ['vezels','eiwitten','koolhydraten'])if(typeof r[key]!=='string'||!/^~?\d+(?:[.,]\d+)?\s*g$/.test(r[key]))throw Error('Voedingswaarden per portie ontbreken. Probeer opnieuw.');
+  const avoid=ccAvoidHit([r.naam,...r.ingredienten],genDieet==='vega'?['vlees','vis']:genDieet==='vis'?['vlees']:[],settings.lieverNiet||[]);if(avoid)throw Error(`Er zat ${avoid} in, en dat eet je liever niet. Probeer opnieuw.`);
   const sport=['voor','tijdens','na'].includes(flowChefMode),snack=flowChefMode==='tijdens'||flowChefMode==='voorraadsnack'||(sport&&flowSportSoort==='snack'),tijd=ccRealisticTime(r);
   const tags=new Set((Array.isArray(r.tags)?r.tags:[]).map(t=>String(t).toLowerCase().trim()).filter(t=>CC_TAGS.includes(t)));
   if(sport)tags.add('sport');if(snack)tags.add('snack');const modeTag={makkelijk:'snel',uitgebreid:'weekend',comfort:'comfort'}[flowChefMode];if(modeTag)tags.add(modeTag);
@@ -7038,7 +7084,7 @@ function chefRecipePrompt(focus,n,previous,selfCheck){
   const time=sportTijd||mode.tijd||'Doorgaans maximaal 35 minuten.';
   const prompt=`Maak ${n} verschillende, goed maakbare recepten op basis van deze wens: ${focus||'Geef me inspiratie voor een lekkere maaltijd.'}
     ${CHEF_STIJL}
-    ${_dieetRegel()} ${_landRegel()} ${_maaltijdRegel()} ${_momentRegel()} ${_modusRegel()} ${_voorraadRegel()}
+    ${_dieetRegel()} ${_geheugenRegel()} ${_landRegel()} ${_maaltijdRegel()} ${_momentRegel()} ${_modusRegel()} ${_voorraadRegel()} ${mode.sport||mode.snack?'':_dagRegel()} ${_afwisselRegel()}
     ${nutrition} ${time} Gebruik gewone supermarktingrediënten, concrete hoeveelheden (ook uitlekgewicht waar relevant), smaakmakers en duidelijke stappen met tijden/temperaturen waar nodig.
     Elk recept is voor EXACT ${persons} personen. Alle ingrediënten gelden voor dit hele recept. Voedingswaarden zijn schattingen PER PORTIE, dus gedeeld door ${persons}. Neem personen:${persons} en voedingsbasis:"per_portie" op.
     ${previous.length?'Bied iets anders dan deze zojuist getoonde voorstellen: '+previous.join(', '):''}
@@ -7195,7 +7241,26 @@ function flowWeekPlanVoice(){return flowListen('weekplan','weekplan-draft','flow
 
 // Flow: speech-first food advice, recipe capture and a compact personal library.
 let flowChefMode='auto',flowChefBusy=false,flowChefTurns=[],flowChefAdvice=null,flowPhotoKind='recipe',flowRecipePhoto=null,flowRecipeSelected=new Set(),flowRecipeSelecting=false;
-function flowRenderChef(){const container=document.getElementById('food-chef-content');if(!container)return;const draft=document.getElementById('gen-focus-input')?.value||'';container.innerHTML=`<section class="flow-chef-card"><div class="cc-eyebrow"><span class="cc-page-tag">Chef</span></div><h1>Wat eet je?</h1><div class="cc-chef-bar"><button id="voice-recipe-btn" class="flow-speak" onclick="smartVoiceRecipe()">${flowVoiceGlyph()} Spreek je eetwens in</button><label class="sr-only" for="gen-focus-input">Je vraag of receptwens</label><textarea id="gen-focus-input" rows="1" oninput="ccResizeComposer(this)" placeholder="Wat wil je eten?">${escapeText(draft)}</textarea><button type="button" class="cc-clear" onclick="ccClearInput('gen-focus-input','chef-mic-label')" aria-label="Tekst wissen"><svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="14" fill="currentColor" opacity=".14"/><path d="m10 10 8 8m0-8-8 8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button><button id="chef-foto-btn" onclick="flowPhotoMenu()" aria-label="Foto toevoegen: recept, gerecht of voorraad" title="Foto: recept, gerecht of voorraad"><svg class="cc-icon" data-cc-icon="camera" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6 10 3h4l2 3h4v14H4V6z"/><circle cx="12" cy="13" r="4"/></svg><span>Foto toevoegen</span></button><button id="gen-btn" class="flow-send" onclick="generateRecepten()" aria-label="Verstuur" title="Verstuur"><svg class="cc-icon" data-cc-icon="send" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5m-6 6 6-6 6 6"/></svg></button></div><p id="chef-mic-label" class="flow-status" role="status"></p><input id="chef-foto-input" type="file" accept="image/*" style="display:none" onchange="analyseChefFoto(this)"><div class="cc-chef-modes"><div class="cc-chef-line"><h2 class="cc-chef-lab">Sport</h2><div class="cc-chef-row">${[['voor','Voor'],['tijdens','Tijdens'],['na','Na']].map(flowChefModeButton).join('')}</div></div><div class="cc-chef-line"><h2 class="cc-chef-lab">Maaltijd</h2><div class="cc-chef-row">${[['makkelijk','Snel'],['uitgebreid','Weekend'],['comfort','Comfort']].map(flowChefModeButton).join('')}</div></div><div class="cc-chef-line"><h2 class="cc-chef-lab">Voorraad</h2><button type="button" class="cc-entry" aria-haspopup="dialog" onclick="showVoorraadModal()"><span id="cc-voorraad-label">${ccVoorraadText()}</span>${CC_CHEVRON}</button></div></div></section><div id="flow-photo-resume"></div><div id="flow-chef-answer" aria-live="polite"></div>`;if(draft)ccResizeComposer(document.getElementById('gen-focus-input'));if(flowChefAdvice)flowRenderAdvice();flowPhotoResume();}
+// ─── Sparren: Dinertje voor gasten. Drie tikvragen → (fase 2) drie richtingen → (fase 3) bijsturen en recept. De sessie leeft alleen in het geheugen. ───
+const CC_SPAR_Q=[
+ {key:'wie',vraag:'Voor wie kook je?',opties:[['twee','Met z\'n tweeën',2],['vrienden','Vrienden',4],['familie','Familie met kinderen',5],['groot','Groot gezelschap',8]]},
+ {key:'avond',vraag:'Wat voor avond wordt het?',opties:[['relaxed','Relaxed aanschuiven'],['uitpakken','Uitpakken'],['samen','Samen koken'],['buiten','Buiten, vuur aan']]},
+ {key:'tijd',vraag:'Hoeveel wil je erin steken?',opties:[['uur','Een uurtje'],['middag','Een middag'],['dag','Dag van tevoren beginnen']]}];
+const CC_SPAR_NIET=[['vega','Vega'],['vis','Geen vis'],['noten','Noten'],['gluten','Gluten'],['alcohol','Alcohol']];
+let ccSpar=null;
+function ccSparStart(){ccSpar={wie:'',avond:'',tijd:'',niet:new Set()};ccSparShow(0);}
+function ccSparShow(step){
+ if(!ccSpar)return;const done=step>=CC_SPAR_Q.length,q=CC_SPAR_Q[step];
+ const label=(k,v)=>CC_SPAR_Q.find(x=>x.key===k).opties.find(o=>o[0]===v)?.[1]||'';
+ const opts=q?`<div class="cc-list cc-spar-opts">${q.opties.map(([v,l])=>`<button type="button" class="cc-row" aria-pressed="${ccSpar[q.key]===v}" onclick="ccSparPick('${q.key}','${v}',${step})"><span class="cc-row-label">${l}</span><span class="cc-status${ccSpar[q.key]===v?' is-done':''}" aria-hidden="true"></span></button>`).join('')}</div>`:'';
+ const niet=step===0?`<h3 class="cc-rec-head">Eet iemand iets niet?</h3><div class="cc-tag-wrap" role="group" aria-label="Eet iemand iets niet?">${CC_SPAR_NIET.map(([v,l])=>`<button type="button" class="cc-tag" aria-pressed="${ccSpar.niet.has(v)}" onclick="ccSparNiet('${v}')">${l}</button>`).join('')}</div><button type="button" class="btn btn-primary btn-full cc-spar-next" ${ccSpar.wie?'':'disabled'} onclick="ccSparShow(1)">Volgende</button>`:'';
+ const summary=done?`<div class="cc-list">${['wie','avond','tijd'].map(k=>`<div class="cc-row cc-spar-sum"><span class="cc-row-label">${label(k,ccSpar[k])}</span></div>`).join('')}${ccSpar.niet.size?`<div class="cc-row cc-spar-sum"><span class="cc-row-label">Let op: ${CC_SPAR_NIET.filter(([v])=>ccSpar.niet.has(v)).map(([,l])=>l.toLowerCase()).join(', ')}</span></div>`:''}</div><button type="button" class="btn btn-primary btn-full cc-spar-next" disabled>Geef drie richtingen</button><p class="cc-sheet-note">De richtingen van Chef komen in de volgende stap.</p>`:'';
+ const html=`<div class="modal-header"><h2>${done?'Klaar om te sparren':q.vraag}</h2>${flowClose()}</div><p class="cc-spar-kicker">Dinertje${done?'':` · ${step+1} van ${CC_SPAR_Q.length}`}</p>${opts}${niet}${summary}`;
+ if(step>0)ccOpenFrom(()=>ccSparShow(step-1),()=>showModal(html));else showModal(html);
+}
+function ccSparPick(key,v,step){if(!ccSpar)return;ccSpar[key]=v;ccSparShow(step===0?0:step+1);}
+function ccSparNiet(v){if(!ccSpar)return;if(ccSpar.niet.has(v))ccSpar.niet.delete(v);else ccSpar.niet.add(v);ccSparShow(0);}
+function flowRenderChef(){const container=document.getElementById('food-chef-content');if(!container)return;const draft=document.getElementById('gen-focus-input')?.value||'';container.innerHTML=`<section class="flow-chef-card"><div class="cc-eyebrow"><span class="cc-page-tag">Chef</span></div><h1>Wat eet je?</h1><div class="cc-chef-bar"><button id="voice-recipe-btn" class="flow-speak" onclick="smartVoiceRecipe()">${flowVoiceGlyph()} Spreek je eetwens in</button><label class="sr-only" for="gen-focus-input">Je vraag of receptwens</label><textarea id="gen-focus-input" rows="1" oninput="ccResizeComposer(this)" placeholder="Wat wil je eten?">${escapeText(draft)}</textarea><button type="button" class="cc-clear" onclick="ccClearInput('gen-focus-input','chef-mic-label')" aria-label="Tekst wissen"><svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="14" fill="currentColor" opacity=".14"/><path d="m10 10 8 8m0-8-8 8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button><button id="chef-foto-btn" onclick="flowPhotoMenu()" aria-label="Foto toevoegen: recept, gerecht of voorraad" title="Foto: recept, gerecht of voorraad"><svg class="cc-icon" data-cc-icon="camera" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6 10 3h4l2 3h4v14H4V6z"/><circle cx="12" cy="13" r="4"/></svg><span>Foto toevoegen</span></button><button id="gen-btn" class="flow-send" onclick="generateRecepten()" aria-label="Verstuur" title="Verstuur"><svg class="cc-icon" data-cc-icon="send" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5m-6 6 6-6 6 6"/></svg></button></div><p id="chef-mic-label" class="flow-status" role="status"></p><input id="chef-foto-input" type="file" accept="image/*" style="display:none" onchange="analyseChefFoto(this)"><div class="cc-chef-modes"><div class="cc-chef-line"><h2 class="cc-chef-lab">Sport</h2><div class="cc-chef-row">${[['voor','Voor'],['tijdens','Tijdens'],['na','Na']].map(flowChefModeButton).join('')}</div></div><div class="cc-chef-line"><h2 class="cc-chef-lab">Maaltijd</h2><div class="cc-chef-row">${[['makkelijk','Snel'],['uitgebreid','Weekend'],['comfort','Comfort']].map(flowChefModeButton).join('')}</div></div><div class="cc-chef-line"><h2 class="cc-chef-lab">Voorraad</h2><button type="button" class="cc-entry" aria-haspopup="dialog" onclick="showVoorraadModal()"><span id="cc-voorraad-label">${ccVoorraadText()}</span>${CC_CHEVRON}</button></div><div class="cc-chef-line"><h2 class="cc-chef-lab">Sparren</h2><button type="button" class="cc-entry" aria-haspopup="dialog" onclick="ccSparStart()"><span>Dinertje voor gasten</span>${CC_CHEVRON}</button></div></div></section><div id="flow-photo-resume"></div><div id="flow-chef-answer" aria-live="polite"></div>`;if(draft)ccResizeComposer(document.getElementById('gen-focus-input'));if(flowChefAdvice)flowRenderAdvice();flowPhotoResume();}
 function flowSetPersons(value){const n=Number(value);if(!Number.isInteger(n)||n<1||n>6)return;genPersonen=n;localStorage.setItem('hc_gen_personen',String(n));const el=document.getElementById('chef-personen');if(el)el.textContent=n;const min=document.getElementById('chef-personen-min'),plus=document.getElementById('chef-personen-plus');if(min)min.disabled=n<=1;if(plus)plus.disabled=n>=6;ccRenderKitchen();}
 function flowSetCount(n){if(![1,2,3].includes(n))return;genCount=n;localStorage.setItem('hc_gen_count',String(n));document.querySelectorAll('.gen-count-pill').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.textContent)===n)));ccRenderKitchen();}
 function flowSetDieet(v){if(!['vlees','vis','vega'].includes(v))return;genDieet=v;localStorage.setItem('hc_dieet',v);document.querySelectorAll('.gen-diet-pill').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.dieet===v)));ccRenderKitchen();}
