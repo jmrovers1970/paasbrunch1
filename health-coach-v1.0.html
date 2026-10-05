@@ -1988,7 +1988,8 @@ body input[type="checkbox"]:checked{background-color:var(--cc-lime)!important;bo
 body input[type="checkbox"]:focus-visible{outline:2px solid var(--cc-green)!important;outline-offset:2px}
 body input[type="checkbox"]:disabled{opacity:.4;cursor:default}
 .ritme-shop-pick label,.shop-item-row,.flow-check{display:flex!important;align-items:center!important;gap:12px!important;min-height:44px;cursor:pointer}
-.shop-item-row.in-huis span{text-decoration:line-through;color:var(--cc-muted)}
+.shop-item-row.in-huis .cc-shop-name{text-decoration:line-through;color:var(--cc-muted)}
+.cc-shop-text{display:flex;flex-direction:column;min-width:0}.cc-shop-from{font-size:12px;font-weight:400;line-height:1.3;color:var(--cc-muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 /* ── voorraadlijst: bewaarde producten als chips met ×, toevoegen eronder ── */
 .cc-pantry-list{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}
 .cc-pantry-item{display:inline-flex;align-items:center;height:40px;padding:0 4px 0 0;border-radius:999px;background:var(--cc-card);border:1px solid var(--cc-line);color:var(--cc-ink);font:600 14px/1 -apple-system,'SF Pro Text',system-ui,sans-serif;white-space:nowrap}
@@ -2265,7 +2266,7 @@ body input[type="checkbox"]:disabled{opacity:.4;cursor:default}
 'use strict';
 
 // ─── VERSION CHECK (forceert Safari herlading bij nieuwe versie) ──────────────
-const APP_VERSION = 'lime-20261005-17';
+const APP_VERSION = 'lime-20261005-18';
 // Eén plek voor de modellen: Sonnet voor gesprekken en recepten, Haiku voor snelle achtergrondtaken.
 const CC_MODEL_MAIN = 'claude-sonnet-5-5';
 const CC_MODEL_FAST = 'claude-haiku-4-5-20251001';
@@ -7794,7 +7795,7 @@ function _buildAndShowShopList(){
  for(const text of s.extraItems)items.push({text,recept:null});
  const cats=_categorizeIngredients(ritmeMergeGroceries(items));
  let markup='';
- for(const [cat,entries] of Object.entries(cats)){if(!entries.length)continue;markup+=`<section class="ritme-shop-category"><h3>${escapeText(cat)}</h3>`;for(const item of entries){const checked=s.inHuis.has(item.display);markup+=`<label class="shop-item-row ${checked?'in-huis':''}"><input type="checkbox" ${checked?'checked':''} onchange="ritmeCheckShopping(${flowArg(item.display)},this.checked,this)"><span>${escapeText(item.display)}</span></label>`;}markup+='</section>';}
+ for(const [cat,entries] of Object.entries(cats)){if(!entries.length)continue;markup+=`<section class="ritme-shop-category"><h3>${escapeText(cat)}</h3>`;for(const item of entries){const checked=s.inHuis.has(item.display);markup+=`<label class="shop-item-row ${checked?'in-huis':''}"><input type="checkbox" ${checked?'checked':''} onchange="ritmeCheckShopping(${flowArg(item.display)},this.checked,this)"><span class="cc-shop-text"><span class="cc-shop-name">${escapeText(item.display)}</span>${item.recepten?.length?`<small class="cc-shop-from">${escapeText(item.recepten.slice(0,3).join(' · ')+(item.recepten.length>3?` +${item.recepten.length-3}`:''))}</small>`:''}</span></label>`;}markup+='</section>';}
  if(missing.length){markup+=`<div class="flow-review-note"><strong>Nog zelf aanvullen</strong><p>${missing.map(escapeText).join(', ')}: geen ingrediënten bekend.</p></div>`;}
  window._shopCats=cats;window._shopMissing=missing;
  showModal(`<div class="modal-header"><h2>Mijn boodschappen</h2>${flowClose()}</div><button class="ritme-link" onclick="_renderShopPicker()">Gerechten en personen aanpassen</button><p class="muted">Vink af wat je hebt. Hoeveelheden uit je recepten worden omgerekend; controleer de verpakkingen.</p><div class="ritme-shopping-list">${markup||'<p class="muted">Je lijst is nog leeg. Voeg hieronder iets toe.</p>'}</div><div class="ritme-shop-add"><label class="flow-field">Losse boodschap<input id="shop-extra-input" placeholder="Bijvoorbeeld 2 appels" onkeydown="if(event.key===\'Enter\')_addShopExtra()"></label><button class="btn btn-secondary" onclick="_addShopExtra()">Toevoegen</button></div><button class="btn btn-primary btn-full" onclick="ritmeCopyShopping(this)">Kopieer lijst</button>${s.extraItems.length?'<button class="btn btn-ghost btn-full" onclick="clearBoodschappenExtra()">Losse boodschappen wissen</button>':''}`);
