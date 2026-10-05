@@ -2266,7 +2266,7 @@ body input[type="checkbox"]:disabled{opacity:.4;cursor:default}
 'use strict';
 
 // ─── VERSION CHECK (forceert Safari herlading bij nieuwe versie) ──────────────
-const APP_VERSION = 'lime-20261005-7';
+const APP_VERSION = 'lime-20261005-8';
 // Eén plek voor de modellen: Sonnet voor gesprekken en recepten, Haiku voor snelle achtergrondtaken.
 const CC_MODEL_MAIN = 'claude-sonnet-5-5';
 const CC_MODEL_FAST = 'claude-haiku-4-5-20251001';
@@ -2561,7 +2561,7 @@ let flowSportSoort = '';
 const CC_SNACK_LEUK = ' Vloeibaar mag (smoothie, shake, kefir- of yoghurtdrank). Maak het leuk en deelbaar voor een jonge doelgroep: kleurrijk, met een pakkende naam, iets crunchy of een topping, er goed uit zien op een foto. Geen kinderachtige namen.';
 function _modusRegel() {
   if (flowChefMode === 'makkelijk') return `
-- MAKKELIJK: weinig werk en weinig afwas — maximaal 8 ingrediënten, maximaal 6 bereidingsstappen, totaal maximaal 30 minuten, alleen gangbare technieken en gewone supermarkt-ingrediënten. Smaak blijft de harde eis: geen fantasieloze "gooi een blik leeg"-recepten, kies slimme shortcuts die écht lekker zijn.`;
+- MAKKELIJK: weinig werk en weinig afwas — maximaal 8 ingrediënten, maximaal 6 bereidingsstappen, totaal liefst hooguit 20 minuten en nooit meer dan 25, alleen gangbare technieken en gewone supermarkt-ingrediënten. Smaak blijft de harde eis: geen fantasieloze "gooi een blik leeg"-recepten, kies slimme shortcuts die écht lekker zijn.`;
   if (flowChefMode === 'comfort') return `
 - COMFORTFOOD: voor troost of om stoom af te blazen. Warm, vullend en een beetje verwennend, zoals een stoofpot, ovenschotel, romige curry of pasta uit de oven, met een frisse, gezonde draai. Wel voedzaam, maar smaak en troost staan voorop; wees minder streng over vezels en eiwit.`;
   if (flowChefMode === 'voor' || flowChefMode === 'na') {
@@ -3865,7 +3865,7 @@ Regels:
 - Houd de stijl van Chef aan en maak geen exotische ingrediënten van een gewoon recept: ${CHEF_STIJL}
 - Tijd eerlijk: tel alle stappen mee en rond naar boven af.
 Antwoord ALLEEN met geldige JSON in exact dit formaat, zonder uitleg:
-{"naam":"...","personen":${recept.personen||2},"voedingsbasis":"per_portie","vezels":"~Xg","eiwitten":"~Xg","koolhydraten":"~Xg","vet":"~Xg","tijd":"X min","ingredienten":["hoeveelheid ingredient","..."],"bereiding":["Stap 1...","..."]}`;
+{"naam":"...","personen":${recept.personen||2},"voedingsbasis":"per_portie","vezels":"~Xg","eiwitten":"~Xg","koolhydraten":"~Xg","vet":"~Xg","kcal":"~X kcal","tijd":"X min","ingredienten":["hoeveelheid ingredient","..."],"bereiding":["Stap 1...","..."]}`;
     const raw = await callAI(prompt, 900);
     const nieuw = validateChefRecipes([safeParseJSON(raw)],recept.personen||2,1)[0];
     if (tweak === 'vega') { const hit = ccAvoidHit([nieuw.naam, ...nieuw.ingredienten], ['vlees','vis']); if (hit) throw Error(`Er zat nog ${hit} in. Probeer het opnieuw.`); }
@@ -5770,7 +5770,7 @@ const CC_CHEF_EVAL=[
  {modus:'comfort',vraag:'Comfortfood',criteria:'Warm, vullend en troostend, met een frisse, gezonde draai. Voedzaam.'},
  {modus:'auto',vraag:'Iets met zalm en broccoli, binnen 20 minuten',criteria:'Gebruikt zalm en broccoli en is binnen 20 minuten klaar.'}
 ];
-const CC_CHEF_EVAL_ALGEMEEN='Voor iedereen: sportief en trendy, gezond zonder dieetgedoe; vormen als bowl, wrap, bakplaat of één pan; hoeveelheden in gram of ml; gewone supermarkt; korte pakkende naam; korte concrete stappen; praktisch met spullen die men vaak in huis heeft; eerlijke bereidingstijd; geen rijstwafels tenzij erom gevraagd; snacks leuk voor een jonge doelgroep; klopt en is haalbaar.';
+const CC_CHEF_EVAL_ALGEMEEN='Voor iedereen: sportief en trendy, gezond zonder dieetgedoe; vormen als bowl, wrap, bakplaat of één pan; hoeveelheden in gram of ml; gewone supermarkt; korte pakkende naam; korte concrete stappen; praktisch met spullen die men vaak in huis heeft; eerlijke bereidingstijd; geen rijstwafels tenzij erom gevraagd; snacks leuk voor een jonge doelgroep; een eiwitsnack heeft echt minstens 5 g eiwit; geen eiwitpoeder of merkproducten tenzij gevraagd; snel = liefst hooguit 20 minuten; klopt en is haalbaar.';
 async function ccChefEvalJudge(c,recipes){
  const kort=recipes.map(r=>({naam:r.naam,tijd:r.tijd,personen:r.personen,eiwit:r.eiwitten,vezels:r.vezels,ingredienten:r.ingredienten,bereiding:r.bereiding}));
  return ccJudgeParse(await callAIFast('Je beoordeelt receptvoorstellen van een kook-app. Wees streng maar redelijk.\nVraag: '+JSON.stringify(c.vraag)+'\nCriteria: '+c.criteria+' '+CC_CHEF_EVAL_ALGEMEEN+'\nRecepten: '+JSON.stringify(kort)+'\nAntwoord met alleen dit JSON-object en niets anders, zonder aanhalingstekens in de reden: {"oordeel":"goed"|"matig"|"fout","reden":"max 20 woorden"}',400));
@@ -7045,9 +7045,9 @@ function isLegacyStarter(r) {
 function myRecipes(){return (data.recepten||[]).filter(r=>!r.flowDeleted&&!r._chefTransient&&!isLegacyStarter(r));}
 
 function mealNutrients(m){
-  const amount=v=>escapeText(String(v||'onbekend').replace(/^~/,'≈').replace(/(\d)g\b/g,'$1 g'));
+  const amount=v=>escapeText(String(v||'onbekend').replace(/^~/,'≈').replace(/(\d)g\b/g,'$1 g').replace(/(\d)kcal\b/gi,'$1 kcal'));
   const known=v=>v&&/\d/.test(v);
-  return `<span>Eiwit ${amount(m.eiwitten)}</span><span>Vezels ${amount(m.vezels)}</span>${known(m.koolhydraten)?`<span>Koolhydraten ${amount(m.koolhydraten)}</span>`:''}${known(m.vet)?`<span>Vet ${amount(m.vet)}</span>`:''}`;
+  return `<span>Eiwit ${amount(m.eiwitten)}</span><span>Vezels ${amount(m.vezels)}</span>${known(m.koolhydraten)?`<span>Koolhydraten ${amount(m.koolhydraten)}</span>`:''}${known(m.vet)?`<span>Vet ${amount(m.vet)}</span>`:''}${known(m.kcal)?`<span>${amount(m.kcal)}</span>`:''}`;
 }
 function showAddMealOptions(){return flowAddMeal();}
 
@@ -7063,9 +7063,13 @@ let genPersonen = [1, 2, 3, 4, 5, 6].includes(Number(localStorage.getItem('hc_ge
 
 function saveMealRecipe(id){const r=(data.recepten||[]).find(x=>x.id===id);if(!r)return;r.bewaard=true;r._chefTransient=false;r.flowDeleted=false;saveAndSync();_renderFoodReceptenList();closeModal();showBanner('green','Bewaard in Mijn recepten.');}
 const CHEF_STIJL=`STIJL VAN CHEF:
-- Voor een sportieve, trendy eter: gezond zonder dieetgedoe, fris, veel smaak en een beetje hip, op het niveau van Chickslovefood, Leuke Recepten, OhMyFoodness, Mob, Eat the Gains en Ottolenghi. Extra inspiratie: Ottolenghi (veel kruiden, zuur, granaatappel, tahin, za'atar), Laura's Bakery (gezond bakken en ontbijt, haalbaar), Veggilaine en bekende foodcreators op TikTok en Instagram (kleurrijk, één pan of bakplaat, makkelijk na te maken). Gebruik ze als smaak en stijl, kopieer geen recepten en noem geen namen in het recept.
+- Voor een sportieve, trendy eter: gezond zonder dieetgedoe, fris, veel smaak en een beetje hip, op het niveau van Chickslovefood, Leuke Recepten, OhMyFoodness, Mob, Eat the Gains en Ottolenghi. Extra inspiratie: Ottolenghi (veel kruiden, zuur, granaatappel, tahin, za'atar), Laura's Bakery (gezond bakken en ontbijt, haalbaar), Veggilaine, Mason Fit (eiwitrijk comfortfood), Joy to the Food (eiwitrijke snacks zonder poeder), Pick Up Limes, Minimalist Baker, Beaufood en bekende foodcreators op TikTok en Instagram (kleurrijk, één pan of bakplaat, makkelijk na te maken). Gebruik ze als smaak en stijl, kopieer geen recepten en noem geen namen in het recept.
 - Vaste vormen die werken: bowl, wrap, bakplaat, één pan, overnight oats, yoghurt- of kwarkbowl. Varieer daarbinnen en wissel af.
 - Eiwit ruim en zichtbaar: een maaltijd 30–45 g eiwit per portie, een snack 5–20 g. Slimme bronnen: Griekse yoghurt, kwark, cottage cheese, eieren, peulvruchten, tofu, tempeh, edamame, en vis of vlees als het eetpatroon dat toestaat.
+- Cottage cheese en Griekse yoghurt zijn ook de basis voor hartige snacks en dips (queso, ranch, yoghurt-hummus). Een eiwitsnack levert echt minstens 5 g eiwit; energieballetjes zonder eiwitbron tellen niet. Snack in stuks (balletjes, muffins, repen): zet in de laatste stap hoeveel stuks één portie is en hoeveel eiwit één stuk ongeveer heeft.
+- Eiwit uit gewone producten: geen eiwitpoeder, eiwitrepen of merkproducten, tenzij de gebruiker erom vraagt. Geen kip- of kalkoengehakt als standaard (in Nederland minder gangbaar); kies kipdij of kipfilet, rundergehakt, linzen of tofu.
+- Meal-prep-vriendelijk waar het past: lunch en diner liefst zo dat het 3 tot 4 dagen goed blijft in de koelkast en koud of opgewarmd lekker is; zeg in een stap wat je vooruit kunt maken.
+- Ijkpunt voor niveau en toon (niet kopiëren): eiwitrijke overnight oats, omelet-wrap, sushi bowl, crispy chicken wrap, taco bowl, burrito bowl, Griekse kipballetjes met krieltjes van de bakplaat, zalm met zoete aardappel van één bakplaat, butter paneer curry, linzen-kokoscurry; snacks als cottage cheese queso, geroosterde kikkererwten, gevulde eieren met avocado, komkommerrolletjes met zalm, loaded appel-nacho's en mango-kwarkrepen.
 - Groente voorop, met contrast: iets fris of zuurs, iets knapperigs, een saus of dip, verse kruiden.
 - Snel waar het kan, maar eerlijk: tel wassen, snijden, oven voorverwarmen, koken en rusten mee, en reken voor een thuiskok, niet voor een chef. Twijfel je, rond dan naar boven af. Een ovenrecept duurt minstens 25 minuten.
 - Hoeveelheden in gram of ml waar het kan, ook bij groente, fruit en kaas (bijvoorbeeld "150 g avocado" in plaats van "1 avocado"); alleen eieren en kleine dingen zoals een teentje knoflook in stuks; zout, peper en verse kruiden mogen "naar smaak". Nooit cups of ounces. Ingrediënten uit een gewone supermarkt.
@@ -7073,7 +7077,7 @@ const CHEF_STIJL=`STIJL VAN CHEF:
 - Stappen: kort, actief en concreet, bijvoorbeeld "Rooster 20 min op 220 °C". Geen lappen tekst.
 - Praktisch: bouw elk recept op basisvoorraad (eieren, yoghurt of kwark, havermout, rijst, pasta, wraps, bonen of kikkererwten uit blik, tomaten uit blik, ui, knoflook, citroen, diepvriesgroente, kaas, pindakaas, specerijen). Voeg hooguit 3 verse of bijzondere ingrediënten toe die het verschil maken. Liever een slimme twist op iets bekends dan een lijst exotische producten.
 - Afwisseling. Rijstwafels en rijstcrackers alleen als de gebruiker erom vraagt. Wissel de basis af (brood, wrap, havermout, yoghurt, kwark, fruit, smoothie, ei, peulvruchten) en gebruik binnen één reeks voorstellen nooit twee keer dezelfde basis.`;
-const CHEF_SCHEMA='[{"naam":"...","personen":2,"voedingsbasis":"per_portie","vezels":"~Xg","eiwitten":"~Xg","koolhydraten":"~Xg","vet":"~Xg","tags":["bowl","snel"],"tijd":"20 min","ingredienten":["200 g ingrediënt"],"bereiding":["Concrete stap met tijd en indien nodig temperatuur"]}]';
+const CHEF_SCHEMA='[{"naam":"...","personen":2,"voedingsbasis":"per_portie","vezels":"~Xg","eiwitten":"~Xg","koolhydraten":"~Xg","vet":"~Xg","kcal":"~X kcal","tags":["bowl","snel"],"tijd":"20 min","ingredienten":["200 g ingrediënt"],"bereiding":["Concrete stap met tijd en indien nodig temperatuur"]}]';
 function validateChefRecipe(r,persons){
   if(!r||typeof r.naam!=='string'||!r.naam.trim()||r.naam.length>180||r.personen!==persons||r.voedingsbasis!=='per_portie')throw Error('Porties of voedingsbasis ontbreken. Probeer opnieuw.');
   for(const key of ['ingredienten','bereiding'])if(!Array.isArray(r[key])||!r[key].length||!r[key].every(x=>typeof x==='string'&&x.trim()))throw Error('Ingrediënten of bereidingsstappen ontbreken. Probeer opnieuw.');
@@ -7085,7 +7089,7 @@ function validateChefRecipe(r,persons){
   const tags=new Set((Array.isArray(r.tags)?r.tags:[]).map(t=>String(t).toLowerCase().trim()).filter(t=>CC_TAGS.includes(t)));
   if(sport)tags.add('sport');if(snack)tags.add('snack');const modeTag={makkelijk:'snel',uitgebreid:'weekend',comfort:'comfort'}[flowChefMode];if(modeTag)tags.add(modeTag);
   if(CC_TAGS.includes(genMaaltijd))tags.add(genMaaltijd);if(genDieet==='vega')tags.add('vega');if(parseInt(tijd)<=20)tags.add('snel');if(!CC_MOMENTS.some(m=>tags.has(m)))tags.add('diner');
-  return {...r,tags:CC_TAGS.filter(t=>tags.has(t)),soort:sport?'sport':flowChefMode==='voorraadsnack'?'snack':'maaltijd',...(sport?{moment:flowChefMode}:{}),vet:typeof r.vet==='string'&&/^~?\d+(?:[.,]\d+)?\s*g$/.test(r.vet)?r.vet:'',tijd,naam:r.naam.trim(),_basePersonen:persons,personen:persons,_type:(snack?'snack':genMaaltijd)||undefined};
+  return {...r,tags:CC_TAGS.filter(t=>tags.has(t)),soort:sport?'sport':flowChefMode==='voorraadsnack'?'snack':'maaltijd',...(sport?{moment:flowChefMode}:{}),vet:typeof r.vet==='string'&&/^~?\d+(?:[.,]\d+)?\s*g$/.test(r.vet)?r.vet:'',kcal:typeof r.kcal==='string'&&/^~?\d{2,4}\s*kcal$/i.test(r.kcal.trim())?r.kcal.trim():'',tijd,naam:r.naam.trim(),_basePersonen:persons,personen:persons,_type:(snack?'snack':genMaaltijd)||undefined};
 }
 // Vangnet tegen te optimistische tijden: de minuten uit de stappen plus 5 minuten voorbereiding zijn het minimum.
 function ccRealisticTime(r){
@@ -7113,7 +7117,7 @@ function chefRecipePrompt(focus,n,previous,selfCheck){
   const mode=CC_CHEF_MODES[flowChefMode]||{},persons=mode.sport||mode.snack?1:genPersonen;
   const nutrition=genFocus==='eiwitten'?'Kies een eiwitrijke variant zonder smaak of praktische haalbaarheid op te offeren.':genFocus==='vezels'?'Kies een vezelrijke variant zonder smaak of praktische haalbaarheid op te offeren.':mode.sport||mode.snack||flowChefMode==='comfort'?'':'Lekker én gezond: veel groente, volkoren of peulvruchten, weinig bewerkt. Draag bij aan het vezeldoel van de dag zonder smaak op te offeren.';
   const sportTijd=flowSportSoort&&{voor:{snack:'Hooguit 5 minuten.',maaltijd:'Hooguit 15 minuten.'},na:{snack:'Hooguit 10 minuten.',maaltijd:'Hooguit 30 minuten.'}}[flowChefMode]?.[flowSportSoort];
-  const time=sportTijd||mode.tijd||'Doorgaans maximaal 35 minuten.';
+  const time=sportTijd||mode.tijd||'Liefst 15 tot 25 minuten, hooguit 35.';
   const prompt=`Maak ${n} verschillende, goed maakbare recepten op basis van deze wens: ${focus||'Geef me inspiratie voor een lekkere maaltijd.'}
     ${CHEF_STIJL}
     ${_dieetRegel()} ${_geheugenRegel()} ${_landRegel()} ${_maaltijdRegel()} ${_momentRegel()} ${_modusRegel()} ${_voorraadRegel()} ${mode.sport||mode.snack?'':_dagRegel()} ${_afwisselRegel()} ${_coachRegel()}
@@ -7404,7 +7408,7 @@ function flowRenderChef(){const container=document.getElementById('food-chef-con
 function flowSetPersons(value){const n=Number(value);if(!Number.isInteger(n)||n<1||n>6)return;genPersonen=n;localStorage.setItem('hc_gen_personen',String(n));const el=document.getElementById('chef-personen');if(el)el.textContent=n;const min=document.getElementById('chef-personen-min'),plus=document.getElementById('chef-personen-plus');if(min)min.disabled=n<=1;if(plus)plus.disabled=n>=6;ccRenderKitchen();}
 function flowSetCount(n){if(![1,2,3].includes(n))return;genCount=n;localStorage.setItem('hc_gen_count',String(n));document.querySelectorAll('.gen-count-pill').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.textContent)===n)));ccRenderKitchen();}
 function flowSetDieet(v){if(!['vlees','vis','vega'].includes(v))return;genDieet=v;localStorage.setItem('hc_dieet',v);document.querySelectorAll('.gen-diet-pill').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.dieet===v)));ccRenderKitchen();}
-const CC_CHEF_MODES={voor:{vraag:'Eten voor het sporten',sport:true,tijd:'Snack hooguit 5 minuten, lichte maaltijd hooguit 15 minuten.'},tijdens:{vraag:'Snack tijdens het sporten',sport:true,tijd:'Geen bereiding nodig: meeneembaar of vooraf klaar te maken. Gebruik "1 min" als tijd als er niets te bereiden is.'},na:{vraag:'Eten na het sporten',sport:true,tijd:'Snack hooguit 10 minuten, maaltijd hooguit 30 minuten.'},makkelijk:{vraag:'Makkelijke maaltijd',tijd:'Hooguit 30 minuten.'},uitgebreid:{vraag:'Uitgebreid koken',tijd:'45 tot 90 minuten mag.'},comfort:{vraag:'Comfortfood',tijd:'Doorgaans maximaal 60 minuten; ovenwerk mag.'},voorraadsnack:{vraag:'Snack uit voorraad',snack:true,tijd:'Hooguit 10 minuten.'},voorraad:{vraag:'Maaltijd uit voorraad',tijd:'Doorgaans maximaal 35 minuten.'}};
+const CC_CHEF_MODES={voor:{vraag:'Eten voor het sporten',sport:true,tijd:'Snack hooguit 5 minuten, lichte maaltijd hooguit 15 minuten.'},tijdens:{vraag:'Snack tijdens het sporten',sport:true,tijd:'Geen bereiding nodig: meeneembaar of vooraf klaar te maken. Gebruik "1 min" als tijd als er niets te bereiden is.'},na:{vraag:'Eten na het sporten',sport:true,tijd:'Snack hooguit 10 minuten, maaltijd hooguit 30 minuten.'},makkelijk:{vraag:'Makkelijke maaltijd',tijd:'Liefst 10 tot 20 minuten, hooguit 25.'},uitgebreid:{vraag:'Uitgebreid koken',tijd:'45 tot 90 minuten mag.'},comfort:{vraag:'Comfortfood',tijd:'Doorgaans maximaal 60 minuten; ovenwerk mag.'},voorraadsnack:{vraag:'Snack uit voorraad',snack:true,tijd:'Hooguit 10 minuten.'},voorraad:{vraag:'Maaltijd uit voorraad',tijd:'Liefst 15 tot 25 minuten, hooguit 35.'}};
 let flowChefDefaultText='';
 const CC_CHEVRON='<svg class="cc-chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>';
 const CC_PLUS='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>';
