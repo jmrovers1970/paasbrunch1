@@ -15,7 +15,7 @@ Gewoon de app gebruiken zoals altijd. Klopt iets niet, maak dan een schermafbeel
 8. [ ] Open *Mijn recepten* en tik *Lunch*. Het overzicht is duidelijk.
 
 **Sparren**
-9. [ ] *Dinertje voor gasten*: beantwoord de vragen, kies een richting en tik *Maak het recept*. Het recept staat daarna in Mijn recepten.
+9. [ ] *Dinertje voor gasten*: kies 6 personen en drie gangen, kies een richting en tik *Maak het menu*. Tik *Zet op het weekmenu* en daarna *Naar de boodschappen*. Kloppen de hoeveelheden?
 
 **Tot slot**
 10. [ ] Ziet alles er netjes uit? Is er niets afgekapt en niets scheef?
