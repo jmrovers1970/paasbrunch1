@@ -1,6 +1,6 @@
 # TAKEN.md — Coach-gesprek en receptenoverzicht
 
-Basis: `health-coach-v1.0.html`, versie `lime-20261005-12` (branch `claude/practical-edison-cvl53y`, backup `backup/lime-20261004-12`). Vorige takenlijsten staan in de git-geschiedenis.
+Basis: `health-coach-v1.0.html`, versie `lime-20261005-13` (branch `claude/practical-edison-cvl53y`, backup `backup/lime-20261004-12`). Vorige takenlijsten staan in de git-geschiedenis.
 
 Bron: Jims test op de iPhone (5 okt) met vijf schermafbeeldingen. Zijn woorden staan tussen aanhalingstekens. Jims keuzes op het advies: 1 ja, 2 allebei, 3 "laat maar even", 4 "doe maar helemaal".
 
@@ -48,6 +48,12 @@ Bron: Jims test op de iPhone (5 okt) met vijf schermafbeeldingen. Zijn woorden s
 - *Coach testen* neemt de vervolgvragen nog niet mee in de beoordeling.
 
 ---
+
+## 5 okt — Dinertje: gangen en meer personen — af (`lime-20261005-13`)
+Jim: "Kan bij dinertje voor gasten ook meer gangen (voor, hoofd, na)? En kiezen voor meer personen?" → plan akkoord.
+- Teller *Aantal personen* (2–12) in stap 1; extra stap *Welke gangen?*.
+- Richtingen zijn menu's (Voor / Hoofd / Na), bijsturen geldt voor het hele menu, *Maak het menu* maakt per gang een recept en toont *Je menu*.
+- **Controle voor Jim**: drie gangen voor 6 personen, met een wens (bijv. noten). Kloppen de hoeveelheden voor 6, past het menu bij elkaar, zit de wens nergens in?
 
 ## 5 okt — Voorbeelden — af (`lime-20261005-12`)
 Jim: "Coach heeft nu 2 knoppen (hoe sta ik ervoor met vezels, ik ben moe). Dat is dubbel met Ideeën. Zou Ideeën ook niet beter iets van voorbeeldvragen kunnen zijn?" → "Doe beide."
