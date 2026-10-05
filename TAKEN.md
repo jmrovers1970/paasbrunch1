@@ -1,6 +1,6 @@
 # TAKEN.md — Coach-gesprek en receptenoverzicht
 
-Basis: `health-coach-v1.0.html`, versie `lime-20261005-24` (branch `claude/practical-edison-cvl53y`, backup `backup/lime-20261004-12`). Vorige takenlijsten staan in de git-geschiedenis.
+Basis: `health-coach-v1.0.html`, versie `lime-20261005-25` (branch `claude/practical-edison-cvl53y`, backup `backup/lime-20261004-12`). Vorige takenlijsten staan in de git-geschiedenis.
 
 Bron: Jims test op de iPhone (5 okt) met vijf schermafbeeldingen. Zijn woorden staan tussen aanhalingstekens. Jims keuzes op het advies: 1 ja, 2 allebei, 3 "laat maar even", 4 "doe maar helemaal".
 
@@ -48,6 +48,12 @@ Bron: Jims test op de iPhone (5 okt) met vijf schermafbeeldingen. Zijn woorden s
 - *Coach testen* neemt de vervolgvragen nog niet mee in de beoordeling.
 
 ---
+
+## 5 okt — Recept delen — af op branch (`lime-20261005-25`)
+Jim: recepten naar Kookschrift (app van zijn vader, eigen server) sturen. Gekozen: optie 1, delen via het deelmenu.
+- Knop *Delen* naast *Bewerken* in elk recept; recept als tekst naar het deelmenu, anders kopiëren.
+- **Controle voor Jim**: open een recept, tik *Delen*, kies Kookschrift (of WhatsApp/Notities).
+- Later mogelijk: rechtstreeks via een API van Kookschrift (vraag aan zijn vader: import, account per persoon).
 
 ## 5 okt — Tegels zonder dubbelingen — af op branch (`lime-20261005-24`)
 Jim: "Geplande en Beweging dubbel? En twee keer vezels en eiwit?" → advies akkoord; knop "idee" mag vervallen, Omhoog/Omlaag blijven.
