@@ -49,7 +49,7 @@ Bron: Jims test op de iPhone (5 okt) met vijf schermafbeeldingen. Zijn woorden s
 
 ---
 
-## 5 okt — Voorleesstem via het tussenstation — gebouwd, wacht op test (`lime-20261005-29`)
+## 5 okt — Voorleesstem via het tussenstation — af, door Jim getest op de iPhone (`lime-20261005-29`)
 Jim: "die stem wel fijn!" → wie een code heeft, krijgt ook de OpenAI-stem.
 - Worker: route `/v1/audio/speech` (alleen `tts-1` en de vaste stemmen, code moet geldig zijn), geheim `OPENAI_KEY`. Telt niet mee voor de maandlimiet: bestedingslimiet in OpenAI zelf. Zonder `OPENAI_KEY` antwoordt hij 503 en leest de app stil voor met de telefoonstem.
 - App: `ccHasTTS`, `ccTTSRequest`, `ccTTSFail`. Eigen OpenAI-sleutel gaat voor. Weigert het tussenstation, dan de rest van de sessie de telefoonstem, zonder melding.
