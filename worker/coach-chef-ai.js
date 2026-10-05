@@ -3,7 +3,7 @@
 // en geeft de vraag door aan Anthropic met de sleutel die als geheim in Cloudflare staat.
 // Nodig in Cloudflare (Settings › Variables and Secrets / Bindings):
 //   geheim ANTHROPIC_KEY   = je Anthropic-sleutel
-//   geheim ADMIN_PASSWORD  = wachtwoord voor de beheerpagina (/admin)
+//   geheim ADMIN_PASSWORD  = wachtwoord voor de beheerpagina (/admin, inlogpagina)
 //   KV-binding CODES       = opslag voor codes en gebruik
 // Er staan geen sleutels in dit bestand.
 
@@ -56,13 +56,20 @@ function fail(message, status, cors) {
   return new Response(JSON.stringify({ type: 'error', error: { message } }), { status, headers: { ...cors, 'content-type': 'application/json' } });
 }
 
-// Beheer: codes aanmaken, limiet zetten, intrekken, gebruik zien. Inloggen met gebruikersnaam "admin" en ADMIN_PASSWORD.
+// Beheer: codes aanmaken, limiet zetten, intrekken, gebruik zien. Inloggen met ADMIN_PASSWORD via een gewone inlogpagina (cookie, alleen voor /admin).
+const LOGIN_PAGE = (fout) => `<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Coach & Chef · inloggen</title>
+<style>body{font:16px -apple-system,system-ui,sans-serif;margin:32px 16px;color:#22312a;background:#f6f6f1}form{max-width:360px;display:grid;gap:12px}input,button{font:inherit;padding:12px;border-radius:12px;border:1px solid #e3e8df}button{background:#d7f653;border:0;font-weight:600}</style>
+<h1>Beheer</h1><form method="post" action="/admin/login"><input type="password" name="pw" placeholder="Wachtwoord" autocomplete="current-password" autofocus><button>Inloggen</button>${fout ? '<p>Wachtwoord klopt niet.</p>' : ''}</form>`;
 async function admin(req, env, url) {
-  const auth = req.headers.get('Authorization') || '';
-  const given = auth.startsWith('Basic ') ? atob(auth.slice(6)).split(':').slice(1).join(':') : '';
-  if (!env.ADMIN_PASSWORD || !(await same(given, env.ADMIN_PASSWORD))) {
-    return new Response('Inloggen nodig', { status: 401, headers: { 'WWW-Authenticate': 'Basic realm="Coach & Chef beheer"' } });
+  if (!env.ADMIN_PASSWORD) return new Response('ADMIN_PASSWORD ontbreekt in de Worker (Settings › Variables and Secrets).', { status: 500 });
+  const token = await sha(env.ADMIN_PASSWORD);
+  if (url.pathname === '/admin/login' && req.method === 'POST') {
+    const pw = String((await req.formData()).get('pw') || '');
+    if (!(await same(pw, env.ADMIN_PASSWORD))) return new Response(LOGIN_PAGE(true), { status: 401, headers: { 'content-type': 'text/html; charset=utf-8' } });
+    return new Response(null, { status: 303, headers: { Location: '/admin', 'Set-Cookie': `cc_admin=${token}; Path=/admin; HttpOnly; Secure; SameSite=Strict; Max-Age=2592000` } });
   }
+  const cookie = (req.headers.get('Cookie') || '').match(/(?:^|;\s*)cc_admin=([a-f0-9]+)/)?.[1] || '';
+  if (!(await same(cookie, token))) return new Response(LOGIN_PAGE(false), { status: 401, headers: { 'content-type': 'text/html; charset=utf-8' } });
   const month = new Date().toISOString().slice(0, 7);
   if (req.method === 'POST') {
     const form = await req.formData(), action = form.get('action');
@@ -75,7 +82,7 @@ async function admin(req, env, url) {
       if (rec && action === 'limiet') { rec.limiet = Math.max(1, Number(form.get('limiet')) || rec.limiet); await env.CODES.put('code:' + code, JSON.stringify(rec)); }
       if (rec && action === 'weg') await env.CODES.delete('code:' + code);
     }
-    return Response.redirect(url.origin + '/admin', 303);
+    return new Response(null, { status: 303, headers: { Location: '/admin' } });
   }
   const list = await env.CODES.list({ prefix: 'code:' });
   const rows = [];
@@ -97,6 +104,7 @@ function makeCode() {
   const abc = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789', b = crypto.getRandomValues(new Uint8Array(8));
   return [...b].map(x => abc[x % abc.length]).join('');
 }
+async function sha(s) { return [...new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode('cc-admin:' + s)))].map(b => b.toString(16).padStart(2, '0')).join(''); }
 async function same(a, b) {
   const enc = new TextEncoder(), [x, y] = await Promise.all([a, b].map(s => crypto.subtle.digest('SHA-256', enc.encode(String(s)))));
   const u = new Uint8Array(x), v = new Uint8Array(y);
