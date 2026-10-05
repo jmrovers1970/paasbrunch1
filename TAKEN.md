@@ -1,6 +1,6 @@
 # TAKEN.md — Coach-gesprek en receptenoverzicht
 
-Basis: `health-coach-v1.0.html`, versie `lime-20261005-18` (branch `claude/practical-edison-cvl53y`, backup `backup/lime-20261004-12`). Vorige takenlijsten staan in de git-geschiedenis.
+Basis: `health-coach-v1.0.html`, versie `lime-20261005-19` (branch `claude/practical-edison-cvl53y`, backup `backup/lime-20261004-12`). Vorige takenlijsten staan in de git-geschiedenis.
 
 Bron: Jims test op de iPhone (5 okt) met vijf schermafbeeldingen. Zijn woorden staan tussen aanhalingstekens. Jims keuzes op het advies: 1 ja, 2 allebei, 3 "laat maar even", 4 "doe maar helemaal".
 
@@ -48,6 +48,12 @@ Bron: Jims test op de iPhone (5 okt) met vijf schermafbeeldingen. Zijn woorden s
 - *Coach testen* neemt de vervolgvragen nog niet mee in de beoordeling.
 
 ---
+
+## 5 okt — Engels, ronde 1 van 4 — af op branch (`lime-20261005-19`)
+Jim: "De taaloptie werkt niet, alle tekst blijft Nederlands. Moet die niet bovenaan? Zodra je je taal kiest, ook de wizard in die taal." Doelgroep: internationale groep van Jims dochter.
+- Vertaaltabel `CC_EN` + observer (`ccApplyLang`). Opening, startscherm en wizard in het Engels; taal en land is nu stap 1 en de wizard wisselt direct.
+- Eerste start volgt de taal van de telefoon.
+- **Nog te doen**: ronde 2 Coach, ronde 3 Chef en boodschappen (ook herkennen van Engelse invoer, `CC_ACT_WORDS`), ronde 4 Instellingen, vensters en meldingen. Pas live als alle rondes af zijn.
 
 ## 5 okt — Recept bij elk product — af (`lime-20261005-18`)
 Jim: "Kan er achter het product in de boodschappenlijst bij elk recept staan waar het bij hoort (subtiel)?"

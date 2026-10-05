@@ -2266,7 +2266,7 @@ body input[type="checkbox"]:disabled{opacity:.4;cursor:default}
 'use strict';
 
 // ─── VERSION CHECK (forceert Safari herlading bij nieuwe versie) ──────────────
-const APP_VERSION = 'lime-20261005-18';
+const APP_VERSION = 'lime-20261005-19';
 // Eén plek voor de modellen: Sonnet voor gesprekken en recepten, Haiku voor snelle achtergrondtaken.
 const CC_MODEL_MAIN = 'claude-sonnet-5-5';
 const CC_MODEL_FAST = 'claude-haiku-4-5-20251001';
@@ -2614,6 +2614,53 @@ const CC_COUNTRIES=[['NL','Nederland'],['BE','België'],['DE','Duitsland'],['GB'
 function ccTaal(){return settings.taal==='en'?'en':'nl';}
 function ccLandCode(){return CC_COUNTRIES.some(c=>c[0]===settings.land)?settings.land:'NL';}
 function ccCountry(){return ccLandCode()==='ANDERS'?String(settings.landNaam||'').trim()||'een ander land':CC_COUNTRIES.find(c=>c[0]===ccLandCode())[1];}
+// Schermtaal: de Nederlandse tekst is de sleutel; ontbreekt een vertaling, dan blijft het Nederlands. Een observer vertaalt alles wat in beeld komt (tekst, aria-label, placeholder, title), behalve binnen [translate="no"].
+function ccUiLang(){if(ccWiz?.taal)return ccWiz.taal;if(settings.setupDone||settings.taal)return ccTaal();return /^nl\b/i.test(navigator.language||'nl')?'nl':'en';}
+const CC_EN={
+ // opening en startscherm
+ 'Eten en bewegen.':'Eat well. Move more.','Zeg wat je deed, krijg antwoord, motivatie en advies.':'Say what you did, get answers, motivation and advice.','Praten of typen':'Talk or type','Zeg: “Vanochtend 8 km gelopen”.':'Say: “Ran 8 km this morning”.','Vraag: “Wat eet ik na mijn training?”':'Ask: “What should I eat after my workout?”','Recepten op maat, snel of rond je training.':'Recipes made for you, quick or around your training.','Inzicht':'Insight','“Hoeveel heb ik deze week bewogen?”':'“How much did I move this week?”','Privé':'Private','Je gegevens blijven op je telefoon.':'Your data stays on your phone.','Voor de slimme coach vul je je AI-sleutel in bij Instellingen.':'For the smart coach, add your AI key in Settings.','Begin':'Start','Niet meer tonen':"Don't show again",'Jouw dag. Jouw ritme.':'Your day. Your rhythm.','Coach en Chef laden':'Loading Coach and Chef',
+ // wizard
+ 'Waar ben je?':'Where are you?','De taal van de app, en het land voor recepten en boodschappen.':'The language of the app, and the country for recipes and shopping.','Hoe mogen we je noemen?':'What should we call you?','Je naam':'Your name','Kopie terugzetten':'Restore a copy','Kopie teruggezet':'Copy restored','Wat doe je graag?':'What do you like to do?','Kies wat past, meerdere mag.':'Pick what fits, more than one is fine.','Iets anders?':'Something else?','Jouw doelen':'Your goals','Later altijd aan te passen.':'You can always change this later.','Bewegen':'Exercise','min per week':'min per week','Vezels':'Fibre','gram per dag':'grams per day','Eiwit':'Protein','Wat eet je?':'What do you eat?','Alles':'All','Vis':'Fish','Vega':'Veggie','Liever niet':'Rather not','Slimme coach':'Smart coach','Met een AI-sleutel praat de coach terug en maakt Chef recepten. Kan ook later.':'With an AI key, the coach talks back and Chef makes recipes. You can also do this later.','AI-sleutel':'AI key','Plak je sleutel':'Paste your key','Voorlezen':'Read aloud','Privacymodus':'Privacy mode','Zeg of typ bijvoorbeeld:':'Say or type, for example:','Klaar!':'Done!','Terug':'Back','Overslaan':'Skip','Volgende':'Next','Welk land?':'Which country?','Je kopie is teruggezet.':'Your copy has been restored.',
+ // keuzes
+ 'Hardlopen':'Running','Fietsen':'Cycling','Krachttraining':'Strength training','Wandelen':'Walking','Zwemmen':'Swimming','Yoga':'Yoga','Noten':'Nuts','Lactose':'Lactose','Gluten':'Gluten','Pittig':'Spicy',
+ 'Nederland':'Netherlands','België':'Belgium','Duitsland':'Germany','Verenigd Koninkrijk':'United Kingdom','Verenigde Staten':'United States','Spanje':'Spain','Frankrijk':'France','Italië':'Italy','Ander land':'Other country',
+ // voorbeelden
+ 'Vanochtend 8 km gelopen':'Ran 8 km this morning','40 minuten gewandeld met Otis':'Walked the dog for 40 minutes','Havermout met banaan als ontbijt':'Oats with banana for breakfast','Ik wil beginnen met intervaltraining. Hoe doe ik dat?':'I want to start interval training. How do I do that?','Maak een opbouw naar 10 km':'Build me a plan to run 10 km','Krachttraining met dumbbells en een bankje':'Strength training with dumbbells and a bench','Hoe warm ik goed op voor een run?':'How do I warm up properly for a run?','Wat eet ik na mijn training?':'What should I eat after my workout?','Wat eet ik voor een lange duurloop?':'What should I eat before a long run?','Mijn kuit is stijf: lopen of rusten?':'My calf is stiff: run or rest?','Ik ben moe, wat nu?':"I'm tired, now what?",'Hoeveel heb ik deze week bewogen?':'How much did I move this week?','Hoe sta ik ervoor met vezels?':'How am I doing on fibre?','Wat ging goed deze week?':'What went well this week?','Zet morgen een wandeling op de planning':'Plan a walk for tomorrow','Plan drie runs deze week, met rust ertussen':'Plan three runs this week, with rest in between','Schuif mijn run naar donderdag':'Move my run to Thursday'
+};
+const CC_EN_RE=[[/^Stap (\d+) van (\d+)$/,'Step $1 of $2'],[/^Klaar, (.+)!$/,'Done, $1!'],[/^Welkom terug, (.+)$/,'Welcome back, $1'],[/^(.+) (minder|meer)$/,(m,a,b)=>CC_EN[a]?`${b==='meer'?'More':'Less'} ${CC_EN[a].toLowerCase()}`:m]];
+function ccT(nl){
+ if(ccUiLang()!=='en'||!nl)return nl;
+ const k=String(nl).trim();if(!k)return nl;
+ let en=CC_EN[k];
+ if(en==null){const q=k.match(/^“(.+)”$/);if(q&&CC_EN[q[1]])en=`“${CC_EN[q[1]]}”`;}
+ if(en==null)for(const [re,to] of CC_EN_RE)if(re.test(k)){const r=k.replace(re,to);if(r!==k){en=r;break;}}
+ return en==null?nl:String(nl).replace(k,en);
+}
+const CC_T_ATTRS=['aria-label','placeholder','title'];
+function ccTNode(n){
+ const cur=n.nodeValue,orig=n.__ccNl!=null&&cur===n.__ccEn?n.__ccNl:cur,out=ccT(orig);
+ if(out!==orig){n.__ccNl=orig;n.__ccEn=out;}
+ if(out!==cur)n.nodeValue=out;
+}
+function ccTEl(el){
+ for(const a of CC_T_ATTRS){if(!el.hasAttribute(a))continue;const cur=el.getAttribute(a),m=el.__ccA||(el.__ccA={}),orig=m[a]&&cur===m[a][1]?m[a][0]:cur,out=ccT(orig);if(out!==orig)m[a]=[orig,out];if(out!==cur)el.setAttribute(a,out);}
+}
+function ccTranslate(root){
+ if(!root)return;
+ if(root.nodeType===3){if(!root.parentElement?.closest('[translate="no"],script,style'))ccTNode(root);return;}
+ if(root.nodeType!==1||root.closest('[translate="no"],script,style'))return;
+ ccTEl(root);
+ const w=document.createTreeWalker(root,NodeFilter.SHOW_ELEMENT|NodeFilter.SHOW_TEXT,{acceptNode:n=>n.nodeType===1&&(n.getAttribute('translate')==='no'||n.tagName==='SCRIPT'||n.tagName==='STYLE')?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT});
+ for(let n=w.nextNode();n;n=w.nextNode())n.nodeType===3?ccTNode(n):ccTEl(n);
+}
+let ccTObserver=null;
+function ccApplyLang(){
+ document.documentElement.lang=ccUiLang();
+ ccTranslate(document.body);
+ if(ccTObserver)return;
+ ccTObserver=new MutationObserver(list=>{for(const m of list){if(m.type==='childList')m.addedNodes.forEach(ccTranslate);else if(m.type==='characterData')ccTranslate(m.target);else ccTranslate(m.target);}});
+ ccTObserver.observe(document.body,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:CC_T_ATTRS});
+}
 function ccSpeechLang(){return ccTaal()==='en'?(ccLandCode()==='US'?'en-US':'en-GB'):'nl-NL';}
 // Voor elke AI-aanroep (zie ccVocabNote): taal en, buiten Nederland, het land.
 function ccLangNote(){
@@ -4743,7 +4790,7 @@ function ccRenderMood(){
 // Wat kan ik vragen? Eén lijst voorbeelden voor Coach (venster), de opening en het einde van de wizard.
 const CC_EXAMPLES=[{kop:'Loggen',sub:'Zeg wat je deed of at',icon:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>',items:['Vanochtend 8 km gelopen','40 minuten gewandeld met Otis','Havermout met banaan als ontbijt']},{kop:'Trainen',sub:'Leer het en bouw het op',icon:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M9 2h6"/></svg>',items:['Ik wil beginnen met intervaltraining. Hoe doe ik dat?','Maak een opbouw naar 10 km','Krachttraining met dumbbells en een bankje','Hoe warm ik goed op voor een run?']},{kop:'Advies',sub:'Vraag wat past bij je dag',icon:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 0 1-11.6 7.1L4 20l1-4.2A8 8 0 1 1 20 12z"/></svg>',items:['Wat eet ik na mijn training?','Wat eet ik voor een lange duurloop?','Mijn kuit is stijf: lopen of rusten?','Ik ben moe, wat nu?']},{kop:'Inzicht',sub:'Zie hoe je week gaat',icon:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>',items:['Hoeveel heb ik deze week bewogen?','Hoe sta ik ervoor met vezels?','Wat ging goed deze week?']},{kop:'Plannen',sub:'Zet iets klaar of schuif het op',icon:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4m6-4v4"/></svg>',items:['Zet morgen een wandeling op de planning','Plan drie runs deze week, met rust ertussen','Schuif mijn run naar donderdag']}];
 function ccOpenExamples(){showModal(`<div class="modal-header"><h2>Wat kan ik vragen?</h2>${flowClose()}</div><p class="cc-sheet-note cc-ex-note">Tik op een voorbeeld; het komt klaar te staan in je invoer.</p>${CC_EXAMPLES.map((g,i)=>`<section class="cc-ex-card"><div class="cc-ex-head"><span class="cc-intro-ic">${g.icon}</span><span><strong>${g.kop}</strong><small>${g.sub}</small></span></div><div class="cc-ex-bubbles">${g.items.map((t,j)=>`<button type="button" class="cc-ex-bubble" onclick="ccUseExample(${i},${j})">${t}</button>`).join('')}</div></section>`).join('')}`);}
-function ccUseExample(i,j){const input=document.getElementById('coach-front-input'),t=CC_EXAMPLES[i]?.items[j];if(!input||!t)return;closeModal();input.value=t;ccResizeComposer(input);input.focus();}
+function ccUseExample(i,j){const input=document.getElementById('coach-front-input'),t=CC_EXAMPLES[i]?.items[j];if(!input||!t)return;closeModal();input.value=ccT(t);ccResizeComposer(input);input.focus();}
 
 // Eerste keer instellen: één vraag per scherm, tikken in plaats van typen. Ook later te starten via Instellingen › Opnieuw instellen.
 const CC_SPORTS=['Hardlopen','Fietsen','Krachttraining','Wandelen','Zwemmen','Yoga'];
@@ -4751,7 +4798,7 @@ const CC_AVOID=['Noten','Lactose','Gluten','Pittig'];
 let ccWiz=null;
 function ccWizStart(mode){
  const g=nutritionGoals(),sp=String(settings.sporten||'').split(/,\s*/).filter(Boolean);
- ccWiz={mode,step:0,naam:settings.naam&&settings.naam!=='Gebruiker'?settings.naam:'',sporten:new Set(sp.filter(x=>CC_SPORTS.includes(x))),anders:sp.filter(x=>!CC_SPORTS.includes(x)).join(', '),beweging:ccMoveGoal(),vezels:g.vezels,eiwit:g.eiwitten,dieet:genDieet,liever:new Set(settings.lieverNiet||[]),key:settings.anthropicKey||'',tts:_ttsEnabled,privacy:!!settings.privacyModus,imported:false,taal:ccTaal(),land:ccLandCode(),landNaam:settings.landNaam||''};
+ ccWiz={mode,step:0,naam:settings.naam&&settings.naam!=='Gebruiker'?settings.naam:'',sporten:new Set(sp.filter(x=>CC_SPORTS.includes(x))),anders:sp.filter(x=>!CC_SPORTS.includes(x)).join(', '),beweging:ccMoveGoal(),vezels:g.vezels,eiwit:g.eiwitten,dieet:genDieet,liever:new Set(settings.lieverNiet||[]),key:settings.anthropicKey||'',tts:_ttsEnabled,privacy:!!settings.privacyModus,imported:false,taal:ccUiLang(),land:ccLandCode(),landNaam:settings.landNaam||''};
  document.getElementById('setup-overlay').classList.add('visible');ccWizRender();
 }
 function ccWizKeep(){const w=ccWiz,v=id=>document.getElementById(id);if(v('cc-wiz-landnaam'))w.landNaam=v('cc-wiz-landnaam').value.trim();if(v('cc-wiz-naam'))w.naam=v('cc-wiz-naam').value.trim();if(v('cc-wiz-anders'))w.anders=v('cc-wiz-anders').value.trim();if(v('cc-wiz-key'))w.key=v('cc-wiz-key').value.trim();if(v('cc-wiz-tts')){w.tts=v('cc-wiz-tts').checked;w.privacy=v('cc-wiz-privacy').checked;}}
@@ -4759,7 +4806,7 @@ function ccWizGo(step){ccWizKeep();ccWiz.step=Math.max(0,Math.min(6,step));ccWiz
 function ccWizToggle(set,value,btn){const on=!ccWiz[set].has(value);on?ccWiz[set].add(value):ccWiz[set].delete(value);btn.setAttribute('aria-pressed',String(on));}
 function ccWizStep(key,delta,min,max){ccWiz[key]=Math.max(min,Math.min(max,ccWiz[key]+delta));ccWizRender();}
 function ccWizDiet(v){ccWiz.dieet=v;ccWizRender();}
-function ccWizTaal(v){ccWizKeep();ccWiz.taal=v;ccWizRender();}
+function ccWizTaal(v){ccWizKeep();ccWiz.taal=v;ccWizRender();ccApplyLang();}
 function ccWizLand(v){ccWizKeep();ccWiz.land=v;ccWizRender();}
 async function ccWizImport(input){const f=input.files[0];if(!f)return;if(await importFromFile(f)){ccWiz.imported=true;showBanner('green','Je kopie is teruggezet.');}input.value='';}
 function ccWizRender(){
@@ -4767,8 +4814,8 @@ function ccWizRender(){
  const chip=(set,v)=>`<button type="button" class="cc-chip" aria-pressed="${w[set].has(v)}" onclick="ccWizToggle('${set}','${v}',this)">${v}</button>`;
  const stepper=(key,label,unit,step,min,max)=>`<div class="cc-setting-row"><span class="cc-wiz-label">${label}<small>${unit}</small></span><div class="cc-stepper"><button type="button" aria-label="${label} minder" onclick="ccWizStep('${key}',-${step},${min},${max})" ${w[key]<=min?'disabled':''}>−</button><strong>${w[key]}</strong><button type="button" aria-label="${label} meer" onclick="ccWizStep('${key}',${step},${min},${max})" ${w[key]>=max?'disabled':''}>+</button></div></div>`;
  const body=[
+  `<h1 id="cc-wiz-title" tabindex="-1">Waar ben je?</h1><p class="cc-wiz-sub">De taal van de app, en het land voor recepten en boodschappen.</p><div class="cc-seg cc-wiz-seg">${[['nl','Nederlands'],['en','English']].map(([v,l])=>`<button type="button" aria-pressed="${w.taal===v}" onclick="ccWizTaal('${v}')">${l}</button>`).join('')}</div><div class="cc-wiz-chips">${CC_COUNTRIES.map(([c,n])=>`<button type="button" class="cc-chip" aria-pressed="${w.land===c}" onclick="ccWizLand('${c}')">${n}</button>`).join('')}</div>${w.land==='ANDERS'?`<input id="cc-wiz-landnaam" class="cc-wiz-input" value="${escapeText(w.landNaam)}" placeholder="Welk land?">`:''}`,
   `<h1 id="cc-wiz-title" tabindex="-1">Hoe mogen we je noemen?</h1><input id="cc-wiz-naam" class="cc-wiz-input" value="${escapeText(w.naam)}" placeholder="Je naam" autocomplete="given-name">${w.mode==='first'?`<label class="cc-wiz-link">${w.imported?'Kopie teruggezet':'Kopie terugzetten'}<input type="file" accept=".json" hidden onchange="ccWizImport(this)"></label>`:''}`,
-  `<h1 id="cc-wiz-title" tabindex="-1">Waar ben je?</h1><p class="cc-wiz-sub">De taal van de antwoorden, en het land voor recepten en boodschappen.</p><div class="cc-seg cc-wiz-seg">${[['nl','Nederlands'],['en','English']].map(([v,l])=>`<button type="button" aria-pressed="${w.taal===v}" onclick="ccWizTaal('${v}')">${l}</button>`).join('')}</div><div class="cc-wiz-chips">${CC_COUNTRIES.map(([c,n])=>`<button type="button" class="cc-chip" aria-pressed="${w.land===c}" onclick="ccWizLand('${c}')">${n}</button>`).join('')}</div>${w.land==='ANDERS'?`<input id="cc-wiz-landnaam" class="cc-wiz-input" value="${escapeText(w.landNaam)}" placeholder="Welk land?">`:''}`,
   `<h1 id="cc-wiz-title" tabindex="-1">Wat doe je graag?</h1><p class="cc-wiz-sub">Kies wat past, meerdere mag.</p><div class="cc-wiz-chips">${CC_SPORTS.map(v=>chip('sporten',v)).join('')}</div><input id="cc-wiz-anders" class="cc-wiz-input" value="${escapeText(w.anders)}" placeholder="Iets anders?">`,
   `<h1 id="cc-wiz-title" tabindex="-1">Jouw doelen</h1><p class="cc-wiz-sub">Later altijd aan te passen.</p><div class="cc-wiz-card">${stepper('beweging','Bewegen','min per week',15,30,600)}${stepper('vezels','Vezels','gram per dag',5,10,60)}${stepper('eiwit','Eiwit','gram per dag',5,30,250)}</div>`,
   `<h1 id="cc-wiz-title" tabindex="-1">Wat eet je?</h1><div class="cc-seg cc-wiz-seg">${[['vlees','Alles'],['vis','Vis'],['vega','Vega']].map(([v,l])=>`<button type="button" aria-pressed="${w.dieet===v}" onclick="ccWizDiet('${v}')">${l}</button>`).join('')}</div><p class="cc-wiz-sub">Liever niet</p><div class="cc-wiz-chips">${CC_AVOID.map(v=>chip('liever',v)).join('')}</div>`,
@@ -8506,6 +8553,7 @@ for(const name of ['ccSetMood','setMealConsumed','flowToggleActivity','saveQuick
 
 window.addEventListener('DOMContentLoaded', () => {
   loadSettings();
+  ccApplyLang();
 
   const subEl = document.getElementById('splash-sub');
   if (subEl && settings.naam && settings.setupDone) {
